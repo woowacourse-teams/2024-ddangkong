@@ -7,6 +7,7 @@
     "noImplicitAny": true, // 암시적 any를 허용하지 않음
     "strict": true, // 엄격한 타입 검사
     "jsx": "react-jsx", // React 프로젝트에서 JSX를 사용하기 위해 필요
+    "jsxImportSource": "@emotion/react", // 새로운 JSX 변환 방식(React 17+)으로 css prop 사용하기 위해 필요
     "allowSyntheticDefaultImports": true, // default export 가 없어도 import 허용
     "sourceMap": true, // 디버깅 시 어떤 파일에서 에러났는지 추적 용이
     "baseUrl": ".", // 모듈 해석 기본 경로
