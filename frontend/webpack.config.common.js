@@ -17,22 +17,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: ["babel-loader"],
-      },
-      {
         test: /\.html$/,
         use: [
           {
             loader: "html-loader",
           },
         ],
-      },
-      {
-        test: /\.(ts|tsx)$/,
-        use: "ts-loader",
-        exclude: /node_modules/,
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
