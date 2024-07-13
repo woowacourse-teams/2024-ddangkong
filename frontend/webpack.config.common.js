@@ -1,17 +1,17 @@
-const path = require("path");
-const HTMLWebpackPlugin = require("html-webpack-plugin");
+const path = require('path');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: "./src/index.tsx",
+  entry: './src/index.tsx',
   output: {
-    filename: "bundle.js",
-    path: path.resolve(__dirname + "/dist"),
+    filename: 'bundle.js',
+    path: path.resolve(__dirname + '/dist'),
     clean: true,
   },
   resolve: {
-    extensions: [".js", ".jsx", ".ts", ".tsx"],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   module: {
@@ -20,7 +20,7 @@ module.exports = {
         test: /\.html$/,
         use: [
           {
-            loader: "html-loader",
+            loader: 'html-loader',
           },
         ],
       },
@@ -28,9 +28,9 @@ module.exports = {
         test: /\.(png|jpe?g|gif|svg)$/i,
         use: [
           {
-            loader: "file-loader",
+            loader: 'file-loader',
             options: {
-              name: "[path][name].[ext]",
+              name: '[path][name].[ext]',
             },
           },
         ],
@@ -39,8 +39,8 @@ module.exports = {
   },
   plugins: [
     new HTMLWebpackPlugin({
-      template: "./index.html", // 읽을 파일명
-      filename: "./index.html", // output으로 출력할 파일명
+      template: './index.html', // 읽을 파일명
+      filename: './index.html', // output으로 출력할 파일명
     }),
   ],
 };
