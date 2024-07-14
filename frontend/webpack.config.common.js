@@ -1,5 +1,10 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+// this will update the process.env with environment variables in .env file
+dotenv.config();
 
 module.exports = {
   entry: './src/index.tsx',
@@ -41,6 +46,9 @@ module.exports = {
     new HTMLWebpackPlugin({
       template: './index.html', // 읽을 파일명
       filename: './index.html', // output으로 출력할 파일명
+    }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
     }),
   ],
 };
