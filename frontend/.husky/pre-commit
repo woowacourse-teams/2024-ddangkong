@@ -1,1 +1,1 @@
-cd frontend && npx lint-staged
+cd frontend && npx lint-staged && npm run lint:styled

@@ -24,6 +24,7 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-unused-vars": "warn",
+    "react/no-unknown-property": ["error", { "ignore": ["css"] }],
     "react/function-component-definition": [
       "error",
       {
