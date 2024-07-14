@@ -10,6 +10,8 @@
     "plugin:react-hooks/recommended",
     "plugin:import/recommended",
     "plugin:jsx-a11y/recommended",
+    "plugin:storybook/recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     "prettier"
   ],
   "parser": "@typescript-eslint/parser",
@@ -18,11 +20,22 @@
     "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint", "react-refresh"],
+  "ignorePatterns": ["webpack.config.common.js", "webpack.config.dev.js", "webpack.config.prod.js"],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-unused-vars": "warn",
-    "react/function-component-definition": ["error", { "namedComponents": "arrow-function" }],
-    "react-refresh/only-export-components": ["warn", { "allowConstantExport": true }],
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "arrow-function"
+      }
+    ],
+    "react-refresh/only-export-components": [
+      "warn",
+      {
+        "allowConstantExport": true
+      }
+    ],
     "import/no-unresolved": "off",
     "import/order": [
       "error",
