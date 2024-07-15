@@ -1,3 +1,5 @@
+import fetcher from './fetcher';
+
 const BASE_URL = process.env.NODE_ENV === 'production' ? process.env.API_BASE_URL : '';
 
 const URL = {
@@ -7,7 +9,7 @@ const URL = {
 };
 
 export const fetchQuestion = async (roomId = 1) => {
-  const res = await fetch(URL.question(roomId));
+  const res = await fetcher.get({ url: URL.question(roomId) });
 
   const data = await res.json();
 
@@ -15,12 +17,12 @@ export const fetchQuestion = async (roomId = 1) => {
 };
 
 export const voteQuestion = async (choiceId: number, roomId = 1, questionId = 1) => {
-  const res = await fetch(URL.vote(roomId, questionId), {
-    method: 'POST',
-    body: JSON.stringify({
+  const res = await fetcher.post({
+    url: URL.vote(roomId, questionId),
+    body: {
       memberId: 1,
       choiceId,
-    }),
+    },
   });
 
   const data = await res.json();
