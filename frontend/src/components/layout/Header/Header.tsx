@@ -1,6 +1,7 @@
+import { gameTitle, headerLayout } from './Header.styled';
+
 import HomeIcon from '@/assets/images/homeIcon.svg';
 import SettingsIcon from '@/assets/images/settingsIcon.svg';
-import { gameTitle, headerLayout } from './Header.styled';
 
 interface HeaderProps {
   title: string;
