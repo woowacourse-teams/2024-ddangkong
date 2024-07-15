@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 
 export const layout = css`
-  width: 245px;
-  height: 154px;
   display: flex;
   justify-content: space-between;
+  width: 245px;
+  height: 154px;
 `;
 
 export const nicknameContainer = css`
@@ -16,5 +16,6 @@ export const nicknameContainer = css`
 export const verticalLine = css`
   width: 1px;
   height: 100%;
+
   background-color: #d9d9d9;
 `;
