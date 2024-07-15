@@ -1,9 +1,7 @@
+import GamePage from './pages/GamePage/GamePage';
+
 const App = () => {
-  return (
-    <div>
-      <h1>ddang-kong</h1>
-    </div>
-  );
+  return <GamePage />;
 };
 
 export default App;

@@ -11,7 +11,7 @@ const SelectContainer = () => {
         <span>VS</span>
         <SelectOption />
       </section>
-      <Button />
+      <Button text="선택" active={true} onClick={() => console.log('클릭')} />
     </div>
   );
 };
