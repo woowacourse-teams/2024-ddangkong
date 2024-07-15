@@ -1,9 +1,9 @@
-import Timer from '@/components/Timer/Timer';
+import SelectContainer from '@/components/SelectContainer/SelectContainer';
 
 const App = () => {
   return (
     <div>
-      <Timer />
+      <SelectContainer />
       <h1>ddang-kong</h1>
     </div>
   );
