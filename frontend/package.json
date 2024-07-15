@@ -9,7 +9,7 @@
     "build-prod": "webpack --config webpack.config.prod.js",
     "test": "jest --watch",
     "lint": "npx eslint --ext .ts,.tsx .",
-    "lint:styled": "stylelint './src/**/*.styled.ts' --fix",
+    "lint:styled": "stylelint ./src/**/*.styled.ts --fix",
     "prepare": "cd .. && husky frontend/.husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
