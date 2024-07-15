@@ -5,5 +5,6 @@ export const layout = css`
   height: 40px;
   border: 0;
   border-radius: 24px;
+
   background-color: #ffcc6a;
 `;

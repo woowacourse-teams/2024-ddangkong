@@ -10,7 +10,7 @@ export const layout = css`
 
 export const selectSection = css`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 12px;
-  justify-content: space-between;
 `;
