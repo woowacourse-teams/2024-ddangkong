@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
+import { Theme } from '@/styles/Theme';
 
-export const layout = css`
-  width: 120px;
-  height: 40px;
-  border: 0;
-  border-radius: 24px;
+export const buttonLayout = (active: boolean) => css`
+  padding: 1rem 4rem;
 
-  background-color: #ffcc6a;
+  background-color: ${active ? Theme.color.peanut500 : Theme.color.peanut300};
+
+  font-weight: bold;
+  font-size: 2rem;
+  border-radius: 2.4rem;
 `;
