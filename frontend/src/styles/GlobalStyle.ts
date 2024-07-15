@@ -130,12 +130,20 @@ const reset = css`
     border-collapse: collapse;
     border-spacing: 0;
   }
+
+  button {
+    border: none;
+    outline: none;
+    background-color: inherit;
+    cursor: pointer;
+  }
 `;
 
 const GlobalStyle = css`
   ${reset}
 
   html {
+    margin-top: 3rem;
     font-size: 10px;
   }
 
