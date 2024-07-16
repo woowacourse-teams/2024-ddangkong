@@ -1,15 +1,14 @@
 import { categoryText, topicLayout, topicText } from './TopicContainer.styled';
 
-interface TopicContainerProp {
-  category: string;
-  title: string;
-}
+import useQuestionQuery from '@/hooks/useQuestionQuery';
 
-const TopicContainer = ({ category, title }: TopicContainerProp) => {
+const TopicContainer = () => {
+  const { data: question } = useQuestionQuery();
+
   return (
     <section css={topicLayout}>
-      <span css={categoryText}>{category}</span>
-      <span css={topicText}>{title}</span>
+      <span css={categoryText}>{question?.category}</span>
+      <span css={topicText}>{question?.title}</span>
     </section>
   );
 };
