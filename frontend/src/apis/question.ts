@@ -1,8 +1,9 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
+import { Question } from '@/types/question';
 
-export const fetchQuestion = async (roomId = 1) => {
+export const fetchQuestion = async (roomId = 1): Promise<Question> => {
   const res = await fetcher.get({ url: API_URL.question(roomId) });
 
   const data = await res.json();
