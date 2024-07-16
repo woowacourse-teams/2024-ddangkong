@@ -3,18 +3,18 @@ import { css } from '@emotion/react';
 export const layout = css`
   display: flex;
   justify-content: space-between;
-  width: 245px;
-  height: 154px;
+  width: 24.5rem;
+  height: 15.4rem;
 `;
 
 export const nicknameContainer = css`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 1.2rem;
 `;
 
 export const verticalLine = css`
-  width: 1px;
+  width: 0.1rem;
   height: 100%;
 
   background-color: #d9d9d9;

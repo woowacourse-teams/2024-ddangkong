@@ -5,5 +5,5 @@ export const layout = css`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  gap: 60px;
+  gap: 6rem;
 `;
