@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 export const layout = css`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 24.5rem;
   height: 15.4rem;
 `;

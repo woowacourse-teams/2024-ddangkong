@@ -1,12 +1,11 @@
 import GameResult from '@/components/GameResult/GameResult';
-import Header from '@/components/layout/Header/Header';
+import Content from '@/components/layout/Content/Content';
 
 const GameResultPage = () => {
   return (
-    <div>
-      <Header title="밸런스 게임" />
+    <Content>
       <GameResult />
-    </div>
+    </Content>
   );
 };
 
