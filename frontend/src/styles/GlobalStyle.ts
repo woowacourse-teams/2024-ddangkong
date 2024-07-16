@@ -149,7 +149,7 @@ const GlobalStyle = css`
 
   #root {
     width: 32rem;
-    height: 56.8rem;
+    height: 100vh;
     margin: 0 auto;
   }
 `;

@@ -3,8 +3,10 @@ import { css } from '@emotion/react';
 export const topicLayout = css`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 1.4rem;
+  gap: 2rem;
+  flex-basis: 20%;
 `;
 
 export const categoryText = css`
