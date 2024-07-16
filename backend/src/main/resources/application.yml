@@ -1,1 +1,3 @@
-spring.application.name=backend
+spring:
+  profiles:
+    active: local
