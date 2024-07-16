@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import { gameTitle, headerLayout } from './Header.styled';
 
 import HomeIcon from '@/assets/images/homeIcon.svg';
@@ -8,9 +10,14 @@ interface HeaderProps {
 }
 
 const Header = ({ title }: HeaderProps) => {
+  const navigate = useNavigate();
+
+  const goToHome = () => {
+    navigate('/');
+  };
   return (
     <header css={headerLayout}>
-      <button>
+      <button onClick={goToHome}>
         <img src={HomeIcon} alt="홈으로 이동" />
       </button>
       <span css={gameTitle}>{title}</span>
