@@ -4,13 +4,12 @@ export const layout = css`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;
-  border: solid 1px;
+  gap: 5rem;
 `;
 
 export const selectSection = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 1.2rem;
 `;
