@@ -1,4 +1,4 @@
-name: BE CI for Dev
+name: BE CD for Dev
 
 on:
   pull_request:
@@ -10,34 +10,9 @@ permissions:
   contents: read
 
 jobs:
-#  # docker 이동 시, 사용
-#  build:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: checkout
-#        uses: actions/checkout@v4
-#
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v4
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
-#
-#      - name: Grant execute permission for gradlew
-#        run: chmod +x gradlew
-#
-#      - name: Build with Gradle
-#        run: ./gradlew clean bootJar
-
   deploy:
-#    needs: build
-    runs-on: [self-hosted, linux, ARM64]
+    runs-on: [self-hosted, linux, ARM64] # Self hosted runner 사용
 
-      # EC2에 배포
-      # EC2 SSH 키를 private_key.pem 파일로 저장 ( 위치는 GitHub 서버 )
-      # SSH를 사용하여 EC2 서버에 연결하고 현재 실행 중인 Java 프로세스를 종료한 다음 새로운 Java 프로세스 생성 및 실행!!
-    ## NLP 적용하면 IP -> 도메인으로 수정 + EC2 늘리면 run 추가
     steps:
       - name: Deploy to EC2
         run: |
