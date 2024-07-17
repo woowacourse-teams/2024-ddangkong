@@ -1,7 +1,11 @@
 {
   "testEnvironment": "jsdom",
+  "testEnvironmentOptions": {
+    "customExportConditions": [""]
+  },
   "moduleNameMapper": {
     "^@/(.*)$": "<rootDir>/src/$1"
   },
+  "setupFiles": ["./jest.polyfills.js"],
   "setupFilesAfterEnv": ["<rootDir>/jest.setup.ts"]
 }
