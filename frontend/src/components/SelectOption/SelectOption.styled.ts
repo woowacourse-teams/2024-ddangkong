@@ -20,4 +20,7 @@ export const layout = (selected: boolean) => css`
 
   word-break: keep-all;
   border-radius: 3rem; /* 둥근 모서리 */
+
+  transition: all 0.5s;
+  scale: ${selected ? 1.1 : 1};
 `;
