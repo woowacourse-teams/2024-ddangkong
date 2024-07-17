@@ -20,7 +20,12 @@
     "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint", "react-refresh"],
-  "ignorePatterns": ["webpack.config.common.js", "webpack.config.dev.js", "webpack.config.prod.js"],
+  "ignorePatterns": [
+    "webpack.config.common.js",
+    "webpack.config.dev.js",
+    "webpack.config.prod.js",
+    "jest.polyfills.js"
+  ],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-unused-vars": "warn",
