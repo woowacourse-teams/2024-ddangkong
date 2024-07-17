@@ -1,15 +1,13 @@
 package ddangkong.controller.exception;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Path;
-import jakarta.validation.constraints.NotEmpty;
-import org.springframework.validation.BindingResult;
-
 import java.util.List;
 import java.util.Set;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.springframework.validation.BindingResult;
 
 public record ErrorResponse(
         String message,
