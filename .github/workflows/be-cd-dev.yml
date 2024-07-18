@@ -12,6 +12,6 @@ permissions:
 jobs:
   deploy:
     runs-on: [self-hosted, linux, ARM64] # Self hosted runner 사용
-
-      - name: Deploy to EC2
+    steps:
+      - name: Execute script on EC2 to deploy
         run: sudo sh ~/deploy-script-dev.sh
