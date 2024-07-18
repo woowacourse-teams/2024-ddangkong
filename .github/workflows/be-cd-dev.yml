@@ -40,7 +40,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_GMAIL }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest .
