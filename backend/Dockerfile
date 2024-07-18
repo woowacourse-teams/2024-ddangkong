@@ -1,5 +1,5 @@
 # Use an official OpenJDK runtime as a parent image
-FROM openjdk:17-jre-slim
+FROM openjdk:17-jdk-slim
 
 # Copy the jar file into the container
 COPY build/libs/*.jar app.jar
