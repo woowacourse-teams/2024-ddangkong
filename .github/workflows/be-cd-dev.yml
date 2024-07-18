@@ -45,6 +45,7 @@ jobs:
 
 
   deploy:
+    needs: build
     runs-on: [self-hosted, linux, ARM64] # Self hosted runner 사용
     steps:
       - name: Pull docker image
