@@ -49,4 +49,4 @@ jobs:
     runs-on: [self-hosted, linux, ARM64] # Self hosted runner 사용
     steps:
       - name: Pull docker image
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/ddangkong-api-dev:latest
+        run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/ddangkong-api-dev:latest
