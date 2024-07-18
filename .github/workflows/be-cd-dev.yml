@@ -14,9 +14,18 @@ jobs:
     runs-on: [self-hosted, linux, ARM64] # Self hosted runner 사용
 
     steps:
-      - name: Deploy to EC2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SSH key
         run: |
           echo "${{ secrets.EC2_DEV_SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
-          ssh -i private_key.pem ${{ secrets.EC2_DEV_USERNAME }}@${{ secrets.EC2_DEV_IP }} | sh deploy-script-dev.sh
+
+      - name: Deploy to EC2
+        run: |
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_DEV_USERNAME }}@${{ secrets.EC2_DEV_IP }} sh ~/deploy-script-dev.sh
+
+      - name: Cleanup
+        run: |
           rm -f private_key.pem
