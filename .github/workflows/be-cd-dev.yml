@@ -58,6 +58,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_GMAIL }}
           password: ${{ secrets.DOCKER_TOKEN }}
+        env:
+          CONTAINER_NAME: ddangkong-api-dev
 
       - name: Pull docker image
         run: sudo docker pull ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest
@@ -65,7 +67,11 @@ jobs:
       - name: Stop and Remove previous Docker container
         run: |
           CONTAINER_ID=$(sudo docker ps -aqf "name=ddangkong-api-dev")
+          if [ -n "$CONTAINER_ID" ]; then
           sudo docker rm -f ${CONTAINER_ID}
+          else
+            echo "No previous container found with name. Skipping removal."
+          fi
 
       - name: Run new Docker container
         run: | 
