@@ -43,7 +43,7 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest .
+        run: docker build .Dockerfile --platform linux/amd64 -t ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest .
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest
@@ -52,5 +52,6 @@ jobs:
     needs: build
     runs-on: [ self-hosted, linux, ARM64 ] # Self hosted runner 사용
     steps:
+      -
       - name: Pull docker image
         run: sudo docker pull ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest
