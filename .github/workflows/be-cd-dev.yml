@@ -66,8 +66,11 @@ jobs:
 
       - name: Stop and Remove previous Docker container
         run: |
-          CONTAINER_ID=$(sudo docker ps -aqf "name=$CONTAINER_NAME")
+          CONTAINER_ID=$(sudo docker ps -aqf "name=${{ env.CONTAINER_NAME }}")
           sudo docker rm -f ${CONTAINER_ID}
 
       - name: Run new Docker container
-        run: sudo docker run -d --name $CONTAINER_NAME -p 8080:8080 ddangkong/ddangkong-api-dev:latest
+        run: | 
+          sudo docker run -d --name ${{ env.CONTAINER_NAME }} \
+          -p 8080:8080 \
+          ddangkong/ddangkong-api-dev:latest
