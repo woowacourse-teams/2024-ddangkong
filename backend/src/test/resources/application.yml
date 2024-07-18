@@ -1,13 +1,13 @@
 spring:
-  active:
-    profiles: test
+  profiles:
+    active: test
   jpa:
     properties:
       hibernate:
         format_sql: true
         highlight_sql: true
         show_sql: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
 
 ---
 spring:
@@ -16,7 +16,7 @@ spring:
       on-profile: test
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb;MODE=MYSQL;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
     username: sa
   h2:
     console:
