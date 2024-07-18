@@ -14,10 +14,6 @@ java {
     }
 }
 
-jar {
-    enabled = false
-}
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -44,6 +40,10 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'io.rest-assured:rest-assured:5.5.0'
+}
+
+tasks.named('jar') {
+    enabled = false
 }
 
 tasks.named('test') {
