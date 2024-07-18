@@ -8,4 +8,4 @@ COPY build/libs/*.jar app.jar
 EXPOSE 8080
   
 # Run the jar file
-ENTRYPOINT ["nohup", "java", "-jar", "-Duser.timezone=Asia/Seoul","-Dspring.profiles.active=dev", "app.jar", "&"]
+ENTRYPOINT ["java", "-jar", "-Duser.timezone=Asia/Seoul","-Dspring.profiles.active=dev", "app.jar"]
