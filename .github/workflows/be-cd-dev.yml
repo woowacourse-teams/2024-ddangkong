@@ -21,9 +21,11 @@ jobs:
         working-directory: ./backend
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up JDK 17
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -41,11 +43,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build ./Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ddangkong-api-dev:latest
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/ddangkong-api-dev:latest .
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/ddangkong-api-dev:latest
-
 
   deploy:
     needs: build
