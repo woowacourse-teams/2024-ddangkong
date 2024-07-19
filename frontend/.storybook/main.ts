@@ -20,6 +20,9 @@ const config: StorybookConfig = {
       },
     },
   },
+  docs: {
+    autodocs: true,
+  },
   swc: () => ({
     jsc: {
       transform: {
@@ -31,6 +34,15 @@ const config: StorybookConfig = {
   }),
   webpackFinal: async (config: Configuration) => {
     const { resolve } = config;
+
+    // storybook 에 emotion 관련 babel 설정추가
+    config?.module?.rules?.push({
+      test: /\.(ts|tsx)$/,
+      loader: require.resolve('babel-loader'),
+      options: {
+        presets: [require.resolve('@emotion/babel-preset-css-prop')],
+      },
+    });
 
     if (resolve) {
       resolve.alias = {
