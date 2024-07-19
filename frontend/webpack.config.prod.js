@@ -4,6 +4,10 @@ const common = require('./webpack.config.common.js');
 module.exports = merge(common, {
   mode: 'production',
   devtool: 'source-map',
+  devServer: {
+    port: 3000,
+    historyApiFallback: true,
+  },
   module: {
     rules: [
       {
