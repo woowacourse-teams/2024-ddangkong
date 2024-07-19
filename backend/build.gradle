@@ -55,6 +55,8 @@ tasks.named('jar') {
 
 tasks.named('test') {
     useJUnitPlatform()
+    reports.html.required = false
+    reports.junitXml.required = false
     outputs.dir snippetsDir
 }
 
