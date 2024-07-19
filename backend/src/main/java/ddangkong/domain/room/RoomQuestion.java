@@ -1,5 +1,6 @@
 package ddangkong.domain.room;
 
+import ddangkong.domain.AuditingEntity;
 import ddangkong.domain.question.BalanceQuestion;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,7 +20,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode
 @ToString
-public class RoomQuestion {
+public class RoomQuestion extends AuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
