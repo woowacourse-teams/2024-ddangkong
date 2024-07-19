@@ -10,7 +10,7 @@ export const layout = (selected: boolean) => css`
   height: 16.8rem;
   padding: 1.6rem;
 
-  background-color: ${selected ? Theme.color.peanut400 : Theme.color.peanut300};
+  background-color: ${selected ? Theme.color.peanut500 : Theme.color.peanut300};
 
   color: #000; /* 텍스트 색상 */
   font-weight: bold;

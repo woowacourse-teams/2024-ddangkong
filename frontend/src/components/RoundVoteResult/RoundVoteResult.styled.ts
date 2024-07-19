@@ -16,11 +16,12 @@ export const layout = ({ percentage }: LayoutProps) => css`
   font-size: 1.2rem;
   background: linear-gradient(
     to right,
-    ${Theme.color.peanut400} 0%,
-    ${Theme.color.peanut400} ${percentage}%,
-    #fff4df ${percentage}%,
-    #fff4df 100%
+    ${Theme.color.peanut500} 0%,
+    ${Theme.color.peanut500} ${percentage - 20}%,
+    ${Theme.color.peanut300} ${percentage}%,
+    white 100%
   );
+
   border-radius: 1.7rem;
 `;
 
