@@ -9,7 +9,8 @@
         "shippedProposals": true
       }
     ],
+    "@emotion/babel-preset-css-prop",
     "@babel/preset-typescript",
-    ["@babel/preset-react", { "runtime": "automatic" }]
+    ["@babel/preset-react", { "runtime": "automatic", "importSource": "@emotion/react" }]
   ]
 }
