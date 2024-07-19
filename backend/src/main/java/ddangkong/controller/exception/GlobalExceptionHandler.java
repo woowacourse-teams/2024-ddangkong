@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    private static final String SERVER_ERROR_MESSAGE = "서버 오류가 발생했습니다. 관리자에게 문의하세요.";
+
     @ExceptionHandler
     public ErrorResponse handleBindingException(BindException e) {
         log.warn(e.getMessage());
@@ -27,10 +29,26 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBusinessLogicException(BusinessLogicException e) {
+        log.warn(e.getMessage());
+
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleViolateDataException(ViolateDataException e) {
+        log.warn(e.getMessage());
+
+        return new ErrorResponse(SERVER_ERROR_MESSAGE);
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(Exception e) {
         log.error(e.getMessage());
 
-        return new ErrorResponse("서버 오류가 발생했습니다. 관리자에게 문의하세요.");
+        return new ErrorResponse(SERVER_ERROR_MESSAGE);
     }
 }
