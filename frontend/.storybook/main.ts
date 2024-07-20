@@ -33,15 +33,20 @@ const config: StorybookConfig = {
     },
   }),
   webpackFinal: async (config: Configuration) => {
-    const { resolve } = config;
+    const { resolve, module } = config;
 
-    // storybook 에 emotion 관련 babel 설정추가
-    config?.module?.rules?.push({
+    // storybook 에 emotion 관련 babel 설정 추가
+    module?.rules?.push({
       test: /\.(ts|tsx)$/,
-      loader: require.resolve('babel-loader'),
-      options: {
-        presets: [require.resolve('@emotion/babel-preset-css-prop')],
-      },
+      exclude: /node_modules/,
+      use: [
+        {
+          loader: require.resolve('babel-loader'),
+          options: {
+            plugins: [require.resolve('@emotion/babel-plugin')],
+          },
+        },
+      ],
     });
 
     if (resolve) {
