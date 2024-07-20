@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleViolateDataException(ViolateDataException e) {
-        log.warn(e.getMessage());
+        log.error(e.getMessage());
 
         return new ErrorResponse(SERVER_ERROR_MESSAGE);
     }
