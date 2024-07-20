@@ -43,7 +43,9 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Build Docker image
-        run: docker build --platform linux/arm64/v8 -t ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest .
+        run: |
+          docker compose -f deploy/docker-compose-dev.yml build
+          docker tag deploy-ddangkong-api-dev:latest ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest
@@ -76,5 +78,4 @@ jobs:
       - name: Run new Docker container
         run: | 
           sudo docker run -d --name ddangkong-api-dev \
-          -p 8080:8080 \
           ddangkong/ddangkong-api-dev:latest
