@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test;
 class BalanceQuestionControllerTest extends BaseControllerTest {
 
     private static final BalanceQuestionResponse EXPECTED_RESPONSE = new BalanceQuestionResponse(
-            1L, Category.EXAMPLE, "똥 맛 카레 vs 카레 맛 똥",
-            new BalanceOptionResponse(1L, "똥 맛 카레"),
-            new BalanceOptionResponse(2L, "카레 맛 똥"));
+            1L, Category.EXAMPLE, "민초 vs 반민초",
+            new BalanceOptionResponse(1L, "민초"),
+            new BalanceOptionResponse(2L, "반민초"));
 
     @Nested
     class 방의_질문_조회 {

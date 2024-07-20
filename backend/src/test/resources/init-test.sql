@@ -16,21 +16,19 @@ ALTER TABLE room_question ALTER COLUMN ID RESTART WITH 1;
 
 INSERT INTO room() VALUES ();
 
-INSERT INTO member(nickname, room_id) VALUES ('mohamedeu al katan', 1);
-INSERT INTO member(nickname, room_id) VALUES ('deundeun ', 1);
-INSERT INTO member(nickname, room_id) VALUES ('rupi', 1);
-INSERT INTO member(nickname, room_id) VALUES ('rapper lee', 1);
+INSERT INTO member(nickname, room_id)
+VALUES ('mohamedeu al katan', 1), ('deundeun ', 1), ('rupi', 1), ('rapper lee', 1);
 
-INSERT INTO room_question(room_id, balance_question_id, created_at) VALUES (1, 1, '2024-07-18 20:00:00.000');
+INSERT INTO room_question(room_id, balance_question_id, created_at)
+VALUES (1, 2, '2024-07-18 19:50:00.000'), (1, 1, '2024-07-18 20:00:00.000');
 
-INSERT INTO balance_question(category, content) VALUES ('EXAMPLE', '똥 맛 카레 vs 카레 맛 똥');
+INSERT INTO balance_question(category, content)
+VALUES ('EXAMPLE', '민초 vs 반민초'), ('EXAMPLE', '월 200 백수 vs 월 500 직장인');
 
-INSERT INTO balance_option(content, balance_question_id) VALUES ('똥 맛 카레', 1);
-INSERT INTO balance_option(content, balance_question_id) VALUES ('카레 맛 똥', 1);
+INSERT INTO balance_option(content, balance_question_id)
+VALUES ('민초', 1), ('반민초', 1), ('월 200 백수', 2), ('월 200 직장인', 2);
 
-INSERT INTO balance_vote(balance_option_id, member_id) VALUES (1, 1);
-INSERT INTO balance_vote(balance_option_id, member_id) VALUES (1, 2);
-INSERT INTO balance_vote(balance_option_id, member_id) VALUES (1, 3);
-INSERT INTO balance_vote(balance_option_id, member_id) VALUES (2, 4);
+INSERT INTO balance_vote(balance_option_id, member_id)
+VALUES (4, 1), (4, 2), (4, 3), (4, 4), (1, 1), (1, 2), (1, 3), (2, 4);
 
 SET REFERENTIAL_INTEGRITY TRUE;
