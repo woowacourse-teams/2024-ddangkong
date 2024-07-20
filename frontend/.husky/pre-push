@@ -1,6 +1,7 @@
 # cd frontend && npm run build-dev
 
 
+
 # 현재 브랜치 이름 가져오기
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
