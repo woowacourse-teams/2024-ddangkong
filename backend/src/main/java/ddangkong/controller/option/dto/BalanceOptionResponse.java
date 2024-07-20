@@ -7,6 +7,6 @@ public record BalanceOptionResponse(
         String content
 ) {
     public static BalanceOptionResponse from(BalanceOption balanceOption) {
-        return new BalanceOptionResponse(balanceOption.getId(), balanceOption.getContent());
+        return new BalanceOptionResponse(balanceOption.getId(), balanceOption.getName());
     }
 }

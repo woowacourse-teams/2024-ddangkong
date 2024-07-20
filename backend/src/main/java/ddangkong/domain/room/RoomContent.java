@@ -1,7 +1,7 @@
 package ddangkong.domain.room;
 
 import ddangkong.domain.BaseEntity;
-import ddangkong.domain.question.BalanceQuestion;
+import ddangkong.domain.content.BalanceContent;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class RoomQuestion extends BaseEntity {
+public class RoomContent extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,6 @@ public class RoomQuestion extends BaseEntity {
     private Room room;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "balance_question_id")
-    private BalanceQuestion balanceQuestion;
+    @JoinColumn(name = "balance_content_id")
+    private BalanceContent balanceContent;
 }

@@ -1,4 +1,4 @@
-package ddangkong.domain.question;
+package ddangkong.domain.content;
 
 public enum Category {
     EXAMPLE,
