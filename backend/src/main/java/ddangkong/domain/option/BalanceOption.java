@@ -1,6 +1,6 @@
 package ddangkong.domain.option;
 
-import ddangkong.domain.question.BalanceQuestion;
+import ddangkong.domain.content.BalanceContent;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,9 +23,9 @@ public class BalanceOption {
     private Long id;
 
     @Column(nullable = false)
-    private String content;
+    private String name;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "balance_question_id", nullable = false)
-    private BalanceQuestion balanceQuestion;
+    @JoinColumn(name = "balance_content_id", nullable = false)
+    private BalanceContent balanceContent;
 }

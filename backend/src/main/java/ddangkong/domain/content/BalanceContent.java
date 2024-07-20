@@ -1,4 +1,4 @@
-package ddangkong.domain.question;
+package ddangkong.domain.content;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class BalanceQuestion {
+public class BalanceContent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +25,5 @@ public class BalanceQuestion {
     private Category category;
 
     @Column(nullable = false)
-    private String content;
+    private String name;
 }

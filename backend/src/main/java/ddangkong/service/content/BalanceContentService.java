@@ -1,10 +1,10 @@
-package ddangkong.service.question;
+package ddangkong.service.content;
 
-import ddangkong.controller.question.dto.BalanceQuestionResponse;
+import ddangkong.controller.content.dto.BalanceContentResponse;
 import ddangkong.domain.option.BalanceOption;
 import ddangkong.domain.option.BalanceOptionRepository;
-import ddangkong.domain.question.BalanceQuestion;
-import ddangkong.domain.question.RoomQuestionRepository;
+import ddangkong.domain.content.BalanceContent;
+import ddangkong.domain.content.RoomContentRepository;
 import ddangkong.service.excpetion.BusinessLogicException;
 import ddangkong.service.excpetion.ViolateDataException;
 import java.util.List;
@@ -14,34 +14,34 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class BalanceQuestionService {
+public class BalanceContentService {
 
     private static final int BALANCE_OPTION_SIZE = 2;
 
-    private final RoomQuestionRepository roomQuestionRepository;
+    private final RoomContentRepository roomContentRepository;
 
     private final BalanceOptionRepository balanceOptionRepository;
 
     @Transactional(readOnly = true)
-    public BalanceQuestionResponse findRecentBalanceQuestion(Long roomId) {
-        BalanceQuestion balanceQuestion = findRecentQuestion(roomId);
-        List<BalanceOption> balanceOptions = findBalanceOptions(balanceQuestion);
+    public BalanceContentResponse findRecentBalanceContent(Long roomId) {
+        BalanceContent balanceContent = findRecentContent(roomId);
+        List<BalanceOption> balanceOptions = findBalanceOptions(balanceContent);
 
-        return BalanceQuestionResponse.builder()
-                .question(balanceQuestion)
+        return BalanceContentResponse.builder()
+                .balanceContent(balanceContent)
                 .firstOption(balanceOptions.get(0))
                 .secondOption(balanceOptions.get(1))
                 .build();
     }
 
-    private BalanceQuestion findRecentQuestion(Long roomId) {
-        return roomQuestionRepository.findTopByRoomIdOrderByCreatedAtDesc(roomId)
+    private BalanceContent findRecentContent(Long roomId) {
+        return roomContentRepository.findTopByRoomIdOrderByCreatedAtDesc(roomId)
                 .orElseThrow(() -> new BusinessLogicException("해당 방의 질문이 존재하지 않습니다."))
-                .getBalanceQuestion();
+                .getBalanceContent();
     }
 
-    private List<BalanceOption> findBalanceOptions(BalanceQuestion balanceQuestion) {
-        List<BalanceOption> balanceOptions = balanceOptionRepository.findByBalanceQuestion(balanceQuestion);
+    private List<BalanceOption> findBalanceOptions(BalanceContent balanceContent) {
+        List<BalanceOption> balanceOptions = balanceOptionRepository.findByBalanceContent(balanceContent);
         validateBalanceOptions(balanceOptions);
         return balanceOptions;
     }
