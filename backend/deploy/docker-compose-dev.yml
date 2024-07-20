@@ -1,0 +1,11 @@
+version: "2.29.0"
+
+services:
+  ddangkong-api-dev:
+    platform: linux/arm64/v8
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    entrypoint: [ java, -jar, -Dspring.profiles.active=dev, -Duser.timezone=Asia/Seoul, app.jar ]
+    ports:
+      - "8080:8080"
