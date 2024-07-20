@@ -3,7 +3,6 @@ import { categoryText, topicLayout, topicText } from './TopicContainer.styled';
 import useQuestionQuery from '@/hooks/useQuestionQuery';
 
 const TopicContainer = () => {
-  console.log('hi');
   const { data: question } = useQuestionQuery();
 
   return (
