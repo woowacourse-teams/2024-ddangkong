@@ -1,9 +1,9 @@
-package ddangkong.repository.room;
+package ddangkong.domain.question;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import ddangkong.domain.BaseRepositoryTest;
 import ddangkong.domain.room.RoomQuestion;
-import ddangkong.repository.BaseRepositoryTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
