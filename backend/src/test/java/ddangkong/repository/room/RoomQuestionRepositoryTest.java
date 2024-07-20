@@ -20,7 +20,7 @@ class RoomQuestionRepositoryTest extends BaseRepositoryTest {
         void 방의_가장_최신의_질문을_조회할_수_있다() {
             RoomQuestion actual = roomQuestionRepository.findTopByRoomIdOrderByCreatedAtDesc(1L).get();
 
-            assertThat(actual.getId()).isEqualTo(1L);
+            assertThat(actual.getId()).isEqualTo(2L);
         }
     }
 }
