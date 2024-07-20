@@ -17,7 +17,7 @@ class BalanceQuestionServiceTest extends BaseServiceTest {
     private static final Long PROGRESS_ROOM_ID = 1L;
     private static final Long NOT_EXIST_ROOM_ID = 2L;
     private static final BalanceQuestionResponse BALANCE_QUESTION_RESPONSE = new BalanceQuestionResponse(
-        1L, Category.EXAMPLE, "민초 vs 반민초",
+            1L, Category.EXAMPLE, "민초 vs 반민초",
             new BalanceOptionResponse(1L, "민초"),
             new BalanceOptionResponse(2L, "반민초"));
 
