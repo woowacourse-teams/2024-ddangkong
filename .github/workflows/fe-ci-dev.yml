@@ -1,0 +1,32 @@
+name: Frontend CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - "frontend/**"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: ./frontend
+
+      - name: Build
+        run: npm run build-dev
+        working-directory: ./frontend
+
+      - name: Test
+        run: npm test
+        working-directory: ./frontend
