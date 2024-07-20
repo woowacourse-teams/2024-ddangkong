@@ -1,4 +1,4 @@
-package ddangkong.controller.exception;
+package ddangkong.service.excpetion;
 
 public class BusinessLogicException extends RuntimeException {
 

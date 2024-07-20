@@ -3,11 +3,11 @@ package ddangkong.service.question;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import ddangkong.controller.exception.BusinessLogicException;
 import ddangkong.controller.option.dto.BalanceOptionResponse;
 import ddangkong.controller.question.dto.BalanceQuestionResponse;
 import ddangkong.domain.question.Category;
 import ddangkong.service.BaseServiceTest;
+import ddangkong.service.excpetion.BusinessLogicException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
