@@ -14,6 +14,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_REPOSITORY_NAME: ddangkong/ddangkong-api-dev
 
     defaults:
       run:
@@ -44,15 +46,18 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker compose -f deploy/docker-compose-dev.yml build
-          docker tag deploy-ddangkong-api-dev:latest ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest
+          docker compose -f deploy/docker-compose-dev.yml build 
+          docker tag deploy-ddangkong-api-dev:latest $DOCKER_REPOSITORY_NAME:latest
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest
+        run: docker push $DOCKER_REPOSITORY_NAME:latest
 
   deploy:
     needs: build
     runs-on: [ self-hosted, linux, ARM64 ] # Self hosted runner 사용
+    env:
+      DOCKER_REPOSITORY_NAME: ddangkong/ddangkong-api-dev
+      CONTAINER_NAME: ddangkong-api-dev
 
     steps:
       - name: Log in to Docker Hub
@@ -60,16 +65,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_GMAIL }}
           password: ${{ secrets.DOCKER_TOKEN }}
-        env:
-          CONTAINER_NAME: ddangkong-api-dev
 
       - name: Pull docker image
-        run: sudo docker pull ${{ secrets.DOCKER_REPOSITORY_NAME }}/ddangkong-api-dev:latest
+        run: sudo docker pull $DOCKER_REPOSITORY_NAME:latest
 
       - name: Stop and Remove previous Docker container
         run: |
-          CONTAINER_ID=$(sudo docker ps -aqf "name=ddangkong-api-dev")
-          if [ -n "$CONTAINER_ID" ]; then
+          CONTAINER_ID=$(sudo docker ps -aqf name=$CONTAINER_NAME)
+          if [ -n ${CONTAINER_ID} ]; then
           sudo docker rm -f ${CONTAINER_ID}
           else
             echo "No previous container found with name. Skipping removal."
@@ -77,5 +80,5 @@ jobs:
 
       - name: Run new Docker container
         run: | 
-          sudo docker run -d --name ddangkong-api-dev \
-          ddangkong/ddangkong-api-dev:latest
+          sudo docker run -d --name $CONTAINER_NAME \
+          $DOCKER_REPOSITORY_NAME:latest
