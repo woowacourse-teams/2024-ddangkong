@@ -1,12 +1,12 @@
 package ddangkong.service.question;
 
-import ddangkong.controller.exception.BusinessLogicException;
-import ddangkong.controller.exception.ViolateDataException;
 import ddangkong.controller.question.dto.BalanceQuestionResponse;
 import ddangkong.domain.option.BalanceOption;
 import ddangkong.domain.option.BalanceOptionRepository;
 import ddangkong.domain.question.BalanceQuestion;
 import ddangkong.domain.question.RoomQuestionRepository;
+import ddangkong.service.excpetion.BusinessLogicException;
+import ddangkong.service.excpetion.ViolateDataException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

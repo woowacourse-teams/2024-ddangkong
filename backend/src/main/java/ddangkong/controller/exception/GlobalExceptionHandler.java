@@ -1,5 +1,7 @@
 package ddangkong.controller.exception;
 
+import ddangkong.service.excpetion.BusinessLogicException;
+import ddangkong.service.excpetion.ViolateDataException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
