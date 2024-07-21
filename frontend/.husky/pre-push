@@ -6,7 +6,7 @@
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 # feat/ 로 시작하는 브랜치인지 확인
-if [[ $current_branch == feat/* ]]; then
+if [[ $current_branch == feat/* ]] || [[ $current_branch == hotfix/* ]]; then
     echo "Feature branch detected: $current_branch"
     echo "Starting rebase process..."
 
