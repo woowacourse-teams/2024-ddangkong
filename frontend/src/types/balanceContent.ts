@@ -1,13 +1,13 @@
-export interface Question {
-  questionId: number;
-  title: string;
+export interface BalanceContent {
+  contentId: number;
   category: string;
+  question: string;
   firstOption: {
-    content: string;
     optionId: number;
+    name: string;
   };
   secondOption: {
-    content: string;
     optionId: number;
+    name: string;
   };
 }
