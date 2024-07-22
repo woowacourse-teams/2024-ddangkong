@@ -25,7 +25,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
     private BalanceContentService balanceContentService;
 
     @Nested
-    class 방의_최신_내용_조회 {
+    class 현재_방의_내용_조회 {
 
         @Test
         void 방의_최신_내용을_조회할_수_있다() {
