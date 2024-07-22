@@ -37,11 +37,11 @@ public class DatabaseCleanerExtension implements BeforeEachCallback {
 
     @SuppressWarnings("unchecked")
     private List<String> findTableNames(EntityManager em) {
-        String tableSelectQuery = """
+        String tableNameSelectQuery = """
                 SELECT TABLE_NAME
                 FROM INFORMATION_SCHEMA.TABLES
                 WHERE TABLE_SCHEMA = 'PUBLIC'
                 """;
-        return em.createNativeQuery(tableSelectQuery).getResultList();
+        return em.createNativeQuery(tableNameSelectQuery).getResultList();
     }
 }
