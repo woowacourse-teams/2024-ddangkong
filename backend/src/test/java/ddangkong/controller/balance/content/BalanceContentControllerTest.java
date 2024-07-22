@@ -30,5 +30,13 @@ class BalanceContentControllerTest extends BaseControllerTest {
 
             assertThat(actual).isEqualTo(EXPECTED_RESPONSE);
         }
+
+        @Test
+        void 방의_식별자가_음수인_경우_예외를_던진다() {
+            RestAssured.given().log().all()
+                    .when().get("/api/balances/rooms/-1/question")
+                    .then().log().all()
+                    .statusCode(400);
+        }
     }
 }
