@@ -7,9 +7,9 @@ import ddangkong.domain.balance.option.BalanceOption;
 import lombok.Builder;
 
 public record BalanceContentResponse(
-        Long questionId,
+        Long contentId,
         Category category,
-        String title,
+        String question,
         BalanceOptionResponse firstOption,
         BalanceOptionResponse secondOption
 ) {
