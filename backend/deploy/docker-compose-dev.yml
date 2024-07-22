@@ -6,6 +6,7 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile
-    entrypoint: [ java, -jar, -Dspring.profiles.active=dev, -Duser.timezone=Asia/Seoul, app.jar ]
+      args:
+        - SPRINT_PROFILE=dev
     ports:
       - "8080:8080"
