@@ -18,7 +18,7 @@ class BalanceContentControllerTest extends BaseControllerTest {
             new BalanceOptionResponse(2L, "반민초"));
 
     @Nested
-    class 방의_질문_조회 {
+    class 현재_방의_내용_조회 {
 
         @Test
         void 현재_방의_질문을_조회할_수_있다() {
