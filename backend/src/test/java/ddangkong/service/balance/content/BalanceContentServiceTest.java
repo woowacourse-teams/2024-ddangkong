@@ -29,13 +29,16 @@ class BalanceContentServiceTest extends BaseServiceTest {
 
         @Test
         void 방의_최신_내용을_조회할_수_있다() {
+            // when
             BalanceContentResponse actual = balanceContentService.findRecentBalanceContent(PROGRESS_ROOM_ID);
 
+            // then
             assertThat(actual).isEqualTo(BALANCE_CONTENT_RESPONSE);
         }
 
         @Test
         void 방이_없을_경우_예외를_던진다() {
+            // when & then
             assertThatThrownBy(() -> balanceContentService.findRecentBalanceContent(NOT_EXIST_ROOM_ID))
                     .isInstanceOf(BusinessLogicException.class)
                     .hasMessage("해당 방의 질문이 존재하지 않습니다.");
