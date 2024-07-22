@@ -6,6 +6,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ddangkong.controller.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(RestDocumentationExtension.class)
-abstract class BaseDocumentationTest {
+public abstract class BaseDocumentationTest {
 
     protected final ObjectMapper objectMapper;
 
@@ -42,6 +43,7 @@ abstract class BaseDocumentationTest {
                         )
                 )
                 .setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
     }
 
