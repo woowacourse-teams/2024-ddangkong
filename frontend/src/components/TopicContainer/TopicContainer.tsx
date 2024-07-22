@@ -1,14 +1,14 @@
 import { categoryText, topicLayout, topicText } from './TopicContainer.styled';
 
-import useQuestionQuery from '@/hooks/useQuestionQuery';
+import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const TopicContainer = () => {
-  const { data: question } = useQuestionQuery();
+  const { balanceContent } = useBalanceContentQuery();
 
   return (
     <section css={topicLayout}>
-      <span css={categoryText}>{question?.category}</span>
-      <span css={topicText}>{question?.title}</span>
+      <span css={categoryText}>{balanceContent?.category}</span>
+      <span css={topicText}>{balanceContent?.question}</span>
     </section>
   );
 };

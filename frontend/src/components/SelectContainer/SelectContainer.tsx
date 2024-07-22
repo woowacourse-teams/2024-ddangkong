@@ -5,11 +5,11 @@ import { layout, selectSection } from './SelectContainer.styled';
 
 import Button from '@/components/common/Button/Button';
 import SelectOption from '@/components/SelectOption/SelectOption';
-import useQuestionQuery from '@/hooks/useQuestionQuery';
+import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const SelectContainer = () => {
   const navigate = useNavigate();
-  const { data: question, isLoading } = useQuestionQuery();
+  const { balanceContent, isLoading } = useBalanceContentQuery();
   const [selectedId, setSelectedId] = useState(0);
 
   const goToRoundResult = () => {
@@ -24,17 +24,17 @@ const SelectContainer = () => {
 
   return (
     <>
-      {question && (
+      {balanceContent && (
         <div css={layout}>
           <section css={selectSection}>
             <SelectOption
-              option={question.firstOption}
+              option={balanceContent.firstOption}
               selectedId={selectedId}
               handleSelectOption={handleSelectOption}
             />
             <span>VS</span>
             <SelectOption
-              option={question.secondOption}
+              option={balanceContent.secondOption}
               selectedId={selectedId}
               handleSelectOption={handleSelectOption}
             />
