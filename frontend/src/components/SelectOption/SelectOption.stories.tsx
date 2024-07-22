@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 export const 선택되지_않은_옵션: Story = {
   args: {
-    option: { content: '100억 빚 송강', optionId: 1 },
+    option: { name: '100억 빚 송강', optionId: 1 },
     selectedId: 0,
   },
   render: ({ ...args }) => <SelectOption {...args} />,
@@ -29,7 +29,7 @@ export const 선택되지_않은_옵션: Story = {
 
 export const 선택된_옵션: Story = {
   args: {
-    option: { content: '100억 빚 송강', optionId: 1 },
+    option: { name: '100억 빚 송강', optionId: 1 },
     selectedId: 1,
   },
 

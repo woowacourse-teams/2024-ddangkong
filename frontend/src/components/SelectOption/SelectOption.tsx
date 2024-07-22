@@ -1,9 +1,9 @@
 import { layout } from './SelectOption.styled';
 
-import { Question } from '@/types/question';
+import { BalanceContent } from '@/types/balanceContent';
 
 interface SelectOptionProps {
-  option: Question['firstOption'];
+  option: BalanceContent['firstOption'];
   selectedId: number;
   handleSelectOption: (selectedId: number) => void;
 }
@@ -14,7 +14,7 @@ const SelectOption = ({ option, selectedId, handleSelectOption }: SelectOptionPr
       css={layout(Boolean(selectedId === option.optionId))}
       onClick={() => handleSelectOption(option.optionId)}
     >
-      {option.content}
+      {option.name}
     </button>
   );
 };
