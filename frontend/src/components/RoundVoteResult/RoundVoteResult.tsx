@@ -1,19 +1,19 @@
 import { layout, fontBold, voteContent } from './RoundVoteResult.styled';
 
-import useQuestionQuery from '@/hooks/useQuestionQuery';
+import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const RoundVoteResult = () => {
-  const { data: question } = useQuestionQuery();
+  const { balanceContent } = useBalanceContentQuery();
 
   return (
     <div css={layout({ percentage: 72 })}>
       <div css={voteContent}>
-        <div css={fontBold}>{question?.firstOption.content}</div>
+        <div css={fontBold}>{balanceContent?.firstOption.name}</div>
         <div css={fontBold}>72%</div>
       </div>
       <span>vs</span>
       <div css={voteContent}>
-        <div css={fontBold}>{question?.secondOption.content}</div>
+        <div css={fontBold}>{balanceContent?.secondOption.name}</div>
         <div>28%</div>
       </div>
     </div>
