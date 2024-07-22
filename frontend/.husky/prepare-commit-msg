@@ -21,7 +21,7 @@ fi
 # 이슈 번호가 이미 커밋 메시지에 있는지 확인
 if ! echo "$COMMIT_MSG" | grep -q "#$ISSUE_NUMBER"; then
   # 이슈 번호가 없으면 커밋 메시지 끝에 추가
-  echo "$COMMIT_MSG" > $COMMIT_MSG_FILE
+  echo -n "$COMMIT_MSG" > $COMMIT_MSG_FILE
   echo " #$ISSUE_NUMBER" >> $COMMIT_MSG_FILE
   echo "Issue number #$ISSUE_NUMBER has been automatically added to the commit message."
 fi
