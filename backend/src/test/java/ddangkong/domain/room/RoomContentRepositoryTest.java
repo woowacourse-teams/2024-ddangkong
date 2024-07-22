@@ -1,14 +1,13 @@
-package ddangkong.domain.content;
+package ddangkong.domain.room;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ddangkong.domain.BaseRepositoryTest;
-import ddangkong.domain.room.RoomContent;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class RoomQuestionRepositoryTest extends BaseRepositoryTest {
+class RoomContentRepositoryTest extends BaseRepositoryTest {
 
     @Autowired
     private RoomContentRepository roomContentRepository;

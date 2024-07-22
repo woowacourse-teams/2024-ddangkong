@@ -1,4 +1,4 @@
-package ddangkong.domain.content;
+package ddangkong.domain.room;
 
 import ddangkong.domain.room.RoomContent;
 import java.util.Optional;

@@ -4,7 +4,7 @@ import ddangkong.controller.content.dto.BalanceContentResponse;
 import ddangkong.domain.option.BalanceOption;
 import ddangkong.domain.option.BalanceOptionRepository;
 import ddangkong.domain.content.BalanceContent;
-import ddangkong.domain.content.RoomContentRepository;
+import ddangkong.domain.room.RoomContentRepository;
 import ddangkong.service.excpetion.BusinessLogicException;
 import ddangkong.service.excpetion.ViolateDataException;
 import java.util.List;
