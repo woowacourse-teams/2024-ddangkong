@@ -1,11 +1,11 @@
-package ddangkong.service.content;
+package ddangkong.service.balance.content;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import ddangkong.controller.option.dto.BalanceOptionResponse;
-import ddangkong.controller.content.dto.BalanceContentResponse;
-import ddangkong.domain.content.Category;
+import ddangkong.controller.balance.content.dto.BalanceContentResponse;
+import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
+import ddangkong.domain.balance.content.Category;
 import ddangkong.service.BaseServiceTest;
 import ddangkong.service.excpetion.BusinessLogicException;
 import org.junit.jupiter.api.Nested;

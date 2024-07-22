@@ -1,11 +1,11 @@
-package ddangkong.controller.content;
+package ddangkong.controller.balance.content;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ddangkong.controller.BaseControllerTest;
-import ddangkong.controller.option.dto.BalanceOptionResponse;
-import ddangkong.controller.content.dto.BalanceContentResponse;
-import ddangkong.domain.content.Category;
+import ddangkong.controller.balance.content.dto.BalanceContentResponse;
+import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
+import ddangkong.domain.balance.content.Category;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

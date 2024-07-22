@@ -1,6 +1,6 @@
-package ddangkong.controller.option.dto;
+package ddangkong.controller.balance.option.dto;
 
-import ddangkong.domain.option.BalanceOption;
+import ddangkong.domain.balance.option.BalanceOption;
 
 public record BalanceOptionResponse(
         Long optionId,

@@ -1,6 +1,6 @@
-package ddangkong.domain.option;
+package ddangkong.domain.balance.option;
 
-import ddangkong.domain.content.BalanceContent;
+import ddangkong.domain.balance.content.BalanceContent;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,7 +1,7 @@
-package ddangkong.controller.content;
+package ddangkong.controller.balance.content;
 
-import ddangkong.controller.content.dto.BalanceContentResponse;
-import ddangkong.service.content.BalanceContentService;
+import ddangkong.controller.balance.content.dto.BalanceContentResponse;
+import ddangkong.service.balance.content.BalanceContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
