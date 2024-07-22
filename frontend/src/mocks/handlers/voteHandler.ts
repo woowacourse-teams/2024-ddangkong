@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw';
 
 import { MOCK_API_URL } from '@/constants/url';
 
-const voteQuestionHandler = async ({ request }: { request: Request }) => {
+const voteBalanceContentHandler = async ({ request }: { request: Request }) => {
   const body = await request.json();
 
   return HttpResponse.json(
@@ -13,4 +13,4 @@ const voteQuestionHandler = async ({ request }: { request: Request }) => {
   );
 };
 
-export const voteHandler = [http.post(MOCK_API_URL.vote, voteQuestionHandler)];
+export const voteHandler = [http.post(MOCK_API_URL.vote, voteBalanceContentHandler)];
