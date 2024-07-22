@@ -17,8 +17,13 @@ class RoomContentRepositoryTest extends BaseRepositoryTest {
 
         @Test
         void 방의_가장_최신의_질문을_조회할_수_있다() {
-            RoomContent actual = roomContentRepository.findTopByRoomIdOrderByCreatedAtDesc(1L).get();
+            // given
+            Long recentContentId = 1L;
 
+            // when
+            RoomContent actual = roomContentRepository.findTopByRoomIdOrderByCreatedAtDesc(recentContentId).get();
+
+            // then
             assertThat(actual.getId()).isEqualTo(2L);
         }
     }
