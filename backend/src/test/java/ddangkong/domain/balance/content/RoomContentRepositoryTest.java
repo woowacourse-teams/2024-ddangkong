@@ -1,4 +1,4 @@
-package ddangkong.domain.room;
+package ddangkong.domain.balance.content;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

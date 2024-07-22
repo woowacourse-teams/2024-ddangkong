@@ -1,6 +1,5 @@
-package ddangkong.domain.room;
+package ddangkong.domain.balance.content;
 
-import ddangkong.domain.room.RoomContent;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,10 +1,10 @@
-package ddangkong.service.content;
+package ddangkong.service.balance.content;
 
-import ddangkong.controller.content.dto.BalanceContentResponse;
-import ddangkong.domain.option.BalanceOption;
-import ddangkong.domain.option.BalanceOptionRepository;
-import ddangkong.domain.content.BalanceContent;
-import ddangkong.domain.room.RoomContentRepository;
+import ddangkong.controller.balance.content.dto.BalanceContentResponse;
+import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.content.RoomContentRepository;
+import ddangkong.domain.balance.option.BalanceOption;
+import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.service.excpetion.BusinessLogicException;
 import ddangkong.service.excpetion.ViolateDataException;
 import java.util.List;
