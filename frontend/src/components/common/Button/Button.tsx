@@ -1,7 +1,7 @@
 import { buttonLayout } from './Button.styled';
 
 interface ButtonProps {
-  text: '선택' | '확인' | '다음';
+  text: string;
   active: boolean;
   onClick: () => void;
 }
