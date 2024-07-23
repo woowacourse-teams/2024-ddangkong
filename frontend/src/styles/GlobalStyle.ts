@@ -143,7 +143,6 @@ const GlobalStyle = css`
   ${reset}
 
   html {
-    margin-top: 3rem;
     font-size: 10px;
   }
 
