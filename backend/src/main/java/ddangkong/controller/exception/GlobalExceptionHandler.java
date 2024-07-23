@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBusinessLogicException(BadRequestException e) {
+    public ErrorResponse handleBadRequestException(BadRequestException e) {
         log.warn(e.getMessage());
 
         return new ErrorResponse(e.getMessage());
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleViolateDataException(InternalServerErrorException e) {
+    public ErrorResponse handleInternalServerErrorException(InternalServerErrorException e) {
         log.error(e.getMessage(), e);
 
         return new ErrorResponse(SERVER_ERROR_MESSAGE);
