@@ -13,7 +13,7 @@ const SelectContainer = () => {
   const [selectedId, setSelectedId] = useState(0);
 
   const goToRoundResult = () => {
-    navigate('/round-result');
+    navigate(`/round/result`);
   };
 
   const handleSelectOption = (selectedId: number) => {
