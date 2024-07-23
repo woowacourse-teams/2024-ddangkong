@@ -24,6 +24,7 @@ export const buttonLayout = ({ disabled, size, radius, fontSize }: ButtonLayoutP
   background-color: ${disabled ? Theme.color.peanut300 : Theme.color.peanut400};
 
   font-weight: bold;
+
   font-size: ${getFontSize(fontSize)};
   cursor: ${disabled ? 'not-allowed' : 'pointer'};
 

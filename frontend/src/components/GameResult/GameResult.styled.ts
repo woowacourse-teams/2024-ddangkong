@@ -5,8 +5,8 @@ export const gameResultLayout = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 40vh;
   gap: 6rem;
+  height: 40vh;
 `;
 
 export const gameResultTitleWrapper = css`

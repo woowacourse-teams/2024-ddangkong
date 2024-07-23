@@ -4,9 +4,9 @@ import { Theme } from '@/styles/Theme';
 
 export const tabLayout = css`
   display: flex;
+  flex-basis: 40%;
   flex-direction: column;
   width: 100%;
-  flex-basis: 40%;
 `;
 
 export const tabWrapperStyle = css`
@@ -16,13 +16,14 @@ export const tabWrapperStyle = css`
 `;
 
 export const tabButtonStyle = (isActive: boolean) => css`
+  flex: 1;
+  padding: 0.8rem;
+  border-radius: 1.2rem 1.2rem 0 0;
+
   background-color: ${isActive ? Theme.color.peanut400 : Theme.color.gray};
 
   color: black;
-  flex: 1;
   font-weight: bold;
-  padding: 0.8rem;
-  border-radius: 1.2rem 1.2rem 0 0;
 `;
 
 export const contentWrapperStyle = css`
@@ -67,6 +68,7 @@ export const barStyle = (percentage: number, isBigFirstOption: boolean) => css`
 
   width: ${percentage}%;
   height: 8vh;
+  border-radius: 1.6rem 0 0 1.6rem;
 
   background-color: ${isBigFirstOption ? Theme.color.peanut400 : Theme.color.gray};
 
@@ -74,7 +76,6 @@ export const barStyle = (percentage: number, isBigFirstOption: boolean) => css`
   font-weight: bold;
   font-size: 1.6rem;
   clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-  border-radius: 1.6rem 0 0 1.6rem;
   transition: all 1s;
   transform: translateX(5px);
 `;
@@ -85,6 +86,7 @@ export const barBackgroundStyle = (percentage: number, isBigFirstOption: boolean
   align-items: center;
   width: ${percentage}%;
   height: 8vh;
+  border-radius: 0 1.6rem 1.6rem 0;
 
   background-color: ${isBigFirstOption ? Theme.color.gray : Theme.color.peanut400};
 
@@ -92,7 +94,6 @@ export const barBackgroundStyle = (percentage: number, isBigFirstOption: boolean
   font-weight: bold;
   font-size: 1.6rem;
   clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%);
-  border-radius: 0 1.6rem 1.6rem 0;
   transition: all 1s;
   transform: translateX(-5px);
 `;
