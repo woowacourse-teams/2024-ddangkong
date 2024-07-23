@@ -1,5 +1,5 @@
-INSERT INTO room (current_round, total_round)
-VALUES (2, 5);
+INSERT INTO room (total_round, current_round)
+VALUES (5, 2);
 
 INSERT INTO member (nickname, room_id)
 VALUES ('mohamedeu al katan', 1),
