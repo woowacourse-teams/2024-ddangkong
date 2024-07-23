@@ -11,12 +11,12 @@ import RoundResultPage from '@/pages/RoundResultPage/RoundResultPage';
 export const router = createBrowserRouter([
   {
     path: '/',
+    element: <MainPage />,
+  },
+  {
+    path: '/',
     element: <Layout />,
     children: [
-      {
-        index: true,
-        element: <MainPage />,
-      },
       {
         path: 'nickname',
         element: <NicknamePage />,

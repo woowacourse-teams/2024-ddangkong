@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
 
-export const layout = css`
+export const timerLayout = css`
   display: flex;
   justify-content: center;
   width: 100%;
