@@ -4,6 +4,7 @@ export const headerLayout = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 7rem;
 `;
 
 export const gameTitle = css`
