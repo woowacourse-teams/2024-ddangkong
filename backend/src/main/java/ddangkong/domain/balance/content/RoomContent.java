@@ -32,4 +32,20 @@ public class RoomContent extends BaseEntity {
 
     @Column(nullable = false)
     private int round;
+
+    public Long getContentId() {
+        return balanceContent.getId();
+    }
+
+    public Category getContentCategory() {
+        return balanceContent.getCategory();
+    }
+
+    public String getContentName() {
+        return balanceContent.getName();
+    }
+
+    public int getTotalRound() {
+        return room.getTotalRound();
+    }
 }

@@ -2,6 +2,7 @@ package ddangkong.service.balance.content;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.content.RoomContent;
 import ddangkong.domain.balance.content.RoomContentRepository;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
@@ -24,20 +25,19 @@ public class BalanceContentService {
 
     @Transactional(readOnly = true)
     public BalanceContentResponse findRecentBalanceContent(Long roomId) {
-        BalanceContent balanceContent = findRecentContent(roomId);
-        List<BalanceOption> balanceOptions = findBalanceOptions(balanceContent);
+        RoomContent roomContent = findRecentRoomContent(roomId);
+        List<BalanceOption> balanceOptions = findBalanceOptions(roomContent.getBalanceContent());
 
         return BalanceContentResponse.builder()
-                .balanceContent(balanceContent)
+                .roomContent(roomContent)
                 .firstOption(balanceOptions.get(0))
                 .secondOption(balanceOptions.get(1))
                 .build();
     }
 
-    private BalanceContent findRecentContent(Long roomId) {
+    private RoomContent findRecentRoomContent(Long roomId) {
         return roomContentRepository.findTopByRoomIdOrderByCreatedAtDesc(roomId)
-                .orElseThrow(() -> new BadRequestException("해당 방의 질문이 존재하지 않습니다."))
-                .getBalanceContent();
+                .orElseThrow(() -> new BadRequestException("해당 방의 질문이 존재하지 않습니다."));
     }
 
     private List<BalanceOption> findBalanceOptions(BalanceContent balanceContent) {
