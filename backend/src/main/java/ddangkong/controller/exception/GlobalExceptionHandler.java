@@ -1,7 +1,7 @@
 package ddangkong.controller.exception;
 
-import ddangkong.service.excpetion.BusinessLogicException;
-import ddangkong.service.excpetion.ViolateDataException;
+import ddangkong.exception.BadRequestException;
+import ddangkong.exception.InternalServerErrorException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBusinessLogicException(BusinessLogicException e) {
+    public ErrorResponse handleBusinessLogicException(BadRequestException e) {
         log.warn(e.getMessage());
 
         return new ErrorResponse(e.getMessage());
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleViolateDataException(ViolateDataException e) {
+    public ErrorResponse handleViolateDataException(InternalServerErrorException e) {
         log.error(e.getMessage(), e);
 
         return new ErrorResponse(SERVER_ERROR_MESSAGE);

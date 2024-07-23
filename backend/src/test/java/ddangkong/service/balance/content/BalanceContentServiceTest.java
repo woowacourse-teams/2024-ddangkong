@@ -7,7 +7,7 @@ import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.service.BaseServiceTest;
-import ddangkong.service.excpetion.BusinessLogicException;
+import ddangkong.exception.BadRequestException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         void 방이_없을_경우_예외를_던진다() {
             // when & then
             assertThatThrownBy(() -> balanceContentService.findRecentBalanceContent(NOT_EXIST_ROOM_ID))
-                    .isInstanceOf(BusinessLogicException.class)
+                    .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방의 질문이 존재하지 않습니다.");
         }
     }
