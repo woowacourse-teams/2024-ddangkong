@@ -21,8 +21,8 @@ public class Room {
     private Long id;
 
     @Column(nullable = false)
-    private int currentRound;
+    private int totalRound = DEFAULT_TOTAL_ROUND;
 
     @Column(nullable = false)
-    private int totalRound = DEFAULT_TOTAL_ROUND;
+    private int currentRound;
 }
