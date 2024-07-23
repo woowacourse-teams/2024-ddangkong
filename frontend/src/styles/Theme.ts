@@ -4,7 +4,7 @@ const color = {
   peanut300: '#FFF4DF',
   peanut400: '#FFDD9A',
   peanut500: '#FFD076',
-
+  gray: '#D9D9D9',
   gray200: '#F3F1F1',
   gray300: '#E4E4E4',
   gray400: '#9D9B9B',

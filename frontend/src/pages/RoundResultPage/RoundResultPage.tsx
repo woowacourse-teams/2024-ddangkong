@@ -1,11 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 
-import { NicknameListWrapper } from './RoundResultPage.styled';
-
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
-import NicknameList from '@/components/NicknameList/NicknameList';
-import RoundVoteResult from '@/components/RoundVoteResult/RoundVoteResult';
+import RoundResultTab from '@/components/RoundResultTab/RoundResultTab';
 import TopicContainer from '@/components/TopicContainer/TopicContainer';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
@@ -26,10 +23,7 @@ const RoundResultPage = () => {
   return (
     <Content>
       <TopicContainer />
-      <RoundVoteResult />
-      <div css={NicknameListWrapper}>
-        <NicknameList />
-      </div>
+      <RoundResultTab />
       <Button
         text={isLastRound ? '결과 확인' : '다음'}
         onClick={isLastRound ? goToGameResult : goToNextRound}
