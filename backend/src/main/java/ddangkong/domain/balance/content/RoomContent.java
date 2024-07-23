@@ -1,6 +1,7 @@
 package ddangkong.domain.balance.content;
 
 import ddangkong.domain.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,4 +29,7 @@ public class RoomContent extends BaseEntity {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "balance_content_id")
     private BalanceContent balanceContent;
+
+    @Column(nullable = false)
+    private int round;
 }
