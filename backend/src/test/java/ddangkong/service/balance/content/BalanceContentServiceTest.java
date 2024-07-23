@@ -6,8 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.service.BaseServiceTest;
 import ddangkong.exception.BadRequestException;
+import ddangkong.service.BaseServiceTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
     private static final Long PROGRESS_ROOM_ID = 1L;
     private static final Long NOT_EXIST_ROOM_ID = 2L;
     private static final BalanceContentResponse BALANCE_CONTENT_RESPONSE = new BalanceContentResponse(
-            1L, Category.EXAMPLE, "민초 vs 반민초",
+            1L, Category.EXAMPLE, 5, 2, "민초 vs 반민초",
             new BalanceOptionResponse(1L, "민초"),
             new BalanceOptionResponse(2L, "반민초"));
 
