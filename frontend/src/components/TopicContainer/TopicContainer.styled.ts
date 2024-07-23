@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-export const topicLayout = css`
+export const topicContainerLayout = css`
   display: flex;
   flex-direction: column;
   justify-content: center;

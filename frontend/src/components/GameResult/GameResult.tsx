@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { gameResultTitle, gameResultTitleWrapper, layout } from './GameResult.styled';
+import { gameResultTitle, gameResultTitleWrapper, gameResultLayout } from './GameResult.styled';
 
 import Button from '@/components/common/Button/Button';
 
@@ -12,7 +12,7 @@ const GameResult = () => {
   };
 
   return (
-    <div css={layout}>
+    <div css={gameResultLayout}>
       <div css={gameResultTitleWrapper}>
         <h1 css={gameResultTitle}>게임 결과</h1>
       </div>

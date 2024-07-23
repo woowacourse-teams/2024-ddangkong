@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { layout, selectSection } from './SelectContainer.styled';
+import { selectContainerLayout, selectSection } from './SelectContainer.styled';
 
 import Button from '@/components/common/Button/Button';
 import SelectOption from '@/components/SelectOption/SelectOption';
@@ -25,7 +25,7 @@ const SelectContainer = () => {
   return (
     <>
       {balanceContent && (
-        <div css={layout}>
+        <div css={selectContainerLayout}>
           <section css={selectSection}>
             <SelectOption
               option={balanceContent.firstOption}

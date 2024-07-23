@@ -1,9 +1,9 @@
 import { PropsWithChildren } from 'react';
 
-import { contentSection } from './Content.styled';
+import { contentLayout } from './Content.styled';
 
 const Content = ({ children }: PropsWithChildren) => {
-  return <section css={contentSection}>{children}</section>;
+  return <section css={contentLayout}>{children}</section>;
 };
 
 export default Content;
