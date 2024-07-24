@@ -9,19 +9,16 @@ export interface Group {
 }
 
 export interface Total {
-  firstOption: AverageOption;
-  secondOption: AverageOption;
+  firstOption: TotalOption;
+  secondOption: TotalOption;
 }
 
-export interface GroupOption {
-  optionId: number;
-  name: string;
+export interface GroupOption extends TotalOption {
   members: string[];
   memberCount: number;
-  percent: number;
 }
 
-export interface AverageOption {
+export interface TotalOption {
   optionId: number;
   name: string;
   percent: number;

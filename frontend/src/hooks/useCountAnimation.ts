@@ -6,7 +6,7 @@ const easeOutRate = (timingRate: number) => {
 };
 
 interface UseCountAnimationProps {
-  target: number;
+  target?: number;
   start?: number;
   duration?: number;
 }
@@ -17,7 +17,7 @@ const useCountAnimation = ({ target, start = 50, duration = 2000 }: UseCountAnim
   const totalFrame = Math.round(duration / frameRate);
 
   useEffect(() => {
-    if (target === start) return; // target 값을 API로 불러올 경우 초기값이 애니메이션에 반영되므로 예외처리
+    if (typeof target === 'undefined' || target === start) return; // target 값을 API로 불러올 경우 초기값이 애니메이션에 반영되므로 예외처리
     let currentNumber = start;
     const counter = setInterval(() => {
       const progress = easeOutRate(++currentNumber / totalFrame);

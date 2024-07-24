@@ -1,78 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
+import { useTotalCountAnimation } from './RoundResultTab.hook';
 import {
-  barBackgroundStyle,
-  barStyle,
-  barWrapperStyle,
   blankWrapper,
-  buttonStyle,
-  categoryContainer,
   contentWrapperStyle,
-  currentVoteButtonWrapper,
-  resultTextStyle,
-  roundVoteResultContainer,
   tabButtonStyle,
   tabLayout,
   tabWrapperStyle,
 } from './RoundResultTab.styled';
+import GroupRoundResultTab from '../GroupRoundResultTab/GroupRoundResultTab';
+import TotalResultTab from '../TotalResultTab/TotalResultTab';
 
-import useCountAnimation from '@/hooks/useCountAnimation';
-
-interface Option {
-  percentage: number;
-  count: number;
-}
-
-interface Statistic {
-  firstOption: Option;
-  secondOption: Option;
-}
-
-const INITIAL_STATISTIC: Statistic = {
-  firstOption: {
-    percentage: 50,
-    count: 0,
-  },
-  secondOption: {
-    percentage: 50,
-    count: 0,
-  },
-};
+import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 
 const RoundResultTab = () => {
   const [activeTab, setActiveTab] = useState('group');
-  const [groupResult, setGroupResult] = useState<Statistic>(INITIAL_STATISTIC);
-  const [averageResult, setAverageResult] = useState<Statistic>(INITIAL_STATISTIC);
+  const { groupRoundResult, totalResult } = useRoundVoteResultQuery();
 
-  const animatedFirstPercentage = useCountAnimation({ target: groupResult.firstOption.percentage });
-  const animatedSecondPercentage = useCountAnimation({
-    target: groupResult.secondOption.percentage,
-  });
+  const {
+    animatedFirstPercent,
+    animatedSecondPercent,
+    animatedTotalFirstPercent,
+    animatedTotalSecondPercent,
+  } = useTotalCountAnimation(groupRoundResult, totalResult);
 
-  const isBigFirstOption = groupResult.firstOption.percentage >= 50;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const groupResponse = await new Promise<Statistic>((resolve) =>
-        resolve({
-          firstOption: { percentage: 73, count: 7 },
-          secondOption: { percentage: 27, count: 3 },
-        }),
-      );
-
-      const averageResponse = await new Promise<Statistic>((resolve) =>
-        resolve({
-          firstOption: { percentage: 16, count: 16 },
-          secondOption: { percentage: 84, count: 84 },
-        }),
-      );
-
-      setGroupResult(groupResponse);
-      setAverageResult(averageResponse);
-    };
-
-    fetchData();
-  }, []);
+  if (!groupRoundResult || !totalResult) return <div>데이터가 없습니다</div>;
 
   return (
     <div css={tabLayout}>
