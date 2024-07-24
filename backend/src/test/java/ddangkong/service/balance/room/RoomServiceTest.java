@@ -27,10 +27,10 @@ class RoomServiceTest extends BaseServiceTest {
             RoomJoinResponse expected = new RoomJoinResponse(3L, expectedMemberResponse);
 
             // when
-            RoomJoinResponse roomServiceRoom = roomService.createRoom(nickname);
+            RoomJoinResponse actual = roomService.createRoom(nickname);
 
             // then
-            assertThat(roomServiceRoom).isEqualTo(expected);
+            assertThat(actual).isEqualTo(expected);
         }
     }
 
@@ -46,10 +46,10 @@ class RoomServiceTest extends BaseServiceTest {
             RoomJoinResponse expected = new RoomJoinResponse(joinRoomId, expectedMemberResponse);
 
             // when
-            RoomJoinResponse roomServiceRoom = roomService.joinRoom(nickname, joinRoomId);
+            RoomJoinResponse actual = roomService.joinRoom(nickname, joinRoomId);
 
             // then
-            assertThat(roomServiceRoom).isEqualTo(expected);
+            assertThat(actual).isEqualTo(expected);
         }
 
         @Test
