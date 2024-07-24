@@ -79,6 +79,6 @@ jobs:
           fi
 
       - name: Run new Docker container
-        run: | 
-          sudo docker run -d --name $CONTAINER_NAME \
-          $DOCKER_REPOSITORY_NAME:latest
+        run: |
+          sudo nohup docker run --name $CONTAINER_NAME \
+          $DOCKER_REPOSITORY_NAME:latest > nohup.out 2>&1 &
