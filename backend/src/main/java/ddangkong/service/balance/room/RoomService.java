@@ -21,7 +21,7 @@ public class RoomService {
         Room room = roomRepository.getById(roomId);
 
         List<RoomMemberResponse> response = memberRepository.findByRoom(room).stream()
-                .map(RoomMemberResponse::fromMember)
+                .map(RoomMemberResponse::new)
                 .toList();
         return new RoomMembersResponse(response);
     }

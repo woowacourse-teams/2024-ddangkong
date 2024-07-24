@@ -8,7 +8,7 @@ public record RoomMemberResponse(
         Boolean isMaster
 ) {
 
-    public static RoomMemberResponse fromMember(Member member) {
-        return new RoomMemberResponse(member.getId(), member.getNickname(), member.isMaster());
+    public RoomMemberResponse(Member member) {
+        this(member.getId(), member.getNickname(), member.isMaster());
     }
 }
