@@ -48,7 +48,7 @@ class BalanceContentDocumentationTest extends BaseDocumentationTest {
             mockMvc.perform(get(ENDPOINT, 1L)
                     )
                     .andExpect(status().isOk())
-                    .andDo(document("balance-content/find",
+                    .andDo(document("balanceContent/find",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
                             ),

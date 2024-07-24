@@ -4,18 +4,18 @@
 
 ==== curl
 
-include::{snippets}/balance-content/find/curl-request.adoc[]
+include::{snippets}/balanceContent/find/curl-request.adoc[]
 
 ==== request
 
-include::{snippets}/balance-content/find/http-request.adoc[]
+include::{snippets}/balanceContent/find/http-request.adoc[]
 
-include::{snippets}/balance-content/find/path-parameters.adoc[]
+include::{snippets}/balanceContent/find/path-parameters.adoc[]
 
 ==== response
 
-include::{snippets}/balance-content/find/http-response.adoc[]
+include::{snippets}/balanceContent/find/http-response.adoc[]
 
 response fields
 
-include::{snippets}/balance-content/find/response-fields.adoc[]
+include::{snippets}/balanceContent/find/response-fields.adoc[]
