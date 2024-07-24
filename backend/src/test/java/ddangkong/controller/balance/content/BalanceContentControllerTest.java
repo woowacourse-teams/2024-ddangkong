@@ -24,7 +24,7 @@ class BalanceContentControllerTest extends BaseControllerTest {
         void 현재_방의_질문을_조회할_수_있다() {
             // when
             BalanceContentResponse actual = RestAssured.given().log().all()
-                    .when().get("/api/balances/rooms/1/question")
+                    .when().get("/api/balances/rooms/1/content")
                     .then().log().all()
                     .statusCode(200)
                     .extract().as(BalanceContentResponse.class);
@@ -37,7 +37,7 @@ class BalanceContentControllerTest extends BaseControllerTest {
         void 방의_식별자가_음수인_경우_예외를_던진다() {
             // when & then
             RestAssured.given().log().all()
-                    .when().get("/api/balances/rooms/-1/question")
+                    .when().get("/api/balances/rooms/-1/content")
                     .then().log().all()
                     .statusCode(400);
         }
