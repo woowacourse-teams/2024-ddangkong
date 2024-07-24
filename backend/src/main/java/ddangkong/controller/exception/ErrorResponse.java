@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.validation.BindingResult;
 
 public record ErrorResponse(
+        String errorCode,
         String message,
         @JsonInclude(Include.NON_NULL)
         List<FieldError> fieldErrors,
@@ -18,15 +19,15 @@ public record ErrorResponse(
 ) {
 
     public ErrorResponse(String message) {
-        this(message, null, null);
+        this("BUSINESS_LOGIC_ERROR", message, null, null);
     }
 
     public ErrorResponse(BindingResult bindingResult) {
-        this("입력이 잘못되었습니다.", FieldError.from(bindingResult), null);
+        this("FIELD_ERROR", "입력이 잘못되었습니다.", FieldError.from(bindingResult), null);
     }
 
     public ErrorResponse(Set<ConstraintViolation<?>> constraintViolations) {
-        this("입력이 잘못되었습니다.", null, ConstraintViolationError.from(constraintViolations));
+        this("URL_PARAMETER_ERROR", "입력이 잘못되었습니다.", null, ConstraintViolationError.from(constraintViolations));
     }
 
     private record FieldError(String field, Object rejectedValue, String reason) {
