@@ -9,7 +9,7 @@ interface ButtonLayoutProps {
   fontSize?: 'small' | 'medium' | 'large';
 }
 
-const getSizeStyles = (size: 'small' | 'medium' | 'large' | undefined) => {
+const getSizeStyles = (size?: 'small' | 'medium' | 'large') => {
   switch (size) {
     case 'small':
       return css`
@@ -34,7 +34,7 @@ const getSizeStyles = (size: 'small' | 'medium' | 'large' | undefined) => {
   }
 };
 
-const getFontSize = (fontSize: 'small' | 'medium' | 'large' | undefined) => {
+const getFontSize = (fontSize?: 'small' | 'medium' | 'large') => {
   switch (fontSize) {
     case 'small':
       return Theme.typography.caption.fontSize;
@@ -47,7 +47,7 @@ const getFontSize = (fontSize: 'small' | 'medium' | 'large' | undefined) => {
   }
 };
 
-const getBorderRadius = (radius: 'small' | 'medium' | 'large' | undefined) => {
+const getBorderRadius = (radius?: 'small' | 'medium' | 'large') => {
   switch (radius) {
     case 'small':
       return Theme.borderRadius.radius10;
