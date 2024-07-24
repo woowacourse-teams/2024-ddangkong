@@ -1,7 +1,7 @@
 package ddangkong.controller.exception;
 
 import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerErrorException;
+import ddangkong.exception.InternalServerException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleInternalServerErrorException(InternalServerErrorException e) {
+    public ErrorResponse handleInternalServerErrorException(InternalServerException e) {
         log.error(e.getMessage(), e);
 
         return new ErrorResponse(SERVER_ERROR_MESSAGE);

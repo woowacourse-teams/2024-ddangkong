@@ -9,7 +9,7 @@ import ddangkong.domain.balance.content.RoomRepository;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerErrorException;
+import ddangkong.exception.InternalServerException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class BalanceContentService {
 
     private void validateBalanceOptions(List<BalanceOption> balanceOptions) {
         if (balanceOptions.size() != BALANCE_OPTION_SIZE) {
-            throw new InternalServerErrorException("밸런스 게임의 선택지가 %d개입니다".formatted(balanceOptions.size()));
+            throw new InternalServerException("밸런스 게임의 선택지가 %d개입니다".formatted(balanceOptions.size()));
         }
     }
 }
