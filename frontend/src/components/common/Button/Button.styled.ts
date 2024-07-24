@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
+import getBorderRadius from '@/styles/utils/getBorderRadius';
+import getFontSize from '@/styles/utils/getFontSize';
+import getSizeStyles from '@/styles/utils/getSizeStyles';
 
 interface ButtonLayoutProps {
   disabled?: boolean;
@@ -8,57 +11,6 @@ interface ButtonLayoutProps {
   radius?: 'small' | 'medium' | 'large';
   fontSize?: 'small' | 'medium' | 'large';
 }
-
-const getSizeStyles = (size?: 'small' | 'medium' | 'large') => {
-  switch (size) {
-    case 'small':
-      return css`
-        width: 6.8rem;
-        padding: 0.8rem 0;
-      `;
-    case 'medium':
-      return css`
-        width: 12rem;
-        padding: 1.6rem 0;
-      `;
-    case 'large':
-      return css`
-        width: 32rem;
-        padding: 2rem 0;
-      `;
-    default:
-      return css`
-        width: 32rem;
-        padding: 2rem 0;
-      `;
-  }
-};
-
-const getFontSize = (fontSize?: 'small' | 'medium' | 'large') => {
-  switch (fontSize) {
-    case 'small':
-      return Theme.typography.caption.fontSize;
-    case 'medium':
-      return Theme.typography.headline2.fontSize;
-    case 'large':
-      return Theme.typography.headline1.fontSize;
-    default:
-      return Theme.typography.headline2.fontSize;
-  }
-};
-
-const getBorderRadius = (radius?: 'small' | 'medium' | 'large') => {
-  switch (radius) {
-    case 'small':
-      return Theme.borderRadius.radius10;
-    case 'medium':
-      return Theme.borderRadius.radius20;
-    case 'large':
-      return Theme.borderRadius.radius30;
-    default:
-      return '0';
-  }
-};
 
 export const buttonLayout = ({ disabled, size, radius, fontSize }: ButtonLayoutProps) => css`
   display: flex;
