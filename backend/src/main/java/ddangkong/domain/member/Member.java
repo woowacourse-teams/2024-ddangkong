@@ -31,9 +31,16 @@ public class Member {
 
     private boolean isMaster;
 
-    public Member(String nickname, Room room, boolean isMaster) {
+    private Member(String nickname, Room room, boolean isMaster) {
         this.nickname = nickname;
         this.room = room;
         this.isMaster = isMaster;
+    }
+
+    public static Member createMaster(String nickname, Room room) {
+        return new Member(nickname, room, true);
+    }
+    public static Member createCommon(String nickname, Room room) {
+        return new Member(nickname, room, false);
     }
 }
