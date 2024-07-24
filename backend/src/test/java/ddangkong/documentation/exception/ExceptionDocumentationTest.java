@@ -19,7 +19,7 @@ class ExceptionDocumentationTest extends BaseDocumentationTest {
     @Test
     void 요청_바디_관련_예외가_발생한다() throws Exception {
         // given
-        ExceptionRequest request = new ExceptionRequest(null);
+        ExceptionRequest request = new ExceptionRequest(" ");
         String content = objectMapper.writeValueAsString(request);
 
         // when & then
@@ -30,11 +30,11 @@ class ExceptionDocumentationTest extends BaseDocumentationTest {
                 .andExpect(status().isBadRequest())
                 .andDo(document("exception/field-error",
                         responseFields(
-                                fieldWithPath("errorCode").description("에러 코드"),
-                                fieldWithPath("message").description("에러 메시지"),
-                                fieldWithPath("fieldErrors.[].field").description("필드명"),
-                                fieldWithPath("fieldErrors.[].rejectedValue").description("거부된 값"),
-                                fieldWithPath("fieldErrors.[].reason").description("거부된 이유")
+                                fieldWithPath("errorCode").type(STRING).description("에러 코드"),
+                                fieldWithPath("message").type(STRING).description("에러 메시지"),
+                                fieldWithPath("fieldErrors.[].field").type(STRING).description("필드명"),
+                                fieldWithPath("fieldErrors.[].rejectedValue").type(STRING).description("거부된 값"),
+                                fieldWithPath("fieldErrors.[].reason").type(STRING).description("거부된 이유")
                         )
                 ));
 
@@ -54,11 +54,11 @@ class ExceptionDocumentationTest extends BaseDocumentationTest {
                 .andExpect(status().isBadRequest())
                 .andDo(document("exception/url-parameter-error",
                         responseFields(
-                                fieldWithPath("errorCode").description("에러 코드"),
-                                fieldWithPath("message").description("에러 메시지"),
-                                fieldWithPath("violationErrors.[].field").description("필드명"),
-                                fieldWithPath("violationErrors.[].rejectedValue").description("거부된 값"),
-                                fieldWithPath("violationErrors.[].reason").description("거부된 이유")
+                                fieldWithPath("errorCode").type(STRING).description("에러 코드"),
+                                fieldWithPath("message").type(STRING).description("에러 메시지"),
+                                fieldWithPath("violationErrors.[].field").type(STRING).description("필드명"),
+                                fieldWithPath("violationErrors.[].rejectedValue").type(STRING).description("거부된 값"),
+                                fieldWithPath("violationErrors.[].reason").type(STRING).description("거부된 이유")
                         )
                 ));
 
