@@ -2,11 +2,11 @@ import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
 
-export const layout = (selected: boolean) => css`
+export const SelectOptionLayout = (selected: boolean) => css`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 11.4rem;
+  width: 11.6rem;
   height: 16.8rem;
   padding: 1.6rem;
 

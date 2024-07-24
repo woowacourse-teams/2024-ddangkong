@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 
-export const layout = css`
+export const selectContainerLayout = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 5rem;
+  gap: 4rem;
   flex-basis: 55%;
 `;
 

@@ -1,11 +1,11 @@
-import { layout, nicknameContainer, verticalLine } from './NicknameList.styled';
+import { nicknameListLayout, nicknameContainer, verticalLine } from './NicknameList.styled';
 
 const NicknameList = () => {
   const optionANicknames = ['철수', '철수', '철수', '철수', '철수', '철수', '철수', '철수', '철수'];
   const optionBNicknames = ['영미', '영미', '영미'];
 
   return (
-    <div css={layout}>
+    <div css={nicknameListLayout}>
       <div css={nicknameContainer}>
         {optionANicknames.map((optionANickname) => (
           <span key={optionANickname}>{optionANickname}</span>

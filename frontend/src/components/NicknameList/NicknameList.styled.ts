@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 
-export const layout = css`
+export const nicknameListLayout = css`
   display: flex;
   justify-content: space-around;
-  width: 24.5rem;
-  height: 15.4rem;
+  width: 24.4rem;
+  height: 15.8rem;
 `;
 
 export const nicknameContainer = css`

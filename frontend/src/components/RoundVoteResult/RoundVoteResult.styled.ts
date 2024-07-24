@@ -2,16 +2,16 @@ import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
 
-interface LayoutProps {
+interface RoundVoteResultLayoutProps {
   percentage: number;
 }
 
-export const layout = ({ percentage }: LayoutProps) => css`
+export const roundVoteResultLayout = ({ percentage }: RoundVoteResultLayoutProps) => css`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 24.5rem;
-  height: 11rem;
+  width: 24rem;
+  height: 11.6rem;
 
   font-size: 1.2rem;
   background: linear-gradient(

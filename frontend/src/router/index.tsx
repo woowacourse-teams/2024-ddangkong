@@ -4,23 +4,37 @@ import { Layout } from './layout';
 
 import GamePage from '@/pages/GamePage/GamePage';
 import GameResultPage from '@/pages/GameResultPage/GameResultPage';
+import MainPage from '@/pages/MainPage/MainPage';
+import NicknamePage from '@/pages/NicknamePage/NicknamePage';
 import RoundResultPage from '@/pages/RoundResultPage/RoundResultPage';
 
 export const router = createBrowserRouter([
   {
     path: '/',
+    element: <MainPage />,
+  },
+  {
+    path: '/',
     element: <Layout />,
     children: [
       {
-        index: true,
+        path: 'nickname',
+        element: <NicknamePage />,
+      },
+      {
+        path: 'ready',
+        element: <div>게임 대기 화면</div>,
+      },
+      {
+        path: 'game',
         element: <GamePage />,
       },
       {
-        path: 'round-result',
+        path: 'round/result',
         element: <RoundResultPage />,
       },
       {
-        path: 'game-result',
+        path: 'game/result',
         element: <GameResultPage />,
       },
     ],

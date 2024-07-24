@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-export const topicLayout = css`
+export const topicContainerLayout = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -11,7 +11,7 @@ export const topicLayout = css`
 
 export const categoryText = css`
   font-weight: bold;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 `;
 
 export const topicText = css`

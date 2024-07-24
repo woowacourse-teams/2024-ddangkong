@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-export const layout = css`
+export const gameResultLayout = css`
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-export const contentSection = css`
+export const contentLayout = css`
   display: flex;
   flex-direction: column;
   align-items: center;
