@@ -28,6 +28,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setting application.yml
+        run: |
+          echo ${{ secrets.application-yml-dev }} > src/main/resources/application-dev.yml
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
