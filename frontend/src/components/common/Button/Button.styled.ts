@@ -5,7 +5,7 @@ import { Theme } from '@/styles/Theme';
 interface ButtonLayoutProps {
   disabled?: boolean;
   size?: 'small' | 'medium' | 'large';
-  radius?: 'none' | 'small' | 'medium' | 'large';
+  radius?: 'small' | 'medium' | 'large';
   fontSize?: 'small' | 'medium' | 'large';
 }
 
@@ -22,6 +22,10 @@ const getSizeStyles = (size: 'small' | 'medium' | 'large' | undefined) => {
         padding: 1.6rem 0;
       `;
     case 'large':
+      return css`
+        width: 32rem;
+        padding: 2rem 0;
+      `;
     default:
       return css`
         width: 32rem;
@@ -37,12 +41,13 @@ const getFontSize = (fontSize: 'small' | 'medium' | 'large' | undefined) => {
     case 'medium':
       return Theme.typography.headline2.fontSize;
     case 'large':
-    default:
       return Theme.typography.headline1.fontSize;
+    default:
+      return Theme.typography.headline2.fontSize;
   }
 };
 
-const getBorderRadius = (radius: 'none' | 'small' | 'medium' | 'large' | undefined) => {
+const getBorderRadius = (radius: 'small' | 'medium' | 'large' | undefined) => {
   switch (radius) {
     case 'small':
       return Theme.borderRadius.radius10;
@@ -50,7 +55,6 @@ const getBorderRadius = (radius: 'none' | 'small' | 'medium' | 'large' | undefin
       return Theme.borderRadius.radius20;
     case 'large':
       return Theme.borderRadius.radius30;
-    case 'none':
     default:
       return '0';
   }
