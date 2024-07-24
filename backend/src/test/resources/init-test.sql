@@ -1,11 +1,12 @@
 INSERT INTO room (total_round, current_round)
-VALUES (5, 2), (5, 1);
+VALUES (5, 2),
+       (5, 1);
 
-INSERT INTO member (nickname, room_id)
-VALUES ('mohamedeu al katan', 1),
-       ('deundeun', 1),
-       ('rupi', 1),
-       ('rapper lee', 1);
+INSERT INTO member (nickname, room_id, is_master)
+VALUES ('mohamedeu al katan', 1, false),
+       ('deundeun', 1, false),
+       ('rupi', 1, false),
+       ('rapper lee', 1, false);
 
 INSERT INTO balance_content (category, name)
 VALUES ('EXAMPLE', '민초 vs 반민초'),

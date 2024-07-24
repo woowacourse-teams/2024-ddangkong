@@ -25,16 +25,16 @@ public class Member {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
-    private Boolean isMaster;
-
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    public Member(String nickname, Room room, Boolean isMaster) {
+    @Column(nullable = false)
+    private boolean isMaster;
+
+    private Member(String nickname, Room room, boolean isMaster) {
         this.nickname = nickname;
-        this.isMaster = isMaster;
         this.room = room;
+        this.isMaster = isMaster;
     }
 }
