@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+
     private final MemberRepository memberRepository;
 
     public RoomMembersResponse findAllRoomMember(Long roomId) {
