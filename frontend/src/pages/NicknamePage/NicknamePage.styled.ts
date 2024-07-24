@@ -23,7 +23,7 @@ export const nicknameInputWrapper = css`
   display: flex;
   align-items: center;
   width: 26.8rem;
-  height: 4.9rem;
+  height: 4.8rem;
   padding: 0 1rem;
 
   background-color: ${Theme.color.gray200};
