@@ -15,7 +15,7 @@ const MainPage = () => {
     <div css={mainPageLayout}>
       <div css={logoWrapper}>LO to the GO</div>
       <h1 css={title}>땅콩</h1>
-      <div css={intro}>어색한 분위기를 주도해봐요</div>
+      <h2 css={intro}>어색한 분위기를 주도해봐요</h2>
       <Button text="방 만들기" active={true} onClick={goToNicknamePage}></Button>
     </div>
   );
