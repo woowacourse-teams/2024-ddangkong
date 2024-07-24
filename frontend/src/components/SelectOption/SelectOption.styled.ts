@@ -6,7 +6,7 @@ export const SelectOptionLayout = (selected: boolean) => css`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 11.4rem;
+  width: 11.6rem;
   height: 16.8rem;
   padding: 1.6rem;
 

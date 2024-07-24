@@ -5,7 +5,7 @@ export const selectContainerLayout = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 5rem;
+  gap: 4rem;
   flex-basis: 55%;
 `;
 

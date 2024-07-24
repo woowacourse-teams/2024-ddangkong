@@ -10,8 +10,8 @@ export const roundVoteResultLayout = ({ percentage }: RoundVoteResultLayoutProps
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 24.5rem;
-  height: 11rem;
+  width: 24rem;
+  height: 11.6rem;
 
   font-size: 1.2rem;
   background: linear-gradient(
