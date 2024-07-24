@@ -29,6 +29,7 @@ public class Member {
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
+    @Column(nullable = false)
     private boolean isMaster;
 
     private Member(String nickname, Room room, boolean isMaster) {
@@ -40,6 +41,7 @@ public class Member {
     public static Member createMaster(String nickname, Room room) {
         return new Member(nickname, room, true);
     }
+
     public static Member createCommon(String nickname, Room room) {
         return new Member(nickname, room, false);
     }
