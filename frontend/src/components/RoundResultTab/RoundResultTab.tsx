@@ -44,57 +44,22 @@ const RoundResultTab = () => {
           전체
         </button>
       </div>
-      {activeTab === 'group' ? (
-        <div css={contentWrapperStyle}>
-          <div css={blankWrapper}></div>
-          <div css={roundVoteResultContainer}>
-            <div css={categoryContainer}>
-              <span>100억 빚 송강</span>
-              <span>100억 부자 송강호</span>
-            </div>
-            <div css={barWrapperStyle}>
-              <div css={barStyle(groupResult.firstOption.percentage, isBigFirstOption)}>
-                {animatedFirstPercentage}%
-              </div>
-              <div css={barBackgroundStyle(groupResult.secondOption.percentage, isBigFirstOption)}>
-                {animatedSecondPercentage}%
-              </div>
-            </div>
-            <div css={resultTextStyle}>
-              <span>{groupResult.firstOption.count}명</span>
-              <span>{groupResult.secondOption.count}명</span>
-            </div>
-          </div>
-          <div css={currentVoteButtonWrapper}>
-            <button css={buttonStyle}>투표 현황 {'>'}</button>
-          </div>
-        </div>
-      ) : (
-        <div css={contentWrapperStyle}>
-          <div css={blankWrapper}></div>
-          <div css={roundVoteResultContainer}>
-            <div css={categoryContainer}>
-              <span>100억 빚 송강</span>
-              <span>100억 부자 송강호</span>
-            </div>
-            <div css={barWrapperStyle}>
-              <div css={barStyle(averageResult.firstOption.percentage, isBigFirstOption)}>
-                {averageResult.firstOption.percentage}%
-              </div>
-              <div
-                css={barBackgroundStyle(averageResult.secondOption.percentage, isBigFirstOption)}
-              >
-                {averageResult.secondOption.percentage}%
-              </div>
-            </div>
-            <div css={resultTextStyle}>
-              <span>{averageResult.firstOption.count}명</span>
-              <span>{averageResult.secondOption.count}명</span>
-            </div>
-          </div>
-          <div css={blankWrapper}></div>
-        </div>
-      )}
+      <div css={contentWrapperStyle}>
+        <div css={blankWrapper}></div>
+        {activeTab === 'group' ? (
+          <GroupRoundResultTab
+            groupRoundResult={groupRoundResult}
+            animatedFirstPercent={animatedFirstPercent}
+            animatedSecondPercent={animatedSecondPercent}
+          />
+        ) : (
+          <TotalResultTab
+            totalResult={totalResult}
+            animatedTotalFirstPercent={animatedTotalFirstPercent}
+            animatedTotalSecondPercent={animatedTotalSecondPercent}
+          />
+        )}
+      </div>
     </div>
   );
 };
