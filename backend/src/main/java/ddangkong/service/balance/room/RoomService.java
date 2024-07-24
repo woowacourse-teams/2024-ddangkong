@@ -19,13 +19,13 @@ public class RoomService {
 
     public RoomJoinResponse createRoom(String nickname) {
         Room room = roomRepository.save(new Room());
-        Member member = memberRepository.save(new Member(nickname, room, true));
+        Member member = memberRepository.save(Member.createMaster(nickname, room));
         return new RoomJoinResponse(room.getId(), new MemberResponse(member));
     }
 
     public RoomJoinResponse joinRoom(String nickname, Long roomId) {
         Room room = roomRepository.getById(roomId);
-        Member member = memberRepository.save(new Member(nickname, room, false));
+        Member member = memberRepository.save(Member.createCommon(nickname, room));
         return new RoomJoinResponse(room.getId(), new MemberResponse(member));
     }
 }

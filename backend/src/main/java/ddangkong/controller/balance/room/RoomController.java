@@ -28,7 +28,7 @@ public class RoomController {
 
     @RequestMapping("/balances/rooms/{roomId}/members")
     @PostMapping
-    public RoomJoinResponse joinRoom(@PathVariable @Positive Long roomId, @RequestBody String nickname) {
+    public RoomJoinResponse joinRoom(@PathVariable @Positive Long roomId, @RequestBody @NotNull String nickname) {
         return roomService.joinRoom(nickname, roomId);
     }
 }

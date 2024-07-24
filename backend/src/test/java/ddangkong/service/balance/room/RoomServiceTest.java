@@ -54,13 +54,11 @@ class RoomServiceTest extends BaseServiceTest {
 
         @Test
         void 존재하지_않는_방에_참여시_예외를_던진다() {
-            // given & when
+            // given
             String nickname = "나는참가자";
             Long nonExistId = 99999999999L;
-            MemberResponse expectedMemberResponse = new MemberResponse(5L, nickname, false);
-            RoomJoinResponse expected = new RoomJoinResponse(nonExistId, expectedMemberResponse);
 
-            // then
+            // when & then
             assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistId))
                     .isInstanceOf(BadRequestException.class);
         }
