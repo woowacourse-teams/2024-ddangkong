@@ -2,12 +2,12 @@ package ddangkong.service.balance.content;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.domain.balance.content.BalanceContent;
-import ddangkong.domain.balance.content.Room;
-import ddangkong.domain.balance.content.RoomContent;
-import ddangkong.domain.balance.content.RoomContentRepository;
-import ddangkong.domain.balance.content.RoomRepository;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
+import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomContent;
+import ddangkong.domain.balance.room.RoomContentRepository;
+import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.exception.BadRequestException;
 import ddangkong.exception.InternalServerException;
 import java.util.List;

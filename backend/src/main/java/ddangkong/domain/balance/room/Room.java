@@ -1,4 +1,4 @@
-package ddangkong.domain.balance.content;
+package ddangkong.domain.balance.room;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
