@@ -37,7 +37,38 @@ export const createRandomNickname = () => {
     '명랑한',
     '흥미로운',
   ];
-  const nouns = ['마루', '썬데이', '프린', '이든', '포메', '타칸', '커찬'];
+  const nouns = [
+    '강아지',
+    '고양이',
+    '개구리',
+    '딱다구리',
+    '사자',
+    '호랑이',
+    '코끼리',
+    '기린',
+    '고래',
+    '판다',
+    '토끼',
+    '햄스터',
+    '다람쥐',
+    '수달',
+    '원숭이',
+    '여우',
+    '늑대',
+    '말',
+    '돼지',
+    '소',
+    '양',
+    '염소',
+    '치타',
+    '타조',
+    '참새',
+    '비둘기',
+    '까마귀',
+    '공룡',
+    '거북이',
+    '독수리',
+  ];
 
   const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
   const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
