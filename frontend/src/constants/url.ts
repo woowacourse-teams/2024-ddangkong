@@ -4,9 +4,12 @@ export const API_URL = {
   balanceContent: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/content`,
   vote: (roomId: number, contentId: number) =>
     `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/votes`,
+  roundVoteResult: (roomId: number, contentId: number) =>
+    `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/vote-result`,
 };
 
 export const MOCK_API_URL = {
   balanceContent: '/api/balances/rooms/:roomId/content',
   vote: '/api/balances/rooms/:roomId/contents/:contentId/votes',
+  voteResult: '/api/balances/rooms/:roomId/contents/:contentId/vote-result',
 };
