@@ -39,7 +39,8 @@ public class RoomService {
     public RoomMembersResponse findAllRoomMember(Long roomId) {
         Room room = roomRepository.getById(roomId);
 
-        List<RoomMemberResponse> response = memberRepository.findByRoom(room).stream()
+        List<RoomMemberResponse> response = memberRepository.findByRoom(room)
+                .stream()
                 .map(RoomMemberResponse::new)
                 .toList();
         return new RoomMembersResponse(response);
