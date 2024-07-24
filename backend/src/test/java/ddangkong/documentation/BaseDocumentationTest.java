@@ -6,30 +6,27 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ddangkong.controller.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class BaseDocumentationTest {
 
-    protected final ObjectMapper objectMapper;
+    @Autowired
+    protected ObjectMapper objectMapper;
 
     protected MockMvc mockMvc;
 
-    protected BaseDocumentationTest() {
-        this.objectMapper = new ObjectMapper();
-    }
-
     @BeforeEach
-    void setUp(RestDocumentationContextProvider restDocumentation) {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(controller())
+    void setUp(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .alwaysDo(print())
                 .apply(documentationConfiguration(restDocumentation)
                         .operationPreprocessors()
@@ -42,10 +39,6 @@ public abstract class BaseDocumentationTest {
                                 modifyHeaders().remove(HttpHeaders.CONTENT_LENGTH)
                         )
                 )
-                .setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
-                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
     }
-
-    protected abstract Object controller();
 }
