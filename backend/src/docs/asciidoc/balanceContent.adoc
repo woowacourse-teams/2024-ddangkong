@@ -1,0 +1,21 @@
+== 밸런스 게임 콘텐츠
+
+=== 방의 콘텐츠 및 선택지 조회
+
+==== curl
+
+include::{snippets}/balance-content/find/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/balance-content/find/http-request.adoc[]
+
+include::{snippets}/balance-content/find/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/balance-content/find/http-response.adoc[]
+
+response fields
+
+include::{snippets}/balance-content/find/response-fields.adoc[]
