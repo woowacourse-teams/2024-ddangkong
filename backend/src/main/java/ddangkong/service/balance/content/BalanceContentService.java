@@ -40,8 +40,7 @@ public class BalanceContentService {
     }
 
     private RoomContent findCurrentRoomContent(Long roomId) {
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new BadRequestException("해당 방이 존재하지 않습니다."));
+        Room room = roomRepository.getById(roomId);
         return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
                 .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
     }
