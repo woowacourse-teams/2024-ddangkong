@@ -2,6 +2,7 @@ package ddangkong.documentation;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyHeaders;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -31,6 +32,10 @@ public abstract class BaseDocumentationTest {
                 .apply(documentationConfiguration(restDocumentation)
                         .operationPreprocessors()
                         .withRequestDefaults(
+                                modifyUris()
+                                        .scheme("https")
+                                        .host("ddangkong.io")
+                                        .removePort(),
                                 prettyPrint(),
                                 modifyHeaders().remove(HttpHeaders.CONTENT_LENGTH)
                         )
