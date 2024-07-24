@@ -2,8 +2,10 @@ package ddangkong.service.balance.content;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.content.Room;
 import ddangkong.domain.balance.content.RoomContent;
 import ddangkong.domain.balance.content.RoomContentRepository;
+import ddangkong.domain.balance.content.RoomRepository;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.exception.BadRequestException;
@@ -19,13 +21,15 @@ public class BalanceContentService {
 
     private static final int BALANCE_OPTION_SIZE = 2;
 
+    private final RoomRepository roomRepository;
+
     private final RoomContentRepository roomContentRepository;
 
     private final BalanceOptionRepository balanceOptionRepository;
 
     @Transactional(readOnly = true)
     public BalanceContentResponse findRecentBalanceContent(Long roomId) {
-        RoomContent roomContent = findRecentRoomContent(roomId);
+        RoomContent roomContent = findCurrentRoomContent(roomId);
         List<BalanceOption> balanceOptions = findBalanceOptions(roomContent.getBalanceContent());
 
         return BalanceContentResponse.builder()
@@ -35,9 +39,11 @@ public class BalanceContentService {
                 .build();
     }
 
-    private RoomContent findRecentRoomContent(Long roomId) {
-        return roomContentRepository.findTopByRoomIdOrderByCreatedAtDesc(roomId)
-                .orElseThrow(() -> new BadRequestException("해당 방의 질문이 존재하지 않습니다."));
+    private RoomContent findCurrentRoomContent(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new BadRequestException("해당 방이 존재하지 않습니다."));
+        return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
+                .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
     }
 
     private List<BalanceOption> findBalanceOptions(BalanceContent balanceContent) {
