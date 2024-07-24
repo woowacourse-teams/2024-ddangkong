@@ -1,14 +1,28 @@
+import React, { ButtonHTMLAttributes } from 'react';
+
 import { buttonLayout } from './Button.styled';
 
-interface ButtonProps {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
-  active: boolean;
   onClick: () => void;
+  disabled?: boolean;
+  style?: React.CSSProperties;
+  size?: 'small' | 'medium' | 'large';
+  radius?: 'small' | 'medium' | 'large';
+  fontSize?: 'small' | 'medium' | 'large';
 }
 
-const Button = ({ text, active, onClick }: ButtonProps) => {
+const Button: React.FC<ButtonProps> = ({
+  text,
+  onClick,
+  disabled,
+  size,
+  radius,
+  fontSize,
+  ...props
+}) => {
   return (
-    <button disabled={!active} onClick={onClick} css={buttonLayout(active)}>
+    <button onClick={onClick} css={buttonLayout({ disabled, size, radius, fontSize })} {...props}>
       {text}
     </button>
   );

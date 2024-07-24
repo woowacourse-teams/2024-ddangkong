@@ -1,13 +1,33 @@
 import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
+import getBorderRadius from '@/styles/utils/getBorderRadius';
+import getFontSize from '@/styles/utils/getFontSize';
+import getSizeStyles from '@/styles/utils/getSizeStyles';
 
-export const buttonLayout = (active: boolean) => css`
-  padding: 1rem 4rem;
+interface ButtonLayoutProps {
+  disabled?: boolean;
+  size?: 'small' | 'medium' | 'large';
+  radius?: 'small' | 'medium' | 'large';
+  fontSize?: 'small' | 'medium' | 'large';
+}
 
-  background-color: ${active ? Theme.color.peanut400 : Theme.color.peanut300};
+export const buttonLayout = ({ disabled, size, radius, fontSize }: ButtonLayoutProps) => css`
+  display: flex;
+  justify-content: center;
+
+  ${getSizeStyles(size)};
+
+  border: none;
+  border-radius: ${getBorderRadius(radius)};
+
+  background-color: ${disabled ? Theme.color.peanut300 : Theme.color.peanut400};
 
   font-weight: bold;
-  font-size: 2rem;
-  border-radius: 2.4rem;
+  font-size: ${getFontSize(fontSize)};
+  cursor: ${disabled ? 'not-allowed' : 'pointer'};
+
+  &:disabled {
+    background-color: ${Theme.color.peanut300};
+  }
 `;

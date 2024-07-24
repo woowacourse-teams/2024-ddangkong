@@ -22,7 +22,7 @@ const RoundResultPage = () => {
       <div css={NicknameListWrapper}>
         <NicknameList />
       </div>
-      <Button text="다음" active={true} onClick={goToGameResult} />
+      <Button text="다음" onClick={goToGameResult} />
     </Content>
   );
 };

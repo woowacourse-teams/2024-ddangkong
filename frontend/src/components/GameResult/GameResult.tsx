@@ -16,7 +16,7 @@ const GameResult = () => {
       <div css={gameResultTitleWrapper}>
         <h1 css={gameResultTitle}>게임 결과</h1>
       </div>
-      <Button text="확인" active={true} onClick={goToHome} />
+      <Button text="확인" onClick={goToHome} />
     </div>
   );
 };
