@@ -39,7 +39,8 @@ const SelectContainer = () => {
               handleSelectOption={handleSelectOption}
             />
           </section>
-          <Button text="선택" disabled={Boolean(selectedId)} onClick={goToRoundResult} />
+
+          <Button text="선택" disabled={!selectedId} onClick={goToRoundResult} />
         </div>
       )}
     </>

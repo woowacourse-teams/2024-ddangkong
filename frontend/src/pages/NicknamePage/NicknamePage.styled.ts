@@ -6,9 +6,9 @@ export const profile = css`
   width: 8rem;
   height: 8rem;
   margin-top: 4rem;
+  border-radius: 50%;
 
   background-color: ${Theme.color.gray300};
-  border-radius: 50%;
 `;
 
 export const nickname = css`
@@ -25,9 +25,9 @@ export const nicknameInputWrapper = css`
   width: 26.8rem;
   height: 4.8rem;
   padding: 0 1rem;
+  border-radius: 1rem;
 
   background-color: ${Theme.color.gray200};
-  border-radius: 1rem;
 `;
 
 export const nicknameInput = css`

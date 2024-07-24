@@ -7,10 +7,10 @@ export const mainPageLayout = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 3rem;
   height: 100%;
 
   background-color: ${Theme.color.peanut200};
-  gap: 3rem;
 `;
 
 export const logoWrapper = css`
