@@ -8,17 +8,17 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
   style?: React.CSSProperties;
   size?: 'small' | 'medium' | 'large';
-  radius?: 'none' | 'small' | 'medium' | 'large';
+  radius?: 'small' | 'medium' | 'large';
   fontSize?: 'small' | 'medium' | 'large';
 }
 
 const Button: React.FC<ButtonProps> = ({
   text,
   onClick,
-  disabled = false,
-  size = 'large',
-  radius = 'none',
-  fontSize = 'medium',
+  disabled,
+  size,
+  radius,
+  fontSize,
   ...props
 }) => {
   return (
