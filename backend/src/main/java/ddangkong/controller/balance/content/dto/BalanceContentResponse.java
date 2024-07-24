@@ -2,8 +2,8 @@ package ddangkong.controller.balance.content.dto;
 
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.domain.balance.content.RoomContent;
 import ddangkong.domain.balance.option.BalanceOption;
+import ddangkong.domain.balance.room.RoomContent;
 import lombok.Builder;
 
 public record BalanceContentResponse(

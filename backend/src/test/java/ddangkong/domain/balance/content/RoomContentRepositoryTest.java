@@ -3,6 +3,10 @@ package ddangkong.domain.balance.content;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ddangkong.domain.BaseRepositoryTest;
+import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomContent;
+import ddangkong.domain.balance.room.RoomContentRepository;
+import ddangkong.domain.balance.room.RoomRepository;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

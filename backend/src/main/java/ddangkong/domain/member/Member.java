@@ -1,6 +1,6 @@
 package ddangkong.domain.member;
 
-import ddangkong.domain.balance.content.Room;
+import ddangkong.domain.balance.room.Room;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
