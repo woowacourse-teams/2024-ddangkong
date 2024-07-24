@@ -28,4 +28,9 @@ public class Member {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
+
+    public Member(String nickname, Room room) {
+        this.nickname = nickname;
+        this.room = room;
+    }
 }
