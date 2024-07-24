@@ -9,25 +9,69 @@ interface ButtonLayoutProps {
   fontSize?: 'small' | 'medium' | 'large';
 }
 
+const getSizeStyles = (size: 'small' | 'medium' | 'large' | undefined) => {
+  switch (size) {
+    case 'small':
+      return css`
+        width: 6.9rem;
+        padding: 0.8rem 0;
+      `;
+    case 'medium':
+      return css`
+        width: 12rem;
+        padding: 1.6rem 0;
+      `;
+    case 'large':
+    default:
+      return css`
+        width: 32rem;
+        padding: 2rem 0;
+      `;
+  }
+};
+
+const getFontSize = (fontSize: 'small' | 'medium' | 'large' | undefined) => {
+  switch (fontSize) {
+    case 'small':
+      return Theme.typography.caption.fontSize;
+    case 'medium':
+      return Theme.typography.headline2.fontSize;
+    case 'large':
+    default:
+      return Theme.typography.headline1.fontSize;
+  }
+};
+
+const getBorderRadius = (radius: 'none' | 'small' | 'medium' | 'large' | undefined) => {
+  switch (radius) {
+    case 'small':
+      return Theme.borderRadius.radius10;
+    case 'medium':
+      return Theme.borderRadius.radius20;
+    case 'large':
+      return Theme.borderRadius.radius30;
+    case 'none':
+    default:
+      return '0';
+  }
+};
+
 export const buttonLayout = ({ disabled, size, radius, fontSize }: ButtonLayoutProps) => css`
   display: flex;
   justify-content: center;
-  width: ${size === 'small' ? '6.9rem' : size === 'medium' ? '12rem' : '32rem'};
-  padding: ${size === 'small' ? '0.8rem' : size === 'medium' ? '1.6rem' : '2rem'} 0;
+
+  ${getSizeStyles(size)};
+
+  border: none;
+  border-radius: ${getBorderRadius(radius)};
 
   background-color: ${disabled ? Theme.color.peanut300 : Theme.color.peanut400};
 
   font-weight: bold;
-  font-size: ${fontSize === 'small'
-    ? Theme.typography.caption.fontSize
-    : size === 'medium'
-      ? Theme.typography.headline2.fontSize
-      : Theme.typography.headline1.fontSize};
-  border-radius: ${radius === 'small'
-    ? Theme.borderRadius.radius10
-    : radius === 'medium'
-      ? Theme.borderRadius.radius20
-      : radius === 'large'
-        ? Theme.borderRadius.radius30
-        : Theme.borderRadius.none};
+  font-size: ${getFontSize(fontSize)};
+  cursor: ${disabled ? 'not-allowed' : 'pointer'};
+
+  &:disabled {
+    background-color: ${Theme.color.peanut300};
+  }
 `;
