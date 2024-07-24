@@ -13,3 +13,9 @@ export interface BalanceContent {
     name: string;
   };
 }
+
+export interface FinalGameResult {
+  rank: number;
+  name: string;
+  percent: number;
+}

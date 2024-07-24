@@ -1,7 +1,7 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { BalanceContent } from '@/types/balanceContent';
+import { BalanceContent, FinalGameResult } from '@/types/balanceContent';
 import { RoundVoteResult } from '@/types/roundVoteResult';
 
 export const fetchBalanceContent = async (roomId = 1): Promise<BalanceContent> => {
@@ -39,6 +39,16 @@ export const fetchRoundVoteResult = async (roomId = 1, contentId = 1): Promise<R
 export const moveNextRound = async (roomId = 1): Promise<RoundVoteResult> => {
   const res = await fetcher.post({
     url: API_URL.moveNextRound(roomId),
+  });
+
+  const data = await res.json();
+
+  return data;
+};
+
+export const fetchFinalGameResult = async (roomId = 1): Promise<FinalGameResult[]> => {
+  const res = await fetcher.get({
+    url: API_URL.finalResult(roomId),
   });
 
   const data = await res.json();
