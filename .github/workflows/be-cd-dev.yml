@@ -19,8 +19,10 @@ jobs:
         working-directory: ./backend
 
     steps:
-      - name: Checkout code and Setting application.yml
+      - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Setting application-dev.yml
         run: |
           touch ./src/main/resources/application-dev.yml
           echo ${{ secrets.APPLICATION_DEV_YML }} > ./src/main/resources/application-dev.yml
