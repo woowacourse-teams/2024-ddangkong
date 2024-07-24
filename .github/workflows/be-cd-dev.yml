@@ -81,4 +81,4 @@ jobs:
       - name: Run new Docker container
         run: |
           sudo nohup docker run --name $CONTAINER_NAME \
-          $DOCKER_REPOSITORY_NAME:latest > nohup.out 2>&1 &
+          $DOCKER_REPOSITORY_NAME:latest > ~/dev-nohup.out 2>&1 &
