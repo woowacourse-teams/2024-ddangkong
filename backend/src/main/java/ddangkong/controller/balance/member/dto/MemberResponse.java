@@ -7,11 +7,7 @@ public record MemberResponse(
         String nickname,
         boolean isMaster
 ) {
-    public static MemberResponse createByMemberWithMaster(Member member) {
-        return new MemberResponse(member.getId(), member.getNickname(), true);
-    }
-
-    public static MemberResponse createByMemberWithCommon(Member member) {
-        return new MemberResponse(member.getId(), member.getNickname(), false);
+    public MemberResponse(Member member) {
+        this(member.getId(), member.getNickname(), member.isMaster());
     }
 }
