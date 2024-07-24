@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router-dom';
+
 import { gameTitle, headerLayout, roundText } from './Header.styled';
 
 import SettingsIcon from '@/assets/images/settingsIcon.svg';
@@ -9,6 +11,13 @@ interface HeaderProps {
 
 const Header = ({ title }: HeaderProps) => {
   const { balanceContent } = useBalanceContentQuery();
+  const location = useLocation();
+
+  const isFinalPage = location.pathname === '/game/result';
+
+  if (isFinalPage) {
+    return <header css={headerLayout}></header>;
+  }
 
   return (
     <header css={headerLayout}>
