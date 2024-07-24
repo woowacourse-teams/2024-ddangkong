@@ -13,7 +13,7 @@ const getSizeStyles = (size: 'small' | 'medium' | 'large' | undefined) => {
   switch (size) {
     case 'small':
       return css`
-        width: 6.9rem;
+        width: 6.8rem;
         padding: 0.8rem 0;
       `;
     case 'medium':
