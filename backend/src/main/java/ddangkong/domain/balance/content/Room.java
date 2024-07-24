@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class Room {
 
     private static final int DEFAULT_TOTAL_ROUND = 5;
+    private static final int DEFAULT_CURRENT_ROUND = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +25,5 @@ public class Room {
     private int totalRound = DEFAULT_TOTAL_ROUND;
 
     @Column(nullable = false)
-    private int currentRound;
+    private int currentRound = DEFAULT_CURRENT_ROUND;
 }
