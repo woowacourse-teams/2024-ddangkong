@@ -17,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RoomService {
 
-    private final MemberRepository memberRepository;
-
     private final RoomRepository roomRepository;
+
+    private final MemberRepository memberRepository;
 
     @Transactional
     public RoomJoinResponse createRoom(String nickname) {
