@@ -35,3 +35,13 @@ export const fetchRoundVoteResult = async (roomId = 1, contentId = 1): Promise<R
 
   return data;
 };
+
+export const moveNextRound = async (roomId = 1): Promise<RoundVoteResult> => {
+  const res = await fetcher.post({
+    url: API_URL.moveNextRound(roomId),
+  });
+
+  const data = await res.json();
+
+  return data;
+};

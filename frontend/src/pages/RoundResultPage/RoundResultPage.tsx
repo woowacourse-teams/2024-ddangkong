@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
+import { moveNextRound } from '@/apis/balanceContent';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
 import RoundResultTab from '@/components/RoundResultTab/RoundResultTab';
@@ -16,7 +17,8 @@ const RoundResultPage = () => {
     navigate('/game/result');
   };
 
-  const goToNextRound = () => {
+  const goToNextRound = async () => {
+    await moveNextRound();
     navigate('/game');
   };
 
