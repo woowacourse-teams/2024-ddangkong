@@ -26,4 +26,10 @@ public class BalanceContent {
 
     @Column(nullable = false)
     private String name;
+
+    public BalanceContent(Long id, Category category, String name) {
+        this.id = id;
+        this.category = category;
+        this.name = name;
+    }
 }

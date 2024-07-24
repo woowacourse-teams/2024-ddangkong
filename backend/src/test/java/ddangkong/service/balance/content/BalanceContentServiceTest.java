@@ -16,6 +16,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
 
     @Autowired
     private BalanceContentService balanceContentService;
+
     @Nested
     class 현재_방의_밸런스_게임_내용_조회 {
 
