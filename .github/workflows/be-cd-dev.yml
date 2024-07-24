@@ -24,8 +24,7 @@ jobs:
 
       - name: Setting application-dev.yml
         run: |
-          touch ./src/main/resources/application-dev.yml
-          echo ${{ secrets.APPLICATION_DEV_YML }} > ./src/main/resources/application-dev.yml
+          printf "%s" "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
