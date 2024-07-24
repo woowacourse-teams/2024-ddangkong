@@ -1,5 +1,6 @@
 package ddangkong.controller.balance.room;
 
+import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.service.balance.room.RoomService;
 import jakarta.validation.Valid;
@@ -24,13 +25,13 @@ public class RoomController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms")
-    public RoomJoinResponse creatRoom(@Valid @RequestBody String nickname) {
-        return roomService.createRoom(nickname);
+    public RoomJoinResponse creatRoom(@Valid @RequestBody RoomJoinRequest request) {
+        return roomService.createRoom(request.nickname());
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms/{roomId}/members")
-    public RoomJoinResponse joinRoom(@PathVariable @Positive Long roomId, @Valid @RequestBody String nickname) {
-        return roomService.joinRoom(nickname, roomId);
+    public RoomJoinResponse joinRoom(@PathVariable @Positive Long roomId, @Valid @RequestBody RoomJoinRequest request) {
+        return roomService.joinRoom(request.nickname(), roomId);
     }
 }
