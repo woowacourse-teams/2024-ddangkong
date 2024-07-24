@@ -1,9 +1,11 @@
 package ddangkong.service.balance.room;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.controller.balance.member.dto.MemberResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,38 @@ class RoomServiceTest extends BaseServiceTest {
 
             // then
             assertThat(roomServiceRoom).isEqualTo(expected);
+        }
+    }
+
+    @Nested
+    class 방_참여 {
+
+        @Test
+        void 이미_생성된_방에_참여한다() {
+            // given
+            String nickname = "나는참가자";
+            Long joinRoomId = 2L;
+            MemberResponse expectedMemberResponse = new MemberResponse(5L, nickname, false);
+            RoomJoinResponse expected = new RoomJoinResponse(joinRoomId, expectedMemberResponse);
+
+            // when
+            RoomJoinResponse roomServiceRoom = roomService.joinRoom(nickname, joinRoomId);
+
+            // then
+            assertThat(roomServiceRoom).isEqualTo(expected);
+        }
+
+        @Test
+        void 존재하지_않는_방에_참여시_예외를_던진다() {
+            // given & when
+            String nickname = "나는참가자";
+            Long nonExistId = 99999999999L;
+            MemberResponse expectedMemberResponse = new MemberResponse(5L, nickname, false);
+            RoomJoinResponse expected = new RoomJoinResponse(nonExistId, expectedMemberResponse);
+
+            // then
+            assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistId))
+                    .isInstanceOf(BadRequestException.class);
         }
     }
 }
