@@ -26,4 +26,8 @@ public class Room {
 
     @Column(nullable = false)
     private int currentRound = DEFAULT_CURRENT_ROUND;
+
+    public Room(Long id) {
+        this.id = id;
+    }
 }
