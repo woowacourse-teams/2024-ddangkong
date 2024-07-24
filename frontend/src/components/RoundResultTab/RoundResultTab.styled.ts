@@ -76,7 +76,7 @@ export const barStyle = (percentage: number, isBigFirstOption: boolean) => css`
   font-weight: bold;
   font-size: 1.6rem;
   clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-  transition: all 1s;
+  transition: all 2s;
   transform: translateX(5px);
 `;
 
@@ -94,7 +94,7 @@ export const barBackgroundStyle = (percentage: number, isBigFirstOption: boolean
   font-weight: bold;
   font-size: 1.6rem;
   clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%);
-  transition: all 1s;
+  transition: all 2s;
   transform: translateX(-5px);
 `;
 

@@ -16,6 +16,8 @@ import {
   tabWrapperStyle,
 } from './RoundResultTab.styled';
 
+import useCountAnimation from '@/hooks/useCountAnimation';
+
 interface Option {
   percentage: number;
   count: number;
@@ -41,6 +43,11 @@ const RoundResultTab = () => {
   const [activeTab, setActiveTab] = useState('group');
   const [groupResult, setGroupResult] = useState<Statistic>(INITIAL_STATISTIC);
   const [averageResult, setAverageResult] = useState<Statistic>(INITIAL_STATISTIC);
+
+  const animatedFirstPercentage = useCountAnimation({ target: groupResult.firstOption.percentage });
+  const animatedSecondPercentage = useCountAnimation({
+    target: groupResult.secondOption.percentage,
+  });
 
   const isBigFirstOption = groupResult.firstOption.percentage >= 50;
 
@@ -95,10 +102,10 @@ const RoundResultTab = () => {
             </div>
             <div css={barWrapperStyle}>
               <div css={barStyle(groupResult.firstOption.percentage, isBigFirstOption)}>
-                {groupResult.firstOption.percentage}%
+                {animatedFirstPercentage}%
               </div>
               <div css={barBackgroundStyle(groupResult.secondOption.percentage, isBigFirstOption)}>
-                {groupResult.secondOption.percentage}%
+                {animatedSecondPercentage}%
               </div>
             </div>
             <div css={resultTextStyle}>
