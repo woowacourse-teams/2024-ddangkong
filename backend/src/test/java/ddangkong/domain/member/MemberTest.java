@@ -18,19 +18,19 @@ class MemberTest {
 
         @Test
         void 특정_방에_없다() {
-            // given
+            // when
             boolean actual = MEMBER.isNotIn(NOT_CONTAIN_ROOM_ID);
 
-            // actual
+            // then
             assertThat(actual).isTrue();
         }
 
         @Test
         void 특정_방에_있다() {
-            // given
+            // when
             boolean actual = MEMBER.isNotIn(CONTAIN_ROOM_ID);
 
-            // actual
+            // then
             assertThat(actual).isFalse();
         }
     }
