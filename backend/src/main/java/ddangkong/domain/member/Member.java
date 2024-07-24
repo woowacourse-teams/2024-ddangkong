@@ -29,8 +29,11 @@ public class Member {
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    public Member(String nickname, Room room) {
+    private boolean isMaster;
+
+    public Member(String nickname, Room room, boolean isMaster) {
         this.nickname = nickname;
         this.room = room;
+        this.isMaster = isMaster;
     }
 }
