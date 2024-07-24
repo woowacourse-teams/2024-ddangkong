@@ -10,4 +10,8 @@ public record MemberResponse(
     public static MemberResponse createByMemberWithMaster(Member member) {
         return new MemberResponse(member.getId(), member.getNickname(), true);
     }
+
+    public static MemberResponse createByMemberWithCommon(Member member) {
+        return new MemberResponse(member.getId(), member.getNickname(), false);
+    }
 }

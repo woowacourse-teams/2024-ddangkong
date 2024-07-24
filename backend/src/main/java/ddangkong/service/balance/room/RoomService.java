@@ -22,4 +22,10 @@ public class RoomService {
         Member member = memberRepository.save(new Member(nickname, room));
         return new RoomJoinResponse(room.getId(), MemberResponse.createByMemberWithMaster(member));
     }
+
+    public RoomJoinResponse joinRoom(String nickname, Long roomId) {
+        Room room = roomRepository.getById(roomId);
+        Member member = memberRepository.save(new Member(nickname, room));
+        return new RoomJoinResponse(room.getId(), MemberResponse.createByMemberWithCommon(member));
+    }
 }
