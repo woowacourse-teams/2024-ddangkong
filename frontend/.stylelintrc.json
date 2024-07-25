@@ -27,9 +27,12 @@
           "bottom",
           "left",
           "z-index",
+          "flex",
+          "flex-basis",
           "flex-direction",
           "justify-content",
-          "align-items"
+          "align-items",
+          "gap"
         ]
       },
       {
@@ -49,7 +52,10 @@
           "padding-right",
           "padding-bottom",
           "padding-left",
-          "border"
+          "border",
+          "border-radius",
+          "border-top",
+          "border-bottom"
         ]
       },
       {
