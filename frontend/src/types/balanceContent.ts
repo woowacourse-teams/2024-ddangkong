@@ -14,7 +14,7 @@ export interface BalanceContent {
   };
 }
 
-export interface GameResult {
+export interface GameFinalResult {
   rank: number;
   name: string;
   percent: number;

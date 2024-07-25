@@ -3,8 +3,6 @@ import { gameResultTitle, gameResultLayout, rankListContainer } from './GameResu
 import FinalButton from '../common/FinalButton/FinalButton';
 import GameResultItem from '../GameResultItem/GameResultItem';
 
-import { GameResult } from '@/types/balanceContent';
-
 const GameResult = () => {
   const { gameResult } = useGameResultQuery();
 
@@ -14,7 +12,7 @@ const GameResult = () => {
         <h1 css={gameResultTitle}>게임 결과</h1>
         <div css={rankListContainer}>
           {gameResult &&
-            gameResult.map((item) => <GameResultItem key={item.rank} gameResult={item} />)}
+            gameResult.map((item) => <GameResultItem key={item.rank} gameFinalResult={item} />)}
         </div>
       </div>
       <FinalButton />
