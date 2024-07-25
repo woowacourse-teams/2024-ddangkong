@@ -29,8 +29,7 @@ public class Member {
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    public Member(Long id, String nickname, Room room) {
-        this.id = id;
+    public Member(String nickname, Room room) {
         this.nickname = nickname;
         this.room = room;
     }

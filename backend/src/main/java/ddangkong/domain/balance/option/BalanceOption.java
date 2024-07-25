@@ -29,8 +29,7 @@ public class BalanceOption {
     @JoinColumn(name = "balance_content_id", nullable = false)
     private BalanceContent balanceContent;
 
-    public BalanceOption(Long id, String name, BalanceContent balanceContent) {
-        this.id = id;
+    public BalanceOption(String name, BalanceContent balanceContent) {
         this.name = name;
         this.balanceContent = balanceContent;
     }

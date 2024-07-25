@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Room {
 
@@ -26,8 +25,4 @@ public class Room {
 
     @Column(nullable = false)
     private int currentRound = DEFAULT_CURRENT_ROUND;
-
-    public Room(Long id) {
-        this.id = id;
-    }
 }
