@@ -1,4 +1,4 @@
-version: "2.29.0"
+version: "3.8"
 
 services:
   ddangkong-api-dev:
@@ -6,7 +6,7 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile
-      args:
-        - SPRINT_PROFILE=dev
+    environment:
+      - SPRING_PROFILE=dev
     ports:
-      - "8080:8080"
+      - "80:8080"
