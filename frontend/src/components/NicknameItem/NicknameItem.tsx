@@ -1,11 +1,15 @@
-import { profileImage } from './NicknameItem.styled';
+import { nicknameListLayout, nicknameText } from './NicknameItem.styled';
 
-const NicknameItem = (member: string) => {
+interface NicknameItemProp {
+  member: string;
+}
+
+const NicknameItem = ({ member }: NicknameItemProp) => {
   return (
-    <div>
-      <div css={profileImage}></div>
-      <span>{member}</span>
-    </div>
+    <li css={nicknameListLayout}>
+      <span>🥜</span>
+      <span css={nicknameText}>{member}</span>
+    </li>
   );
 };
 
