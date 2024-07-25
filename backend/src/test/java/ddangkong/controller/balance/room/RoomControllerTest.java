@@ -82,8 +82,7 @@ class RoomControllerTest extends BaseControllerTest {
         void 방에_참가할_수_있다() {
             // given
             String nickname = "참가자";
-            Map<String, Object> body = new HashMap<>();
-            body.put("nickname", nickname);
+            Map<String, Object> body = Map.of("nickname", nickname);
 
             // when & then
             RestAssured.given().log().all()
@@ -99,8 +98,7 @@ class RoomControllerTest extends BaseControllerTest {
         void 방에_참가한_멤버는_방장이_아니다() {
             // given
             String nickname = "참가자";
-            Map<String, Object> body = new HashMap<>();
-            body.put("nickname", nickname);
+            Map<String, Object> body = Map.of("nickname", nickname);
 
             // when & then
             RoomJoinResponse actual = RestAssured.given().log().all()
@@ -112,7 +110,6 @@ class RoomControllerTest extends BaseControllerTest {
                     .extract().as(RoomJoinResponse.class);
 
             assertThat(actual.member().isMaster()).isFalse();
-
         }
     }
 
