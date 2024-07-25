@@ -5,6 +5,7 @@ VALUES ('EXAMPLE', '민초 vs 반민초'),
        ('EXAMPLE', '개구리 맛 초콜릿 vs 초콜릿 맛 개구리'),
        ('EXAMPLE', '언제 죽을 지 알기 vs 어떻게 죽을 지 알기');
 
+
 INSERT INTO balance_option (name, balance_content_id)
 VALUES ('민초', 1),
        ('반민초', 1),
@@ -16,3 +17,19 @@ VALUES ('민초', 1),
        ('초콜릿 맛 개구리', 4),
        ('언제 죽을 지 알기', 5),
        ('어떻게 죽을 지 알기', 5);
+
+
+INSERT INTO room(total_round, current_round)
+VALUES (5, 1);
+
+
+INSERT INTO room_content(room_id, balance_content_id, round, created_at)
+VALUES (1, 1, 1, '2024-07-25 13:24:09'),
+       (1, 2, 1, '2024-07-25 13:24:09'),
+       (1, 3, 1, '2024-07-25 13:24:09'),
+       (1, 4, 1, '2024-07-25 13:24:09'),
+       (1, 5, 1, '2024-07-25 13:24:09');
+
+
+INSERT INTO member(room_id, nickname, is_master)
+VALUES (1, '콩콩', true);
