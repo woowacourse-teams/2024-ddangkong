@@ -26,4 +26,9 @@ public class BalanceContent {
 
     @Column(nullable = false)
     private String name;
+
+    public BalanceContent(Category category, String name) {
+        this.category = category;
+        this.name = name;
+    }
 }

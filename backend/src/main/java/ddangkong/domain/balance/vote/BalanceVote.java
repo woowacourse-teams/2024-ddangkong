@@ -29,4 +29,13 @@ public class BalanceVote {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    public BalanceVote(BalanceOption balanceOption, Member member) {
+        this.balanceOption = balanceOption;
+        this.member = member;
+    }
+
+    public Long getOptionId() {
+        return balanceOption.getId();
+    }
 }
