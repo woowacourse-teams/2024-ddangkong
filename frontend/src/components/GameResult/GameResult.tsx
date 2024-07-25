@@ -1,19 +1,12 @@
-import { useNavigate } from 'react-router-dom';
-
 import { useGameResultQuery } from './GameResult.hook';
 import { gameResultTitle, gameResultLayout, rankListContainer } from './GameResult.styled';
+import FinalButton from '../common/FinalButton/FinalButton';
 import GameResultItem from '../GameResultItem/GameResultItem';
 
-import Button from '@/components/common/Button/Button';
 import { GameResult } from '@/types/balanceContent';
 
 const GameResult = () => {
-  const navigate = useNavigate();
   const { gameResult } = useGameResultQuery();
-
-  const goToHome = () => {
-    navigate('/ready');
-  };
 
   return (
     <>
@@ -24,7 +17,7 @@ const GameResult = () => {
             gameResult.map((item) => <GameResultItem key={item.rank} gameResult={item} />)}
         </div>
       </div>
-      <Button text="확인" onClick={goToHome} />
+      <FinalButton />
     </>
   );
 };
