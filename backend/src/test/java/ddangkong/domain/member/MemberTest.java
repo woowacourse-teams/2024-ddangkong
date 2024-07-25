@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class MemberTest {
 
     @Nested
-    class 특정_방에_있는지_확인할_수_있다 {
+    class 특정_방에_있는지_확인 {
 
         @Test
         void 특정_방에_없다() {

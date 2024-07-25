@@ -22,7 +22,7 @@ class BalanceVoteControllerTest extends BaseControllerTest {
 
         @Test
         void 현재_방의_질문을_조회할_수_있다() {
-            // given
+            // given & when
             BalanceVoteResponse actual = RestAssured.given().log().all()
                     .body(NORMAL_REQUEST).contentType(ContentType.JSON)
                     .pathParam("roomId", ROOM_ID)
@@ -38,28 +38,28 @@ class BalanceVoteControllerTest extends BaseControllerTest {
 
         @Test
         void 요청_경로의_아이디가_양수가_아닌_경우_400_에러로_응답한다() {
-            // when
+            // given
             Long roomId = 0L;
 
-            // given & then
+            // when & then
             assertThatCreateVoteIsBadRequest(roomId, CONTENT_ID, NORMAL_REQUEST);
         }
 
         @Test
         void 요청_바디의_아이디가_양수가_아닌_경우_400_에러로_응답한다() {
-            // when
+            // given
             BalanceVoteRequest request = new BalanceVoteRequest(0L, 1L);
 
-            // given & then
+            // when & then
             assertThatCreateVoteIsBadRequest(ROOM_ID, CONTENT_ID, request);
         }
 
         @Test
         void 요청_바디의_아이디가_null인_경우_400_에러로_응답한다() {
-            // when
+            // given
             BalanceVoteRequest request = new BalanceVoteRequest(null, 1L);
 
-            // given & then
+            // when & then
             assertThatCreateVoteIsBadRequest(ROOM_ID, CONTENT_ID, request);
         }
 
