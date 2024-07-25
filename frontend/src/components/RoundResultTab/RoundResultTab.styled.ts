@@ -4,26 +4,17 @@ import { Theme } from '@/styles/Theme';
 
 export const tabLayout = css`
   display: flex;
-  flex-basis: 40%;
+  flex-basis: 45%;
   flex-direction: column;
   width: 100%;
+
+  transition: all 1s;
 `;
 
 export const tabWrapperStyle = css`
   display: flex;
   width: 40%;
   margin-left: 2.4rem;
-`;
-
-export const tabButtonStyle = (isActive: boolean) => css`
-  flex: 1;
-  padding: 0.8rem;
-  border-radius: 1.2rem 1.2rem 0 0;
-
-  background-color: ${isActive ? Theme.color.peanut400 : Theme.color.gray};
-
-  color: black;
-  font-weight: bold;
 `;
 
 export const contentWrapperStyle = css`
@@ -38,7 +29,7 @@ export const contentWrapperStyle = css`
 
 export const blankWrapper = css`
   width: 100%;
-  height: 1.6rem;
+  height: 1.2rem;
 `;
 
 export const roundVoteResultContainer = css`
@@ -76,7 +67,7 @@ export const barStyle = (percentage: number, isBigFirstOption: boolean) => css`
   font-weight: bold;
   font-size: 1.6rem;
   clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-  transition: all 2s;
+  transition: all 1s;
   transform: translateX(5px);
 `;
 
@@ -94,21 +85,24 @@ export const barBackgroundStyle = (percentage: number, isBigFirstOption: boolean
   font-weight: bold;
   font-size: 1.6rem;
   clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%);
-  transition: all 2s;
+  transition: all 1s;
   transform: translateX(-5px);
 `;
 
-export const resultTextStyle = css`
+export const resultTextStyle = (isGroupTabActive: boolean) => css`
   display: flex;
+  visibility: ${isGroupTabActive ? 'visible' : 'hidden'};
   justify-content: space-between;
   align-items: center;
+  height: 1.2rem;
 
   font-weight: bold;
   font-size: 1.2rem;
 `;
 
-export const currentVoteButtonWrapper = css`
+export const currentVoteButtonWrapper = (isGroupTabActive: boolean) => css`
   display: flex;
+  visibility: ${isGroupTabActive ? 'visible' : 'hidden'};
   justify-content: flex-end;
   align-items: center;
 `;
