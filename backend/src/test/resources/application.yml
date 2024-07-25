@@ -9,6 +9,20 @@ spring:
         show_sql: true
     database-platform: org.hibernate.dialect.H2Dialect
 
+cors:
+  origin: "*"
+
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: TRACE
+      springframework:
+        transaction:
+          interceptor: TRACE
+
 ---
 spring:
   config:
