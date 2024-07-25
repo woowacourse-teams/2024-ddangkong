@@ -7,11 +7,16 @@ import GameResultPage from '@/pages/GameResultPage/GameResultPage';
 import MainPage from '@/pages/MainPage/MainPage';
 import NicknamePage from '@/pages/NicknamePage/NicknamePage';
 import RoundResultPage from '@/pages/RoundResultPage/RoundResultPage';
+import VoteStatusPage from '@/pages/VoteStatusPage/VoteStatusPage';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <MainPage />,
+  },
+  {
+    path: 'round/result/status',
+    element: <VoteStatusPage />,
   },
   {
     path: '/',

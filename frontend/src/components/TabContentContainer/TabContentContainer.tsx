@@ -32,8 +32,8 @@ const TabContentContainer = ({
 
   const isBigFirstOption = roundResult.firstOption.percent >= 50;
 
-  const goToCurrentVote = () => {
-    navigate('/round/result/current');
+  const goToVoteStatus = () => {
+    navigate('/round/result/status');
   };
   return (
     <div css={contentWrapperStyle}>
@@ -61,7 +61,7 @@ const TabContentContainer = ({
         </div>
       </div>
       <div css={currentVoteButtonWrapper(isGroupTabActive)}>
-        <button css={buttonStyle} onClick={goToCurrentVote}>
+        <button css={buttonStyle} onClick={goToVoteStatus}>
           투표 현황 {'>'}
         </button>
       </div>
