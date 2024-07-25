@@ -2,11 +2,11 @@ import { css } from '@emotion/react';
 
 export const selectContainerLayout = css`
   display: flex;
+  flex-basis: 55%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 4rem;
-  flex-basis: 55%;
+  gap: 5rem;
 `;
 
 export const selectSection = css`

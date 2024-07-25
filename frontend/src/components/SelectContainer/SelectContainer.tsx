@@ -13,7 +13,7 @@ const SelectContainer = () => {
   const [selectedId, setSelectedId] = useState(0);
 
   const goToRoundResult = () => {
-    navigate('/round-result');
+    navigate(`/round/result`);
   };
 
   const handleSelectOption = (selectedId: number) => {
@@ -39,7 +39,8 @@ const SelectContainer = () => {
               handleSelectOption={handleSelectOption}
             />
           </section>
-          <Button text="선택" disabled={Boolean(selectedId)} onClick={goToRoundResult} />
+
+          <Button text="선택" disabled={!selectedId} onClick={goToRoundResult} />
         </div>
       )}
     </>

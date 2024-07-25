@@ -10,6 +10,20 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
 
+cors:
+  origin: "*"
+
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: TRACE
+      springframework:
+        transaction:
+          interceptor: TRACE
+
 ---
 spring:
   config:
