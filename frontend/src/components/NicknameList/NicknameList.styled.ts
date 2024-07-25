@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
 
+import { Theme } from '@/styles/Theme';
+
 export const nicknameListLayout = css`
   display: flex;
   justify-content: space-around;
-  width: 24.4rem;
-  height: 15.8rem;
+  width: 100%;
+  row-gap: 1.2rem;
 `;
 
 export const nicknameContainer = css`
@@ -17,5 +19,5 @@ export const verticalLine = css`
   width: 0.1rem;
   height: 100%;
 
-  background-color: #d9d9d9;
+  background-color: ${Theme.color.gray};
 `;
