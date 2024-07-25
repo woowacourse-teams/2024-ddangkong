@@ -7,5 +7,4 @@ public record BalanceVoteResultResponse(
         BalanceContentGroupResponse group,
         BalanceContentTotalResponse total
 ) {
-
 }

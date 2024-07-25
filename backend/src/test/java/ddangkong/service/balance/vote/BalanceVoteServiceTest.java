@@ -108,6 +108,5 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             assertThatThrownBy(() -> balanceVoteService.findBalanceVoteResult(1L, 2L))
                     .isInstanceOf(BadRequestException.class);
         }
-
     }
 }
