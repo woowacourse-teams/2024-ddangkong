@@ -3,8 +3,11 @@ package ddangkong.service.balance.room;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
+import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
 import ddangkong.controller.balance.room.dto.RoomMembersResponse;
@@ -17,6 +20,22 @@ class RoomServiceTest extends BaseServiceTest {
 
     @Autowired
     private RoomService roomService;
+
+    @Nested
+    class 게임_방_전체_멤버_조회 {
+
+        @Test
+        void 게임_방_전쳬_멤버_조회() {
+            // given
+            Long roomId = 1L;
+
+            // when
+            RoomMembersResponse actual = roomService.findAllRoomMember(roomId);
+
+            // then
+            Assertions.assertThat(actual.members()).hasSize(4);
+        }
+    }
 
     @Nested
     class 방_생성 {
@@ -67,18 +86,39 @@ class RoomServiceTest extends BaseServiceTest {
     }
 
     @Nested
-    class 게임_방_전체_멤버_조회 {
+    class 다음_라운드로_이동 {
+
+        private static final Long PROGRESS_ROOM_ID = 1L;
+        private static final Long NOT_EXIST_ROOM_ID = 3L;
+        private static final Long NOT_PROGRESSED_ROOM_ID = 2L;
+        private static final BalanceContentResponse BALANCE_CONTENT_RESPONSE = new BalanceContentResponse(
+                3L, Category.EXAMPLE, 5, 3, "다음 중 여행가고 싶은 곳은?",
+                new BalanceOptionResponse(5L, "산"),
+                new BalanceOptionResponse(6L, "바다"));
 
         @Test
-        void 게임_방_전쳬_멤버_조회() {
-            // given
-            Long roomId = 1L;
-
+        void 다음_라운드로_넘어갈_수_있다() {
             // when
-            RoomMembersResponse actual = roomService.findAllRoomMember(roomId);
+            BalanceContentResponse actual = roomService.moveToNextRound(PROGRESS_ROOM_ID);
 
             // then
-            Assertions.assertThat(actual.members()).hasSize(4);
+            assertThat(actual).isEqualTo(BALANCE_CONTENT_RESPONSE);
+        }
+
+        @Test
+        void 방이_없을_경우_예외를_던진다() {
+            // when & then
+            assertThatThrownBy(() -> roomService.moveToNextRound(NOT_EXIST_ROOM_ID))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("해당 방이 존재하지 않습니다.");
+        }
+
+        @Test
+        void 방의_현재_라운드의_질문이_없을_경우_예외를_던진다() {
+            // when & then
+            assertThatThrownBy(() -> roomService.moveToNextRound(NOT_PROGRESSED_ROOM_ID))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
         }
     }
 }
