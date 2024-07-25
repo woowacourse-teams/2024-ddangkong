@@ -1,5 +1,6 @@
 package ddangkong.domain.balance.room;
 
+import ddangkong.exception.BadRequestException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +13,7 @@ import lombok.Getter;
 public class Room {
 
     private static final int DEFAULT_TOTAL_ROUND = 5;
-    private static final int DEFAULT_CURRENT_ROUND = 1;
+    private static final int START_ROUND = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +23,17 @@ public class Room {
     private int totalRound = DEFAULT_TOTAL_ROUND;
 
     @Column(nullable = false)
-    private int currentRound = DEFAULT_CURRENT_ROUND;
+    private int currentRound = START_ROUND;
+
+    public void moveToNextRound() {
+        if (canMoveToNextRound()) {
+            currentRound++;
+            return;
+        }
+        throw new BadRequestException("마지막 라운드입니다.");
+    }
+
+    private boolean canMoveToNextRound() {
+        return currentRound < totalRound;
+    }
 }
