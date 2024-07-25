@@ -1,16 +1,15 @@
 import { css } from '@emotion/react';
 
-export const tabLayout = css`
-  display: flex;
-  flex-basis: 45%;
-  flex-direction: column;
-  width: 100%;
+import { Theme } from '@/styles/Theme';
 
-  transition: all 1s;
-`;
+export const tabButtonStyle = (isActive: boolean) => css`
+  flex: 1;
+  padding: 0.8rem;
+  border-radius: 1.2rem 1.2rem 0 0;
 
-export const tabWrapperStyle = css`
-  display: flex;
-  width: 40%;
-  margin-left: 2.4rem;
+  background-color: ${isActive ? Theme.color.peanut400 : Theme.color.gray};
+
+  color: black;
+  font-weight: bold;
+  transition: all 0.5s;
 `;

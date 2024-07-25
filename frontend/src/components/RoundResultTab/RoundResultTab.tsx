@@ -1,46 +1,23 @@
-import { useState } from 'react';
+import { tabButtonStyle } from './RoundResultTab.styled';
 
-import { useTotalCountAnimation } from './RoundResultTab.hook';
-import { tabLayout, tabWrapperStyle } from './RoundResultTab.styled';
-import TabContentContainer from '../TabContentContainer/TabContentContainer';
-import TabItem from '../TabItem/TabItem';
+type TabTitle = 'group' | 'total';
 
-import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
+interface RoundResultTabProps {
+  tab: TabTitle;
+  activeTab: TabTitle;
+  handleClickTab: (tab: TabTitle) => void;
+}
 
-const RoundResultTab = () => {
-  const [activeTab, setActiveTab] = useState<'group' | 'total'>('group');
-  const isGroupTabActive = activeTab === 'group';
+const TAB_TITLE = {
+  group: '그룹',
+  total: '전체',
+} as const;
 
-  const { groupRoundResult, totalResult } = useRoundVoteResultQuery();
-  const {
-    animatedFirstPercent,
-    animatedSecondPercent,
-    animatedTotalFirstPercent,
-    animatedTotalSecondPercent,
-  } = useTotalCountAnimation(groupRoundResult, totalResult);
-
-  const handleClickTab = (clickedTab: 'group' | 'total') => {
-    setActiveTab(clickedTab);
-  };
-
-  if (!groupRoundResult || !totalResult) return <div>데이터가 없습니다</div>;
-
+const RoundResultTab = ({ tab, activeTab, handleClickTab }: RoundResultTabProps) => {
   return (
-    <div css={tabLayout}>
-      <div css={tabWrapperStyle}>
-        <TabItem tab="group" activeTab={activeTab} handleClickTab={handleClickTab} />
-        <TabItem tab="total" activeTab={activeTab} handleClickTab={handleClickTab} />
-      </div>
-      <TabContentContainer
-        isGroupTabActive={isGroupTabActive}
-        roundResult={isGroupTabActive ? groupRoundResult : totalResult}
-        animatedFirstPercent={isGroupTabActive ? animatedFirstPercent : animatedTotalFirstPercent}
-        animatedSecondPercent={
-          isGroupTabActive ? animatedSecondPercent : animatedTotalSecondPercent
-        }
-      />
-    </div>
+    <button css={tabButtonStyle(activeTab === tab)} onClick={() => handleClickTab(tab)}>
+      {TAB_TITLE[tab]}
+    </button>
   );
 };
-
 export default RoundResultTab;
