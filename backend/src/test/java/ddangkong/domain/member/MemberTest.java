@@ -2,7 +2,7 @@ package ddangkong.domain.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ddangkong.domain.balance.content.Room;
+import ddangkong.domain.balance.room.Room;
 import ddangkong.domain.support.EntityTestUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ class MemberTest {
             // given
             Room room = new Room();
             EntityTestUtils.setId(room, 1L);
-            Member member = new Member("rapper lee", room);
+            Member member = Member.createMaster("rapper lee", room);
             EntityTestUtils.setId(member, 1L);
 
             // when
@@ -33,7 +33,7 @@ class MemberTest {
             Long roomId = 1L;
             Room room = new Room();
             EntityTestUtils.setId(room, roomId);
-            Member member = new Member("rapper lee", room);
+            Member member = Member.createMaster("rapper lee", room);
             EntityTestUtils.setId(member, 1L);
 
             // when
