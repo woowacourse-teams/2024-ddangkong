@@ -38,21 +38,22 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew bootJar
 
-      - name: Upload build artifact
+      - name: make app.jar
+        run: | 
+          cp ./build/libs/*.jar ./deploy/app.jar
+
+      - name: Upload build file
         uses: actions/upload-artifact@v4
-      - run: cp ./build/libs/*.jar ./build/libs/app.jar
         with:
           name: build-artifact
-          path: |
-            ./build/libs/app.jar
-            ./deploy/deploy-api-dev.yml
+          path: deploy
 
   deploy:
     needs: build
     runs-on: [ self-hosted, linux, ARM64 ] # Self hosted runner 사용
 
     steps:
-    - name: Download build artifact
+    - name: Download build file
       uses: actions/download-artifact@v4
       with:
         path: build-artifact
