@@ -1,20 +1,14 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { selectContainerLayout, selectSection } from './SelectContainer.styled';
+import SelectButton from '../common/SelectButton/SelectButton';
 
-import Button from '@/components/common/Button/Button';
 import SelectOption from '@/components/SelectOption/SelectOption';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const SelectContainer = () => {
-  const navigate = useNavigate();
   const { balanceContent, isLoading } = useBalanceContentQuery();
   const [selectedId, setSelectedId] = useState(0);
-
-  const goToRoundResult = () => {
-    navigate(`/round/result`);
-  };
 
   const handleSelectOption = (selectedId: number) => {
     setSelectedId(selectedId);
@@ -39,8 +33,7 @@ const SelectContainer = () => {
               handleSelectOption={handleSelectOption}
             />
           </section>
-
-          <Button text="선택" disabled={!selectedId} onClick={goToRoundResult} />
+          <SelectButton isDisabled={!selectedId} />
         </div>
       )}
     </>
