@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,10 +27,8 @@ public class RoomController {
     private final RoomService roomService;
 
     @GetMapping("/balances/rooms/{roomId}/members")
-    public ResponseEntity<RoomMembersResponse> getAllBalanceGameRoomMember(@Positive @PathVariable Long roomId) {
-        RoomMembersResponse response = roomService.findAllRoomMember(roomId);
-
-        return ResponseEntity.ok(response);
+    public RoomMembersResponse getAllBalanceGameRoomMember(@Positive @PathVariable Long roomId) {
+        return roomService.findAllRoomMember(roomId);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
