@@ -7,6 +7,14 @@ export const headerLayout = css`
   height: 8rem;
 `;
 
+export const roundText = css`
+  width: 2.4rem;
+  height: 2.4rem;
+
+  font-weight: bold;
+  font-size: 1.6rem;
+`;
+
 export const gameTitle = css`
   font-weight: bold;
   font-size: 1.6rem;

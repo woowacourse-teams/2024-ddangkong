@@ -2,12 +2,12 @@ package ddangkong.service.balance.content;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.domain.balance.content.BalanceContent;
-import ddangkong.domain.balance.content.Room;
-import ddangkong.domain.balance.content.RoomContent;
-import ddangkong.domain.balance.content.RoomContentRepository;
-import ddangkong.domain.balance.content.RoomRepository;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
+import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomContent;
+import ddangkong.domain.balance.room.RoomContentRepository;
+import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.exception.BadRequestException;
 import ddangkong.exception.InternalServerException;
 import java.util.List;
@@ -40,14 +40,13 @@ public class BalanceContentService {
     }
 
     private RoomContent findCurrentRoomContent(Long roomId) {
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new BadRequestException("해당 방이 존재하지 않습니다."));
+        Room room = roomRepository.getById(roomId);
         return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
                 .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
     }
 
     private List<BalanceOption> findBalanceOptions(BalanceContent balanceContent) {
-        List<BalanceOption> balanceOptions = balanceOptionRepository.findByBalanceContent(balanceContent);
+        List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
         validateBalanceOptions(balanceOptions);
         return balanceOptions;
     }

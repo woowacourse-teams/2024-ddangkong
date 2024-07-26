@@ -1,6 +1,6 @@
 package ddangkong.domain.member;
 
-import ddangkong.domain.balance.content.Room;
+import ddangkong.domain.balance.room.Room;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,4 +28,25 @@ public class Member {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
+
+    @Column(nullable = false)
+    private boolean isMaster;
+
+    private Member(String nickname, Room room, boolean isMaster) {
+        this.nickname = nickname;
+        this.room = room;
+        this.isMaster = isMaster;
+    }
+
+    public static Member createMaster(String nickname, Room room) {
+        return new Member(nickname, room, true);
+    }
+
+    public static Member createCommon(String nickname, Room room) {
+        return new Member(nickname, room, false);
+    }
+
+    public boolean isNotIn(Long roomId) {
+        return !room.getId().equals(roomId);
+    }
 }

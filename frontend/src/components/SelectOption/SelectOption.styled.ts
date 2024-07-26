@@ -9,6 +9,7 @@ export const SelectOptionLayout = (selected: boolean) => css`
   width: 11.6rem;
   height: 16.8rem;
   padding: 1.6rem;
+  border-radius: 3rem;
 
   background-color: ${selected ? Theme.color.peanut500 : Theme.color.peanut300};
 
@@ -19,7 +20,6 @@ export const SelectOptionLayout = (selected: boolean) => css`
   text-align: center;
 
   word-break: keep-all;
-  border-radius: 3rem;
 
   transition: all 0.5s;
   scale: ${selected ? 1.1 : 1};

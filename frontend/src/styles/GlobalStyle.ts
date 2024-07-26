@@ -136,6 +136,7 @@ const reset = css`
     outline: none;
     background-color: inherit;
     cursor: pointer;
+    padding: 0;
   }
 `;
 

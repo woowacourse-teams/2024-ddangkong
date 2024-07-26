@@ -1,0 +1,13 @@
+package ddangkong.controller.balance.member.dto;
+
+import ddangkong.domain.member.Member;
+
+public record MemberResponse(
+        Long id,
+        String nickname,
+        boolean isMaster
+) {
+    public MemberResponse(Member member) {
+        this(member.getId(), member.getNickname(), member.isMaster());
+    }
+}
