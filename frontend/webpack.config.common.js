@@ -3,7 +3,6 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 
-// this will update the process.env with environment variables in .env file
 dotenv.config();
 
 module.exports = {
@@ -11,6 +10,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname + '/dist'),
+    publicPath: '/',
     clean: true,
   },
   resolve: {

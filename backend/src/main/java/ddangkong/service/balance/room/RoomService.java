@@ -39,7 +39,7 @@ public class RoomService {
     public RoomMembersResponse findAllRoomMember(Long roomId) {
         Room room = roomRepository.getById(roomId);
 
-        List<RoomMemberResponse> response = memberRepository.findByRoom(room)
+        List<RoomMemberResponse> response = memberRepository.findAllByRoom(room)
                 .stream()
                 .map(RoomMemberResponse::new)
                 .toList();
@@ -80,7 +80,7 @@ public class RoomService {
     }
 
     private List<BalanceOption> findBalanceOptions(BalanceContent balanceContent) {
-        List<BalanceOption> balanceOptions = balanceOptionRepository.findByBalanceContent(balanceContent);
+        List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
         validateBalanceOptions(balanceOptions);
         return balanceOptions;
     }

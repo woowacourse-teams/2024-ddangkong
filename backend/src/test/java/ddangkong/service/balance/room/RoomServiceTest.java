@@ -44,8 +44,8 @@ class RoomServiceTest extends BaseServiceTest {
         void 방_생성_시_멤버를_생성하고_방을_생성한다() {
             // given
             String nickname = "나는방장";
-            MemberResponse expectedMemberResponse = new MemberResponse(5L, nickname, true);
-            RoomJoinResponse expected = new RoomJoinResponse(3L, expectedMemberResponse);
+            MemberResponse expectedMemberResponse = new MemberResponse(7L, nickname, true);
+            RoomJoinResponse expected = new RoomJoinResponse(4L, expectedMemberResponse);
 
             // when
             RoomJoinResponse actual = roomService.createRoom(nickname);
@@ -63,7 +63,7 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             String nickname = "나는참가자";
             Long joinRoomId = 2L;
-            MemberResponse expectedMemberResponse = new MemberResponse(5L, nickname, false);
+            MemberResponse expectedMemberResponse = new MemberResponse(7L, nickname, false);
             RoomJoinResponse expected = new RoomJoinResponse(joinRoomId, expectedMemberResponse);
 
             // when
@@ -89,7 +89,7 @@ class RoomServiceTest extends BaseServiceTest {
     class 다음_라운드로_이동 {
 
         private static final Long PROGRESS_ROOM_ID = 1L;
-        private static final Long NOT_EXIST_ROOM_ID = 3L;
+        private static final Long NOT_EXIST_ROOM_ID = 999999999L;
         private static final Long NOT_PROGRESSED_ROOM_ID = 2L;
         private static final BalanceContentResponse BALANCE_CONTENT_RESPONSE = new BalanceContentResponse(
                 3L, Category.EXAMPLE, 5, 3, "다음 중 여행가고 싶은 곳은?",

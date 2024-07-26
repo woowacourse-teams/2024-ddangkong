@@ -22,7 +22,12 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   return (
-    <button onClick={onClick} css={buttonLayout({ disabled, size, radius, fontSize })} {...props}>
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      css={buttonLayout({ disabled, size, radius, fontSize })}
+      {...props}
+    >
       {text}
     </button>
   );

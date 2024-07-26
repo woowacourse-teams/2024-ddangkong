@@ -21,7 +21,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
     class 현재_방의_밸런스_게임_내용_조회 {
 
         private static final Long PROGRESS_ROOM_ID = 1L;
-        private static final Long NOT_EXIST_ROOM_ID = 3L;
+        private static final Long NOT_EXIST_ROOM_ID = 99999999L;
         private static final Long NOT_PROGRESSED_ROOM_ID = 2L;
         private static final BalanceContentResponse BALANCE_CONTENT_RESPONSE = new BalanceContentResponse(
                 1L, Category.EXAMPLE, 5, 2, "민초 vs 반민초",

@@ -31,3 +31,9 @@ export const buttonLayout = ({ disabled, size, radius, fontSize }: ButtonLayoutP
     background-color: ${Theme.color.peanut300};
   }
 `;
+
+export const bottomButtonLayout = css`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+`;
