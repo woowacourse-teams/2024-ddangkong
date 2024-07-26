@@ -65,7 +65,7 @@ public class RoomService {
         Room room = roomRepository.getById(roomId);
         room.moveToNextRound();
 
-        RoomContent roomContent = findCurrentRoomContent(roomId);
+        RoomContent roomContent = findCurrentRoomContent(room);
         List<BalanceOption> balanceOptions = findBalanceOptions(roomContent.getBalanceContent());
         return BalanceContentResponse.builder()
                 .roomContent(roomContent)
@@ -74,8 +74,7 @@ public class RoomService {
                 .build();
     }
 
-    private RoomContent findCurrentRoomContent(Long roomId) {
-        Room room = roomRepository.getById(roomId);
+    private RoomContent findCurrentRoomContent(Room room) {
         return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
                 .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
     }
