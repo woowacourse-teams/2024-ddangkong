@@ -1,5 +1,6 @@
 package ddangkong.controller.balance.room;
 
+import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.controller.balance.room.dto.RoomMembersResponse;
@@ -8,7 +9,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,9 +26,14 @@ public class RoomController {
 
     private final RoomService roomService;
 
+    @GetMapping("/balances/rooms/{roomId}/members")
+    public RoomMembersResponse getAllBalanceGameRoomMember(@Positive @PathVariable Long roomId) {
+        return roomService.findAllRoomMember(roomId);
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms")
-    public RoomJoinResponse creatRoom(@Valid @RequestBody RoomJoinRequest request) {
+    public RoomJoinResponse createRoom(@Valid @RequestBody RoomJoinRequest request) {
         return roomService.createRoom(request.nickname());
     }
 
@@ -38,10 +43,9 @@ public class RoomController {
         return roomService.joinRoom(request.nickname(), roomId);
     }
 
-    @GetMapping("/balances/rooms/{roomId}/members")
-    public ResponseEntity<RoomMembersResponse> getAllBalanceGameRoomMember(@Positive @PathVariable Long roomId) {
-        RoomMembersResponse response = roomService.findAllRoomMember(roomId);
-
-        return ResponseEntity.ok(response);
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/balances/rooms/{roomId}/contents")
+    public BalanceContentResponse moveToNextRound(@PathVariable @Positive Long roomId) {
+        return roomService.moveToNextRound(roomId);
     }
 }
