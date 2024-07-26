@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# 5. 빌드된 JAR 파일을 실행
+JAR_FILE=$(ls *.jar | head -n 1)
+
+if [ -z "$JAR_FILE" ]; then
+echo "No JAR file found"
+exit 1
+fi
+  
+  # 이전에 돌아가고 있던 Spring 애플리케이션 종료
+PID=$(lsof -t -i:8080)
+
+if [ -n "$PID" ]; then
+echo "Killing process $PID running on port 8080"
+kill -9 $PID
+echo "Process $PID has been killed"
+else
+echo "No process is running on port 8080"
+fi
+  
+  # 우선 nohup에 로그 출력하고 이후에 logback 붙이기
+nohup java -Dspring.profiles.active=dev -Duser.timezone=Asia/Seoul -Dserver.port=8080 -jar "$JAR_FILE" &
+~
