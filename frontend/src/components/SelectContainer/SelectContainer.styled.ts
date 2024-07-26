@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 export const selectContainerLayout = css`
   display: flex;
-  flex-basis: 55%;
+  flex-basis: 45%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
