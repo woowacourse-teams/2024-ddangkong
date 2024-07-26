@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    List<Member> findByRoom(Room room);
+    List<Member> findAllByRoom(Room room);
 
     default Member getById(Long id) {
         return findById(id)

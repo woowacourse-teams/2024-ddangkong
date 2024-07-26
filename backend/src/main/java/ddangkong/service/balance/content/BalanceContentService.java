@@ -46,7 +46,7 @@ public class BalanceContentService {
     }
 
     private List<BalanceOption> findBalanceOptions(BalanceContent balanceContent) {
-        List<BalanceOption> balanceOptions = balanceOptionRepository.findByBalanceContent(balanceContent);
+        List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
         validateBalanceOptions(balanceOptions);
         return balanceOptions;
     }

@@ -38,4 +38,8 @@ public class BalanceVote {
     public Long getOptionId() {
         return balanceOption.getId();
     }
+
+    public String getMemberNickname() {
+        return member.getNickname();
+    }
 }
