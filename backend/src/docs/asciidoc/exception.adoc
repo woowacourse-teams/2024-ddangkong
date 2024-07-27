@@ -1,0 +1,49 @@
+== 예외
+
+=== business error
+
+==== example request
+
+include::{snippets}/exception/business-error/http-request.adoc[]
+
+==== response
+
+include::{snippets}/exception/business-error/http-response.adoc[]
+
+response fields
+
+include::{snippets}/exception/business-error/response-fields.adoc[]
+
+=== field error
+
+==== example request
+
+include::{snippets}/exception/field-error/http-request.adoc[]
+
+include::{snippets}/exception/field-error/request-fields.adoc[]
+
+==== response
+
+include::{snippets}/exception/field-error/http-response.adoc[]
+
+response fields
+
+include::{snippets}/exception/field-error/response-fields.adoc[]
+
+=== url parameter error
+
+==== example request
+
+include::{snippets}/exception/url-parameter-error/http-request.adoc[]
+
+include::{snippets}/exception/url-parameter-error/path-parameters.adoc[]
+
+include::{snippets}/exception/url-parameter-error/query-parameters.adoc[]
+
+==== response
+
+include::{snippets}/exception/url-parameter-error/http-response.adoc[]
+
+response fields
+
+include::{snippets}/exception/url-parameter-error/response-fields.adoc[]
