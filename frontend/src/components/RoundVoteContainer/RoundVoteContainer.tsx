@@ -5,13 +5,19 @@ import { tabLayout, tabWrapperStyle } from './RoundVoteContainer.styled';
 import RoundResultTab from '../RoundResultTab/RoundResultTab';
 import TabContentContainer from '../TabContentContainer/TabContentContainer';
 
+import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 
 const RoundVoteContainer = () => {
   const [activeTab, setActiveTab] = useState<'group' | 'total'>('group');
   const isGroupTabActive = activeTab === 'group';
 
-  const { groupRoundResult, totalResult } = useRoundVoteResultQuery();
+  const { balanceContent } = useBalanceContentQuery();
+  const { groupRoundResult, totalResult } = useRoundVoteResultQuery({
+    roomId: 1,
+    contentId: balanceContent?.contentId,
+  });
+
   const {
     animatedFirstPercent,
     animatedSecondPercent,
