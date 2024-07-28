@@ -10,3 +10,4 @@
 
 include::exception.adoc[]
 include::balanceContent.adoc[]
+include::room.adoc[]
