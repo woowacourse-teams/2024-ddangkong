@@ -24,7 +24,7 @@ const SelectButton = ({ isDisabled, selectedId }: SelectButtonProps) => {
       roomId: 1,
     });
 
-    navigate(`/round/result`);
+    navigate('/round/result');
   };
 
   return (

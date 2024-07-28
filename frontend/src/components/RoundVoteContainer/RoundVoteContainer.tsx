@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useTotalCountAnimation } from './RoundVoteContainer.hook';
-import { tabLayout, tabWrapperStyle } from './RoundVoteContainer.styled';
+import { tabLayout, tabWrapper } from './RoundVoteContainer.styled';
 import RoundResultTab from '../RoundResultTab/RoundResultTab';
 import TabContentContainer from '../TabContentContainer/TabContentContainer';
 
@@ -33,10 +33,10 @@ const RoundVoteContainer = () => {
 
   return (
     <div css={tabLayout}>
-      <div css={tabWrapperStyle}>
+      <nav css={tabWrapper}>
         <RoundResultTab tab="group" activeTab={activeTab} handleClickTab={handleClickTab} />
         <RoundResultTab tab="total" activeTab={activeTab} handleClickTab={handleClickTab} />
-      </div>
+      </nav>
       <TabContentContainer
         isGroupTabActive={isGroupTabActive}
         roundResult={isGroupTabActive ? groupRoundResult : totalResult}
