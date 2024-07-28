@@ -15,7 +15,7 @@ const SelectButton = ({ isDisabled, selectedId }: SelectButtonProps) => {
   const navigate = useNavigate();
   const { balanceContent } = useBalanceContentQuery();
 
-  const goToRoundResult = async () => {
+  const handleSelectComplete = async () => {
     if (!balanceContent) return;
 
     await voteBalanceContent({
@@ -24,6 +24,10 @@ const SelectButton = ({ isDisabled, selectedId }: SelectButtonProps) => {
       roomId: 1,
     });
 
+    goToRoundResult();
+  };
+
+  const goToRoundResult = () => {
     navigate('/round/result');
   };
 
@@ -32,8 +36,8 @@ const SelectButton = ({ isDisabled, selectedId }: SelectButtonProps) => {
       <Button
         style={{ width: '100%' }}
         disabled={isDisabled}
-        text={'선택'}
-        onClick={goToRoundResult}
+        text="선택"
+        onClick={handleSelectComplete}
       />
     </div>
   );
