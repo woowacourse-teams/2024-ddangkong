@@ -1,8 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { fetchBalanceContent } from '@/apis/balanceContent';
+import { BalanceContent } from '@/types/balanceContent';
 
-const useBalanceContentQuery = () => {
+type BalanceContentQueryResponse = UseQueryResult<BalanceContent, Error> & {
+  balanceContent?: BalanceContent;
+};
+
+const useBalanceContentQuery = (): BalanceContentQueryResponse => {
   const balanceContentQuery = useQuery({
     queryKey: ['balanceContent'],
     queryFn: async () => await fetchBalanceContent(),

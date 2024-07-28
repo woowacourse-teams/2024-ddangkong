@@ -1,8 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { fetchFinalGameResult } from '@/apis/balanceContent';
+import { GameFinalResult } from '@/types/balanceContent';
 
-const useGameResultQuery = () => {
+type GameResultQueryResponse = UseQueryResult<GameFinalResult[], Error> & {
+  gameResult?: GameFinalResult[];
+};
+
+const useGameResultQuery = (): GameResultQueryResponse => {
   const gameResultQuery = useQuery({
     queryKey: ['gameResult'],
     queryFn: async () => await fetchFinalGameResult(),

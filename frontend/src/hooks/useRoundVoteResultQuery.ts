@@ -1,15 +1,24 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import INITIAL_VALUE from '../mocks/data/roundVoteResultInitialValue.json';
 
 import { fetchRoundVoteResult } from '@/apis/balanceContent';
+import { Group, RoundVoteResult, Total } from '@/types/roundVoteResult';
 
 interface UseRoundVoteResultQueryProps {
   roomId: number;
   contentId?: number;
 }
 
-const useRoundVoteResultQuery = ({ roomId, contentId }: UseRoundVoteResultQueryProps) => {
+type RoundVoteResultQueryResponse = UseQueryResult<RoundVoteResult, Error> & {
+  groupRoundResult?: Group;
+  totalResult?: Total;
+};
+
+const useRoundVoteResultQuery = ({
+  roomId,
+  contentId,
+}: UseRoundVoteResultQueryProps): RoundVoteResultQueryResponse => {
   const roundVoteResultQuery = useQuery({
     queryKey: ['roundVoteResult', roomId, contentId],
     queryFn: async () => {
