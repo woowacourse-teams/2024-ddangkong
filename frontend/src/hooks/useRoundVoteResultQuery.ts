@@ -3,6 +3,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import INITIAL_VALUE from '../mocks/data/roundVoteResultInitialValue.json';
 
 import { fetchRoundVoteResult } from '@/apis/balanceContent';
+import { QUERY_KEYS } from '@/constants/queryKeys';
 import { Group, RoundVoteResult, Total } from '@/types/roundVoteResult';
 
 interface UseRoundVoteResultQueryProps {
@@ -20,7 +21,7 @@ const useRoundVoteResultQuery = ({
   contentId,
 }: UseRoundVoteResultQueryProps): RoundVoteResultQueryResponse => {
   const roundVoteResultQuery = useQuery({
-    queryKey: ['roundVoteResult', roomId, contentId],
+    queryKey: [QUERY_KEYS.roundVoteResult, roomId, contentId],
     queryFn: async () => {
       if (typeof contentId === 'undefined') {
         throw new Error('contentId 가 존재하지 않습니다.');

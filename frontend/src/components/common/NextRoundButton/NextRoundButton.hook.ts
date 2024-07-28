@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { moveNextRound } from '@/apis/balanceContent';
+import { QUERY_KEYS } from '@/constants/queryKeys';
 
 const useMoveNextRoundMutation = () => {
   const queryClient = useQueryClient();
@@ -8,7 +9,7 @@ const useMoveNextRoundMutation = () => {
   return useMutation({
     mutationFn: async () => await moveNextRound(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['balanceContent'] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balanceContent] });
     },
   });
 };

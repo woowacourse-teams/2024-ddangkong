@@ -1,6 +1,7 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { fetchFinalGameResult } from '@/apis/balanceContent';
+import { QUERY_KEYS } from '@/constants/queryKeys';
 import { GameFinalResult } from '@/types/balanceContent';
 
 type GameResultQueryResponse = UseQueryResult<GameFinalResult[], Error> & {
@@ -9,7 +10,7 @@ type GameResultQueryResponse = UseQueryResult<GameFinalResult[], Error> & {
 
 const useGameResultQuery = (): GameResultQueryResponse => {
   const gameResultQuery = useQuery({
-    queryKey: ['gameResult'],
+    queryKey: [QUERY_KEYS.gameResult],
     queryFn: async () => await fetchFinalGameResult(),
   });
 
