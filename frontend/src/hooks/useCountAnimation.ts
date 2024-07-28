@@ -32,6 +32,8 @@ const useCountAnimation = ({ target, start = 50, duration = 2000 }: UseCountAnim
         clearInterval(counter);
       }
     }, FRAME_RATE);
+
+    return () => clearInterval(counter);
   }, [target, start, duration]);
 
   return count;
