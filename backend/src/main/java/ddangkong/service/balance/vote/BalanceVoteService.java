@@ -2,8 +2,6 @@ package ddangkong.service.balance.vote;
 
 import ddangkong.controller.balance.content.dto.BalanceContentGroupResponse;
 import ddangkong.controller.balance.content.dto.BalanceContentTotalResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionGroupResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionTotalResponse;
 import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
 import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
 import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
@@ -90,24 +88,14 @@ public class BalanceVoteService {
         List<BalanceVote> secondOptionVotes = balanceVoteRepository
                 .findByMemberRoomAndBalanceOption(room, balanceOptions.getSecondOption());
 
-        int roomMemberSize = firstOptionVotes.size() + secondOptionVotes.size();
-        return new BalanceContentGroupResponse(
-                BalanceOptionGroupResponse.of(balanceOptions.getFistOption(), firstOptionVotes, roomMemberSize),
-                BalanceOptionGroupResponse.of(balanceOptions.getSecondOption(), secondOptionVotes, roomMemberSize)
-        );
+        return BalanceContentGroupResponse.of(balanceOptions, firstOptionVotes, secondOptionVotes);
     }
 
     private BalanceContentTotalResponse getBalanceContentTotalResponse(BalanceOptions balanceOptions) {
         Long firstOptionCount = balanceVoteRepository.countByBalanceOption(balanceOptions.getFistOption());
         Long secondOptionCount = balanceVoteRepository.countByBalanceOption(balanceOptions.getSecondOption());
-        return new BalanceContentTotalResponse(
-                BalanceOptionTotalResponse.of(balanceOptions.getFistOption(),
-                        firstOptionCount + secondOptionCount,
-                        firstOptionCount),
-                BalanceOptionTotalResponse.of(balanceOptions.getSecondOption(),
-                        firstOptionCount + secondOptionCount,
-                        secondOptionCount)
-        );
+
+        return BalanceContentTotalResponse.of(balanceOptions, firstOptionCount, secondOptionCount);
     }
 
     private BalanceOptions findBalanceOptions(Room room, Long balanceContentId) {
