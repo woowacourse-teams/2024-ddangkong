@@ -1,9 +1,9 @@
 package ddangkong.controller.balance.room;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
+import ddangkong.controller.balance.member.dto.MembersResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.controller.balance.room.dto.RoomMembersResponse;
 import ddangkong.service.balance.room.RoomService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -27,7 +27,7 @@ public class RoomController {
     private final RoomService roomService;
 
     @GetMapping("/balances/rooms/{roomId}/members")
-    public RoomMembersResponse getAllBalanceGameRoomMember(@Positive @PathVariable Long roomId) {
+    public MembersResponse getAllBalanceGameRoomMember(@Positive @PathVariable Long roomId) {
         return roomService.findAllRoomMember(roomId);
     }
 

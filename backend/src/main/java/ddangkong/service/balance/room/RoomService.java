@@ -2,9 +2,8 @@ package ddangkong.service.balance.room;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
+import ddangkong.controller.balance.member.dto.MembersResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.controller.balance.room.dto.RoomMemberResponse;
-import ddangkong.controller.balance.room.dto.RoomMembersResponse;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.balance.room.Room;
@@ -32,14 +31,14 @@ public class RoomService {
     private final BalanceOptionRepository balanceOptionRepository;
 
     @Transactional(readOnly = true)
-    public RoomMembersResponse findAllRoomMember(Long roomId) {
+    public MembersResponse findAllRoomMember(Long roomId) {
         Room room = roomRepository.getById(roomId);
 
-        List<RoomMemberResponse> response = memberRepository.findAllByRoom(room)
+        List<MemberResponse> response = memberRepository.findAllByRoom(room)
                 .stream()
-                .map(RoomMemberResponse::new)
+                .map(MemberResponse::new)
                 .toList();
-        return new RoomMembersResponse(response);
+        return new MembersResponse(response);
     }
 
     @Transactional
