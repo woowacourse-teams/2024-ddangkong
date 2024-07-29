@@ -52,23 +52,13 @@ public class BalanceVoteService {
     }
 
     private BalanceOption findValidOption(Long optionId, Long contentId) {
-        BalanceOption balanceOption = balanceOptionRepository.getById(optionId);
-        if (balanceOption.isNotContained(contentId)) {
-            String errorMessage = "해당 질문의 선택지가 아닙니다. contentId : %d, optionId : %d"
-                    .formatted(contentId, optionId);
-            throw new BadRequestException(errorMessage);
-        }
-        return balanceOption;
+        return balanceOptionRepository.findByIdAndBalanceContentId(optionId, contentId)
+                .orElseThrow(() -> new BadRequestException("해당 질문의 선택지가 존재하지 않습니다."));
     }
 
     private Member findValidMember(Long memberId, Long roomId) {
-        Member member = memberRepository.getById(memberId);
-        if (member.isNotIn(roomId)) {
-            String errorMessage = "해당 방의 멤버가 아닙니다. roomId : %d, memberId : %d"
-                    .formatted(roomId, memberId);
-            throw new BadRequestException(errorMessage);
-        }
-        return member;
+        return memberRepository.findByIdAndRoomId(memberId, roomId)
+                .orElseThrow(() -> new BadRequestException("해당 방의 멤버가 존재하지 않습니다."));
     }
 
     @Transactional(readOnly = true)
