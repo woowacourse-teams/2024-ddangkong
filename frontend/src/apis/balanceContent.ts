@@ -4,6 +4,16 @@ import { API_URL } from '@/constants/url';
 import { BalanceContent, GameFinalResult } from '@/types/balanceContent';
 import { RoundVoteResult } from '@/types/roundVoteResult';
 
+interface ContentResultParams {
+  contentId: number;
+  roomId: number;
+}
+
+interface VoteParams extends ContentResultParams {
+  optionId: number;
+}
+
+// 밸런스 게임 컨텐츠 가져오기
 export const fetchBalanceContent = async (roomId = 1): Promise<BalanceContent> => {
   const res = await fetcher.get({ url: API_URL.balanceContent(roomId) });
 
@@ -12,9 +22,13 @@ export const fetchBalanceContent = async (roomId = 1): Promise<BalanceContent> =
   return data;
 };
 
-export const voteBalanceContent = async (optionId: number, roomId = 1, contentId = 1) => {
+// 투표하기
+export const voteBalanceContent = async ({ optionId, contentId, roomId }: VoteParams) => {
   const res = await fetcher.post({
     url: API_URL.vote(roomId, contentId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
     body: {
       memberId: 1,
       optionId,
@@ -26,7 +40,11 @@ export const voteBalanceContent = async (optionId: number, roomId = 1, contentId
   return data;
 };
 
-export const fetchRoundVoteResult = async (roomId = 1, contentId = 1): Promise<RoundVoteResult> => {
+// 라운드 통계 가져오기
+export const fetchRoundVoteResult = async ({
+  contentId,
+  roomId,
+}: ContentResultParams): Promise<RoundVoteResult> => {
   const res = await fetcher.get({
     url: API_URL.roundVoteResult(roomId, contentId),
   });
@@ -36,9 +54,13 @@ export const fetchRoundVoteResult = async (roomId = 1, contentId = 1): Promise<R
   return data;
 };
 
+// 다음 라운드로 이동하기
 export const moveNextRound = async (roomId = 1): Promise<RoundVoteResult> => {
   const res = await fetcher.post({
     url: API_URL.moveNextRound(roomId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
   });
 
   const data = await res.json();
@@ -46,6 +68,7 @@ export const moveNextRound = async (roomId = 1): Promise<RoundVoteResult> => {
   return data;
 };
 
+// 최종 결과 가져오기
 export const fetchFinalGameResult = async (roomId = 1): Promise<GameFinalResult[]> => {
   const res = await fetcher.get({
     url: API_URL.finalResult(roomId),

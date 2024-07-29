@@ -16,5 +16,5 @@ export const categoryText = css`
 
 export const topicText = css`
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 1.6rem;
 `;

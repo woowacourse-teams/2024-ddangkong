@@ -20,7 +20,7 @@ const GameResultItem = ({ gameFinalResult }: GameResultItemProps) => {
   });
 
   return (
-    <div css={rankItem}>
+    <li css={rankItem}>
       <div css={rankInfoContainer}>
         <span css={rankNumber}>{gameFinalResult.rank}</span>
         <div css={nicknameContainer(animatedRankPercent)}>
@@ -29,7 +29,7 @@ const GameResultItem = ({ gameFinalResult }: GameResultItemProps) => {
         </div>
       </div>
       <span css={rankPercent}>{animatedRankPercent}%</span>
-    </div>
+    </li>
   );
 };
 
