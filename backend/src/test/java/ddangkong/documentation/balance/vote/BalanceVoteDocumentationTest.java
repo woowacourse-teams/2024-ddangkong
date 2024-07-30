@@ -108,7 +108,7 @@ public class BalanceVoteDocumentationTest extends BaseDocumentationTest {
         private static final String END_POINT = "/api/balances/rooms/{roomId}/contents/{contentId}/votes";
 
         @Test
-        void 방의_진행중인_라운드_결과를_조회한다() throws Exception {
+        void 선택지에_투표를_할_수_있다() throws Exception {
             // given
             Long optionId = 1L;
             Long contentId = 1L;
