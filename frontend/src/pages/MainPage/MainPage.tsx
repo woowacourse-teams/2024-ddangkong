@@ -8,7 +8,7 @@ const MainPage = () => {
   const navigate = useNavigate();
 
   const goToNicknamePage = () => {
-    navigate('/nickname');
+    navigate('/nickname', { state: { isMaster: true } });
   };
 
   return (

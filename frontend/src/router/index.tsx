@@ -6,6 +6,7 @@ import GamePage from '@/pages/GamePage/GamePage';
 import GameResultPage from '@/pages/GameResultPage/GameResultPage';
 import MainPage from '@/pages/MainPage/MainPage';
 import NicknamePage from '@/pages/NicknamePage/NicknamePage';
+import ReadyPage from '@/pages/ReadyPage/ReadyPage';
 import RoundResultPage from '@/pages/RoundResultPage/RoundResultPage';
 import VoteStatusPage from '@/pages/VoteStatusPage/VoteStatusPage';
 
@@ -28,7 +29,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'ready',
-        element: <div>게임 대기 화면</div>,
+        element: <ReadyPage />,
       },
       {
         path: 'game',

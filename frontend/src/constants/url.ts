@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NODE_ENV === 'production' ? process.env.API_BASE_URL : '';
+const BASE_URL = process.env.API_BASE_URL;
 
 export const API_URL = {
   balanceContent: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/content`,
