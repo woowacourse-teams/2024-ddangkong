@@ -58,7 +58,7 @@ public class RoomService {
         room.moveToNextRound();
 
         RoomContent roomContent = findCurrentRoomContent(room);
-        BalanceOptions balanceOptions = balanceOptionRepository.findBalanceOptionsByBalanceContent(
+        BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(
                 roomContent.getBalanceContent());
         return BalanceContentResponse.builder()
                 .roomContent(roomContent)

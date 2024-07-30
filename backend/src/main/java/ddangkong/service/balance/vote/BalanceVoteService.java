@@ -94,7 +94,7 @@ public class BalanceVoteService {
         validateBalanceContent(balanceContentId, roomContent.getBalanceContent());
 
         BalanceContent balanceContent = balanceContentRepository.getById(balanceContentId);
-        return balanceOptionRepository.findBalanceOptionsByBalanceContent(balanceContent);
+        return balanceOptionRepository.getBalanceOptionsByBalanceContent(balanceContent);
     }
 
     private void validateBalanceContent(Long balanceContentId, BalanceContent balanceContent) {

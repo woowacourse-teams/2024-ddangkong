@@ -25,7 +25,7 @@ public class BalanceContentService {
     @Transactional(readOnly = true)
     public BalanceContentResponse findRecentBalanceContent(Long roomId) {
         RoomContent roomContent = findCurrentRoomContent(roomId);
-        BalanceOptions balanceOptions = balanceOptionRepository.findBalanceOptionsByBalanceContent(
+        BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(
                 roomContent.getBalanceContent());
 
         return BalanceContentResponse.builder()

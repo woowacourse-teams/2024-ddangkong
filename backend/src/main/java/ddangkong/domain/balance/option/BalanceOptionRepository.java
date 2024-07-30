@@ -17,7 +17,7 @@ public interface BalanceOptionRepository extends JpaRepository<BalanceOption, Lo
                 .orElseThrow(() -> new BadRequestException("해당 옵션이 존재하지 않습니다."));
     }
 
-    default BalanceOptions findBalanceOptionsByBalanceContent(BalanceContent balanceContent) {
+    default BalanceOptions getBalanceOptionsByBalanceContent(BalanceContent balanceContent) {
         return new BalanceOptions(findAllByBalanceContent(balanceContent));
     }
 }
