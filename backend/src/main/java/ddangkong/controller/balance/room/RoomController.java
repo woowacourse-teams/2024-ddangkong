@@ -26,15 +26,15 @@ public class RoomController {
 
     private final RoomService roomService;
 
-    @GetMapping("/balances/rooms/{roomId}/members")
-    public RoomMembersResponse getAllBalanceGameRoomMember(@Positive @PathVariable Long roomId) {
-        return roomService.findAllRoomMember(roomId);
-    }
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms")
     public RoomJoinResponse createRoom(@Valid @RequestBody RoomJoinRequest request) {
         return roomService.createRoom(request.nickname());
+    }
+
+    @GetMapping("/balances/rooms/{roomId}/members")
+    public RoomMembersResponse getAllBalanceGameRoomMember(@Positive @PathVariable Long roomId) {
+        return roomService.findAllRoomMember(roomId);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
