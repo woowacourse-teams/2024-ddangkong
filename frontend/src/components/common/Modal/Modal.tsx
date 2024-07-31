@@ -16,14 +16,14 @@ import {
 
 import CloseIcon from '@/assets/images/closeIcon.png';
 
-export interface ModalProps {
-  children?: React.ReactNode;
-  isOpen: boolean;
-  position: 'top' | 'bottom' | 'center';
-  style?: React.CSSProperties;
-  onClose: () => void;
-  onConfirm?: () => void;
-}
+export interface ModalProps
+  extends React.PropsWithChildren<{
+    isOpen: boolean;
+    position: 'top' | 'bottom' | 'center';
+    style?: React.CSSProperties;
+    onClose: () => void;
+    onConfirm?: () => void;
+  }> {}
 
 const Modal = ({ children, isOpen, onClose, position, ...restProps }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -50,9 +50,7 @@ const Modal = ({ children, isOpen, onClose, position, ...restProps }: ModalProps
   );
 };
 
-interface ModalHeaderProps extends HTMLAttributes<HTMLElement> {
-  children: React.ReactNode;
-}
+interface ModalHeaderProps extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {}
 
 const ModalHeader = ({ children, ...restProps }: ModalHeaderProps) => {
   return (
@@ -62,9 +60,7 @@ const ModalHeader = ({ children, ...restProps }: ModalHeaderProps) => {
   );
 };
 
-interface ModalTitleProps extends HTMLAttributes<HTMLSpanElement> {
-  children: React.ReactNode;
-}
+interface ModalTitleProps extends React.PropsWithChildren<HTMLAttributes<HTMLSpanElement>> {}
 
 const ModalTitle = ({ children, ...restProps }: ModalTitleProps) => {
   return (
@@ -124,9 +120,7 @@ const ModalTextButton = ({
   );
 };
 
-interface ModalContentProps extends HTMLAttributes<HTMLElement> {
-  children: React.ReactNode;
-}
+interface ModalContentProps extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {}
 
 const ModalContent = ({ children, ...restProps }: ModalContentProps) => {
   return (
@@ -142,8 +136,7 @@ const ModalInput = ({ ...restProps }: ModalInputProps) => {
   return <input css={modalInputLayout} {...restProps} />;
 };
 
-interface ModalFooterProps extends HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+interface ModalFooterProps extends React.PropsWithChildren<HTMLAttributes<HTMLDivElement>> {
   buttonPosition?: 'left' | 'center' | 'right';
   buttonGap?: string;
 }
