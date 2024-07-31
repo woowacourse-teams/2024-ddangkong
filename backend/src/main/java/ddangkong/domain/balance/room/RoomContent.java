@@ -11,9 +11,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,6 +36,13 @@ public class RoomContent extends BaseEntity {
 
     @Column(nullable = false)
     private int round;
+
+    @Column(nullable = false)
+    private LocalDateTime roundEndedAt;
+
+    public boolean isRoundOver(LocalDateTime currentTime) {
+        return roundEndedAt.isAfter(currentTime);
+    }
 
     public Long getContentId() {
         return balanceContent.getId();

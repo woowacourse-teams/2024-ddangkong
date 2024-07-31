@@ -16,11 +16,11 @@ VALUES ('EXAMPLE', '민초 vs 반민초'),
        ('EXAMPLE', '월 200 백수 vs 월 500 직장인'),
        ('EXAMPLE', '다음 중 여행가고 싶은 곳은?');
 
-INSERT INTO room_content (room_id, balance_content_id, round, created_at)
-VALUES (1, 2, 1, '2024-07-18 19:50:00.000'),
-       (1, 1, 2, '2024-07-18 20:00:00.000'),
-       (1, 3, 3, '2024-07-18 20:00:00.000'),
-       (3, 1, 1, '2024-07-18 19:51:00.000');
+INSERT INTO room_content (room_id, balance_content_id, round, created_at, round_ended_at)
+VALUES (1, 2, 1, '2024-07-18 19:50:00.000', '2099-12-31 23:59:59.999'),
+       (1, 1, 2, '2024-07-18 20:00:00.000', '2099-12-31 23:59:59.999'),
+       (1, 3, 3, '2024-07-18 20:00:00.000', '2099-12-31 23:59:59.999'),
+       (3, 1, 1, '2024-07-18 19:51:00.000', '2099-12-31 23:59:59.999');
 
 INSERT INTO balance_option (name, balance_content_id)
 VALUES ('민초', 1),
