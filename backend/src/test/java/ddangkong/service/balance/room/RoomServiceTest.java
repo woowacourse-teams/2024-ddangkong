@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
+import ddangkong.controller.balance.member.dto.MembersResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.controller.balance.room.dto.RoomMembersResponse;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.room.Room;
 import ddangkong.domain.balance.room.RoomRepository;
@@ -38,7 +38,7 @@ class RoomServiceTest extends BaseServiceTest {
             Long roomId = 1L;
 
             // when
-            RoomMembersResponse actual = roomService.findAllRoomMember(roomId);
+            MembersResponse actual = roomService.findAllRoomMember(roomId);
 
             // then
             Assertions.assertThat(actual.members()).hasSize(4);

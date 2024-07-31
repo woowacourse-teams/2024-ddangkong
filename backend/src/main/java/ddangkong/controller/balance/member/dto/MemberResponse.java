@@ -3,7 +3,7 @@ package ddangkong.controller.balance.member.dto;
 import ddangkong.domain.member.Member;
 
 public record MemberResponse(
-        Long id,
+        Long memberId,
         String nickname,
         boolean isMaster
 ) {
