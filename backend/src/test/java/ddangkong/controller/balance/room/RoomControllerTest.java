@@ -1,6 +1,7 @@
 package ddangkong.controller.balance.room;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.controller.BaseControllerTest;
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
@@ -19,10 +20,10 @@ import org.junit.jupiter.api.Test;
 class RoomControllerTest extends BaseControllerTest {
 
     @Nested
-    class 밸런스_게임_방_전체_멤버_조회 {
+    class 밸런스_게임_방_정보_조회 {
 
         @Test
-        void 게임_방_전체_멤버_조회() {
+        void 게임_방_정보_조회() {
             //when
             RoomInfoResponse actual = RestAssured.given()
                     .when().get("/api/balances/rooms/1")
@@ -31,7 +32,12 @@ class RoomControllerTest extends BaseControllerTest {
                     .extract().as(RoomInfoResponse.class);
 
             //then
-            Assertions.assertThat(actual.members()).hasSize(4);
+            assertAll(
+                    () -> Assertions.assertThat(actual.members()).hasSize(4),
+                    () -> Assertions.assertThat(actual.isGameStart()).isTrue(),
+                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(10000),
+                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
+            );
         }
     }
 

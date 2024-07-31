@@ -1,6 +1,7 @@
 package ddangkong.controller.balance.room.dto;
 
-public record RoomSetting(
+public record RoomSettingResponse(
+        int totalRound,
         int timeLimit
 ) {
 }

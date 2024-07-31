@@ -2,6 +2,7 @@ package ddangkong.service.balance.room;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
@@ -33,8 +34,13 @@ class RoomServiceTest extends BaseServiceTest {
 
             // then
             RoomInfoResponse actual = roomService.findRoomInfo(room.roomId());
-            Assertions.assertThat(actual.members()).hasSize(3);
-            Assertions.assertThat(actual.isGameStart()).isFalse();
+
+            assertAll(
+                    () -> Assertions.assertThat(actual.members()).hasSize(3),
+                    () -> Assertions.assertThat(actual.isGameStart()).isFalse(),
+                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(10000),
+                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
+            );
         }
     }
 
