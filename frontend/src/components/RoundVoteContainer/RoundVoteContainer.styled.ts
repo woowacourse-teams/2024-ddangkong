@@ -9,7 +9,7 @@ export const tabLayout = css`
   transition: all 1s;
 `;
 
-export const tabWrapperStyle = css`
+export const tabWrapper = css`
   display: flex;
   width: 40%;
   margin-left: 2.4rem;

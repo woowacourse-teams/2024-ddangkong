@@ -10,10 +10,10 @@ const GameResult = () => {
     <>
       <div css={gameResultLayout}>
         <h1 css={gameResultTitle}>게임 결과</h1>
-        <div css={rankListContainer}>
+        <ol css={rankListContainer}>
           {gameResult &&
             gameResult.map((item) => <GameResultItem key={item.rank} gameFinalResult={item} />)}
-        </div>
+        </ol>
       </div>
       <FinalButton />
     </>

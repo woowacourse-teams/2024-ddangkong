@@ -5,12 +5,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
+import ddangkong.controller.balance.member.dto.MembersResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
-import ddangkong.controller.balance.room.dto.RoomMembersResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class RoomServiceTest extends BaseServiceTest {
             Long roomId = 1L;
 
             // when
-            RoomMembersResponse actual = roomService.findAllRoomMember(roomId);
+            MembersResponse actual = roomService.findAllRoomMember(roomId);
 
             // then
             Assertions.assertThat(actual.members()).hasSize(4);

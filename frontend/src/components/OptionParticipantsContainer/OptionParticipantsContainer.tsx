@@ -10,7 +10,10 @@ import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 
 const OptionParticipantsContainer = () => {
   const { balanceContent } = useBalanceContentQuery();
-  const { groupRoundResult } = useRoundVoteResultQuery();
+  const { groupRoundResult } = useRoundVoteResultQuery({
+    contentId: balanceContent?.contentId,
+    roomId: 1,
+  });
 
   if (!balanceContent || !groupRoundResult) {
     return null;

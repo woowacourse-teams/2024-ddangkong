@@ -45,8 +45,4 @@ public class Member {
     public static Member createCommon(String nickname, Room room) {
         return new Member(nickname, room, false);
     }
-
-    public boolean isNotIn(Long roomId) {
-        return !room.getId().equals(roomId);
-    }
 }

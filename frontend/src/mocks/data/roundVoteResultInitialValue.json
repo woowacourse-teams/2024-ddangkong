@@ -2,14 +2,14 @@
   "group": {
     "firstOption": {
       "optionId": 1,
-      "name": "100억 빚 송강",
+      "name": "Loading...",
       "members": [],
       "memberCount": 0,
       "percent": 50
     },
     "secondOption": {
       "optionId": 2,
-      "name": "100억 부자 송강호",
+      "name": "Loading...",
       "members": [],
       "memberCount": 0,
       "percent": 50
@@ -18,12 +18,12 @@
   "total": {
     "firstOption": {
       "optionId": 1,
-      "name": "100억 빚 송강",
+      "name": "Loading...",
       "percent": 50
     },
     "secondOption": {
       "optionId": 2,
-      "name": "100억 부자 송강호",
+      "name": "Loading...",
       "percent": 50
     }
   }
