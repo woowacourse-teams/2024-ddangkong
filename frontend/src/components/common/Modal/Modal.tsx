@@ -19,13 +19,13 @@ import CloseIcon from '@/assets/images/closeIcon.png';
 export interface ModalProps
   extends React.PropsWithChildren<{
     isOpen: boolean;
-    position: 'top' | 'bottom' | 'center';
-    style?: React.CSSProperties;
     onClose: () => void;
+    position?: 'top' | 'bottom' | 'center';
+    style?: React.CSSProperties;
     onConfirm?: () => void;
   }> {}
 
-const Modal = ({ children, isOpen, onClose, position, ...restProps }: ModalProps) => {
+const Modal = ({ children, isOpen, onClose, position = 'center', ...restProps }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   useModalEscClose(isOpen, onClose);
@@ -71,7 +71,7 @@ const ModalTitle = ({ children, ...restProps }: ModalTitleProps) => {
 };
 
 interface ModalIconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  src: string;
+  src?: string;
   imgSize?: string;
 }
 
@@ -83,7 +83,7 @@ const ModalIconButton = ({
 }: ModalIconButtonProps) => {
   return (
     <button css={modalIconButton({ imgSize })} type={type} {...restProps}>
-      <img src={src} alt="Close icon" />
+      <img src={src} alt="닫기 버튼" />
     </button>
   );
 };
