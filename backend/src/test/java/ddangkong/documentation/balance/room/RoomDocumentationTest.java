@@ -19,12 +19,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
+import ddangkong.controller.balance.member.dto.MembersResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.RoomController;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.controller.balance.room.dto.RoomMemberResponse;
-import ddangkong.controller.balance.room.dto.RoomMembersResponse;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.service.balance.room.RoomService;
@@ -124,9 +123,9 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 방_전체_멤버를_조회한다() throws Exception{
             //given
-            RoomMembersResponse response = new RoomMembersResponse(List.of(
-                    new RoomMemberResponse(1L, "땅콩", true),
-                    new RoomMemberResponse(2L, "타콩", false)
+            MembersResponse response = new MembersResponse(List.of(
+                    new MemberResponse(1L, "땅콩", true),
+                    new MemberResponse(2L, "타콩", false)
             ));
 
             //when
