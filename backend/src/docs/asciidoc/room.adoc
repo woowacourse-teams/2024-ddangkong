@@ -3,6 +3,7 @@
 === 방 생성
 
 ==== curl
+
 include::{snippets}/room/create/curl-request.adoc[]
 
 ==== request
@@ -32,11 +33,11 @@ include::{snippets}/room/join/curl-request.adoc[]
 
 include::{snippets}/room/join/http-request.adoc[]
 
+include::{snippets}/room/join/path-parameters.adoc[]
+
 request fields
 
 include::{snippets}/room/join/request-fields.adoc[]
-
-include::{snippets}/room/join/path-parameters.adoc[]
 
 
 ==== response
@@ -52,21 +53,21 @@ include::{snippets}/room/join/response-fields.adoc[]
 
 ==== curl
 
-include::{snippets}/room/find/curl-request.adoc[]
+include::{snippets}/room/memberSearch/curl-request.adoc[]
 
 ==== request
 
-include::{snippets}/room/find/http-request.adoc[]
+include::{snippets}/room/memberSearch/http-request.adoc[]
 
-include::{snippets}/room/find/path-parameters.adoc[]
+include::{snippets}/room/memberSearch/path-parameters.adoc[]
 
 ==== response
 
-include::{snippets}/room/find/http-response.adoc[]
+include::{snippets}/room/memberSearch/http-response.adoc[]
 
 response fields
 
-include::{snippets}/room/find/response-fields.adoc[]
+include::{snippets}/room/memberSearch/response-fields.adoc[]
 
 === 다음 라운드로 이동
 

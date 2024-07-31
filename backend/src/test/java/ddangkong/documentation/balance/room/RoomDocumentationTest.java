@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 @WebMvcTest(RoomController.class)
 class RoomDocumentationTest extends BaseDocumentationTest {
@@ -51,10 +52,10 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             //given
             RoomJoinRequest request = new RoomJoinRequest("땅콩");
             String content = objectMapper.writeValueAsString(request);
-            MemberResponse memberResponse = new MemberResponse(1L, "땅콩", true);
-            RoomJoinResponse response = new RoomJoinResponse(1L, memberResponse);
 
             //when
+            MemberResponse memberResponse = new MemberResponse(1L, "땅콩", true);
+            RoomJoinResponse response = new RoomJoinResponse(1L, memberResponse);
             when(roomService.createRoom(anyString())).thenReturn(response);
 
             //then
@@ -69,7 +70,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
-                                    fieldWithPath("member.id").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
                             )
@@ -107,7 +108,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
-                                    fieldWithPath("member.id").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
                             )
@@ -134,14 +135,15 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             //then
             mockMvc.perform(get(ENDPOINT, 1L))
                     .andExpect(status().isOk())
-                    .andDo(document("room/find",
+                    .andDo(document("room/memberSearch",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
                             ),
                             responseFields(
-                                    fieldWithPath("members.[].memberId").type(NUMBER).description("멤버 ID"),
-                                    fieldWithPath("members.[].nickname").type(STRING).description("멤버 닉네임"),
-                                    fieldWithPath("members.[].isMaster").type(BOOLEAN).description("방장 여부")
+                                    fieldWithPath("members").type(JsonFieldType.ARRAY).description("방에 참여중 인원 목록"),
+                                    fieldWithPath("members[].memberId").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("members[].nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("members[].isMaster").type(BOOLEAN).description("방장 여부")
                             )
                     ));
         }
