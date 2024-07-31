@@ -207,7 +207,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             .param("myRound", "1")
                     )
                     .andExpect(status().isOk())
-                    .andDo(document("room/round-isFinished",
+                    .andDo(document("room/round-finished",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
                             ),
