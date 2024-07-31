@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.member.dto.MembersResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
+import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
@@ -22,18 +22,19 @@ class RoomServiceTest extends BaseServiceTest {
     private RoomService roomService;
 
     @Nested
-    class 게임_방_전체_멤버_조회 {
+    class 게임_방_정보_조회 {
 
         @Test
-        void 게임_방_전쳬_멤버_조회() {
-            // given
-            Long roomId = 1L;
-
+        void 대기중인_게임_방_정보_조회() {
             // when
-            MembersResponse actual = roomService.findAllRoomMember(roomId);
+            RoomJoinResponse room = roomService.createRoom("방장");
+            roomService.joinRoom("멤버1", room.roomId());
+            roomService.joinRoom("멤버2", room.roomId());
 
             // then
-            Assertions.assertThat(actual.members()).hasSize(4);
+            RoomInfoResponse actual = roomService.findRoomInfo(room.roomId());
+            Assertions.assertThat(actual.members()).hasSize(3);
+            Assertions.assertThat(actual.isGameStart()).isFalse();
         }
     }
 
@@ -41,7 +42,7 @@ class RoomServiceTest extends BaseServiceTest {
     class 방_생성 {
 
         @Test
-        void 방_생성_시_멤버를_생성하고_방을_생성한다() {
+        void 방_생성_시_방장_멤버를_생성하고_방을_생성한다() {
             // given
             String nickname = "나는방장";
             MemberResponse expectedMemberResponse = new MemberResponse(7L, nickname, true);

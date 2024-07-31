@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import ddangkong.controller.BaseControllerTest;
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
-import ddangkong.controller.balance.member.dto.MembersResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
+import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.domain.balance.content.Category;
 import io.restassured.RestAssured;
@@ -24,11 +24,11 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 게임_방_전체_멤버_조회() {
             //when
-            MembersResponse actual = RestAssured.given()
+            RoomInfoResponse actual = RestAssured.given()
                     .when().get("/api/balances/rooms/1/members")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
-                    .extract().as(MembersResponse.class);
+                    .extract().as(RoomInfoResponse.class);
 
             //then
             Assertions.assertThat(actual.members()).hasSize(4);

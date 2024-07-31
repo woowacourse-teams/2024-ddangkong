@@ -2,7 +2,7 @@ package ddangkong.service.balance.room;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.member.dto.MembersResponse;
+import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.domain.balance.option.BalanceOptions;
@@ -31,11 +31,11 @@ public class RoomService {
     private final BalanceOptionRepository balanceOptionRepository;
 
     @Transactional(readOnly = true)
-    public MembersResponse findAllRoomMember(Long roomId) {
+    public RoomInfoResponse findRoomInfo(Long roomId) {
         Room room = roomRepository.getById(roomId);
-
         List<Member> members = memberRepository.findAllByRoom(room);
-        return MembersResponse.from(members);
+
+        return RoomInfoResponse.of(members, room.getStatus());
     }
 
     @Transactional
