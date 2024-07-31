@@ -88,11 +88,9 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             RoomJoinRequest request = new RoomJoinRequest("타콩");
             RoomJoinResponse response = new RoomJoinResponse(1L, new MemberResponse(2L, "타콩", false));
             String content = objectMapper.writeValueAsString(request);
-
-            //when
             when(roomService.joinRoom(anyString(), anyLong())).thenReturn(response);
 
-            //then
+            //when & then
             mockMvc.perform(post(ENDPOINT, 1L)
                             .content(content)
                             .contentType(MediaType.APPLICATION_JSON)
