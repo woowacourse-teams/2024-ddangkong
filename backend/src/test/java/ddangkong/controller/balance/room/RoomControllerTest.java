@@ -25,7 +25,7 @@ class RoomControllerTest extends BaseControllerTest {
         void 게임_방_전체_멤버_조회() {
             //when
             RoomInfoResponse actual = RestAssured.given()
-                    .when().get("/api/balances/rooms/1/members")
+                    .when().get("/api/balances/rooms/1")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
                     .extract().as(RoomInfoResponse.class);

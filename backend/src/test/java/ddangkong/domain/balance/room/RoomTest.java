@@ -32,7 +32,8 @@ class RoomTest {
             // given
             final int TOTAL_ROUND = 5;
             final int CURRENT_ROUND = 5;
-            Room room = new Room(TOTAL_ROUND, CURRENT_ROUND, RoomStatus.PROGRESS);
+            final int TIME_LIMIT = 10000;
+            Room room = new Room(TOTAL_ROUND, CURRENT_ROUND, TIME_LIMIT, RoomStatus.PROGRESS);
 
             // when & then
             assertThatThrownBy(room::moveToNextRound)

@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 public class Room {
 
     private static final int DEFAULT_TOTAL_ROUND = 5;
+    private static final int DEFAULT_TIME_LIMIT = 10000;
     private static final int START_ROUND = 1;
 
     @Id
@@ -31,16 +32,20 @@ public class Room {
     private int currentRound;
 
     @Column(nullable = false)
+    private int timeLimit;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RoomStatus status;
 
     public static Room createNewRoom() {
-        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, RoomStatus.READY);
+        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, DEFAULT_TIME_LIMIT, RoomStatus.READY);
     }
 
-    public Room(int totalRound, int currentRound, RoomStatus status) {
+    public Room(int totalRound, int currentRound, int timeLimit, RoomStatus status) {
         this.totalRound = totalRound;
         this.currentRound = currentRound;
+        this.timeLimit = timeLimit;
         this.status = status;
     }
 
@@ -54,5 +59,9 @@ public class Room {
 
     private boolean canMoveToNextRound() {
         return currentRound < totalRound;
+    }
+
+    public boolean isGameProgress() {
+        return status.isGameProgress();
     }
 }
