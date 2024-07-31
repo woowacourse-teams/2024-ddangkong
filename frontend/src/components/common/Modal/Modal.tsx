@@ -1,4 +1,5 @@
 import React, { ButtonHTMLAttributes, HTMLAttributes, useRef } from 'react';
+import ReactDOM from 'react-dom';
 
 import useDisableBackgroundScroll from './hooks/useDisableBackgroundScroll';
 import useModalEscClose from './hooks/useModalEscClose';
@@ -39,7 +40,7 @@ const Modal = ({ children, isOpen, onClose, position = 'center', ...restProps }:
 
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     /* eslint jsx-a11y/no-static-element-interactions: "off" */
     // 모달을 제외한 영역을 클릭시 모달이 꺼지도록 설정하기 위해 설정함
     <div css={modalBackdropLayout} onClick={handleOutsideClick} onKeyDown={handleOutsideClick}>
@@ -48,6 +49,8 @@ const Modal = ({ children, isOpen, onClose, position = 'center', ...restProps }:
       </div>
     </div>
   );
+
+  return ReactDOM.createPortal(modalContent, document.body);
 };
 
 interface ModalHeaderProps extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {}
