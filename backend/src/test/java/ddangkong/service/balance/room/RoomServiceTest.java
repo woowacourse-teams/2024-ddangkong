@@ -26,7 +26,7 @@ class RoomServiceTest extends BaseServiceTest {
     class 게임_방_정보_조회 {
 
         @Test
-        void 대기중인_게임_방_정보_조회() {
+        void 게임_방_정보를_조회한다() {
             // when
             RoomJoinResponse room = roomService.createRoom("방장");
             roomService.joinRoom("멤버1", room.roomId());
