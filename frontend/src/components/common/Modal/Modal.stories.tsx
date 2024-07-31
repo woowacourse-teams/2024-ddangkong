@@ -8,10 +8,6 @@ import CloseIcon from '@/assets/images/closeIcon.png';
 const meta = {
   title: 'Modal',
   component: Modal,
-  parameters: {
-    argTypes: {},
-    actions: { argTypesRegex: '^on.*' },
-  },
   argTypes: {
     isOpen: {
       control: 'boolean',
@@ -78,7 +74,6 @@ export const 이미지_버튼이_있는_모달: Story = {
   args: {
     isOpen: true,
     position: 'center',
-    onClose: fn(),
   },
   parameters: {
     docs: {
@@ -104,7 +99,6 @@ export const 텍스트_버튼이_있는_모달: Story = {
   args: {
     isOpen: true,
     position: 'center',
-    onClose: fn(),
   },
   parameters: {
     docs: {
@@ -133,7 +127,6 @@ export const 이미지_버튼과_텍스트_버튼이_있는_모달: Story = {
   args: {
     isOpen: true,
     position: 'center',
-    onClose: fn(),
   },
   parameters: {
     docs: {
