@@ -30,10 +30,10 @@ class RoomTest {
         @Test
         void 마지막_라운드_일_경우_예외를_던진다() {
             // given
-            final int TOTAL_ROUND = 5;
-            final int CURRENT_ROUND = 5;
-            final int TIME_LIMIT = 10000;
-            Room room = new Room(TOTAL_ROUND, CURRENT_ROUND, TIME_LIMIT, RoomStatus.PROGRESS);
+            int totalRound = 5;
+            int currentRound = 5;
+            int timeLimit = 10000;
+            Room room = new Room(totalRound, currentRound, timeLimit, RoomStatus.PROGRESS);
 
             // when & then
             assertThatThrownBy(room::moveToNextRound)
