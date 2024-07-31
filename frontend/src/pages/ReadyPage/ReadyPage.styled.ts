@@ -6,10 +6,3 @@ export const readyPageLayout = css`
   gap: 2rem;
   padding: 0 2.4rem;
 `;
-
-export const totalNumber = css`
-  padding-left: 2rem;
-
-  font-weight: 500;
-  font-size: 1.2rem;
-`;
