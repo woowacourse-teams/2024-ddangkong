@@ -2,15 +2,14 @@ package ddangkong.service.balance.vote;
 
 import ddangkong.controller.balance.content.dto.BalanceContentGroupResponse;
 import ddangkong.controller.balance.content.dto.BalanceContentTotalResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionGroupResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionTotalResponse;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
 import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
+import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
+import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.balance.room.Room;
 import ddangkong.domain.balance.room.RoomContent;
 import ddangkong.domain.balance.room.RoomContentRepository;
@@ -20,7 +19,6 @@ import ddangkong.domain.balance.vote.BalanceVoteRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class BalanceVoteService {
-
-    private static final int BALANCE_OPTION_SIZE = 2;
 
     private final BalanceVoteRepository balanceVoteRepository;
 
@@ -56,88 +52,54 @@ public class BalanceVoteService {
     }
 
     private BalanceOption findValidOption(Long optionId, Long contentId) {
-        BalanceOption balanceOption = balanceOptionRepository.getById(optionId);
-        if (balanceOption.isNotContained(contentId)) {
-            String errorMessage = "해당 질문의 선택지가 아닙니다. contentId : %d, optionId : %d"
-                    .formatted(contentId, optionId);
-            throw new BadRequestException(errorMessage);
-        }
-        return balanceOption;
+        return balanceOptionRepository.findByIdAndBalanceContentId(optionId, contentId)
+                .orElseThrow(() -> new BadRequestException("해당 질문의 선택지가 존재하지 않습니다."));
     }
 
     private Member findValidMember(Long memberId, Long roomId) {
-        Member member = memberRepository.getById(memberId);
-        if (member.isNotIn(roomId)) {
-            String errorMessage = "해당 방의 멤버가 아닙니다. roomId : %d, memberId : %d"
-                    .formatted(roomId, memberId);
-            throw new BadRequestException(errorMessage);
-        }
-        return member;
+        return memberRepository.findByIdAndRoomId(memberId, roomId)
+                .orElseThrow(() -> new BadRequestException("해당 방의 멤버가 존재하지 않습니다."));
     }
 
     @Transactional(readOnly = true)
     public BalanceVoteResultResponse findBalanceVoteResult(Long roomId, Long balanceContentId) {
         Room room = roomRepository.getById(roomId);
-        List<BalanceOption> balanceOptions = findBalanceOptions(room, balanceContentId);
+        BalanceOptions balanceOptions = findBalanceOptions(room, balanceContentId);
 
-        BalanceOption firstOption = balanceOptions.get(0);
-        BalanceOption secondOption = balanceOptions.get(1);
-
-        BalanceContentGroupResponse group = getBalanceContentGroupResponse(room, firstOption, secondOption);
-        BalanceContentTotalResponse total = getBalanceContentTotalResponse(firstOption, secondOption);
+        BalanceContentGroupResponse group = getBalanceContentGroupResponse(room, balanceOptions);
+        BalanceContentTotalResponse total = getBalanceContentTotalResponse(balanceOptions);
 
         return new BalanceVoteResultResponse(group, total);
     }
 
-    private BalanceContentGroupResponse getBalanceContentGroupResponse(Room room,
-                                                                       BalanceOption firstOption,
-                                                                       BalanceOption secondOption) {
+    private BalanceContentGroupResponse getBalanceContentGroupResponse(Room room, BalanceOptions balanceOptions) {
         List<BalanceVote> firstOptionVotes = balanceVoteRepository
-                .findByMemberRoomAndBalanceOption(room, firstOption);
+                .findByMemberRoomAndBalanceOption(room, balanceOptions.getFistOption());
         List<BalanceVote> secondOptionVotes = balanceVoteRepository
-                .findByMemberRoomAndBalanceOption(room, secondOption);
+                .findByMemberRoomAndBalanceOption(room, balanceOptions.getSecondOption());
 
-        int roomMemberSize = firstOptionVotes.size() + secondOptionVotes.size();
-        return new BalanceContentGroupResponse(
-                BalanceOptionGroupResponse.of(firstOption, firstOptionVotes, roomMemberSize),
-                BalanceOptionGroupResponse.of(secondOption, secondOptionVotes, roomMemberSize)
-        );
+        return BalanceContentGroupResponse.of(balanceOptions, firstOptionVotes, secondOptionVotes);
     }
 
-    private BalanceContentTotalResponse getBalanceContentTotalResponse(BalanceOption firstOption,
-                                                                       BalanceOption secondOption) {
-        Long firstOptionCount = balanceVoteRepository.countByBalanceOption(firstOption);
-        Long secondOptionCount = balanceVoteRepository.countByBalanceOption(secondOption);
-        return new BalanceContentTotalResponse(
-                BalanceOptionTotalResponse.of(firstOption,
-                        firstOptionCount + secondOptionCount,
-                        firstOptionCount),
-                BalanceOptionTotalResponse.of(secondOption,
-                        firstOptionCount + secondOptionCount,
-                        secondOptionCount)
-        );
+    private BalanceContentTotalResponse getBalanceContentTotalResponse(BalanceOptions balanceOptions) {
+        Long firstOptionCount = balanceVoteRepository.countByBalanceOption(balanceOptions.getFistOption());
+        Long secondOptionCount = balanceVoteRepository.countByBalanceOption(balanceOptions.getSecondOption());
+
+        return BalanceContentTotalResponse.of(balanceOptions, firstOptionCount, secondOptionCount);
     }
 
-    private List<BalanceOption> findBalanceOptions(Room room, Long balanceContentId) {
+    private BalanceOptions findBalanceOptions(Room room, Long balanceContentId) {
         RoomContent roomContent = roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
                 .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
         validateBalanceContent(balanceContentId, roomContent.getBalanceContent());
 
         BalanceContent balanceContent = balanceContentRepository.getById(balanceContentId);
-        List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
-        validateBalanceOptions(balanceOptions);
-        return balanceOptions;
+        return balanceOptionRepository.getBalanceOptionsByBalanceContent(balanceContent);
     }
 
     private void validateBalanceContent(Long balanceContentId, BalanceContent balanceContent) {
         if (!Objects.equals(balanceContent.getId(), balanceContentId)) {
             throw new BadRequestException("현재 진행중인 질문의 컨텐츠와 일치하지 않는 요청입니다.");
-        }
-    }
-
-    private void validateBalanceOptions(List<BalanceOption> balanceOptions) {
-        if (balanceOptions.size() != BALANCE_OPTION_SIZE) {
-            throw new InternalServerException("밸런스 게임의 선택지가 %d개입니다".formatted(balanceOptions.size()));
         }
     }
 }

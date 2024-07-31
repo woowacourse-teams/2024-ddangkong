@@ -54,7 +54,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             assertThatThrownBy(() -> balanceVoteService.createBalanceVote(
                     new BalanceVoteRequest(memberId, optionId), roomId, contentId))
                     .isInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 질문의 선택지가 아닙니다. contentId : 2, optionId : 1");
+                    .hasMessage("해당 질문의 선택지가 존재하지 않습니다.");
         }
 
         @Test
@@ -69,7 +69,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             assertThatThrownBy(() -> balanceVoteService.createBalanceVote(
                     new BalanceVoteRequest(memberId, optionId), roomId, contentId))
                     .isInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방의 멤버가 아닙니다. roomId : 2, memberId : 1");
+                    .hasMessage("해당 방의 멤버가 존재하지 않습니다.");
         }
     }
 
