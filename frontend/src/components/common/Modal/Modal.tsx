@@ -1,7 +1,6 @@
 import React, { ButtonHTMLAttributes, HTMLAttributes, useRef } from 'react';
 
 import useDisableBackgroundScroll from './hooks/useDisableBackgroundScroll';
-import useModalBackdropClickClose from './hooks/useModalBackdropClickClose';
 import useModalEscClose from './hooks/useModalEscClose';
 import {
   modalBackdropLayout,
@@ -27,16 +26,23 @@ export interface ModalProps {
 }
 
 const Modal = ({ children, isOpen, onClose, position, ...restProps }: ModalProps) => {
-  const modalRef = useRef(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   useModalEscClose(isOpen, onClose);
-  useModalBackdropClickClose(isOpen, modalRef, onClose);
   useDisableBackgroundScroll(isOpen);
+
+  const handleOutsideClick = (event: React.MouseEvent | React.KeyboardEvent) => {
+    if (isOpen && modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      onClose();
+    }
+  };
 
   if (!isOpen) return null;
 
   return (
-    <div css={modalBackdropLayout}>
+    /* eslint jsx-a11y/no-static-element-interactions: "off" */
+    // 모달을 제외한 영역을 클릭시 모달이 꺼지도록 설정하기 위해 설정함
+    <div css={modalBackdropLayout} onClick={handleOutsideClick} onKeyDown={handleOutsideClick}>
       <div css={modalContentWrapper({ position })} ref={modalRef} {...restProps}>
         {children}
       </div>
