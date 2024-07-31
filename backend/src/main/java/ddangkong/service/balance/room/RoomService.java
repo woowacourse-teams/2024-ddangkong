@@ -40,7 +40,7 @@ public class RoomService {
 
     @Transactional
     public RoomJoinResponse createRoom(String nickname) {
-        Room room = roomRepository.save(new Room());
+        Room room = roomRepository.save(Room.createNewRoom());
         Member member = memberRepository.save(Member.createMaster(nickname, room));
         return new RoomJoinResponse(room.getId(), new MemberResponse(member));
     }

@@ -3,13 +3,18 @@ package ddangkong.domain.balance.room;
 import ddangkong.exception.BadRequestException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Room {
 
     private static final int DEFAULT_TOTAL_ROUND = 5;
@@ -20,10 +25,24 @@ public class Room {
     private Long id;
 
     @Column(nullable = false)
-    private int totalRound = DEFAULT_TOTAL_ROUND;
+    private int totalRound;
 
     @Column(nullable = false)
-    private int currentRound = START_ROUND;
+    private int currentRound;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoomStatus status;
+
+    public static Room createNewRoom() {
+        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, RoomStatus.READY);
+    }
+
+    public Room(int totalRound, int currentRound, RoomStatus status) {
+        this.totalRound = totalRound;
+        this.currentRound = currentRound;
+        this.status = status;
+    }
 
     public void moveToNextRound() {
         if (canMoveToNextRound()) {
