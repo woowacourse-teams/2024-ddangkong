@@ -10,9 +10,16 @@ interface ButtonLayoutProps {
   size?: 'small' | 'medium' | 'large';
   radius?: 'small' | 'medium' | 'large';
   fontSize?: 'small' | 'medium' | 'large';
+  bottom?: boolean;
 }
 
-export const buttonLayout = ({ disabled, size, radius, fontSize }: ButtonLayoutProps) => css`
+export const buttonLayout = ({
+  disabled,
+  size,
+  radius,
+  fontSize,
+  bottom,
+}: ButtonLayoutProps) => css`
   display: flex;
   justify-content: center;
 
@@ -30,6 +37,15 @@ export const buttonLayout = ({ disabled, size, radius, fontSize }: ButtonLayoutP
   &:disabled {
     background-color: ${Theme.color.peanut300};
   }
+
+  ${bottom &&
+  css`
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    max-width: 32rem;
+  `}
 `;
 
 export const bottomButtonLayout = css`
