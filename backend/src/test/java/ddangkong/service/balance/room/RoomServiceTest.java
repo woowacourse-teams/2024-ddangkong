@@ -7,19 +7,27 @@ import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.controller.balance.room.dto.RoomMembersResponse;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
-import ddangkong.controller.balance.room.dto.RoomMembersResponse;
+import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class RoomServiceTest extends BaseServiceTest {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Nested
     class 게임_방_전체_멤버_조회 {
@@ -119,6 +127,39 @@ class RoomServiceTest extends BaseServiceTest {
             assertThatThrownBy(() -> roomService.moveToNextRound(NOT_PROGRESSED_ROOM_ID))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
+        }
+    }
+
+    @Nested
+    class 나의_라운드_종료_여부 {
+
+        private static final int FIXED_TOTAL_ROUND = 5;
+
+        @ParameterizedTest
+        @CsvSource(value = {"1, true", "2, false"})
+        void 나의_라운드가_종료되었는지_조회한다(int myRound, boolean expected) {
+            // given
+            int currentRound = 2;
+            Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound));
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), myRound);
+
+            // then
+            assertThat(roundFinishedResponse.isFinished()).isEqualTo(expected);
+        }
+
+        @Test
+        void 모든_라운드가_종료됐으면_나의_라운드도_종료된다() { // TODO
+            // given
+            int currentRound = 5;
+            Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound));
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), 5);
+
+            // then
+            assertThat(roundFinishedResponse.isFinished()).isTrue();
         }
     }
 }

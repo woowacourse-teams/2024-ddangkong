@@ -16,6 +16,7 @@ import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
 import ddangkong.exception.InternalServerException;
+import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -89,5 +90,13 @@ public class RoomService {
         if (balanceOptions.size() != BALANCE_OPTION_SIZE) {
             throw new InternalServerException("밸런스 게임의 선택지가 %d개입니다".formatted(balanceOptions.size()));
         }
+    }
+
+    public RoundFinishedResponse getMyRoundFinished(Long roomId, int myRound) {
+        Room room = roomRepository.getById(roomId);
+        if (room.isAllRoundFinished()) {
+            return RoundFinishedResponse.allRoundFinished();
+        }
+        return RoundFinishedResponse.myRoundFinished(room, myRound);
     }
 }
