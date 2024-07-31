@@ -41,9 +41,9 @@ export const buttonLayout = ({
   ${bottom &&
   css`
     position: fixed;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 0;
     max-width: 32rem;
   `}
 `;
