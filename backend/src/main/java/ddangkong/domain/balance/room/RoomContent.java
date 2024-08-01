@@ -11,6 +11,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +37,24 @@ public class RoomContent extends BaseEntity {
 
     @Column(nullable = false)
     private int round;
+
+    private LocalDateTime roundEndedAt;
+
+    @Column(nullable = false)
+    private boolean isUsed;
+
+    public static List<RoomContent> createList(Room room, List<BalanceContent> balanceContents) {
+        return IntStream.range(0, balanceContents.size())
+                .mapToObj(index -> new RoomContent(room, balanceContents.get(index), index + 1))
+                .toList();
+    }
+
+    private RoomContent(Room room, BalanceContent balanceContent, int round) {
+        this.room = room;
+        this.balanceContent = balanceContent;
+        this.round = round;
+        this.isUsed = false;
+    }
 
     public Long getContentId() {
         return balanceContent.getId();
