@@ -68,9 +68,6 @@ jobs:
           username: ${{ secrets.DOCKER_GMAIL }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Pull docker image
-        run: sudo docker pull $DOCKER_REPOSITORY_NAME:latest
-
       - name: Stop and Remove previous Docker container
         run: |
           CONTAINER_ID=$(sudo docker ps -aqf name=$CONTAINER_NAME)
@@ -88,6 +85,9 @@ jobs:
           else
           echo "No previous image found with repository name. Skipping removal."
           fi
+
+      - name: Pull docker image
+        run: sudo docker pull $DOCKER_REPOSITORY_NAME:latest
 
       - name: Run new Docker container
         run: |
