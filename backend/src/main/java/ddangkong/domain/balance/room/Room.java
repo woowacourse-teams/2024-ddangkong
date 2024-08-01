@@ -1,5 +1,6 @@
 package ddangkong.domain.balance.room;
 
+import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,15 +39,20 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private RoomStatus status;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
     public static Room createNewRoom() {
-        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, DEFAULT_TIME_LIMIT_MSEC, RoomStatus.READY);
+        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, DEFAULT_TIME_LIMIT_MSEC, RoomStatus.READY, Category.EXAMPLE);
     }
 
-    public Room(int totalRound, int currentRound, int timeLimit, RoomStatus status) {
+    public Room(int totalRound, int currentRound, int timeLimit, RoomStatus status, Category category) {
         this.totalRound = totalRound;
         this.currentRound = currentRound;
         this.timeLimit = timeLimit;
         this.status = status;
+        this.category = category;
     }
 
     public void moveToNextRound() {
@@ -55,6 +61,14 @@ public class Room {
             return;
         }
         throw new BadRequestException("마지막 라운드입니다.");
+    }
+
+    public void updateTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
+    }
+
+    public void updateTotalRound(int totalRound) {
+        this.totalRound = totalRound;
     }
 
     private boolean canMoveToNextRound() {
