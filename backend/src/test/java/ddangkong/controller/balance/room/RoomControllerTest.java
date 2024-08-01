@@ -159,7 +159,7 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 나의_라운드가_종료되었는지_조회한다() {
             // when
-            RoundFinishedResponse roundFinishedResponse = RestAssured.given().log().all()
+            RoundFinishedResponse actual = RestAssured.given().log().all()
                     .pathParam("roomId", 1L)
                     .queryParam("myRound", 1)
                     .when().get("/api/balances/rooms/{roomId}/round-finished")
@@ -169,8 +169,8 @@ class RoomControllerTest extends BaseControllerTest {
 
             // then
             assertAll(
-                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isTrue(),
-                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+                    () -> assertThat(actual.isRoundFinished()).isTrue(),
+                    () -> assertThat(actual.isGameFinished()).isFalse()
             );
         }
     }
