@@ -68,9 +68,9 @@ interface ModalTitleProps extends React.PropsWithChildren<HTMLAttributes<HTMLHea
   fontWeight?: string;
 }
 
-const ModalTitle = ({ children, fontSize, fontWeight, ...restProps }: ModalTitleProps) => {
+const ModalTitle = ({ fontSize, fontWeight, children, ...restProps }: ModalTitleProps) => {
   return (
-    <h2 css={modalTitle({ fontSize: '2rem', fontWeight: 'bold' })} {...restProps}>
+    <h2 css={modalTitle({ fontSize, fontWeight })} {...restProps}>
       {children}
     </h2>
   );

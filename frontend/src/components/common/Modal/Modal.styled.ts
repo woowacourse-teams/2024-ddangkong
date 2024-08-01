@@ -72,12 +72,12 @@ interface ModalTitleProps {
   fontWeight?: string;
 }
 
-export const modalTitle = ({ fontSize, fontWeight }: ModalTitleProps) => css`
-  font-weight: ${fontWeight || 'bold'};
-  font-size: ${fontSize || '2rem'};
+export const modalTitle = ({ fontSize = 'bold', fontWeight = '2rem' }: ModalTitleProps) => css`
+  font-weight: ${fontWeight};
+  font-size: ${fontSize};
 `;
 
-export const modalIconButton = ({ imgSize }: { imgSize?: string }) => css`
+export const modalIconButton = ({ imgSize = '1.6rem' }: { imgSize?: string }) => css`
   margin: 0 0 0 auto;
   padding: 0;
   border: none;
@@ -87,7 +87,7 @@ export const modalIconButton = ({ imgSize }: { imgSize?: string }) => css`
   }
 
   img {
-    width: ${imgSize || '1.6rem'};
+    width: ${imgSize};
   }
 `;
 
@@ -100,25 +100,25 @@ interface ModalTextButtonProps {
 }
 
 export const modalTextButton = ({
-  buttonWidth,
-  buttonHeight,
-  fontSize,
-  backgroundColor,
-  fontColor,
+  buttonWidth = '100%',
+  buttonHeight = '100%',
+  fontSize = '1.6rem',
+  backgroundColor = Theme.color.peanut400,
+  fontColor = '#000000',
 }: ModalTextButtonProps) => css`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${buttonWidth || '100%'};
-  height: ${buttonHeight || '100%'};
+  width: ${buttonWidth};
+  height: ${buttonHeight};
   padding: 1rem;
   border: none;
 
-  background-color: ${backgroundColor || Theme.color.peanut400};
+  background-color: ${backgroundColor};
 
-  color: ${fontColor || '#000000'};
+  color: ${fontColor};
   font-weight: bold;
-  font-size: ${fontSize || '1.6rem'};
+  font-size: ${fontSize};
   border-radius: 0;
   border-radius: 0.8rem;
 
@@ -131,12 +131,12 @@ interface ModalContentProps {
   fontSize?: string;
 }
 
-export const modalContentLayout = ({ fontSize }: ModalContentProps) => css`
+export const modalContentLayout = ({ fontSize = '1.2rem' }: ModalContentProps) => css`
   * {
     box-sizing: border-box;
   }
 
-  font-size: ${fontSize || '1.2rem'};
+  font-size: ${fontSize};
 `;
 
 export const modalInputLayout = css`
@@ -150,8 +150,11 @@ interface ModalFooterProps {
   buttonGap?: string;
 }
 
-export const modalFooter = ({ buttonPosition, buttonGap }: ModalFooterProps) => css`
+export const modalFooter = ({
+  buttonPosition = 'center',
+  buttonGap = '1.2rem',
+}: ModalFooterProps) => css`
   display: flex;
-  justify-content: ${buttonPosition || 'center'};
-  gap: ${buttonGap || '1.2rem'};
+  justify-content: ${buttonPosition};
+  gap: ${buttonGap};
 `;
