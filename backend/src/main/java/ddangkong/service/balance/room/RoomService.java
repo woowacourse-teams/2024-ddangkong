@@ -72,6 +72,7 @@ public class RoomService {
                 .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
     }
 
+    @Transactional(readOnly = true)
     public RoundFinishedResponse getMyRoundFinished(Long roomId, int myRound) {
         Room room = roomRepository.getById(roomId);
         if (room.isAllRoundFinished()) {
