@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.EnumSource.Mode;
 
 class RoomTest {
 
@@ -132,7 +133,7 @@ class RoomTest {
         }
 
         @ParameterizedTest
-        @EnumSource(value = RoomStatus.class, names = {"READY", "PROGRESS"})
+        @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
         void 방_상태가_FINISH가_아니면_방의_전체_라운드가_종료되지_않은_것이다(RoomStatus status) {
             // given
             Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status);
