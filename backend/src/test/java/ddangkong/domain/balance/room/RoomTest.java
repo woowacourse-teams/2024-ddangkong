@@ -3,6 +3,7 @@ package ddangkong.domain.balance.room;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ class RoomTest {
             int totalRound = 5;
             int currentRound = 5;
             int timeLimit = 30000;
-            Room room = new Room(totalRound, currentRound, timeLimit, RoomStatus.PROGRESS);
+            Room room = new Room(totalRound, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
 
             // when & then
             assertThatThrownBy(room::moveToNextRound)
