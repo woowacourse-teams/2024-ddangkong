@@ -52,7 +52,7 @@ class RoomTest {
         private static final RoomStatus FIXED_STATUS = RoomStatus.PROGRESS;
 
         @Test
-        void 나의_라운드가_종료되었으면_true를_반환한다() {
+        void 나의_라운드가_방의_현재_라운드보다_작으면_나의_라운드는_종료된_것이다() {
             // given
             int currentRound = 2;
             Room room = new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
@@ -66,7 +66,7 @@ class RoomTest {
         }
 
         @Test
-        void 나의_라운드가_종료되지_않았으면_false를_반환한다() {
+        void 나의_라운드와_방의_현재_라운드와_같으면_나의_라운드는_종료되지_않은_것이다() {
             // given
             int currentRound = 2;
             Room room = new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
@@ -105,9 +105,10 @@ class RoomTest {
         }
 
         @Test
-        void 전체_라운드가_종료되었으면_true를_반환한다() {
+        void 현재_라운드와_전체_라운드가_같고_방_상태가_FINISH이면_방의_전체_라운드가_종료된_것이다() {
             // given
-            Room room = new Room(FIXED_TOTAL_ROUND, 5, FIXED_TIME_LIMIT, RoomStatus.FINISH);
+            RoomStatus status = RoomStatus.FINISH;
+            Room room = new Room(FIXED_TOTAL_ROUND, 5, FIXED_TIME_LIMIT, status);
 
             // when
             boolean actual = room.isAllRoundFinished();
@@ -116,9 +117,23 @@ class RoomTest {
             assertThat(actual).isTrue();
         }
 
+        @Test
+        void 현재_라운드와_전체_라운드가_다르면_방의_전체_라운드가_종료되지_않은_것이다() {
+            // given
+            int currentRound = 3;
+            int totalRound = 5;
+            Room room = new Room(totalRound, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
+
+            // when
+            boolean actual = room.isAllRoundFinished();
+
+            // then
+            assertThat(actual).isFalse();
+        }
+
         @ParameterizedTest
         @EnumSource(value = RoomStatus.class, names = {"READY", "PROGRESS"})
-        void 전체_라운드가_종료되지_않았으면_false를_반환한다(RoomStatus status) {
+        void 방_상태가_FINISH가_아니면_방의_전체_라운드가_종료되지_않은_것이다(RoomStatus status) {
             // given
             Room room = new Room(FIXED_TOTAL_ROUND, 5, FIXED_TIME_LIMIT, status);
 
