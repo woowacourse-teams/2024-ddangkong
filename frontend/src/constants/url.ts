@@ -1,4 +1,4 @@
-const BASE_URL = process.env.API_BASE_URL;
+const BASE_URL = `http://${process.env.API_BASE_URL}`;
 
 export const API_URL = {
   balanceContent: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/content`,
@@ -9,7 +9,7 @@ export const API_URL = {
   moveNextRound: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/contents`,
   finalResult: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/final`,
   room: `${BASE_URL}/api/balances/rooms`,
-  roomMembers: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/members`,
+  roomMembers: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
 };
 
 export const MOCK_API_URL = {
@@ -18,4 +18,6 @@ export const MOCK_API_URL = {
   roundVoteResult: '/api/balances/rooms/:roomId/contents/:contentId/vote-result',
   moveNextRound: '/api/balances/rooms/:roomId/contents',
   finalResult: '/api/balances/rooms/:roomId/final',
+  room: `${BASE_URL}/api/balances/rooms`,
+  roomMembers: `${BASE_URL}/api/balances/rooms/:roomId`,
 };
