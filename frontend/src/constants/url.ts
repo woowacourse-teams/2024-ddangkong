@@ -9,6 +9,7 @@ export const API_URL = {
   moveNextRound: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/contents`,
   finalResult: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/final`,
   room: `${BASE_URL}/api/balances/rooms`,
+  enterRoom: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/members`,
   roomMembers: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
 };
 

@@ -12,7 +12,6 @@ import { QUERY_KEYS } from '@/constants/queryKeys';
 import { memberInfoState } from '@/recoil/atom';
 
 const ReadyPage = () => {
-  const handleClick = () => {};
   const memberInfo = useRecoilValue(memberInfoState);
   const { search } = useLocation();
   const roomId = Number(new URLSearchParams(search).get('roomId'));
@@ -23,13 +22,20 @@ const ReadyPage = () => {
     refetchInterval: 1000,
   });
 
+  const handleGameStart = () => {
+    if (memberInfo.isMaster) {
+      // TODO: 게임 시작 API 연결 예정
+      alert('Game Start');
+    }
+  };
+
   return (
     <div css={readyPageLayout}>
       <CategoryContainer category="연애" />
       {isError && <div>에러 발생</div>}
       {isLoading && <div>로딩중.......</div>}
       {data && <ReadyMembersContainer members={data.members} />}
-      <Button text="시작" disabled={!memberInfo.isMaster} onClick={handleClick} bottom />
+      <Button text="시작" disabled={!memberInfo.isMaster} onClick={handleGameStart} bottom />
     </div>
   );
 };

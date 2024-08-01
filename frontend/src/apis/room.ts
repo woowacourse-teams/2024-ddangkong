@@ -27,7 +27,7 @@ export const makeRoom = async (nickname: string): Promise<RoomAndMember> => {
 // 방 참여하기
 export const enterRoom = async (roomId: number, nickname: string): Promise<RoomInfo> => {
   const res = await fetcher.post({
-    url: API_URL.roomMembers(roomId),
+    url: API_URL.enterRoom(roomId),
     headers: {
       'Content-Type': `application/json`,
     },
