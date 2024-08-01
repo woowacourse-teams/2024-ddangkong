@@ -13,7 +13,7 @@ const ReadyPage = () => {
     <div css={readyPageLayout}>
       <CategoryContainer />
       <ReadyMembersContainer />
-      <Button text="시작" onClick={handleClick} style={{ width: '100%' }} bottom />
+      <Button text="시작" onClick={handleClick} bottom />
     </div>
   );
 };
