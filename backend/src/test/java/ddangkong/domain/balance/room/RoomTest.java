@@ -48,7 +48,7 @@ class RoomTest {
     class 라운드_종료 {
 
         private static final int FIXED_TOTAL_ROUND = 5;
-        private static final int FIXED_TIME_LIMIT = 30_000;
+        private static final int FIXED_TIME_LIMIT = 30;
         private static final RoomStatus FIXED_STATUS = RoomStatus.PROGRESS;
 
         @Test
