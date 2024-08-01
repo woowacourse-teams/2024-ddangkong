@@ -15,9 +15,10 @@
     "baseUrl": ".", // 모듈 해석 기본 경로
     "paths": {
       // 경로 별칭 설정
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "test-utils": ["./src/utils/test-utils"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "jest.setup.ts"],
   "exclude": ["node_modules"]
 }
