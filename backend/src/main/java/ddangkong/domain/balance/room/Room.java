@@ -88,6 +88,6 @@ public class Room {
     }
 
     public boolean isAllRoundFinished() {
-        return status.isGameFinish();
+        return currentRound == totalRound && status.isGameFinish();
     }
 }
