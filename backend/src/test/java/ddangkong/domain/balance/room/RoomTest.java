@@ -105,6 +105,19 @@ class RoomTest {
         }
 
         @Test
+        void 나의_라운드가_방의_현재_라운드보다_2이상_작으면_예외가_발생한다() {
+            // given
+            int currentRound = 4;
+            Room room = new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
+            int invalidMyRound = 2;
+
+            // when & then
+            assertThatThrownBy(() -> room.isMyRoundFinished(invalidMyRound))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("currentRound과 round의 차이는 1이하여야 합니다. currentRound : 4, round : 2");
+        }
+
+        @Test
         void 현재_라운드와_전체_라운드가_같고_방_상태가_FINISH이면_방의_전체_라운드가_종료된_것이다() {
             // given
             RoomStatus status = RoomStatus.FINISH;
