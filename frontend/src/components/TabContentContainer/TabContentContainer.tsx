@@ -35,6 +35,7 @@ const TabContentContainer = ({
   const goToVoteStatus = () => {
     navigate('/round/result/status');
   };
+
   return (
     <div css={contentWrapperStyle}>
       <div css={alertText(isGroupTabActive)}>다른 사람들은 이렇게 생각했어요 🥜</div>
