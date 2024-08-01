@@ -1,7 +1,7 @@
 package ddangkong.controller.balance.room;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
-import ddangkong.controller.balance.member.dto.MembersResponse;
+import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.service.balance.room.RoomService;
@@ -34,9 +34,9 @@ public class RoomController {
         return roomService.createRoom(request.nickname());
     }
 
-    @GetMapping("/balances/rooms/{roomId}/members")
-    public MembersResponse getAllBalanceGameRoomMember(@Positive @PathVariable Long roomId) {
-        return roomService.findAllRoomMember(roomId);
+    @GetMapping("/balances/rooms/{roomId}")
+    public RoomInfoResponse getBalanceGameRoomInfo(@Positive @PathVariable Long roomId) {
+        return roomService.findRoomInfo(roomId);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

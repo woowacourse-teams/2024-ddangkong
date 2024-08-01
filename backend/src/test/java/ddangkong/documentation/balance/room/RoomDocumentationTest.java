@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
@@ -21,11 +22,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.member.dto.MembersResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.RoomController;
+import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.controller.balance.room.dto.RoomSettingResponse;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.service.balance.room.RoomService;
@@ -116,27 +118,36 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     }
 
     @Nested
-    class 방_전체_멤버_조회 {
+    class 방_정보_조회 {
 
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}";
 
         @Test
-        void 방_전체_멤버를_조회한다() throws Exception {
+        void 방_정보를_조회한다() throws Exception {
             // given
-            MembersResponse response = new MembersResponse(List.of(
-                    new MemberResponse(1L, "땅콩", true),
-                    new MemberResponse(2L, "타콩", false)
-            ));
-            when(roomService.findAllRoomMember(anyLong())).thenReturn(response);
+            int totalRound = 5;
+            int timeLimit = 30000;
+            RoomInfoResponse response = new RoomInfoResponse(
+                    false,
+                    new RoomSettingResponse(totalRound, timeLimit),
+                    List.of(
+                            new MemberResponse(1L, "땅콩", true),
+                            new MemberResponse(2L, "타콩", false)
+                    ));
+            when(roomService.findRoomInfo(anyLong())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(ENDPOINT, 1L))
                     .andExpect(status().isOk())
-                    .andDo(document("room/memberSearch",
+                    .andDo(document("room/info",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
                             ),
                             responseFields(
+                                    fieldWithPath("isGameStart").type(BOOLEAN).description("게임 시작 여부"),
+                                    fieldWithPath("roomSetting").type(OBJECT).description("현재 방 설정 값"),
+                                    fieldWithPath("roomSetting.totalRound").type(NUMBER).description("전체 라운드"),
+                                    fieldWithPath("roomSetting.timeLimit").type(NUMBER).description("라운드 당 시간제한(ms)"),
                                     fieldWithPath("members").type(ARRAY).description("방에 참여중 인원 목록"),
                                     fieldWithPath("members[].memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("members[].nickname").type(STRING).description("멤버 닉네임"),

@@ -12,13 +12,11 @@ class RoomTest {
     @Nested
     class 다음_라운드로_이동 {
 
-        private static final int START_ROUND = 1;
-        private static final int TOTAL_ROUND = 5;
 
         @Test
         void 다음_라운드로_이동할_수_있다() {
             // given
-            Room room = new Room();
+            Room room = Room.createNewRoom();
             int currentRound = room.getCurrentRound();
             int expectedRound = currentRound + 1;
 
@@ -32,19 +30,15 @@ class RoomTest {
         @Test
         void 마지막_라운드_일_경우_예외를_던진다() {
             // given
-            Room room = new Room();
-            goToFinalRound(room);
+            int totalRound = 5;
+            int currentRound = 5;
+            int timeLimit = 30000;
+            Room room = new Room(totalRound, currentRound, timeLimit, RoomStatus.PROGRESS);
 
             // when & then
-            assertThatThrownBy(() -> room.moveToNextRound())
+            assertThatThrownBy(room::moveToNextRound)
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("마지막 라운드입니다.");
-        }
-
-        private void goToFinalRound(Room room) {
-            for (int round = START_ROUND; round < TOTAL_ROUND; round++) {
-                room.moveToNextRound();
-            }
         }
     }
 
@@ -52,12 +46,14 @@ class RoomTest {
     class 라운드_종료 {
 
         private static final int FIXED_TOTAL_ROUND = 5;
+        private static final int FIXED_TIME_LIMIT = 30_000;
+        private static final RoomStatus FIXED_STATUS = RoomStatus.PROGRESS;
 
         @Test
         void 나의_라운드가_종료되었으면_true를_반환한다() {
             // given
             int currentRound = 2;
-            Room room = new Room(FIXED_TOTAL_ROUND, currentRound);
+            Room room = new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
             int myRound = 1;
 
             // when
@@ -71,7 +67,7 @@ class RoomTest {
         void 나의_라운드가_종료되지_않았으면_false를_반환한다() {
             // given
             int currentRound = 2;
-            Room room = new Room(FIXED_TOTAL_ROUND, currentRound);
+            Room room = new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
             int myRound = 2;
 
             // when
@@ -84,7 +80,7 @@ class RoomTest {
         @Test
         void 나의_라운드가_방의_시작_라운드보다_작으면_예외가_발생한다() {
             // given
-            Room room = new Room(FIXED_TOTAL_ROUND, 1);
+            Room room = new Room(FIXED_TOTAL_ROUND, 1, FIXED_TIME_LIMIT, FIXED_STATUS);
             int invalidMyRound = 0;
 
             // when & then
@@ -97,7 +93,7 @@ class RoomTest {
         void 나의_라운드가_방의_현재_라운드보다_크면_예외가_발생한다() {
             // given
             int currentRound = 1;
-            Room room = new Room(FIXED_TOTAL_ROUND, currentRound);
+            Room room = new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
             int invalidMyRound = 2;
 
             // when & then
