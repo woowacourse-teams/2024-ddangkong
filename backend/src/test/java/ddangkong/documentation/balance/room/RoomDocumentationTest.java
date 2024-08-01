@@ -210,7 +210,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 나의_라운드가_종료되었는지_조회한다() throws Exception {
             // given
-            RoundFinishedResponse response = new RoundFinishedResponse(true);
+            RoundFinishedResponse response = new RoundFinishedResponse(true, false);
             when(roomService.getMyRoundFinished(anyLong(), anyInt())).thenReturn(response);
 
             // when & then
@@ -226,7 +226,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     parameterWithName("myRound").description("나의 라운드")
                             ),
                             responseFields(
-                                    fieldWithPath("isFinished").description("라운드 종료 여부")
+                                    fieldWithPath("isRoundFinished").description("나의 라운드 종료 여부"),
+                                    fieldWithPath("isGameFinished").description("게임 종료 여부")
                             )
                     ));
         }

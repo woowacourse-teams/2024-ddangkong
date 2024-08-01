@@ -75,9 +75,6 @@ public class RoomService {
     @Transactional(readOnly = true)
     public RoundFinishedResponse getMyRoundFinished(Long roomId, int myRound) {
         Room room = roomRepository.getById(roomId);
-        if (room.isAllRoundFinished()) {
-            return RoundFinishedResponse.allRoundFinished();
-        }
-        return RoundFinishedResponse.myRoundFinished(room, myRound);
+        return new RoundFinishedResponse(room.isMyRoundFinished(myRound), room.isAllRoundFinished());
     }
 }

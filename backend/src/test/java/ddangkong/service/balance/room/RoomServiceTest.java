@@ -19,8 +19,6 @@ import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class RoomServiceTest extends BaseServiceTest {
@@ -145,33 +143,73 @@ class RoomServiceTest extends BaseServiceTest {
         private static final int FIXED_TIME_LIMIT = 30_000;
         private static final RoomStatus FIXED_STATUS = RoomStatus.PROGRESS;
 
-        @ParameterizedTest
-        @CsvSource(value = {"1, true", "2, false"})
-        void 나의_라운드가_종료되었는지_조회한다(int myRound, boolean expected) {
+        @Test
+        void 나의_라운드가_종료되지_않았으면_게임도_종료되지_않은_상태이다() {
             // given
             int currentRound = 2;
             Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS));
+            int myRound = 2;
 
             // when
             RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), myRound);
 
             // then
-            assertThat(roundFinishedResponse.isFinished()).isEqualTo(expected);
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+            );
         }
 
         @Test
-        void 모든_라운드가_종료됐으면_나의_라운드도_종료된다() {
+        void 나의_라운드가_종료되면_게임은_종료되지_않은_상태이다() {
             // given
-            int currentRound = 5;
-            Room room = roomRepository.save(
-                    new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, RoomStatus.FINISH)
-            );
+            int currentRound = 2;
+            Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS));
+            int myRound = 1;
 
             // when
-            RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), 5);
+            RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), myRound);
 
             // then
-            assertThat(roundFinishedResponse.isFinished()).isTrue();
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isTrue(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+            );
+        }
+
+        @Test
+        void 게임이_종료되면_나의_라운드는_종료되지_않은_상태이다() {
+            // given
+            int currentRound = 5;
+            RoomStatus status = RoomStatus.FINISH;
+            Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, status));
+            int myRound = 5;
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), myRound);
+
+            // then
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isTrue()
+            );
+        }
+
+        @Test
+        void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_나의_라운드도_종료되지_않은_상태이다() {
+            // given
+            int currentRound = 5;
+            Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS));
+            int myRound = 5;
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), myRound);
+
+            // then
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+            );
         }
     }
 }

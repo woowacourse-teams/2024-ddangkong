@@ -168,7 +168,10 @@ class RoomControllerTest extends BaseControllerTest {
                     .extract().as(RoundFinishedResponse.class);
 
             // then
-            assertThat(roundFinishedResponse.isFinished()).isTrue();
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isTrue(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+            );
         }
     }
 }
