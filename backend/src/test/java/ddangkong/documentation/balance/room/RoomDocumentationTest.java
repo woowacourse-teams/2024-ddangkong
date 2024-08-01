@@ -19,11 +19,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.member.dto.MembersResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.RoomController;
+import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.controller.balance.room.dto.RoomSettingResponse;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.service.balance.room.RoomService;
@@ -114,29 +115,38 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     }
 
     @Nested
-    class 방_전체_멤버_조회 {
+    class 방_정보_조회 {
 
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}";
 
         @Test
-        void 방_전체_멤버를_조회한다() throws Exception{
+        void 방_정보를_조회한다() throws Exception {
             //given
-            MembersResponse response = new MembersResponse(List.of(
-                    new MemberResponse(1L, "땅콩", true),
-                    new MemberResponse(2L, "타콩", false)
-            ));
+            int totalRound = 5;
+            int timeLimit = 10000;
+            RoomInfoResponse response = new RoomInfoResponse(
+                    false,
+                    new RoomSettingResponse(totalRound, timeLimit),
+                    List.of(
+                            new MemberResponse(1L, "땅콩", true),
+                            new MemberResponse(2L, "타콩", false)
+                    ));
 
             //when
-            when(roomService.findAllRoomMember(anyLong())).thenReturn(response);
+            when(roomService.findRoomInfo(anyLong())).thenReturn(response);
 
             //then
             mockMvc.perform(get(ENDPOINT, 1L))
                     .andExpect(status().isOk())
-                    .andDo(document("room/memberSearch",
+                    .andDo(document("room/info",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
                             ),
                             responseFields(
+                                    fieldWithPath("isGameStart").type(BOOLEAN).description("게임 시작 여부"),
+                                    fieldWithPath("roomSetting").type(JsonFieldType.OBJECT).description("현재 방 설정 값"),
+                                    fieldWithPath("roomSetting.totalRound").type(NUMBER).description("전체 라운드"),
+                                    fieldWithPath("roomSetting.timeLimit").type(NUMBER).description("라운드 당 시간제한(ms)"),
                                     fieldWithPath("members").type(JsonFieldType.ARRAY).description("방에 참여중 인원 목록"),
                                     fieldWithPath("members[].memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("members[].nickname").type(STRING).description("멤버 닉네임"),
@@ -152,7 +162,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/contents";
 
         @Test
-        void 다음_라운드로_이동한다() throws Exception{
+        void 다음_라운드로_이동한다() throws Exception {
             //given
             BalanceOptionResponse firstOption = new BalanceOptionResponse(3L, "10년 동안 한 사람과 연애한 애인");
             BalanceOptionResponse secondOption = new BalanceOptionResponse(4L, "1년 동안 다섯 사람과 연애한 애인");

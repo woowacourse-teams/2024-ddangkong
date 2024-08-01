@@ -53,21 +53,21 @@ include::{snippets}/room/join/response-fields.adoc[]
 
 ==== curl
 
-include::{snippets}/room/memberSearch/curl-request.adoc[]
+include::{snippets}/room/info/curl-request.adoc[]
 
 ==== request
 
-include::{snippets}/room/memberSearch/http-request.adoc[]
+include::{snippets}/room/info/http-request.adoc[]
 
-include::{snippets}/room/memberSearch/path-parameters.adoc[]
+include::{snippets}/room/info/path-parameters.adoc[]
 
 ==== response
 
-include::{snippets}/room/memberSearch/http-response.adoc[]
+include::{snippets}/room/info/http-response.adoc[]
 
 response fields
 
-include::{snippets}/room/memberSearch/response-fields.adoc[]
+include::{snippets}/room/info/response-fields.adoc[]
 
 === 다음 라운드로 이동
 
