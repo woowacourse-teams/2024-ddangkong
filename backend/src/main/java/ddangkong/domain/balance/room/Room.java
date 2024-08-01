@@ -82,7 +82,7 @@ public class Room {
                     .formatted(currentRound, round)
             );
         }
-        if (round < currentRound && currentRound - round != 1) {
+        if (round < currentRound && currentRound - round != ALLOWED_ROUND_GAP) {
             throw new BadRequestException("currentRound과 round의 차이는 %d이하여야 합니다. currentRound : %d, round : %d"
                     .formatted(ALLOWED_ROUND_GAP, currentRound, round)
             );
