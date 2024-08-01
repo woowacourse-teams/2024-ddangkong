@@ -46,7 +46,7 @@ export const enterRoom = async (roomId: number, nickname: string): Promise<RoomA
 };
 
 // 방 전체 멤버 조회
-export const getMembers = async (roomId: number): Promise<RoomMembers> => {
+export const getRoomMembers = async (roomId: number): Promise<RoomMembers> => {
   const res = await fetcher.get({
     url: API_URL.roomMembers(roomId),
   });

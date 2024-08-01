@@ -6,7 +6,6 @@ import {
   profileBox,
   memberStatus,
 } from './ReadyMembersContainer.styled';
-import { nickname } from '../GameResultItem/GameResultItem.styled';
 
 const example = {
   isGameStart: false,
