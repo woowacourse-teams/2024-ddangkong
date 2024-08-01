@@ -126,7 +126,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .pathParam("roomId", 1L)
                     .when().patch("/api/balances/rooms/{roomId}/next")
                     .then().log().all()
-                    .statusCode(200);
+                    .statusCode(204);
         }
 
         @Test

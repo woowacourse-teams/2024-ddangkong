@@ -43,6 +43,7 @@ public class RoomController {
         return roomService.joinRoom(request.nickname(), roomId);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/balances/rooms/{roomId}/next")
     public void moveToNextRound(@PathVariable @Positive Long roomId) {
         roomService.moveToNextRound(roomId);
