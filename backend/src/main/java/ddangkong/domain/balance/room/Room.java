@@ -82,7 +82,7 @@ public class Room {
     }
 
     private void validateLessThanOrEqualToCurrentRound(int round) {
-        if (currentRound < round) {
+        if (round > currentRound) {
             throw new BadRequestException("currentRound보다 작거나 같아야 합니다. currentRound : %d, round : %d"
                     .formatted(currentRound, round)
             );
