@@ -63,9 +63,12 @@ const ModalHeader = ({ children, ...restProps }: ModalHeaderProps) => {
   );
 };
 
-interface ModalTitleProps extends React.PropsWithChildren<HTMLAttributes<HTMLHeadingElement>> {}
+interface ModalTitleProps extends React.PropsWithChildren<HTMLAttributes<HTMLHeadingElement>> {
+  fontSize?: string;
+  fontWeight?: string;
+}
 
-const ModalTitle = ({ children, ...restProps }: ModalTitleProps) => {
+const ModalTitle = ({ children, fontSize, fontWeight, ...restProps }: ModalTitleProps) => {
   return (
     <h2 css={modalTitle({ fontSize: '2rem', fontWeight: 'bold' })} {...restProps}>
       {children}
@@ -123,9 +126,11 @@ const ModalTextButton = ({
   );
 };
 
-interface ModalContentProps extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {}
+interface ModalContentProps extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {
+  fontSize?: string;
+}
 
-const ModalContent = ({ children, ...restProps }: ModalContentProps) => {
+const ModalContent = ({ children, fontSize, ...restProps }: ModalContentProps) => {
   return (
     <section css={modalContentLayout({ fontSize: '1.4rem' })} {...restProps}>
       {children}
