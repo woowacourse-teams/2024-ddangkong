@@ -19,7 +19,10 @@ import lombok.NoArgsConstructor;
 public class Room {
 
     private static final int DEFAULT_TOTAL_ROUND = 5;
-    private static final int DEFAULT_TIME_LIMIT_MSEC = 30_000;
+    private static final int MIN_TOTAL_ROUND = 3;
+    private static final int MAX_TOTAL_ROUND = 10;
+    private static final int MIN_TIME_LIMIT_MSEC = 10_000;
+    private static final int MAX_TIME_LIMIT_MSEC = 30_000;
     private static final int START_ROUND = 1;
 
     @Id
@@ -44,7 +47,7 @@ public class Room {
     private Category category;
 
     public static Room createNewRoom() {
-        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, DEFAULT_TIME_LIMIT_MSEC, RoomStatus.READY, Category.EXAMPLE);
+        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, MAX_TIME_LIMIT_MSEC, RoomStatus.READY, Category.EXAMPLE);
     }
 
     public Room(int totalRound, int currentRound, int timeLimit, RoomStatus status, Category category) {
@@ -64,10 +67,18 @@ public class Room {
     }
 
     public void updateTimeLimit(int timeLimit) {
+        if (timeLimit < MIN_TIME_LIMIT_MSEC || timeLimit > MAX_TIME_LIMIT_MSEC) {
+            throw new BadRequestException("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
+                    .formatted(MIN_TIME_LIMIT_MSEC, MAX_TIME_LIMIT_MSEC, timeLimit));
+        }
         this.timeLimit = timeLimit;
     }
 
     public void updateTotalRound(int totalRound) {
+        if (totalRound < MIN_TOTAL_ROUND || totalRound > MAX_TOTAL_ROUND) {
+            throw new BadRequestException("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
+                    .formatted(MIN_TOTAL_ROUND, MAX_TOTAL_ROUND, totalRound));
+        }
         this.totalRound = totalRound;
     }
 

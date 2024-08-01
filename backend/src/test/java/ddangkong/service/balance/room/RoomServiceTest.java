@@ -9,12 +9,16 @@ import ddangkong.controller.balance.member.dto.MemberResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.controller.balance.room.dto.RoomSettingRequest;
+import ddangkong.controller.balance.room.dto.RoomSettingResponse;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class RoomServiceTest extends BaseServiceTest {
@@ -126,6 +130,68 @@ class RoomServiceTest extends BaseServiceTest {
             assertThatThrownBy(() -> roomService.moveToNextRound(NOT_PROGRESSED_ROOM_ID))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
+        }
+    }
+
+    @Nested
+    class 방_설정_변경 {
+
+        @Test
+        void 방_설정_정보를_변경한다() {
+            // given
+            Long roomId = 2L;
+            int totalRound = 5;
+            int timeLimit = 10000;
+            Category category = Category.EXAMPLE;
+
+            RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);
+
+            // when
+            roomService.updateRoomSetting(roomId, request);
+
+            // then
+            RoomInfoResponse roomInfo = roomService.findRoomInfo(roomId);
+            RoomSettingResponse roomSetting = roomInfo.roomSetting();
+
+            assertAll(
+                    () -> assertThat(roomSetting.totalRound()).isEqualTo(totalRound),
+                    () -> assertThat(roomSetting.timeLimit()).isEqualTo(timeLimit),
+                    () -> assertThat(roomSetting.category()).isEqualTo(category)
+            );
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = {2, 11})
+        void 라운드는_3이상_10이하_여야한다(int notValidTotalRound) {
+            // given
+            Long roomId = 2L;
+            int timeLimit = 10000;
+            Category category = Category.EXAMPLE;
+
+            RoomSettingRequest request = new RoomSettingRequest(notValidTotalRound, timeLimit, category);
+
+            // when & then
+            assertThatThrownBy(() -> roomService.updateRoomSetting(roomId, request))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
+                            .formatted(3, 10, notValidTotalRound));
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = {9000, 31000})
+        void 시간_제한은_10000이상_30000이하_여야한다(int notValidTimeLimit) {
+            // given
+            Long roomId = 2L;
+            int totalRound = 5;
+            Category category = Category.EXAMPLE;
+
+            RoomSettingRequest request = new RoomSettingRequest(totalRound, notValidTimeLimit, category);
+
+            // when & then
+            assertThatThrownBy(() -> roomService.updateRoomSetting(roomId, request))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
+                            .formatted(10000, 30000, notValidTimeLimit));
         }
     }
 }
