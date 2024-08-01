@@ -14,7 +14,6 @@ class RoomTest {
     @Nested
     class 다음_라운드로_이동 {
 
-
         @Test
         void 다음_라운드로_이동할_수_있다() {
             // given
@@ -47,15 +46,15 @@ class RoomTest {
     @Nested
     class 라운드_종료 {
 
-        private static final int FIXED_TOTAL_ROUND = 5;
-        private static final int FIXED_TIME_LIMIT = 30;
-        private static final RoomStatus FIXED_STATUS = RoomStatus.PROGRESS;
+        private static final int TOTAL_ROUND = 5;
+        private static final int TIME_LIMIT = 30;
+        private static final RoomStatus STATUS = RoomStatus.PROGRESS;
 
         @Test
         void 나의_라운드가_방의_현재_라운드보다_작으면_나의_라운드는_종료된_것이다() {
             // given
             int currentRound = 2;
-            Room room = new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
+            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS);
             int myRound = 1;
 
             // when
@@ -69,7 +68,7 @@ class RoomTest {
         void 나의_라운드와_방의_현재_라운드와_같으면_나의_라운드는_종료되지_않은_것이다() {
             // given
             int currentRound = 2;
-            Room room = new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
+            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS);
             int myRound = 2;
 
             // when
@@ -82,7 +81,7 @@ class RoomTest {
         @Test
         void 나의_라운드가_방의_시작_라운드보다_작으면_예외가_발생한다() {
             // given
-            Room room = new Room(FIXED_TOTAL_ROUND, 1, FIXED_TIME_LIMIT, FIXED_STATUS);
+            Room room = new Room(TOTAL_ROUND, 1, TIME_LIMIT, STATUS);
             int invalidMyRound = 0;
 
             // when & then
@@ -95,7 +94,7 @@ class RoomTest {
         void 나의_라운드가_방의_현재_라운드보다_크면_예외가_발생한다() {
             // given
             int currentRound = 1;
-            Room room = new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
+            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS);
             int invalidMyRound = 2;
 
             // when & then
@@ -108,7 +107,7 @@ class RoomTest {
         void 나의_라운드가_방의_현재_라운드보다_2이상_작으면_예외가_발생한다() {
             // given
             int currentRound = 4;
-            Room room = new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
+            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS);
             int invalidMyRound = 2;
 
             // when & then
@@ -121,7 +120,7 @@ class RoomTest {
         void 현재_라운드와_전체_라운드가_같고_방_상태가_FINISH이면_방의_전체_라운드가_종료된_것이다() {
             // given
             RoomStatus status = RoomStatus.FINISH;
-            Room room = new Room(FIXED_TOTAL_ROUND, 5, FIXED_TIME_LIMIT, status);
+            Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status);
 
             // when
             boolean actual = room.isAllRoundFinished();
@@ -135,7 +134,7 @@ class RoomTest {
             // given
             int currentRound = 3;
             int totalRound = 5;
-            Room room = new Room(totalRound, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS);
+            Room room = new Room(totalRound, currentRound, TIME_LIMIT, STATUS);
 
             // when
             boolean actual = room.isAllRoundFinished();
@@ -148,7 +147,7 @@ class RoomTest {
         @EnumSource(value = RoomStatus.class, names = {"READY", "PROGRESS"})
         void 방_상태가_FINISH가_아니면_방의_전체_라운드가_종료되지_않은_것이다(RoomStatus status) {
             // given
-            Room room = new Room(FIXED_TOTAL_ROUND, 5, FIXED_TIME_LIMIT, status);
+            Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status);
 
             // when
             boolean actual = room.isAllRoundFinished();
