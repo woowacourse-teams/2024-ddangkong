@@ -19,6 +19,7 @@ import ddangkong.domain.balance.vote.BalanceVoteRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -42,9 +43,11 @@ public class BalanceVoteService {
 
     private final RoomRepository roomRepository;
 
+    private final Clock clock;
+
     @Transactional
     public BalanceVoteResponse createBalanceVote(BalanceVoteRequest request, Long roomId, Long contentId) {
-        validateVoteTime(roomId);
+        validateRoundEnded(roomId, contentId);
         BalanceOption balanceOption = findValidOption(request.optionId(), contentId);
         Member member = findValidMember(request.memberId(), roomId);
 
@@ -53,11 +56,15 @@ public class BalanceVoteService {
         return new BalanceVoteResponse(savedBalanceVote);
     }
 
-    private void validateVoteTime(Long roomId) {
+    private void validateRoundEnded(Long roomId, Long contentId) {
         RoomContent roomContent = findValidRoomContent(roomId);
-        if (roomContent.isRoundOver(LocalDateTime.now())) {
-            throw new BadRequestException("이미 종료된 라운드는 투표할 수 없습니다.");
+        if (isNotCurrentContentId(contentId, roomContent) || roomContent.isRoundOver(LocalDateTime.now(clock))) {
+            throw new BadRequestException("유효하지 않은 라운드에는 투표할 수 없습니다.");
         }
+    }
+
+    private static boolean isNotCurrentContentId(Long contentId, RoomContent roomContent) {
+        return !Objects.equals(roomContent.getContentId(), contentId);
     }
 
     private RoomContent findValidRoomContent(Long roomId) {
