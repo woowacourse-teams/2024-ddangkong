@@ -63,13 +63,13 @@ const ModalHeader = ({ children, ...restProps }: ModalHeaderProps) => {
   );
 };
 
-interface ModalTitleProps extends React.PropsWithChildren<HTMLAttributes<HTMLSpanElement>> {}
+interface ModalTitleProps extends React.PropsWithChildren<HTMLAttributes<HTMLHeadingElement>> {}
 
 const ModalTitle = ({ children, ...restProps }: ModalTitleProps) => {
   return (
-    <span css={modalTitle({ fontSize: '2rem', fontWeight: 'bold' })} {...restProps}>
+    <h2 css={modalTitle({ fontSize: '2rem', fontWeight: 'bold' })} {...restProps}>
       {children}
-    </span>
+    </h2>
   );
 };
 
