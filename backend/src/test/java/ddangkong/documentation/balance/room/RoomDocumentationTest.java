@@ -123,7 +123,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방_정보를_조회한다() throws Exception {
             //given
             int totalRound = 5;
-            int timeLimit = 10000;
+            int timeLimit = 30000;
             RoomInfoResponse response = new RoomInfoResponse(
                     false,
                     new RoomSettingResponse(totalRound, timeLimit),

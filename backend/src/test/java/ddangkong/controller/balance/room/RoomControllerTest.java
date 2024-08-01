@@ -35,7 +35,7 @@ class RoomControllerTest extends BaseControllerTest {
             assertAll(
                     () -> Assertions.assertThat(actual.members()).hasSize(4),
                     () -> Assertions.assertThat(actual.isGameStart()).isTrue(),
-                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(10000),
+                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
                     () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
             );
         }

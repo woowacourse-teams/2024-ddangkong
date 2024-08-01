@@ -32,7 +32,7 @@ class RoomTest {
             // given
             int totalRound = 5;
             int currentRound = 5;
-            int timeLimit = 10000;
+            int timeLimit = 30000;
             Room room = new Room(totalRound, currentRound, timeLimit, RoomStatus.PROGRESS);
 
             // when & then

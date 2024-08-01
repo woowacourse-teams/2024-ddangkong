@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class Room {
 
     private static final int DEFAULT_TOTAL_ROUND = 5;
-    private static final int DEFAULT_TIME_LIMIT_MSEC = 10_000;
+    private static final int DEFAULT_TIME_LIMIT_MSEC = 30_000;
     private static final int START_ROUND = 1;
 
     @Id

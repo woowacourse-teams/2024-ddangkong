@@ -20,7 +20,7 @@ VALUES ('민초', 1),
 
 
 INSERT INTO room(total_round, current_round, time_limit, status)
-VALUES (5, 1, 10000, 'READY');
+VALUES (5, 1, 30000, 'READY');
 
 
 INSERT INTO room_content(room_id, balance_content_id, round, created_at)

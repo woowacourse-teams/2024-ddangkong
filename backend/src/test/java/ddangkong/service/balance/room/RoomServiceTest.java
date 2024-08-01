@@ -38,7 +38,7 @@ class RoomServiceTest extends BaseServiceTest {
             assertAll(
                     () -> Assertions.assertThat(actual.members()).hasSize(3),
                     () -> Assertions.assertThat(actual.isGameStart()).isFalse(),
-                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(10000),
+                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
                     () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
             );
         }
