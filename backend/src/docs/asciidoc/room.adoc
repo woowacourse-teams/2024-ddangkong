@@ -90,20 +90,20 @@ include::{snippets}/room/next/response-fields.adoc[]
 
 ==== curl
 
-include::{snippets}/room/round-finished/curl-request.adoc[]
+include::{snippets}/room/roundFinished/curl-request.adoc[]
 
 ==== request
 
-include::{snippets}/room/round-finished/http-request.adoc[]
+include::{snippets}/room/roundFinished/http-request.adoc[]
 
-include::{snippets}/room/round-finished/path-parameters.adoc[]
+include::{snippets}/room/roundFinished/path-parameters.adoc[]
 
-include::{snippets}/room/round-finished/query-parameters.adoc[]
+include::{snippets}/room/roundFinished/query-parameters.adoc[]
 
 ==== response
 
-include::{snippets}/room/round-finished/http-response.adoc[]
+include::{snippets}/room/roundFinished/http-response.adoc[]
 
 response fields
 
-include::{snippets}/room/round-finished/response-fields.adoc[]
+include::{snippets}/room/roundFinished/response-fields.adoc[]
