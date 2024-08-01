@@ -57,11 +57,8 @@ class RoomTest {
             Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS);
             int myRound = 1;
 
-            // when
-            boolean actual = room.isMyRoundFinished(myRound);
-
-            // then
-            assertThat(actual).isTrue();
+            // when & then
+            assertThat(room.isMyRoundFinished(myRound)).isTrue();
         }
 
         @Test
@@ -71,11 +68,8 @@ class RoomTest {
             Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS);
             int myRound = 2;
 
-            // when
-            boolean actual = room.isMyRoundFinished(myRound);
-
-            // then
-            assertThat(actual).isFalse();
+            // when & then
+            assertThat(room.isMyRoundFinished(myRound)).isFalse();
         }
 
         @Test
@@ -122,11 +116,8 @@ class RoomTest {
             RoomStatus status = RoomStatus.FINISH;
             Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status);
 
-            // when
-            boolean actual = room.isAllRoundFinished();
-
-            // then
-            assertThat(actual).isTrue();
+            // when & then
+            assertThat(room.isAllRoundFinished()).isTrue();
         }
 
         @Test
@@ -136,11 +127,8 @@ class RoomTest {
             int totalRound = 5;
             Room room = new Room(totalRound, currentRound, TIME_LIMIT, STATUS);
 
-            // when
-            boolean actual = room.isAllRoundFinished();
-
-            // then
-            assertThat(actual).isFalse();
+            // when & then
+            assertThat(room.isAllRoundFinished()).isFalse();
         }
 
         @ParameterizedTest
@@ -149,11 +137,8 @@ class RoomTest {
             // given
             Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status);
 
-            // when
-            boolean actual = room.isAllRoundFinished();
-
-            // then
-            assertThat(actual).isFalse();
+            // when & then
+            assertThat(room.isAllRoundFinished()).isFalse();
         }
     }
 }
