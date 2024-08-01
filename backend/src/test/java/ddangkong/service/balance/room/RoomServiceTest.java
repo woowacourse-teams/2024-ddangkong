@@ -139,15 +139,15 @@ class RoomServiceTest extends BaseServiceTest {
     @Nested
     class 나의_라운드_종료_여부 {
 
-        private static final int FIXED_TOTAL_ROUND = 5;
-        private static final int FIXED_TIME_LIMIT = 30_000;
-        private static final RoomStatus FIXED_STATUS = RoomStatus.PROGRESS;
+        private static final int TOTAL_ROUND = 5;
+        private static final int TIME_LIMIT = 30_000;
+        private static final RoomStatus STATUS = RoomStatus.PROGRESS;
 
         @Test
         void 나의_라운드가_종료되지_않았으면_게임도_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 2;
-            Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS));
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS));
             int myRound = 2;
 
             // when
@@ -164,7 +164,7 @@ class RoomServiceTest extends BaseServiceTest {
         void 나의_라운드가_종료되면_게임은_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 2;
-            Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS));
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS));
             int myRound = 1;
 
             // when
@@ -182,7 +182,7 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             int currentRound = 5;
             RoomStatus status = RoomStatus.FINISH;
-            Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, status));
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, status));
             int myRound = 5;
 
             // when
@@ -199,7 +199,7 @@ class RoomServiceTest extends BaseServiceTest {
         void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_나의_라운드도_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 5;
-            Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS));
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS));
             int myRound = 5;
 
             // when
