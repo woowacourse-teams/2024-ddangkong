@@ -1,11 +1,12 @@
 package ddangkong.controller.balance.room;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.controller.BaseControllerTest;
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
-import ddangkong.controller.balance.member.dto.MembersResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
+import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.domain.balance.content.Category;
 import io.restassured.RestAssured;
@@ -19,19 +20,24 @@ import org.junit.jupiter.api.Test;
 class RoomControllerTest extends BaseControllerTest {
 
     @Nested
-    class 밸런스_게임_방_전체_멤버_조회 {
+    class 밸런스_게임_방_정보_조회 {
 
         @Test
-        void 게임_방_전체_멤버_조회() {
+        void 게임_방_정보_조회() {
             //when
-            MembersResponse actual = RestAssured.given()
-                    .when().get("/api/balances/rooms/1/members")
+            RoomInfoResponse actual = RestAssured.given()
+                    .when().get("/api/balances/rooms/1")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
-                    .extract().as(MembersResponse.class);
+                    .extract().as(RoomInfoResponse.class);
 
             //then
-            Assertions.assertThat(actual.members()).hasSize(4);
+            assertAll(
+                    () -> Assertions.assertThat(actual.members()).hasSize(4),
+                    () -> Assertions.assertThat(actual.isGameStart()).isTrue(),
+                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
+                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
+            );
         }
     }
 

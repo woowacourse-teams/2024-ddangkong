@@ -22,7 +22,6 @@ response fields
 
 include::{snippets}/room/create/response-fields.adoc[]
 
-
 === 방 참여
 
 ==== curl
@@ -39,7 +38,6 @@ request fields
 
 include::{snippets}/room/join/request-fields.adoc[]
 
-
 ==== response
 
 include::{snippets}/room/join/http-response.adoc[]
@@ -48,26 +46,25 @@ response fields
 
 include::{snippets}/room/join/response-fields.adoc[]
 
-
-=== 방 멤버 조회
+=== 방 정보 조회
 
 ==== curl
 
-include::{snippets}/room/memberSearch/curl-request.adoc[]
+include::{snippets}/room/info/curl-request.adoc[]
 
 ==== request
 
-include::{snippets}/room/memberSearch/http-request.adoc[]
+include::{snippets}/room/info/http-request.adoc[]
 
-include::{snippets}/room/memberSearch/path-parameters.adoc[]
+include::{snippets}/room/info/path-parameters.adoc[]
 
 ==== response
 
-include::{snippets}/room/memberSearch/http-response.adoc[]
+include::{snippets}/room/info/http-response.adoc[]
 
 response fields
 
-include::{snippets}/room/memberSearch/response-fields.adoc[]
+include::{snippets}/room/info/response-fields.adoc[]
 
 === 다음 라운드로 이동
 
