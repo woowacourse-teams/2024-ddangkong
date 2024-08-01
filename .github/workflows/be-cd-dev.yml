@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 3
     runs-on: ubuntu-latest
     env:
       DOCKER_REPOSITORY_NAME: ddangkong/ddangkong-api-dev
@@ -54,6 +55,7 @@ jobs:
 
   deploy:
     needs: build
+    timeout-minutes: 1
     runs-on: [ self-hosted, linux, ARM64 ] # Self hosted runner 사용
     env:
       DOCKER_REPOSITORY_NAME: ddangkong/ddangkong-api-dev
