@@ -75,18 +75,18 @@ jobs:
         run: |
           CONTAINER_ID=$(sudo docker ps -aqf name=$CONTAINER_NAME)
           if [ -n ${CONTAINER_ID} ]; then
-            sudo docker rm -f ${CONTAINER_ID}
+          sudo docker rm -f ${CONTAINER_ID}
           else
-            echo "No previous container found with name. Skipping removal."
+          echo "No previous container found with name. Skipping removal."
           fi
 
       - name: Remove previous Docker image
         run: |    
           IMAGE_ID=$(sudo docker images --filter=reference=ddangkong/ddangkong-api-dev --format "{{.ID}}")
           if [ -n ${IMAGE_ID} ]; then
-            sudo docker rmi ${IMAGE_ID}
+          sudo docker rmi ${IMAGE_ID}
           else
-            echo "No previous image found with repository name. Skipping removal."
+          echo "No previous image found with repository name. Skipping removal."
           fi
 
       - name: Run new Docker container
