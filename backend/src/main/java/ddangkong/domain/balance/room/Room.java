@@ -66,17 +66,25 @@ public class Room {
     }
 
     public boolean isMyRoundFinished(int myRound) {
-        if (myRound < START_ROUND) {
-            throw new BadRequestException("나의 라운드는 %d보다 크거나 같아야 합니다. myRound : %d"
-                    .formatted(START_ROUND, myRound)
-            );
-        }
-        if (currentRound < myRound) {
-            throw new BadRequestException("방의 currentRound보다 작거나 같아야 합니다. currentRound : %d, myRound : %d"
-                    .formatted(currentRound, myRound)
-            );
-        }
+        validateGreaterThanOrEqualToStartRound(myRound);
+        validateLessThanOrEqualToCurrentRound(myRound);
         return currentRound != myRound;
+    }
+
+    private void validateGreaterThanOrEqualToStartRound(int round) {
+        if (round < START_ROUND) {
+            throw new BadRequestException("startRound보다 크거나 같아야 합니다. startRound : %d, round : %d"
+                    .formatted(START_ROUND, round)
+            );
+        }
+    }
+
+    private void validateLessThanOrEqualToCurrentRound(int round) {
+        if (currentRound < round) {
+            throw new BadRequestException("currentRound보다 작거나 같아야 합니다. currentRound : %d, round : %d"
+                    .formatted(currentRound, round)
+            );
+        }
     }
 
     public boolean isAllRoundFinished() {

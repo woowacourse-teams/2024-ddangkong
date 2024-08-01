@@ -88,7 +88,7 @@ class RoomTest {
             // when & then
             assertThatThrownBy(() -> room.isMyRoundFinished(invalidMyRound))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("나의 라운드는 1보다 크거나 같아야 합니다. myRound : 0");
+                    .hasMessageContaining("startRound보다 크거나 같아야 합니다. startRound : 1, round : 0");
         }
 
         @Test
@@ -101,7 +101,7 @@ class RoomTest {
             // when & then
             assertThatThrownBy(() -> room.isMyRoundFinished(invalidMyRound))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방의 currentRound보다 작거나 같아야 합니다. currentRound : 1, myRound : 2");
+                    .hasMessageContaining("currentRound보다 작거나 같아야 합니다. currentRound : 1, round : 2");
         }
 
         @Test
