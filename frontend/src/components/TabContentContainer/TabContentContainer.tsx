@@ -2,39 +2,53 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   alertText,
-  barBackgroundStyle,
-  barStyle,
   barWrapperStyle,
   buttonStyle,
   categoryContainer,
   contentWrapperStyle,
   currentVoteButtonWrapper,
+  firstBar,
   resultTextStyle,
   roundVoteResultContainer,
+  secondBar,
 } from './TabContentContainer.styled';
+import { useTotalCountAnimation } from '../RoundVoteContainer/RoundVoteContainer.hook';
 
+import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 import { Group, Total } from '@/types/roundVoteResult';
+
+const isGroup = (value: Group | Total): value is Group => {
+  return 'memberCount' in value.firstOption;
+};
 
 interface TabContentContainerProps {
   isGroupTabActive: boolean;
-  roundResult: Group | Total;
-  animatedFirstPercent?: number;
-  animatedSecondPercent?: number;
 }
 
-const TabContentContainer = ({
-  isGroupTabActive,
-  roundResult,
-  animatedFirstPercent,
-  animatedSecondPercent,
-}: TabContentContainerProps) => {
+const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => {
   const navigate = useNavigate();
+  const { balanceContent } = useBalanceContentQuery();
+  const { groupRoundResult, totalResult } = useRoundVoteResultQuery({
+    roomId: 1,
+    contentId: balanceContent?.contentId,
+  });
 
-  const isBigFirstOption = roundResult.firstOption.percent >= 50;
+  const {
+    animatedFirstPercent,
+    animatedSecondPercent,
+    animatedTotalFirstPercent,
+    animatedTotalSecondPercent,
+  } = useTotalCountAnimation(groupRoundResult, totalResult);
+
+  const roundResult = isGroupTabActive ? groupRoundResult : totalResult;
+  const isBigFirstOption = roundResult && roundResult.firstOption.percent >= 50;
 
   const goToVoteStatus = () => {
     navigate('/round/result/status');
   };
+
+  if (!roundResult) return <div>데이터가 없습니다</div>;
 
   return (
     <div css={contentWrapperStyle}>
@@ -45,20 +59,16 @@ const TabContentContainer = ({
           <span>{roundResult.secondOption.name}</span>
         </div>
         <div css={barWrapperStyle}>
-          <span css={barStyle(roundResult.firstOption.percent, isBigFirstOption)}>
-            {animatedFirstPercent}%
+          <span css={firstBar(roundResult.firstOption.percent, isBigFirstOption)}>
+            {isGroup(roundResult) ? animatedFirstPercent : animatedTotalFirstPercent}%
           </span>
-          <span css={barBackgroundStyle(roundResult.secondOption.percent, isBigFirstOption)}>
-            {animatedSecondPercent}%
+          <span css={secondBar(roundResult.secondOption.percent, isBigFirstOption)}>
+            {isGroup(roundResult) ? animatedSecondPercent : animatedTotalSecondPercent}%
           </span>
         </div>
         <div css={resultTextStyle(isGroupTabActive)}>
-          {'memberCount' in roundResult.firstOption && (
-            <span>{roundResult.firstOption.memberCount}명</span>
-          )}
-          {'memberCount' in roundResult.secondOption && (
-            <span>{roundResult.secondOption.memberCount}명</span>
-          )}
+          {isGroup(roundResult) && <span>{roundResult.firstOption.memberCount}명</span>}
+          {isGroup(roundResult) && <span>{roundResult.secondOption.memberCount}명</span>}
         </div>
       </div>
       <div css={currentVoteButtonWrapper(isGroupTabActive)}>
