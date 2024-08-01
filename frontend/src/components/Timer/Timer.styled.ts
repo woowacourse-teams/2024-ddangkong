@@ -1,6 +1,36 @@
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
+
+const shake = keyframes`
+  0%{
+      transform: rotate(0deg);
+    }
+    10%{
+      transform: scale(1.5) rotate(45deg);
+    }
+    20%{
+      transform: scale(1.5) rotate(-45deg);
+    }
+    30%{
+      transform:  rotate(30deg);
+    }
+    40%{
+      transform:  rotate(-30deg);
+    }
+    50%{
+      transform: rotate(10deg);
+    }
+    60%{
+      transform: rotate(-10deg);
+    }
+    70%{
+      transform: rotate(0deg);
+    }
+    100%{
+      transform: rotate(0deg);
+    }
+`;
 
 export const timerLayout = css`
   display: flex;
@@ -44,10 +74,15 @@ export const timerIcon = css`
   position: absolute;
 `;
 
-export const timerText = css`
+export const timerIconShake = css`
+  animation: ${shake} 1s linear infinite;
+`;
+
+export const timerText = (isAlmostFinished: boolean) => css`
   position: absolute;
   top: 5.2rem;
 
+  color: ${isAlmostFinished ? 'red' : 'black'};
   font-weight: bold;
   font-size: 1.6rem;
 `;
