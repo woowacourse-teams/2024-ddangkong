@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
@@ -159,7 +160,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 다음_라운드로_이동 {
 
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/contents";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/next";
 
         @Test
         void 다음_라운드로_이동한다() throws Exception {
@@ -180,22 +181,11 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             when(roomService.moveToNextRound(anyLong())).thenReturn(response);
 
             //then
-            mockMvc.perform(post(ENDPOINT, 1L))
-                    .andExpect(status().isCreated())
+            mockMvc.perform(patch(ENDPOINT, 1L))
+                    .andExpect(status().isOk())
                     .andDo(document("room/next",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
-                            ),
-                            responseFields(
-                                    fieldWithPath("contentId").type(NUMBER).description("콘텐츠 ID"),
-                                    fieldWithPath("category").type(STRING).description("콘텐츠 카테고리"),
-                                    fieldWithPath("totalRound").type(NUMBER).description("총 라운드 수"),
-                                    fieldWithPath("currentRound").type(NUMBER).description("현재 라운드"),
-                                    fieldWithPath("question").type(STRING).description("콘텐츠 질문"),
-                                    fieldWithPath("firstOption.optionId").type(NUMBER).description("첫 번째 선택지 ID"),
-                                    fieldWithPath("firstOption.name").type(STRING).description("첫 번째 선택지명"),
-                                    fieldWithPath("secondOption.optionId").type(NUMBER).description("두 번째 선택지 ID"),
-                                    fieldWithPath("secondOption.name").type(STRING).description("두 번째 선택지명")
                             )
                     ));
         }

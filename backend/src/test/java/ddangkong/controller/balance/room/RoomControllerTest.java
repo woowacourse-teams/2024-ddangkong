@@ -4,11 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.controller.BaseControllerTest;
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.domain.balance.content.Category;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.HashMap;
@@ -122,23 +119,14 @@ class RoomControllerTest extends BaseControllerTest {
     @Nested
     class 다음_라운드_진행 {
 
-        private static final BalanceContentResponse EXPECTED_RESPONSE = new BalanceContentResponse(
-                3L, Category.EXAMPLE, 5, 3, "다음 중 여행가고 싶은 곳은?",
-                new BalanceOptionResponse(5L, "산"),
-                new BalanceOptionResponse(6L, "바다"));
-
         @Test
         void 다음_라운드로_진행할_수_있다() {
             // when
-            BalanceContentResponse actual = RestAssured.given().log().all()
+            RestAssured.given().log().all()
                     .pathParam("roomId", 1L)
-                    .when().post("/api/balances/rooms/{roomId}/contents")
+                    .when().patch("/api/balances/rooms/{roomId}/next")
                     .then().log().all()
-                    .statusCode(201)
-                    .extract().as(BalanceContentResponse.class);
-
-            // then
-            assertThat(actual).isEqualTo(EXPECTED_RESPONSE);
+                    .statusCode(200);
         }
 
         @Test
@@ -146,7 +134,7 @@ class RoomControllerTest extends BaseControllerTest {
             // when & then
             RestAssured.given().log().all()
                     .pathParam("roomId", -1L)
-                    .when().post("/api/balances/rooms/{roomId}/contents")
+                    .when().patch("/api/balances/rooms/{roomId}/next")
                     .then().log().all()
                     .statusCode(400);
         }

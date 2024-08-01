@@ -1,6 +1,5 @@
 package ddangkong.controller.balance.room;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
@@ -11,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,9 +43,8 @@ public class RoomController {
         return roomService.joinRoom(request.nickname(), roomId);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/balances/rooms/{roomId}/contents")
-    public BalanceContentResponse moveToNextRound(@PathVariable @Positive Long roomId) {
-        return roomService.moveToNextRound(roomId);
+    @PatchMapping("/balances/rooms/{roomId}/next")
+    public void moveToNextRound(@PathVariable @Positive Long roomId) {
+        roomService.moveToNextRound(roomId);
     }
 }
