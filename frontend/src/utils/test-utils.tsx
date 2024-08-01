@@ -1,6 +1,9 @@
 import { Global, ThemeProvider } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+// eslint-disable-next-line import/named
+import { render, RenderOptions } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
 import GlobalStyle from '@/styles/GlobalStyle';
@@ -19,12 +22,17 @@ const wrapper = ({ children }: PropsWithChildren) => {
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
         <ThemeProvider theme={Theme}>
-          <Global styles={GlobalStyle} />
-          {children}
+          <MemoryRouter initialEntries={['/']}>
+            <Global styles={GlobalStyle} />
+            {children}
+          </MemoryRouter>
         </ThemeProvider>
       </RecoilRoot>
     </QueryClientProvider>
   );
 };
 
-export default wrapper;
+const customRender = (ui: React.ReactNode, options?: RenderOptions) =>
+  render(ui, { wrapper, ...options });
+
+export { wrapper, customRender };
