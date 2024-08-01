@@ -22,7 +22,6 @@ response fields
 
 include::{snippets}/room/create/response-fields.adoc[]
 
-
 === 방 참여
 
 ==== curl
@@ -39,7 +38,6 @@ request fields
 
 include::{snippets}/room/join/request-fields.adoc[]
 
-
 ==== response
 
 include::{snippets}/room/join/http-response.adoc[]
@@ -48,8 +46,7 @@ response fields
 
 include::{snippets}/room/join/response-fields.adoc[]
 
-
-=== 방 멤버 조회
+=== 방 정보 조회
 
 ==== curl
 
