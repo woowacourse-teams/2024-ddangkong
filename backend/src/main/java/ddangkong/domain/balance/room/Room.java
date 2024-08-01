@@ -50,15 +50,18 @@ public class Room {
     }
 
     public void moveToNextRound() {
-        if (canMoveToNextRound()) {
-            currentRound++;
+        if (!isGameProgress()) {
+            throw new BadRequestException("게임이 진행 중이 아닙니다.");
+        }
+        if (isFinalRound()) {
+            status = RoomStatus.FINISH;
             return;
         }
-        throw new BadRequestException("마지막 라운드입니다.");
+        currentRound++;
     }
 
-    private boolean canMoveToNextRound() {
-        return currentRound < totalRound;
+    private boolean isFinalRound() {
+        return currentRound == totalRound;
     }
 
     public boolean isGameProgress() {

@@ -18,16 +18,13 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.RoomController;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.controller.balance.room.dto.RoomSettingResponse;
 import ddangkong.documentation.BaseDocumentationTest;
-import ddangkong.domain.balance.content.Category;
 import ddangkong.service.balance.room.RoomService;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -164,23 +161,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
 
         @Test
         void 다음_라운드로_이동한다() throws Exception {
-            //given
-            BalanceOptionResponse firstOption = new BalanceOptionResponse(3L, "10년 동안 한 사람과 연애한 애인");
-            BalanceOptionResponse secondOption = new BalanceOptionResponse(4L, "1년 동안 다섯 사람과 연애한 애인");
-            BalanceContentResponse response = new BalanceContentResponse(
-                    2L,
-                    Category.EXAMPLE,
-                    5,
-                    2,
-                    "10년 동안 한 사람과 연애한 애인 VS 1년 동안 다섯 사람과 연애한 애인",
-                    firstOption,
-                    secondOption
-            );
 
-            //when
-            when(roomService.moveToNextRound(anyLong())).thenReturn(response);
-
-            //then
+            // when & then
             mockMvc.perform(patch(ENDPOINT, 1L))
                     .andExpect(status().isOk())
                     .andDo(document("room/next",

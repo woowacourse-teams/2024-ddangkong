@@ -10,6 +10,9 @@ import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomRepository;
+import ddangkong.domain.balance.room.RoomStatus;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
 import org.assertj.core.api.Assertions;
@@ -21,6 +24,9 @@ class RoomServiceTest extends BaseServiceTest {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Nested
     class 게임_방_정보_조회 {
@@ -96,6 +102,7 @@ class RoomServiceTest extends BaseServiceTest {
     class 다음_라운드로_이동 {
 
         private static final Long PROGRESS_ROOM_ID = 1L;
+        private static final int CURRENT_ROUND = 2;
         private static final Long NOT_EXIST_ROOM_ID = 999999999L;
         private static final Long NOT_PROGRESSED_ROOM_ID = 2L;
         private static final BalanceContentResponse BALANCE_CONTENT_RESPONSE = new BalanceContentResponse(
@@ -104,12 +111,43 @@ class RoomServiceTest extends BaseServiceTest {
                 new BalanceOptionResponse(6L, "바다"));
 
         @Test
-        void 다음_라운드로_넘어갈_수_있다() {
+        void 중간_라운드라면_다음_라운드로_넘어갈_수_있다() {
+            // given
+            int nextRound = CURRENT_ROUND + 1;
+
             // when
-            BalanceContentResponse actual = roomService.moveToNextRound(PROGRESS_ROOM_ID);
+            roomService.moveToNextRound(PROGRESS_ROOM_ID);
 
             // then
-            assertThat(actual).isEqualTo(BALANCE_CONTENT_RESPONSE);
+            Room room = roomRepository.getById(PROGRESS_ROOM_ID);
+            assertAll(
+                    () -> assertThat(room.getCurrentRound()).isEqualTo(nextRound),
+                    () -> assertThat(room.isGameProgress()).isTrue()
+            );
+        }
+
+        @Test
+        void 마지막_라운드라면_게임을_종료한다() {
+            // given
+            moveToFinalRound(PROGRESS_ROOM_ID);
+
+            // when
+            roomService.moveToNextRound(PROGRESS_ROOM_ID);
+
+            // then
+            Room room = roomRepository.getById(PROGRESS_ROOM_ID);
+            assertAll(
+                    () -> assertThat(room.getCurrentRound()).isEqualTo(room.getTotalRound()),
+                    () -> assertThat(room.getStatus()).isEqualTo(RoomStatus.FINISH)
+            );
+        }
+
+        void moveToFinalRound(Long roomId) {
+            Room room = roomRepository.getById(roomId);
+            int countOfMoving = room.getTotalRound() - room.getCurrentRound();
+            for (int count = 0; count < countOfMoving; count++) {
+                roomService.moveToNextRound(PROGRESS_ROOM_ID);
+            }
         }
 
         @Test
@@ -118,14 +156,6 @@ class RoomServiceTest extends BaseServiceTest {
             assertThatThrownBy(() -> roomService.moveToNextRound(NOT_EXIST_ROOM_ID))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방이 존재하지 않습니다.");
-        }
-
-        @Test
-        void 방의_현재_라운드의_질문이_없을_경우_예외를_던진다() {
-            // when & then
-            assertThatThrownBy(() -> roomService.moveToNextRound(NOT_PROGRESSED_ROOM_ID))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
         }
     }
 }
