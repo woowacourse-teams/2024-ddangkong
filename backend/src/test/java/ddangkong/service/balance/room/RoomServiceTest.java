@@ -144,7 +144,7 @@ class RoomServiceTest extends BaseServiceTest {
         private static final RoomStatus FIXED_STATUS = RoomStatus.PROGRESS;
 
         @Test
-        void 나의_라운드가_종료되지_않았으면_게임도_종료되지_않은_상태이다() {
+        void 나의_라운드가_종료되지_않았으면_게임도_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 2;
             Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS));
@@ -161,7 +161,7 @@ class RoomServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 나의_라운드가_종료되면_게임은_종료되지_않은_상태이다() {
+        void 나의_라운드가_종료되면_게임은_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 2;
             Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS));
@@ -178,7 +178,7 @@ class RoomServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 게임이_종료되면_나의_라운드는_종료되지_않은_상태이다() {
+        void 게임이_종료되면_나의_라운드는_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 5;
             RoomStatus status = RoomStatus.FINISH;
@@ -196,7 +196,7 @@ class RoomServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_나의_라운드도_종료되지_않은_상태이다() {
+        void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_나의_라운드도_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 5;
             Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS));
