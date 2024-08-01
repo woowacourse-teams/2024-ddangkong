@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 4
     runs-on: ubuntu-latest
 
     defaults:
