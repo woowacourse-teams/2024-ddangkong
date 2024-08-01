@@ -160,10 +160,12 @@ class RoomServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 모든_라운드가_종료됐으면_나의_라운드도_종료된다() { // TODO
+        void 모든_라운드가_종료됐으면_나의_라운드도_종료된다() {
             // given
             int currentRound = 5;
-            Room room = roomRepository.save(new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, FIXED_STATUS));
+            Room room = roomRepository.save(
+                    new Room(FIXED_TOTAL_ROUND, currentRound, FIXED_TIME_LIMIT, RoomStatus.FINISH)
+            );
 
             // when
             RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), 5);

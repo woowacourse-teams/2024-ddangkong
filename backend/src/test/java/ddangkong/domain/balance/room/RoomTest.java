@@ -6,6 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import ddangkong.exception.BadRequestException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 class RoomTest {
 
@@ -103,23 +105,28 @@ class RoomTest {
         }
 
         @Test
-        void 전체_라운드가_종료되었으면_true를_반환한다() { // TODO
+        void 전체_라운드가_종료되었으면_true를_반환한다() {
             // given
+            Room room = new Room(FIXED_TOTAL_ROUND, 5, FIXED_TIME_LIMIT, RoomStatus.FINISH);
 
             // when
+            boolean actual = room.isAllRoundFinished();
 
             // then
-
+            assertThat(actual).isTrue();
         }
 
-        @Test
-        void 전체_라운드가_종료되지_않았으면_false를_반환한다() { // TODO
+        @ParameterizedTest
+        @EnumSource(value = RoomStatus.class, names = {"READY", "PROGRESS"})
+        void 전체_라운드가_종료되지_않았으면_false를_반환한다(RoomStatus status) {
             // given
+            Room room = new Room(FIXED_TOTAL_ROUND, 5, FIXED_TIME_LIMIT, status);
 
             // when
+            boolean actual = room.isAllRoundFinished();
 
             // then
-
+            assertThat(actual).isFalse();
         }
     }
 }

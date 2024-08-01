@@ -80,7 +80,6 @@ public class Room {
     }
 
     public boolean isAllRoundFinished() {
-        // TODO: room의 status가 종료인지 여부 리턴
-        return currentRound == totalRound;
+        return status.isGameFinish();
     }
 }
