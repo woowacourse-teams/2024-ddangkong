@@ -2,11 +2,11 @@ import React from 'react';
 
 import { categoryContainerLayout, title, subtitle } from './CategoryContainer.styled';
 
-interface CategoryContainerInterface {
+interface CategoryContainerProps {
   category: string;
 }
 
-const CategoryContainer = ({ category }: CategoryContainerInterface) => {
+const CategoryContainer = ({ category }: CategoryContainerProps) => {
   return (
     <section css={categoryContainerLayout}>
       <h2 css={subtitle}>카테고리</h2>

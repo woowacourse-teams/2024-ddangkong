@@ -3,13 +3,13 @@ import { useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-import { profile, nickname, nicknameInputWrapper, nicknameInput } from './NicknamePage.styled';
+import { profile, nicknameBox, nicknameInputWrapper, nicknameInput } from './NicknamePage.styled';
 
 import { enterRoom, makeRoom } from '@/apis/room';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
 import { memberInfoState } from '@/recoil/atom';
-import { RoomAndMember } from '@/types/room';
+import { RoomAndMember, RoomInfo } from '@/types/room';
 import { createRandomNickname } from '@/utils/nickname';
 
 const NicknamePage = () => {
@@ -29,15 +29,13 @@ const NicknamePage = () => {
     onError: (error: Error) => {},
   });
 
-  const enterRoomMutation = useMutation<RoomAndMember, Error, { nickname: string; roomId: number }>(
-    {
-      mutationFn: ({ nickname, roomId }) => enterRoom(roomId, nickname),
-      onSuccess: (data) => {
-        navigate(`/ready?roomId=${data.roomId}`);
-      },
-      onError: (error: Error) => {},
+  const enterRoomMutation = useMutation<RoomInfo, Error, { nickname: string; roomId: number }>({
+    mutationFn: ({ nickname, roomId }) => enterRoom(roomId, nickname),
+    onSuccess: () => {
+      navigate(`/ready?roomId=${roomId}`);
     },
-  );
+    onError: (error: Error) => {},
+  });
 
   const handleClick = () => {
     if (isMaster) {
@@ -50,7 +48,7 @@ const NicknamePage = () => {
   return (
     <Content>
       <div css={profile}></div>
-      <div css={nickname}>닉네임</div>
+      <div css={nicknameBox}>닉네임</div>
       <div css={nicknameInputWrapper}>
         <input
           css={nicknameInput}

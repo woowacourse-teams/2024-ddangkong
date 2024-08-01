@@ -28,7 +28,7 @@ const ReadyPage = () => {
       <CategoryContainer category="연애" />
       {isError && <div>에러 발생</div>}
       {isLoading && <div>로딩중.......</div>}
-      {data && <ReadyMembersContainer />}
+      {data && <ReadyMembersContainer members={data.members} />}
       <Button text="시작" disabled={!memberInfo.isMaster} onClick={handleClick} bottom />
     </div>
   );

@@ -4,11 +4,22 @@ interface Member {
   isMaster: boolean;
 }
 
-export interface RoomAndMember {
-  roomId: number;
+interface RoomSetting {
+  totalRound: number;
+  timeLimit: number;
+}
+
+export interface RoomInfo {
+  isGameStart: boolean;
+  roomSetting: RoomSetting;
   member: Member;
 }
 
 export interface RoomMembers {
   members: Member[];
+}
+
+export interface RoomAndMember {
+  roomId: number;
+  member: Member;
 }

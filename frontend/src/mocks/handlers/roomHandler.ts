@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import ROOM_AND_MEMBER from '../data/roomAndMember.json';
+// import ROOM_AND_MEMBER from '../data/RoomInfo.json';
 import ROOM_MEMBERS from '../data/roomMembers.json';
 
 import { MOCK_API_URL } from '@/constants/url';
