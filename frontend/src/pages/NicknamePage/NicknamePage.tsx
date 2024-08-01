@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { profile, nickname, nicknameInputWrapper, nicknameInput } from './NicknamePage.styled';
 
@@ -10,6 +10,12 @@ import { createRandomNickname } from '@/utils/nickname';
 const NicknamePage = () => {
   const randomNickname = createRandomNickname();
   const nicknameInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+
+  const goToReadyPage = () => {
+    navigate('/ready', { state: { isMaster: true } });
+  };
+
   const { state } = useLocation();
 
   const handleClick = () => {
@@ -28,7 +34,7 @@ const NicknamePage = () => {
           ref={nicknameInputRef}
         />
       </div>
-      <Button onClick={handleClick} text="확인"></Button>
+      <Button onClick={goToReadyPage} text="확인" bottom></Button>
     </Content>
   );
 };

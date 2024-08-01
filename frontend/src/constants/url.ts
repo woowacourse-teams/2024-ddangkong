@@ -8,6 +8,8 @@ export const API_URL = {
     `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/vote-result`,
   moveNextRound: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/contents`,
   finalResult: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/final`,
+  room: `${BASE_URL}/api/balances/rooms`,
+  roomMembers: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/members`,
 };
 
 export const MOCK_API_URL = {
