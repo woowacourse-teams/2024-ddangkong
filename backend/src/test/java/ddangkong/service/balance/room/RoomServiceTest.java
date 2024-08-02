@@ -10,6 +10,9 @@ import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomContentRepository;
+import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
 import org.assertj.core.api.Assertions;
@@ -21,6 +24,12 @@ class RoomServiceTest extends BaseServiceTest {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private RoomRepository roomRepository;
+
+    @Autowired
+    private RoomContentRepository roomContentRepository;
 
     @Nested
     class 게임_방_정보_조회 {
@@ -51,7 +60,7 @@ class RoomServiceTest extends BaseServiceTest {
         void 방_생성_시_방장_멤버를_생성하고_방을_생성한다() {
             // given
             String nickname = "나는방장";
-            MemberResponse expectedMemberResponse = new MemberResponse(7L, nickname, true);
+            MemberResponse expectedMemberResponse = new MemberResponse(10L, nickname, true);
             RoomJoinResponse expected = new RoomJoinResponse(4L, expectedMemberResponse);
 
             // when
@@ -70,7 +79,7 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             String nickname = "나는참가자";
             Long joinRoomId = 2L;
-            MemberResponse expectedMemberResponse = new MemberResponse(7L, nickname, false);
+            MemberResponse expectedMemberResponse = new MemberResponse(10L, nickname, false);
             RoomJoinResponse expected = new RoomJoinResponse(joinRoomId, expectedMemberResponse);
 
             // when
@@ -89,6 +98,37 @@ class RoomServiceTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistId))
                     .isInstanceOf(BadRequestException.class);
+        }
+    }
+
+    @Nested
+    class 게임_시작 {
+
+        private static final Long READY_ROOM_ID = 3L;
+
+        @Test
+        void 게임_시작_시_방이_진행_상태가_된다() {
+            // when
+            roomService.startGame(READY_ROOM_ID);
+
+            // then
+            Room room = roomRepository.getById(READY_ROOM_ID);
+            assertThat(room.isGameProgress()).isTrue();
+        }
+
+        @Test
+        void 게임_시작_시_해당_방의_컨텐츠가_생성된다() {
+            // given
+            long beforeRoomContentCount = roomContentRepository.count();
+
+            // when
+            roomService.startGame(READY_ROOM_ID);
+
+            // then
+            Room room = roomRepository.getById(READY_ROOM_ID);
+            long afterRoomContentCount = roomContentRepository.count();
+            long addedRoomContentCount = afterRoomContentCount - beforeRoomContentCount;
+            assertThat(addedRoomContentCount).isEqualTo(room.getTotalRound());
         }
     }
 

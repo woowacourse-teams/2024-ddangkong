@@ -5,6 +5,7 @@ import ddangkong.controller.balance.member.dto.MemberResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.balance.room.Room;
@@ -28,6 +29,8 @@ public class RoomService {
     private final MemberRepository memberRepository;
 
     private final RoomContentRepository roomContentRepository;
+
+    private final BalanceContentRepository balanceContentRepository;
 
     private final BalanceOptionRepository balanceOptionRepository;
 
@@ -54,6 +57,21 @@ public class RoomService {
     }
 
     @Transactional
+    public void startGame(Long roomId) {
+        Room room = roomRepository.getById(roomId);
+        room.startGame();
+
+        List<BalanceContent> balanceContents = balanceContentRepository.findByRandom(room.getTotalRound());
+        List<RoomContent> roomContents = RoomContent.createList(room, balanceContents);
+        startRound(roomContents.get(0));
+        roomContentRepository.saveAll(roomContents);
+    }
+
+    private void startRound(RoomContent roomContent) {
+        // TODO #109 머지 시 반영
+    }
+
+    @Transactional
     public BalanceContentResponse moveToNextRound(Long roomId) {
         Room room = roomRepository.getById(roomId);
         room.moveToNextRound();
@@ -70,19 +88,5 @@ public class RoomService {
     private RoomContent findCurrentRoomContent(Room room) {
         return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
                 .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
-    }
-
-    @Transactional
-    public void startGame(Long roomId) {
-        Room room = roomRepository.getById(roomId);
-        room.startGame();
-
-        List<BalanceContent> balanceContents = findContents(room);
-        List<RoomContent> roomContents = RoomContent.createList(room, balanceContents);
-        roomContentRepository.saveAll(roomContents);
-    }
-
-    private List<BalanceContent> findContents(Room room) {
-        return List.of(); // TODO 랜덤 N개 조회 로직 구현
     }
 }
