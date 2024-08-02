@@ -9,7 +9,7 @@ import {
 } from './Timer.styled';
 import { formatTimer } from './Timer.util';
 
-import HOME_ICON from '@/assets/images/homeIcon.svg';
+import DDANGKONG from '@/assets/images/ddangkong.png';
 
 const Timer = () => {
   const { barWidth, timerCount, isAlmostFinished } = useRoundTimer();
@@ -20,7 +20,7 @@ const Timer = () => {
       <div css={timerWrapper(barWidth)}>
         <img
           css={[timerIcon, isAlmostFinished && timerIconShake]}
-          src={HOME_ICON}
+          src={DDANGKONG}
           alt="타이머"
           width={48}
           height={48}
