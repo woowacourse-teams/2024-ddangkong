@@ -3,6 +3,7 @@ package ddangkong.domain.balance.room;
 import ddangkong.domain.BaseEntity;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.exception.BadRequestException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class RoomContent extends BaseEntity {
+
+    private static final int DELAY_MSEC = 2_000; // TODO SEC로 변경
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +38,36 @@ public class RoomContent extends BaseEntity {
 
     @Column(nullable = false)
     private int round;
+
+    private LocalDateTime roundEndedAt;
+
+    @Column(nullable = false)
+    private boolean isUsed;
+
+    public RoomContent(Room room, BalanceContent balanceContent, int round) {
+        this.room = room;
+        this.balanceContent = balanceContent;
+        this.round = round;
+        this.roundEndedAt = null;
+        this.isUsed = false;
+    }
+
+    public void startRound(LocalDateTime currentTime) {
+        if (roundEndedAt != null) {
+            throw new BadRequestException("해당 라운드는 이미 시작했습니다.");
+        }
+        if (room.isGameProgress() && isDifferentToRoomRound()) {
+            throw new BadRequestException("방이 해당 라운드가 아닙니다 roomRound : %d, contentRound : %d"
+                    .formatted(room.getCurrentRound(), round));
+        }
+
+        int afterSec = (room.getTimeLimit() + DELAY_MSEC) / 1_000;
+        roundEndedAt = currentTime.plusSeconds(afterSec);
+    }
+
+    private boolean isDifferentToRoomRound() {
+        return round != room.getCurrentRound();
+    }
 
     public Long getContentId() {
         return balanceContent.getId();
