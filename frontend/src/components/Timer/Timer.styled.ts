@@ -69,6 +69,8 @@ export const timerWrapper = (width: number) => css`
 
 export const timerIcon = css`
   position: absolute;
+  width: 4.8rem;
+  height: 4.8rem;
 `;
 
 export const timerIconShake = css`

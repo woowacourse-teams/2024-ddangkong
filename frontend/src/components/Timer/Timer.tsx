@@ -18,13 +18,7 @@ const Timer = () => {
     <div css={timerLayout}>
       <div css={timerInnerLayout(barWidth)}></div>
       <div css={timerWrapper(barWidth)}>
-        <img
-          css={[timerIcon, isAlmostFinished && timerIconShake]}
-          src={DDANGKONG}
-          alt="타이머"
-          width={48}
-          height={48}
-        />
+        <img css={[timerIcon, isAlmostFinished && timerIconShake]} src={DDANGKONG} alt="타이머" />
         <span css={timerText(isAlmostFinished)}>{formatTimer(timerCount)}</span>
       </div>
     </div>
