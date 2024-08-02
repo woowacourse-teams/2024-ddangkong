@@ -12,7 +12,7 @@ interface RoomSetting {
 export interface RoomInfo {
   isGameStart: boolean;
   roomSetting: RoomSetting;
-  member: Member;
+  members: Member[];
 }
 
 export interface RoomMembers {

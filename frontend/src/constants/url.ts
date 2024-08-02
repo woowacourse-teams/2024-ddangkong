@@ -10,7 +10,7 @@ export const API_URL = {
   finalResult: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/final`,
   room: `${BASE_URL}/api/balances/rooms`,
   enterRoom: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/members`,
-  roomMembers: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
+  getRoomInfo: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
 };
 
 export const MOCK_API_URL = {
