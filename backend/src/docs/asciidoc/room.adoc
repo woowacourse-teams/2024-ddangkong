@@ -102,7 +102,7 @@ response fields
 
 include::{snippets}/room/next/response-fields.adoc[]
 
-=== 나의 라운드 종료 여부
+    === 라운드 종료 여부
 
 ==== curl
 

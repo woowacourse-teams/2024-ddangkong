@@ -95,9 +95,9 @@ public class Room {
         return status.isGameProgress();
     }
 
-    public boolean isMyRoundFinished(int myRound) {
-        validateRound(myRound);
-        return currentRound != myRound;
+    public boolean isRoundFinished(int round) {
+        validateRound(round);
+        return currentRound != round;
     }
 
     private void validateRound(int round) {

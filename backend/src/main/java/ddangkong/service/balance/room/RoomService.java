@@ -83,8 +83,8 @@ public class RoomService {
     }
 
     @Transactional(readOnly = true)
-    public RoundFinishedResponse getMyRoundFinished(Long roomId, int myRound) {
+    public RoundFinishedResponse getRoundFinished(Long roomId, int round) {
         Room room = roomRepository.getById(roomId);
-        return new RoundFinishedResponse(room.isMyRoundFinished(myRound), room.isAllRoundFinished());
+        return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished());
     }
 }

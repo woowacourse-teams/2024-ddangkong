@@ -85,61 +85,61 @@ class RoomTest {
         private static final Category CATEGORY = Category.EXAMPLE;
 
         @Test
-        void 나의_라운드가_방의_현재_라운드보다_작으면_나의_라운드는_종료된_것이다() {
+        void 라운드가_방의_현재_라운드보다_작으면_라운드는_종료된_것이다() {
             // given
             int currentRound = 2;
             Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
-            int myRound = 1;
+            int round = 1;
 
             // when & then
-            assertThat(room.isMyRoundFinished(myRound)).isTrue();
+            assertThat(room.isRoundFinished(round)).isTrue();
         }
 
         @Test
-        void 나의_라운드와_방의_현재_라운드와_같으면_나의_라운드는_종료되지_않은_것이다() {
+        void 라운드가_방의_현재_라운드와_같으면_라운드는_종료되지_않은_것이다() {
             // given
             int currentRound = 2;
             Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
-            int myRound = 2;
+            int round = 2;
 
             // when & then
-            assertThat(room.isMyRoundFinished(myRound)).isFalse();
+            assertThat(room.isRoundFinished(round)).isFalse();
         }
 
         @Test
-        void 나의_라운드가_방의_시작_라운드보다_작으면_예외가_발생한다() {
+        void 라운드가_방의_시작_라운드보다_작으면_예외가_발생한다() {
             // given
             Room room = new Room(TOTAL_ROUND, 1, TIME_LIMIT, STATUS, CATEGORY);
-            int invalidMyRound = 0;
+            int invalidRound = 0;
 
             // when & then
-            assertThatThrownBy(() -> room.isMyRoundFinished(invalidMyRound))
+            assertThatThrownBy(() -> room.isRoundFinished(invalidRound))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("startRound보다 크거나 같아야 합니다. startRound : 1, round : 0");
         }
 
         @Test
-        void 나의_라운드가_방의_현재_라운드보다_크면_예외가_발생한다() {
+        void 라운드가_방의_현재_라운드보다_크면_예외가_발생한다() {
             // given
             int currentRound = 1;
             Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
-            int invalidMyRound = 2;
+            int invalidRound = 2;
 
             // when & then
-            assertThatThrownBy(() -> room.isMyRoundFinished(invalidMyRound))
+            assertThatThrownBy(() -> room.isRoundFinished(invalidRound))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("currentRound보다 작거나 같아야 합니다. currentRound : 1, round : 2");
         }
 
         @Test
-        void 나의_라운드가_방의_현재_라운드보다_2이상_작으면_예외가_발생한다() {
+        void 라운드가_방의_현재_라운드보다_2이상_작으면_예외가_발생한다() {
             // given
             int currentRound = 4;
             Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
-            int invalidMyRound = 2;
+            int invalidRound = 2;
 
             // when & then
-            assertThatThrownBy(() -> room.isMyRoundFinished(invalidMyRound))
+            assertThatThrownBy(() -> room.isRoundFinished(invalidRound))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("currentRound과 round의 차이는 1이하여야 합니다. currentRound : 4, round : 2");
         }

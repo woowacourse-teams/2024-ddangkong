@@ -61,8 +61,8 @@ public class RoomController {
     }
 
     @GetMapping("/balances/rooms/{roomId}/round-finished")
-    public RoundFinishedResponse getMyRoundFinished(@Positive @PathVariable Long roomId,
-                                                    @Positive @RequestParam int myRound) {
-        return roomService.getMyRoundFinished(roomId, myRound);
+    public RoundFinishedResponse getRoundFinished(@Positive @PathVariable Long roomId,
+                                                  @Positive @RequestParam int round) {
+        return roomService.getRoundFinished(roomId, round);
     }
 }

@@ -203,7 +203,7 @@ class RoomServiceTest extends BaseServiceTest {
     }
 
     @Nested
-    class 나의_라운드_종료_여부 {
+    class 라운드_종료_여부 {
 
         private static final int TOTAL_ROUND = 5;
         private static final int TIME_LIMIT = 30_000;
@@ -211,15 +211,15 @@ class RoomServiceTest extends BaseServiceTest {
         private static final Category CATEGORY = Category.EXAMPLE;
 
         @Test
-        void 나의_라운드가_종료되지_않았으면_게임도_종료되지_않은_상태여야_한다() {
+        void 라운드가_종료되지_않았으면_게임도_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 2;
             Room room = roomRepository.save(
                     new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
-            int myRound = 2;
+            int round = 2;
 
             // when
-            RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), myRound);
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
 
             // then
             assertAll(
@@ -229,14 +229,14 @@ class RoomServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 나의_라운드가_종료되면_게임은_종료되지_않은_상태여야_한다() {
+        void 라운드가_종료되면_게임은_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 2;
             Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
-            int myRound = 1;
+            int round = 1;
 
             // when
-            RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), myRound);
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
 
             // then
             assertAll(
@@ -246,15 +246,15 @@ class RoomServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 게임이_종료되면_나의_라운드는_종료되지_않은_상태여야_한다() {
+        void 게임이_종료되면_라운드는_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 5;
             RoomStatus status = RoomStatus.FINISH;
             Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY));
-            int myRound = 5;
+            int round = 5;
 
             // when
-            RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), myRound);
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
 
             // then
             assertAll(
@@ -264,14 +264,14 @@ class RoomServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_나의_라운드도_종료되지_않은_상태여야_한다() {
+        void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_라운드도_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 5;
             Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
-            int myRound = 5;
+            int round = 5;
 
             // when
-            RoundFinishedResponse roundFinishedResponse = roomService.getMyRoundFinished(room.getId(), myRound);
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
 
             // then
             assertAll(

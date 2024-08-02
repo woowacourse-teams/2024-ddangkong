@@ -179,14 +179,14 @@ class RoomControllerTest extends BaseControllerTest {
     }
 
     @Nested
-    class 나의_라운드_종료_여부 {
+    class 라운드_종료_여부 {
 
         @Test
-        void 나의_라운드가_종료되었는지_조회한다() {
+        void 라운드가_종료되었는지_조회한다() {
             // when
             RoundFinishedResponse actual = RestAssured.given().log().all()
                     .pathParam("roomId", 1L)
-                    .queryParam("myRound", 1)
+                    .queryParam("round", 1)
                     .when().get("/api/balances/rooms/{roomId}/round-finished")
                     .then().log().all()
                     .statusCode(200)

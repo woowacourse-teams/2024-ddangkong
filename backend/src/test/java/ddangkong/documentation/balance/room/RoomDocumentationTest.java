@@ -238,19 +238,19 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     }
 
     @Nested
-    class 나의_라운드_종료_여부 {
+    class 라운드_종료_여부 {
 
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/round-finished";
 
         @Test
-        void 나의_라운드가_종료되었는지_조회한다() throws Exception {
+        void 라운드가_종료되었는지_조회한다() throws Exception {
             // given
             RoundFinishedResponse response = new RoundFinishedResponse(true, false);
-            when(roomService.getMyRoundFinished(anyLong(), anyInt())).thenReturn(response);
+            when(roomService.getRoundFinished(anyLong(), anyInt())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(ENDPOINT, 1)
-                            .param("myRound", "1")
+                            .param("round", "1")
                     )
                     .andExpect(status().isOk())
                     .andDo(document("room/roundFinished",
@@ -258,10 +258,10 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     parameterWithName("roomId").description("방 ID")
                             ),
                             queryParameters(
-                                    parameterWithName("myRound").description("나의 라운드")
+                                    parameterWithName("round").description("라운드")
                             ),
                             responseFields(
-                                    fieldWithPath("isRoundFinished").description("나의 라운드 종료 여부"),
+                                    fieldWithPath("isRoundFinished").description("라운드 종료 여부"),
                                     fieldWithPath("isGameFinished").description("게임 종료 여부")
                             )
                     ));
