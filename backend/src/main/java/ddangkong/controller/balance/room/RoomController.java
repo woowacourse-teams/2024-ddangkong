@@ -28,7 +28,6 @@ public class RoomController {
 
     private final RoomService roomService;
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/balances/rooms/{roomId}")
     public RoomInfoResponse getBalanceGameRoomInfo(@Positive @PathVariable Long roomId) {
         return roomService.findRoomInfo(roomId);
