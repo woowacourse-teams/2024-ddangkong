@@ -12,8 +12,12 @@ import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.controller.balance.room.dto.RoomSettingResponse;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomRepository;
+import ddangkong.domain.balance.room.RoomStatus;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
+import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -25,6 +29,9 @@ class RoomServiceTest extends BaseServiceTest {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Nested
     class 게임_방_정보_조회 {
@@ -192,6 +199,85 @@ class RoomServiceTest extends BaseServiceTest {
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
                             .formatted(10000, 30000, notValidTimeLimit));
+        }
+    }
+
+    @Nested
+    class 라운드_종료_여부 {
+
+        private static final int TOTAL_ROUND = 5;
+        private static final int TIME_LIMIT = 30_000;
+        private static final RoomStatus STATUS = RoomStatus.PROGRESS;
+        private static final Category CATEGORY = Category.EXAMPLE;
+
+        @Test
+        void 라운드가_종료되지_않았으면_게임도_종료되지_않은_상태여야_한다() {
+            // given
+            int currentRound = 2;
+            Room room = roomRepository.save(
+                    new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+            int round = 2;
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+
+            // then
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+            );
+        }
+
+        @Test
+        void 라운드가_종료되면_게임은_종료되지_않은_상태여야_한다() {
+            // given
+            int currentRound = 2;
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+            int round = 1;
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+
+            // then
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isTrue(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+            );
+        }
+
+        @Test
+        void 게임이_종료되면_라운드는_종료되지_않은_상태여야_한다() {
+            // given
+            int currentRound = 5;
+            RoomStatus status = RoomStatus.FINISH;
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY));
+            int round = 5;
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+
+            // then
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isTrue()
+            );
+        }
+
+        @Test
+        void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_라운드도_종료되지_않은_상태여야_한다() {
+            // given
+            int currentRound = 5;
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+            int round = 5;
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+
+            // then
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+            );
         }
     }
 }

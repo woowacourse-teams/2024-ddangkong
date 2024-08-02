@@ -9,4 +9,8 @@ public enum RoomStatus {
     public boolean isGameProgress() {
         return this == PROGRESS;
     }
+
+    public boolean isGameFinish() {
+        return this == FINISH;
+    }
 }

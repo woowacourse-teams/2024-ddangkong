@@ -10,7 +10,7 @@ include::{snippets}/room/create/curl-request.adoc[]
 
 include::{snippets}/room/create/http-request.adoc[]
 
-requestFields
+request fields
 
 include::{snippets}/room/create/request-fields.adoc[]
 
@@ -45,6 +45,22 @@ include::{snippets}/room/join/http-response.adoc[]
 response fields
 
 include::{snippets}/room/join/response-fields.adoc[]
+
+=== 방 설정 변경
+
+==== curl
+
+include::{snippets}/room/setting/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/setting/http-request.adoc[]
+
+include::{snippets}/room/setting/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/setting/http-response.adoc[]
 
 === 방 정보 조회
 
@@ -86,22 +102,24 @@ response fields
 
 include::{snippets}/room/next/response-fields.adoc[]
 
-=== 방 설정 변경
+    === 라운드 종료 여부
 
 ==== curl
 
-include::{snippets}/room/setting/curl-request.adoc[]
+include::{snippets}/room/roundFinished/curl-request.adoc[]
 
 ==== request
 
-include::{snippets}/room/setting/http-request.adoc[]
+include::{snippets}/room/roundFinished/http-request.adoc[]
 
-include::{snippets}/room/setting/path-parameters.adoc[]
+include::{snippets}/room/roundFinished/path-parameters.adoc[]
+
+include::{snippets}/room/roundFinished/query-parameters.adoc[]
 
 ==== response
 
-include::{snippets}/room/setting/http-response.adoc[]
+include::{snippets}/room/roundFinished/http-response.adoc[]
 
 response fields
 
-include::{snippets}/room/setting/response-fields.adoc[]
+include::{snippets}/room/roundFinished/response-fields.adoc[]

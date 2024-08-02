@@ -24,6 +24,7 @@ public class Room {
     private static final int MIN_TIME_LIMIT_MSEC = 10_000;
     private static final int MAX_TIME_LIMIT_MSEC = 30_000;
     private static final int START_ROUND = 1;
+    private static final int ALLOWED_ROUND_GAP = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,16 +47,16 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    public static Room createNewRoom() {
-        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, MAX_TIME_LIMIT_MSEC, RoomStatus.READY, Category.EXAMPLE);
-    }
-
     public Room(int totalRound, int currentRound, int timeLimit, RoomStatus status, Category category) {
         this.totalRound = totalRound;
         this.currentRound = currentRound;
         this.timeLimit = timeLimit;
         this.status = status;
         this.category = category;
+    }
+
+    public static Room createNewRoom() {
+        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, MAX_TIME_LIMIT_MSEC, RoomStatus.READY, Category.EXAMPLE);
     }
 
     public void moveToNextRound() {
@@ -92,5 +93,32 @@ public class Room {
 
     public boolean isGameProgress() {
         return status.isGameProgress();
+    }
+
+    public boolean isRoundFinished(int round) {
+        validateRound(round);
+        return currentRound != round;
+    }
+
+    private void validateRound(int round) {
+        if (round < START_ROUND) {
+            throw new BadRequestException("startRound보다 크거나 같아야 합니다. startRound : %d, round : %d"
+                    .formatted(START_ROUND, round)
+            );
+        }
+        if (round > currentRound) {
+            throw new BadRequestException("currentRound보다 작거나 같아야 합니다. currentRound : %d, round : %d"
+                    .formatted(currentRound, round)
+            );
+        }
+        if (currentRound - round > ALLOWED_ROUND_GAP) {
+            throw new BadRequestException("currentRound과 round의 차이는 %d이하여야 합니다. currentRound : %d, round : %d"
+                    .formatted(ALLOWED_ROUND_GAP, currentRound, round)
+            );
+        }
+    }
+
+    public boolean isAllRoundFinished() {
+        return currentRound == totalRound && status.isGameFinish();
     }
 }
