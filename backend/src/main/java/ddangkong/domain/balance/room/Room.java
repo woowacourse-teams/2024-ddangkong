@@ -82,6 +82,10 @@ public class Room {
         this.totalRound = totalRound;
     }
 
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
+
     private boolean canMoveToNextRound() {
         return currentRound < totalRound;
     }

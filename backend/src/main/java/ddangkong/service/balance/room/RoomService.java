@@ -78,5 +78,6 @@ public class RoomService {
 
         room.updateTimeLimit(request.timeLimit());
         room.updateTotalRound(request.totalRound());
+        room.updateCategory(request.category());
     }
 }
