@@ -58,13 +58,9 @@ public class BalanceVoteService {
 
     private void validateRoundEnded(Long roomId, Long contentId) {
         RoomContent roomContent = findValidRoomContent(roomId);
-        if (isNotCurrentContentId(contentId, roomContent) || roomContent.isRoundOver(LocalDateTime.now(clock))) {
+        if (roomContent.isNotSameContentId(contentId) || roomContent.isRoundOver(LocalDateTime.now(clock))) {
             throw new BadRequestException("유효하지 않은 라운드에는 투표할 수 없습니다.");
         }
-    }
-
-    private static boolean isNotCurrentContentId(Long contentId, RoomContent roomContent) {
-        return !Objects.equals(roomContent.getContentId(), contentId);
     }
 
     private RoomContent findValidRoomContent(Long roomId) {

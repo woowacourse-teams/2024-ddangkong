@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,6 +45,10 @@ public class RoomContent extends BaseEntity {
 
     public boolean isRoundOver(LocalDateTime currentTime) {
         return currentTime.isAfter(getRoundEndedAt());
+    }
+
+    public boolean isNotSameContentId(Long contentId) {
+        return !Objects.equals(getContentId(), contentId);
     }
 
     public Long getContentId() {
