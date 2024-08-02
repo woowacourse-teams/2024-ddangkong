@@ -9,6 +9,7 @@ import {
 } from './ReadyMembersContainer.styled';
 
 import crownIcon from '@/assets/images/crownIcon.png';
+import plusIcon from '@/assets/images/plusIcon.png';
 import { RoomMembers } from '@/types/room';
 
 interface ReadyMembersContainerProps extends RoomMembers {}
@@ -20,7 +21,9 @@ const ReadyMembersContainer = ({ members }: ReadyMembersContainerProps) => {
       <section css={membersContainer}>
         <ul css={memberList}>
           <li css={memberItem}>
-            <div css={profileBox}>+</div>
+            <div css={profileBox}>
+              <img src={plusIcon} alt="추가 아이콘" />
+            </div>
             <div>초대하기</div>
           </li>
           {members.map((member) => (

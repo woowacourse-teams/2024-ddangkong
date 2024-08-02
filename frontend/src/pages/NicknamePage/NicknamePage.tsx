@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
 import { profile, nicknameBox, nicknameInputWrapper, nicknameInput } from './NicknamePage.styled';
@@ -17,14 +17,13 @@ const NicknamePage = () => {
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const [{ isMaster }, setMemberInfo] = useRecoilState(memberInfoState);
-  const { search } = useLocation();
-  const roomId = Number(new URLSearchParams(search).get('roomId'));
+  const { roomId } = useParams();
   const nickname = nicknameInputRef.current?.value || randomNickname;
 
   const makeRoomMutation = useMutation<RoomAndMember, Error, string>({
     mutationFn: makeRoom,
     onSuccess: (data) => {
-      navigate(`/ready?roomId=${data.roomId}`);
+      navigate(`/ready/${data.roomId}`);
     },
     onError: (error: Error) => {},
   });
@@ -32,7 +31,7 @@ const NicknamePage = () => {
   const enterRoomMutation = useMutation<RoomInfo, Error, { nickname: string; roomId: number }>({
     mutationFn: ({ nickname, roomId }) => enterRoom(roomId, nickname),
     onSuccess: () => {
-      navigate(`/ready?roomId=${roomId}`);
+      navigate(`/ready/${roomId}`);
     },
     onError: (error: Error) => {},
   });
@@ -41,7 +40,7 @@ const NicknamePage = () => {
     if (isMaster) {
       makeRoomMutation.mutate(nickname);
     } else {
-      enterRoomMutation.mutate({ nickname, roomId });
+      enterRoomMutation.mutate({ nickname, roomId: Number(roomId) });
     }
   };
 

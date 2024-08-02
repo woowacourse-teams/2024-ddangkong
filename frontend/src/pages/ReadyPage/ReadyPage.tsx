@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import { readyPageLayout } from './ReadyPage.styled';
@@ -13,11 +13,10 @@ import { memberInfoState } from '@/recoil/atom';
 
 const ReadyPage = () => {
   const memberInfo = useRecoilValue(memberInfoState);
-  const { search } = useLocation();
-  const roomId = Number(new URLSearchParams(search).get('roomId'));
+  const { roomId } = useParams();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: [QUERY_KEYS.roomMembers, roomId],
+    queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
     queryFn: ({ queryKey: [_, roomId] }) => getRoomMembers(roomId as number),
     refetchInterval: 1000,
   });

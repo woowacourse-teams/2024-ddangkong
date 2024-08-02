@@ -24,11 +24,11 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: 'nickname',
+        path: 'nickname/:roomId?',
         element: <NicknamePage />,
       },
       {
-        path: 'ready',
+        path: 'ready/:roomId',
         element: <ReadyPage />,
       },
       {
