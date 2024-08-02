@@ -11,6 +11,8 @@ import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomContent;
+import ddangkong.domain.balance.room.RoomContentRepository;
 import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.domain.balance.room.RoomStatus;
 import ddangkong.exception.BadRequestException;
@@ -27,6 +29,9 @@ class RoomServiceTest extends BaseServiceTest {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private RoomContentRepository roomContentRepository;
 
     @Nested
     class 게임_방_정보_조회 {
@@ -120,9 +125,12 @@ class RoomServiceTest extends BaseServiceTest {
 
             // then
             Room room = roomRepository.getById(PROGRESS_ROOM_ID);
+            RoomContent roomContent = roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
+                    .orElseThrow();
             assertAll(
                     () -> assertThat(room.getCurrentRound()).isEqualTo(nextRound),
-                    () -> assertThat(room.isGameProgress()).isTrue()
+                    () -> assertThat(room.isGameProgress()).isTrue(),
+                    () -> assertThat(roomContent.getRoundEndedAt()).isNotNull()
             );
         }
 
