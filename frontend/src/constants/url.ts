@@ -8,6 +8,8 @@ export const API_URL = {
     `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/vote-result`,
   moveNextRound: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/contents`,
   finalResult: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/final`,
+  roundVoteIsFinished: (roomId: number, contentId: number) =>
+    `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/vote-finished`,
 };
 
 export const MOCK_API_URL = {
@@ -16,4 +18,5 @@ export const MOCK_API_URL = {
   roundVoteResult: '/api/balances/rooms/:roomId/contents/:contentId/vote-result',
   moveNextRound: '/api/balances/rooms/:roomId/contents',
   finalResult: '/api/balances/rooms/:roomId/final',
+  roundVoteIsFinished: 'api/balances/rooms/:roomId/contents/:contentId/vote-finished',
 };
