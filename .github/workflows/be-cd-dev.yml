@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 3
     runs-on: ubuntu-latest
     env:
       DOCKER_REPOSITORY_NAME: ddangkong/ddangkong-api-dev
@@ -54,6 +55,7 @@ jobs:
 
   deploy:
     needs: build
+    timeout-minutes: 1
     runs-on: [ self-hosted, linux, ARM64 ] # Self hosted runner 사용
     env:
       DOCKER_REPOSITORY_NAME: ddangkong/ddangkong-api-dev
@@ -66,17 +68,26 @@ jobs:
           username: ${{ secrets.DOCKER_GMAIL }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Pull docker image
-        run: sudo docker pull $DOCKER_REPOSITORY_NAME:latest
-
       - name: Stop and Remove previous Docker container
         run: |
           CONTAINER_ID=$(sudo docker ps -aqf name=$CONTAINER_NAME)
-          if [ -n ${CONTAINER_ID} ]; then
+          if [ -n "${CONTAINER_ID}" ]; then
           sudo docker rm -f ${CONTAINER_ID}
           else
-            echo "No previous container found with name. Skipping removal."
+          echo "No previous container found with name. Skipping removal."
           fi
+
+      - name: Remove previous Docker image
+        run: |    
+          IMAGE_ID=$(sudo docker images --filter=reference=ddangkong/ddangkong-api-dev --format "{{.ID}}")
+          if [ -n "${IMAGE_ID}" ]; then
+          sudo docker rmi ${IMAGE_ID}
+          else
+          echo "No previous image found with repository name. Skipping removal."
+          fi
+
+      - name: Pull docker image
+        run: sudo docker pull $DOCKER_REPOSITORY_NAME:latest
 
       - name: Run new Docker container
         run: |

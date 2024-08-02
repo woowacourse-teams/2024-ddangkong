@@ -8,6 +8,7 @@ import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
@@ -17,6 +18,7 @@ import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 class RoomControllerTest extends BaseControllerTest {
 
@@ -150,6 +152,29 @@ class RoomControllerTest extends BaseControllerTest {
                     .when().post("/api/balances/rooms/{roomId}/contents")
                     .then().log().all()
                     .statusCode(400);
+        }
+    }
+
+    @Nested
+    class 방_설정_변경 {
+
+        @Test
+        void 방_설정_정보를_변경한다() {
+            // given
+            int totalRound = 5;
+            int timeLimit = 10000;
+            Category category = Category.EXAMPLE;
+
+            RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);
+
+            // when & then
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .pathParam("roomId", 1L)
+                    .body(request)
+                    .when().patch("/api/balances/rooms/{roomId}")
+                    .then().log().all()
+                    .statusCode(HttpStatus.NO_CONTENT.value());
         }
     }
 

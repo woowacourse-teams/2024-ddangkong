@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
@@ -27,6 +28,7 @@ import ddangkong.controller.balance.room.RoomController;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.controller.balance.room.dto.RoomSettingResponse;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
@@ -127,9 +129,10 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             // given
             int totalRound = 5;
             int timeLimit = 30000;
+            Category category = Category.EXAMPLE;
             RoomInfoResponse response = new RoomInfoResponse(
                     false,
-                    new RoomSettingResponse(totalRound, timeLimit),
+                    new RoomSettingResponse(totalRound, timeLimit, category),
                     List.of(
                             new MemberResponse(1L, "땅콩", true),
                             new MemberResponse(2L, "타콩", false)
@@ -148,6 +151,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("roomSetting").type(OBJECT).description("현재 방 설정 값"),
                                     fieldWithPath("roomSetting.totalRound").type(NUMBER).description("전체 라운드"),
                                     fieldWithPath("roomSetting.timeLimit").type(NUMBER).description("라운드 당 시간제한(ms)"),
+                                    fieldWithPath("roomSetting.category").type(STRING).description("컨텐츠 카테고리"),
                                     fieldWithPath("members").type(ARRAY).description("방에 참여중 인원 목록"),
                                     fieldWithPath("members[].memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("members[].nickname").type(STRING).description("멤버 닉네임"),
@@ -197,6 +201,37 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("firstOption.name").type(STRING).description("첫 번째 선택지명"),
                                     fieldWithPath("secondOption.optionId").type(NUMBER).description("두 번째 선택지 ID"),
                                     fieldWithPath("secondOption.name").type(STRING).description("두 번째 선택지명")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    class 방_설정_변경 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}";
+
+        @Test
+        void 방의_설정_정보를_변경한다() throws Exception {
+            // given
+            int totalRound = 5;
+            int timeLimit = 30_000;
+            Category category = Category.EXAMPLE;
+            RoomSettingRequest content = new RoomSettingRequest(totalRound, timeLimit, category);
+
+            // then
+            mockMvc.perform(patch(ENDPOINT, 1L)
+                            .content(objectMapper.writeValueAsString(content))
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/setting",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            ),
+                            requestFields(
+                                    fieldWithPath("totalRound").type(NUMBER).description("변경할 총 라운드"),
+                                    fieldWithPath("timeLimit").type(NUMBER).description("변경할 제한 시간"),
+                                    fieldWithPath("category").type(STRING).description("변경할 카테고리")
                             )
                     ));
         }

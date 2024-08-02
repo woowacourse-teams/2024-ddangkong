@@ -46,6 +46,26 @@ response fields
 
 include::{snippets}/room/join/response-fields.adoc[]
 
+=== 방 설정 변경
+
+==== curl
+
+include::{snippets}/room/setting/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/setting/http-request.adoc[]
+
+include::{snippets}/room/setting/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/setting/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/setting/response-fields.adoc[]
+
 === 방 정보 조회
 
 ==== curl

@@ -3,12 +3,14 @@ package ddangkong.domain.balance.room;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class RoomTest {
 
@@ -35,7 +37,7 @@ class RoomTest {
             int totalRound = 5;
             int currentRound = 5;
             int timeLimit = 30000;
-            Room room = new Room(totalRound, currentRound, timeLimit, RoomStatus.PROGRESS);
+            Room room = new Room(totalRound, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
 
             // when & then
             assertThatThrownBy(room::moveToNextRound)
@@ -45,17 +47,48 @@ class RoomTest {
     }
 
     @Nested
+    class 방_설정_변경 {
+
+        @ParameterizedTest
+        @ValueSource(ints = {2, 11})
+        void 라운드는_3이상_10이하_여야한다(int notValidTotalRound) {
+            // given
+            Room room = Room.createNewRoom();
+
+            // when & then
+            assertThatThrownBy(() -> room.updateTotalRound(notValidTotalRound))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
+                            .formatted(3, 10, notValidTotalRound));
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = {9000, 31000})
+        void 시간_제한은_10000이상_30000이하_여야한다(int notValidTimeLimit) {
+            // given
+            Room room = Room.createNewRoom();
+
+            // when & then
+            assertThatThrownBy(() -> room.updateTimeLimit(notValidTimeLimit))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
+                            .formatted(10000, 30000, notValidTimeLimit));
+        }
+    }
+
+    @Nested
     class 라운드_종료 {
 
         private static final int TOTAL_ROUND = 5;
         private static final int TIME_LIMIT = 30;
         private static final RoomStatus STATUS = RoomStatus.PROGRESS;
+        private static final Category CATEGORY = Category.EXAMPLE;
 
         @Test
         void 나의_라운드가_방의_현재_라운드보다_작으면_나의_라운드는_종료된_것이다() {
             // given
             int currentRound = 2;
-            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS);
+            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
             int myRound = 1;
 
             // when & then
@@ -66,7 +99,7 @@ class RoomTest {
         void 나의_라운드와_방의_현재_라운드와_같으면_나의_라운드는_종료되지_않은_것이다() {
             // given
             int currentRound = 2;
-            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS);
+            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
             int myRound = 2;
 
             // when & then
@@ -76,7 +109,7 @@ class RoomTest {
         @Test
         void 나의_라운드가_방의_시작_라운드보다_작으면_예외가_발생한다() {
             // given
-            Room room = new Room(TOTAL_ROUND, 1, TIME_LIMIT, STATUS);
+            Room room = new Room(TOTAL_ROUND, 1, TIME_LIMIT, STATUS, CATEGORY);
             int invalidMyRound = 0;
 
             // when & then
@@ -89,7 +122,7 @@ class RoomTest {
         void 나의_라운드가_방의_현재_라운드보다_크면_예외가_발생한다() {
             // given
             int currentRound = 1;
-            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS);
+            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
             int invalidMyRound = 2;
 
             // when & then
@@ -102,7 +135,7 @@ class RoomTest {
         void 나의_라운드가_방의_현재_라운드보다_2이상_작으면_예외가_발생한다() {
             // given
             int currentRound = 4;
-            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS);
+            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
             int invalidMyRound = 2;
 
             // when & then
@@ -115,7 +148,7 @@ class RoomTest {
         void 현재_라운드와_전체_라운드가_같고_방_상태가_FINISH이면_방의_전체_라운드가_종료된_것이다() {
             // given
             RoomStatus status = RoomStatus.FINISH;
-            Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status);
+            Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
 
             // when & then
             assertThat(room.isAllRoundFinished()).isTrue();
@@ -126,7 +159,7 @@ class RoomTest {
             // given
             int currentRound = 3;
             int totalRound = 5;
-            Room room = new Room(totalRound, currentRound, TIME_LIMIT, STATUS);
+            Room room = new Room(totalRound, currentRound, TIME_LIMIT, STATUS, CATEGORY);
 
             // when & then
             assertThat(room.isAllRoundFinished()).isFalse();
@@ -136,7 +169,7 @@ class RoomTest {
         @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
         void 방_상태가_FINISH가_아니면_방의_전체_라운드가_종료되지_않은_것이다(RoomStatus status) {
             // given
-            Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status);
+            Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
 
             // when & then
             assertThat(room.isAllRoundFinished()).isFalse();
