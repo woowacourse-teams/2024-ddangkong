@@ -167,7 +167,7 @@ class RoomTest {
 
         @ParameterizedTest
         @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
-        void 방_상태가_FINISH가_아니면_방의_전체_라운드가_종료되지_않은_것이다(RoomStatus status) {
+        void 방_상태가_FINISH가_아니면_현재_라운드가_전체_라운드와_같아도_전체_라운드는_종료되지_않은_것이다(RoomStatus status) {
             // given
             Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
 
