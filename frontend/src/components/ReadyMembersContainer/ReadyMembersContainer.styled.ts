@@ -3,6 +3,12 @@ import { css } from '@emotion/react';
 import { Theme } from '@/styles/Theme';
 
 export const readyMembersContainerLayout = css`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+`;
+
+export const membersContainer = css`
   position: relative;
   height: 25rem;
   padding: 2rem 3rem 0;
@@ -57,4 +63,5 @@ export const memberStatus = css`
   display: flex;
   flex: 1;
   justify-content: space-between;
+  align-items: center;
 `;
