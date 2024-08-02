@@ -62,10 +62,6 @@ include::{snippets}/room/setting/path-parameters.adoc[]
 
 include::{snippets}/room/setting/http-response.adoc[]
 
-response fields
-
-include::{snippets}/room/setting/response-fields.adoc[]
-
 === 방 정보 조회
 
 ==== curl
