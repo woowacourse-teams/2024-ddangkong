@@ -24,9 +24,6 @@ const shake = keyframes`
     60%{
       transform: rotate(-10deg);
     }
-    70%{
-      transform: rotate(0deg);
-    }
     100%{
       transform: rotate(0deg);
     }
