@@ -125,7 +125,12 @@ class RoomControllerTest extends BaseControllerTest {
     class 다음_라운드_진행 {
 
         private static final BalanceContentResponse EXPECTED_RESPONSE = new BalanceContentResponse(
-                3L, Category.EXAMPLE, 5, 3, "다음 중 여행가고 싶은 곳은?",
+                3L,
+                Category.EXAMPLE,
+                5,
+                3,
+                30_000, // TODO 추후 sec으로 변경
+                "다음 중 여행가고 싶은 곳은?",
                 new BalanceOptionResponse(5L, "산"),
                 new BalanceOptionResponse(6L, "바다"));
 

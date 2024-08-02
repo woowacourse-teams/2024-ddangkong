@@ -40,7 +40,14 @@ class BalanceContentDocumentationTest extends BaseDocumentationTest {
             BalanceOptionResponse firstOptionResponse = new BalanceOptionResponse(1L, "100억 빚 송강");
             BalanceOptionResponse secondOptionResponse = new BalanceOptionResponse(2L, "100억 부자 송강호");
             BalanceContentResponse response = new BalanceContentResponse(
-                    1L, Category.EXAMPLE, 5, 2, "100억 빚 송강 vs 100억 부자 송강호", firstOptionResponse, secondOptionResponse
+                    1L,
+                    Category.EXAMPLE,
+                    5,
+                    2,
+                    30_000, // TODO sec 단위로 수정
+                    "100억 빚 송강 vs 100억 부자 송강호",
+                    firstOptionResponse,
+                    secondOptionResponse
             );
             when(balanceContentService.findRecentBalanceContent(anyLong())).thenReturn(response);
 
@@ -57,6 +64,7 @@ class BalanceContentDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("category").type(STRING).description("콘텐츠 카테고리"),
                                     fieldWithPath("totalRound").type(NUMBER).description("총 라운드 수"),
                                     fieldWithPath("currentRound").type(NUMBER).description("현재 라운드"),
+                                    fieldWithPath("timeLimit").type(NUMBER).description("라운드 제한시간"),
                                     fieldWithPath("question").type(STRING).description("콘텐츠 질문"),
                                     fieldWithPath("firstOption.optionId").type(NUMBER).description("첫 번째 선택지 ID"),
                                     fieldWithPath("firstOption.name").type(STRING).description("첫 번째 선택지명"),
