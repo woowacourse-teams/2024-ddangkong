@@ -2,7 +2,7 @@ package ddangkong.controller.balance.content.dto;
 
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.domain.balance.option.BalanceOption;
+import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.balance.room.RoomContent;
 import lombok.Builder;
 
@@ -18,14 +18,13 @@ public record BalanceContentResponse(
 
     @Builder
     private BalanceContentResponse(RoomContent roomContent,
-                                   BalanceOption firstOption,
-                                   BalanceOption secondOption) {
+                                   BalanceOptions balanceOptions) {
         this(roomContent.getContentId(),
                 roomContent.getContentCategory(),
                 roomContent.getTotalRound(),
                 roomContent.getRound(),
                 roomContent.getContentName(),
-                BalanceOptionResponse.from(firstOption),
-                BalanceOptionResponse.from(secondOption));
+                BalanceOptionResponse.from(balanceOptions.getFistOption()),
+                BalanceOptionResponse.from(balanceOptions.getSecondOption()));
     }
 }

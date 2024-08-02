@@ -2,12 +2,11 @@ package ddangkong.service.balance.room;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
+import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.controller.balance.room.dto.RoomMemberResponse;
-import ddangkong.controller.balance.room.dto.RoomMembersResponse;
-import ddangkong.domain.balance.content.BalanceContent;
-import ddangkong.domain.balance.option.BalanceOption;
+import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
+import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.balance.room.Room;
 import ddangkong.domain.balance.room.RoomContent;
 import ddangkong.domain.balance.room.RoomContentRepository;
@@ -15,7 +14,7 @@ import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
+import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,8 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class RoomService {
-
-    private static final int BALANCE_OPTION_SIZE = 2;
 
     private final RoomRepository roomRepository;
 
@@ -36,19 +33,16 @@ public class RoomService {
     private final BalanceOptionRepository balanceOptionRepository;
 
     @Transactional(readOnly = true)
-    public RoomMembersResponse findAllRoomMember(Long roomId) {
+    public RoomInfoResponse findRoomInfo(Long roomId) {
         Room room = roomRepository.getById(roomId);
+        List<Member> members = memberRepository.findAllByRoom(room);
 
-        List<RoomMemberResponse> response = memberRepository.findAllByRoom(room)
-                .stream()
-                .map(RoomMemberResponse::new)
-                .toList();
-        return new RoomMembersResponse(response);
+        return RoomInfoResponse.of(members, room);
     }
 
     @Transactional
     public RoomJoinResponse createRoom(String nickname) {
-        Room room = roomRepository.save(new Room());
+        Room room = roomRepository.save(Room.createNewRoom());
         Member member = memberRepository.save(Member.createMaster(nickname, room));
         return new RoomJoinResponse(room.getId(), new MemberResponse(member));
     }
@@ -66,11 +60,11 @@ public class RoomService {
         room.moveToNextRound();
 
         RoomContent roomContent = findCurrentRoomContent(room);
-        List<BalanceOption> balanceOptions = findBalanceOptions(roomContent.getBalanceContent());
+        BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(
+                roomContent.getBalanceContent());
         return BalanceContentResponse.builder()
                 .roomContent(roomContent)
-                .firstOption(balanceOptions.get(0))
-                .secondOption(balanceOptions.get(1))
+                .balanceOptions(balanceOptions)
                 .build();
     }
 
@@ -79,15 +73,18 @@ public class RoomService {
                 .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
     }
 
-    private List<BalanceOption> findBalanceOptions(BalanceContent balanceContent) {
-        List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
-        validateBalanceOptions(balanceOptions);
-        return balanceOptions;
+    @Transactional
+    public void updateRoomSetting(Long roomId, RoomSettingRequest request) {
+        Room room = roomRepository.getById(roomId);
+
+        room.updateTimeLimit(request.timeLimit());
+        room.updateTotalRound(request.totalRound());
+        room.updateCategory(request.category());
     }
 
-    private void validateBalanceOptions(List<BalanceOption> balanceOptions) {
-        if (balanceOptions.size() != BALANCE_OPTION_SIZE) {
-            throw new InternalServerException("밸런스 게임의 선택지가 %d개입니다".formatted(balanceOptions.size()));
-        }
+    @Transactional(readOnly = true)
+    public RoundFinishedResponse getRoundFinished(Long roomId, int round) {
+        Room room = roomRepository.getById(roomId);
+        return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished());
     }
 }

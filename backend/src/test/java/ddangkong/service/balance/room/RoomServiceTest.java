@@ -2,18 +2,27 @@ package ddangkong.service.balance.room;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
+import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.controller.balance.room.dto.RoomSettingRequest;
+import ddangkong.controller.balance.room.dto.RoomSettingResponse;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomRepository;
+import ddangkong.domain.balance.room.RoomStatus;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
-import ddangkong.controller.balance.room.dto.RoomMembersResponse;
+import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class RoomServiceTest extends BaseServiceTest {
@@ -21,19 +30,28 @@ class RoomServiceTest extends BaseServiceTest {
     @Autowired
     private RoomService roomService;
 
+    @Autowired
+    private RoomRepository roomRepository;
+
     @Nested
-    class 게임_방_전체_멤버_조회 {
+    class 게임_방_정보_조회 {
 
         @Test
-        void 게임_방_전쳬_멤버_조회() {
-            // given
-            Long roomId = 1L;
-
+        void 게임_방_정보를_조회한다() {
             // when
-            RoomMembersResponse actual = roomService.findAllRoomMember(roomId);
+            RoomJoinResponse room = roomService.createRoom("방장");
+            roomService.joinRoom("멤버1", room.roomId());
+            roomService.joinRoom("멤버2", room.roomId());
 
             // then
-            Assertions.assertThat(actual.members()).hasSize(4);
+            RoomInfoResponse actual = roomService.findRoomInfo(room.roomId());
+
+            assertAll(
+                    () -> Assertions.assertThat(actual.members()).hasSize(3),
+                    () -> Assertions.assertThat(actual.isGameStart()).isFalse(),
+                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
+                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
+            );
         }
     }
 
@@ -41,7 +59,7 @@ class RoomServiceTest extends BaseServiceTest {
     class 방_생성 {
 
         @Test
-        void 방_생성_시_멤버를_생성하고_방을_생성한다() {
+        void 방_생성_시_방장_멤버를_생성하고_방을_생성한다() {
             // given
             String nickname = "나는방장";
             MemberResponse expectedMemberResponse = new MemberResponse(7L, nickname, true);
@@ -119,6 +137,147 @@ class RoomServiceTest extends BaseServiceTest {
             assertThatThrownBy(() -> roomService.moveToNextRound(NOT_PROGRESSED_ROOM_ID))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
+        }
+    }
+
+    @Nested
+    class 방_설정_변경 {
+
+        @Test
+        void 방_설정_정보를_변경한다() {
+            // given
+            Long roomId = 2L;
+            int totalRound = 5;
+            int timeLimit = 10000;
+            Category category = Category.EXAMPLE;
+
+            RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);
+
+            // when
+            roomService.updateRoomSetting(roomId, request);
+
+            // then
+            RoomInfoResponse roomInfo = roomService.findRoomInfo(roomId);
+            RoomSettingResponse roomSetting = roomInfo.roomSetting();
+
+            assertAll(
+                    () -> assertThat(roomSetting.totalRound()).isEqualTo(totalRound),
+                    () -> assertThat(roomSetting.timeLimit()).isEqualTo(timeLimit),
+                    () -> assertThat(roomSetting.category()).isEqualTo(category)
+            );
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = {2, 11})
+        void 라운드는_3이상_10이하_여야한다(int notValidTotalRound) {
+            // given
+            Long roomId = 2L;
+            int timeLimit = 10000;
+            Category category = Category.EXAMPLE;
+
+            RoomSettingRequest request = new RoomSettingRequest(notValidTotalRound, timeLimit, category);
+
+            // when & then
+            assertThatThrownBy(() -> roomService.updateRoomSetting(roomId, request))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
+                            .formatted(3, 10, notValidTotalRound));
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = {9000, 31000})
+        void 시간_제한은_10000이상_30000이하_여야한다(int notValidTimeLimit) {
+            // given
+            Long roomId = 2L;
+            int totalRound = 5;
+            Category category = Category.EXAMPLE;
+
+            RoomSettingRequest request = new RoomSettingRequest(totalRound, notValidTimeLimit, category);
+
+            // when & then
+            assertThatThrownBy(() -> roomService.updateRoomSetting(roomId, request))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
+                            .formatted(10000, 30000, notValidTimeLimit));
+        }
+    }
+
+    @Nested
+    class 라운드_종료_여부 {
+
+        private static final int TOTAL_ROUND = 5;
+        private static final int TIME_LIMIT = 30_000;
+        private static final RoomStatus STATUS = RoomStatus.PROGRESS;
+        private static final Category CATEGORY = Category.EXAMPLE;
+
+        @Test
+        void 라운드가_종료되지_않았으면_게임도_종료되지_않은_상태여야_한다() {
+            // given
+            int currentRound = 2;
+            Room room = roomRepository.save(
+                    new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+            int round = 2;
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+
+            // then
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+            );
+        }
+
+        @Test
+        void 라운드가_종료되면_게임은_종료되지_않은_상태여야_한다() {
+            // given
+            int currentRound = 2;
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+            int round = 1;
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+
+            // then
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isTrue(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+            );
+        }
+
+        @Test
+        void 게임이_종료되면_라운드는_종료되지_않은_상태여야_한다() {
+            // given
+            int currentRound = 5;
+            RoomStatus status = RoomStatus.FINISH;
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY));
+            int round = 5;
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+
+            // then
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isTrue()
+            );
+        }
+
+        @Test
+        void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_라운드도_종료되지_않은_상태여야_한다() {
+            // given
+            int currentRound = 5;
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+            int round = 5;
+
+            // when
+            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+
+            // then
+            assertAll(
+                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+            );
         }
     }
 }
