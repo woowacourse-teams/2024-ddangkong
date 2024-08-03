@@ -5,13 +5,12 @@ import { bottomButtonLayout } from '../Button/Button.styled';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 interface SelectButtonProps {
-  isDisabled: boolean;
   selectedId: number;
 }
 
-const SelectButton = ({ isDisabled, selectedId }: SelectButtonProps) => {
+const SelectButton = ({ selectedId }: SelectButtonProps) => {
   const { balanceContent } = useBalanceContentQuery();
-  const { mutate: selectComplete } = useSelectCompleteMutation({
+  const { data, mutate: selectComplete } = useSelectCompleteMutation({
     selectedId,
     contentId: balanceContent?.contentId,
   });
@@ -20,8 +19,8 @@ const SelectButton = ({ isDisabled, selectedId }: SelectButtonProps) => {
     <div css={bottomButtonLayout}>
       <Button
         style={{ width: '100%' }}
-        disabled={isDisabled}
-        text="선택"
+        disabled={data || !selectedId}
+        text={data ? '선택 완료' : '선택'}
         onClick={selectComplete}
       />
     </div>

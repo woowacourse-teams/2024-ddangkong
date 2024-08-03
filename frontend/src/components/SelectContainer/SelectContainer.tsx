@@ -49,7 +49,7 @@ const SelectContainer = () => {
               handleSelectOption={handleSelectOption}
             />
           </section>
-          <SelectButton isDisabled={!selectedId} selectedId={selectedId} />
+          <SelectButton selectedId={selectedId} />
         </div>
       )}
     </>
