@@ -1,7 +1,7 @@
-INSERT INTO room (total_round, current_round, time_limit, status)
-VALUES (5, 2, 30000, 'PROGRESS'),
-       (5, 1, 30000, 'PROGRESS'),
-       (5, 1, 30000, 'PROGRESS');
+INSERT INTO room (total_round, current_round, time_limit, status, category)
+VALUES (5, 2, 30000, 'PROGRESS', 'EXAMPLE'),
+       (5, 1, 30000, 'PROGRESS', 'EXAMPLE'),
+       (5, 1, 30000, 'PROGRESS', 'EXAMPLE');
 
 INSERT INTO member (nickname, room_id, is_master)
 VALUES ('mohamedeu al katan', 1, true),

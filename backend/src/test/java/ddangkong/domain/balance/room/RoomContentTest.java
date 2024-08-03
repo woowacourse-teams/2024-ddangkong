@@ -23,7 +23,7 @@ class RoomContentTest {
             // given
             int currentRound = 1;
             int timeLimit = 10_000;
-            Room room = new Room(5, currentRound, timeLimit, RoomStatus.PROGRESS);
+            Room room = new Room(5, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
             RoomContent roomContent = RoomContent.createNewRoom(room, BALANCE_CONTENT, currentRound);
             int expectedAfterSec = (timeLimit + 2_000) / 1_000;
             LocalDateTime expectedRoundEnded = CURRENT_TIME.plusSeconds(expectedAfterSec);
@@ -39,7 +39,7 @@ class RoomContentTest {
         void 이미_라운드가_시작되었다면_예외를_던진다() {
             // given
             int currentRound = 1;
-            Room room = new Room(5, currentRound, 10_000, RoomStatus.PROGRESS);
+            Room room = new Room(5, currentRound, 10_000, RoomStatus.PROGRESS, Category.EXAMPLE);
             RoomContent roomContent = RoomContent.createNewRoom(room, BALANCE_CONTENT, currentRound);
             roomContent.startRound(CURRENT_TIME);
 
@@ -54,7 +54,7 @@ class RoomContentTest {
             // given
             int roomRound = 1;
             int roomContentRound = 2;
-            Room room = new Room(5, roomRound, 10_000, RoomStatus.PROGRESS);
+            Room room = new Room(5, roomRound, 10_000, RoomStatus.PROGRESS, Category.EXAMPLE);
             RoomContent roomContent = RoomContent.createNewRoom(room, BALANCE_CONTENT, roomContentRound);
 
             // when & then

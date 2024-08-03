@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import ddangkong.controller.BaseControllerTest;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.controller.balance.room.dto.RoomSettingRequest;
+import ddangkong.domain.balance.content.Category;
+import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.HashMap;
@@ -13,6 +16,7 @@ import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 class RoomControllerTest extends BaseControllerTest {
 
@@ -137,6 +141,51 @@ class RoomControllerTest extends BaseControllerTest {
                     .when().patch("/api/balances/rooms/{roomId}/next-round")
                     .then().log().all()
                     .statusCode(400);
+        }
+    }
+
+    @Nested
+    class 방_설정_변경 {
+
+        @Test
+        void 방_설정_정보를_변경한다() {
+            // given
+            int totalRound = 5;
+            int timeLimit = 10000;
+            Category category = Category.EXAMPLE;
+
+            RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);
+
+            // when & then
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .pathParam("roomId", 1L)
+                    .body(request)
+                    .when().patch("/api/balances/rooms/{roomId}")
+                    .then().log().all()
+                    .statusCode(HttpStatus.NO_CONTENT.value());
+        }
+    }
+
+    @Nested
+    class 라운드_종료_여부 {
+
+        @Test
+        void 라운드가_종료되었는지_조회한다() {
+            // when
+            RoundFinishedResponse actual = RestAssured.given().log().all()
+                    .pathParam("roomId", 1L)
+                    .queryParam("round", 1)
+                    .when().get("/api/balances/rooms/{roomId}/round-finished")
+                    .then().log().all()
+                    .statusCode(200)
+                    .extract().as(RoundFinishedResponse.class);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.isRoundFinished()).isTrue(),
+                    () -> assertThat(actual.isGameFinished()).isFalse()
+            );
         }
     }
 }

@@ -5,11 +5,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import ddangkong.controller.BaseControllerTest;
 import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
 import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
+import ddangkong.support.config.TestClockConfig;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.Import;
 
+@Import(TestClockConfig.class)
 class BalanceVoteControllerTest extends BaseControllerTest {
 
     @Nested
@@ -21,7 +24,7 @@ class BalanceVoteControllerTest extends BaseControllerTest {
         private static final BalanceVoteResponse EXPECTED_RESPONSE = new BalanceVoteResponse(1L);
 
         @Test
-        void 현재_방의_질문을_조회할_수_있다() {
+        void 현재_방에서_투표할_수_있다() {
             // given & when
             BalanceVoteResponse actual = RestAssured.given().log().all()
                     .body(NORMAL_REQUEST).contentType(ContentType.JSON)

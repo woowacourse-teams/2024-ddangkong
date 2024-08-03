@@ -3,6 +3,7 @@ package ddangkong.service.balance.room;
 import ddangkong.controller.balance.member.dto.MemberResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.domain.balance.room.Room;
 import ddangkong.domain.balance.room.RoomContent;
 import ddangkong.domain.balance.room.RoomContentRepository;
@@ -10,6 +11,7 @@ import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.InternalServerException;
+import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +51,15 @@ public class RoomService {
     }
 
     @Transactional
+    public void updateRoomSetting(Long roomId, RoomSettingRequest request) {
+        Room room = roomRepository.getById(roomId);
+
+        room.updateTimeLimit(request.timeLimit());
+        room.updateTotalRound(request.totalRound());
+        room.updateCategory(request.category());
+    }
+
+    @Transactional
     public void moveToNextRound(Long roomId) {
         Room room = roomRepository.getById(roomId);
         room.moveToNextRound();
@@ -62,5 +73,11 @@ public class RoomService {
     private RoomContent getCurrentRoomContent(Room room) {
         return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
                 .orElseThrow(() -> new InternalServerException("해당 룸에서 진행 중인 라운드 컨텐츠가 존재하지 않습니다."));
+    }
+
+    @Transactional(readOnly = true)
+    public RoundFinishedResponse getRoundFinished(Long roomId, int round) {
+        Room room = roomRepository.getById(roomId);
+        return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished());
     }
 }

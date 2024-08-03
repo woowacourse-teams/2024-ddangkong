@@ -12,11 +12,14 @@ import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
 import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
+import ddangkong.support.config.TestClockConfig;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 
+@Import(TestClockConfig.class)
 class BalanceVoteServiceTest extends BaseServiceTest {
 
     @Autowired
@@ -45,8 +48,8 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         @Test
         void 질문에_해당하는_선택지가_아닌_경우_예외를_던진다() {
             // given
-            Long optionId = 1L;
-            Long contentId = 2L;
+            Long optionId = 3L;
+            Long contentId = 1L;
             Long memberId = 1L;
             Long roomId = 1L;
 
@@ -63,13 +66,43 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             Long optionId = 1L;
             Long contentId = 1L;
             Long memberId = 1L;
-            Long roomId = 2L;
+            Long roomId = 3L;
 
             // when & then
             assertThatThrownBy(() -> balanceVoteService.createBalanceVote(
                     new BalanceVoteRequest(memberId, optionId), roomId, contentId))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방의 멤버가 존재하지 않습니다.");
+        }
+
+        @Test
+        void 투표_시간이_지난_이후_투표_시_예외를_던진다() {
+            // given
+            Long optionId = 3L;
+            Long contentId = 2L;
+            Long memberId = 1L;
+            Long roomId = 1L;
+
+            // when & then
+            assertThatThrownBy(() -> balanceVoteService.createBalanceVote(
+                    new BalanceVoteRequest(memberId, optionId), roomId, contentId))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("유효하지 않은 라운드에는 투표할 수 없습니다.");
+        }
+
+        @Test
+        void 아직_진행하지_않은_컨텐츠에_투표_시_예외를_던진다() {
+            // given
+            Long optionId = 5L;
+            Long contentId = 3L;
+            Long memberId = 1L;
+            Long roomId = 1L;
+
+            // when & then
+            assertThatThrownBy(() -> balanceVoteService.createBalanceVote(
+                    new BalanceVoteRequest(memberId, optionId), roomId, contentId))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("유효하지 않은 라운드에는 투표할 수 없습니다.");
         }
     }
 
