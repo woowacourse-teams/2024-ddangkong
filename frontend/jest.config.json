@@ -9,5 +9,6 @@
     "test-utils": "<rootDir>/src/utils/test-utils"
   },
   "setupFiles": ["./jest.polyfills.js"],
-  "setupFilesAfterEnv": ["<rootDir>/jest.setup.ts"]
+  "setupFilesAfterEnv": ["<rootDir>/jest.setup.ts"],
+  "clearMocks": true
 }
