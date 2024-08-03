@@ -1,9 +1,10 @@
 package ddangkong.controller.balance.vote;
 
-import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
 import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
+import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.service.balance.vote.BalanceVoteService;
+import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,11 @@ public class BalanceVoteController {
                                                  @PathVariable @Positive Long contentId,
                                                  @RequestBody @Valid BalanceVoteRequest request) {
         return balanceVoteService.createBalanceVote(request, roomId, contentId);
+    }
+
+    @GetMapping("/balances/rooms/{roomId}/contents/{contentId}/vote-finished")
+    public VoteFinishedResponse getAllVoteFinished(@PathVariable @Positive Long roomId,
+                                                   @PathVariable @Positive Long contentId) {
+        return balanceVoteService.getAllVoteFinished(roomId, contentId);
     }
 }
