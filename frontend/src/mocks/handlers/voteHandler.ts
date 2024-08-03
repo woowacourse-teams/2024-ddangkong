@@ -6,7 +6,6 @@ import MY_GAME_STATUS from '../data/myGameStatus.json';
 import VOTE_RESULT from '../data/roundVoteResult.json';
 
 import { MOCK_API_URL } from '@/constants/url';
-import { BalanceContent } from '@/types/balanceContent';
 import { RoundVoteResult } from '@/types/roundVoteResult';
 
 const voteBalanceContentHandler = async ({ request }: { request: Request }) => {
@@ -26,6 +25,7 @@ const fetchVoteResultHandler = async () => {
 
 const goToNextRoundHandler = () => {
   BALANCE_CONTENT.currentRound += 1;
+  MY_GAME_STATUS.isRoundFinished = true;
   return HttpResponse.json({ state: 204 });
 };
 
@@ -33,18 +33,9 @@ const fetchFinalResultHandler = async () => {
   return HttpResponse.json(FINAL_RESULT);
 };
 
-const checkMyGameStatusHandler = () => {
-  setTimeout(() => {
-    MY_GAME_STATUS.isRoundFinished = true;
-  }, 5 * 1000);
-
-  return HttpResponse.json(MY_GAME_STATUS);
-};
-
 export const voteHandler = [
   http.post(MOCK_API_URL.vote, voteBalanceContentHandler),
   http.get(MOCK_API_URL.roundVoteResult, fetchVoteResultHandler),
-  http.get(MOCK_API_URL.myGameStatus, checkMyGameStatusHandler),
   http.patch(MOCK_API_URL.moveNextRound, goToNextRoundHandler),
   http.get(MOCK_API_URL.finalResult, fetchFinalResultHandler),
 ];
