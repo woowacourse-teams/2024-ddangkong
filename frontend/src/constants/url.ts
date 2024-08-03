@@ -7,6 +7,8 @@ export const API_URL = {
   roundVoteResult: (roomId: number, contentId: number) =>
     `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/vote-result`,
   moveNextRound: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/contents`,
+  myGameStatus: (roomId: number, round: number) =>
+    `${BASE_URL}/api/balances/rooms/${roomId}?round=${round}`,
   finalResult: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/final`,
 };
 
