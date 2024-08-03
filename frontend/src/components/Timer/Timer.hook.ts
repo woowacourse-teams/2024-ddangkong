@@ -5,7 +5,7 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 const INITIAL_WIDTH = 100;
 const DELAY = 1000;
 
-const useRoundTimer = () => {
+export const useRoundTimer = () => {
   const { balanceContent } = useBalanceContentQuery();
   const timeLimit = balanceContent?.timeLimit || 30;
 
@@ -39,5 +39,3 @@ const useRoundTimer = () => {
 
   return { timerCount, barWidth, isAlmostFinished };
 };
-
-export { useRoundTimer };
