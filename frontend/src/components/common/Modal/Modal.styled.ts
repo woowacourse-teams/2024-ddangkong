@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 import { ModalProps } from './Modal';
 
-import { Theme } from '@/styles/Theme';
+import { borderRadius, Theme } from '@/styles/Theme';
 
 export const modalBackdropLayout = css`
   display: flex;
@@ -19,8 +19,8 @@ export const modalContentWrapper = ({ position }: Pick<ModalProps, 'position'>) 
   position: fixed;
   left: 50%;
   flex-direction: column;
-  width: 24rem;
   gap: 1.6rem;
+  width: 24rem;
   height: fit-content;
   max-height: 70vh;
   min-height: 1.2rem;
@@ -28,7 +28,7 @@ export const modalContentWrapper = ({ position }: Pick<ModalProps, 'position'>) 
   margin: 0;
   padding: 2.4rem 3.2rem;
   border: none;
-  border-radius: 0.8rem;
+  border-radius: ${borderRadius.radius10};
 
   background-color: white;
   box-sizing: border-box;
@@ -113,14 +113,13 @@ export const modalTextButton = ({
   height: ${buttonHeight};
   padding: 1rem;
   border: none;
+  border-radius: 0.8rem;
 
   background-color: ${backgroundColor};
 
   color: ${fontColor};
   font-weight: bold;
   font-size: ${fontSize};
-  border-radius: 0;
-  border-radius: 0.8rem;
 
   &:focus {
     outline: none;
