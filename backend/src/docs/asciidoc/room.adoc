@@ -81,7 +81,3 @@ include::{snippets}/room/next/path-parameters.adoc[]
 ==== response
 
 include::{snippets}/room/next/http-response.adoc[]
-
-response fields
-
-include::{snippets}/room/next/response-fields.adoc[]
