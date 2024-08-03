@@ -63,6 +63,19 @@ public class RoomContent extends BaseEntity {
         return !Objects.equals(getContentId(), contentId);
     }
 
+    public void validateAlreadyUsed() {
+        if (isUsed) {
+            throw new BadRequestException("이미 사용된 컨텐츠입니다.");
+        }
+    }
+
+    public void validateSameRound(int round) {
+        if (this.round != round) {
+            throw new BadRequestException("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : %d, 요청한 라운드 : %d"
+                    .formatted(this.round, round));
+        }
+    }
+
     public Long getContentId() {
         return balanceContent.getId();
     }
@@ -84,18 +97,5 @@ public class RoomContent extends BaseEntity {
             throw new BadRequestException("라운드 종료 시간이 설정되지 않습니다.");
         }
         return roundEndedAt;
-    }
-
-    public void validateAlreadyUsed() {
-        if (isUsed) {
-            throw new BadRequestException("이미 사용된 컨텐츠입니다.");
-        }
-    }
-
-    public void validateSameRound(int round) {
-        if (this.round != round) {
-            throw new BadRequestException("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : %d, 요청한 라운드 : %d"
-                    .formatted(this.round, round));
-        }
     }
 }
