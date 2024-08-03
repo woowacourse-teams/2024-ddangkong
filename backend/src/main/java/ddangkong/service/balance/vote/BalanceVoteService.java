@@ -19,6 +19,7 @@ import ddangkong.domain.balance.vote.BalanceVoteRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
+import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -119,5 +120,29 @@ public class BalanceVoteService {
         if (!Objects.equals(balanceContent.getId(), balanceContentId)) {
             throw new BadRequestException("현재 진행중인 질문의 컨텐츠와 일치하지 않는 요청입니다.");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public VoteFinishedResponse getAllVoteFinished(Long roomId, Long contentId) {
+        Room room = roomRepository.getById(roomId);
+        BalanceContent balanceContent = balanceContentRepository.getById(contentId);
+        if (isRoundFinished(room, balanceContent)) {
+            return VoteFinishedResponse.roundFinished();
+        }
+        return VoteFinishedResponse.allVoteFinished(isAllVoteFinished(room, balanceContent));
+    }
+
+    private boolean isRoundFinished(Room room, BalanceContent balanceContent) {
+        RoomContent roomContent = roomContentRepository.getByRoomAndBalanceContent(room, balanceContent);
+        roomContent.validateSameRound(room.getCurrentRound());
+        roomContent.validateAlreadyUsed();
+        return roomContent.isRoundOver(LocalDateTime.now(clock));
+    }
+
+    private boolean isAllVoteFinished(Room room, BalanceContent balanceContent) {
+        List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
+        Long voteCount = balanceVoteRepository.countByMemberRoomAndBalanceOptionIn(room, balanceOptions);
+        List<Member> members = memberRepository.findAllByRoom(room);
+        return voteCount == members.size();
     }
 }

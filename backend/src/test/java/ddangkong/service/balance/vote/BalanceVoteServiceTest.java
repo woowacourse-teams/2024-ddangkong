@@ -1,5 +1,12 @@
 package ddangkong.service.balance.vote;
 
+import static ddangkong.support.fixture.MemberFixture.EDEN;
+import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
+import static ddangkong.support.fixture.MemberFixture.MARU;
+import static ddangkong.support.fixture.MemberFixture.POME;
+import static ddangkong.support.fixture.MemberFixture.PRIN;
+import static ddangkong.support.fixture.MemberFixture.SUNDAY;
+import static ddangkong.support.fixture.MemberFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -10,10 +17,20 @@ import ddangkong.controller.balance.option.dto.BalanceOptionTotalResponse;
 import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
 import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
 import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
+import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.content.Category;
+import ddangkong.domain.balance.option.BalanceOption;
+import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomContent;
+import ddangkong.domain.balance.vote.BalanceVote;
+import ddangkong.domain.member.Member;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
+import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
 import ddangkong.support.annotation.FixedClock;
+import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,6 +156,134 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> balanceVoteService.findBalanceVoteResult(1L, 2L))
                     .isInstanceOf(BadRequestException.class);
+        }
+    }
+
+    @Nested
+    @FixedClock(date = "2024-08-03", time = "11:00:00")
+    class 모두_투표했는지_조회 {
+
+        private static final LocalDateTime ROUND_ENDED_AT = LocalDateTime.parse("2024-08-03T11:00:10");
+        private static final boolean IS_USED = false;
+
+        private Room myRoom;
+
+        private BalanceContent aVsB;
+
+        private BalanceOption optionA;
+
+        private BalanceOption optionB;
+
+        private Member prin;
+
+        private Member tacan;
+
+        private Member keochan;
+
+        private Member eden;
+
+        @BeforeEach
+        void setUp() {
+            aVsB = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            optionA = balanceOptionRepository.save(new BalanceOption("A", aVsB));
+            optionB = balanceOptionRepository.save(new BalanceOption("B", aVsB));
+            BalanceContent cVsD = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "C vs D"));
+            BalanceOption optionC = balanceOptionRepository.save(new BalanceOption("C", cVsD));
+            BalanceOption optionD = balanceOptionRepository.save(new BalanceOption("D", cVsD));
+
+            myRoom = roomRepository.save(Room.createNewRoom());
+            prin = memberRepository.save(PRIN.master(myRoom));
+            tacan = memberRepository.save(TACAN.common(myRoom));
+            keochan = memberRepository.save(KEOCHAN.common(myRoom));
+            eden = memberRepository.save(EDEN.common(myRoom));
+
+            Room anotherRoom = roomRepository.save(Room.createNewRoom());
+            Member sunday = memberRepository.save(SUNDAY.master(anotherRoom));
+            Member maru = memberRepository.save(MARU.common(anotherRoom));
+            Member pome = memberRepository.save(POME.common(anotherRoom));
+
+            balanceVoteRepository.save(new BalanceVote(optionA, sunday));
+            balanceVoteRepository.save(new BalanceVote(optionB, maru));
+            balanceVoteRepository.save(new BalanceVote(optionC, prin));
+            balanceVoteRepository.save(new BalanceVote(optionD, tacan));
+        }
+
+        @Test
+        void 방의_모든_멤버가_컨텐츠에_투표하면_모두_투표한_것이다() {
+            // given
+            int roomContentRound = 1;
+            roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, ROUND_ENDED_AT, IS_USED));
+            balanceVoteRepository.save(new BalanceVote(optionA, prin));
+            balanceVoteRepository.save(new BalanceVote(optionA, tacan));
+            balanceVoteRepository.save(new BalanceVote(optionB, keochan));
+            balanceVoteRepository.save(new BalanceVote(optionB, eden));
+
+            // when
+            VoteFinishedResponse actual = balanceVoteService.getAllVoteFinished(myRoom.getId(), aVsB.getId());
+
+            // then
+            assertThat(actual.isFinished()).isTrue();
+        }
+
+        @Test
+        @FixedClock(date = "2024-08-03", time = "11:00:11")
+        void 컨텐츠의_투표_제한_시간이_지나면_모두_투표한_것이다() {
+            // given
+            int roomContentRound = 1;
+            roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, ROUND_ENDED_AT, IS_USED));
+
+            // when
+            VoteFinishedResponse actual = balanceVoteService.getAllVoteFinished(myRoom.getId(), aVsB.getId());
+
+            // then
+            assertThat(actual.isFinished()).isTrue();
+        }
+
+        @Test
+        void 투표_제한_시간이_지나지_않고_방의_모든_멤버가_투표하지_않았으면_모두_투표하지_않은_것이다() {
+            // given
+            int roomContentRound = 1;
+            roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, ROUND_ENDED_AT, IS_USED));
+            balanceVoteRepository.save(new BalanceVote(optionA, prin));
+            balanceVoteRepository.save(new BalanceVote(optionA, tacan));
+
+            // when
+            VoteFinishedResponse actual = balanceVoteService.getAllVoteFinished(myRoom.getId(), aVsB.getId());
+
+            // then
+            assertThat(actual.isFinished()).isFalse();
+        }
+
+        @Test
+        void 방에_존재하지_않은_방_컨텐츠이면_예외가_발생한다() {
+            // when & then
+            assertThatThrownBy(() -> balanceVoteService.getAllVoteFinished(myRoom.getId(), aVsB.getId()))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("방에 존재하지 않은 컨텐츠입니다.");
+        }
+
+        @Test
+        void 방의_라운드와_방_컨텐츠의_라운드가_다르면_예외가_발생한다() {
+            // given
+            int roomContentRound = 2;
+            roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, ROUND_ENDED_AT, IS_USED));
+
+            // when & then
+            assertThatThrownBy(() -> balanceVoteService.getAllVoteFinished(myRoom.getId(), aVsB.getId()))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 요청한 라운드 : 1");
+        }
+
+        @Test
+        void 이미_사용된_방_컨텐츠이면_예외가_발생한다() {
+            // given
+            int roomContentRound = 1;
+            roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, ROUND_ENDED_AT, true));
+
+            // when & then
+            assertThatThrownBy(() -> balanceVoteService.getAllVoteFinished(myRoom.getId(), aVsB.getId()))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("이미 사용된 컨텐츠입니다.");
         }
     }
 }
