@@ -48,4 +48,10 @@ public class RoomController {
     public BalanceContentResponse moveToNextRound(@PathVariable @Positive Long roomId) {
         return roomService.moveToNextRound(roomId);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/balances/rooms/{roomId}/start")
+    public void startGame(@PathVariable @Positive Long roomId) {
+        roomService.startGame(roomId);
+    }
 }
