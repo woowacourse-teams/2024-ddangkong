@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useRoundIsFinishedQuery } from './SelectContainer.hook';
 import { selectContainerLayout, selectSection } from './SelectContainer.styled';
@@ -11,10 +11,10 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const SelectContainer = () => {
   const navigate = useNavigate();
+  const { roomId } = useParams();
 
   const { balanceContent, isLoading } = useBalanceContentQuery();
   const { isFinished } = useRoundIsFinishedQuery({
-    roomId: 1,
     contentId: balanceContent?.contentId,
   });
 
@@ -26,9 +26,9 @@ const SelectContainer = () => {
 
   useEffect(() => {
     if (isFinished) {
-      navigate(ROUTES.roundResult);
+      navigate(ROUTES.roundResult(Number(roomId)), { replace: true });
     }
-  }, [isFinished, navigate]);
+  }, [isFinished, navigate, roomId]);
 
   if (isLoading) return <div>Loading...</div>;
 
