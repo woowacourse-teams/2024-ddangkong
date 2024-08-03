@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     timeout-minutes: 4
-    runs-on: ubuntu-latest
+    runs-on: [ self-hosted, linux, ARM64 ]
 
     defaults:
       run:
