@@ -5,6 +5,7 @@ import { useMoveNextRoundMutation } from './NextRoundButton.hook';
 import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 
+import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import { memberInfoState } from '@/recoil/atom';
 
@@ -20,12 +21,12 @@ const NextRoundButton = () => {
   const isButtonDisabled = !memberInfo.isMaster;
 
   const goToGameResult = () => {
-    navigate('/game/result');
+    navigate(ROUTES.gameResult);
   };
 
   const goToNextRound = async () => {
     await moveNextRound();
-    navigate('/game');
+    navigate(ROUTES.game);
   };
 
   return (
