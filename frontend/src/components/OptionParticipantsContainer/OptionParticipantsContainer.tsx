@@ -1,3 +1,4 @@
+import useOptionParticipantsQuery from './OptionParticipantsContainer.hook';
 import {
   dividerLine,
   optionParticipantsContainerLayout,
@@ -5,17 +6,10 @@ import {
 import OptionParticipants from '../OptionParticipants/OptionParticipants';
 import TopicContainer from '../TopicContainer/TopicContainer';
 
-import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
-import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
-
 const OptionParticipantsContainer = () => {
-  const { balanceContent } = useBalanceContentQuery();
-  const { groupRoundResult } = useRoundVoteResultQuery({
-    contentId: balanceContent?.contentId,
-    roomId: 1,
-  });
+  const { groupRoundResult } = useOptionParticipantsQuery();
 
-  if (!balanceContent || !groupRoundResult) {
+  if (!groupRoundResult) {
     return null;
   }
 
