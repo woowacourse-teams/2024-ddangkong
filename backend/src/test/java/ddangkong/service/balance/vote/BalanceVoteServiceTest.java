@@ -12,20 +12,19 @@ import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
 import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
-import ddangkong.support.config.TestClockConfig;
+import ddangkong.support.annotation.FixedClock;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 
-@Import(TestClockConfig.class)
 class BalanceVoteServiceTest extends BaseServiceTest {
 
     @Autowired
     private BalanceVoteService balanceVoteService;
 
     @Nested
+    @FixedClock(date = "2024-07-18", time = "20:00:02")
     class 투표_생성 {
 
         @Test

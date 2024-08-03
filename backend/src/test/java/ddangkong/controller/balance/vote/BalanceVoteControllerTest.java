@@ -5,17 +5,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import ddangkong.controller.BaseControllerTest;
 import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
 import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
-import ddangkong.support.config.TestClockConfig;
+import ddangkong.support.annotation.FixedClock;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.Import;
 
-@Import(TestClockConfig.class)
 class BalanceVoteControllerTest extends BaseControllerTest {
 
     @Nested
+    @FixedClock(date = "2024-07-18", time = "20:00:02")
     class 투표_생성 {
 
         private static final Long ROOM_ID = 1L;
