@@ -1,4 +1,3 @@
-import useOptionParticipantsQuery from './OptionParticipantsContainer.hook';
 import {
   dividerLine,
   optionParticipantsContainerLayout,
@@ -6,8 +5,10 @@ import {
 import OptionParticipants from '../OptionParticipants/OptionParticipants';
 import TopicContainer from '../TopicContainer/TopicContainer';
 
+import useMyGameStatus from '@/hooks/useMyGameStatus';
+
 const OptionParticipantsContainer = () => {
-  const { groupRoundResult } = useOptionParticipantsQuery();
+  const { groupRoundResult } = useMyGameStatus();
 
   if (!groupRoundResult) {
     return null;
