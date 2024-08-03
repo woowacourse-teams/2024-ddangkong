@@ -18,7 +18,7 @@ interface RoundVoteIsFinished {
 }
 
 // 밸런스 게임 컨텐츠 가져오기
-export const fetchBalanceContent = async (roomId = 1): Promise<BalanceContent> => {
+export const fetchBalanceContent = async (roomId: number): Promise<BalanceContent> => {
   const res = await fetcher.get({ url: API_URL.balanceContent(roomId) });
 
   const data = await res.json();

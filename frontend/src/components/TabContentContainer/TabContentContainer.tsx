@@ -30,7 +30,6 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
   const navigate = useNavigate();
   const { balanceContent } = useBalanceContentQuery();
   const { groupRoundResult, totalResult } = useRoundVoteResultQuery({
-    roomId: 1,
     contentId: balanceContent?.contentId,
   });
 
