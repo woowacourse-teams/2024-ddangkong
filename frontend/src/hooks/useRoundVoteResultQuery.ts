@@ -1,5 +1,4 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
 
 import INITIAL_VALUE from '../mocks/data/roundVoteResultInitialValue.json';
 
@@ -8,6 +7,7 @@ import { QUERY_KEYS } from '@/constants/queryKeys';
 import { Group, RoundVoteResult, Total } from '@/types/roundVoteResult';
 
 interface UseRoundVoteResultQueryProps {
+  roomId: number;
   contentId?: number;
 }
 
@@ -17,10 +17,9 @@ type RoundVoteResultQueryResponse = UseQueryResult<RoundVoteResult, Error> & {
 };
 
 const useRoundVoteResultQuery = ({
+  roomId,
   contentId,
 }: UseRoundVoteResultQueryProps): RoundVoteResultQueryResponse => {
-  const { roomId } = useParams();
-
   const roundVoteResultQuery = useQuery({
     queryKey: [QUERY_KEYS.roundVoteResult, roomId, contentId],
     queryFn: async () => {
@@ -32,7 +31,7 @@ const useRoundVoteResultQuery = ({
         throw new Error('방이 존재하지 않습니다.');
       }
 
-      return await fetchRoundVoteResult({ roomId: Number(roomId), contentId });
+      return await fetchRoundVoteResult({ roomId, contentId });
     },
     placeholderData: INITIAL_VALUE,
     enabled: !!contentId,

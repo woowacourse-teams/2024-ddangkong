@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   alertText,
@@ -27,9 +27,12 @@ interface TabContentContainerProps {
 }
 
 const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => {
+  const { roomId } = useParams();
   const navigate = useNavigate();
+
   const { balanceContent } = useBalanceContentQuery();
   const { groupRoundResult, totalResult } = useRoundVoteResultQuery({
+    roomId: Number(roomId),
     contentId: balanceContent?.contentId,
   });
 
