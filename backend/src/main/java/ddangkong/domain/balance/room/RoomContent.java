@@ -43,6 +43,15 @@ public class RoomContent extends BaseEntity {
     @Column(nullable = false)
     private boolean isUsed;
 
+    public RoomContent(Room room, BalanceContent balanceContent, int round, LocalDateTime roundEndedAt,
+                       boolean isUsed) {
+        this.room = room;
+        this.balanceContent = balanceContent;
+        this.round = round;
+        this.roundEndedAt = roundEndedAt;
+        this.isUsed = isUsed;
+    }
+
     public boolean isRoundOver(LocalDateTime currentTime) {
         return currentTime.isAfter(getRoundEndedAt());
     }
