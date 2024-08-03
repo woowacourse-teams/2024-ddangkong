@@ -3,6 +3,7 @@ package ddangkong.domain.balance.room;
 import ddangkong.domain.BaseEntity;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.exception.BadRequestException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +43,14 @@ public class RoomContent extends BaseEntity {
     @Column(nullable = false)
     private boolean isUsed;
 
+    public boolean isRoundOver(LocalDateTime currentTime) {
+        return currentTime.isAfter(getRoundEndedAt());
+    }
+
+    public boolean isNotSameContentId(Long contentId) {
+        return !Objects.equals(getContentId(), contentId);
+    }
+
     public Long getContentId() {
         return balanceContent.getId();
     }
@@ -57,7 +67,10 @@ public class RoomContent extends BaseEntity {
         return room.getTotalRound();
     }
 
-    public boolean isRoomContentEnded(LocalDateTime now) {
-        return roundEndedAt.isBefore(now);
+    public LocalDateTime getRoundEndedAt() {
+        if (roundEndedAt == null) {
+            throw new BadRequestException("라운드 종료 시간이 설정되지 않습니다.");
+        }
+        return roundEndedAt;
     }
 }
