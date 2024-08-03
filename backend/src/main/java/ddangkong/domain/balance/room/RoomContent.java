@@ -61,7 +61,7 @@ public class RoomContent {
             throw new BadRequestException("해당 라운드는 이미 시작했습니다.");
         }
         if (room.isGameProgress() && isDifferentToRoomRound()) {
-            throw new BadRequestException("방이 해당 라운드가 아닙니다 roomRound : %d, contentRound : %d"
+            throw new BadRequestException("방이 해당 라운드가 아닙니다. roomRound : %d, contentRound : %d"
                     .formatted(room.getCurrentRound(), round));
         }
 

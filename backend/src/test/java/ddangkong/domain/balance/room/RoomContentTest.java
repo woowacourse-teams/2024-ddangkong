@@ -60,7 +60,7 @@ class RoomContentTest {
             // when & then
             assertThatThrownBy(() -> roomContent.startRound(CURRENT_TIME))
                     .isInstanceOf(BadRequestException.class)
-                    .hasMessage("방이 해당 라운드가 아닙니다 roomRound : 1, contentRound : 2");
+                    .hasMessage("방이 해당 라운드가 아닙니다. roomRound : 1, contentRound : 2");
         }
     }
 }
