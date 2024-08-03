@@ -124,7 +124,7 @@ class RoomControllerTest extends BaseControllerTest {
             // when
             RestAssured.given().log().all()
                     .pathParam("roomId", 1L)
-                    .when().patch("/api/balances/rooms/{roomId}/next")
+                    .when().patch("/api/balances/rooms/{roomId}/next-round")
                     .then().log().all()
                     .statusCode(204);
         }
@@ -134,7 +134,7 @@ class RoomControllerTest extends BaseControllerTest {
             // when & then
             RestAssured.given().log().all()
                     .pathParam("roomId", -1L)
-                    .when().patch("/api/balances/rooms/{roomId}/next")
+                    .when().patch("/api/balances/rooms/{roomId}/next-round")
                     .then().log().all()
                     .statusCode(400);
         }

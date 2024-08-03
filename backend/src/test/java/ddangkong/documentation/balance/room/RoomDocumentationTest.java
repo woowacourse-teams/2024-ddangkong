@@ -157,7 +157,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 다음_라운드로_이동 {
 
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/next";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/next-round";
 
         @Test
         void 다음_라운드로_이동한다() throws Exception {

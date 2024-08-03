@@ -44,7 +44,7 @@ public class RoomController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping("/balances/rooms/{roomId}/next")
+    @PatchMapping("/balances/rooms/{roomId}/next-round")
     public void moveToNextRound(@PathVariable @Positive Long roomId) {
         roomService.moveToNextRound(roomId);
     }
