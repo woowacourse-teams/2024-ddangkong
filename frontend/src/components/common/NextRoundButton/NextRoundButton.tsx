@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import { useMoveNextRoundMutation } from './NextRoundButton.hook';
@@ -9,9 +9,11 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import { memberInfoState } from '@/recoil/atom';
 
 const NextRoundButton = () => {
+  const { search } = useLocation();
+  const roomId = Number(new URLSearchParams(search).get('roomId'));
   const navigate = useNavigate();
   const { balanceContent } = useBalanceContentQuery();
-  const { mutateAsync: moveNextRound } = useMoveNextRoundMutation();
+  const { mutateAsync: moveNextRound } = useMoveNextRoundMutation(roomId);
   const memberInfo = useRecoilValue(memberInfoState);
 
   const isLastRound = balanceContent?.currentRound === balanceContent?.totalRound;
