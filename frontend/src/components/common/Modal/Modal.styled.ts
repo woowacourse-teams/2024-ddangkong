@@ -113,7 +113,6 @@ export const modalTextButton = ({
   height: ${buttonHeight};
   padding: 1rem;
   border: none;
-  border-radius: 0;
   border-radius: 0.8rem;
 
   background-color: ${backgroundColor};

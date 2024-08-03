@@ -19,7 +19,7 @@ export interface RoomMembers {
   members: Member[];
 }
 
-export interface RoomAndMember {
+export interface RoomIdAndMember {
   roomId: number;
   member: Member;
 }

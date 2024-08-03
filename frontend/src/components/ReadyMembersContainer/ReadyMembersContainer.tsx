@@ -17,13 +17,13 @@ interface ReadyMembersContainerProps extends RoomMembers {}
 const ReadyMembersContainer = ({ members }: ReadyMembersContainerProps) => {
   return (
     <div css={readyMembersContainerLayout}>
-      <div css={totalNumber}>총 인원 {members.length}명</div>
+      <p css={totalNumber}>총 인원 {members.length}명</p>
       <section css={membersContainer}>
         <ul css={memberList}>
           <li css={memberItem}>
-            <div css={profileBox}>
+            <button css={profileBox}>
               <img src={plusIcon} alt="추가 아이콘" />
-            </div>
+            </button>
             <div>초대하기</div>
           </li>
           {members.map((member) => (

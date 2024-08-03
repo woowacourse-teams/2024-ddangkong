@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
+import getBorderRadius from '@/styles/utils/getBorderRadius';
 
 export const categoryContainerLayout = css`
   display: flex;
@@ -9,7 +10,7 @@ export const categoryContainerLayout = css`
   align-items: center;
   height: 10rem;
   padding: 1.6rem 0 2.4rem;
-  border-radius: 2rem;
+  border-radius: ${getBorderRadius('medium')};
 
   background-color: ${Theme.color.peanut400};
 `;

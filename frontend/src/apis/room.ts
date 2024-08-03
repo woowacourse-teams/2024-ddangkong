@@ -1,10 +1,10 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { RoomInfo, RoomMembers, RoomAndMember } from '@/types/room';
+import { RoomInfo, RoomIdAndMember } from '@/types/room';
 
 // 방 만들기
-export const makeRoom = async (nickname: string): Promise<RoomAndMember> => {
+export const createRoom = async (nickname: string): Promise<RoomIdAndMember> => {
   const res = await fetcher.post({
     url: API_URL.room,
     headers: {
@@ -25,7 +25,7 @@ export const makeRoom = async (nickname: string): Promise<RoomAndMember> => {
 };
 
 // 방 참여하기
-export const enterRoom = async (roomId: number, nickname: string): Promise<RoomAndMember> => {
+export const enterRoom = async (roomId: number, nickname: string): Promise<RoomIdAndMember> => {
   const res = await fetcher.post({
     url: API_URL.enterRoom(roomId),
     headers: {
