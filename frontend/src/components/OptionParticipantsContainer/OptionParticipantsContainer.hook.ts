@@ -20,12 +20,20 @@ const useOptionParticipants = () => {
 
   const { isRoundFinished, isGameFinished } = useMyGameStatusQuery({ balanceContent, roomId });
 
+  const goToGameResult = () => {
+    navigate(ROUTES.gameResult);
+  };
+
+  const goToNextRound = async () => {
+    navigate(ROUTES.game);
+  };
+
   useEffect(() => {
     if (isGameFinished) {
-      navigate(ROUTES.gameResult);
+      goToGameResult();
     }
     if (isRoundFinished) {
-      navigate(ROUTES.game);
+      goToNextRound();
     }
   }, [isRoundFinished, isGameFinished]);
 
