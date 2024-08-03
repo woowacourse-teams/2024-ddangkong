@@ -1,6 +1,5 @@
 package ddangkong.domain.balance.room;
 
-import ddangkong.domain.BaseEntity;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
@@ -20,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class RoomContent extends BaseEntity {
+public class RoomContent {
 
     private static final int DELAY_MSEC = 2_000; // TODO SEC로 변경
 
