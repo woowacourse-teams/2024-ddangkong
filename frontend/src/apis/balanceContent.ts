@@ -76,8 +76,8 @@ export const checkMyGameStatus = async ({
 };
 
 // 다음 라운드로 이동하기
-export const moveNextRound = async (roomId = 1): Promise<RoundVoteResult> => {
-  const res = await fetcher.post({
+export const moveNextRound = async (roomId: number): Promise<RoundVoteResult> => {
+  const res = await fetcher.patch({
     url: API_URL.moveNextRound(roomId),
     headers: {
       'Content-Type': `application/json`,
