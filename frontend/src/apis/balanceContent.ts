@@ -76,17 +76,13 @@ export const checkMyGameStatus = async ({
 };
 
 // 다음 라운드로 이동하기
-export const moveNextRound = async (roomId: number): Promise<RoundVoteResult> => {
+export const moveNextRound = async (roomId: number) => {
   const res = await fetcher.patch({
     url: API_URL.moveNextRound(roomId),
     headers: {
       'Content-Type': `application/json`,
     },
   });
-
-  const data = await res.json();
-
-  return data;
 };
 
 // 최종 결과 가져오기

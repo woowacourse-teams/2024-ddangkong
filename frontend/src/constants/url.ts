@@ -17,6 +17,6 @@ export const MOCK_API_URL = {
   vote: '/api/balances/rooms/:roomId/contents/:contentId/votes',
   roundVoteResult: '/api/balances/rooms/:roomId/contents/:contentId/vote-result',
   myGameStatus: '/api/balances/rooms/:roomId?myRound=:myRound',
-  moveNextRound: '/api/balances/rooms/:roomId/contents',
+  moveNextRound: '/api/balances/rooms/:roomId/next-round',
   finalResult: '/api/balances/rooms/:roomId/final',
 };

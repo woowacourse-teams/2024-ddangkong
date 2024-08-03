@@ -26,8 +26,7 @@ const fetchVoteResultHandler = async () => {
 
 const goToNextRoundHandler = () => {
   BALANCE_CONTENT.currentRound += 1;
-
-  return HttpResponse.json<BalanceContent>(BALANCE_CONTENT, { status: 201 });
+  return HttpResponse.json({ state: 204 });
 };
 
 const fetchFinalResultHandler = async () => {
@@ -46,6 +45,6 @@ export const voteHandler = [
   http.post(MOCK_API_URL.vote, voteBalanceContentHandler),
   http.get(MOCK_API_URL.roundVoteResult, fetchVoteResultHandler),
   http.get(MOCK_API_URL.myGameStatus, checkMyGameStatusHandler),
-  http.post(MOCK_API_URL.moveNextRound, goToNextRoundHandler),
+  http.patch(MOCK_API_URL.moveNextRound, goToNextRoundHandler),
   http.get(MOCK_API_URL.finalResult, fetchFinalResultHandler),
 ];
