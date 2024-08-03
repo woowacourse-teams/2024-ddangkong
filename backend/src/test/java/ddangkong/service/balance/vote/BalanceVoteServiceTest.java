@@ -225,7 +225,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 투표_제한_시간이_지나지_않고_방의_모든_멤버가_투표하지_않았으면_모두_투표하지_않은_것이다() {
+        void 투표_제한_시간이_끝나지_않고_방의_모든_멤버가_투표하지_않았으면_모두_투표하지_않은_것이다() {
             // given
             int roomContentRound = 1;
             roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, ROUND_ENDED_AT, IS_USED));
