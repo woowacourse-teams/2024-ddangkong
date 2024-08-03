@@ -4,12 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.room.Room;
 import ddangkong.domain.balance.room.RoomContent;
 import ddangkong.domain.balance.room.RoomContentRepository;
@@ -109,11 +106,6 @@ class RoomServiceTest extends BaseServiceTest {
         private static final Long PROGRESS_ROOM_ID = 1L;
         private static final int CURRENT_ROUND = 2;
         private static final Long NOT_EXIST_ROOM_ID = 999999999L;
-        private static final Long NOT_PROGRESSED_ROOM_ID = 2L;
-        private static final BalanceContentResponse BALANCE_CONTENT_RESPONSE = new BalanceContentResponse(
-                3L, Category.EXAMPLE, 5, 3, "다음 중 여행가고 싶은 곳은?",
-                new BalanceOptionResponse(5L, "산"),
-                new BalanceOptionResponse(6L, "바다"));
 
         @Test
         void 중간_라운드라면_다음_라운드로_넘어갈_수_있다() {
@@ -137,25 +129,23 @@ class RoomServiceTest extends BaseServiceTest {
         @Test
         void 마지막_라운드라면_게임을_종료한다() {
             // given
-            moveToFinalRound(PROGRESS_ROOM_ID);
+            Long roomId = finalRoundRoomId();
 
             // when
-            roomService.moveToNextRound(PROGRESS_ROOM_ID);
+            roomService.moveToNextRound(roomId);
 
             // then
-            Room room = roomRepository.getById(PROGRESS_ROOM_ID);
+            Room room = roomRepository.getById(roomId);
             assertAll(
                     () -> assertThat(room.getCurrentRound()).isEqualTo(room.getTotalRound()),
                     () -> assertThat(room.getStatus()).isEqualTo(RoomStatus.FINISH)
             );
         }
 
-        void moveToFinalRound(Long roomId) {
-            Room room = roomRepository.getById(roomId);
-            int countOfMoving = room.getTotalRound() - room.getCurrentRound();
-            for (int count = 0; count < countOfMoving; count++) {
-                roomService.moveToNextRound(PROGRESS_ROOM_ID);
-            }
+        Long finalRoundRoomId() {
+            Room room = new Room(5, 5, 30_000, RoomStatus.PROGRESS);
+            roomRepository.save(room);
+            return room.getId();
         }
 
         @Test

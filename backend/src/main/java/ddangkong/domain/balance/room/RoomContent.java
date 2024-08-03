@@ -43,12 +43,17 @@ public class RoomContent {
     @Column(nullable = false)
     private boolean isUsed;
 
-    public RoomContent(Room room, BalanceContent balanceContent, int round) {
+    public static RoomContent createNewRoom(Room room, BalanceContent balanceContent, int round) {
+        return new RoomContent(room, balanceContent, round, null, false);
+    }
+
+    public RoomContent(Room room, BalanceContent balanceContent, int round, LocalDateTime roundEndedAt,
+                       boolean isUsed) {
         this.room = room;
         this.balanceContent = balanceContent;
         this.round = round;
-        this.roundEndedAt = null;
-        this.isUsed = false;
+        this.roundEndedAt = roundEndedAt;
+        this.isUsed = isUsed;
     }
 
     public void startRound(LocalDateTime currentTime) {

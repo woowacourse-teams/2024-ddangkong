@@ -23,14 +23,13 @@ class RoomContentTest {
             // given
             int currentRound = 1;
             int timeLimit = 10_000;
-            LocalDateTime currentTime = LocalDateTime.of(2024, 8, 2, 14, 14, 10);
             Room room = new Room(5, currentRound, timeLimit, RoomStatus.PROGRESS);
-            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound);
+            RoomContent roomContent = RoomContent.createNewRoom(room, BALANCE_CONTENT, currentRound);
             int expectedAfterSec = (timeLimit + 2_000) / 1_000;
-            LocalDateTime expectedRoundEnded = currentTime.plusSeconds(expectedAfterSec);
+            LocalDateTime expectedRoundEnded = CURRENT_TIME.plusSeconds(expectedAfterSec);
 
             // when
-            roomContent.startRound(currentTime);
+            roomContent.startRound(CURRENT_TIME);
 
             // then
             assertThat(roomContent.getRoundEndedAt()).isEqualTo(expectedRoundEnded);
@@ -41,7 +40,7 @@ class RoomContentTest {
             // given
             int currentRound = 1;
             Room room = new Room(5, currentRound, 10_000, RoomStatus.PROGRESS);
-            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound);
+            RoomContent roomContent = RoomContent.createNewRoom(room, BALANCE_CONTENT, currentRound);
             roomContent.startRound(CURRENT_TIME);
 
             // when & then
@@ -56,7 +55,7 @@ class RoomContentTest {
             int roomRound = 1;
             int roomContentRound = 2;
             Room room = new Room(5, roomRound, 10_000, RoomStatus.PROGRESS);
-            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, roomContentRound);
+            RoomContent roomContent = RoomContent.createNewRoom(room, BALANCE_CONTENT, roomContentRound);
 
             // when & then
             assertThatThrownBy(() -> roomContent.startRound(CURRENT_TIME))
