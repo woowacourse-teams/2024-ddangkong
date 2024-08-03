@@ -2,10 +2,7 @@ package ddangkong.service.balance.vote;
 
 import static ddangkong.support.fixture.MemberFixture.EDEN;
 import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
-import static ddangkong.support.fixture.MemberFixture.MARU;
-import static ddangkong.support.fixture.MemberFixture.POME;
 import static ddangkong.support.fixture.MemberFixture.PRIN;
-import static ddangkong.support.fixture.MemberFixture.SUNDAY;
 import static ddangkong.support.fixture.MemberFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -161,7 +158,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
 
     @Nested
     @FixedClock(date = "2024-08-03", time = "11:00:00")
-    class 모두_투표했는지_조회 {
+    class 투표_종료_여부_조회 {
 
         private static final LocalDateTime ROUND_ENDED_AT = LocalDateTime.parse("2024-08-03T11:00:10");
         private static final boolean IS_USED = false;
@@ -187,25 +184,12 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             aVsB = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
             optionA = balanceOptionRepository.save(new BalanceOption("A", aVsB));
             optionB = balanceOptionRepository.save(new BalanceOption("B", aVsB));
-            BalanceContent cVsD = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "C vs D"));
-            BalanceOption optionC = balanceOptionRepository.save(new BalanceOption("C", cVsD));
-            BalanceOption optionD = balanceOptionRepository.save(new BalanceOption("D", cVsD));
 
             myRoom = roomRepository.save(Room.createNewRoom());
             prin = memberRepository.save(PRIN.master(myRoom));
             tacan = memberRepository.save(TACAN.common(myRoom));
             keochan = memberRepository.save(KEOCHAN.common(myRoom));
             eden = memberRepository.save(EDEN.common(myRoom));
-
-            Room anotherRoom = roomRepository.save(Room.createNewRoom());
-            Member sunday = memberRepository.save(SUNDAY.master(anotherRoom));
-            Member maru = memberRepository.save(MARU.common(anotherRoom));
-            Member pome = memberRepository.save(POME.common(anotherRoom));
-
-            balanceVoteRepository.save(new BalanceVote(optionA, sunday));
-            balanceVoteRepository.save(new BalanceVote(optionB, maru));
-            balanceVoteRepository.save(new BalanceVote(optionC, prin));
-            balanceVoteRepository.save(new BalanceVote(optionD, tacan));
         }
 
         @Test
@@ -226,11 +210,12 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         }
 
         @Test
-        @FixedClock(date = "2024-08-03", time = "11:00:11")
+        @FixedClock(date = "2024-08-03", time = "11:00:21")
         void 컨텐츠의_투표_제한_시간이_지나면_모두_투표한_것이다() {
             // given
             int roomContentRound = 1;
-            roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, ROUND_ENDED_AT, IS_USED));
+            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T11:00:20");
+            roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, roundEndedAt, IS_USED));
 
             // when
             VoteFinishedResponse actual = balanceVoteService.getAllVoteFinished(myRoom.getId(), aVsB.getId());
@@ -246,6 +231,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, ROUND_ENDED_AT, IS_USED));
             balanceVoteRepository.save(new BalanceVote(optionA, prin));
             balanceVoteRepository.save(new BalanceVote(optionA, tacan));
+            balanceVoteRepository.save(new BalanceVote(optionB, eden));
 
             // when
             VoteFinishedResponse actual = balanceVoteService.getAllVoteFinished(myRoom.getId(), aVsB.getId());
@@ -255,7 +241,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 방에_존재하지_않은_방_컨텐츠이면_예외가_발생한다() {
+        void 방에_존재하지_않은_방_컨텐츠의_투표_여부를_조회하면_예외가_발생한다() {
             // when & then
             assertThatThrownBy(() -> balanceVoteService.getAllVoteFinished(myRoom.getId(), aVsB.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
@@ -263,7 +249,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 방의_라운드와_방_컨텐츠의_라운드가_다르면_예외가_발생한다() {
+        void 방의_현재_라운드와_다른_방_컨텐츠의_투표_여부를_조회하면_예외가_발생한다() {
             // given
             int roomContentRound = 2;
             roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, ROUND_ENDED_AT, IS_USED));
@@ -275,10 +261,11 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 이미_사용된_방_컨텐츠이면_예외가_발생한다() {
+        void 이미_사용된_방_컨텐츠의_투표_여부를_조회하면_예외가_발생한다() {
             // given
             int roomContentRound = 1;
-            roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, ROUND_ENDED_AT, true));
+            boolean isUsed = true;
+            roomContentRepository.save(new RoomContent(myRoom, aVsB, roomContentRound, ROUND_ENDED_AT, isUsed));
 
             // when & then
             assertThatThrownBy(() -> balanceVoteService.getAllVoteFinished(myRoom.getId(), aVsB.getId()))
