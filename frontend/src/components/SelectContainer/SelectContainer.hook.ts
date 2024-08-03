@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { fetchRoundVoteIsFinished } from '@/apis/balanceContent';
 import { QUERY_KEYS } from '@/constants/queryKeys';
+import { ROUTES } from '@/constants/routes';
 
 const POLLING_DELAY = 1000;
 
@@ -28,4 +30,30 @@ export const useRoundIsFinishedQuery = ({ contentId }: UseRoundIsFinishedQueryPr
   });
 
   return { ...roundIsFinishedQuery, isFinished: roundIsFinishedQuery.data?.finished };
+};
+
+export const useRoundIsFinished = (contentId?: number) => {
+  const navigate = useNavigate();
+  const { roomId } = useParams();
+  const { isFinished } = useRoundIsFinishedQuery({
+    contentId,
+  });
+
+  useEffect(() => {
+    if (isFinished) {
+      navigate(ROUTES.roundResult(Number(roomId)), { replace: true });
+    }
+  }, [isFinished, navigate, roomId]);
+
+  return { isFinished };
+};
+
+export const useSelectOption = () => {
+  const [selectedId, setSelectedId] = useState(0);
+
+  const handleSelectOption = (selectedId: number) => {
+    setSelectedId(selectedId);
+  };
+
+  return { selectedId, handleSelectOption };
 };
