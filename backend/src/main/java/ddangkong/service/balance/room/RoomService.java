@@ -12,6 +12,7 @@ import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.InternalServerException;
 import ddangkong.service.balance.room.dto.RoundFinishedResponse;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,8 @@ public class RoomService {
     private final MemberRepository memberRepository;
 
     private final RoomContentRepository roomContentRepository;
+
+    private final Clock clock;
 
     @Transactional(readOnly = true)
     public RoomInfoResponse findRoomInfo(Long roomId) {
@@ -66,7 +69,7 @@ public class RoomService {
 
         if (room.isGameProgress()) {
             RoomContent roomContent = getCurrentRoomContent(room);
-            roomContent.startRound(LocalDateTime.now()); // TODO #105와 merge될 때 수정 예정
+            roomContent.startRound(LocalDateTime.now(clock));
         }
     }
 

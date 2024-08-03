@@ -18,13 +18,16 @@ import ddangkong.domain.balance.room.RoomStatus;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
 import ddangkong.service.balance.room.dto.RoundFinishedResponse;
+import ddangkong.support.config.TestClockConfig;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 
+@Import(TestClockConfig.class)
 class RoomServiceTest extends BaseServiceTest {
 
     @Autowired
