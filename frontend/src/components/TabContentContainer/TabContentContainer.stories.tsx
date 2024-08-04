@@ -15,12 +15,10 @@ export const 그룹_탭: Story = {
   args: {
     isGroupTabActive: true,
   },
-  render: (args) => <TabContentContainer {...args} />,
 };
 
 export const 전체_탭: Story = {
   args: {
     isGroupTabActive: false,
   },
-  render: (args) => <TabContentContainer {...args} />,
 };

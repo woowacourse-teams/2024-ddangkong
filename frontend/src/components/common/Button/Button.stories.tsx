@@ -5,13 +5,7 @@ import Button from './Button';
 
 const meta = {
   title: 'Button',
-  parameters: {
-    argTypes: {},
-    actions: { argTypesRegex: '^on.*' },
-  },
-
   args: { onClick: fn() },
-
   component: Button,
 } satisfies Meta<typeof Button>;
 
@@ -24,5 +18,4 @@ export const 기본_버튼: Story = {
     text: '선택',
     disabled: false,
   },
-  render: ({ ...args }) => <Button {...args} />,
 };
