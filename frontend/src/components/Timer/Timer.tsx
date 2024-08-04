@@ -9,19 +9,19 @@ import {
 } from './Timer.styled';
 import { formatTimer } from './Timer.util';
 
-import DDANGKONG from '@/assets/images/ddangkong.png';
+import Ddangkong from '@/assets/images/ddangkong.png';
 
 const Timer = () => {
   const { barWidth, timerCount, isAlmostFinished } = useRoundTimer();
 
   return (
-    <div css={timerLayout}>
+    <section css={timerLayout}>
       <div css={timerInnerLayout(barWidth)}></div>
       <div css={timerWrapper(barWidth)}>
-        <img css={[timerIcon, isAlmostFinished && timerIconShake]} src={DDANGKONG} alt="타이머" />
+        <img css={[timerIcon, isAlmostFinished && timerIconShake]} src={Ddangkong} alt="타이머" />
         <span css={timerText(isAlmostFinished)}>{formatTimer(timerCount)}</span>
       </div>
-    </div>
+    </section>
   );
 };
 
