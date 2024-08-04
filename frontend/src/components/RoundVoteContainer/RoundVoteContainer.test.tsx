@@ -1,8 +1,9 @@
 import { screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { customRender } from 'test-utils';
 
 import RoundVoteContainer from './RoundVoteContainer';
+
+import { customRender } from '@/test-utils';
 
 describe('RoundVoteContainer 컴포넌트 테스트', () => {
   it('기본 탭인 그룹 탭에서, 전체 탭을 클릭하면 전체 사용자 통계를 퍼센트로 보여준다.', async () => {

@@ -5,8 +5,8 @@
   },
   "moduleFileExtensions": ["js", "ts", "tsx"],
   "moduleNameMapper": {
-    "^@/(.*)$": "<rootDir>/src/$1",
-    "test-utils": "<rootDir>/src/utils/test-utils"
+    "^@/test-utils": "<rootDir>/src/utils/test-utils",
+    "^@/(.*)$": "<rootDir>/src/$1"
   },
   "setupFiles": ["./jest.polyfills.js"],
   "setupFilesAfterEnv": ["<rootDir>/jest.setup.ts"],

@@ -1,9 +1,10 @@
 import { renderHook, screen, waitFor } from '@testing-library/react';
-import { customRender, wrapper } from 'test-utils';
 
 import TabContentContainer from './TabContentContainer';
 
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
+
+import { customRender, wrapper } from '@/test-utils';
 
 describe('TabContentContainer 컴포넌트 테스트', () => {
   it('라운드 결과 그룹원들이 선택한 퍼센트를 카운팅 애니메이션으로 보여준다.', async () => {

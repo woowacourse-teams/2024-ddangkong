@@ -16,7 +16,7 @@
     "paths": {
       // 경로 별칭 설정
       "@/*": ["src/*"],
-      "test-utils": ["./src/utils/test-utils"]
+      "@/test-utils": ["./src/utils/test-utils"]
     }
   },
   "include": ["src", "jest.setup.ts"],
