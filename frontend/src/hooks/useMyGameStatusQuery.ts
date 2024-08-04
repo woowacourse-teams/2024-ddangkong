@@ -24,7 +24,6 @@ const useMyGameStatusQuery = ({ roomId, balanceContent }: useMyGameStatusQueryPr
     enabled: !!balanceContent,
     staleTime: 0,
     refetchInterval: 1000,
-    refetchOnWindowFocus: true,
   });
 
   return {
