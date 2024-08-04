@@ -4,9 +4,9 @@ import ReadyMembersContainer from './ReadyMembersContainer';
 
 import roomInfo from '@/mocks/data/roomInfo.json';
 
-const meta: Meta<typeof ReadyMembersContainer> = {
+const meta = {
   component: ReadyMembersContainer,
-};
+} satisfies Meta<typeof ReadyMembersContainer>;
 
 export const 기본값: Story = {
   args: {
