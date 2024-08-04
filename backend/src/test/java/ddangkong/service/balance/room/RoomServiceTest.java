@@ -38,19 +38,22 @@ class RoomServiceTest extends BaseServiceTest {
 
         @Test
         void 게임_방_정보를_조회한다() {
+            // given
+            Room room = roomFixture.createNewRoom();
+            memberFixture.createMaster("방장", room);
+            memberFixture.createCommon("참가자1", room);
+            memberFixture.createCommon("참가자2", room);
+            memberFixture.createCommon("참가자3", room);
+
             // when
-            RoomJoinResponse room = roomService.createRoom("방장");
-            roomService.joinRoom("멤버1", room.roomId());
-            roomService.joinRoom("멤버2", room.roomId());
+            RoomInfoResponse actual = roomService.findRoomInfo(room.getId());
 
             // then
-            RoomInfoResponse actual = roomService.findRoomInfo(room.roomId());
-
             assertAll(
-                    () -> Assertions.assertThat(actual.members()).hasSize(3),
+                    () -> Assertions.assertThat(actual.members()).hasSize(4),
                     () -> Assertions.assertThat(actual.isGameStart()).isFalse(),
-                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
-                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
+                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(room.getTimeLimit()),
+                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(room.getTotalRound())
             );
         }
     }

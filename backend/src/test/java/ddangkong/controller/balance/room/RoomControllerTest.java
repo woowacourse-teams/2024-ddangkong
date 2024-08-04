@@ -10,6 +10,7 @@ import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.domain.balance.room.Room;
 import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -27,19 +28,27 @@ class RoomControllerTest extends BaseControllerTest {
 
         @Test
         void 게임_방_정보_조회() {
-            //when
+            // given
+            Room room = roomFixture.createNewRoom();
+            memberFixture.createMaster("방장", room);
+            memberFixture.createCommon("참가자1", room);
+            memberFixture.createCommon("참가자2", room);
+            memberFixture.createCommon("참가자3", room);
+
+            // when
             RoomInfoResponse actual = RestAssured.given()
-                    .when().get("/api/balances/rooms/1")
+                    .pathParam("roomId", room.getId())
+                    .when().get("/api/balances/rooms/{roomId}")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
                     .extract().as(RoomInfoResponse.class);
 
-            //then
+            // then
             assertAll(
                     () -> Assertions.assertThat(actual.members()).hasSize(4),
-                    () -> Assertions.assertThat(actual.isGameStart()).isTrue(),
-                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
-                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
+                    () -> Assertions.assertThat(actual.isGameStart()).isFalse(),
+                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(room.getTimeLimit()),
+                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(room.getTotalRound())
             );
         }
     }
