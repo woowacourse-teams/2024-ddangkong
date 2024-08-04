@@ -121,4 +121,12 @@ public class Room {
     public boolean isAllRoundFinished() {
         return currentRound == totalRound && status.isGameFinish();
     }
+
+    public void reset() {
+        if (!isAllRoundFinished()) {
+            throw new BadRequestException("방이 종료되지 않았습니다.");
+        }
+        this.currentRound = START_ROUND;
+        this.status = RoomStatus.READY;
+    }
 }
