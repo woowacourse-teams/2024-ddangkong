@@ -193,10 +193,12 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 방의_모든_멤버가_컨텐츠에_투표하면_모두_투표한_것이다() {
+        @FixedClock(date = "2024-08-03", time = "11:00:19")
+        void 투표_제한_시간이_끝나지_않았지만_방의_모든_멤버가_컨텐츠에_투표했으면_모두_투표한_것이다() {
             // given
             int round = 1;
-            roomContentRepository.save(new RoomContent(room, balanceContent, round, ROUND_ENDED_AT, IS_USED));
+            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T11:00:20");
+            roomContentRepository.save(new RoomContent(room, balanceContent, round, roundEndedAt, IS_USED));
             balanceVoteRepository.save(new BalanceVote(optionA, prin));
             balanceVoteRepository.save(new BalanceVote(optionA, tacan));
             balanceVoteRepository.save(new BalanceVote(optionB, keochan));
@@ -211,7 +213,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
 
         @Test
         @FixedClock(date = "2024-08-03", time = "11:00:21")
-        void 컨텐츠의_투표_제한_시간이_지나면_모두_투표한_것이다() {
+        void 방의_모든_멤버가_투표하지_않았지만_컨텐츠의_투표_제한_시간이_지나면_모두_투표한_것이다() {
             // given
             int roomContentRound = 1;
             LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T11:00:20");
