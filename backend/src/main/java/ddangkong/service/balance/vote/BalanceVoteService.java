@@ -48,35 +48,29 @@ public class BalanceVoteService {
 
     @Transactional
     public BalanceVoteResponse createBalanceVote(BalanceVoteRequest request, Long roomId, Long contentId) {
-        validateRoundEnded(roomId, contentId);
-        BalanceOption balanceOption = findValidOption(request.optionId(), contentId);
-        Member member = findValidMember(request.memberId(), roomId);
+        Room room = roomRepository.getById(roomId);
+        BalanceContent balanceContent = balanceContentRepository.getById(contentId);
+        validateRoundFinished(room, balanceContent);
+        BalanceOption balanceOption = getValidOption(request.optionId(), balanceContent);
+        Member member = getValidMember(request.memberId(), room);
 
-        BalanceVote balanceVote = new BalanceVote(balanceOption, member);
-        BalanceVote savedBalanceVote = balanceVoteRepository.save(balanceVote);
-        return new BalanceVoteResponse(savedBalanceVote);
+        BalanceVote balanceVote = balanceVoteRepository.save(new BalanceVote(balanceOption, member));
+        return new BalanceVoteResponse(balanceVote);
     }
 
-    private void validateRoundEnded(Long roomId, Long contentId) {
-        RoomContent roomContent = findValidRoomContent(roomId);
-        if (roomContent.isNotSameContentId(contentId) || roomContent.isRoundOver(LocalDateTime.now(clock))) {
-            throw new BadRequestException("유효하지 않은 라운드에는 투표할 수 없습니다.");
+    private void validateRoundFinished(Room room, BalanceContent balanceContent) {
+        if (isRoundFinished(room, balanceContent)) {
+            throw new BadRequestException("이미 종료된 라운드에는 투표할 수 없습니다.");
         }
     }
 
-    private RoomContent findValidRoomContent(Long roomId) {
-        Room room = roomRepository.getById(roomId);
-        return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
-                .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
-    }
-
-    private BalanceOption findValidOption(Long optionId, Long contentId) {
-        return balanceOptionRepository.findByIdAndBalanceContentId(optionId, contentId)
+    private BalanceOption getValidOption(Long optionId, BalanceContent balanceContent) {
+        return balanceOptionRepository.findByIdAndBalanceContent(optionId, balanceContent)
                 .orElseThrow(() -> new BadRequestException("해당 질문의 선택지가 존재하지 않습니다."));
     }
 
-    private Member findValidMember(Long memberId, Long roomId) {
-        return memberRepository.findByIdAndRoomId(memberId, roomId)
+    private Member getValidMember(Long memberId, Room room) {
+        return memberRepository.findByIdAndRoom(memberId, room)
                 .orElseThrow(() -> new BadRequestException("해당 방의 멤버가 존재하지 않습니다."));
     }
 
@@ -134,9 +128,8 @@ public class BalanceVoteService {
 
     private boolean isRoundFinished(Room room, BalanceContent balanceContent) {
         RoomContent roomContent = roomContentRepository.getByRoomAndBalanceContent(room, balanceContent);
-        roomContent.validateSameRound(room.getCurrentRound());
-        roomContent.validateAlreadyUsed();
-        return roomContent.isRoundOver(LocalDateTime.now(clock));
+        LocalDateTime now = LocalDateTime.now(clock);
+        return roomContent.isRoundOver(now, room.getCurrentRound());
     }
 
     private boolean isAllVoteFinished(Room room, BalanceContent balanceContent) {
