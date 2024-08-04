@@ -12,7 +12,7 @@ import {
   roundVoteResultContainer,
   secondBar,
 } from './TabContentContainer.styled';
-import { useTotalCountAnimation } from '../RoundVoteContainer/RoundVoteContainer.hook';
+import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hook';
 
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';

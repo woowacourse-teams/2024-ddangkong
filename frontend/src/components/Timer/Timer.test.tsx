@@ -1,4 +1,4 @@
-import { formatTimer } from './Timer.util';
+import formatTimer from './Timer.util';
 
 describe('Timer 테스트', () => {
   describe('formatTimer 유틸 함수 테스트', () => {

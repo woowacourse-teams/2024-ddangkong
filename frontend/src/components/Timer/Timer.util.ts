@@ -1,4 +1,4 @@
-export const formatTimer = (timer: number) => {
+const formatTimer = (timer: number) => {
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;
 
@@ -7,3 +7,5 @@ export const formatTimer = (timer: number) => {
 
   return `${formattedMinutes}:${formattedSeconds}`;
 };
+
+export default formatTimer;

@@ -1,4 +1,4 @@
-import { useSelectCompleteMutation } from './SelectButton.hook';
+import useSelectCompleteMutation from './SelectButton.hook';
 import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 

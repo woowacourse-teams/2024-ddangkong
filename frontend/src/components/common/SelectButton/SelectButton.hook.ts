@@ -8,10 +8,7 @@ interface UseSelectCompleteMutationProps {
   contentId?: number;
 }
 
-export const useSelectCompleteMutation = ({
-  selectedId,
-  contentId,
-}: UseSelectCompleteMutationProps) => {
+const useSelectCompleteMutation = ({ selectedId, contentId }: UseSelectCompleteMutationProps) => {
   const { roomId } = useParams();
 
   return useMutation({
@@ -28,3 +25,5 @@ export const useSelectCompleteMutation = ({
     },
   });
 };
+
+export default useSelectCompleteMutation;

@@ -1,4 +1,4 @@
-import { useRoundTimer } from './Timer.hook';
+import useRoundTimer from './Timer.hook';
 import {
   timerIcon,
   timerIconShake,
@@ -7,7 +7,7 @@ import {
   timerText,
   timerWrapper,
 } from './Timer.styled';
-import { formatTimer } from './Timer.util';
+import formatTimer from './Timer.util';
 
 import Ddangkong from '@/assets/images/ddangkong.png';
 
