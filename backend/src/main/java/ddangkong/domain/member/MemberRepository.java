@@ -10,7 +10,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     List<Member> findAllByRoom(Room room);
 
-    Optional<Member> findByIdAndRoomId(Long id, Long roomId);
+    Optional<Member> findByIdAndRoom(Long id, Room room);
 
     default Member getById(Long id) {
         return findById(id)
