@@ -62,16 +62,19 @@ class BalanceContentServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 방의_상태가_진행중이_아닌_경우_예외를_던진다() {
+        void 방의_준비_상태인_경우_예외를_던진다() {
             // when & then
-            assertAll(
-                    () -> assertThatThrownBy(() -> balanceContentService.findRecentBalanceContent(READY_ROOM_ID))
-                            .isInstanceOf(BadRequestException.class)
-                            .hasMessage("해당 방은 게임을 진행하고 있지 않습니다."),
-                    () -> assertThatThrownBy(() -> balanceContentService.findRecentBalanceContent(FINISHED_ROOM_ID))
-                            .isInstanceOf(BadRequestException.class)
-                            .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.")
-            );
+            assertThatThrownBy(() -> balanceContentService.findRecentBalanceContent(READY_ROOM_ID))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
+        }
+
+        @Test
+        void 방이_종료_상태인_경우_예외를_던진다() {
+            // when & then
+            assertThatThrownBy(() -> balanceContentService.findRecentBalanceContent(FINISHED_ROOM_ID))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
         }
     }
 }
