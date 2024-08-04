@@ -21,12 +21,12 @@ const NextRoundButton = () => {
   const isButtonDisabled = !memberInfo.isMaster;
 
   const goToGameResult = () => {
-    navigate(ROUTES.gameResult);
+    navigate(ROUTES.gameResult, { replace: true });
   };
 
   const goToNextRound = async () => {
     await moveNextRound();
-    navigate(ROUTES.game);
+    navigate(ROUTES.game, { replace: true });
   };
 
   return (
