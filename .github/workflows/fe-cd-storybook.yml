@@ -34,9 +34,8 @@ jobs:
         run: npm run build-storybook
 
       - name: upload storybook
-          uses: peaceiris/actions-gh-pages@v3
-          with:
-            github_token: ${{ secrets.TOKEN }}
-            publish_dir: ./frontend/storybook-static
-            destination_dir: storybook
-
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          publish_dir: ./frontend/storybook-static
+          destination_dir: storybook
