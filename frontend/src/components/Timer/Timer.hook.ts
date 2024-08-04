@@ -9,27 +9,27 @@ const useRoundTimer = () => {
   const { balanceContent } = useBalanceContentQuery();
   const timeLimit = balanceContent?.timeLimit || 30;
 
-  const [timerCount, setTimerCount] = useState(timeLimit);
-  const [barWidth, setBarWidth] = useState(INITIAL_WIDTH);
-  const isAlmostFinished = timerCount <= 5;
+  const [leftRoundTime, setLeftRoundTime] = useState(timeLimit);
+  const [barWidthPercent, setBarWidthPercent] = useState(INITIAL_WIDTH);
+  const isAlmostFinished = leftRoundTime <= 5;
 
   const timeout = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    if (timerCount <= 0) {
+    if (leftRoundTime <= 0) {
       clearInterval(timeout.current);
     }
-  }, [timerCount]);
+  }, [leftRoundTime]);
 
   useEffect(() => {
     if (!balanceContent) return;
 
     const DECREASE_RATE = INITIAL_WIDTH / timeLimit;
-    setTimerCount(timeLimit);
+    setLeftRoundTime(timeLimit);
 
     timeout.current = setInterval(() => {
-      setTimerCount((prev) => prev - 1);
-      setBarWidth((prevWidth) => (prevWidth > 0 ? prevWidth - DECREASE_RATE : 0));
+      setLeftRoundTime((prev) => prev - 1);
+      setBarWidthPercent((prevWidth) => (prevWidth > 0 ? prevWidth - DECREASE_RATE : 0));
     }, DELAY);
 
     return () => {
@@ -37,7 +37,7 @@ const useRoundTimer = () => {
     };
   }, [balanceContent, timeLimit]);
 
-  return { timerCount, barWidth, isAlmostFinished };
+  return { leftRoundTime, barWidthPercent, isAlmostFinished };
 };
 
 export default useRoundTimer;
