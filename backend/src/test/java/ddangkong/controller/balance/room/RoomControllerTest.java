@@ -10,6 +10,7 @@ import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.HashMap;
@@ -179,6 +180,28 @@ class RoomControllerTest extends BaseControllerTest {
                     .when().patch("/api/balances/rooms/{roomId}")
                     .then().log().all()
                     .statusCode(HttpStatus.NO_CONTENT.value());
+        }
+    }
+
+    @Nested
+    class 라운드_종료_여부 {
+
+        @Test
+        void 라운드가_종료되었는지_조회한다() {
+            // when
+            RoundFinishedResponse actual = RestAssured.given().log().all()
+                    .pathParam("roomId", 1L)
+                    .queryParam("round", 1)
+                    .when().get("/api/balances/rooms/{roomId}/round-finished")
+                    .then().log().all()
+                    .statusCode(200)
+                    .extract().as(RoundFinishedResponse.class);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.isRoundFinished()).isTrue(),
+                    () -> assertThat(actual.isGameFinished()).isFalse()
+            );
         }
     }
 }

@@ -14,6 +14,7 @@ import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
+import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -79,5 +80,11 @@ public class RoomService {
         room.updateTimeLimit(request.timeLimit());
         room.updateTotalRound(request.totalRound());
         room.updateCategory(request.category());
+    }
+
+    @Transactional(readOnly = true)
+    public RoundFinishedResponse getRoundFinished(Long roomId, int round) {
+        Room room = roomRepository.getById(roomId);
+        return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished());
     }
 }
