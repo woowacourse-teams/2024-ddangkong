@@ -35,6 +35,9 @@ public class RoomContent extends BaseEntity {
     @Column(nullable = false)
     private int round;
 
+    @Column(nullable = false)
+    private boolean isUsed;
+
     public Long getContentId() {
         return balanceContent.getId();
     }

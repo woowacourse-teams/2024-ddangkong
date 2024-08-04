@@ -44,7 +44,7 @@ public class BalanceContentService {
     }
 
     private RoomContent findCurrentRoomContent(Room room) {
-        return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
+        return roomContentRepository.findByRoomAndRoundAndIsUsed(room, room.getCurrentRound(), false)
                 .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
     }
 }
