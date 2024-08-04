@@ -73,6 +73,7 @@ jobs:
           CONTAINER_ID=$(sudo docker ps -aqf name=$CONTAINER_NAME)
           if [ -n "${CONTAINER_ID}" ]; then
           sudo docker rm -f ${CONTAINER_ID}
+          echo "Container ${CONTAINER_ID} is stopped and removed."
           else
           echo "No previous container found with name. Skipping removal."
           fi
