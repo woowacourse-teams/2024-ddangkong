@@ -1,4 +1,4 @@
-package ddangkong.support.domain;
+package ddangkong.support.fixture;
 
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.room.Room;

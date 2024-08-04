@@ -1,11 +1,8 @@
-package ddangkong.support.domain;
+package ddangkong.support.fixture;
 
 import ddangkong.domain.balance.content.BalanceContent;
-import ddangkong.domain.balance.content.BalanceContentRepository;
-import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
-import ddangkong.domain.balance.option.BalanceOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
