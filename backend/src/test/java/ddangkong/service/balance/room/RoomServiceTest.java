@@ -11,17 +11,25 @@ import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.controller.balance.room.dto.RoomSettingResponse;
+import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomContent;
+import ddangkong.domain.balance.room.RoomContentRepository;
 import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.domain.balance.room.RoomStatus;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
 import ddangkong.service.balance.room.dto.RoundFinishedResponse;
+import java.util.List;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -32,6 +40,12 @@ class RoomServiceTest extends BaseServiceTest {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private RoomContentRepository roomContentRepository;
+
+    @Autowired
+    private BalanceContentRepository balanceContentRepository;
 
     @Nested
     class 게임_방_정보_조회 {
@@ -278,6 +292,73 @@ class RoomServiceTest extends BaseServiceTest {
                     () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
                     () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
             );
+        }
+    }
+
+    @Nested
+    class 방_초기화 {
+
+        private static final int TOTAL_ROUND = 5;
+        private static final int TIME_LIMIT = 30;
+        private static final RoomStatus STATUS = RoomStatus.FINISH;
+        private static final Category CATEGORY = Category.EXAMPLE;
+
+        private BalanceContent content;
+
+        @BeforeEach
+        void setUp() {
+            content = balanceContentRepository.save(new BalanceContent(CATEGORY, "A vs B"));
+        }
+
+        @Test
+        void 방을_초기_상태로_초기화한다() {
+            // given
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, 5, TIME_LIMIT, STATUS, CATEGORY));
+            saveRoomContents(room);
+
+            // when
+            roomService.resetRoom(room.getId());
+
+            // then
+            Room resetRoom = roomRepository.getById(room.getId());
+            List<RoomContent> notUsedRoomContents = roomContentRepository.findAllByRoomAndIsUsed(room, false);
+            assertAll(
+                    () -> assertThat(resetRoom.getStatus()).isEqualTo(RoomStatus.READY),
+                    () -> assertThat(resetRoom.getCurrentRound()).isEqualTo(1),
+                    () -> assertThat(notUsedRoomContents).isEmpty()
+            );
+        }
+
+        @Test
+        void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
+            // given
+            int invalidCurrentRound = 4;
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, invalidCurrentRound, TIME_LIMIT, STATUS, CATEGORY));
+            saveRoomContents(room);
+
+            // when & then
+            assertThatThrownBy(() -> roomService.resetRoom(room.getId()))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("방이 종료되지 않았습니다");
+        }
+
+        @ParameterizedTest
+        @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
+        void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
+            // given
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY));
+            saveRoomContents(room);
+
+            // when & then
+            assertThatThrownBy(() -> roomService.resetRoom(room.getId()))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("방이 종료되지 않았습니다");
+        }
+
+        private void saveRoomContents(Room room) {
+            for (int i = 1; i < room.getTotalRound(); i++) {
+                roomContentRepository.save(new RoomContent(room, content, i, null, false));
+            }
         }
     }
 }

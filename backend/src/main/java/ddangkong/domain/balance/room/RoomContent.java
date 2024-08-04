@@ -73,6 +73,10 @@ public class RoomContent extends BaseEntity {
         }
     }
 
+    public void updateUsed() {
+        isUsed = true;
+    }
+
     public Long getContentId() {
         return balanceContent.getId();
     }

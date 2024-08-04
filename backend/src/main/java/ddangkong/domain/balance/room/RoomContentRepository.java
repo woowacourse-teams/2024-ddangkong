@@ -2,12 +2,15 @@ package ddangkong.domain.balance.room;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.exception.BadRequestException;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoomContentRepository extends JpaRepository<RoomContent, Long> {
 
     Optional<RoomContent> findByRoomAndRound(Room room, int round);
+
+    List<RoomContent> findAllByRoomAndIsUsed(Room room, boolean isUsed);
 
     Optional<RoomContent> findByRoomAndBalanceContent(Room room, BalanceContent balanceContent);
 

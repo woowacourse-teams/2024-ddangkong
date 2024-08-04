@@ -185,7 +185,7 @@ class RoomTest {
         private static final Category CATEGORY = Category.EXAMPLE;
 
         @Test
-        void 방을_초기_상태로_초기화_한다() {
+        void 방을_초기_상태로_초기화한다() {
             // given
             int currentRound = 5;
             RoomStatus status = RoomStatus.FINISH;
