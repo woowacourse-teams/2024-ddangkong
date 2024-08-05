@@ -12,6 +12,10 @@ jobs:
     timeout-minutes: 4
     runs-on: [self-hosted, linux, ARM64]
 
+    defaults:
+      run:
+        working-directory: ./frontend
+
     steps:
       - uses: actions/checkout@v4
 
