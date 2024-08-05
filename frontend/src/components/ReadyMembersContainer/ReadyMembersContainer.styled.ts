@@ -17,8 +17,8 @@ export const membersContainer = css`
 
   background-color: ${Theme.color.peanut300};
 
-  font-size: 1rem;
   font-weight: 600;
+  font-size: 1rem;
 
   overflow-y: scroll;
 
@@ -48,10 +48,12 @@ export const inviteButton = css`
   display: flex;
   align-items: center;
   gap: 2rem;
-  font-size: 1rem;
   width: 100%;
-  background-color: ${Theme.color.peanut400};
   border-radius: ${getBorderRadius('medium')};
+
+  background-color: ${Theme.color.peanut400};
+
+  font-size: 1rem;
 `;
 
 export const memberItem = css`
