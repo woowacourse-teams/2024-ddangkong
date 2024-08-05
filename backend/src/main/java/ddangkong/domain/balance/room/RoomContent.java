@@ -37,7 +37,7 @@ public class RoomContent {
 
     @Column(nullable = false)
     private int round;
-
+  
     private LocalDateTime roundEndedAt;
 
     @Column(nullable = false)

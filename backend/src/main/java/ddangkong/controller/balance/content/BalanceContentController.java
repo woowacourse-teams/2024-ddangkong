@@ -20,6 +20,6 @@ public class BalanceContentController {
 
     @GetMapping("/balances/rooms/{roomId}/content")
     public BalanceContentResponse getBalanceContent(@PathVariable @Positive Long roomId) {
-        return balanceContentService.findRecentBalanceContent(roomId);
+        return balanceContentService.getRecentBalanceContent(roomId);
     }
 }

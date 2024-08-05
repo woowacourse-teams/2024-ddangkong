@@ -9,6 +9,8 @@ public interface RoomContentRepository extends JpaRepository<RoomContent, Long> 
 
     Optional<RoomContent> findByRoomAndRound(Room room, int round);
 
+    Optional<RoomContent> findByRoomAndRoundAndIsUsed(Room room, int round, boolean isUsed);
+
     Optional<RoomContent> findByRoomAndBalanceContent(Room room, BalanceContent balanceContent);
 
     default RoomContent getByRoomAndBalanceContent(Room room, BalanceContent balanceContent) {
