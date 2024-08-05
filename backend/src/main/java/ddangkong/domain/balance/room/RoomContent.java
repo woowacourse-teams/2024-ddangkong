@@ -44,11 +44,10 @@ public class RoomContent {
     @Column(nullable = false)
     private boolean isUsed;
 
-    public static RoomContent createNewRoom(Room room, BalanceContent balanceContent, int round) {
-        return new RoomContent(room, balanceContent, round, null, false);
-    }
-
-    public RoomContent(Room room, BalanceContent balanceContent, int round, LocalDateTime roundEndedAt,
+    public RoomContent(Room room,
+                       BalanceContent balanceContent,
+                       int round,
+                       LocalDateTime roundEndedAt,
                        boolean isUsed) {
         this.room = room;
         this.balanceContent = balanceContent;

@@ -24,7 +24,7 @@ class RoomContentTest {
             int currentRound = 1;
             int timeLimit = 10_000;
             Room room = new Room(5, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
-            RoomContent roomContent = RoomContent.createNewRoom(room, BALANCE_CONTENT, currentRound);
+            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null, false);
             int expectedAfterSec = (timeLimit + 2_000) / 1_000;
             LocalDateTime expectedRoundEnded = CURRENT_TIME.plusSeconds(expectedAfterSec);
 
@@ -40,7 +40,7 @@ class RoomContentTest {
             // given
             int currentRound = 1;
             Room room = new Room(5, currentRound, 10_000, RoomStatus.PROGRESS, Category.EXAMPLE);
-            RoomContent roomContent = RoomContent.createNewRoom(room, BALANCE_CONTENT, currentRound);
+            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null, false);
             roomContent.startRound(CURRENT_TIME);
 
             // when & then
@@ -55,7 +55,7 @@ class RoomContentTest {
             int roomRound = 1;
             int roomContentRound = 2;
             Room room = new Room(5, roomRound, 10_000, RoomStatus.PROGRESS, Category.EXAMPLE);
-            RoomContent roomContent = RoomContent.createNewRoom(room, BALANCE_CONTENT, roomContentRound);
+            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, roomContentRound, null, false);
 
             // when & then
             assertThatThrownBy(() -> roomContent.startRound(CURRENT_TIME))
