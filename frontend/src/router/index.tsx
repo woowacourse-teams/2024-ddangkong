@@ -6,6 +6,7 @@ import GamePage from '@/pages/GamePage/GamePage';
 import GameResultPage from '@/pages/GameResultPage/GameResultPage';
 import MainPage from '@/pages/MainPage/MainPage';
 import NicknamePage from '@/pages/NicknamePage/NicknamePage';
+import ReadyPage from '@/pages/ReadyPage/ReadyPage';
 import RoundResultPage from '@/pages/RoundResultPage/RoundResultPage';
 import VoteStatusPage from '@/pages/VoteStatusPage/VoteStatusPage';
 
@@ -23,23 +24,23 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: 'nickname',
+        path: 'nickname/:roomId?',
         element: <NicknamePage />,
       },
       {
-        path: 'ready',
-        element: <div>게임 대기 화면</div>,
+        path: 'ready/:roomId',
+        element: <ReadyPage />,
       },
       {
-        path: 'game',
+        path: ':roomId/game',
         element: <GamePage />,
       },
       {
-        path: 'round/result',
+        path: ':roomId/round/result',
         element: <RoundResultPage />,
       },
       {
-        path: 'game/result',
+        path: ':roomId/game/result',
         element: <GameResultPage />,
       },
     ],

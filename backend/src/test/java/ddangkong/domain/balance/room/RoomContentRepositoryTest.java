@@ -3,6 +3,10 @@ package ddangkong.domain.balance.room;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ddangkong.domain.BaseRepositoryTest;
+import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.content.Category;
+import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,24 +16,33 @@ class RoomContentRepositoryTest extends BaseRepositoryTest {
     @Autowired
     private RoomContentRepository roomContentRepository;
 
-    @Autowired
-    private RoomRepository roomRepository;
-
     @Nested
     class 방의_해당_라운드_질문_조회 {
 
+        private static final LocalDateTime ROUND_ENDED_AT = LocalDateTime.parse("2021-08-03T00:00:00");
+
+        private Room room;
+
+        private BalanceContent balanceContent;
+
+        @BeforeEach
+        void setUp() {
+            room = save(Room.createNewRoom());
+            balanceContent = save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+        }
+
         @Test
-        void 방의_해당_라운드의_질문을_조회할_수_있다() {
+        void 방의_현재_라운드에_해당하는_룸_컨텐츠를_조회할_수_있다() {
             // given
-            Long roomId = 1L;
-            Room room = roomRepository.findById(roomId).get();
-            int round = 2;
+            int round = 1;
+            RoomContent roomContent = new RoomContent(room, balanceContent, round, ROUND_ENDED_AT, false);
+            roomContentRepository.save(roomContent);
 
             // when
-            RoomContent actual = roomContentRepository.findByRoomAndRound(room, round).get();
+            RoomContent actual = roomContentRepository.findByRoomAndRound(room, room.getCurrentRound()).orElseThrow();
 
             // then
-            assertThat(actual.getId()).isEqualTo(2L);
+            assertThat(actual.getId()).isEqualTo(1L);
         }
     }
 }

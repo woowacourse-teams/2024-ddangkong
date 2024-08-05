@@ -5,13 +5,11 @@ import TopicContainer from '@/components/TopicContainer/TopicContainer';
 
 const GamePage = () => {
   return (
-    <>
-      <Content>
-        <TopicContainer />
-        <Timer />
-        <SelectContainer />
-      </Content>
-    </>
+    <Content>
+      <TopicContainer />
+      <Timer />
+      <SelectContainer />
+    </Content>
   );
 };
 

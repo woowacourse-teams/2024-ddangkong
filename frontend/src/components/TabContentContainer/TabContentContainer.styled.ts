@@ -43,7 +43,7 @@ export const barWrapperStyle = css`
   width: inherit;
 `;
 
-export const barStyle = (percentage: number, isBigFirstOption: boolean) => css`
+export const firstBar = (percentage: number, isBigFirstOption?: boolean) => css`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,7 +62,7 @@ export const barStyle = (percentage: number, isBigFirstOption: boolean) => css`
   transform: translateX(5px);
 `;
 
-export const barBackgroundStyle = (percentage: number, isBigFirstOption: boolean) => css`
+export const secondBar = (percentage: number, isBigFirstOption?: boolean) => css`
   display: flex;
   justify-content: center;
   align-items: center;

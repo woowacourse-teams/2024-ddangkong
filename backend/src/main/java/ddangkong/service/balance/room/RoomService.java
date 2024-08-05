@@ -1,22 +1,22 @@
 package ddangkong.service.balance.room;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.domain.balance.option.BalanceOptionRepository;
-import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.balance.room.Room;
 import ddangkong.domain.balance.room.RoomContent;
 import ddangkong.domain.balance.room.RoomContentRepository;
 import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
-import ddangkong.exception.BadRequestException;
 import ddangkong.exception.InternalServerException;
+import ddangkong.service.balance.room.dto.RoundFinishedResponse;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -36,7 +36,7 @@ public class RoomService {
 
     private final BalanceContentRepository balanceContentRepository;
 
-    private final BalanceOptionRepository balanceOptionRepository;
+    private final Clock clock;
 
     @Transactional(readOnly = true)
     public RoomInfoResponse findRoomInfo(Long roomId) {
@@ -65,10 +65,9 @@ public class RoomService {
         Room room = roomRepository.getById(roomId);
         room.startGame();
 
-        // TODO Room에 카테고리 도입 후 수정
-        List<BalanceContent> balanceContents = findByRandom(Category.EXAMPLE, room.getTotalRound());
+        List<BalanceContent> balanceContents = findByRandom(room.getCategory(), room.getTotalRound());
         List<RoomContent> roomContents = createRoomContents(room, balanceContents);
-        startRound(roomContents.get(0));
+        startFirstRound(roomContents, room.getTimeLimit());
         roomContentRepository.saveAll(roomContents);
     }
 
@@ -84,30 +83,42 @@ public class RoomService {
 
     private List<RoomContent> createRoomContents(Room room, List<BalanceContent> balanceContents) {
         return IntStream.range(0, balanceContents.size())
-                .mapToObj(index -> new RoomContent(room, balanceContents.get(index), index + 1))
+                .mapToObj(index -> RoomContent.newRoomContent(room, balanceContents.get(index), index + 1))
                 .toList();
     }
 
-    private void startRound(RoomContent roomContent) {
-        // TODO #109 머지 시 반영
+    private void startFirstRound(List<RoomContent> roomContents, int timeLimit) {
+        roomContents.get(0).updateRoundEndedAt(LocalDateTime.now(clock), timeLimit);
     }
 
     @Transactional
-    public BalanceContentResponse moveToNextRound(Long roomId) {
+    public void updateRoomSetting(Long roomId, RoomSettingRequest request) {
+        Room room = roomRepository.getById(roomId);
+
+        room.updateTimeLimit(request.timeLimit());
+        room.updateTotalRound(request.totalRound());
+        room.updateCategory(request.category());
+    }
+
+    @Transactional
+    public void moveToNextRound(Long roomId) {
         Room room = roomRepository.getById(roomId);
         room.moveToNextRound();
 
-        RoomContent roomContent = findCurrentRoomContent(room);
-        BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(
-                roomContent.getBalanceContent());
-        return BalanceContentResponse.builder()
-                .roomContent(roomContent)
-                .balanceOptions(balanceOptions)
-                .build();
+        if (room.isGameProgress()) {
+            RoomContent roomContent = getCurrentRoomContent(room);
+            roomContent.updateRoundEndedAt(LocalDateTime.now(clock), room.getTimeLimit());
+        }
     }
 
-    private RoomContent findCurrentRoomContent(Room room) {
+    private RoomContent getCurrentRoomContent(Room room) {
         return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
-                .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
+                .orElseThrow(() -> new InternalServerException("해당 룸에서 진행 중인 라운드 컨텐츠가 존재하지 않습니다."));
+    }
+
+    @Transactional(readOnly = true)
+    public RoundFinishedResponse getRoundFinished(Long roomId, int round) {
+        Room room = roomRepository.getById(roomId);
+        return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished());
     }
 }

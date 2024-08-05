@@ -10,7 +10,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    runs-on: [ self-hosted, linux, ARM64 ]
 
     defaults:
       run:
@@ -30,4 +31,4 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew test

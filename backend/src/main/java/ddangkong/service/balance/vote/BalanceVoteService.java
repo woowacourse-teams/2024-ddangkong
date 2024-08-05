@@ -19,6 +19,9 @@ import ddangkong.domain.balance.vote.BalanceVoteRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
+import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -41,23 +44,33 @@ public class BalanceVoteService {
 
     private final RoomRepository roomRepository;
 
+    private final Clock clock;
+
     @Transactional
     public BalanceVoteResponse createBalanceVote(BalanceVoteRequest request, Long roomId, Long contentId) {
-        BalanceOption balanceOption = findValidOption(request.optionId(), contentId);
-        Member member = findValidMember(request.memberId(), roomId);
+        Room room = roomRepository.getById(roomId);
+        BalanceContent balanceContent = balanceContentRepository.getById(contentId);
+        validateRoundFinished(room, balanceContent);
+        BalanceOption balanceOption = getValidOption(request.optionId(), balanceContent);
+        Member member = getValidMember(request.memberId(), room);
 
-        BalanceVote balanceVote = new BalanceVote(balanceOption, member);
-        BalanceVote savedBalanceVote = balanceVoteRepository.save(balanceVote);
-        return new BalanceVoteResponse(savedBalanceVote);
+        BalanceVote balanceVote = balanceVoteRepository.save(new BalanceVote(balanceOption, member));
+        return new BalanceVoteResponse(balanceVote);
     }
 
-    private BalanceOption findValidOption(Long optionId, Long contentId) {
-        return balanceOptionRepository.findByIdAndBalanceContentId(optionId, contentId)
+    private void validateRoundFinished(Room room, BalanceContent balanceContent) {
+        if (isRoundFinished(room, balanceContent)) {
+            throw new BadRequestException("이미 종료된 라운드에는 투표할 수 없습니다.");
+        }
+    }
+
+    private BalanceOption getValidOption(Long optionId, BalanceContent balanceContent) {
+        return balanceOptionRepository.findByIdAndBalanceContent(optionId, balanceContent)
                 .orElseThrow(() -> new BadRequestException("해당 질문의 선택지가 존재하지 않습니다."));
     }
 
-    private Member findValidMember(Long memberId, Long roomId) {
-        return memberRepository.findByIdAndRoomId(memberId, roomId)
+    private Member getValidMember(Long memberId, Room room) {
+        return memberRepository.findByIdAndRoom(memberId, room)
                 .orElseThrow(() -> new BadRequestException("해당 방의 멤버가 존재하지 않습니다."));
     }
 
@@ -101,5 +114,28 @@ public class BalanceVoteService {
         if (!Objects.equals(balanceContent.getId(), balanceContentId)) {
             throw new BadRequestException("현재 진행중인 질문의 컨텐츠와 일치하지 않는 요청입니다.");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public VoteFinishedResponse getAllVoteFinished(Long roomId, Long contentId) {
+        Room room = roomRepository.getById(roomId);
+        BalanceContent balanceContent = balanceContentRepository.getById(contentId);
+        if (isRoundFinished(room, balanceContent)) {
+            return VoteFinishedResponse.roundFinished();
+        }
+        return VoteFinishedResponse.allVoteFinished(isAllVoteFinished(room, balanceContent));
+    }
+
+    private boolean isRoundFinished(Room room, BalanceContent balanceContent) {
+        RoomContent roomContent = roomContentRepository.getByRoomAndBalanceContent(room, balanceContent);
+        LocalDateTime now = LocalDateTime.now(clock);
+        return roomContent.isRoundOver(now, room.getCurrentRound());
+    }
+
+    private boolean isAllVoteFinished(Room room, BalanceContent balanceContent) {
+        List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
+        Long voteCount = balanceVoteRepository.countByMemberRoomAndBalanceOptionIn(room, balanceOptions);
+        List<Member> members = memberRepository.findAllByRoom(room);
+        return voteCount == members.size();
     }
 }

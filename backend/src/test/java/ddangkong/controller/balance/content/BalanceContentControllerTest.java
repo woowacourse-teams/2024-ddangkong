@@ -16,7 +16,12 @@ class BalanceContentControllerTest extends BaseControllerTest {
     class 현재_방의_내용_조회 {
 
         private static final BalanceContentResponse EXPECTED_RESPONSE = new BalanceContentResponse(
-                1L, Category.EXAMPLE, 5, 2, "민초 vs 반민초",
+                1L,
+                Category.EXAMPLE,
+                5,
+                2,
+                30_000, // TODO 추후 sec으로 변경
+                "민초 vs 반민초",
                 new BalanceOptionResponse(1L, "민초"),
                 new BalanceOptionResponse(2L, "반민초"));
 

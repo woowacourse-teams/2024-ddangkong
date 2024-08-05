@@ -91,7 +91,8 @@
   "lint-staged": {
     "**/*.{ts,tsx}": [
       "eslint --fix",
-      "prettier --write"
+      "prettier --write",
+      "stylelint ./src/**/*.styled.ts --fix"
     ]
   },
   "msw": {
