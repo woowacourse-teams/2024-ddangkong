@@ -23,8 +23,11 @@ public class BalanceContentService {
     private final BalanceOptionRepository balanceOptionRepository;
 
     @Transactional(readOnly = true)
-    public BalanceContentResponse findRecentBalanceContent(Long roomId) {
-        RoomContent roomContent = findCurrentRoomContent(roomId);
+    public BalanceContentResponse getRecentBalanceContent(Long roomId) {
+        Room room = roomRepository.getById(roomId);
+        validateProgressing(room);
+
+        RoomContent roomContent = getCurrentRoomContent(room);
         BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(
                 roomContent.getBalanceContent());
 
@@ -34,9 +37,14 @@ public class BalanceContentService {
                 .build();
     }
 
-    private RoomContent findCurrentRoomContent(Long roomId) {
-        Room room = roomRepository.getById(roomId);
-        return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
+    private static void validateProgressing(Room room) {
+        if (!room.isGameProgress()) {
+            throw new BadRequestException("해당 방은 게임을 진행하고 있지 않습니다.");
+        }
+    }
+
+    private RoomContent getCurrentRoomContent(Room room) {
+        return roomContentRepository.findByRoomAndRoundAndIsUsed(room, room.getCurrentRound(), false)
                 .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
     }
 }

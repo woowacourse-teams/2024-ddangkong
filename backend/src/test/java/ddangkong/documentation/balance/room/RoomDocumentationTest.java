@@ -176,6 +176,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                     Category.EXAMPLE,
                     5,
                     2,
+                    30_000, // TODO sec 단위로 수정
                     "10년 동안 한 사람과 연애한 애인 VS 1년 동안 다섯 사람과 연애한 애인",
                     firstOption,
                     secondOption
@@ -196,6 +197,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("category").type(STRING).description("콘텐츠 카테고리"),
                                     fieldWithPath("totalRound").type(NUMBER).description("총 라운드 수"),
                                     fieldWithPath("currentRound").type(NUMBER).description("현재 라운드"),
+                                    fieldWithPath("timeLimit").type(NUMBER).description("라운드 제한시간"),
                                     fieldWithPath("question").type(STRING).description("콘텐츠 질문"),
                                     fieldWithPath("firstOption.optionId").type(NUMBER).description("첫 번째 선택지 ID"),
                                     fieldWithPath("firstOption.name").type(STRING).description("첫 번째 선택지명"),
