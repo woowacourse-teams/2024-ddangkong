@@ -19,6 +19,7 @@ import ddangkong.exception.BadRequestException;
 import ddangkong.exception.InternalServerException;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,7 +67,7 @@ public class RoomService {
 
         // TODO Room에 카테고리 도입 후 수정
         List<BalanceContent> balanceContents = findByRandom(Category.EXAMPLE, room.getTotalRound());
-        List<RoomContent> roomContents = RoomContent.createRoomContents(room, balanceContents);
+        List<RoomContent> roomContents = createRoomContents(room, balanceContents);
         startRound(roomContents.get(0));
         roomContentRepository.saveAll(roomContents);
     }
@@ -79,6 +80,12 @@ public class RoomService {
 
         Collections.shuffle(contents);
         return contents.subList(0, count);
+    }
+
+    private List<RoomContent> createRoomContents(Room room, List<BalanceContent> balanceContents) {
+        return IntStream.range(0, balanceContents.size())
+                .mapToObj(index -> new RoomContent(room, balanceContents.get(index), index + 1))
+                .toList();
     }
 
     private void startRound(RoomContent roomContent) {
