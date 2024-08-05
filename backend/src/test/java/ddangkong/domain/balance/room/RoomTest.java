@@ -7,7 +7,8 @@ import ddangkong.exception.BadRequestException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.EnumSource.Mode;
 
 class RoomTest {
 
@@ -27,7 +28,7 @@ class RoomTest {
         }
 
         @ParameterizedTest
-        @CsvSource({"PROGRESS", "FINISH"})
+        @EnumSource(mode = Mode.EXCLUDE, names = {"READY"})
         void 게임이_이미_시작했다면_예외를_던진다(RoomStatus status) {
             // given
             Room room = new Room(5, 1, 30_000, status);
