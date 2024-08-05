@@ -11,7 +11,7 @@ export const profile = css`
   background-color: ${Theme.color.gray300};
 `;
 
-export const nickname = css`
+export const nicknameBox = css`
   width: 26.8rem;
   margin: 2rem 0;
 

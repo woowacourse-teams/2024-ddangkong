@@ -20,6 +20,7 @@ const Header = ({ title }: HeaderProps) => {
 
   const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
   const isFinalPage = location.pathname === ROUTES.gameResult;
+  const isNicknamePage = location.pathname.startsWith(ROUTES.nickname);
 
   if (isFinalPage) {
     return <header css={headerLayout}></header>;
@@ -30,6 +31,16 @@ const Header = ({ title }: HeaderProps) => {
       <header css={headerLayout}>
         <span></span>
         <span css={gameTitle}>투표 결과</span>
+        <span></span>
+      </header>
+    );
+  }
+
+  if (isNicknamePage) {
+    return (
+      <header css={headerLayout}>
+        <span></span>
+        <span css={gameTitle}>닉네임 설정</span>
         <span></span>
       </header>
     );

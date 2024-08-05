@@ -1,0 +1,34 @@
+{
+  "isGameStart": false,
+  "roomSettings": {
+    "totalRound": 5,
+    "timeLimit": 10000
+  },
+  "members": [
+    {
+      "memberId": 1,
+      "nickname": "든콩",
+      "isMaster": true
+    },
+    {
+      "memberId": 2,
+      "nickname": "프콩",
+      "isMaster": false
+    },
+    {
+      "memberId": 3,
+      "nickname": "프콩",
+      "isMaster": false
+    },
+    {
+      "memberId": 4,
+      "nickname": "프콩",
+      "isMaster": false
+    },
+    {
+      "memberId": 5,
+      "nickname": "프콩",
+      "isMaster": false
+    }
+  ]
+}
