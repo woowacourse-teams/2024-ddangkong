@@ -3,4 +3,5 @@ export const QUERY_KEYS = {
   gameResult: 'gameResult',
   roundVoteResult: 'roundVoteResult',
   roundIsFinished: 'roundIsFinished',
+  roomMembers: 'roomMembers',
 } as const;

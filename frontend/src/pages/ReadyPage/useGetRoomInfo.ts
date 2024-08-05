@@ -9,7 +9,7 @@ export const useGetRoomInfo = () => {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
-    queryFn: ({ queryKey: [_, roomId] }) => getRoomInfo(roomId as number),
+    queryFn: ({ queryKey: [_, roomId] }) => getRoomInfo(Number(roomId)),
     refetchInterval: 1000,
   });
 
