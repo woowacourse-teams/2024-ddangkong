@@ -69,7 +69,7 @@ public class RoomService {
 
         if (room.isGameProgress()) {
             RoomContent roomContent = getCurrentRoomContent(room);
-            roomContent.startRound(LocalDateTime.now(clock));
+            roomContent.startRound(LocalDateTime.now(clock), room.getTimeLimit());
         }
     }
 

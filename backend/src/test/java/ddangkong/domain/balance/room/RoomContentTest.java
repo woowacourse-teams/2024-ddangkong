@@ -29,7 +29,7 @@ class RoomContentTest {
             LocalDateTime expectedRoundEnded = CURRENT_TIME.plusSeconds(expectedAfterSec);
 
             // when
-            roomContent.startRound(CURRENT_TIME);
+            roomContent.startRound(CURRENT_TIME, timeLimit);
 
             // then
             assertThat(roomContent.getRoundEndedAt()).isEqualTo(expectedRoundEnded);
@@ -41,10 +41,10 @@ class RoomContentTest {
             int currentRound = 1;
             Room room = new Room(5, currentRound, 10_000, RoomStatus.PROGRESS, Category.EXAMPLE);
             RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null, false);
-            roomContent.startRound(CURRENT_TIME);
+            roomContent.startRound(CURRENT_TIME, 10_000);
 
             // when & then
-            assertThatThrownBy(() -> roomContent.startRound(CURRENT_TIME))
+            assertThatThrownBy(() -> roomContent.startRound(CURRENT_TIME, 10_000))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 라운드는 이미 시작했습니다.");
         }

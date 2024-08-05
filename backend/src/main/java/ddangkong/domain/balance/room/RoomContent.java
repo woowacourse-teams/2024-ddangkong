@@ -55,12 +55,12 @@ public class RoomContent {
         this.isUsed = isUsed;
     }
 
-    public void startRound(LocalDateTime currentTime) {
+    public void startRound(LocalDateTime currentTime, int timeLimit) {
         if (roundEndedAt != null) {
             throw new BadRequestException("해당 라운드는 이미 시작했습니다.");
         }
 
-        int afterSec = (room.getTimeLimit() + DELAY_MSEC) / 1_000;
+        int afterSec = (timeLimit + DELAY_MSEC) / 1_000;
         roundEndedAt = currentTime.plusSeconds(afterSec);
     }
 
