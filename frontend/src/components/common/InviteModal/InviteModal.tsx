@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   inviteModalLi,
   inviteModalHeader,
@@ -9,6 +11,7 @@ import {
   inviteModalCopyIcon,
 } from './InviteModal.styled';
 import Modal from '../Modal/Modal';
+import Toast from '../Toast/Toast';
 
 import CopyIcon from '@/assets/images/copyIcon.png';
 
@@ -18,9 +21,12 @@ interface InviteModalProps {
 }
 
 const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
+  const [isCopied, setIsCopied] = useState(false);
+
   const handleCopy = () => {
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
     // TODO: 링크 영역 클릭하면 카피되는 기능
-    // TODO: 카피가 성공하면 토스트 복사 알림
   };
 
   return (
@@ -47,6 +53,7 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
           닫기
         </Modal.TextButton>
       </Modal.Footer>
+      {isCopied && <Toast message="링크가 복사되었습니다!" duration={2000} />}
     </Modal>
   );
 };
