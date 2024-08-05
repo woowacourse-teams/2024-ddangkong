@@ -23,10 +23,10 @@ interface InviteModalProps {
 const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
   const [isCopied, setIsCopied] = useState(false);
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText('복사되어야하는링크');
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
-    // TODO: 링크 영역 클릭하면 카피되는 기능
   };
 
   return (
