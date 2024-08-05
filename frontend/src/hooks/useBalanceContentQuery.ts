@@ -1,4 +1,5 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 import { fetchBalanceContent } from '@/apis/balanceContent';
 import { QUERY_KEYS } from '@/constants/queryKeys';
@@ -9,9 +10,11 @@ type BalanceContentQueryResponse = UseQueryResult<BalanceContent, Error> & {
 };
 
 const useBalanceContentQuery = (): BalanceContentQueryResponse => {
+  const { roomId } = useParams();
+
   const balanceContentQuery = useQuery({
-    queryKey: [QUERY_KEYS.balanceContent],
-    queryFn: async () => await fetchBalanceContent(),
+    queryKey: [QUERY_KEYS.balanceContent, roomId],
+    queryFn: async () => await fetchBalanceContent(Number(roomId)),
     staleTime: 3 * 60 * 1000,
   });
 

@@ -1,5 +1,4 @@
-import { useState } from 'react';
-
+import { useRoundIsFinished, useSelectOption } from './SelectContainer.hook';
 import { selectContainerLayout, selectSection } from './SelectContainer.styled';
 import SelectButton from '../common/SelectButton/SelectButton';
 
@@ -8,35 +7,30 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const SelectContainer = () => {
   const { balanceContent, isLoading } = useBalanceContentQuery();
-  const [selectedId, setSelectedId] = useState(0);
-
-  const handleSelectOption = (selectedId: number) => {
-    setSelectedId(selectedId);
-  };
+  const { selectedId, handleSelectOption } = useSelectOption();
+  useRoundIsFinished(balanceContent?.contentId);
 
   if (isLoading) return <div>Loading...</div>;
 
+  if (!balanceContent) return <div>데이터가 없습니다.</div>;
+
   return (
-    <>
-      {balanceContent && (
-        <div css={selectContainerLayout}>
-          <section css={selectSection}>
-            <SelectOption
-              option={balanceContent.firstOption}
-              selectedId={selectedId}
-              handleSelectOption={handleSelectOption}
-            />
-            <span>VS</span>
-            <SelectOption
-              option={balanceContent.secondOption}
-              selectedId={selectedId}
-              handleSelectOption={handleSelectOption}
-            />
-          </section>
-          <SelectButton isDisabled={!selectedId} selectedId={selectedId} />
-        </div>
-      )}
-    </>
+    <div css={selectContainerLayout}>
+      <section css={selectSection}>
+        <SelectOption
+          option={balanceContent.firstOption}
+          selectedId={selectedId}
+          handleSelectOption={handleSelectOption}
+        />
+        <span>VS</span>
+        <SelectOption
+          option={balanceContent.secondOption}
+          selectedId={selectedId}
+          handleSelectOption={handleSelectOption}
+        />
+      </section>
+      <SelectButton selectedId={selectedId} />
+    </div>
   );
 };
 

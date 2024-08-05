@@ -3,9 +3,12 @@
   "testEnvironmentOptions": {
     "customExportConditions": [""]
   },
+  "moduleFileExtensions": ["js", "ts", "tsx"],
   "moduleNameMapper": {
+    "^@/test-utils": "<rootDir>/src/utils/test-utils",
     "^@/(.*)$": "<rootDir>/src/$1"
   },
   "setupFiles": ["./jest.polyfills.js"],
-  "setupFilesAfterEnv": ["<rootDir>/jest.setup.ts"]
+  "setupFilesAfterEnv": ["<rootDir>/jest.setup.ts"],
+  "clearMocks": true
 }

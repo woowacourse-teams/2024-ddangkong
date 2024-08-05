@@ -31,15 +31,15 @@ export const router = createBrowserRouter([
         element: <div>게임 대기 화면</div>,
       },
       {
-        path: 'game',
+        path: ':roomId/game',
         element: <GamePage />,
       },
       {
-        path: 'round/result',
+        path: ':roomId/round/result',
         element: <RoundResultPage />,
       },
       {
-        path: 'game/result',
+        path: ':roomId/game/result',
         element: <GameResultPage />,
       },
     ],

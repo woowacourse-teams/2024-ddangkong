@@ -26,6 +26,11 @@ const useRoundVoteResultQuery = ({
       if (typeof contentId === 'undefined') {
         throw new Error('contentId 가 존재하지 않습니다.');
       }
+
+      if (typeof roomId === 'undefined') {
+        throw new Error('방이 존재하지 않습니다.');
+      }
+
       return await fetchRoundVoteResult({ roomId, contentId });
     },
     placeholderData: INITIAL_VALUE,
