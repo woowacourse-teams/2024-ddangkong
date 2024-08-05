@@ -99,7 +99,7 @@ class RoomServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistId))
-                    .isInstanceOf(BadRequestException.class);
+                    .isExactlyInstanceOf(BadRequestException.class);
         }
     }
 
@@ -132,7 +132,7 @@ class RoomServiceTest extends BaseServiceTest {
         void 방이_없을_경우_예외를_던진다() {
             // when & then
             assertThatThrownBy(() -> roomService.moveToNextRound(NOT_EXIST_ROOM_ID))
-                    .isInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방이 존재하지 않습니다.");
         }
 
@@ -140,7 +140,7 @@ class RoomServiceTest extends BaseServiceTest {
         void 방의_현재_라운드의_질문이_없을_경우_예외를_던진다() {
             // when & then
             assertThatThrownBy(() -> roomService.moveToNextRound(NOT_PROGRESSED_ROOM_ID))
-                    .isInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
         }
     }
