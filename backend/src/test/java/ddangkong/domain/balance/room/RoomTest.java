@@ -181,7 +181,6 @@ class RoomTest {
     class 방_초기화 {
         private static final int TOTAL_ROUND = 5;
         private static final int TIME_LIMIT = 30;
-        //        private static final RoomStatus STATUS = RoomStatus.PROGRESS;
         private static final Category CATEGORY = Category.EXAMPLE;
 
         @Test
