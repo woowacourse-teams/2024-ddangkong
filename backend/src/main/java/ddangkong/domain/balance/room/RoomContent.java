@@ -43,7 +43,7 @@ public class RoomContent extends BaseEntity {
     @Column(nullable = false)
     private boolean isUsed;
 
-    public static List<RoomContent> createList(Room room, List<BalanceContent> balanceContents) {
+    public static List<RoomContent> createRoomContents(Room room, List<BalanceContent> balanceContents) {
         return IntStream.range(0, balanceContents.size())
                 .mapToObj(index -> new RoomContent(room, balanceContents.get(index), index + 1))
                 .toList();

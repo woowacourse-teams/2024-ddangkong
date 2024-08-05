@@ -62,7 +62,7 @@ public class RoomService {
         room.startGame();
 
         List<BalanceContent> balanceContents = balanceContentRepository.findByRandom(room.getTotalRound());
-        List<RoomContent> roomContents = RoomContent.createList(room, balanceContents);
+        List<RoomContent> roomContents = RoomContent.createRoomContents(room, balanceContents);
         startRound(roomContents.get(0));
         roomContentRepository.saveAll(roomContents);
     }
