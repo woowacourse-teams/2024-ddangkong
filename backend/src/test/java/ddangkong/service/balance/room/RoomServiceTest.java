@@ -4,15 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.controller.balance.room.dto.RoomSettingResponse;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomContent;
+import ddangkong.domain.balance.room.RoomContentRepository;
 import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.domain.balance.room.RoomStatus;
 import ddangkong.exception.BadRequestException;
@@ -32,6 +32,9 @@ class RoomServiceTest extends BaseServiceTest {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private RoomContentRepository roomContentRepository;
 
     @Nested
     class 게임_방_정보_조회 {
@@ -107,25 +110,48 @@ class RoomServiceTest extends BaseServiceTest {
     class 다음_라운드로_이동 {
 
         private static final Long PROGRESS_ROOM_ID = 1L;
+        private static final int CURRENT_ROUND = 2;
         private static final Long NOT_EXIST_ROOM_ID = 999999999L;
-        private static final Long NOT_PROGRESSED_ROOM_ID = 2L;
-        private static final BalanceContentResponse BALANCE_CONTENT_RESPONSE = new BalanceContentResponse(
-                3L,
-                Category.EXAMPLE,
-                5,
-                3,
-                30_000, // TODO 추후 sec으로 변경
-                "다음 중 여행가고 싶은 곳은?",
-                new BalanceOptionResponse(5L, "산"),
-                new BalanceOptionResponse(6L, "바다"));
 
         @Test
-        void 다음_라운드로_넘어갈_수_있다() {
+        void 중간_라운드라면_다음_라운드로_넘어갈_수_있다() {
+            // given
+            int nextRound = CURRENT_ROUND + 1;
+
             // when
-            BalanceContentResponse actual = roomService.moveToNextRound(PROGRESS_ROOM_ID);
+            roomService.moveToNextRound(PROGRESS_ROOM_ID);
 
             // then
-            assertThat(actual).isEqualTo(BALANCE_CONTENT_RESPONSE);
+            Room room = roomRepository.getById(PROGRESS_ROOM_ID);
+            RoomContent roomContent = roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
+                    .orElseThrow();
+            assertAll(
+                    () -> assertThat(room.getCurrentRound()).isEqualTo(nextRound),
+                    () -> assertThat(room.isGameProgress()).isTrue(),
+                    () -> assertThat(roomContent.getRoundEndedAt()).isNotNull()
+            );
+        }
+
+        @Test
+        void 마지막_라운드라면_게임을_종료한다() {
+            // given
+            Long roomId = finalRoundRoomId();
+
+            // when
+            roomService.moveToNextRound(roomId);
+
+            // then
+            Room room = roomRepository.getById(roomId);
+            assertAll(
+                    () -> assertThat(room.getCurrentRound()).isEqualTo(room.getTotalRound()),
+                    () -> assertThat(room.getStatus()).isEqualTo(RoomStatus.FINISH)
+            );
+        }
+
+        Long finalRoundRoomId() {
+            Room room = new Room(5, 5, 30_000, RoomStatus.PROGRESS, Category.EXAMPLE);
+            roomRepository.save(room);
+            return room.getId();
         }
 
         @Test
@@ -134,14 +160,6 @@ class RoomServiceTest extends BaseServiceTest {
             assertThatThrownBy(() -> roomService.moveToNextRound(NOT_EXIST_ROOM_ID))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방이 존재하지 않습니다.");
-        }
-
-        @Test
-        void 방의_현재_라운드의_질문이_없을_경우_예외를_던진다() {
-            // when & then
-            assertThatThrownBy(() -> roomService.moveToNextRound(NOT_PROGRESSED_ROOM_ID))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
         }
     }
 

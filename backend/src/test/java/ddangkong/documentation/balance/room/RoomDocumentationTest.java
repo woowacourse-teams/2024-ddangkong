@@ -21,9 +21,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.RoomController;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
@@ -164,45 +162,18 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 다음_라운드로_이동 {
 
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/contents";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/next-round";
 
         @Test
         void 다음_라운드로_이동한다() throws Exception {
-            // given
-            BalanceOptionResponse firstOption = new BalanceOptionResponse(3L, "10년 동안 한 사람과 연애한 애인");
-            BalanceOptionResponse secondOption = new BalanceOptionResponse(4L, "1년 동안 다섯 사람과 연애한 애인");
-            BalanceContentResponse response = new BalanceContentResponse(
-                    2L,
-                    Category.EXAMPLE,
-                    5,
-                    2,
-                    30_000, // TODO sec 단위로 수정
-                    "10년 동안 한 사람과 연애한 애인 VS 1년 동안 다섯 사람과 연애한 애인",
-                    firstOption,
-                    secondOption
-            );
-            when(roomService.moveToNextRound(anyLong())).thenReturn(response);
-
             // when & then
-            mockMvc.perform(post(ENDPOINT, 1L)
+            mockMvc.perform(patch(ENDPOINT, 1L)
                             .contentType(MediaType.APPLICATION_JSON)
                     )
-                    .andExpect(status().isCreated())
-                    .andDo(document("room/next",
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/nextRound",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
-                            ),
-                            responseFields(
-                                    fieldWithPath("contentId").type(NUMBER).description("콘텐츠 ID"),
-                                    fieldWithPath("category").type(STRING).description("콘텐츠 카테고리"),
-                                    fieldWithPath("totalRound").type(NUMBER).description("총 라운드 수"),
-                                    fieldWithPath("currentRound").type(NUMBER).description("현재 라운드"),
-                                    fieldWithPath("timeLimit").type(NUMBER).description("라운드 제한시간"),
-                                    fieldWithPath("question").type(STRING).description("콘텐츠 질문"),
-                                    fieldWithPath("firstOption.optionId").type(NUMBER).description("첫 번째 선택지 ID"),
-                                    fieldWithPath("firstOption.name").type(STRING).description("첫 번째 선택지명"),
-                                    fieldWithPath("secondOption.optionId").type(NUMBER).description("두 번째 선택지 ID"),
-                                    fieldWithPath("secondOption.name").type(STRING).description("두 번째 선택지명")
                             )
                     ));
         }

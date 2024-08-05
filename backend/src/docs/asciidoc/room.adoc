@@ -86,21 +86,17 @@ include::{snippets}/room/info/response-fields.adoc[]
 
 ==== curl
 
-include::{snippets}/room/next/curl-request.adoc[]
+include::{snippets}/room/nextRound/curl-request.adoc[]
 
 ==== request
 
-include::{snippets}/room/next/http-request.adoc[]
+include::{snippets}/room/nextRound/http-request.adoc[]
 
-include::{snippets}/room/next/path-parameters.adoc[]
+include::{snippets}/room/nextRound/path-parameters.adoc[]
 
 ==== response
 
-include::{snippets}/room/next/http-response.adoc[]
-
-response fields
-
-include::{snippets}/room/next/response-fields.adoc[]
+include::{snippets}/room/nextRound/http-response.adoc[]
 
 === 라운드 종료 여부
 
