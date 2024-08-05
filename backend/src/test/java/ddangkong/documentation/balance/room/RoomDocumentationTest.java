@@ -1,11 +1,11 @@
 package ddangkong.documentation.balance.room;
 
-
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
@@ -167,7 +167,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             Long roomId = 1L;
 
             // when & then
-            mockMvc.perform(post(ENDPOINT, roomId))
+            mockMvc.perform(patch(ENDPOINT, roomId))
                     .andExpect(status().isNoContent())
                     .andDo(document("room/start",
                             pathParameters(
