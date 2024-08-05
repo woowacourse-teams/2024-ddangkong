@@ -18,13 +18,14 @@ import CopyIcon from '@/assets/images/copyIcon.png';
 interface InviteModalProps {
   isOpen: boolean;
   onClose: () => void;
+  inviteUrl: string;
 }
 
-const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
+const InviteModal = ({ isOpen, onClose, inviteUrl }: InviteModalProps) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText('복사되어야하는링크');
+    await navigator.clipboard.writeText(inviteUrl);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
@@ -41,7 +42,7 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
           <li css={inviteModalLi}>
             <button onClick={handleCopy} css={inviteModalLinkButton}>
               <div css={inviteModalLinkButtonInfoWrapper}>
-                <span>초대 링크 복사</span>
+                <span>{inviteUrl}</span>
                 <img src={CopyIcon} alt="복사하기 이미지" css={inviteModalCopyIcon} />
               </div>
             </button>
