@@ -60,17 +60,9 @@ public class RoomContent {
         if (roundEndedAt != null) {
             throw new BadRequestException("해당 라운드는 이미 시작했습니다.");
         }
-        if (room.isGameProgress() && isDifferentToRoomRound()) {
-            throw new BadRequestException("방이 해당 라운드가 아닙니다. roomRound : %d, contentRound : %d"
-                    .formatted(room.getCurrentRound(), round));
-        }
 
         int afterSec = (room.getTimeLimit() + DELAY_MSEC) / 1_000;
         roundEndedAt = currentTime.plusSeconds(afterSec);
-    }
-
-    private boolean isDifferentToRoomRound() {
-        return round != room.getCurrentRound();
     }
 
     public boolean isRoundOver(LocalDateTime currentTime) {

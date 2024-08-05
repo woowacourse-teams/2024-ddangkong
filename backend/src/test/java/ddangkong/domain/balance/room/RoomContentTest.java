@@ -48,19 +48,5 @@ class RoomContentTest {
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 라운드는 이미 시작했습니다.");
         }
-
-        @Test
-        void 방의_진행_라운드와_일치하지_않으면_예외를_던진다() {
-            // given
-            int roomRound = 1;
-            int roomContentRound = 2;
-            Room room = new Room(5, roomRound, 10_000, RoomStatus.PROGRESS, Category.EXAMPLE);
-            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, roomContentRound, null, false);
-
-            // when & then
-            assertThatThrownBy(() -> roomContent.startRound(CURRENT_TIME))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("방이 해당 라운드가 아닙니다. roomRound : 1, contentRound : 2");
-        }
     }
 }
