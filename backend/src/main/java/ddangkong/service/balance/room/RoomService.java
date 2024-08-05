@@ -6,6 +6,7 @@ import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
+import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.balance.room.Room;
@@ -15,6 +16,8 @@ import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
+import ddangkong.exception.InternalServerException;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,10 +64,21 @@ public class RoomService {
         Room room = roomRepository.getById(roomId);
         room.startGame();
 
-        List<BalanceContent> balanceContents = balanceContentRepository.findByRandom(room.getTotalRound());
+        // TODO Room에 카테고리 도입 후 수정
+        List<BalanceContent> balanceContents = findByRandom(Category.EXAMPLE, room.getTotalRound());
         List<RoomContent> roomContents = RoomContent.createRoomContents(room, balanceContents);
         startRound(roomContents.get(0));
         roomContentRepository.saveAll(roomContents);
+    }
+
+    private List<BalanceContent> findByRandom(Category category, int count) {
+        List<BalanceContent> contents = balanceContentRepository.findByCategory(category);
+        if (contents.size() < count) {
+            throw new InternalServerException("DB의 질문 수가 부족합니다. category : " + category);
+        }
+
+        Collections.shuffle(contents);
+        return contents.subList(0, count);
     }
 
     private void startRound(RoomContent roomContent) {
