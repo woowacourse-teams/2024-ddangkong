@@ -37,7 +37,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew bootJar
+        run: ./gradlew bootJar -PcreateRestDocs
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
