@@ -14,4 +14,4 @@ const useMoveNextRoundMutation = () => {
   });
 };
 
-export { useMoveNextRoundMutation };
+export default useMoveNextRoundMutation;

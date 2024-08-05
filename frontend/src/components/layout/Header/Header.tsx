@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { gameTitle, headerLayout, roundText } from './Header.styled';
 
@@ -16,8 +16,9 @@ interface HeaderProps {
 const Header = ({ title }: HeaderProps) => {
   const { balanceContent } = useBalanceContentQuery();
   const location = useLocation();
+  const { roomId } = useParams();
 
-  const isRoundResultPage = location.pathname === ROUTES.roundResult;
+  const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
   const isFinalPage = location.pathname === ROUTES.gameResult;
   const isNicknamePage = location.pathname.startsWith(ROUTES.nickname);
 

@@ -17,4 +17,4 @@ const useGameResultQuery = (): GameResultQueryResponse => {
   return { ...gameResultQuery, gameResult: gameResultQuery.data };
 };
 
-export { useGameResultQuery };
+export default useGameResultQuery;

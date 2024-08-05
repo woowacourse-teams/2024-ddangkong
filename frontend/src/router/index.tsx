@@ -32,15 +32,15 @@ export const router = createBrowserRouter([
         element: <ReadyPage />,
       },
       {
-        path: 'game',
+        path: ':roomId/game',
         element: <GamePage />,
       },
       {
-        path: 'round/result',
+        path: ':roomId/round/result',
         element: <RoundResultPage />,
       },
       {
-        path: 'game/result',
+        path: ':roomId/game/result',
         element: <GameResultPage />,
       },
     ],

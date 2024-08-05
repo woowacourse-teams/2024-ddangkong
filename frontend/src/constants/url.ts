@@ -11,6 +11,8 @@ export const API_URL = {
   room: `${BASE_URL}/api/balances/rooms`,
   enterRoom: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/members`,
   getRoomInfo: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
+  roundVoteIsFinished: (roomId: number, contentId: number) =>
+    `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/vote-finished`,
 };
 
 export const MOCK_API_URL = {
@@ -21,4 +23,5 @@ export const MOCK_API_URL = {
   finalResult: '/api/balances/rooms/:roomId/final',
   room: `${BASE_URL}/api/balances/rooms`,
   roomMembers: `${BASE_URL}/api/balances/rooms/:roomId`,
+  roundVoteIsFinished: '/api/balances/rooms/:roomId/contents/:contentId/vote-finished',
 };

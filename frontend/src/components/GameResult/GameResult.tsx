@@ -1,4 +1,4 @@
-import { useGameResultQuery } from './GameResult.hook';
+import useGameResultQuery from './GameResult.hook';
 import { gameResultTitle, gameResultLayout, rankListContainer } from './GameResult.styled';
 import FinalButton from '../common/FinalButton/FinalButton';
 import GameResultItem from '../GameResultItem/GameResultItem';
