@@ -43,3 +43,23 @@ include::{snippets}/balanceVote/createBalanceVote/http-response.adoc[]
 response fields
 
 include::{snippets}/balanceVote/createBalanceVote/response-fields.adoc[]
+
+=== 투표 종료 여부
+
+==== curl
+
+include::{snippets}/balanceVote/voteFinished/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/balanceVote/voteFinished/http-request.adoc[]
+
+include::{snippets}/balanceVote/voteFinished/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/balanceVote/voteFinished/http-response.adoc[]
+
+response fields
+
+include::{snippets}/balanceVote/voteFinished/response-fields.adoc[]

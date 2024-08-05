@@ -10,7 +10,7 @@ public interface BalanceOptionRepository extends JpaRepository<BalanceOption, Lo
 
     List<BalanceOption> findAllByBalanceContent(BalanceContent balanceContent);
 
-    Optional<BalanceOption> findByIdAndBalanceContentId(Long id, Long contentId);
+    Optional<BalanceOption> findByIdAndBalanceContent(Long id, BalanceContent balanceContent);
 
     default BalanceOption getById(Long id) {
         return findById(id)

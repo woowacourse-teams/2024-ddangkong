@@ -13,7 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,12 +42,35 @@ public class RoomContent extends BaseEntity {
     @Column(nullable = false)
     private boolean isUsed;
 
-    public boolean isRoundOver(LocalDateTime currentTime) {
+    public RoomContent(Room room,
+                       BalanceContent balanceContent,
+                       int round,
+                       LocalDateTime roundEndedAt,
+                       boolean isUsed) {
+        this.room = room;
+        this.balanceContent = balanceContent;
+        this.round = round;
+        this.roundEndedAt = roundEndedAt;
+        this.isUsed = isUsed;
+    }
+
+    public boolean isRoundOver(LocalDateTime currentTime, int round) {
+        validateSameRound(round);
+        validateAlreadyUsed();
         return currentTime.isAfter(getRoundEndedAt());
     }
 
-    public boolean isNotSameContentId(Long contentId) {
-        return !Objects.equals(getContentId(), contentId);
+    private void validateSameRound(int round) {
+        if (this.round != round) {
+            throw new BadRequestException("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : %d, 요청한 라운드 : %d"
+                    .formatted(this.round, round));
+        }
+    }
+
+    private void validateAlreadyUsed() {
+        if (isUsed) {
+            throw new BadRequestException("이미 사용된 컨텐츠입니다.");
+        }
     }
 
     public Long getContentId() {

@@ -37,7 +37,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew bootJar
+        run: ./gradlew bootJar -PcreateRestDocs
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -73,6 +73,7 @@ jobs:
           CONTAINER_ID=$(sudo docker ps -aqf name=$CONTAINER_NAME)
           if [ -n "${CONTAINER_ID}" ]; then
           sudo docker rm -f ${CONTAINER_ID}
+          echo "Container ${CONTAINER_ID} is stopped and removed."
           else
           echo "No previous container found with name. Skipping removal."
           fi

@@ -1,43 +1,27 @@
-import { useNavigate } from 'react-router-dom';
-
+import useSelectCompleteMutation from './SelectButton.hook';
 import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 
-import { voteBalanceContent } from '@/apis/balanceContent';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 interface SelectButtonProps {
-  isDisabled: boolean;
   selectedId: number;
 }
 
-const SelectButton = ({ isDisabled, selectedId }: SelectButtonProps) => {
-  const navigate = useNavigate();
+const SelectButton = ({ selectedId }: SelectButtonProps) => {
   const { balanceContent } = useBalanceContentQuery();
-
-  const handleSelectComplete = async () => {
-    if (!balanceContent) return;
-
-    await voteBalanceContent({
-      optionId: selectedId,
-      contentId: balanceContent.contentId,
-      roomId: 1,
-    });
-
-    goToRoundResult();
-  };
-
-  const goToRoundResult = () => {
-    navigate('/round/result');
-  };
+  const { data, mutate: selectComplete } = useSelectCompleteMutation({
+    selectedId,
+    contentId: balanceContent?.contentId,
+  });
 
   return (
     <div css={bottomButtonLayout}>
       <Button
         style={{ width: '100%' }}
-        disabled={isDisabled}
-        text="선택"
-        onClick={handleSelectComplete}
+        disabled={data || !selectedId}
+        text={data ? '선택 완료' : '선택'}
+        onClick={selectComplete}
       />
     </div>
   );
