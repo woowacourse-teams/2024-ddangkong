@@ -73,7 +73,7 @@ public class RoomContent extends BaseEntity {
         }
     }
 
-    public void updateUsed() {
+    public void finish() {
         isUsed = true;
     }
 

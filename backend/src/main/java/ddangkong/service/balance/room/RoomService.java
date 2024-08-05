@@ -96,7 +96,7 @@ public class RoomService {
         room.reset();
         List<RoomContent> roomContents = roomContentRepository.findAllByRoomAndIsUsed(room, false);
         for (RoomContent roomContent : roomContents) {
-            roomContent.updateUsed();
+            roomContent.finish();
         }
 
         if (room.getTotalRound() != roomContents.size()) {
