@@ -49,7 +49,7 @@ class BalanceContentDocumentationTest extends BaseDocumentationTest {
                     firstOptionResponse,
                     secondOptionResponse
             );
-            when(balanceContentService.findRecentBalanceContent(anyLong())).thenReturn(response);
+            when(balanceContentService.getRecentBalanceContent(anyLong())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(ENDPOINT, 1L)

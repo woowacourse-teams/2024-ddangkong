@@ -2,7 +2,6 @@ package ddangkong.service.balance.content;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
@@ -39,7 +38,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 방의_진행_중인_밸런스_게임_내용을_조회할_수_있다() {
             // when
-            BalanceContentResponse actual = balanceContentService.findRecentBalanceContent(PROGRESS_ROOM_ID);
+            BalanceContentResponse actual = balanceContentService.getRecentBalanceContent(PROGRESS_ROOM_ID);
 
             // then
             assertThat(actual).isEqualTo(BALANCE_CONTENT_RESPONSE);
@@ -48,7 +47,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 방이_없을_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> balanceContentService.findRecentBalanceContent(NOT_EXIST_ROOM_ID))
+            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(NOT_EXIST_ROOM_ID))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방이 존재하지 않습니다.");
         }
@@ -56,7 +55,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 방의_현재_라운드의_질문이_없을_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> balanceContentService.findRecentBalanceContent(NOT_PROGRESSED_ROOM_ID))
+            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(NOT_PROGRESSED_ROOM_ID))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
         }
@@ -64,7 +63,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 방의_준비_상태인_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> balanceContentService.findRecentBalanceContent(READY_ROOM_ID))
+            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(READY_ROOM_ID))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
         }
@@ -72,7 +71,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 방이_종료_상태인_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> balanceContentService.findRecentBalanceContent(FINISHED_ROOM_ID))
+            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(FINISHED_ROOM_ID))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
         }
