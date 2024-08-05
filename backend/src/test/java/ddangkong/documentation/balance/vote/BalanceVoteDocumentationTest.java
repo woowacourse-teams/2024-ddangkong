@@ -1,10 +1,12 @@
 package ddangkong.documentation.balance.vote;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
+import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
@@ -25,6 +27,7 @@ import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
 import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.service.balance.vote.BalanceVoteService;
+import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -136,6 +139,33 @@ public class BalanceVoteDocumentationTest extends BaseDocumentationTest {
                                     ),
                                     responseFields(
                                             fieldWithPath("optionId").type(NUMBER).description("옵션 ID")
+                                    )
+                            )
+                    );
+        }
+    }
+
+    @Nested
+    class 투표_종료_여부_조회 {
+
+        private static final String END_POINT = "/api/balances/rooms/{roomId}/contents/{contentId}/vote-finished";
+
+        @Test
+        void 투표가_종료되었는지_조회한다() throws Exception {
+            // given
+            VoteFinishedResponse response = new VoteFinishedResponse(true);
+            when(balanceVoteService.getAllVoteFinished(anyLong(), anyLong())).thenReturn(response);
+
+            // when & then
+            mockMvc.perform(get(END_POINT, 1L, 1L))
+                    .andExpect(status().isOk())
+                    .andDo(document("balanceVote/voteFinished",
+                                    pathParameters(
+                                            parameterWithName("roomId").description("방 ID"),
+                                            parameterWithName("contentId").description("콘텐츠 ID")
+                                    ),
+                                    responseFields(
+                                            fieldWithPath("isFinished").type(BOOLEAN).description("투표 종료 여부")
                                     )
                             )
                     );

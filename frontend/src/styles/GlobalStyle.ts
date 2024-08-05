@@ -152,6 +152,10 @@ const GlobalStyle = css`
     height: 100vh;
     margin: 0 auto;
   }
+
+  * {
+    box-sizing: border-box;
+  }
 `;
 
 export default GlobalStyle;

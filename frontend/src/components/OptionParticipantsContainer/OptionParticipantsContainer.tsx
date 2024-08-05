@@ -1,3 +1,5 @@
+import { useParams } from 'react-router-dom';
+
 import {
   dividerLine,
   optionParticipantsContainerLayout,
@@ -9,10 +11,12 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 
 const OptionParticipantsContainer = () => {
+  const { roomId } = useParams();
+
   const { balanceContent } = useBalanceContentQuery();
   const { groupRoundResult } = useRoundVoteResultQuery({
+    roomId: Number(roomId),
     contentId: balanceContent?.contentId,
-    roomId: 1,
   });
 
   if (!balanceContent || !groupRoundResult) {

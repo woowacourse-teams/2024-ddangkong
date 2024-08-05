@@ -20,4 +20,5 @@ const RoundResultTab = ({ tab, activeTab, handleClickTab }: RoundResultTabProps)
     </button>
   );
 };
+
 export default RoundResultTab;
