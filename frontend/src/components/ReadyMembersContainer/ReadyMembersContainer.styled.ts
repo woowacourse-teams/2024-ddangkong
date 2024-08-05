@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
+import getBorderRadius from '@/styles/utils/getBorderRadius';
 
 export const readyMembersContainerLayout = css`
   display: flex;
@@ -16,6 +17,7 @@ export const membersContainer = css`
 
   background-color: ${Theme.color.peanut300};
 
+  font-size: 1rem;
   font-weight: 600;
 
   overflow-y: scroll;
@@ -40,6 +42,16 @@ export const memberList = css`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+`;
+
+export const inviteButton = css`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  font-size: 1rem;
+  width: 100%;
+  background-color: ${Theme.color.peanut400};
+  border-radius: ${getBorderRadius('medium')};
 `;
 
 export const memberItem = css`

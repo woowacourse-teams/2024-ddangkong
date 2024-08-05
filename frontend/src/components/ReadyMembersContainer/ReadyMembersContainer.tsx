@@ -6,6 +6,7 @@ import {
   profileBox,
   memberStatus,
   membersContainer,
+  inviteButton,
 } from './ReadyMembersContainer.styled';
 
 import crownIcon from '@/assets/images/crownIcon.png';
@@ -20,11 +21,13 @@ const ReadyMembersContainer = ({ members }: ReadyMembersContainerProps) => {
       <p css={totalNumber}>총 인원 {members.length}명</p>
       <section css={membersContainer}>
         <ul css={memberList}>
-          <li css={memberItem}>
-            <button css={profileBox}>
-              <img src={plusIcon} alt="추가 아이콘" />
+          <li>
+            <button css={inviteButton}>
+              <div css={profileBox}>
+                <img src={plusIcon} alt="추가 아이콘" />
+              </div>
+              <div>초대하기</div>
             </button>
-            <div>초대하기</div>
           </li>
           {members.map((member) => (
             <li css={memberItem} key={member.memberId}>
