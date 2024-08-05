@@ -9,7 +9,8 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    runs-on: [self-hosted, linux, ARM64]
 
     steps:
       - uses: actions/checkout@v4
