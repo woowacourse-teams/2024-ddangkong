@@ -19,8 +19,8 @@ export const modalContentWrapper = ({ position }: Pick<ModalProps, 'position'>) 
   position: fixed;
   left: 50%;
   flex-direction: column;
-  width: 24rem;
   gap: 1.6rem;
+  width: 24rem;
   height: fit-content;
   max-height: 70vh;
   min-height: 1.2rem;
@@ -113,14 +113,13 @@ export const modalTextButton = ({
   height: ${buttonHeight};
   padding: 1rem;
   border: none;
+  border-radius: 0.8rem;
 
   background-color: ${backgroundColor};
 
   color: ${fontColor};
   font-weight: bold;
   font-size: ${fontSize};
-  border-radius: 0;
-  border-radius: 0.8rem;
 
   &:focus {
     outline: none;

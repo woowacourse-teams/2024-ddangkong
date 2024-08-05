@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { useMoveNextRoundMutation } from './NextRoundButton.hook';
+import useMoveNextRoundMutation from './NextRoundButton.hook';
 import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 

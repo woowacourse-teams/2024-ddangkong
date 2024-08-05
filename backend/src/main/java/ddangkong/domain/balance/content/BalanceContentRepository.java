@@ -1,6 +1,5 @@
 package ddangkong.domain.balance.content;
 
-import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.exception.BadRequestException;
 import org.springframework.data.jpa.repository.JpaRepository;
 

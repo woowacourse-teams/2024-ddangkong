@@ -1,6 +1,5 @@
 package ddangkong.domain.balance.room;
 
-import ddangkong.domain.BaseEntity;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
@@ -20,7 +19,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class RoomContent extends BaseEntity {
+public class RoomContent {
+
+    private static final int DELAY_MSEC = 2_000; // TODO SEC로 변경
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +37,7 @@ public class RoomContent extends BaseEntity {
 
     @Column(nullable = false)
     private int round;
-
+  
     private LocalDateTime roundEndedAt;
 
     @Column(nullable = false)
@@ -52,6 +53,15 @@ public class RoomContent extends BaseEntity {
         this.round = round;
         this.roundEndedAt = roundEndedAt;
         this.isUsed = isUsed;
+    }
+
+    public void startRound(LocalDateTime currentTime, int timeLimit) {
+        if (roundEndedAt != null) {
+            throw new BadRequestException("해당 라운드는 이미 시작했습니다.");
+        }
+
+        int afterSec = (timeLimit + DELAY_MSEC) / 1_000;
+        roundEndedAt = currentTime.plusSeconds(afterSec);
     }
 
     public boolean isRoundOver(LocalDateTime currentTime, int round) {

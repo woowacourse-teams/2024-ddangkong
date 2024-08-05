@@ -4,9 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.controller.balance.room.dto.RoomSettingRequest;
@@ -76,8 +74,8 @@ class RoomServiceTest extends BaseServiceTest {
         void 방_생성_시_방장_멤버를_생성하고_방을_생성한다() {
             // given
             String nickname = "나는방장";
-            MemberResponse expectedMemberResponse = new MemberResponse(7L, nickname, true);
-            RoomJoinResponse expected = new RoomJoinResponse(4L, expectedMemberResponse);
+            MemberResponse expectedMemberResponse = new MemberResponse(9L, nickname, true);
+            RoomJoinResponse expected = new RoomJoinResponse(6L, expectedMemberResponse);
 
             // when
             RoomJoinResponse actual = roomService.createRoom(nickname);
@@ -95,7 +93,7 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             String nickname = "나는참가자";
             Long joinRoomId = 2L;
-            MemberResponse expectedMemberResponse = new MemberResponse(7L, nickname, false);
+            MemberResponse expectedMemberResponse = new MemberResponse(9L, nickname, false);
             RoomJoinResponse expected = new RoomJoinResponse(joinRoomId, expectedMemberResponse);
 
             // when
@@ -113,7 +111,7 @@ class RoomServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistId))
-                    .isInstanceOf(BadRequestException.class);
+                    .isExactlyInstanceOf(BadRequestException.class);
         }
     }
 
@@ -121,36 +119,56 @@ class RoomServiceTest extends BaseServiceTest {
     class 다음_라운드로_이동 {
 
         private static final Long PROGRESS_ROOM_ID = 1L;
+        private static final int CURRENT_ROUND = 2;
         private static final Long NOT_EXIST_ROOM_ID = 999999999L;
-        private static final Long NOT_PROGRESSED_ROOM_ID = 2L;
-        private static final BalanceContentResponse BALANCE_CONTENT_RESPONSE = new BalanceContentResponse(
-                3L, Category.EXAMPLE, 5, 3, "다음 중 여행가고 싶은 곳은?",
-                new BalanceOptionResponse(5L, "산"),
-                new BalanceOptionResponse(6L, "바다"));
 
         @Test
-        void 다음_라운드로_넘어갈_수_있다() {
+        void 중간_라운드라면_다음_라운드로_넘어갈_수_있다() {
+            // given
+            int nextRound = CURRENT_ROUND + 1;
+
             // when
-            BalanceContentResponse actual = roomService.moveToNextRound(PROGRESS_ROOM_ID);
+            roomService.moveToNextRound(PROGRESS_ROOM_ID);
 
             // then
-            assertThat(actual).isEqualTo(BALANCE_CONTENT_RESPONSE);
+            Room room = roomRepository.getById(PROGRESS_ROOM_ID);
+            RoomContent roomContent = roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
+                    .orElseThrow();
+            assertAll(
+                    () -> assertThat(room.getCurrentRound()).isEqualTo(nextRound),
+                    () -> assertThat(room.isGameProgress()).isTrue(),
+                    () -> assertThat(roomContent.getRoundEndedAt()).isNotNull()
+            );
+        }
+
+        @Test
+        void 마지막_라운드라면_게임을_종료한다() {
+            // given
+            Long roomId = finalRoundRoomId();
+
+            // when
+            roomService.moveToNextRound(roomId);
+
+            // then
+            Room room = roomRepository.getById(roomId);
+            assertAll(
+                    () -> assertThat(room.getCurrentRound()).isEqualTo(room.getTotalRound()),
+                    () -> assertThat(room.getStatus()).isEqualTo(RoomStatus.FINISH)
+            );
+        }
+
+        Long finalRoundRoomId() {
+            Room room = new Room(5, 5, 30_000, RoomStatus.PROGRESS, Category.EXAMPLE);
+            roomRepository.save(room);
+            return room.getId();
         }
 
         @Test
         void 방이_없을_경우_예외를_던진다() {
             // when & then
             assertThatThrownBy(() -> roomService.moveToNextRound(NOT_EXIST_ROOM_ID))
-                    .isInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방이 존재하지 않습니다.");
-        }
-
-        @Test
-        void 방의_현재_라운드의_질문이_없을_경우_예외를_던진다() {
-            // when & then
-            assertThatThrownBy(() -> roomService.moveToNextRound(NOT_PROGRESSED_ROOM_ID))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
         }
     }
 

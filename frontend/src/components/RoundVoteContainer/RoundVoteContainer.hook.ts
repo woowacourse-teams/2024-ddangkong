@@ -1,7 +1,7 @@
 import useCountAnimation from '@/hooks/useCountAnimation';
 import { Total, Group } from '@/types/roundVoteResult';
 
-export const useTotalCountAnimation = (groupRoundResult?: Group, totalResult?: Total) => {
+const useTotalCountAnimation = (groupRoundResult?: Group, totalResult?: Total) => {
   const animatedFirstPercent = useCountAnimation({ target: groupRoundResult?.firstOption.percent });
   const animatedSecondPercent = useCountAnimation({
     target: groupRoundResult?.secondOption.percent,
@@ -19,3 +19,5 @@ export const useTotalCountAnimation = (groupRoundResult?: Group, totalResult?: T
     animatedTotalSecondPercent,
   };
 };
+
+export default useTotalCountAnimation;

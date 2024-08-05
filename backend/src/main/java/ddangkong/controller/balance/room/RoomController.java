@@ -1,6 +1,5 @@
 package ddangkong.controller.balance.room;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
@@ -54,10 +53,10 @@ public class RoomController {
         return roomService.joinRoom(request.nickname(), roomId);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/balances/rooms/{roomId}/contents")
-    public BalanceContentResponse moveToNextRound(@PathVariable @Positive Long roomId) {
-        return roomService.moveToNextRound(roomId);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/balances/rooms/{roomId}/next-round")
+    public void moveToNextRound(@PathVariable @Positive Long roomId) {
+        roomService.moveToNextRound(roomId);
     }
 
     @GetMapping("/balances/rooms/{roomId}/round-finished")

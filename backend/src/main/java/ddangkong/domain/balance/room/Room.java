@@ -59,14 +59,6 @@ public class Room {
         return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, MAX_TIME_LIMIT_MSEC, RoomStatus.READY, Category.EXAMPLE);
     }
 
-    public void moveToNextRound() {
-        if (canMoveToNextRound()) {
-            currentRound++;
-            return;
-        }
-        throw new BadRequestException("마지막 라운드입니다.");
-    }
-
     public void updateTimeLimit(int timeLimit) {
         if (timeLimit < MIN_TIME_LIMIT_MSEC || timeLimit > MAX_TIME_LIMIT_MSEC) {
             throw new BadRequestException("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
@@ -87,8 +79,15 @@ public class Room {
         this.category = category;
     }
 
-    private boolean canMoveToNextRound() {
-        return currentRound < totalRound;
+    public void moveToNextRound() {
+        if (!isGameProgress()) {
+            throw new BadRequestException("게임이 진행 중이 아닙니다.");
+        }
+        if (isFinalRound()) {
+            status = RoomStatus.FINISH;
+            return;
+        }
+        currentRound++;
     }
 
     public boolean isGameProgress() {
@@ -116,6 +115,10 @@ public class Room {
                     .formatted(ALLOWED_ROUND_GAP, currentRound, round)
             );
         }
+    }
+
+    private boolean isFinalRound() {
+        return currentRound == totalRound;
     }
 
     public boolean isAllRoundFinished() {
