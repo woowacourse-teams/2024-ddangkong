@@ -92,5 +92,6 @@ jobs:
 
       - name: Run new Docker container
         run: |
-          sudo nohup docker run -p 80:8080 --name $CONTAINER_NAME \
-          $DOCKER_REPOSITORY_NAME:latest > ~/dev-nohup.out 2>&1 &
+          docker run -d -p 80:8080 --name $CONTAINER_NAME \
+          -v /home/ubuntu/app-logs:/logs
+          $DOCKER_REPOSITORY_NAME:latest
