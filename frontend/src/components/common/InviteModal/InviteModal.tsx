@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import {
   inviteModalLi,
   inviteModalHeader,
@@ -10,7 +8,9 @@ import {
   inviteModalLinkButtonInfoWrapper,
   inviteModalCopyIcon,
   inviteModalUrlText,
+  inviteModal,
 } from './InviteModal.styled';
+import useClipBoard from './useClipBoard';
 import Modal from '../Modal/Modal';
 import Toast from '../Toast/Toast';
 
@@ -23,16 +23,14 @@ interface InviteModalProps {
 }
 
 const InviteModal = ({ isOpen, onClose, inviteUrl }: InviteModalProps) => {
-  const [isCopied, setIsCopied] = useState(false);
+  const { isCopied, copyToClipboard } = useClipBoard();
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(inviteUrl);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
+  const handleCopy = () => {
+    copyToClipboard(inviteUrl);
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} css={inviteModal}>
       <Modal.Header css={inviteModalHeader}>
         <Modal.Title css={inviteModalTitle}>초대하기</Modal.Title>
         <Modal.IconButton onClick={onClose} css={inviteModalIconButton} />
