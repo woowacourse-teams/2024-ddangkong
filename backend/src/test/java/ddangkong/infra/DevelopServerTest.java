@@ -10,6 +10,6 @@ class DevelopServerTest {
 
     @Test
     @Sql(scripts = "/sql/data-dev.sql")
-    void dataSqlTest() {
+    void dataSqlInitTest() {
     }
 }
