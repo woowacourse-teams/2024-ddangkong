@@ -40,7 +40,7 @@ jobs:
           publish_dir: ./frontend/storybook-static
           destination_dir: storybook
 
-      - name: comment storybook url
+      - name: add storybook url in PR description
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.TOKEN }}
@@ -48,7 +48,7 @@ jobs:
             const pr = await github.pulls.get({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                pull_number: context.issue.number
+                pull_number: context.payload.pull_request.number
             });
             const body = pr.data.body;
             const newBody = body + "\n\n" + "## 🌸 Storybook 배포 주소 \n\n"+ "> https://woowacourse-teams.github.io/2024-ddangkong/storybook/";
