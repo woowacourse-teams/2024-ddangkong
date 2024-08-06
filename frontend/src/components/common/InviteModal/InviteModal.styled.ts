@@ -52,6 +52,14 @@ export const inviteModalLinkButtonInfoWrapper = css`
   justify-content: space-between;
 `;
 
+export const inviteModalUrlText = css`
+  overflow: hidden;
+  width: 95%;
+
+  font-size: 1.2rem;
+  text-overflow: ellipsis;
+`;
+
 export const inviteModalCopyIcon = css`
   width: 10%;
 `;

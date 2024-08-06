@@ -9,6 +9,7 @@ import {
   inviteModalLinkButton,
   inviteModalLinkButtonInfoWrapper,
   inviteModalCopyIcon,
+  inviteModalUrlText,
 } from './InviteModal.styled';
 import Modal from '../Modal/Modal';
 import Toast from '../Toast/Toast';
@@ -42,7 +43,7 @@ const InviteModal = ({ isOpen, onClose, inviteUrl }: InviteModalProps) => {
           <li css={inviteModalLi}>
             <button onClick={handleCopy} css={inviteModalLinkButton}>
               <div css={inviteModalLinkButtonInfoWrapper}>
-                <span>{inviteUrl}</span>
+                <span css={inviteModalUrlText}>{inviteUrl}</span>
                 <img src={CopyIcon} alt="복사하기 이미지" css={inviteModalCopyIcon} />
               </div>
             </button>
