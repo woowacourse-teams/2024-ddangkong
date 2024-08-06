@@ -50,14 +50,15 @@ class RoomServiceTest extends BaseServiceTest {
 
         @Test
         void 게임_방_정보를_조회한다() {
-            // when
+            // given
             RoomJoinResponse room = roomService.createRoom("방장");
             roomService.joinRoom("멤버1", room.roomId());
             roomService.joinRoom("멤버2", room.roomId());
 
-            // then
+            // when
             RoomInfoResponse actual = roomService.findRoomInfo(room.roomId());
 
+            // then
             assertAll(
                     () -> Assertions.assertThat(actual.members()).hasSize(3),
                     () -> Assertions.assertThat(actual.isGameStart()).isFalse(),
@@ -74,7 +75,7 @@ class RoomServiceTest extends BaseServiceTest {
         void 방_생성_시_방장_멤버를_생성하고_방을_생성한다() {
             // given
             String nickname = "나는방장";
-            MemberResponse expectedMemberResponse = new MemberResponse(9L, nickname, true);
+            MemberResponse expectedMemberResponse = new MemberResponse(12L, nickname, true);
             RoomJoinResponse expected = new RoomJoinResponse(6L, expectedMemberResponse);
 
             // when
@@ -92,8 +93,8 @@ class RoomServiceTest extends BaseServiceTest {
         void 이미_생성된_방에_참여한다() {
             // given
             String nickname = "나는참가자";
-            Long joinRoomId = 2L;
-            MemberResponse expectedMemberResponse = new MemberResponse(9L, nickname, false);
+            Long joinRoomId = 4L;
+            MemberResponse expectedMemberResponse = new MemberResponse(12L, nickname, false);
             RoomJoinResponse expected = new RoomJoinResponse(joinRoomId, expectedMemberResponse);
 
             // when
@@ -112,6 +113,37 @@ class RoomServiceTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistId))
                     .isExactlyInstanceOf(BadRequestException.class);
+        }
+    }
+
+    @Nested
+    class 게임_시작 {
+
+        private static final Long READY_ROOM_ID = 4L;
+
+        @Test
+        void 게임_시작_시_방이_진행_상태가_된다() {
+            // when
+            roomService.startGame(READY_ROOM_ID);
+
+            // then
+            Room room = roomRepository.getById(READY_ROOM_ID);
+            assertThat(room.isGameProgress()).isTrue();
+        }
+
+        @Test
+        void 게임_시작_시_해당_방의_컨텐츠가_생성된다() {
+            // given
+            long beforeRoomContentCount = roomContentRepository.count();
+
+            // when
+            roomService.startGame(READY_ROOM_ID);
+
+            // then
+            Room room = roomRepository.getById(READY_ROOM_ID);
+            long afterRoomContentCount = roomContentRepository.count();
+            long addedRoomContentCount = afterRoomContentCount - beforeRoomContentCount;
+            assertThat(addedRoomContentCount).isEqualTo(room.getTotalRound());
         }
     }
 
@@ -178,9 +210,9 @@ class RoomServiceTest extends BaseServiceTest {
         @Test
         void 방_설정_정보를_변경한다() {
             // given
-            Long roomId = 2L;
-            int totalRound = 5;
-            int timeLimit = 10000;
+            Long roomId = 4L;
+            int totalRound = 8;
+            int timeLimit = 13_000;
             Category category = Category.EXAMPLE;
 
             RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);

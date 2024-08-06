@@ -66,6 +66,12 @@ public class RoomController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/balances/rooms/{roomId}/start")
+    public void startGame(@PathVariable @Positive Long roomId) {
+        roomService.startGame(roomId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/balances/rooms/{roomId}/reset")
     public void resetRoom(@PathVariable @Positive Long roomId) {
         roomService.resetRoom(roomId);

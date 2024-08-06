@@ -4,6 +4,9 @@ import ddangkong.controller.balance.member.dto.MemberResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.controller.balance.room.dto.RoomSettingRequest;
+import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.content.BalanceContentRepository;
+import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.room.Room;
 import ddangkong.domain.balance.room.RoomContent;
 import ddangkong.domain.balance.room.RoomContentRepository;
@@ -14,7 +17,9 @@ import ddangkong.exception.InternalServerException;
 import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +35,8 @@ public class RoomService {
     private final MemberRepository memberRepository;
 
     private final RoomContentRepository roomContentRepository;
+
+    private final BalanceContentRepository balanceContentRepository;
 
     private final Clock clock;
 
@@ -56,6 +63,37 @@ public class RoomService {
     }
 
     @Transactional
+    public void startGame(Long roomId) {
+        Room room = roomRepository.getById(roomId);
+        room.startGame();
+
+        List<BalanceContent> balanceContents = findByRandom(room.getCategory(), room.getTotalRound());
+        List<RoomContent> roomContents = createRoomContents(room, balanceContents);
+        startFirstRound(roomContents, room.getTimeLimit());
+        roomContentRepository.saveAll(roomContents);
+    }
+
+    private List<BalanceContent> findByRandom(Category category, int count) {
+        List<BalanceContent> contents = balanceContentRepository.findByCategory(category);
+        if (contents.size() < count) {
+            throw new InternalServerException("DB의 질문 수가 부족합니다. category : " + category);
+        }
+
+        Collections.shuffle(contents);
+        return contents.subList(0, count);
+    }
+
+    private List<RoomContent> createRoomContents(Room room, List<BalanceContent> balanceContents) {
+        return IntStream.range(0, balanceContents.size())
+                .mapToObj(index -> RoomContent.newRoomContent(room, balanceContents.get(index), index + 1))
+                .toList();
+    }
+
+    private void startFirstRound(List<RoomContent> roomContents, int timeLimit) {
+        roomContents.get(0).updateRoundEndedAt(LocalDateTime.now(clock), timeLimit);
+    }
+
+    @Transactional
     public void updateRoomSetting(Long roomId, RoomSettingRequest request) {
         Room room = roomRepository.getById(roomId);
 
@@ -71,7 +109,7 @@ public class RoomService {
 
         if (room.isGameProgress()) {
             RoomContent roomContent = getCurrentRoomContent(room);
-            roomContent.startRound(LocalDateTime.now(clock), room.getTimeLimit());
+            roomContent.updateRoundEndedAt(LocalDateTime.now(clock), room.getTimeLimit());
         }
     }
 

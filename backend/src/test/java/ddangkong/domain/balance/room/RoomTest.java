@@ -16,6 +16,34 @@ import org.junit.jupiter.params.provider.ValueSource;
 class RoomTest {
 
     @Nested
+    class 게임_시작 {
+
+        @Test
+        void 게임이_준비_상태일_떄_게임을_시작할_수_있다() {
+            // given
+            Room room = Room.createNewRoom();
+
+            // when
+            room.startGame();
+
+            // then
+            assertThat(room.isGameProgress()).isTrue();
+        }
+
+        @ParameterizedTest
+        @EnumSource(mode = Mode.EXCLUDE, names = {"READY"})
+        void 게임이_이미_시작했다면_예외를_던진다(RoomStatus status) {
+            // given
+            Room room = new Room(5, 1, 30_000, status, Category.EXAMPLE);
+
+            // when & then
+            assertThatThrownBy(room::startGame)
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("이미 게임이 시작했습니다.");
+        }
+    }
+
+    @Nested
     class 다음_라운드로_이동 {
 
         @Test

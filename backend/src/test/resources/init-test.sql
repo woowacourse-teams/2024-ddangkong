@@ -5,6 +5,7 @@ VALUES (5, 2, 30000, 'PROGRESS', 'EXAMPLE'),
        (3, 1, 30000, 'READY', 'EXAMPLE'),
        (3, 1, 30000, 'FINISH', 'EXAMPLE');
 
+
 INSERT INTO member (nickname, room_id, is_master)
 VALUES ('mohamedeu al katan', 1, true),
        ('deundeun', 1, false),
@@ -12,6 +13,9 @@ VALUES ('mohamedeu al katan', 1, true),
        ('rapper lee', 1, false),
        ('alpha', 2, true),
        ('bravo', 2, false),
+       ('sunday', 3, true),
+       ('maru', 3, false),
+       ('pomae', 3, false),
        ('ready player', 4, true),
        ('finish player', 5, true);
 
