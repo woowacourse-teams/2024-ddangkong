@@ -3,6 +3,7 @@ package ddangkong.documentation.balance.room;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -257,6 +258,27 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             responseFields(
                                     fieldWithPath("isRoundFinished").description("라운드 종료 여부"),
                                     fieldWithPath("isGameFinished").description("게임 종료 여부")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    class 방_초기화 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/reset";
+
+        @Test
+        void 방을_초기화한다() throws Exception {
+            // given
+            doNothing().when(roomService).resetRoom(anyLong());
+
+            // when & then
+            mockMvc.perform(patch(ENDPOINT, 1L))
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/reset",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
                             )
                     ));
         }

@@ -119,3 +119,19 @@ include::{snippets}/room/roundFinished/http-response.adoc[]
 response fields
 
 include::{snippets}/room/roundFinished/response-fields.adoc[]
+
+=== 방 초기화
+
+==== curl
+
+include::{snippets}/room/reset/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/reset/http-request.adoc[]
+
+include::{snippets}/room/reset/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/reset/http-response.adoc[]

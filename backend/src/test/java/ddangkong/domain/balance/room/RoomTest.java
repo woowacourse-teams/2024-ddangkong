@@ -226,4 +226,52 @@ class RoomTest {
             assertThat(room.isAllRoundFinished()).isFalse();
         }
     }
+
+    @Nested
+    class 방_초기화 {
+        private static final int TOTAL_ROUND = 5;
+        private static final int TIME_LIMIT = 30;
+        private static final Category CATEGORY = Category.EXAMPLE;
+
+        @Test
+        void 방을_초기_상태로_초기화한다() {
+            // given
+            int currentRound = 5;
+            RoomStatus status = RoomStatus.FINISH;
+            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY);
+
+            // when
+            room.reset();
+
+            // then
+            assertAll(
+                    () -> assertThat(room.getCurrentRound()).isEqualTo(1),
+                    () -> assertThat(room.getStatus()).isEqualTo(RoomStatus.READY)
+            );
+        }
+
+        @Test
+        void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
+            // given
+            int invalidCurrentRound = 4;
+            Room room = new Room(TOTAL_ROUND, invalidCurrentRound, TIME_LIMIT, RoomStatus.FINISH, CATEGORY);
+
+            // when & then
+            assertThatThrownBy(room::reset)
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("방이 종료되지 않았습니다");
+        }
+
+        @ParameterizedTest
+        @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
+        void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
+            // given
+            Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
+
+            // when & then
+            assertThatThrownBy(room::reset)
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("방이 종료되지 않았습니다");
+        }
+    }
 }
