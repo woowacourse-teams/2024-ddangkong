@@ -1,4 +1,4 @@
-name: Frontend CI
+name: FE CI for dev
 
 on:
   pull_request:
