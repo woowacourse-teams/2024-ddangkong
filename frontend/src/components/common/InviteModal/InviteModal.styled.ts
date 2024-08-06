@@ -2,6 +2,10 @@ import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
 
+export const inviteModal = css`
+  background-color: ${Theme.color.peanut300};
+`;
+
 export const inviteModalHeader = css`
   display: flex;
   position: relative;
@@ -36,12 +40,12 @@ export const inviteModalLi = css`
   padding: 0.8rem;
   border-radius: ${Theme.borderRadius.radius10};
 
-  background-color: ${Theme.color.gray200};
+  background-color: #fff;
 `;
 
 export const inviteModalLinkButton = css`
   width: 100%;
-  padding: 2rem 1.2rem;
+  padding: 1.6rem 0.4rem;
   background: none;
   border: none;
   cursor: pointer;
