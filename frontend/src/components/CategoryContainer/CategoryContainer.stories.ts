@@ -8,7 +8,7 @@ const meta = {
 
 export const 기본값: Story = {
   args: {
-    category: '연애',
+    category: '재미',
   },
 };
 
