@@ -30,7 +30,7 @@ jobs:
       - name: Setting SSL/TLS Key
         run: |
           mkdir -p ./src/main/resources/ssl
-          echo "${{ secrets.SSL_PUBLIC_KEY }}" > ./src/main/resources/ssl/keystore.p12
+          echo "${{ secrets.SSL_KEY_BASE64 }}" | base64 -d > ./src/main/resources/ssl/keystore.p12
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
