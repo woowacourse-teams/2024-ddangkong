@@ -23,5 +23,5 @@ export const MOCK_API_URL = {
   finalResult: `${BASE_URL}/api/balances/rooms/:roomId/final`,
   room: `${BASE_URL}/api/balances/rooms`,
   roomMembers: `${BASE_URL}/api/balances/rooms/:roomId`,
-  roundVoteIsFinished: '/api/balances/rooms/:roomId/contents/:contentId/vote-finished',
+  roundVoteIsFinished: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-finished`,
 };
