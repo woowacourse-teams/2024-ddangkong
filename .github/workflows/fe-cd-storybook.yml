@@ -45,9 +45,16 @@ jobs:
         with:
           github-token: ${{ secrets.TOKEN }}
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '🎀 storybook 배포 주소 : https://woowacourse-teams.github.io/2024-ddangkong/storybook/'
-            })
+            const pr = await github.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number
+            });
+            const body = pr.data.body;
+            const newBody = body + "\n\n" + "## 🌸 Storybook 배포 주소 \n\n"+ "> https://woowacourse-teams.github.io/2024-ddangkong/storybook/";
+            await github.pulls.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.issue.number,
+                  body: newBody
+              });
