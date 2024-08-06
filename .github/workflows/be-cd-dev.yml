@@ -28,7 +28,7 @@ jobs:
           echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
 
       - name: Setting SSL/TLS Key
-        run: echo "${{ secrets.SSL_KEY }}" > ./src/main/resources/ssl/keystore.p12
+        run: echo "${{ secrets.SSL_KEY_BASE64 }}" | base64 -d > ./src/main/resources/ssl/keystore.p12
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
