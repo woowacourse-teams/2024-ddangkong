@@ -160,6 +160,27 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     }
 
     @Nested
+    class 게임_시작 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/start";
+
+        @Test
+        void 게임을_시작한다() throws Exception {
+            // given
+            Long roomId = 1L;
+
+            // when & then
+            mockMvc.perform(patch(ENDPOINT, roomId))
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/start",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
     class 다음_라운드로_이동 {
 
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/next-round";

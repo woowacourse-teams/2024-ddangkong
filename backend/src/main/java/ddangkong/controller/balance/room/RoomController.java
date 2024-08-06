@@ -64,4 +64,10 @@ public class RoomController {
                                                   @Positive @RequestParam int round) {
         return roomService.getRoundFinished(roomId, round);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/balances/rooms/{roomId}/start")
+    public void startGame(@PathVariable @Positive Long roomId) {
+        roomService.startGame(roomId);
+    }
 }

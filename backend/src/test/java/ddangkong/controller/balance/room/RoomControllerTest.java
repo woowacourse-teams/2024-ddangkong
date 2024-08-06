@@ -121,6 +121,32 @@ class RoomControllerTest extends BaseControllerTest {
     }
 
     @Nested
+    class 게임_시작 {
+
+        private static final Long READY_ROOM_ID = 4L;
+
+        @Test
+        void 게임을_시작할_수_있다() {
+            // when & then
+            RestAssured.given().log().all()
+                    .pathParam("roomId", READY_ROOM_ID)
+                    .when().patch("/api/balances/rooms/{roomId}/start")
+                    .then().log().all()
+                    .statusCode(204);
+        }
+
+        @Test
+        void 방의_식별자가_음수인_경우_예외를_던진다() {
+            // when & then
+            RestAssured.given().log().all()
+                    .pathParam("roomId", -1L)
+                    .when().patch("/api/balances/rooms/{roomId}/start")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
+
+    @Nested
     class 다음_라운드_진행 {
 
         @Test

@@ -79,6 +79,13 @@ public class Room {
         this.category = category;
     }
 
+    public void startGame() {
+        if (status.isAlreadyStart()) {
+            throw new BadRequestException("이미 게임이 시작했습니다.");
+        }
+        status = RoomStatus.PROGRESS;
+    }
+
     public void moveToNextRound() {
         if (!isGameProgress()) {
             throw new BadRequestException("게임이 진행 중이 아닙니다.");
