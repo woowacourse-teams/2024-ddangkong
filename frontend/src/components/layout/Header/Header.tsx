@@ -19,7 +19,7 @@ const Header = ({ title }: HeaderProps) => {
   const { roomId } = useParams();
 
   const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
-  const isFinalPage = location.pathname === ROUTES.gameResult;
+  const isFinalPage = location.pathname === ROUTES.gameResult(Number(roomId));
   const isNicknamePage = location.pathname.startsWith(ROUTES.nickname);
 
   if (isFinalPage) {

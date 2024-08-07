@@ -19,7 +19,7 @@ const useMyGameStatus = ({ roomId, currentRound }: UseMyGameStatusProps) => {
   });
 
   const goToGameResult = () => {
-    navigate(ROUTES.gameResult);
+    navigate(ROUTES.gameResult(Number(roomId)));
   };
 
   const goToNextRound = () => {
