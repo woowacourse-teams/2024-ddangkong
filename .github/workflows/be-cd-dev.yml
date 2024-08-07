@@ -27,6 +27,11 @@ jobs:
         run: |
           echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
 
+      - name: Setting SSL/TLS Key
+        run: |
+          mkdir -p ./src/main/resources/ssl
+          echo "${{ secrets.SSL_KEY_BASE64 }}" | base64 -d > ./src/main/resources/ssl/keystore.p12
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -72,19 +77,20 @@ jobs:
         run: |
           CONTAINER_ID=$(sudo docker ps -aqf name=$CONTAINER_NAME)
           if [ -n "${CONTAINER_ID}" ]; then
-          sudo docker rm -f ${CONTAINER_ID}
-          echo "Container ${CONTAINER_ID} is stopped and removed."
+            sudo docker rm -f ${CONTAINER_ID}
+            echo "Container ${CONTAINER_ID} is stopped and removed."
           else
-          echo "No previous container found with name. Skipping removal."
+            echo "No previous container found with name. Skipping removal."
           fi
 
       - name: Remove previous Docker image
         run: |    
           IMAGE_ID=$(sudo docker images --filter=reference=ddangkong/ddangkong-api-dev --format "{{.ID}}")
           if [ -n "${IMAGE_ID}" ]; then
-          sudo docker rmi ${IMAGE_ID}
+            sudo docker rmi ${IMAGE_ID}
+            echo "Image ${IMAGE_ID} is removed."
           else
-          echo "No previous image found with repository name. Skipping removal."
+            echo "No previous image found with repository name. Skipping removal."
           fi
 
       - name: Pull docker image
@@ -92,6 +98,6 @@ jobs:
 
       - name: Run new Docker container
         run: |
-          docker run -d -p 80:8080 --name $CONTAINER_NAME \
+          docker run -d -p 443:8080 --name $CONTAINER_NAME \
           -v /home/ubuntu/app-logs:/logs
           $DOCKER_REPOSITORY_NAME:latest

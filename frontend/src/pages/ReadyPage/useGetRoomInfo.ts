@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { getRoomInfo } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 
 export const useGetRoomInfo = () => {
   const { roomId } = useParams();
+  const navigate = useNavigate();
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
@@ -13,5 +15,11 @@ export const useGetRoomInfo = () => {
     refetchInterval: 1000,
   });
 
-  return { data, isLoading, isError };
+  useEffect(() => {
+    if (data?.isGameStart) {
+      navigate(`/${roomId}/game`);
+    }
+  }, [data?.isGameStart, roomId, navigate]);
+
+  return { members: data?.members, isLoading, isError };
 };

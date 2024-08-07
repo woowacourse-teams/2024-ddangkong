@@ -79,43 +79,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             )
                     ));
         }
-    }
 
-    @Nested
-    class 방_참여 {
-
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members";
-
-        @Test
-        void 방에_참여한다() throws Exception {
-            // given
-            RoomJoinResponse response = new RoomJoinResponse(1L, new MemberResponse(2L, "타콩", false));
-            when(roomService.joinRoom(anyString(), anyLong())).thenReturn(response);
-
-            RoomJoinRequest request = new RoomJoinRequest("타콩");
-            String content = objectMapper.writeValueAsString(request);
-
-            //when & then
-            mockMvc.perform(post(ENDPOINT, 1L)
-                            .content(content)
-                            .contentType(MediaType.APPLICATION_JSON)
-                    )
-                    .andExpect(status().isCreated())
-                    .andDo(document("room/join",
-                            pathParameters(
-                                    parameterWithName("roomId").description("참여방 ID")
-                            ),
-                            requestFields(
-                                    fieldWithPath("nickname").description("닉네임")
-                            ),
-                            responseFields(
-                                    fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
-                                    fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
-                                    fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
-                                    fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
-                            )
-                    ));
-        }
     }
 
     @Nested
@@ -161,6 +125,75 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     }
 
     @Nested
+    class 방_설정_변경 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}";
+
+        @Test
+        void 방의_설정_정보를_변경한다() throws Exception {
+            // given
+            int totalRound = 5;
+            int timeLimit = 30_000;
+            Category category = Category.EXAMPLE;
+            RoomSettingRequest content = new RoomSettingRequest(totalRound, timeLimit, category);
+
+            // then
+            mockMvc.perform(patch(ENDPOINT, 1L)
+                            .content(objectMapper.writeValueAsString(content))
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/setting",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            ),
+                            requestFields(
+                                    fieldWithPath("totalRound").type(NUMBER).description("변경할 총 라운드"),
+                                    fieldWithPath("timeLimit").type(NUMBER).description("변경할 제한 시간"),
+                                    fieldWithPath("category").type(STRING).description("변경할 카테고리")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    class 방_참여 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members";
+
+        @Test
+        void 방에_참여한다() throws Exception {
+            // given
+            RoomJoinResponse response = new RoomJoinResponse(1L, new MemberResponse(2L, "타콩", false));
+            when(roomService.joinRoom(anyString(), anyLong())).thenReturn(response);
+
+            RoomJoinRequest request = new RoomJoinRequest("타콩");
+            String content = objectMapper.writeValueAsString(request);
+
+            //when & then
+            mockMvc.perform(post(ENDPOINT, 1L)
+                            .content(content)
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isCreated())
+                    .andDo(document("room/join",
+                            pathParameters(
+                                    parameterWithName("roomId").description("참여방 ID")
+                            ),
+                            requestFields(
+                                    fieldWithPath("nickname").description("닉네임")
+                            ),
+                            responseFields(
+                                    fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
+                                    fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
+                            )
+                    ));
+        }
+
+    }
+
+    @Nested
     class 게임_시작 {
 
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/start";
@@ -196,37 +229,6 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                     .andDo(document("room/nextRound",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
-                            )
-                    ));
-        }
-    }
-
-    @Nested
-    class 방_설정_변경 {
-
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}";
-
-        @Test
-        void 방의_설정_정보를_변경한다() throws Exception {
-            // given
-            int totalRound = 5;
-            int timeLimit = 30_000;
-            Category category = Category.EXAMPLE;
-            RoomSettingRequest content = new RoomSettingRequest(totalRound, timeLimit, category);
-
-            // then
-            mockMvc.perform(patch(ENDPOINT, 1L)
-                            .content(objectMapper.writeValueAsString(content))
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isNoContent())
-                    .andDo(document("room/setting",
-                            pathParameters(
-                                    parameterWithName("roomId").description("방 ID")
-                            ),
-                            requestFields(
-                                    fieldWithPath("totalRound").type(NUMBER).description("변경할 총 라운드"),
-                                    fieldWithPath("timeLimit").type(NUMBER).description("변경할 제한 시간"),
-                                    fieldWithPath("category").type(STRING).description("변경할 카테고리")
                             )
                     ));
         }
