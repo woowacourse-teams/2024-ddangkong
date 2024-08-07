@@ -85,8 +85,8 @@ const reset = css`
     margin: 0;
     padding: 0;
     border: 0;
-    font-size: 100%;
     font: inherit;
+
     vertical-align: baseline;
   }
 
@@ -118,10 +118,10 @@ const reset = css`
     quotes: none;
   }
 
-  blockquote:before,
-  blockquote:after,
-  q:before,
-  q:after {
+  blockquote::before,
+  blockquote::after,
+  q::before,
+  q::after {
     content: '';
     content: none;
   }
@@ -132,11 +132,12 @@ const reset = css`
   }
 
   button {
-    border: none;
-    outline: none;
-    background-color: inherit;
-    cursor: pointer;
     padding: 0;
+    border: none;
+
+    background-color: inherit;
+    outline: none;
+    cursor: pointer;
   }
 `;
 
@@ -148,7 +149,7 @@ const GlobalStyle = css`
   }
 
   #root {
-    width: 32rem;
+    max-width: 768px;
     height: 100vh;
     margin: 0 auto;
   }
