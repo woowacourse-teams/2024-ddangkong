@@ -21,7 +21,6 @@ const useMyGameStatusQuery = ({ roomId, currentRound }: useMyGameStatusQueryProp
       });
     },
     enabled: !!currentRound,
-    staleTime: 0,
     refetchInterval: 1000,
   });
 
