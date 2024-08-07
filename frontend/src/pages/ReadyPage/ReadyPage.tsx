@@ -16,7 +16,12 @@ const ReadyPage = () => {
       {isError && <div>에러 발생</div>}
       {isLoading && <div>로딩중.......</div>}
       {members && <ReadyMembersContainer members={members} />}
-      <Button text="시작" disabled={!isMaster} onClick={handleGameStart} bottom />
+      <Button
+        text={isMaster ? '시작' : '방장이 시작해주세요'}
+        disabled={!isMaster}
+        onClick={handleGameStart}
+        bottom
+      />
     </div>
   );
 };
