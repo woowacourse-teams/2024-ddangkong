@@ -23,7 +23,7 @@ const OptionParticipantsContainer = () => {
   useMyGameStatus({ roomId: Number(roomId), currentRound });
 
   if (!groupRoundResult) {
-    return null;
+    return <div>데이터가 없습니다</div>;
   }
 
   return (
