@@ -37,10 +37,10 @@ public class RequestLoggingAspect {
         HttpServletRequest request = getHttpServletRequest();
         String uri = request.getRequestURI();
         String httpMethod = request.getMethod();
-        String parameters = getParameters(request);
+        String queryParameters = getQueryParameters(request);
         String body = getBody(joinPoint);
 
-        log.info("Request Logging : {} {} body: {} parameters : {}", httpMethod, uri, body, parameters);
+        log.info("Request Logging: {} {} body - {} parameters - {}", httpMethod, uri, body, queryParameters);
     }
 
     private HttpServletRequest getHttpServletRequest() {
@@ -48,12 +48,17 @@ public class RequestLoggingAspect {
         return requestAttributes.getRequest();
     }
 
-    private String getParameters(HttpServletRequest request) {
-        return request.getParameterMap()
+    private String getQueryParameters(HttpServletRequest request) {
+        String queryParameters = request.getParameterMap()
                 .entrySet()
                 .stream()
                 .map(entry -> "%s = %s".formatted(entry.getKey(), entry.getValue()[0]))
                 .collect(joining(", "));
+
+        if (queryParameters.isEmpty()) {
+            return null;
+        }
+        return queryParameters;
     }
 
     private String getBody(JoinPoint joinPoint) {
