@@ -23,7 +23,7 @@ const useMyGameStatus = ({ roomId, balanceContent }: UseMyGameStatusProps) => {
     navigate(ROUTES.gameResult);
   };
 
-  const goToNextRound = async () => {
+  const goToNextRound = () => {
     navigate(ROUTES.game(Number(roomId)));
   };
 
