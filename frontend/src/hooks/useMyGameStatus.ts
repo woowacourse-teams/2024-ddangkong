@@ -4,19 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import useMyGameStatusQuery from './useMyGameStatusQuery';
 
 import { ROUTES } from '@/constants/routes';
-import { BalanceContent } from '@/types/balanceContent';
 
 interface UseMyGameStatusProps {
   roomId: number;
-  balanceContent: BalanceContent | undefined;
+  currentRound: number | undefined;
 }
 
-const useMyGameStatus = ({ roomId, balanceContent }: UseMyGameStatusProps) => {
+const useMyGameStatus = ({ roomId, currentRound }: UseMyGameStatusProps) => {
   const navigate = useNavigate();
 
   const { isRoundFinished, isGameFinished } = useMyGameStatusQuery({
     roomId,
-    balanceContent,
+    currentRound,
   });
 
   const goToGameResult = () => {

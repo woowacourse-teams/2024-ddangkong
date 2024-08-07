@@ -14,12 +14,13 @@ import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 const OptionParticipantsContainer = () => {
   const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery();
+  const currentRound = balanceContent?.currentRound;
   const { groupRoundResult } = useRoundVoteResultQuery({
     roomId: Number(roomId),
     contentId: balanceContent?.contentId,
   });
 
-  useMyGameStatus({ roomId: Number(roomId), balanceContent });
+  useMyGameStatus({ roomId: Number(roomId), currentRound });
 
   if (!groupRoundResult) {
     return null;

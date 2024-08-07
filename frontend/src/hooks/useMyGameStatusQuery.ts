@@ -2,26 +2,25 @@ import { useQuery } from '@tanstack/react-query';
 
 import { checkMyGameStatus } from '@/apis/balanceContent';
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import { BalanceContent } from '@/types/balanceContent';
 
 interface useMyGameStatusQueryProps {
-  balanceContent: BalanceContent | undefined;
+  currentRound: number | undefined;
   roomId: number;
 }
 
-const useMyGameStatusQuery = ({ roomId, balanceContent }: useMyGameStatusQueryProps) => {
+const useMyGameStatusQuery = ({ roomId, currentRound }: useMyGameStatusQueryProps) => {
   const myGameStatusQuery = useQuery({
-    queryKey: [QUERY_KEYS.myGameStatus, balanceContent, roomId, balanceContent?.currentRound],
+    queryKey: [QUERY_KEYS.myGameStatus, roomId, currentRound],
     queryFn: () => {
-      if (!balanceContent) {
+      if (!currentRound) {
         throw new Error('balanceContent 가 존재하지 않습니다.');
       }
       return checkMyGameStatus({
         roomId: roomId,
-        currentRound: balanceContent.currentRound,
+        currentRound: currentRound,
       });
     },
-    enabled: !!balanceContent,
+    enabled: !!currentRound,
     staleTime: 0,
     refetchInterval: 1000,
   });
