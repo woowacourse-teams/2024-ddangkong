@@ -67,10 +67,6 @@ jobs:
       CONTAINER_NAME: ddangkong-api-dev
 
     steps:
-      - name: Setting application-dev.yml
-        run: |
-          echo "${{ secrets.APPLICATION_DEV_YML }}" > ~/application-dev.yml
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
