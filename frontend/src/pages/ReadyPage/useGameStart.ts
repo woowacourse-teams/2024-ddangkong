@@ -9,13 +9,13 @@ export const useGameStart = () => {
   const memberInfo = useRecoilValue(memberInfoState);
   const { roomId } = useParams();
 
-  const startGameMutate = useMutation({
+  const startGameMutation = useMutation({
     mutationFn: () => startGame(Number(roomId)),
   });
 
   const handleGameStart = () => {
     if (memberInfo.isMaster) {
-      startGameMutate.mutate();
+      startGameMutation.mutate();
     }
   };
 
