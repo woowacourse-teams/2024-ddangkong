@@ -69,7 +69,8 @@ class RoomControllerTest extends BaseControllerTest {
         void 게임_방_정보_조회() {
             //when
             RoomInfoResponse actual = RestAssured.given()
-                    .when().get("/api/balances/rooms/1")
+                    .pathParam("roomId", 1L)
+                    .when().get("/api/balances/rooms/{roomId}")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
                     .extract().as(RoomInfoResponse.class);
@@ -119,8 +120,9 @@ class RoomControllerTest extends BaseControllerTest {
             // when & then
             RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
+                    .pathParam("roomId", 1L)
                     .body(body)
-                    .when().post("/api/balances/rooms/1/members")
+                    .when().post("/api/balances/rooms/{roomId}/members")
                     .then().log().all()
                     .statusCode(201)
                     .extract().as(RoomJoinResponse.class);
@@ -135,8 +137,9 @@ class RoomControllerTest extends BaseControllerTest {
             // when & then
             RoomJoinResponse actual = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
+                    .pathParam("roomId", 1L)
                     .body(body)
-                    .when().post("/api/balances/rooms/1/members")
+                    .when().post("/api/balances/rooms/{roomId}/members")
                     .then().log().all()
                     .statusCode(201)
                     .extract().as(RoomJoinResponse.class);
