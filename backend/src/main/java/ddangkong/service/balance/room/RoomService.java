@@ -21,11 +21,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RoomService {
 
     private final RoomRepository roomRepository;
@@ -120,5 +122,20 @@ public class RoomService {
     public RoundFinishedResponse getRoundFinished(Long roomId, int round) {
         Room room = roomRepository.getById(roomId);
         return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished());
+    }
+
+    @Transactional
+    public void resetRoom(Long roomId) {
+        Room room = roomRepository.getById(roomId);
+        room.reset();
+        List<RoomContent> roomContents = roomContentRepository.findAllByRoomAndIsUsed(room, false);
+        for (RoomContent roomContent : roomContents) {
+            roomContent.finish();
+        }
+
+        if (room.getTotalRound() != roomContents.size()) {
+            log.error("방의 총 라운드와 방 컨텐츠 개수가 일치하지 않습니다. roomId: {}, totalRound: {}, roomContent 개수: {}",
+                    roomId, room.getTotalRound(), roomContents.size());
+        }
     }
 }

@@ -70,4 +70,10 @@ public class RoomController {
                                                   @Positive @RequestParam int round) {
         return roomService.getRoundFinished(roomId, round);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/balances/rooms/{roomId}/reset")
+    public void resetRoom(@PathVariable @Positive Long roomId) {
+        roomService.resetRoom(roomId);
+    }
 }

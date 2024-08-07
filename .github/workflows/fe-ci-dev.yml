@@ -1,4 +1,4 @@
-name: Frontend CI
+name: FE CI for dev
 
 on:
   pull_request:
@@ -9,7 +9,12 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    runs-on: [self-hosted, linux, ARM64]
+
+    defaults:
+      run:
+        working-directory: ./frontend
 
     steps:
       - uses: actions/checkout@v4

@@ -87,6 +87,10 @@ public class RoomContent {
         }
     }
 
+    public void finish() {
+        isUsed = true;
+    }
+
     public Long getContentId() {
         return balanceContent.getId();
     }

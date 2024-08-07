@@ -7,13 +7,18 @@ import ddangkong.controller.BaseControllerTest;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.controller.balance.room.dto.RoomSettingRequest;
+import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomContent;
+import ddangkong.domain.balance.room.RoomStatus;
 import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.HashMap;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -212,6 +217,31 @@ class RoomControllerTest extends BaseControllerTest {
                     () -> assertThat(actual.isRoundFinished()).isTrue(),
                     () -> assertThat(actual.isGameFinished()).isFalse()
             );
+        }
+    }
+
+    @Nested
+    class 방_초기화 {
+
+        private Room room;
+
+        @BeforeEach
+        void setUp() {
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            room = roomRepository.save(new Room(3, 3, 30, RoomStatus.FINISH, Category.EXAMPLE));
+            roomContentRepository.save(new RoomContent(room, content, 1, null, false));
+            roomContentRepository.save(new RoomContent(room, content, 2, null, false));
+            roomContentRepository.save(new RoomContent(room, content, 3, null, false));
+        }
+
+        @Test
+        void 방을_초기화한다() {
+            // when & then
+            RestAssured.given().log().all()
+                    .pathParam("roomId", room.getId())
+                    .when().patch("/api/balances/rooms/{roomId}/reset")
+                    .then().log().all()
+                    .statusCode(HttpStatus.NO_CONTENT.value());
         }
     }
 }

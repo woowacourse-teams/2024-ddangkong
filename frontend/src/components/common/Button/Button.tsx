@@ -26,7 +26,6 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      disabled={disabled}
       css={buttonLayout({ disabled, size, radius, fontSize, bottom })}
       {...props}
     >
