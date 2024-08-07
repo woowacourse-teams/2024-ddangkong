@@ -21,5 +21,5 @@ export const useGetRoomInfo = () => {
     }
   }, [data?.isGameStart, roomId, navigate]);
 
-  return { data, isLoading, isError };
+  return { members: data?.members, isLoading, isError };
 };
