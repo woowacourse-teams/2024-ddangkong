@@ -23,6 +23,8 @@ export const MOCK_API_URL = {
   moveNextRound: `${BASE_URL}/api/balances/rooms/:roomId/contents`,
   finalResult: `${BASE_URL}/api/balances/rooms/:roomId/final`,
   room: `${BASE_URL}/api/balances/rooms`,
-  roomMembers: `${BASE_URL}/api/balances/rooms/:roomId`,
+  enterRoom: `${BASE_URL}/api/balances/rooms/:roomId/members`,
+  getRoomInfo: `${BASE_URL}/api/balances/rooms/:roomId`,
+  startGame: `${BASE_URL}/api/balances/rooms/:roomId/start`,
   roundVoteIsFinished: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-finished`,
 };
