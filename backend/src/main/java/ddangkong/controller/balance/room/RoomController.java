@@ -54,6 +54,12 @@ public class RoomController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/balances/rooms/{roomId}/start")
+    public void startGame(@PathVariable @Positive Long roomId) {
+        roomService.startGame(roomId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/balances/rooms/{roomId}/next-round")
     public void moveToNextRound(@PathVariable @Positive Long roomId) {
         roomService.moveToNextRound(roomId);
@@ -63,12 +69,6 @@ public class RoomController {
     public RoundFinishedResponse getRoundFinished(@Positive @PathVariable Long roomId,
                                                   @Positive @RequestParam int round) {
         return roomService.getRoundFinished(roomId, round);
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping("/balances/rooms/{roomId}/start")
-    public void startGame(@PathVariable @Positive Long roomId) {
-        roomService.startGame(roomId);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
