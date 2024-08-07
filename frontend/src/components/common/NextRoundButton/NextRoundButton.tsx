@@ -6,13 +6,11 @@ import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
-import useMyGameStatusQuery from '@/hooks/useMyGameStatusQuery';
 import { memberInfoState } from '@/recoil/atom';
 import { Theme } from '@/styles/Theme';
 
 const NextRoundButton = () => {
   const { roomId } = useParams();
-  const navigate = useNavigate();
   const { balanceContent } = useBalanceContentQuery();
   const { mutateAsync: moveNextRound } = useMoveNextRoundMutation(Number(roomId));
   const memberInfo = useRecoilValue(memberInfoState);
