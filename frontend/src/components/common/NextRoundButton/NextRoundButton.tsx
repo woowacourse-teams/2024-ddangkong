@@ -17,7 +17,6 @@ const NextRoundButton = () => {
   const memberInfo = useRecoilValue(memberInfoState);
 
   const isLastRound = balanceContent?.currentRound === balanceContent?.totalRound;
-  const isButtonDisabled = !memberInfo.isMaster;
 
   const goToGameResult = () => {
     navigate(ROUTES.gameResult, { replace: true });
@@ -34,7 +33,7 @@ const NextRoundButton = () => {
         style={{ width: '100%' }}
         text={isLastRound ? '결과 확인' : '다음'}
         onClick={isLastRound ? goToGameResult : goToNextRound}
-        disabled={isButtonDisabled}
+        disabled={!memberInfo.isMaster}
       />
     </div>
   );
