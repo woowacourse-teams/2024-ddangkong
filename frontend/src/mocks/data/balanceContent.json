@@ -1,9 +1,10 @@
 {
-  "totalRound": 5,
-  "currentRound": 1,
   "contentId": 1,
   "category": "연애",
   "question": "당신의 결혼 상대는?",
+  "timeLimit": 15,
+  "totalRound": 5,
+  "currentRound": 1,
   "firstOption": {
     "optionId": 1,
     "name": "100억 빚 송강"

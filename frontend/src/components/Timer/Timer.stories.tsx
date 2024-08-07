@@ -11,7 +11,4 @@ type Story = StoryObj<typeof meta>;
 
 export default meta;
 
-export const 기본_타이머: Story = {
-  args: {},
-  render: (args) => <Timer {...args} />,
-};
+export const 기본_타이머: Story = {};

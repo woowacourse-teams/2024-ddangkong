@@ -3,4 +3,6 @@ export const QUERY_KEYS = {
   gameResult: 'gameResult',
   roundVoteResult: 'roundVoteResult',
   myGameStatus: 'myGameStatus',
+  roundIsFinished: 'roundIsFinished',
+  roomMembers: 'roomMembers',
 } as const;

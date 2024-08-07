@@ -5,11 +5,6 @@ import SelectOption from './SelectOption';
 
 const meta = {
   title: 'SelectOption',
-  parameters: {
-    argTypes: {},
-    actions: { argTypesRegex: '^on.*' },
-  },
-
   args: { handleSelectOption: fn() },
 
   component: SelectOption,
@@ -24,14 +19,11 @@ export const 선택되지_않은_옵션: Story = {
     option: { name: '100억 빚 송강', optionId: 1 },
     selectedId: 0,
   },
-  render: ({ ...args }) => <SelectOption {...args} />,
 };
 
 export const 선택된_옵션: Story = {
   args: {
-    option: { name: '100억 빚 송강', optionId: 1 },
-    selectedId: 1,
+    option: { name: '100억 부자 송강호', optionId: 2 },
+    selectedId: 2,
   },
-
-  render: (args) => <SelectOption {...args} handleSelectOption={args.handleSelectOption} />,
 };

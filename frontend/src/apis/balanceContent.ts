@@ -18,8 +18,12 @@ interface myGameStatusParams {
   currentRound: number;
 }
 
+interface RoundVoteIsFinished {
+  finished: boolean;
+}
+
 // 밸런스 게임 컨텐츠 가져오기
-export const fetchBalanceContent = async (roomId = 1): Promise<BalanceContent> => {
+export const fetchBalanceContent = async (roomId: number): Promise<BalanceContent> => {
   const res = await fetcher.get({ url: API_URL.balanceContent(roomId) });
 
   const data = await res.json();
@@ -89,6 +93,20 @@ export const moveNextRound = async (roomId: number) => {
 export const fetchFinalGameResult = async (roomId = 1): Promise<GameFinalResult[]> => {
   const res = await fetcher.get({
     url: API_URL.finalResult(roomId),
+  });
+
+  const data = await res.json();
+
+  return data;
+};
+
+// 현재 라운드가 끝났는지 여부 확인하기
+export const fetchRoundVoteIsFinished = async ({
+  contentId,
+  roomId,
+}: ContentResultParams): Promise<RoundVoteIsFinished> => {
+  const res = await fetcher.get({
+    url: API_URL.roundVoteIsFinished(roomId, contentId),
   });
 
   const data = await res.json();

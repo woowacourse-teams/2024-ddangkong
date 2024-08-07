@@ -14,4 +14,4 @@ const useMoveNextRoundMutation = (roomId: number) => {
   });
 };
 
-export { useMoveNextRoundMutation };
+export default useMoveNextRoundMutation;

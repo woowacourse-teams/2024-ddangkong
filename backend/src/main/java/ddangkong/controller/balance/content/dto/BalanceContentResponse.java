@@ -11,6 +11,7 @@ public record BalanceContentResponse(
         Category category,
         int totalRound,
         int currentRound,
+        int timeLimit,
         String question,
         BalanceOptionResponse firstOption,
         BalanceOptionResponse secondOption
@@ -23,6 +24,7 @@ public record BalanceContentResponse(
                 roomContent.getContentCategory(),
                 roomContent.getTotalRound(),
                 roomContent.getRound(),
+                roomContent.getRoom().getTimeLimit(),
                 roomContent.getContentName(),
                 BalanceOptionResponse.from(balanceOptions.getFistOption()),
                 BalanceOptionResponse.from(balanceOptions.getSecondOption()));

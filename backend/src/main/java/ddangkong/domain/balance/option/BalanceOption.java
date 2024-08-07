@@ -28,4 +28,9 @@ public class BalanceOption {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "balance_content_id", nullable = false)
     private BalanceContent balanceContent;
+
+    public BalanceOption(String name, BalanceContent balanceContent) {
+        this.name = name;
+        this.balanceContent = balanceContent;
+    }
 }

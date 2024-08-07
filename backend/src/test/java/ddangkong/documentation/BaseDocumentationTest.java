@@ -34,7 +34,7 @@ public abstract class BaseDocumentationTest {
                         .withRequestDefaults(
                                 modifyUris()
                                         .scheme("https")
-                                        .host("ddangkong.io")
+                                        .host("ddangkong.kr")
                                         .removePort(),
                                 prettyPrint(),
                                 modifyHeaders().remove(HttpHeaders.CONTENT_LENGTH)

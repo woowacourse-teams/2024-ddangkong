@@ -9,4 +9,6 @@ public interface BalanceVoteRepository extends JpaRepository<BalanceVote, Long> 
     Long countByBalanceOption(BalanceOption balanceOption);
 
     List<BalanceVote> findByMemberRoomAndBalanceOption(Room room, BalanceOption balanceOption);
+
+    Long countByMemberRoomAndBalanceOptionIn(Room room, List<BalanceOption> balanceOptions);
 }

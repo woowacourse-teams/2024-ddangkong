@@ -4,18 +4,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.controller.BaseControllerTest;
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
+import ddangkong.controller.balance.room.dto.RoomSettingRequest;
+import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.balance.room.RoomContent;
+import ddangkong.domain.balance.room.RoomStatus;
+import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.HashMap;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 class RoomControllerTest extends BaseControllerTest {
 
@@ -120,25 +126,18 @@ class RoomControllerTest extends BaseControllerTest {
     }
 
     @Nested
-    class 다음_라운드_진행 {
+    class 게임_시작 {
 
-        private static final BalanceContentResponse EXPECTED_RESPONSE = new BalanceContentResponse(
-                3L, Category.EXAMPLE, 5, 3, "다음 중 여행가고 싶은 곳은?",
-                new BalanceOptionResponse(5L, "산"),
-                new BalanceOptionResponse(6L, "바다"));
+        private static final Long READY_ROOM_ID = 4L;
 
         @Test
-        void 다음_라운드로_진행할_수_있다() {
-            // when
-            BalanceContentResponse actual = RestAssured.given().log().all()
-                    .pathParam("roomId", 1L)
-                    .when().post("/api/balances/rooms/{roomId}/contents")
+        void 게임을_시작할_수_있다() {
+            // when & then
+            RestAssured.given().log().all()
+                    .pathParam("roomId", READY_ROOM_ID)
+                    .when().patch("/api/balances/rooms/{roomId}/start")
                     .then().log().all()
-                    .statusCode(201)
-                    .extract().as(BalanceContentResponse.class);
-
-            // then
-            assertThat(actual).isEqualTo(EXPECTED_RESPONSE);
+                    .statusCode(204);
         }
 
         @Test
@@ -146,9 +145,103 @@ class RoomControllerTest extends BaseControllerTest {
             // when & then
             RestAssured.given().log().all()
                     .pathParam("roomId", -1L)
-                    .when().post("/api/balances/rooms/{roomId}/contents")
+                    .when().patch("/api/balances/rooms/{roomId}/start")
                     .then().log().all()
                     .statusCode(400);
+        }
+    }
+
+    @Nested
+    class 다음_라운드_진행 {
+
+        @Test
+        void 다음_라운드로_진행할_수_있다() {
+            // when
+            RestAssured.given().log().all()
+                    .pathParam("roomId", 1L)
+                    .when().patch("/api/balances/rooms/{roomId}/next-round")
+                    .then().log().all()
+                    .statusCode(204);
+        }
+
+        @Test
+        void 방의_식별자가_음수인_경우_예외를_던진다() {
+            // when & then
+            RestAssured.given().log().all()
+                    .pathParam("roomId", -1L)
+                    .when().patch("/api/balances/rooms/{roomId}/next-round")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
+
+    @Nested
+    class 방_설정_변경 {
+
+        @Test
+        void 방_설정_정보를_변경한다() {
+            // given
+            int totalRound = 5;
+            int timeLimit = 10000;
+            Category category = Category.EXAMPLE;
+
+            RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);
+
+            // when & then
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .pathParam("roomId", 1L)
+                    .body(request)
+                    .when().patch("/api/balances/rooms/{roomId}")
+                    .then().log().all()
+                    .statusCode(HttpStatus.NO_CONTENT.value());
+        }
+    }
+
+    @Nested
+    class 라운드_종료_여부 {
+
+        @Test
+        void 라운드가_종료되었는지_조회한다() {
+            // when
+            RoundFinishedResponse actual = RestAssured.given().log().all()
+                    .pathParam("roomId", 1L)
+                    .queryParam("round", 1)
+                    .when().get("/api/balances/rooms/{roomId}/round-finished")
+                    .then().log().all()
+                    .statusCode(200)
+                    .extract().as(RoundFinishedResponse.class);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.isRoundFinished()).isTrue(),
+                    () -> assertThat(actual.isGameFinished()).isFalse()
+            );
+        }
+    }
+
+    @Nested
+    class 방_초기화 {
+
+        private Room room;
+
+        @BeforeEach
+        void setUp() {
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            room = roomRepository.save(new Room(3, 3, 30, RoomStatus.FINISH, Category.EXAMPLE));
+            roomContentRepository.save(new RoomContent(room, content, 1, null, false));
+            roomContentRepository.save(new RoomContent(room, content, 2, null, false));
+            roomContentRepository.save(new RoomContent(room, content, 3, null, false));
+        }
+
+        @Test
+        void 방을_초기화한다() {
+            // when & then
+            RestAssured.given().log().all()
+                    .pathParam("roomId", room.getId())
+                    .when().patch("/api/balances/rooms/{roomId}/reset")
+                    .then().log().all()
+                    .statusCode(HttpStatus.NO_CONTENT.value());
         }
     }
 }

@@ -2,6 +2,7 @@ export interface BalanceContent {
   contentId: number;
   category: string;
   question: string;
+  timeLimit: number;
   totalRound: number;
   currentRound: number;
   firstOption: {

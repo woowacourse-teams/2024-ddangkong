@@ -14,7 +14,8 @@ public record RoomInfoResponse(
         List<MemberResponse> membersResponse = members.stream()
                 .map(MemberResponse::new)
                 .toList();
-        RoomSettingResponse roomSettingResponse = new RoomSettingResponse(room.getTotalRound(), room.getTimeLimit());
+        RoomSettingResponse roomSettingResponse = new RoomSettingResponse(room.getTotalRound(), room.getTimeLimit(),
+                room.getCategory());
 
         return new RoomInfoResponse(room.isGameProgress(), roomSettingResponse, membersResponse);
     }

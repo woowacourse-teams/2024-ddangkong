@@ -10,6 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'small' | 'medium' | 'large';
   radius?: 'small' | 'medium' | 'large';
   fontSize?: 'small' | 'medium' | 'large';
+  bottom?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -19,13 +20,14 @@ const Button: React.FC<ButtonProps> = ({
   size,
   radius,
   fontSize,
+  bottom,
   ...props
 }) => {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      css={buttonLayout({ disabled, size, radius, fontSize })}
+      css={buttonLayout({ disabled, size, radius, fontSize, bottom })}
       {...props}
     >
       {text}
