@@ -50,7 +50,7 @@ export const getRoomInfo = async (roomId: number): Promise<RoomInfo> => {
 
 // 게임 시작
 export const startGame = async (roomId: number): Promise<void> => {
-  fetcher.patch({
+  await fetcher.patch({
     url: API_URL.startGame(roomId),
   });
 };
