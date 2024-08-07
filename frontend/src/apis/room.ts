@@ -24,6 +24,17 @@ export const createRoom = async (nickname: string): Promise<RoomIdAndMember> => 
   return data;
 };
 
+// 방 초기화하기
+export const resetRoom = async (roomId: number) => {
+  const res = await fetcher.patch({
+    url: API_URL.resetRoom(roomId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
+  });
+  return res;
+};
+
 // 방 참여하기
 export const enterRoom = async (roomId: number, nickname: string): Promise<RoomIdAndMember> => {
   const res = await fetcher.post({
