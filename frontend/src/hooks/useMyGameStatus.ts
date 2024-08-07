@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import useBalanceContentQuery from './useBalanceContentQuery';
 import useMyGameStatusQuery from './useMyGameStatusQuery';
@@ -8,25 +8,27 @@ import useRoundVoteResultQuery from './useRoundVoteResultQuery';
 import { ROUTES } from '@/constants/routes';
 
 const useMyGameStatus = () => {
-  const { search } = useLocation();
-  const roomId = Number(new URLSearchParams(search).get('roomId'));
+  const { roomId } = useParams();
   const navigate = useNavigate();
 
   const { balanceContent } = useBalanceContentQuery();
 
   const { groupRoundResult, totalResult } = useRoundVoteResultQuery({
-    roomId: roomId,
+    roomId: Number(roomId),
     contentId: balanceContent?.contentId,
   });
 
-  const { isRoundFinished, isGameFinished } = useMyGameStatusQuery({ balanceContent, roomId });
+  const { isRoundFinished, isGameFinished } = useMyGameStatusQuery({
+    roomId: Number(roomId),
+    balanceContent,
+  });
 
   const goToGameResult = () => {
     navigate(ROUTES.gameResult);
   };
 
   const goToNextRound = async () => {
-    navigate(ROUTES.game);
+    navigate(ROUTES.game(Number(roomId)));
   };
 
   useEffect(() => {
