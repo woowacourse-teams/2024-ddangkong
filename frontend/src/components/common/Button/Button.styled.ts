@@ -28,15 +28,11 @@ export const buttonLayout = ({
   border: none;
   border-radius: ${getBorderRadius(radius)};
 
-  background-color: ${disabled ? Theme.color.peanut300 : Theme.color.peanut400};
+  background-color: ${disabled ? Theme.color.gray300 : Theme.color.peanut400};
 
   font-weight: bold;
   font-size: ${getFontSize(fontSize)};
   cursor: ${disabled ? 'not-allowed' : 'pointer'};
-
-  &:disabled {
-    background-color: ${Theme.color.peanut300};
-  }
 
   ${bottom &&
   css`

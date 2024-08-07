@@ -11,6 +11,7 @@ export const API_URL = {
   room: `${BASE_URL}/api/balances/rooms`,
   enterRoom: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/members`,
   getRoomInfo: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
+  startGame: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/start`,
   roundVoteIsFinished: (roomId: number, contentId: number) =>
     `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/vote-finished`,
 };
