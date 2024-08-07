@@ -7,10 +7,19 @@ import {
 import OptionParticipants from '../OptionParticipants/OptionParticipants';
 import TopicContainer from '../TopicContainer/TopicContainer';
 
+import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useMyGameStatus from '@/hooks/useMyGameStatus';
+import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 
 const OptionParticipantsContainer = () => {
-  const { groupRoundResult } = useMyGameStatus();
+  const { roomId } = useParams();
+  const { balanceContent } = useBalanceContentQuery();
+  const { groupRoundResult } = useRoundVoteResultQuery({
+    roomId: Number(roomId),
+    contentId: balanceContent?.contentId,
+  });
+
+  useMyGameStatus({ roomId: Number(roomId), balanceContent });
 
   if (!groupRoundResult) {
     return null;

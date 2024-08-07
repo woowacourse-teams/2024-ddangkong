@@ -16,6 +16,7 @@ import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hoo
 
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useMyGameStatus from '@/hooks/useMyGameStatus';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 import { Group, Total } from '@/types/roundVoteResult';
 
@@ -36,6 +37,8 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
     roomId: Number(roomId),
     contentId: balanceContent?.contentId,
   });
+
+  useMyGameStatus({ roomId: Number(roomId), balanceContent });
 
   const {
     animatedFirstPercent,

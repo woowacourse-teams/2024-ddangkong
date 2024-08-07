@@ -1,25 +1,21 @@
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import useBalanceContentQuery from './useBalanceContentQuery';
 import useMyGameStatusQuery from './useMyGameStatusQuery';
-import useRoundVoteResultQuery from './useRoundVoteResultQuery';
 
 import { ROUTES } from '@/constants/routes';
+import { BalanceContent } from '@/types/balanceContent';
 
-const useMyGameStatus = () => {
-  const { roomId } = useParams();
+interface UseMyGameStatusProps {
+  roomId: number;
+  balanceContent: BalanceContent | undefined;
+}
+
+const useMyGameStatus = ({ roomId, balanceContent }: UseMyGameStatusProps) => {
   const navigate = useNavigate();
 
-  const { balanceContent } = useBalanceContentQuery();
-
-  const { groupRoundResult, totalResult } = useRoundVoteResultQuery({
-    roomId: Number(roomId),
-    contentId: balanceContent?.contentId,
-  });
-
   const { isRoundFinished, isGameFinished } = useMyGameStatusQuery({
-    roomId: Number(roomId),
+    roomId,
     balanceContent,
   });
 
@@ -39,11 +35,6 @@ const useMyGameStatus = () => {
       goToNextRound();
     }
   }, [isRoundFinished, isGameFinished]);
-
-  return {
-    groupRoundResult,
-    totalResult,
-  };
 };
 
 export default useMyGameStatus;
