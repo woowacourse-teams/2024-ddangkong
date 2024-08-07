@@ -12,12 +12,49 @@ import org.junit.jupiter.api.Test;
 
 class RoomContentTest {
 
-    private static final Room ROOM = Room.createNewRoom();
-    private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.EXAMPLE, "치킨 vs 피자");
+    @Nested
+    class 라운드_시작 {
+
+        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.EXAMPLE, "다음 중 가고 싶은 곳은?");
+        private static final LocalDateTime CURRENT_TIME = LocalDateTime.of(2024, 8, 2, 14, 14, 10);
+
+        @Test
+        void 라운드를_시작할_때_종료_시각을_기록한다() {
+            // given
+            int currentRound = 1;
+            int timeLimit = 10_000;
+            Room room = new Room(5, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
+            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null, false);
+            int expectedAfterSec = (timeLimit + 2_000) / 1_000;
+            LocalDateTime expectedRoundEnded = CURRENT_TIME.plusSeconds(expectedAfterSec);
+
+            // when
+            roomContent.updateRoundEndedAt(CURRENT_TIME, timeLimit);
+
+            // then
+            assertThat(roomContent.getRoundEndedAt()).isEqualTo(expectedRoundEnded);
+        }
+
+        @Test
+        void 이미_라운드가_시작되었다면_예외를_던진다() {
+            // given
+            int currentRound = 1;
+            Room room = new Room(5, currentRound, 10_000, RoomStatus.PROGRESS, Category.EXAMPLE);
+            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null, false);
+            roomContent.updateRoundEndedAt(CURRENT_TIME, 10_000);
+
+            // when & then
+            assertThatThrownBy(() -> roomContent.updateRoundEndedAt(CURRENT_TIME, 10_000))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("해당 라운드는 이미 시작했습니다.");
+        }
+    }
 
     @Nested
     class 라운드_종료_여부 {
 
+        private static final Room ROOM = Room.createNewRoom();
+        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.EXAMPLE, "치킨 vs 피자");
         private static final int ROUND = 1;
         private static final LocalDateTime ROUND_ENDED_AT = LocalDateTime.parse("2024-08-03T20:00:02");
         private static final boolean IS_USED = false;

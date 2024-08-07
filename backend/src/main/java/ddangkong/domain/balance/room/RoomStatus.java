@@ -6,6 +6,10 @@ public enum RoomStatus {
     FINISH,
     ;
 
+    public boolean isAlreadyStart() {
+        return this != READY;
+    }
+
     public boolean isGameProgress() {
         return this == PROGRESS;
     }

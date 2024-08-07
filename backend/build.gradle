@@ -53,15 +53,21 @@ tasks.named('jar') {
     enabled = false
 }
 
-tasks.named('test') {
+tasks.withType(Test).configureEach {
     useJUnitPlatform()
     reports.html.required = false
     reports.junitXml.required = false
+}
+
+tasks.register('restDocsTest', Test) {
     outputs.dir snippetsDir
+    filter {
+        includeTestsMatching 'ddangkong.documentation.*'
+    }
 }
 
 tasks.named('asciidoctor') {
-    dependsOn test
+    dependsOn restDocsTest
     inputs.dir snippetsDir
     configurations 'asciidoctorExt'
     sources {
@@ -71,8 +77,10 @@ tasks.named('asciidoctor') {
 }
 
 tasks.named('bootJar') {
-    dependsOn asciidoctor
-    from("${asciidoctor.outputDir}") {
-        into 'static/docs'
+    if (project.hasProperty('createRestDocs')) {
+        dependsOn asciidoctor
+        from("${asciidoctor.outputDir}") {
+            into 'static/docs'
+        }
     }
 }

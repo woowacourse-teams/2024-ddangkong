@@ -9,7 +9,6 @@ lerna-debug.log*
 
 node_modules
 dist
-dist-ssr
 *.local
 
 # Editor directories and files
@@ -29,5 +28,3 @@ dist-ssr
 
 *storybook.log
 storybook-static
-# Sentry Config File
-.env.sentry-build-plugin

@@ -14,7 +14,6 @@ export const useMakeOrEnterRoom = () => {
   const navigate = useNavigate();
   const { isMaster } = useRecoilValue(memberInfoState);
   const { roomId } = useParams();
-  const nickname = nicknameInputRef.current?.value || randomNickname;
 
   const createRoomMutation = useMutation<RoomIdAndMember, Error, string>({
     mutationFn: createRoom,
@@ -37,6 +36,7 @@ export const useMakeOrEnterRoom = () => {
   });
 
   const handleMakeOrEnterRoom = () => {
+    const nickname = nicknameInputRef.current?.value || randomNickname;
     if (isMaster) {
       createRoomMutation.mutate(nickname);
     } else {

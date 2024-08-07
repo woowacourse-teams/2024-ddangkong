@@ -1,6 +1,5 @@
 package ddangkong.domain.balance.room;
 
-import ddangkong.domain.BaseEntity;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
@@ -20,7 +19,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class RoomContent extends BaseEntity {
+public class RoomContent {
+
+    private static final int DELAY_MSEC = 2_000; // TODO SEC로 변경
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +37,15 @@ public class RoomContent extends BaseEntity {
 
     @Column(nullable = false)
     private int round;
-
+  
     private LocalDateTime roundEndedAt;
 
     @Column(nullable = false)
     private boolean isUsed;
+
+    public static RoomContent newRoomContent(Room room, BalanceContent balanceContent, int round) {
+        return new RoomContent(room, balanceContent, round, null, false);
+    }
 
     public RoomContent(Room room,
                        BalanceContent balanceContent,
@@ -52,6 +57,15 @@ public class RoomContent extends BaseEntity {
         this.round = round;
         this.roundEndedAt = roundEndedAt;
         this.isUsed = isUsed;
+    }
+
+    public void updateRoundEndedAt(LocalDateTime currentTime, int timeLimit) {
+        if (roundEndedAt != null) {
+            throw new BadRequestException("해당 라운드는 이미 시작했습니다.");
+        }
+
+        int afterSec = (timeLimit + DELAY_MSEC) / 1_000;
+        roundEndedAt = currentTime.plusSeconds(afterSec);
     }
 
     public boolean isRoundOver(LocalDateTime currentTime, int round) {
@@ -71,6 +85,10 @@ public class RoomContent extends BaseEntity {
         if (isUsed) {
             throw new BadRequestException("이미 사용된 컨텐츠입니다.");
         }
+    }
+
+    public void finish() {
+        isUsed = true;
     }
 
     public Long getContentId() {
