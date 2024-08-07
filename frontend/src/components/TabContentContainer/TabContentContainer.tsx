@@ -14,6 +14,7 @@ import {
 } from './TabContentContainer.styled';
 import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hook';
 
+import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 import { Group, Total } from '@/types/roundVoteResult';
@@ -47,7 +48,7 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
   const isBigFirstOption = roundResult && roundResult.firstOption.percent >= 50;
 
   const goToVoteStatus = () => {
-    navigate('/round/result/status');
+    navigate(ROUTES.roundResultStatus(Number(roomId)));
   };
 
   if (!roundResult) return <div>데이터가 없습니다</div>;

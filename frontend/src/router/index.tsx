@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
     element: <MainPage />,
   },
   {
-    path: 'round/result/status',
+    path: ':roomId/round/result/status',
     element: <VoteStatusPage />,
   },
   {

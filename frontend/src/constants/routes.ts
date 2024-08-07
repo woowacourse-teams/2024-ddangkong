@@ -6,4 +6,5 @@ export const ROUTES = {
   roundResult: (roomId: number) => `/${roomId}/round/result`,
   roundResultVote: '/round/result/vote',
   gameResult: '/game/result',
+  roundResultStatus: (roomId: number) => `/${roomId}/round/result/status`,
 } as const;
