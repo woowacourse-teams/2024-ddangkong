@@ -1,3 +1,5 @@
+import { captureException } from '@sentry/react';
+
 interface RequestProps {
   url: string;
   method: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
@@ -16,6 +18,7 @@ const fetcher = {
     });
 
     if (!response.ok) {
+      captureException('fetch API ERROR');
       throw new Error('fetch fail error');
     }
 
