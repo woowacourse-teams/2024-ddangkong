@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.controller.BaseControllerTest;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
+import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
 import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.domain.balance.content.BalanceContent;
@@ -31,9 +32,7 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 방을_생성할_수_있다() {
             // given
-            String nickname = "방장";
-            Map<String, Object> body = new HashMap<>();
-            body.put("nickname", nickname);
+            RoomJoinRequest body = new RoomJoinRequest("방장");
 
             // when & then
             RestAssured.given().log().all()
@@ -48,9 +47,7 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 방을_생성한_사용자는_방장이다() {
             // given
-            String nickname = "방장";
-            Map<String, Object> body = new HashMap<>();
-            body.put("nickname", nickname);
+            RoomJoinRequest body = new RoomJoinRequest("방장");
 
             // when & then
             RoomJoinResponse actual = RestAssured.given().log().all()
