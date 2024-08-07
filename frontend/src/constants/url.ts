@@ -21,7 +21,7 @@ export const MOCK_API_URL = {
   balanceContent: `${BASE_URL}/api/balances/rooms/:roomId/content`,
   vote: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/votes`,
   roundVoteResult: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-result`,
-  myGameStatus: `${BASE_URL}/api/balances/rooms/:roomId?myRound=:myRound`,
+  myGameStatus: `${BASE_URL}/api/balances/rooms/:roomId?round=:round`,
   moveNextRound: `${BASE_URL}/api/balances/rooms/:roomId/next-round`,
   finalResult: `${BASE_URL}/api/balances/rooms/:roomId/final`,
   room: `${BASE_URL}/api/balances/rooms`,
