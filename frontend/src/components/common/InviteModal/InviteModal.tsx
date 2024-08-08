@@ -1,3 +1,5 @@
+import { useParams } from 'react-router-dom';
+
 import {
   inviteModalLi,
   inviteModalHeader,
@@ -19,10 +21,12 @@ import CopyIcon from '@/assets/images/copyIcon.png';
 interface InviteModalProps {
   isOpen: boolean;
   onClose: () => void;
-  inviteUrl: string;
 }
 
-const InviteModal = ({ isOpen, onClose, inviteUrl }: InviteModalProps) => {
+const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
+  const { roomId } = useParams();
+  const inviteUrl = `${window.location.origin}${`/nickname/${roomId}`}`;
+
   const { isCopied, copyToClipboard } = useClipBoard();
 
   const handleCopy = () => {

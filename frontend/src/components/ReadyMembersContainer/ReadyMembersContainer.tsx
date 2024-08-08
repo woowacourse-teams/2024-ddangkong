@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 import {
   readyMembersContainerLayout,
@@ -21,8 +20,6 @@ interface ReadyMembersContainerProps extends RoomMembers {}
 
 const ReadyMembersContainer = ({ members }: ReadyMembersContainerProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { roomId } = useParams();
-  const inviteUrl = `${window.location.origin}${`/nickname/${roomId}`}`;
 
   const handleInviteButton = () => {
     setIsModalOpen(true);
@@ -56,7 +53,7 @@ const ReadyMembersContainer = ({ members }: ReadyMembersContainerProps) => {
           ))}
         </ul>
       </section>
-      <InviteModal isOpen={isModalOpen} onClose={handleModalClose} inviteUrl={inviteUrl} />
+      <InviteModal isOpen={isModalOpen} onClose={handleModalClose} />
     </div>
   );
 };
