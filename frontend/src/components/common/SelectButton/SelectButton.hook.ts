@@ -1,7 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import { voteBalanceContent } from '@/apis/balanceContent';
+import { memberInfoState } from '@/recoil/atom';
 
 interface UseSelectCompleteMutationProps {
   selectedId: number;
@@ -10,6 +12,7 @@ interface UseSelectCompleteMutationProps {
 
 const useSelectCompleteMutation = ({ selectedId, contentId }: UseSelectCompleteMutationProps) => {
   const { roomId } = useParams();
+  const memberInfo = useRecoilValue(memberInfoState);
 
   return useMutation({
     mutationFn: async () => {
@@ -21,6 +24,7 @@ const useSelectCompleteMutation = ({ selectedId, contentId }: UseSelectCompleteM
         roomId: Number(roomId),
         optionId: selectedId,
         contentId,
+        memberId: Number(memberInfo.memberId),
       });
     },
   });
