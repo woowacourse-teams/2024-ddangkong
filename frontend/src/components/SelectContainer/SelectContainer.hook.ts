@@ -29,10 +29,20 @@ export const useRoundIsFinishedQuery = ({ contentId }: UseRoundIsFinishedQueryPr
     refetchIntervalInBackground: true,
   });
 
-  return { ...roundIsFinishedQuery, isFinished: roundIsFinishedQuery.data?.finished };
+  return { ...roundIsFinishedQuery, isFinished: roundIsFinishedQuery.data?.isFinished };
 };
 
-export const useRoundIsFinished = (contentId?: number) => {
+interface UseRoundIsFinishedProps {
+  contentId?: number;
+  isFetching: boolean;
+  isFetched: boolean;
+}
+
+export const useRoundIsFinished = ({
+  contentId,
+  isFetching,
+  isFetched,
+}: UseRoundIsFinishedProps) => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const { isFinished } = useRoundIsFinishedQuery({
@@ -40,7 +50,7 @@ export const useRoundIsFinished = (contentId?: number) => {
   });
 
   useEffect(() => {
-    if (isFinished) {
+    if (isFinished && !isFetching && isFetched) {
       navigate(ROUTES.roundResult(Number(roomId)), { replace: true });
     }
   }, [isFinished, navigate, roomId]);
