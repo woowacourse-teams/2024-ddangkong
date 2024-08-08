@@ -47,16 +47,16 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    public Room(int totalRound, int currentRound, int timeLimit, RoomStatus status, Category category) {
+    public static Room createNewRoom() {
+        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, MAX_TIME_LIMIT_MSEC, RoomStatus.READY, Category.EXAMPLE);
+    }
+
+    private Room(int totalRound, int currentRound, int timeLimit, RoomStatus status, Category category) {
         this.totalRound = totalRound;
         this.currentRound = currentRound;
         this.timeLimit = timeLimit;
         this.status = status;
         this.category = category;
-    }
-
-    public static Room createNewRoom() {
-        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, MAX_TIME_LIMIT_MSEC, RoomStatus.READY, Category.EXAMPLE);
     }
 
     public void moveToNextRound() {
