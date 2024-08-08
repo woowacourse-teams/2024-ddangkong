@@ -40,7 +40,5 @@ export const 초대_모달: Story = {
   },
   args: {
     isOpen: true,
-    onClose: fn(),
-    inviteUrl: '링크입니다',
   },
 };
