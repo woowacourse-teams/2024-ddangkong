@@ -41,11 +41,11 @@ export const inviteModalLinkButtonInfoWrapper = css`
   justify-content: space-between;
 `;
 
-export const inviteModalUrlText = css`
+export const inviteModalText = css`
   overflow: hidden;
   width: 95%;
 
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   text-overflow: ellipsis;
 `;
 
