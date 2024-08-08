@@ -11,6 +11,7 @@ interface ContentResultParams {
 
 interface VoteParams extends ContentResultParams {
   optionId: number;
+  memberId: number;
 }
 
 interface myGameStatusParams {
@@ -19,7 +20,7 @@ interface myGameStatusParams {
 }
 
 interface RoundVoteIsFinished {
-  finished: boolean;
+  isFinished: boolean;
 }
 
 // 밸런스 게임 컨텐츠 가져오기
@@ -32,14 +33,14 @@ export const fetchBalanceContent = async (roomId: number): Promise<BalanceConten
 };
 
 // 투표하기
-export const voteBalanceContent = async ({ optionId, contentId, roomId }: VoteParams) => {
+export const voteBalanceContent = async ({ optionId, contentId, roomId, memberId }: VoteParams) => {
   const res = await fetcher.post({
     url: API_URL.vote(roomId, contentId),
     headers: {
       'Content-Type': `application/json`,
     },
     body: {
-      memberId: 1,
+      memberId,
       optionId,
     },
   });
@@ -90,7 +91,7 @@ export const moveNextRound = async (roomId: number) => {
 };
 
 // 최종 결과 가져오기
-export const fetchFinalGameResult = async (roomId = 1): Promise<GameFinalResult[]> => {
+export const fetchFinalGameResult = async (roomId: number): Promise<GameFinalResult[]> => {
   const res = await fetcher.get({
     url: API_URL.finalResult(roomId),
   });
