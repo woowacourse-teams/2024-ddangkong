@@ -8,6 +8,7 @@ import {
   modalContentLayout,
   modalContentWrapper,
   modalFooter,
+  modalHeaderEmptyBox,
   modalHeaderLayout,
   modalIconButton,
   modalInputLayout,
@@ -53,11 +54,14 @@ const Modal = ({ children, isOpen, onClose, position = 'center', ...restProps }:
   return ReactDOM.createPortal(modalContent, document.body);
 };
 
-interface ModalHeaderProps extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {}
+interface ModalHeaderProps extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {
+  position: 'center' | 'left';
+}
 
-const ModalHeader = ({ children, ...restProps }: ModalHeaderProps) => {
+const ModalHeader = ({ position = 'center', children, ...restProps }: ModalHeaderProps) => {
   return (
     <header css={modalHeaderLayout} {...restProps}>
+      <div css={modalHeaderEmptyBox(position)}></div>
       {children}
     </header>
   );
