@@ -30,7 +30,7 @@ public class BalanceVoteController {
     @GetMapping("/balances/rooms/{roomId}/contents/{contentId}/vote-result")
     public BalanceVoteResultResponse getBalanceRoundResult(@PathVariable @Positive Long roomId,
                                                            @PathVariable @Positive Long contentId) {
-        return balanceVoteService.findBalanceVoteResult(roomId, contentId);
+        return balanceVoteService.getBalanceVoteResult(roomId, contentId);
     }
 
     @PostMapping("/balances/rooms/{roomId}/contents/{contentId}/votes")
