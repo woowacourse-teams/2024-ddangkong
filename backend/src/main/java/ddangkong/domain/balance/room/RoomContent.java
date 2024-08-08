@@ -37,7 +37,7 @@ public class RoomContent {
 
     @Column(nullable = false)
     private int round;
-  
+
     private LocalDateTime roundEndedAt;
 
     @Column(nullable = false)
@@ -76,7 +76,7 @@ public class RoomContent {
 
     private void validateSameRound(int round) {
         if (this.round != round) {
-            throw new BadRequestException("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : %d, 요청한 라운드 : %d"
+            throw new BadRequestException("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : %d, 방 라운드 : %d"
                     .formatted(this.round, round));
         }
     }

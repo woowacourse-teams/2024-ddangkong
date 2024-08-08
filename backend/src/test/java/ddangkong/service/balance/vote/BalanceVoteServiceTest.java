@@ -114,7 +114,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> balanceVoteService.createBalanceVote(request, room.getId(), content.getId()))
                     .isInstanceOf(BadRequestException.class)
-                    .hasMessage("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 요청한 라운드 : 1");
+                    .hasMessage("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
         }
 
         @Test
@@ -165,17 +165,18 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             );
 
             // when
-            BalanceVoteResultResponse actual = balanceVoteService.findBalanceVoteResult(1L, 1L);
+            BalanceVoteResultResponse actual = balanceVoteService.getBalanceVoteResult(1L, 1L);
 
             // then
             assertThat(actual).isEqualTo(expected);
         }
 
         @Test
-        void 진행중인_주제가_아닌것의_투표_결과를_요청하면_예외를_발생시킨다() {
+        void 진행중인_주제가_아닌것의_투표_결과를_요청하면_예외를_발생시킨다() { // todo: 테스트명 수정, 테스트 더 추가
             // when & then
-            assertThatThrownBy(() -> balanceVoteService.findBalanceVoteResult(1L, 2L))
-                    .isInstanceOf(BadRequestException.class);
+            assertThatThrownBy(() -> balanceVoteService.getBalanceVoteResult(1L, 2L))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 1, 방 라운드 : 2");
         }
     }
 
@@ -253,7 +254,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> balanceVoteService.getAllVoteFinished(room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 요청한 라운드 : 1");
+                    .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
         }
 
         @Test

@@ -61,7 +61,7 @@ public class BalanceVoteDocumentationTest extends BaseDocumentationTest {
             BalanceVoteResultResponse response = new BalanceVoteResultResponse(
                     new BalanceContentGroupResponse(firstGroupResponse, secondGroupResponse),
                     new BalanceContentTotalResponse(firstTotalResponse, secondTotalResponse));
-            when(balanceVoteService.findBalanceVoteResult(roomId, contentId)).thenReturn(response);
+            when(balanceVoteService.getBalanceVoteResult(roomId, contentId)).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(END_POINT, roomId, contentId))
