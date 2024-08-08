@@ -15,7 +15,6 @@ const useBalanceContentQuery = (): BalanceContentQueryResponse => {
   const balanceContentQuery = useQuery({
     queryKey: [QUERY_KEYS.balanceContent, roomId],
     queryFn: async () => await fetchBalanceContent(Number(roomId)),
-    staleTime: 3 * 60 * 1000,
   });
 
   return { ...balanceContentQuery, balanceContent: balanceContentQuery.data };
