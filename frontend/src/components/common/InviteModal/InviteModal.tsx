@@ -2,8 +2,6 @@ import { useParams } from 'react-router-dom';
 
 import {
   inviteModalLi,
-  inviteModalHeader,
-  inviteModalIconButton,
   inviteModalTitle,
   inviteModalUl,
   inviteModalLinkButton,
@@ -35,9 +33,9 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} css={inviteModal}>
-      <Modal.Header css={inviteModalHeader}>
+      <Modal.Header position="center">
         <Modal.Title css={inviteModalTitle}>초대하기</Modal.Title>
-        <Modal.IconButton onClick={onClose} css={inviteModalIconButton} />
+        <Modal.IconButton onClick={onClose} />
       </Modal.Header>
       <Modal.Content>
         <ul css={inviteModalUl}>

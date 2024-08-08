@@ -6,24 +6,9 @@ export const inviteModal = css`
   background-color: ${Theme.color.peanut300};
 `;
 
-export const inviteModalHeader = css`
-  display: flex;
-  position: relative;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 export const inviteModalTitle = css`
-  position: absolute;
-  left: 50%;
-
   font-size: 1.6rem;
   text-align: center;
-  transform: translateX(-50%);
-`;
-
-export const inviteModalIconButton = css`
-  margin-left: auto;
 `;
 
 export const inviteModalUl = css`
@@ -40,7 +25,7 @@ export const inviteModalLi = css`
   padding: 0.8rem;
   border-radius: ${Theme.borderRadius.radius10};
 
-  background-color: #fff;
+  background-color: #ffff;
 `;
 
 export const inviteModalLinkButton = css`
