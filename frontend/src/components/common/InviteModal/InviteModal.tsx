@@ -8,7 +8,7 @@ import {
   inviteModalLinkButtonInfoWrapper,
   inviteModalCopyIcon,
   inviteModalUrlText,
-  inviteModal,
+  inviteModalLayout,
 } from './InviteModal.styled';
 import useClipBoard from './useClipBoard';
 import Modal from '../Modal/Modal';
@@ -32,7 +32,7 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} css={inviteModal}>
+    <Modal isOpen={isOpen} onClose={onClose} css={inviteModalLayout}>
       <Modal.Header position="center">
         <Modal.Title css={inviteModalTitle}>초대하기</Modal.Title>
         <Modal.IconButton onClick={onClose} />

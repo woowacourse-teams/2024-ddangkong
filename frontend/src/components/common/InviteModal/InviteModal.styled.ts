@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
 
-export const inviteModal = css`
+export const inviteModalLayout = css`
   background-color: ${Theme.color.peanut300};
 `;
 
