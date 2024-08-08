@@ -9,12 +9,14 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
     private static final String SERVER_ERROR_MESSAGE = "서버 오류가 발생했습니다. 관리자에게 문의하세요.";
+    private static final String RESOURCE_NOT_FOUND_MESSAGE = "요청한 리소스를 찾을 수 없습니다.";
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -38,6 +40,14 @@ public class GlobalExceptionHandler {
         log.warn(e.getMessage());
 
         return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNoResourceFoundException(NoResourceFoundException e) {
+        log.warn(e.getMessage());
+
+        return new ErrorResponse(RESOURCE_NOT_FOUND_MESSAGE);
     }
 
     @ExceptionHandler

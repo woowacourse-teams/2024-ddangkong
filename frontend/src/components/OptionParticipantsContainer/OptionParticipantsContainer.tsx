@@ -8,19 +8,22 @@ import OptionParticipants from '../OptionParticipants/OptionParticipants';
 import TopicContainer from '../TopicContainer/TopicContainer';
 
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useMyGameStatus from '@/hooks/useMyGameStatus';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 
 const OptionParticipantsContainer = () => {
   const { roomId } = useParams();
-
   const { balanceContent } = useBalanceContentQuery();
+  const currentRound = balanceContent?.currentRound;
   const { groupRoundResult } = useRoundVoteResultQuery({
     roomId: Number(roomId),
     contentId: balanceContent?.contentId,
   });
 
-  if (!balanceContent || !groupRoundResult) {
-    return null;
+  useMyGameStatus({ roomId: Number(roomId), currentRound });
+
+  if (!groupRoundResult) {
+    return <div>데이터가 없습니다</div>;
   }
 
   return (
