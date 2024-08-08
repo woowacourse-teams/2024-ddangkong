@@ -24,8 +24,8 @@ const useRoundTimer = () => {
   useEffect(() => {
     if (!balanceContent) return;
 
-    const DECREASE_RATE = INITIAL_WIDTH / timeLimit;
-    setLeftRoundTime(timeLimit);
+    const DECREASE_RATE = INITIAL_WIDTH / (timeLimit / 1000);
+    setLeftRoundTime(timeLimit / 1000);
 
     timeout.current = setInterval(() => {
       setLeftRoundTime((prev) => prev - 1);
