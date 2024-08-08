@@ -1,16 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { moveNextRound } from '@/apis/balanceContent';
-import { QUERY_KEYS } from '@/constants/queryKeys';
 
-const useMoveNextRoundMutation = (roomId: number) => {
-  const queryClient = useQueryClient();
-
+const useMoveNextRoundMutation = (roomId?: number) => {
   return useMutation({
-    mutationFn: async () => await moveNextRound(roomId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balanceContent] });
-    },
+    mutationFn: async () => await moveNextRound(Number(roomId)),
   });
 };
 

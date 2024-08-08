@@ -5,7 +5,6 @@ import useMoveNextRoundMutation from './NextRoundButton.hook';
 import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 
-import { useResetRoomMutation } from '@/components/GameResult/GameResult.hook';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import { memberInfoState } from '@/recoil/atom';
 import { Theme } from '@/styles/Theme';
@@ -14,7 +13,6 @@ const NextRoundButton = () => {
   const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery();
   const { mutate: moveNextRound } = useMoveNextRoundMutation(Number(roomId));
-  const { mutate: resetRoom } = useResetRoomMutation(Number(roomId));
   const memberInfo = useRecoilValue(memberInfoState);
   const isLastRound = balanceContent?.currentRound === balanceContent?.totalRound;
 
@@ -24,14 +22,14 @@ const NextRoundButton = () => {
         <Button
           style={{ width: '100%' }}
           text={isLastRound ? '결과 확인' : '다음'}
-          onClick={isLastRound ? resetRoom : moveNextRound}
+          onClick={moveNextRound}
           disabled={!memberInfo.isMaster}
         />
       ) : (
         <Button
           style={{ width: '100%', backgroundColor: Theme.color.gray }}
           text={'방장이 진행해 주세요'}
-          onClick={isLastRound ? resetRoom : moveNextRound}
+          onClick={moveNextRound}
           disabled={!memberInfo.isMaster}
         />
       )}
