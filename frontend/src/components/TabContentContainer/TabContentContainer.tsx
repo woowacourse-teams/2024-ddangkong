@@ -33,13 +33,13 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
   const navigate = useNavigate();
 
   const { balanceContent } = useBalanceContentQuery();
-  const currentRound = balanceContent?.currentRound;
+
   const { groupRoundResult, totalResult } = useRoundVoteResultQuery({
     roomId: Number(roomId),
     contentId: balanceContent?.contentId,
   });
 
-  useMyGameStatus({ roomId: Number(roomId), currentRound });
+  useMyGameStatus({ roomId: Number(roomId) });
 
   const {
     animatedFirstPercent,
