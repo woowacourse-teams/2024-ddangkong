@@ -43,7 +43,7 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
           <li css={inviteModalLi}>
             <button onClick={handleCopy} css={inviteModalLinkButton}>
               <div css={inviteModalLinkButtonInfoWrapper}>
-                <span css={inviteModalUrlText}>{inviteUrl}</span>
+                <span css={inviteModalUrlText}>초대 링크 복사</span>
                 <img src={CopyIcon} alt="복사하기 이미지" css={inviteModalCopyIcon} />
               </div>
             </button>
