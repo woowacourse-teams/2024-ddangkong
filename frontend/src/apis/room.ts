@@ -15,13 +15,20 @@ export const createRoom = async (nickname: string): Promise<RoomIdAndMember> => 
     },
   });
 
-  if (!res.ok) {
-    throw new Error('방 생성에 실패하였습니다');
-  }
-
   const data = await res.json();
 
   return data;
+};
+
+// 방 초기화하기
+export const resetRoom = async (roomId: number) => {
+  const res = await fetcher.patch({
+    url: API_URL.resetRoom(roomId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
+  });
+  return res;
 };
 
 // 방 참여하기
@@ -36,10 +43,6 @@ export const enterRoom = async (roomId: number, nickname: string): Promise<RoomI
     },
   });
 
-  if (!res.ok) {
-    throw new Error('방 참여에 실패하였습니다');
-  }
-
   const data = await res.json();
 
   return data;
@@ -51,11 +54,14 @@ export const getRoomInfo = async (roomId: number): Promise<RoomInfo> => {
     url: API_URL.getRoomInfo(roomId),
   });
 
-  if (!res.ok) {
-    throw new Error('방 정보 가져오기에 실패하였습니다');
-  }
-
   const data = await res.json();
 
   return data;
+};
+
+// 게임 시작
+export const startGame = async (roomId: number): Promise<void> => {
+  await fetcher.patch({
+    url: API_URL.startGame(roomId),
+  });
 };

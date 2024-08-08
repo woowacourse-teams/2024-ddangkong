@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import { enterRoom, createRoom } from '@/apis/room';
+import { ROUTES } from '@/constants/routes';
 import { memberInfoState } from '@/recoil/atom';
 import { RoomIdAndMember } from '@/types/room';
 import { createRandomNickname } from '@/utils/nickname';
@@ -14,12 +15,11 @@ export const useMakeOrEnterRoom = () => {
   const navigate = useNavigate();
   const { isMaster } = useRecoilValue(memberInfoState);
   const { roomId } = useParams();
-  const nickname = nicknameInputRef.current?.value || randomNickname;
 
   const createRoomMutation = useMutation<RoomIdAndMember, Error, string>({
     mutationFn: createRoom,
     onSuccess: (data) => {
-      navigate(`/ready/${data.roomId}`);
+      navigate(ROUTES.ready(Number(data.roomId)));
     },
     onError: (error: Error) => {},
   });
@@ -31,12 +31,13 @@ export const useMakeOrEnterRoom = () => {
   >({
     mutationFn: ({ nickname, roomId }) => enterRoom(roomId, nickname),
     onSuccess: () => {
-      navigate(`/ready/${roomId}`);
+      navigate(ROUTES.ready(Number(roomId)));
     },
     onError: (error: Error) => {},
   });
 
   const handleMakeOrEnterRoom = () => {
+    const nickname = nicknameInputRef.current?.value || randomNickname;
     if (isMaster) {
       createRoomMutation.mutate(nickname);
     } else {

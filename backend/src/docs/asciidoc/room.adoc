@@ -82,6 +82,22 @@ response fields
 
 include::{snippets}/room/info/response-fields.adoc[]
 
+=== 게임 시작
+
+==== curl
+
+include::{snippets}/room/start/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/start/http-request.adoc[]
+
+include::{snippets}/room/start/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/start/http-response.adoc[]
+
 === 다음 라운드로 이동
 
 ==== curl
@@ -119,3 +135,19 @@ include::{snippets}/room/roundFinished/http-response.adoc[]
 response fields
 
 include::{snippets}/room/roundFinished/response-fields.adoc[]
+
+=== 방 초기화
+
+==== curl
+
+include::{snippets}/room/reset/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/reset/http-request.adoc[]
+
+include::{snippets}/room/reset/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/reset/http-response.adoc[]

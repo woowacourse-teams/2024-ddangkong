@@ -43,6 +43,10 @@ public class RoomContent {
     @Column(nullable = false)
     private boolean isUsed;
 
+    public static RoomContent newRoomContent(Room room, BalanceContent balanceContent, int round) {
+        return new RoomContent(room, balanceContent, round, null, false);
+    }
+
     public RoomContent(Room room,
                        BalanceContent balanceContent,
                        int round,
@@ -55,7 +59,7 @@ public class RoomContent {
         this.isUsed = isUsed;
     }
 
-    public void startRound(LocalDateTime currentTime, int timeLimit) {
+    public void updateRoundEndedAt(LocalDateTime currentTime, int timeLimit) {
         if (roundEndedAt != null) {
             throw new BadRequestException("해당 라운드는 이미 시작했습니다.");
         }
@@ -81,6 +85,10 @@ public class RoomContent {
         if (isUsed) {
             throw new BadRequestException("이미 사용된 컨텐츠입니다.");
         }
+    }
+
+    public void finish() {
+        isUsed = true;
     }
 
     public Long getContentId() {

@@ -16,6 +16,34 @@ import org.junit.jupiter.params.provider.ValueSource;
 class RoomTest {
 
     @Nested
+    class 게임_시작 {
+
+        @Test
+        void 게임이_준비_상태일_떄_게임을_시작할_수_있다() {
+            // given
+            Room room = Room.createNewRoom();
+
+            // when
+            room.startGame();
+
+            // then
+            assertThat(room.isGameProgress()).isTrue();
+        }
+
+        @ParameterizedTest
+        @EnumSource(mode = Mode.EXCLUDE, names = {"READY"})
+        void 게임이_이미_시작했다면_예외를_던진다(RoomStatus status) {
+            // given
+            Room room = new Room(5, 1, 30_000, status, Category.EXAMPLE);
+
+            // when & then
+            assertThatThrownBy(room::startGame)
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("이미 게임이 시작했습니다.");
+        }
+    }
+
+    @Nested
     class 다음_라운드로_이동 {
 
         @Test
@@ -196,6 +224,54 @@ class RoomTest {
 
             // when & then
             assertThat(room.isAllRoundFinished()).isFalse();
+        }
+    }
+
+    @Nested
+    class 방_초기화 {
+        private static final int TOTAL_ROUND = 5;
+        private static final int TIME_LIMIT = 30;
+        private static final Category CATEGORY = Category.EXAMPLE;
+
+        @Test
+        void 방을_초기_상태로_초기화한다() {
+            // given
+            int currentRound = 5;
+            RoomStatus status = RoomStatus.FINISH;
+            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY);
+
+            // when
+            room.reset();
+
+            // then
+            assertAll(
+                    () -> assertThat(room.getCurrentRound()).isEqualTo(1),
+                    () -> assertThat(room.getStatus()).isEqualTo(RoomStatus.READY)
+            );
+        }
+
+        @Test
+        void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
+            // given
+            int invalidCurrentRound = 4;
+            Room room = new Room(TOTAL_ROUND, invalidCurrentRound, TIME_LIMIT, RoomStatus.FINISH, CATEGORY);
+
+            // when & then
+            assertThatThrownBy(room::reset)
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("방이 종료되지 않았습니다");
+        }
+
+        @ParameterizedTest
+        @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
+        void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
+            // given
+            Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
+
+            // when & then
+            assertThatThrownBy(room::reset)
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("방이 종료되지 않았습니다");
         }
     }
 }

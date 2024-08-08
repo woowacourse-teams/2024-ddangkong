@@ -1,5 +1,6 @@
 package ddangkong.controller.balance.room;
 
+import ddangkong.aop.logging.Polling;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
@@ -35,6 +36,7 @@ public class RoomController {
         return roomService.createRoom(request.nickname());
     }
 
+    @Polling
     @GetMapping("/balances/rooms/{roomId}")
     public RoomInfoResponse getBalanceGameRoomInfo(@Positive @PathVariable Long roomId) {
         return roomService.findRoomInfo(roomId);
@@ -54,14 +56,27 @@ public class RoomController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/balances/rooms/{roomId}/start")
+    public void startGame(@PathVariable @Positive Long roomId) {
+        roomService.startGame(roomId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/balances/rooms/{roomId}/next-round")
     public void moveToNextRound(@PathVariable @Positive Long roomId) {
         roomService.moveToNextRound(roomId);
     }
 
+    @Polling
     @GetMapping("/balances/rooms/{roomId}/round-finished")
     public RoundFinishedResponse getRoundFinished(@Positive @PathVariable Long roomId,
                                                   @Positive @RequestParam int round) {
         return roomService.getRoundFinished(roomId, round);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/balances/rooms/{roomId}/reset")
+    public void resetRoom(@PathVariable @Positive Long roomId) {
+        roomService.resetRoom(roomId);
     }
 }

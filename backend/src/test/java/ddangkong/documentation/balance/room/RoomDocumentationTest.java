@@ -3,6 +3,7 @@ package ddangkong.documentation.balance.room;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -78,43 +79,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             )
                     ));
         }
-    }
 
-    @Nested
-    class 방_참여 {
-
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members";
-
-        @Test
-        void 방에_참여한다() throws Exception {
-            // given
-            RoomJoinResponse response = new RoomJoinResponse(1L, new MemberResponse(2L, "타콩", false));
-            when(roomService.joinRoom(anyString(), anyLong())).thenReturn(response);
-
-            RoomJoinRequest request = new RoomJoinRequest("타콩");
-            String content = objectMapper.writeValueAsString(request);
-
-            //when & then
-            mockMvc.perform(post(ENDPOINT, 1L)
-                            .content(content)
-                            .contentType(MediaType.APPLICATION_JSON)
-                    )
-                    .andExpect(status().isCreated())
-                    .andDo(document("room/join",
-                            pathParameters(
-                                    parameterWithName("roomId").description("참여방 ID")
-                            ),
-                            requestFields(
-                                    fieldWithPath("nickname").description("닉네임")
-                            ),
-                            responseFields(
-                                    fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
-                                    fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
-                                    fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
-                                    fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
-                            )
-                    ));
-        }
     }
 
     @Nested
@@ -160,26 +125,6 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     }
 
     @Nested
-    class 다음_라운드로_이동 {
-
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/next-round";
-
-        @Test
-        void 다음_라운드로_이동한다() throws Exception {
-            // when & then
-            mockMvc.perform(patch(ENDPOINT, 1L)
-                            .contentType(MediaType.APPLICATION_JSON)
-                    )
-                    .andExpect(status().isNoContent())
-                    .andDo(document("room/nextRound",
-                            pathParameters(
-                                    parameterWithName("roomId").description("방 ID")
-                            )
-                    ));
-        }
-    }
-
-    @Nested
     class 방_설정_변경 {
 
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}";
@@ -211,6 +156,85 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     }
 
     @Nested
+    class 방_참여 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members";
+
+        @Test
+        void 방에_참여한다() throws Exception {
+            // given
+            RoomJoinResponse response = new RoomJoinResponse(1L, new MemberResponse(2L, "타콩", false));
+            when(roomService.joinRoom(anyString(), anyLong())).thenReturn(response);
+
+            RoomJoinRequest request = new RoomJoinRequest("타콩");
+            String content = objectMapper.writeValueAsString(request);
+
+            //when & then
+            mockMvc.perform(post(ENDPOINT, 1L)
+                            .content(content)
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isCreated())
+                    .andDo(document("room/join",
+                            pathParameters(
+                                    parameterWithName("roomId").description("참여방 ID")
+                            ),
+                            requestFields(
+                                    fieldWithPath("nickname").description("닉네임")
+                            ),
+                            responseFields(
+                                    fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
+                                    fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
+                            )
+                    ));
+        }
+
+    }
+
+    @Nested
+    class 게임_시작 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/start";
+
+        @Test
+        void 게임을_시작한다() throws Exception {
+            // given
+            Long roomId = 1L;
+
+            // when & then
+            mockMvc.perform(patch(ENDPOINT, roomId))
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/start",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    class 다음_라운드로_이동 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/next-round";
+
+        @Test
+        void 다음_라운드로_이동한다() throws Exception {
+            // when & then
+            mockMvc.perform(patch(ENDPOINT, 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/nextRound",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
     class 라운드_종료_여부 {
 
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/round-finished";
@@ -236,6 +260,27 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             responseFields(
                                     fieldWithPath("isRoundFinished").description("라운드 종료 여부"),
                                     fieldWithPath("isGameFinished").description("게임 종료 여부")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    class 방_초기화 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/reset";
+
+        @Test
+        void 방을_초기화한다() throws Exception {
+            // given
+            doNothing().when(roomService).resetRoom(anyLong());
+
+            // when & then
+            mockMvc.perform(patch(ENDPOINT, 1L))
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/reset",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
                             )
                     ));
         }

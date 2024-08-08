@@ -20,15 +20,15 @@ VALUES ('민초', 1),
 
 
 INSERT INTO room(total_round, current_round, time_limit, status, category)
-VALUES (5, 1, 30000, 'READY', 'EXAMPLE');
+VALUES (5, 1, 30000, 'PROGRESS', 'EXAMPLE');
 
 
-INSERT INTO room_content(room_id, balance_content_id, round, created_at, is_used)
-VALUES (1, 1, 1, '2024-07-25 13:24:09', false),
-       (1, 2, 2, '2024-07-25 13:24:09', false),
-       (1, 3, 3, '2024-07-25 13:24:09', false),
-       (1, 4, 4, '2024-07-25 13:24:09', false),
-       (1, 5, 5, '2024-07-25 13:24:09', false);
+INSERT INTO room_content(room_id, balance_content_id, round, round_ended_at, is_used)
+VALUES (1, 1, 1, null, false),
+       (1, 2, 2, null, false),
+       (1, 3, 3, null, false),
+       (1, 4, 4, null, false),
+       (1, 5, 5, null, false);
 
 
 INSERT INTO member(room_id, nickname, is_master)
