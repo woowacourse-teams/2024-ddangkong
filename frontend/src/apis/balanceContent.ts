@@ -1,7 +1,7 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { BalanceContent, GameFinalResult } from '@/types/balanceContent';
+import { BalanceContent, GameFinalResult, MyGameStatus } from '@/types/balanceContent';
 import { RoundVoteResult } from '@/types/roundVoteResult';
 
 interface ContentResultParams {
@@ -11,6 +11,11 @@ interface ContentResultParams {
 
 interface VoteParams extends ContentResultParams {
   optionId: number;
+}
+
+interface myGameStatusParams {
+  roomId: number;
+  currentRound: number;
 }
 
 interface RoundVoteIsFinished {
@@ -58,18 +63,30 @@ export const fetchRoundVoteResult = async ({
   return data;
 };
 
-// 다음 라운드로 이동하기
-export const moveNextRound = async (roomId = 1): Promise<RoundVoteResult> => {
-  const res = await fetcher.post({
-    url: API_URL.moveNextRound(roomId),
+// 나의 라운드 종료 및 게임 종료 확인
+export const checkMyGameStatus = async ({
+  roomId,
+  currentRound,
+}: myGameStatusParams): Promise<MyGameStatus> => {
+  const res = await fetcher.get({
+    url: API_URL.myGameStatus(roomId, currentRound),
     headers: {
       'Content-Type': `application/json`,
     },
   });
 
   const data = await res.json();
-
   return data;
+};
+
+// 다음 라운드로 이동하기
+export const moveNextRound = async (roomId: number) => {
+  const res = await fetcher.patch({
+    url: API_URL.moveNextRound(roomId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
+  });
 };
 
 // 최종 결과 가져오기

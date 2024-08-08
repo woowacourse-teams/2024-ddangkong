@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 import BALANCE_CONTENT from '../data/balanceContent.json';
+import MY_GAME_STATUS from '../data/myGameStatus.json';
 import ROUND_VOTE_IS_FINISHED from '../data/roundVoteIsFinished.json';
 
 import { MOCK_API_URL } from '@/constants/url';
@@ -18,7 +19,12 @@ const fetchIsFinishedHandler = () => {
   return HttpResponse.json(ROUND_VOTE_IS_FINISHED);
 };
 
+const getMyGameStatus = () => {
+  return HttpResponse.json(MY_GAME_STATUS);
+};
+
 export const contentHandler = [
   http.get(MOCK_API_URL.balanceContent, fetchBalanceContentHandler),
   http.get(MOCK_API_URL.roundVoteIsFinished, fetchIsFinishedHandler),
+  http.get(MOCK_API_URL.myGameStatus, getMyGameStatus),
 ];
