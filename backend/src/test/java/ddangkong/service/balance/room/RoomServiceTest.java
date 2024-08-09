@@ -218,7 +218,7 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             int currentRound = 2;
             Room room = roomRepository.save(
-                    new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+                    roomFixture.createRoom(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
             int round = 2;
 
             // when
@@ -235,7 +235,8 @@ class RoomServiceTest extends BaseServiceTest {
         void 라운드가_종료되면_게임은_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 2;
-            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+            Room room = roomRepository.save(
+                    roomFixture.createRoom(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
             int round = 1;
 
             // when
@@ -253,7 +254,8 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             int currentRound = 5;
             RoomStatus status = RoomStatus.FINISH;
-            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY));
+            Room room = roomRepository.save(
+                    roomFixture.createRoom(TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY));
             int round = 5;
 
             // when
@@ -270,7 +272,8 @@ class RoomServiceTest extends BaseServiceTest {
         void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_라운드도_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 5;
-            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+            Room room = roomRepository.save(
+                    roomFixture.createRoom(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
             int round = 5;
 
             // when

@@ -1,10 +1,12 @@
 package ddangkong.domain.balance.room;
 
+import static ddangkong.domain.balance.room.RoomStatus.PROGRESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
+import ddangkong.support.fixture.RoomFixture;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,13 +16,15 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class RoomTest {
 
+    RoomFixture roomFixture = new RoomFixture();
+
     @Nested
     class 다음_라운드로_이동 {
 
         @Test
         void 다음_라운드로_이동할_수_있다() {
             // given
-            Room room = Room.createNewRoom();
+            Room room = roomFixture.createNewRoom();
             int currentRound = room.getCurrentRound();
             int expectedRound = currentRound + 1;
 
@@ -37,7 +41,8 @@ class RoomTest {
             int totalRound = 5;
             int currentRound = 5;
             int timeLimit = 30000;
-            Room room = new Room(totalRound, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
+            Room room = roomFixture.createRoom(totalRound, currentRound, timeLimit, RoomStatus.PROGRESS,
+                    Category.EXAMPLE);
 
             // when & then
             assertThatThrownBy(room::moveToNextRound)
@@ -53,7 +58,7 @@ class RoomTest {
         @ValueSource(ints = {2, 11})
         void 라운드는_3이상_10이하_여야한다(int notValidTotalRound) {
             // given
-            Room room = Room.createNewRoom();
+            Room room = roomFixture.createNewRoom();
 
             // when & then
             assertThatThrownBy(() -> room.updateTotalRound(notValidTotalRound))
@@ -66,7 +71,7 @@ class RoomTest {
         @ValueSource(ints = {9000, 31000})
         void 시간_제한은_10000이상_30000이하_여야한다(int notValidTimeLimit) {
             // given
-            Room room = Room.createNewRoom();
+            Room room = roomFixture.createNewRoom();
 
             // when & then
             assertThatThrownBy(() -> room.updateTimeLimit(notValidTimeLimit))
@@ -81,14 +86,14 @@ class RoomTest {
 
         private static final int TOTAL_ROUND = 5;
         private static final int TIME_LIMIT = 30;
-        private static final RoomStatus STATUS = RoomStatus.PROGRESS;
+        private static final RoomStatus STATUS = PROGRESS;
         private static final Category CATEGORY = Category.EXAMPLE;
 
         @Test
         void 라운드가_방의_현재_라운드보다_작으면_라운드는_종료된_것이다() {
             // given
             int currentRound = 2;
-            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
+            Room room = roomFixture.createRoom(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
             int round = 1;
 
             // when & then
@@ -99,7 +104,7 @@ class RoomTest {
         void 라운드가_방의_현재_라운드와_같으면_라운드는_종료되지_않은_것이다() {
             // given
             int currentRound = 2;
-            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
+            Room room = roomFixture.createRoom(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
             int round = 2;
 
             // when & then
@@ -109,7 +114,7 @@ class RoomTest {
         @Test
         void 라운드가_방의_시작_라운드보다_작으면_예외가_발생한다() {
             // given
-            Room room = new Room(TOTAL_ROUND, 1, TIME_LIMIT, STATUS, CATEGORY);
+            Room room = roomFixture.createRoom(TOTAL_ROUND, 1, TIME_LIMIT, STATUS, CATEGORY);
             int invalidRound = 0;
 
             // when & then
@@ -122,7 +127,7 @@ class RoomTest {
         void 라운드가_방의_현재_라운드보다_크면_예외가_발생한다() {
             // given
             int currentRound = 1;
-            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
+            Room room = roomFixture.createRoom(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
             int invalidRound = 2;
 
             // when & then
@@ -135,7 +140,7 @@ class RoomTest {
         void 라운드가_방의_현재_라운드보다_2이상_작으면_예외가_발생한다() {
             // given
             int currentRound = 4;
-            Room room = new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
+            Room room = roomFixture.createRoom(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
             int invalidRound = 2;
 
             // when & then
@@ -148,7 +153,7 @@ class RoomTest {
         void 현재_라운드와_전체_라운드가_같고_방_상태가_FINISH이면_방의_전체_라운드가_종료된_것이다() {
             // given
             RoomStatus status = RoomStatus.FINISH;
-            Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
+            Room room = roomFixture.createRoom(TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
 
             // when & then
             assertThat(room.isAllRoundFinished()).isTrue();
@@ -159,7 +164,7 @@ class RoomTest {
             // given
             int currentRound = 3;
             int totalRound = 5;
-            Room room = new Room(totalRound, currentRound, TIME_LIMIT, STATUS, CATEGORY);
+            Room room = roomFixture.createRoom(totalRound, currentRound, TIME_LIMIT, STATUS, CATEGORY);
 
             // when & then
             assertThat(room.isAllRoundFinished()).isFalse();
@@ -169,7 +174,7 @@ class RoomTest {
         @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
         void 방_상태가_FINISH가_아니면_현재_라운드가_전체_라운드와_같아도_전체_라운드는_종료되지_않은_것이다(RoomStatus status) {
             // given
-            Room room = new Room(TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
+            Room room = roomFixture.createRoom(TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
 
             // when & then
             assertThat(room.isAllRoundFinished()).isFalse();
