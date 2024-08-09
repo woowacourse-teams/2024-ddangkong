@@ -34,7 +34,7 @@ enableMocking().then(() => {
         <ThemeProvider theme={Theme}>
           <Global styles={GlobalStyle} />
           <App />
-          <ReactQueryDevtools initialIsOpen={true} />
+          <ReactQueryDevtools initialIsOpen={false} />
         </ThemeProvider>
       </RecoilRoot>
     </QueryClientProvider>,
