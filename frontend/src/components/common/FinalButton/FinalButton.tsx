@@ -1,13 +1,16 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 
+import { ROUTES } from '@/constants/routes';
+
 const FinalButton = () => {
+  const { roomId } = useParams();
   const navigate = useNavigate();
 
   const goToHome = () => {
-    navigate('/ready');
+    navigate(ROUTES.ready(Number(roomId)));
   };
 
   return (

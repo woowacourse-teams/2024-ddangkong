@@ -1,5 +1,6 @@
 package ddangkong.controller.balance.room;
 
+import ddangkong.aop.logging.Polling;
 import ddangkong.controller.balance.room.dto.RoomInfoResponse;
 import ddangkong.controller.balance.room.dto.RoomJoinRequest;
 import ddangkong.controller.balance.room.dto.RoomJoinResponse;
@@ -35,6 +36,7 @@ public class RoomController {
         return roomService.createRoom(request.nickname());
     }
 
+    @Polling
     @GetMapping("/balances/rooms/{roomId}")
     public RoomInfoResponse getBalanceGameRoomInfo(@Positive @PathVariable Long roomId) {
         return roomService.findRoomInfo(roomId);
@@ -65,6 +67,7 @@ public class RoomController {
         roomService.moveToNextRound(roomId);
     }
 
+    @Polling
     @GetMapping("/balances/rooms/{roomId}/round-finished")
     public RoundFinishedResponse getRoundFinished(@Positive @PathVariable Long roomId,
                                                   @Positive @RequestParam int round) {

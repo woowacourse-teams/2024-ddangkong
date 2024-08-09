@@ -14,7 +14,9 @@ import {
 } from './TabContentContainer.styled';
 import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hook';
 
+import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useMyGameStatus from '@/hooks/useMyGameStatus';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 import { Group, Total } from '@/types/roundVoteResult';
 
@@ -31,10 +33,13 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
   const navigate = useNavigate();
 
   const { balanceContent } = useBalanceContentQuery();
+  const currentRound = balanceContent?.currentRound;
   const { groupRoundResult, totalResult } = useRoundVoteResultQuery({
     roomId: Number(roomId),
     contentId: balanceContent?.contentId,
   });
+
+  useMyGameStatus({ roomId: Number(roomId), currentRound });
 
   const {
     animatedFirstPercent,
@@ -47,7 +52,7 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
   const isBigFirstOption = roundResult && roundResult.firstOption.percent >= 50;
 
   const goToVoteStatus = () => {
-    navigate('/round/result/status');
+    navigate(ROUTES.roundResultStatus(Number(roomId)));
   };
 
   if (!roundResult) return <div>데이터가 없습니다</div>;

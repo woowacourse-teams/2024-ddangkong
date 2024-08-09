@@ -23,6 +23,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 ext {
@@ -47,6 +48,8 @@ dependencies {
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:3.0.1'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:3.0.1'
 
+    // Discord Webhook Appender
+    implementation 'com.github.napstr:logback-discord-appender:1.0.0'
 }
 
 tasks.named('jar') {

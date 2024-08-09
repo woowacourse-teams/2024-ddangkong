@@ -15,6 +15,11 @@ export interface BalanceContent {
   };
 }
 
+export interface MyGameStatus {
+  isRoundFinished: boolean;
+  isGameFinished: boolean;
+}
+
 export interface GameFinalResult {
   rank: number;
   name: string;

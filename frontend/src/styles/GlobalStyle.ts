@@ -85,8 +85,9 @@ const reset = css`
     margin: 0;
     padding: 0;
     border: 0;
+
     font-size: 100%;
-    font: inherit;
+    line-height: inherit;
     vertical-align: baseline;
   }
 
@@ -118,10 +119,10 @@ const reset = css`
     quotes: none;
   }
 
-  blockquote:before,
-  blockquote:after,
-  q:before,
-  q:after {
+  blockquote::before,
+  blockquote::after,
+  q::before,
+  q::after {
     content: '';
     content: none;
   }
@@ -132,11 +133,12 @@ const reset = css`
   }
 
   button {
-    border: none;
-    outline: none;
-    background-color: inherit;
-    cursor: pointer;
     padding: 0;
+    border: none;
+
+    background-color: inherit;
+    outline: none;
+    cursor: pointer;
   }
 `;
 

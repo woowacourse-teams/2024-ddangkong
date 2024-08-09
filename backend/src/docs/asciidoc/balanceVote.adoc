@@ -20,6 +20,8 @@ response fields
 
 include::{snippets}/balanceVote/findRoundResult/response-fields.adoc[]
 
+---
+
 === 투표 생성
 
 ==== curl
@@ -43,6 +45,8 @@ include::{snippets}/balanceVote/createBalanceVote/http-response.adoc[]
 response fields
 
 include::{snippets}/balanceVote/createBalanceVote/response-fields.adoc[]
+
+---
 
 === 투표 종료 여부
 

@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 import { ModalProps } from './Modal';
 
-import { Theme } from '@/styles/Theme';
+import { borderRadius, Theme } from '@/styles/Theme';
 
 export const modalBackdropLayout = css`
   display: flex;
@@ -28,7 +28,7 @@ export const modalContentWrapper = ({ position }: Pick<ModalProps, 'position'>) 
   margin: 0;
   padding: 2.4rem 3.2rem;
   border: none;
-  border-radius: 0.8rem;
+  border-radius: ${borderRadius.radius10};
 
   background-color: white;
   box-sizing: border-box;
@@ -61,10 +61,16 @@ export const modalContentWrapper = ({ position }: Pick<ModalProps, 'position'>) 
 
 export const modalHeaderLayout = css`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin: 0;
 
   font-weight: bold;
+`;
+
+export const modalHeaderEmptyBox = (position: 'center' | 'left') => css`
+  display: ${position === 'center' ? 'block' : 'none'};
+  width: 1.6rem;
 `;
 
 interface ModalTitleProps {
@@ -78,7 +84,6 @@ export const modalTitle = ({ fontSize = 'bold', fontWeight = '2rem' }: ModalTitl
 `;
 
 export const modalIconButton = ({ imgSize = '1.6rem' }: { imgSize?: string }) => css`
-  margin: 0 0 0 auto;
   padding: 0;
   border: none;
 

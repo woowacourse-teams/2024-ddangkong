@@ -1,34 +1,40 @@
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import useMoveNextRoundMutation from './NextRoundButton.hook';
 import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 
+import { useResetRoomMutation } from '@/components/GameResult/GameResult.hook';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import { memberInfoState } from '@/recoil/atom';
+import { Theme } from '@/styles/Theme';
 
 const NextRoundButton = () => {
-  const navigate = useNavigate();
+  const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery();
-  const { mutateAsync: moveNextRound } = useMoveNextRoundMutation();
-
+  const { mutate: moveNextRound } = useMoveNextRoundMutation(Number(roomId));
+  const { mutate: resetRoom } = useResetRoomMutation(Number(roomId));
+  const memberInfo = useRecoilValue(memberInfoState);
   const isLastRound = balanceContent?.currentRound === balanceContent?.totalRound;
-
-  const goToGameResult = () => {
-    navigate('/game/result');
-  };
-
-  const goToNextRound = async () => {
-    await moveNextRound();
-    navigate('/game');
-  };
 
   return (
     <div css={bottomButtonLayout}>
-      <Button
-        style={{ width: '100%' }}
-        text={isLastRound ? '결과 확인' : '다음'}
-        onClick={isLastRound ? goToGameResult : goToNextRound}
-      />
+      {memberInfo.isMaster ? (
+        <Button
+          style={{ width: '100%' }}
+          text={isLastRound ? '결과 확인' : '다음'}
+          onClick={isLastRound ? resetRoom : moveNextRound}
+          disabled={!memberInfo.isMaster}
+        />
+      ) : (
+        <Button
+          style={{ width: '100%', backgroundColor: Theme.color.gray }}
+          text={'방장이 진행해 주세요'}
+          onClick={isLastRound ? resetRoom : moveNextRound}
+          disabled={!memberInfo.isMaster}
+        />
+      )}
     </div>
   );
 };

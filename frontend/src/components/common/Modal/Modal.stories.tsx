@@ -85,7 +85,7 @@ export const 이미지_버튼이_있는_모달: Story = {
 
   render: (args) => (
     <Modal isOpen={args.isOpen} position={args.position} onClose={args.onClose}>
-      <Modal.Header>
+      <Modal.Header position="center">
         <Modal.IconButton onClick={args.onClose} src={CloseIcon} />
       </Modal.Header>
       <Modal.Content>
@@ -110,7 +110,7 @@ export const 텍스트_버튼이_있는_모달: Story = {
 
   render: (args) => (
     <Modal isOpen={args.isOpen} position={args.position} onClose={args.onClose}>
-      <Modal.Header>
+      <Modal.Header position="left">
         <Modal.Title>제목</Modal.Title>
       </Modal.Header>
       <Modal.Content>
@@ -138,7 +138,7 @@ export const 이미지_버튼과_텍스트_버튼이_있는_모달: Story = {
 
   render: (args) => (
     <Modal isOpen={args.isOpen} position={args.position} onClose={args.onClose}>
-      <Modal.Header>
+      <Modal.Header position="center">
         <Modal.Title>제목</Modal.Title>
         <Modal.IconButton onClick={args.onClose} src={CloseIcon} />
       </Modal.Header>
