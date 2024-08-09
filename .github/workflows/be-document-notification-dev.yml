@@ -20,7 +20,11 @@ jobs:
           webhook-url: ${{ secrets.ASCIIDOC_NOTIFICATION_WEBHOOK_URL }}
           username: Document Notificator
           content: |
-            📃 Dev 서버 API 문서에 변경이 발생했습니다!
+            ================================================
+            
+            ##  📃 Dev 서버 API 문서에 변경이 발생했습니다!
             
             ⬆️ [PR 바로가기](${{ github.event.pull_request.html_url }})
             ⬆️ [Docs 바로가기](https://api.dev.ddangkong.kr/docs/index.html)
+            
+            ================================================
