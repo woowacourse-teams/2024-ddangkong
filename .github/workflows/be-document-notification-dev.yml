@@ -10,7 +10,7 @@ on:
       - backend/src/test/java/ddangkong/documentation/**
 
 jobs:
-  build:
+  notification:
     timeout-minutes: 1
     runs-on: ubuntu-latest
     steps:
