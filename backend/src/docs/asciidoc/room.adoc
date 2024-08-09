@@ -22,6 +22,8 @@ response fields
 
 include::{snippets}/room/create/response-fields.adoc[]
 
+---
+
 === 방 참여
 
 ==== curl
@@ -46,6 +48,8 @@ response fields
 
 include::{snippets}/room/join/response-fields.adoc[]
 
+---
+
 === 방 설정 변경
 
 ==== curl
@@ -63,6 +67,8 @@ include::{snippets}/room/setting/request-fields.adoc[]
 ==== response
 
 include::{snippets}/room/setting/http-response.adoc[]
+
+---
 
 === 방 정보 조회
 
@@ -84,6 +90,8 @@ response fields
 
 include::{snippets}/room/info/response-fields.adoc[]
 
+---
+
 === 게임 시작
 
 ==== curl
@@ -100,6 +108,8 @@ include::{snippets}/room/start/path-parameters.adoc[]
 
 include::{snippets}/room/start/http-response.adoc[]
 
+---
+
 === 다음 라운드로 이동
 
 ==== curl
@@ -115,6 +125,8 @@ include::{snippets}/room/nextRound/path-parameters.adoc[]
 ==== response
 
 include::{snippets}/room/nextRound/http-response.adoc[]
+
+---
 
 === 라운드 종료 여부
 
@@ -137,6 +149,8 @@ include::{snippets}/room/roundFinished/http-response.adoc[]
 response fields
 
 include::{snippets}/room/roundFinished/response-fields.adoc[]
+
+---
 
 === 방 초기화
 
