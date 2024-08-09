@@ -63,7 +63,14 @@ jobs:
             const body = pr.data.body;
             const storybookUrl = "## 🌸 Storybook 배포 주소 \n\n> https://woowacourse-teams.github.io/2024-ddangkong/storybook/";
 
-            if (!body.includes(storybookUrl)) {
+            if (body.includes(storybookUrl)) {
+              await github.rest.pulls.update({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: context.issue.number,
+                    body: body
+                });
+            } else {
               const newBody = body + "\n\n" + storybookUrl;
               await github.rest.pulls.update({
                     owner: context.repo.owner,
@@ -71,10 +78,4 @@ jobs:
                     pull_number: context.issue.number,
                     body: newBody
                 });
-            }
-            await github.rest.pulls.update({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  pull_number: context.issue.number,
-                  body: newBody
-              });
+             }
