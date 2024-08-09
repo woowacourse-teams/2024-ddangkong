@@ -3,7 +3,7 @@ name: BE Document Change Discord Notification for Dev
 on:
   workflow_dispatch:
 
-  pull_request:
+  push:
     branches: [ "develop" ]
     paths:
       - backend/src/docs/asciidoc/**
