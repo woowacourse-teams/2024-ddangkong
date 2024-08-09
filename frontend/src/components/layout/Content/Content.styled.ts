@@ -6,4 +6,5 @@ export const contentLayout = css`
   align-items: center;
   gap: 1.6rem;
   height: inherit;
+  padding: 0 2.4rem;
 `;

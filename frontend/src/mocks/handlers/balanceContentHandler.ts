@@ -19,7 +19,11 @@ const fetchIsFinishedHandler = () => {
   return HttpResponse.json(ROUND_VOTE_IS_FINISHED);
 };
 
-const getMyGameStatus = () => {
+const getMyGameStatus = ({ request }: { request: Request }) => {
+  const url = new URL(request.url);
+
+  const round = url.searchParams.get('round');
+
   return HttpResponse.json(MY_GAME_STATUS);
 };
 

@@ -9,7 +9,7 @@ import {
 } from './Timer.styled';
 import formatLeftRoundTime from './Timer.util';
 
-import Ddangkong from '@/assets/images/ddangkong.png';
+import DdangkongTimer from '@/assets/images/ddangkongTimer.png';
 
 const Timer = () => {
   const { barWidthPercent, leftRoundTime, isAlmostFinished } = useRoundTimer();
@@ -18,7 +18,11 @@ const Timer = () => {
     <section css={timerLayout}>
       <div css={timerInnerLayout(barWidthPercent)}></div>
       <div css={timerWrapper(barWidthPercent)}>
-        <img css={[timerIcon, isAlmostFinished && timerIconShake]} src={Ddangkong} alt="타이머" />
+        <img
+          css={[timerIcon, isAlmostFinished && timerIconShake]}
+          src={DdangkongTimer}
+          alt="타이머"
+        />
         <span css={timerText(isAlmostFinished)}>{formatLeftRoundTime(leftRoundTime)}</span>
       </div>
     </section>
