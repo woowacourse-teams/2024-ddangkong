@@ -1,0 +1,29 @@
+name: BE Document Change Discord Notification for Dev
+
+on:
+  workflow_dispatch:
+
+  pull_request:
+    branches: [ "develop" ]
+    paths:
+      - backend/src/docs/asciidoc/**
+      - backend/src/test/java/ddangkong/documentation/**
+
+jobs:
+  build:
+    timeout-minutes: 1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Discord Webhook Action
+        uses: tsickert/discord-webhook@v6.0.0
+        with:
+          webhook-url: ${{ secrets.ASCIIDOC_NOTIFICATION_WEBHOOK_URL }}
+          username: Document Notificator
+          content: | 
+            📃 Dev 서버 API 문서에 변경이 발생했습니다!
+            
+            ⬆️[PR 바로가기](${{ github.event.pull_request.html_url }})
+            ⬆️[Docs 바로가기](api.dev.ddangkong.kr)
+
+
+
