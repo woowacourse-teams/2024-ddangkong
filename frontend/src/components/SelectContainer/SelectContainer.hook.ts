@@ -10,9 +10,10 @@ const POLLING_DELAY = 1000;
 
 interface UseRoundIsFinishedQueryProps {
   contentId?: number;
+  enabled: boolean;
 }
 
-export const useRoundIsFinishedQuery = ({ contentId }: UseRoundIsFinishedQueryProps) => {
+export const useRoundIsFinishedQuery = ({ contentId, enabled }: UseRoundIsFinishedQueryProps) => {
   const { roomId } = useParams();
 
   const roundIsFinishedQuery = useQuery({
@@ -24,7 +25,7 @@ export const useRoundIsFinishedQuery = ({ contentId }: UseRoundIsFinishedQueryPr
 
       return await fetchRoundVoteIsFinished({ roomId: Number(roomId), contentId });
     },
-    enabled: !!contentId,
+    enabled,
     refetchInterval: POLLING_DELAY,
     refetchIntervalInBackground: true,
   });
@@ -47,13 +48,14 @@ export const useRoundIsFinished = ({
   const { roomId } = useParams();
   const { isFinished } = useRoundIsFinishedQuery({
     contentId,
+    enabled: !!contentId && !isFetching && isFetched,
   });
 
   useEffect(() => {
     if (isFinished && !isFetching && isFetched) {
       navigate(ROUTES.roundResult(Number(roomId)), { replace: true });
     }
-  }, [isFinished, navigate, roomId]);
+  }, [isFinished, navigate, roomId, isFetched, isFetching]);
 
   return { isFinished };
 };
