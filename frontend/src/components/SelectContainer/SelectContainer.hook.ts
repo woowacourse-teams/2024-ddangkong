@@ -17,7 +17,7 @@ export const useRoundIsFinishedQuery = ({ contentId, enabled }: UseRoundIsFinish
   const { roomId } = useParams();
 
   const roundIsFinishedQuery = useQuery({
-    queryKey: [QUERY_KEYS.roundIsFinished, roomId, contentId],
+    queryKey: [QUERY_KEYS.roundIsFinished, Number(roomId), contentId],
     queryFn: async () => {
       if (typeof contentId === 'undefined') {
         throw new Error('contentId 가 존재하지 않습니다.');
