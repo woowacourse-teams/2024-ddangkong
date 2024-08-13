@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
+import { convertMsecToSecond } from './Timer.util';
+
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const INITIAL_WIDTH = 100;
@@ -10,7 +12,7 @@ const useRoundTimer = () => {
   const { balanceContent } = useBalanceContentQuery();
   const timeLimit = balanceContent?.timeLimit || DEFAULT_TIME_LIMIT_MSEC;
 
-  const [leftRoundTime, setLeftRoundTime] = useState(timeLimit / 1000);
+  const [leftRoundTime, setLeftRoundTime] = useState(convertMsecToSecond(timeLimit));
   const [barWidthPercent, setBarWidthPercent] = useState(INITIAL_WIDTH);
   const isAlmostFinished = leftRoundTime <= 5;
 
@@ -25,8 +27,8 @@ const useRoundTimer = () => {
   useEffect(() => {
     if (!balanceContent) return;
 
-    const DECREASE_RATE = INITIAL_WIDTH / (timeLimit / 1000);
-    setLeftRoundTime(timeLimit / 1000);
+    const DECREASE_RATE = INITIAL_WIDTH / convertMsecToSecond(timeLimit);
+    setLeftRoundTime(convertMsecToSecond(timeLimit));
 
     timeout.current = setInterval(() => {
       setLeftRoundTime((prev) => prev - 1);
