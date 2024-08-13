@@ -40,7 +40,7 @@ export const buttonLayout = ({
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    max-width: 32rem;
+    width: 100%;
   `}
 `;
 

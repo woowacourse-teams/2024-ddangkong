@@ -4,12 +4,13 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const INITIAL_WIDTH = 100;
 const DELAY = 1000;
+const DEFAULT_TIME_LIMIT_MSEC = 10000;
 
 const useRoundTimer = () => {
   const { balanceContent } = useBalanceContentQuery();
-  const timeLimit = balanceContent?.timeLimit || 30;
+  const timeLimit = balanceContent?.timeLimit || DEFAULT_TIME_LIMIT_MSEC;
 
-  const [leftRoundTime, setLeftRoundTime] = useState(timeLimit);
+  const [leftRoundTime, setLeftRoundTime] = useState(timeLimit / 1000);
   const [barWidthPercent, setBarWidthPercent] = useState(INITIAL_WIDTH);
   const isAlmostFinished = leftRoundTime <= 5;
 
