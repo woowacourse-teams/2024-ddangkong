@@ -85,9 +85,9 @@ const reset = css`
     margin: 0;
     padding: 0;
     border: 0;
+    font: inherit;
 
     font-size: 100%;
-    line-height: inherit;
     vertical-align: baseline;
   }
 
@@ -150,7 +150,7 @@ const GlobalStyle = css`
   }
 
   #root {
-    width: 32rem;
+    max-width: 768px;
     height: 100vh;
     margin: 0 auto;
   }
