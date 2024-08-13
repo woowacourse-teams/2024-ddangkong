@@ -6,12 +6,11 @@ import SelectOption from '@/components/SelectOption/SelectOption';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const SelectContainer = () => {
-  const { balanceContent, isLoading, isFetched, isFetching } = useBalanceContentQuery();
+  const { balanceContent, isLoading, isFetching } = useBalanceContentQuery();
   const { selectedId, handleSelectOption } = useSelectOption();
 
   useRoundIsFinished({
     contentId: balanceContent?.contentId,
-    isFetched,
     isFetching,
   });
 

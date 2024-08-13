@@ -36,26 +36,21 @@ export const useRoundIsFinishedQuery = ({ contentId, enabled }: UseRoundIsFinish
 interface UseRoundIsFinishedProps {
   contentId?: number;
   isFetching: boolean;
-  isFetched: boolean;
 }
 
-export const useRoundIsFinished = ({
-  contentId,
-  isFetching,
-  isFetched,
-}: UseRoundIsFinishedProps) => {
+export const useRoundIsFinished = ({ contentId, isFetching }: UseRoundIsFinishedProps) => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const { isFinished } = useRoundIsFinishedQuery({
     contentId,
-    enabled: !!contentId && !isFetching && isFetched,
+    enabled: !!contentId && !isFetching,
   });
 
   useEffect(() => {
-    if (isFinished && !isFetching && isFetched) {
+    if (isFinished && !isFetching) {
       navigate(ROUTES.roundResult(Number(roomId)), { replace: true });
     }
-  }, [isFinished, navigate, roomId, isFetched, isFetching]);
+  }, [isFinished, navigate, roomId, isFetching]);
 
   return { isFinished };
 };
