@@ -1,4 +1,4 @@
-const formatLeftRoundTime = (leftRoundTime: number) => {
+export const formatLeftRoundTime = (leftRoundTime: number) => {
   const minutes = Math.floor(leftRoundTime / 60);
   const seconds = leftRoundTime % 60;
 
@@ -8,4 +8,7 @@ const formatLeftRoundTime = (leftRoundTime: number) => {
   return `${formattedMinutes}:${formattedSeconds}`;
 };
 
-export default formatLeftRoundTime;
+export const convertMsecToSecond = (msec: number) => {
+  const UNIT_MSEC = 1000;
+  return msec / UNIT_MSEC;
+};

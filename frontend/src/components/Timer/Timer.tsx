@@ -7,7 +7,7 @@ import {
   timerText,
   timerWrapper,
 } from './Timer.styled';
-import formatLeftRoundTime from './Timer.util';
+import { formatLeftRoundTime } from './Timer.util';
 
 import DdangkongTimer from '@/assets/images/ddangkongTimer.png';
 
