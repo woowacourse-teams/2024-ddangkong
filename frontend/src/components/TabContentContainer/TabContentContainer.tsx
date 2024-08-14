@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   alertText,
+  angryImage,
   barWrapperStyle,
   buttonStyle,
   categoryContainer,
@@ -16,7 +17,7 @@ import {
 } from './TabContentContainer.styled';
 import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hook';
 
-import DdangkongTimer from '@/assets/images/ddangkongTimer.png';
+import AngryDdangkong from '@/assets/images/angryDdangkong.png';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useMyGameStatus from '@/hooks/useMyGameStatus';
@@ -93,7 +94,7 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
         </>
       ) : (
         <div css={noVoteTextContainer}>
-          <img src={DdangkongTimer} width={130} height={120} alt="" />
+          <img src={AngryDdangkong} alt="화난 땅콩" css={angryImage} />
           <span css={noVoteText}>아무도 투표하지 않으셨네요 :{`)`}</span>
         </div>
       )}

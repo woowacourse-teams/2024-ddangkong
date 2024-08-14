@@ -21,7 +21,7 @@ export const alertText = (isGroupTabActive: boolean) => css`
 
   width: 100%;
 
-  ${Theme.typography.headline3}
+  ${Theme.typography.body2}
   font-weight: bold;
 `;
 
@@ -34,6 +34,7 @@ export const roundVoteResultContainer = css`
 export const categoryContainer = css`
   display: flex;
   justify-content: space-between;
+  gap: 0.8rem;
 
   font-weight: bold;
   font-size: 1.4rem;
@@ -90,7 +91,12 @@ export const noVoteText = css`
   justify-content: center;
   align-items: center;
   height: 8vh;
-  ${Theme.typography.headline2}
+  ${Theme.typography.headline3}
+`;
+
+export const angryImage = css`
+  width: 16rem;
+  height: 14rem;
 `;
 
 export const resultTextStyle = (isActiveGroupTab: boolean) => css`
