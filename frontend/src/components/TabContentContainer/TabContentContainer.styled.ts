@@ -5,7 +5,8 @@ import { Theme } from '@/styles/Theme';
 export const contentWrapperStyle = css`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 3.2rem;
   height: 100%;
   padding: 2.4rem;
   border: 0.3rem solid ${Theme.color.peanut400};
@@ -16,10 +17,11 @@ export const alertText = (isGroupTabActive: boolean) => css`
   display: flex;
   visibility: ${isGroupTabActive ? 'hidden' : 'visible'};
   justify-content: center;
-  width: 100%;
-  height: 1.2rem;
+  align-items: center;
 
-  ${Theme.typography.body1}
+  width: 100%;
+
+  ${Theme.typography.headline3}
   font-weight: bold;
 `;
 
@@ -39,45 +41,56 @@ export const categoryContainer = css`
 
 export const barWrapperStyle = css`
   display: flex;
+  overflow: hidden;
   align-items: center;
   width: inherit;
+  border-radius: 1.6rem;
 `;
 
-export const firstBar = (percentage: number, isBigFirstOption?: boolean) => css`
+export const barWrapper = css`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  width: ${percentage}%;
   height: 8vh;
+
+  color: black;
+  font-weight: bold;
+  font-size: 1.6rem;
+  transition: all 1s;
+`;
+
+export const firstBar = (percent: number, isBigFirstOption?: boolean) => css`
+  ${barWrapper}
+  width: ${percent}%;
   border-radius: 1.6rem 0 0 1.6rem;
 
   background-color: ${isBigFirstOption ? Theme.color.peanut400 : Theme.color.gray};
-
-  color: black;
-  font-weight: bold;
-  font-size: 1.6rem;
-  clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-  transition: all 1s;
   transform: translateX(5px);
+  clip-path: ${percent === 100 ? 'none' : 'polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%)'};
 `;
 
-export const secondBar = (percentage: number, isBigFirstOption?: boolean) => css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: ${percentage}%;
-  height: 8vh;
+export const secondBar = (percent: number, isBigFirstOption?: boolean) => css`
+  ${barWrapper}
+  width: ${percent}%;
   border-radius: 0 1.6rem 1.6rem 0;
 
   background-color: ${isBigFirstOption ? Theme.color.gray : Theme.color.peanut400};
-
-  color: black;
-  font-weight: bold;
-  font-size: 1.6rem;
-  clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%);
-  transition: all 1s;
   transform: translateX(-5px);
+  clip-path: ${percent === 100 ? 'none' : 'polygon(10px 0, 100% 0, 100% 100%, 0 100%)'};
+`;
+
+export const noVoteTextContainer = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const noVoteText = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 8vh;
+  ${Theme.typography.headline2}
 `;
 
 export const resultTextStyle = (isActiveGroupTab: boolean) => css`
