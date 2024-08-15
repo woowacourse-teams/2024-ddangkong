@@ -1,6 +1,6 @@
-package ddangkong.controller.balance.content.dto;
+package ddangkong.service.balance.content.dto;
 
-import ddangkong.controller.balance.option.dto.BalanceOptionGroupResponse;
+import ddangkong.service.balance.option.dto.BalanceOptionGroupResponse;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.balance.vote.BalanceVote;
 import java.util.List;

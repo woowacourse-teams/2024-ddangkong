@@ -1,10 +1,10 @@
 package ddangkong.controller.balance.vote;
 
 import ddangkong.aop.logging.Polling;
-import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.service.balance.vote.BalanceVoteService;
+import ddangkong.service.balance.vote.dto.BalanceVoteRequest;
+import ddangkong.service.balance.vote.dto.BalanceVoteResponse;
+import ddangkong.service.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -30,7 +30,7 @@ public class BalanceVoteController {
     @GetMapping("/balances/rooms/{roomId}/contents/{contentId}/vote-result")
     public BalanceVoteResultResponse getBalanceRoundResult(@PathVariable @Positive Long roomId,
                                                            @PathVariable @Positive Long contentId) {
-        return balanceVoteService.findBalanceVoteResult(roomId, contentId);
+        return balanceVoteService.getBalanceVoteResult(roomId, contentId);
     }
 
     @PostMapping("/balances/rooms/{roomId}/contents/{contentId}/votes")

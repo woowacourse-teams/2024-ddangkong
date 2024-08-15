@@ -20,6 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@emotion/react": "^11.11.4",
+    "@sentry/react": "^8.24.0",
     "@tanstack/react-query": "^5.51.1",
     "@tanstack/react-query-devtools": "^5.51.23",
     "react": "^18.3.1",
@@ -36,6 +37,7 @@
     "@chromatic-com/storybook": "^1.6.1",
     "@emotion/babel-plugin": "^11.12.0",
     "@emotion/babel-preset-css-prop": "^11.11.0",
+    "@sentry/webpack-plugin": "^2.22.0",
     "@storybook/addon-essentials": "^8.2.2",
     "@storybook/addon-interactions": "^8.2.2",
     "@storybook/addon-links": "^8.2.2",

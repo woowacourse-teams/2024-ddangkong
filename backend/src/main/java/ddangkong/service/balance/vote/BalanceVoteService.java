@@ -1,10 +1,5 @@
 package ddangkong.service.balance.vote;
 
-import ddangkong.controller.balance.content.dto.BalanceContentGroupResponse;
-import ddangkong.controller.balance.content.dto.BalanceContentTotalResponse;
-import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.option.BalanceOption;
@@ -19,11 +14,15 @@ import ddangkong.domain.balance.vote.BalanceVoteRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
+import ddangkong.service.balance.content.dto.BalanceContentGroupResponse;
+import ddangkong.service.balance.content.dto.BalanceContentTotalResponse;
+import ddangkong.service.balance.vote.dto.BalanceVoteRequest;
+import ddangkong.service.balance.vote.dto.BalanceVoteResponse;
+import ddangkong.service.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,14 +74,16 @@ public class BalanceVoteService {
     }
 
     @Transactional(readOnly = true)
-    public BalanceVoteResultResponse findBalanceVoteResult(Long roomId, Long balanceContentId) {
+    public BalanceVoteResultResponse getBalanceVoteResult(Long roomId, Long balanceContentId) {
         Room room = roomRepository.getById(roomId);
-        BalanceOptions balanceOptions = findBalanceOptions(room, balanceContentId);
-
-        BalanceContentGroupResponse group = getBalanceContentGroupResponse(room, balanceOptions);
-        BalanceContentTotalResponse total = getBalanceContentTotalResponse(balanceOptions);
-
-        return new BalanceVoteResultResponse(group, total);
+        BalanceContent balanceContent = balanceContentRepository.getById(balanceContentId);
+        if (isRoundFinished(room, balanceContent) || isAllVoteFinished(room, balanceContent)) {
+            BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(balanceContent);
+            BalanceContentGroupResponse group = getBalanceContentGroupResponse(room, balanceOptions);
+            BalanceContentTotalResponse total = getBalanceContentTotalResponse(balanceOptions);
+            return new BalanceVoteResultResponse(group, total);
+        }
+        throw new BadRequestException("투표가 끝나지 않아 투표 결과를 조회할 수 없습니다.");
     }
 
     private BalanceContentGroupResponse getBalanceContentGroupResponse(Room room, BalanceOptions balanceOptions) {
@@ -99,21 +100,6 @@ public class BalanceVoteService {
         Long secondOptionCount = balanceVoteRepository.countByBalanceOption(balanceOptions.getSecondOption());
 
         return BalanceContentTotalResponse.of(balanceOptions, firstOptionCount, secondOptionCount);
-    }
-
-    private BalanceOptions findBalanceOptions(Room room, Long balanceContentId) {
-        RoomContent roomContent = roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
-                .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
-        validateBalanceContent(balanceContentId, roomContent.getBalanceContent());
-
-        BalanceContent balanceContent = balanceContentRepository.getById(balanceContentId);
-        return balanceOptionRepository.getBalanceOptionsByBalanceContent(balanceContent);
-    }
-
-    private void validateBalanceContent(Long balanceContentId, BalanceContent balanceContent) {
-        if (!Objects.equals(balanceContent.getId(), balanceContentId)) {
-            throw new BadRequestException("현재 진행중인 질문의 컨텐츠와 일치하지 않는 요청입니다.");
-        }
     }
 
     @Transactional(readOnly = true)

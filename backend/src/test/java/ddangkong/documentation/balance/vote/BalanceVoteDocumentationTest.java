@@ -17,16 +17,16 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ddangkong.controller.balance.content.dto.BalanceContentGroupResponse;
-import ddangkong.controller.balance.content.dto.BalanceContentTotalResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionGroupResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionTotalResponse;
 import ddangkong.controller.balance.vote.BalanceVoteController;
-import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.documentation.BaseDocumentationTest;
+import ddangkong.service.balance.content.dto.BalanceContentGroupResponse;
+import ddangkong.service.balance.content.dto.BalanceContentTotalResponse;
+import ddangkong.service.balance.option.dto.BalanceOptionGroupResponse;
+import ddangkong.service.balance.option.dto.BalanceOptionTotalResponse;
 import ddangkong.service.balance.vote.BalanceVoteService;
+import ddangkong.service.balance.vote.dto.BalanceVoteRequest;
+import ddangkong.service.balance.vote.dto.BalanceVoteResponse;
+import ddangkong.service.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -61,7 +61,7 @@ public class BalanceVoteDocumentationTest extends BaseDocumentationTest {
             BalanceVoteResultResponse response = new BalanceVoteResultResponse(
                     new BalanceContentGroupResponse(firstGroupResponse, secondGroupResponse),
                     new BalanceContentTotalResponse(firstTotalResponse, secondTotalResponse));
-            when(balanceVoteService.findBalanceVoteResult(roomId, contentId)).thenReturn(response);
+            when(balanceVoteService.getBalanceVoteResult(roomId, contentId)).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(END_POINT, roomId, contentId))

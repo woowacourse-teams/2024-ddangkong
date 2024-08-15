@@ -1,4 +1,5 @@
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 import { fetchFinalGameResult } from '@/apis/balanceContent';
 import { resetRoom } from '@/apis/room';
@@ -10,9 +11,11 @@ type GameResultQueryResponse = UseQueryResult<GameFinalResult[], Error> & {
 };
 
 export const useGameResultQuery = (): GameResultQueryResponse => {
+  const { roomId } = useParams();
+
   const gameResultQuery = useQuery({
-    queryKey: [QUERY_KEYS.gameResult],
-    queryFn: async () => await fetchFinalGameResult(),
+    queryKey: [QUERY_KEYS.gameResult, roomId],
+    queryFn: async () => await fetchFinalGameResult(Number(roomId)),
   });
 
   return { ...gameResultQuery, gameResult: gameResultQuery.data };

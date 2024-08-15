@@ -14,6 +14,8 @@ response fields
 
 include::{snippets}/exception/business-error/response-fields.adoc[]
 
+---
+
 === field error
 
 ==== example request
@@ -29,6 +31,8 @@ include::{snippets}/exception/field-error/http-response.adoc[]
 response fields
 
 include::{snippets}/exception/field-error/response-fields.adoc[]
+
+---
 
 === url parameter error
 

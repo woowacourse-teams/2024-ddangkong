@@ -7,13 +7,6 @@ import static ddangkong.support.fixture.MemberFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import ddangkong.controller.balance.content.dto.BalanceContentGroupResponse;
-import ddangkong.controller.balance.content.dto.BalanceContentTotalResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionGroupResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionTotalResponse;
-import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
@@ -23,6 +16,13 @@ import ddangkong.domain.balance.vote.BalanceVote;
 import ddangkong.domain.member.Member;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
+import ddangkong.service.balance.content.dto.BalanceContentGroupResponse;
+import ddangkong.service.balance.content.dto.BalanceContentTotalResponse;
+import ddangkong.service.balance.option.dto.BalanceOptionGroupResponse;
+import ddangkong.service.balance.option.dto.BalanceOptionTotalResponse;
+import ddangkong.service.balance.vote.dto.BalanceVoteRequest;
+import ddangkong.service.balance.vote.dto.BalanceVoteResponse;
+import ddangkong.service.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
 import ddangkong.support.annotation.FixedClock;
 import java.time.LocalDateTime;
@@ -114,7 +114,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> balanceVoteService.createBalanceVote(request, room.getId(), content.getId()))
                     .isInstanceOf(BadRequestException.class)
-                    .hasMessage("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 요청한 라운드 : 1");
+                    .hasMessage("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
         }
 
         @Test
@@ -165,17 +165,18 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             );
 
             // when
-            BalanceVoteResultResponse actual = balanceVoteService.findBalanceVoteResult(1L, 1L);
+            BalanceVoteResultResponse actual = balanceVoteService.getBalanceVoteResult(1L, 1L);
 
             // then
             assertThat(actual).isEqualTo(expected);
         }
 
         @Test
-        void 진행중인_주제가_아닌것의_투표_결과를_요청하면_예외를_발생시킨다() {
+        void 진행중인_주제가_아닌것의_투표_결과를_요청하면_예외를_발생시킨다() { // todo: 테스트명 수정, 테스트 더 추가
             // when & then
-            assertThatThrownBy(() -> balanceVoteService.findBalanceVoteResult(1L, 2L))
-                    .isInstanceOf(BadRequestException.class);
+            assertThatThrownBy(() -> balanceVoteService.getBalanceVoteResult(1L, 2L))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 1, 방 라운드 : 2");
         }
     }
 
@@ -253,7 +254,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> balanceVoteService.getAllVoteFinished(room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 요청한 라운드 : 1");
+                    .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
         }
 
         @Test

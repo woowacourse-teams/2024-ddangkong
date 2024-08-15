@@ -3,8 +3,8 @@ package ddangkong.service.balance.content;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
+import ddangkong.service.balance.content.dto.BalanceContentResponse;
+import ddangkong.service.balance.option.dto.BalanceOptionResponse;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;

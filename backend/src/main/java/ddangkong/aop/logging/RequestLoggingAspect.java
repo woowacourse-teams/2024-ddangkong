@@ -32,7 +32,7 @@ public class RequestLoggingAspect {
     public void allControllerWithoutPolling() {
     }
 
-    @Before("allControllerWithoutPolling()")
+    @Before("allController()")
     public void logController(JoinPoint joinPoint) {
         HttpServletRequest request = getHttpServletRequest();
         String uri = request.getRequestURI();
