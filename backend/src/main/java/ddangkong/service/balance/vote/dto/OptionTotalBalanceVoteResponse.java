@@ -12,7 +12,6 @@ public record OptionTotalBalanceVoteResponse(
     public OptionTotalBalanceVoteResponse(BalanceOption balanceOption, long contentVoteCount, long optionVoteCount) {
         this(balanceOption.getId(),
                 balanceOption.getName(),
-                PercentageCalculator.calculatePercent(optionVoteCount, contentVoteCount)
-        );
+                PercentageCalculator.calculatePercent(optionVoteCount, contentVoteCount));
     }
 }
