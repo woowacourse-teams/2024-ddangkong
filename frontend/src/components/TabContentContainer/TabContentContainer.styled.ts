@@ -62,6 +62,7 @@ export const barWrapper = css`
 
 export const firstBar = (percent: number, isBigFirstOption?: boolean) => css`
   ${barWrapper}
+  overflow: hidden;
   width: ${percent}%;
   border-radius: 1.6rem 0 0 1.6rem;
 
@@ -72,6 +73,7 @@ export const firstBar = (percent: number, isBigFirstOption?: boolean) => css`
 
 export const secondBar = (percent: number, isBigFirstOption?: boolean) => css`
   ${barWrapper}
+  overflow: hidden;
   width: ${percent}%;
   border-radius: 0 1.6rem 1.6rem 0;
 
