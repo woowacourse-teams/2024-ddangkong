@@ -1,4 +1,4 @@
-package ddangkong.controller.balance.vote.dto;
+package ddangkong.service.balance.vote.dto;
 
 import ddangkong.domain.balance.vote.BalanceVote;
 

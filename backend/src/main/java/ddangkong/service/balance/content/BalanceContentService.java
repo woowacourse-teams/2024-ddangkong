@@ -1,6 +1,6 @@
 package ddangkong.service.balance.content;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
+import ddangkong.service.balance.content.dto.BalanceContentResponse;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.balance.room.Room;

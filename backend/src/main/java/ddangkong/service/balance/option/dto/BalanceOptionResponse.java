@@ -1,4 +1,4 @@
-package ddangkong.controller.balance.option.dto;
+package ddangkong.service.balance.option.dto;
 
 import ddangkong.domain.balance.option.BalanceOption;
 

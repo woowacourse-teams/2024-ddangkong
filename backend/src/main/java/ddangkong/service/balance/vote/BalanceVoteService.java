@@ -1,10 +1,5 @@
 package ddangkong.service.balance.vote;
 
-import ddangkong.controller.balance.content.dto.BalanceContentGroupResponse;
-import ddangkong.controller.balance.content.dto.BalanceContentTotalResponse;
-import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.option.BalanceOption;
@@ -19,6 +14,11 @@ import ddangkong.domain.balance.vote.BalanceVoteRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
+import ddangkong.service.balance.content.dto.BalanceContentGroupResponse;
+import ddangkong.service.balance.content.dto.BalanceContentTotalResponse;
+import ddangkong.service.balance.vote.dto.BalanceVoteRequest;
+import ddangkong.service.balance.vote.dto.BalanceVoteResponse;
+import ddangkong.service.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
 import java.time.Clock;
 import java.time.LocalDateTime;
