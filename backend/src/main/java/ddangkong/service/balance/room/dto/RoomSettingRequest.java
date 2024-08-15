@@ -1,4 +1,4 @@
-package ddangkong.controller.balance.room.dto;
+package ddangkong.service.balance.room.dto;
 
 import ddangkong.domain.balance.content.Category;
 

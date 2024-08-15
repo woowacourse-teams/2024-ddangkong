@@ -1,10 +1,10 @@
 package ddangkong.controller.balance.room;
 
 import ddangkong.aop.logging.Polling;
-import ddangkong.controller.balance.room.dto.RoomInfoResponse;
-import ddangkong.controller.balance.room.dto.RoomJoinRequest;
-import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.controller.balance.room.dto.RoomSettingRequest;
+import ddangkong.service.balance.room.dto.RoomInfoResponse;
+import ddangkong.service.balance.room.dto.RoomJoinRequest;
+import ddangkong.service.balance.room.dto.RoomJoinResponse;
+import ddangkong.service.balance.room.dto.RoomSettingRequest;
 import ddangkong.service.balance.room.RoomService;
 import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import jakarta.validation.Valid;

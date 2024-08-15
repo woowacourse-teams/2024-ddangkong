@@ -1,9 +1,9 @@
 package ddangkong.service.balance.room;
 
-import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.room.dto.RoomInfoResponse;
-import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.controller.balance.room.dto.RoomSettingRequest;
+import ddangkong.service.member.dto.MemberResponse;
+import ddangkong.service.balance.room.dto.RoomInfoResponse;
+import ddangkong.service.balance.room.dto.RoomJoinResponse;
+import ddangkong.service.balance.room.dto.RoomSettingRequest;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;

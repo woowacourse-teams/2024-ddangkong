@@ -1,4 +1,4 @@
-package ddangkong.controller.balance.member.dto;
+package ddangkong.service.member.dto;
 
 import ddangkong.domain.member.Member;
 

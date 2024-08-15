@@ -1,4 +1,4 @@
-package ddangkong.service.balance.vote.dto;
+package ddangkong.service.balance.option.dto;
 
 public record VoteFinishedResponse(
         boolean isFinished

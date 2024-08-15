@@ -1,11 +1,11 @@
 package ddangkong.controller.balance.vote;
 
 import ddangkong.aop.logging.Polling;
-import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResultResponse;
+import ddangkong.service.balance.vote.dto.BalanceVoteRequest;
+import ddangkong.service.balance.vote.dto.BalanceVoteResponse;
+import ddangkong.service.balance.vote.dto.BalanceVoteResultResponse;
 import ddangkong.service.balance.vote.BalanceVoteService;
-import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
+import ddangkong.service.balance.option.dto.VoteFinishedResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;

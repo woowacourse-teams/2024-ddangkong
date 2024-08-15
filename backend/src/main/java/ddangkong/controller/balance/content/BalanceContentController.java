@@ -1,6 +1,6 @@
 package ddangkong.controller.balance.content;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
+import ddangkong.service.balance.content.dto.BalanceContentResponse;
 import ddangkong.service.balance.content.BalanceContentService;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;

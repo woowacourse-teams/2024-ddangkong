@@ -4,11 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.room.dto.RoomInfoResponse;
-import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.controller.balance.room.dto.RoomSettingRequest;
-import ddangkong.controller.balance.room.dto.RoomSettingResponse;
+import ddangkong.service.member.dto.MemberResponse;
+import ddangkong.service.balance.room.dto.RoomInfoResponse;
+import ddangkong.service.balance.room.dto.RoomJoinResponse;
+import ddangkong.service.balance.room.dto.RoomSettingRequest;
+import ddangkong.service.balance.room.dto.RoomSettingResponse;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;
