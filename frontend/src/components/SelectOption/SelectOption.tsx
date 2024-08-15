@@ -17,7 +17,7 @@ const SelectOption = ({
 }: SelectOptionProps) => {
   return (
     <button
-      css={SelectOptionLayout(Boolean(selectedId === option.optionId))}
+      css={SelectOptionLayout(Boolean(selectedId === option.optionId), isSelected)}
       onClick={() => handleSelectOption(option.optionId)}
       disabled={isSelected}
     >
