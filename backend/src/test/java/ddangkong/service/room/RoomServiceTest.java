@@ -1,17 +1,21 @@
 package ddangkong.service.room;
 
+import static ddangkong.support.fixture.MemberFixture.EDEN;
+import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
+import static ddangkong.support.fixture.MemberFixture.PRIN;
+import static ddangkong.support.fixture.MemberFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.balance.content.BalanceContent;
-import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.room.Room;
-import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
-import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
+import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
+import ddangkong.domain.room.member.Member;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
 import ddangkong.service.room.dto.RoomInfoResponse;
@@ -35,15 +39,6 @@ class RoomServiceTest extends BaseServiceTest {
 
     @Autowired
     private RoomService roomService;
-
-    @Autowired
-    private RoomRepository roomRepository;
-
-    @Autowired
-    private RoomContentRepository roomContentRepository;
-
-    @Autowired
-    private BalanceContentRepository balanceContentRepository;
 
     @Nested
     class 게임_방_정보_조회 {
@@ -409,6 +404,36 @@ class RoomServiceTest extends BaseServiceTest {
             for (int i = 1; i < room.getTotalRound(); i++) {
                 roomContentRepository.save(new RoomContent(room, content, i, null, false));
             }
+        }
+
+        @Test
+        void 방을_초기화하면_방_투표를_삭제하고_전체_투표에_저장한다() {
+            // given
+            BalanceOption optionA = balanceOptionRepository.save(new BalanceOption("A", content));
+            BalanceOption optionB = balanceOptionRepository.save(new BalanceOption("B", content));
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, 5, TIME_LIMIT, STATUS, CATEGORY));
+            Member prin = memberRepository.save(PRIN.master(room));
+            Member eden = memberRepository.save(EDEN.common(room));
+            Member keochan = memberRepository.save(KEOCHAN.common(room));
+            Member tacan = memberRepository.save(TACAN.common(room));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionB));
+
+            // when
+            roomService.resetRoom(room.getId());
+
+            // then
+            List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteRepository.findByMemberRoom(room);
+            Long optionATotalVoteCount = totalBalanceVoteRepository.countByBalanceOption(optionA);
+            Long optionBTotalVoteCount = totalBalanceVoteRepository.countByBalanceOption(optionB);
+            assertAll(
+                    () -> assertThat(roomBalanceVotes).isEmpty(),
+                    () -> assertThat(optionATotalVoteCount).isEqualTo(3),
+                    () -> assertThat(optionBTotalVoteCount).isEqualTo(1)
+
+            );
         }
     }
 }

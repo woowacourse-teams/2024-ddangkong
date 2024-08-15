@@ -56,6 +56,7 @@ public class RoomBalanceVoteService {
         BalanceOption balanceOption = getValidOption(request.optionId(), balanceContent);
         Member member = getValidMember(request.memberId(), room);
 
+        // todo 중복 투표 검증
         RoomBalanceVote roomBalanceVote = roomBalanceVoteRepository.save(new RoomBalanceVote(member, balanceOption));
         return new RoomBalanceVoteResponse(roomBalanceVote);
     }
