@@ -1,7 +1,7 @@
 package ddangkong.domain.balance.vote;
 
 import ddangkong.domain.balance.option.BalanceOption;
-import ddangkong.domain.balance.room.Room;
+import ddangkong.domain.room.Room;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

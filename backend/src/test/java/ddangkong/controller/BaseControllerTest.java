@@ -5,10 +5,10 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
-import ddangkong.domain.balance.room.RoomContentRepository;
-import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.domain.balance.vote.BalanceVoteRepository;
-import ddangkong.domain.member.MemberRepository;
+import ddangkong.domain.room.RoomRepository;
+import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
+import ddangkong.domain.room.member.MemberRepository;
 import ddangkong.support.extension.DatabaseCleanerExtension;
 import io.restassured.RestAssured;
 import java.time.Clock;
@@ -48,7 +48,7 @@ public abstract class BaseControllerTest {
     private int port;
 
     @BeforeEach
-    void setUpPort() {
+    void setPort() {
         RestAssured.port = port;
     }
 }

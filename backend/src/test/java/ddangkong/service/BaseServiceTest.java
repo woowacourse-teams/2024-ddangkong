@@ -4,10 +4,10 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
-import ddangkong.domain.balance.room.RoomContentRepository;
-import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.domain.balance.vote.BalanceVoteRepository;
-import ddangkong.domain.member.MemberRepository;
+import ddangkong.domain.room.RoomRepository;
+import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
+import ddangkong.domain.room.member.MemberRepository;
 import ddangkong.support.extension.DatabaseCleanerExtension;
 import java.time.Clock;
 import org.junit.jupiter.api.extension.ExtendWith;
