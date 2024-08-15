@@ -1,13 +1,13 @@
 package ddangkong.service.balance.content;
 
-import ddangkong.service.balance.content.dto.BalanceContentResponse;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.domain.balance.option.BalanceOptions;
-import ddangkong.domain.balance.room.Room;
-import ddangkong.domain.balance.room.RoomContent;
-import ddangkong.domain.balance.room.RoomContentRepository;
-import ddangkong.domain.balance.room.RoomRepository;
+import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomRepository;
+import ddangkong.domain.room.balance.roomcontent.RoomContent;
+import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
 import ddangkong.exception.BadRequestException;
+import ddangkong.service.balance.content.dto.BalanceContentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
