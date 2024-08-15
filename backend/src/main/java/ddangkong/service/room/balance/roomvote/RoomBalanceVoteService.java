@@ -141,7 +141,7 @@ public class RoomBalanceVoteService {
 
     private boolean isAllVoteFinished(Room room, BalanceContent balanceContent) {
         List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
-        Long voteCount = roomBalanceVoteRepository.countByMemberRoomAndBalanceOptionIn(room, balanceOptions);
+        long voteCount = roomBalanceVoteRepository.countByMemberRoomAndBalanceOptionIn(room, balanceOptions);
         List<Member> members = memberRepository.findAllByRoom(room);
         return voteCount == members.size();
     }
