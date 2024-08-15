@@ -129,6 +129,31 @@ class RoomServiceTest extends BaseServiceTest {
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("방의 인원 수가 가득 찼습니다.");
         }
+
+        @Test
+        void 동시에_최대_인원수만큼_방에_참여해도_예외를_발생한다() {
+            String masterNickname = "master";
+            RoomJoinResponse createdRoom = roomService.createRoom(masterNickname);
+            for (int i = 0; i < 10; i++) {
+                roomService.joinRoom("member%d".formatted(i), createdRoom.roomId());
+            }
+
+            Thread t1 = new Thread(() -> roomService.joinRoom("t1member", createdRoom.roomId()));
+            Thread t2 = new Thread(() -> roomService.joinRoom("t2member", createdRoom.roomId()));
+            t1.start();
+            t2.start();
+
+            try {
+                t1.join();
+                t2.join();
+            } catch (InterruptedException e) {
+            }
+
+            Room room = roomRepository.getById(createdRoom.roomId());
+            long memberCountInRoom = memberRepository.countByRoom(room);
+
+            assertThat(memberCountInRoom).isEqualTo(12);
+        }
     }
 
     @Nested
