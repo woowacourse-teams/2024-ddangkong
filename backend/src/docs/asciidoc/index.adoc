@@ -9,6 +9,6 @@
 :sectnums:
 
 include::exception.adoc[]
-include::balanceContent.adoc[]
+include::roomContent.adoc[]
 include::room.adoc[]
 include::balanceVote.adoc[]

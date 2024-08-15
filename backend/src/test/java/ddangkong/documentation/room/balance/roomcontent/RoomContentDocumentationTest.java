@@ -1,4 +1,4 @@
-package ddangkong.documentation.balance.content;
+package ddangkong.documentation.room.balance.roomcontent;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -12,22 +12,22 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ddangkong.controller.balance.content.BalanceContentController;
-import ddangkong.service.balance.content.dto.BalanceContentResponse;
-import ddangkong.service.balance.option.dto.BalanceOptionResponse;
+import ddangkong.controller.room.balance.roomcontent.RoomContentController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.service.balance.content.BalanceContentService;
+import ddangkong.service.balance.option.dto.BalanceOptionResponse;
+import ddangkong.service.room.balance.roomcontent.RoomContentService;
+import ddangkong.service.room.balance.roomcontent.dto.RoomContentResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-@WebMvcTest(BalanceContentController.class)
-class BalanceContentDocumentationTest extends BaseDocumentationTest {
+@WebMvcTest(RoomContentController.class)
+class RoomContentDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
-    private BalanceContentService balanceContentService;
+    private RoomContentService roomContentService;
 
     @Nested
     class 방의_콘텐츠_조회 {
@@ -39,7 +39,7 @@ class BalanceContentDocumentationTest extends BaseDocumentationTest {
             // given
             BalanceOptionResponse firstOptionResponse = new BalanceOptionResponse(1L, "100억 빚 송강");
             BalanceOptionResponse secondOptionResponse = new BalanceOptionResponse(2L, "100억 부자 송강호");
-            BalanceContentResponse response = new BalanceContentResponse(
+            RoomContentResponse response = new RoomContentResponse(
                     1L,
                     Category.EXAMPLE,
                     5,
@@ -49,13 +49,13 @@ class BalanceContentDocumentationTest extends BaseDocumentationTest {
                     firstOptionResponse,
                     secondOptionResponse
             );
-            when(balanceContentService.getRecentBalanceContent(anyLong())).thenReturn(response);
+            when(roomContentService.getRecentRoomContent(anyLong())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(ENDPOINT, 1L)
                     )
                     .andExpect(status().isOk())
-                    .andDo(document("balanceContent/find",
+                    .andDo(document("roomContent/find",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
                             ),

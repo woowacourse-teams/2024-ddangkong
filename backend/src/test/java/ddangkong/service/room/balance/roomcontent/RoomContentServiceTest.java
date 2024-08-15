@@ -1,21 +1,21 @@
-package ddangkong.service.balance.content;
+package ddangkong.service.room.balance.roomcontent;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import ddangkong.service.balance.content.dto.BalanceContentResponse;
-import ddangkong.service.balance.option.dto.BalanceOptionResponse;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
+import ddangkong.service.balance.option.dto.BalanceOptionResponse;
+import ddangkong.service.room.balance.roomcontent.dto.RoomContentResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class BalanceContentServiceTest extends BaseServiceTest {
+class RoomContentServiceTest extends BaseServiceTest {
 
     @Autowired
-    private BalanceContentService balanceContentService;
+    private RoomContentService roomContentService;
 
     @Nested
     class 현재_방의_밸런스_게임_내용_조회 {
@@ -25,7 +25,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         private static final Long NOT_PROGRESSED_ROOM_ID = 2L;
         private static final Long READY_ROOM_ID = 4L;
         private static final Long FINISHED_ROOM_ID = 5L;
-        private static final BalanceContentResponse BALANCE_CONTENT_RESPONSE = new BalanceContentResponse(
+        private static final RoomContentResponse BALANCE_CONTENT_RESPONSE = new RoomContentResponse(
                 1L,
                 Category.EXAMPLE,
                 5,
@@ -38,7 +38,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 방의_진행_중인_밸런스_게임_내용을_조회할_수_있다() {
             // when
-            BalanceContentResponse actual = balanceContentService.getRecentBalanceContent(PROGRESS_ROOM_ID);
+            RoomContentResponse actual = roomContentService.getRecentRoomContent(PROGRESS_ROOM_ID);
 
             // then
             assertThat(actual).isEqualTo(BALANCE_CONTENT_RESPONSE);
@@ -47,7 +47,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 방이_없을_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(NOT_EXIST_ROOM_ID))
+            assertThatThrownBy(() -> roomContentService.getRecentRoomContent(NOT_EXIST_ROOM_ID))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방이 존재하지 않습니다.");
         }
@@ -55,7 +55,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 방의_현재_라운드의_질문이_없을_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(NOT_PROGRESSED_ROOM_ID))
+            assertThatThrownBy(() -> roomContentService.getRecentRoomContent(NOT_PROGRESSED_ROOM_ID))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
         }
@@ -63,7 +63,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 방이_준비_상태인_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(READY_ROOM_ID))
+            assertThatThrownBy(() -> roomContentService.getRecentRoomContent(READY_ROOM_ID))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
         }
@@ -71,7 +71,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 방이_종료_상태인_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(FINISHED_ROOM_ID))
+            assertThatThrownBy(() -> roomContentService.getRecentRoomContent(FINISHED_ROOM_ID))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
         }

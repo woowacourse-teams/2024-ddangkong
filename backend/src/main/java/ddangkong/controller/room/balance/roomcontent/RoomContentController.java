@@ -1,7 +1,7 @@
-package ddangkong.controller.balance.content;
+package ddangkong.controller.room.balance.roomcontent;
 
-import ddangkong.service.balance.content.dto.BalanceContentResponse;
-import ddangkong.service.balance.content.BalanceContentService;
+import ddangkong.service.room.balance.roomcontent.RoomContentService;
+import ddangkong.service.room.balance.roomcontent.dto.RoomContentResponse;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @Validated
 @RequiredArgsConstructor
-public class BalanceContentController {
+public class RoomContentController {
 
-    private final BalanceContentService balanceContentService;
+    private final RoomContentService roomContentService;
 
     @GetMapping("/balances/rooms/{roomId}/content")
-    public BalanceContentResponse getBalanceContent(@PathVariable @Positive Long roomId) {
-        return balanceContentService.getRecentBalanceContent(roomId);
+    public RoomContentResponse getRecentRoomContent(@PathVariable @Positive Long roomId) {
+        return roomContentService.getRecentRoomContent(roomId);
     }
 }

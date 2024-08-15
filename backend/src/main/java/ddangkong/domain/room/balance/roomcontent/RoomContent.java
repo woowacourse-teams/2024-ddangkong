@@ -1,7 +1,6 @@
 package ddangkong.domain.room.balance.roomcontent;
 
 import ddangkong.domain.balance.content.BalanceContent;
-import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
 import ddangkong.exception.BadRequestException;
 import jakarta.persistence.Column;
@@ -90,22 +89,6 @@ public class RoomContent {
 
     public void finish() {
         isUsed = true;
-    }
-
-    public Long getContentId() {
-        return balanceContent.getId();
-    }
-
-    public Category getContentCategory() {
-        return balanceContent.getCategory();
-    }
-
-    public String getContentName() {
-        return balanceContent.getName();
-    }
-
-    public int getTotalRound() {
-        return room.getTotalRound();
     }
 
     public LocalDateTime getRoundEndedAt() {

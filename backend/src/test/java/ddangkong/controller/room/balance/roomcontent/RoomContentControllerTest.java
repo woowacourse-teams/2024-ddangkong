@@ -1,21 +1,21 @@
-package ddangkong.controller.balance.content;
+package ddangkong.controller.room.balance.roomcontent;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ddangkong.controller.BaseControllerTest;
-import ddangkong.service.balance.content.dto.BalanceContentResponse;
-import ddangkong.service.balance.option.dto.BalanceOptionResponse;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.service.balance.option.dto.BalanceOptionResponse;
+import ddangkong.service.room.balance.roomcontent.dto.RoomContentResponse;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class BalanceContentControllerTest extends BaseControllerTest {
+class RoomContentControllerTest extends BaseControllerTest {
 
     @Nested
     class 현재_방의_내용_조회 {
 
-        private static final BalanceContentResponse EXPECTED_RESPONSE = new BalanceContentResponse(
+        private static final RoomContentResponse EXPECTED_RESPONSE = new RoomContentResponse(
                 1L,
                 Category.EXAMPLE,
                 5,
@@ -28,12 +28,12 @@ class BalanceContentControllerTest extends BaseControllerTest {
         @Test
         void 현재_방의_질문을_조회할_수_있다() {
             // when
-            BalanceContentResponse actual = RestAssured.given().log().all()
+            RoomContentResponse actual = RestAssured.given().log().all()
                     .pathParam("roomId", 1L)
                     .when().get("/api/balances/rooms/{roomId}/content")
                     .then().log().all()
                     .statusCode(200)
-                    .extract().as(BalanceContentResponse.class);
+                    .extract().as(RoomContentResponse.class);
 
             // then
             assertThat(actual).isEqualTo(EXPECTED_RESPONSE);

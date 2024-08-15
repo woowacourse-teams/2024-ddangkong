@@ -1,5 +1,6 @@
-package ddangkong.service.balance.content;
+package ddangkong.service.room.balance.roomcontent;
 
+import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
@@ -7,14 +8,14 @@ import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
 import ddangkong.exception.BadRequestException;
-import ddangkong.service.balance.content.dto.BalanceContentResponse;
+import ddangkong.service.room.balance.roomcontent.dto.RoomContentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class BalanceContentService {
+public class RoomContentService {
 
     private final RoomRepository roomRepository;
 
@@ -23,18 +24,15 @@ public class BalanceContentService {
     private final BalanceOptionRepository balanceOptionRepository;
 
     @Transactional(readOnly = true)
-    public BalanceContentResponse getRecentBalanceContent(Long roomId) {
+    public RoomContentResponse getRecentRoomContent(Long roomId) {
         Room room = roomRepository.getById(roomId);
         validateProgressing(room);
 
-        RoomContent roomContent = getCurrentRoomContent(room);
-        BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(
-                roomContent.getBalanceContent());
+        RoomContent roomContent = getCurrentRoundRoomContent(room);
+        BalanceContent balanceContent = roomContent.getBalanceContent();
+        BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(balanceContent);
 
-        return BalanceContentResponse.builder()
-                .roomContent(roomContent)
-                .balanceOptions(balanceOptions)
-                .build();
+        return new RoomContentResponse(room, balanceContent, balanceOptions);
     }
 
     private static void validateProgressing(Room room) {
@@ -43,7 +41,7 @@ public class BalanceContentService {
         }
     }
 
-    private RoomContent getCurrentRoomContent(Room room) {
+    private RoomContent getCurrentRoundRoomContent(Room room) {
         return roomContentRepository.findByRoomAndRoundAndIsUsed(room, room.getCurrentRound(), false)
                 .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
     }
