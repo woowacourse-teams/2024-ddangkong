@@ -11,4 +11,4 @@
 include::exception.adoc[]
 include::roomContent.adoc[]
 include::room.adoc[]
-include::balanceVote.adoc[]
+include::roomBalanceVote.adoc[]

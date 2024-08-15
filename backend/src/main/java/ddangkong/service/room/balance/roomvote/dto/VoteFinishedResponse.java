@@ -1,4 +1,4 @@
-package ddangkong.service.balance.vote.dto;
+package ddangkong.service.room.balance.roomvote.dto;
 
 public record VoteFinishedResponse(
         boolean isFinished

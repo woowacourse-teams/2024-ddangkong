@@ -1,4 +1,4 @@
-package ddangkong.documentation.balance.vote;
+package ddangkong.documentation.room.balance.roomvote;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -17,17 +17,17 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ddangkong.controller.balance.vote.BalanceVoteController;
+import ddangkong.controller.room.balance.roomvote.RoomBalanceVoteController;
 import ddangkong.documentation.BaseDocumentationTest;
-import ddangkong.service.balance.content.dto.BalanceContentGroupResponse;
-import ddangkong.service.balance.content.dto.BalanceContentTotalResponse;
-import ddangkong.service.balance.option.dto.BalanceOptionGroupResponse;
-import ddangkong.service.balance.option.dto.BalanceOptionTotalResponse;
-import ddangkong.service.balance.vote.BalanceVoteService;
-import ddangkong.service.balance.vote.dto.BalanceVoteRequest;
-import ddangkong.service.balance.vote.dto.BalanceVoteResponse;
-import ddangkong.service.balance.vote.dto.BalanceVoteResultResponse;
-import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
+import ddangkong.service.balance.vote.dto.ContentTotalBalanceVoteResponse;
+import ddangkong.service.balance.vote.dto.OptionTotalBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.RoomBalanceVoteService;
+import ddangkong.service.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.dto.OptionRoomBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteRequest;
+import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
+import ddangkong.service.room.balance.roomvote.dto.VoteFinishedResponse;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -35,38 +35,38 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
-@WebMvcTest(BalanceVoteController.class)
-public class BalanceVoteDocumentationTest extends BaseDocumentationTest {
+@WebMvcTest(RoomBalanceVoteController.class)
+public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
-    private BalanceVoteService balanceVoteService;
+    private RoomBalanceVoteService roomBalanceVoteService;
 
     @Nested
-    class 방의_라운드_결과_조희 {
+    class 방_투표_결과_조희 {
 
         private static final String END_POINT = "/api/balances/rooms/{roomId}/contents/{contentId}/vote-result";
 
         @Test
-        void 방의_진행중인_라운드_결과를_조회한다() throws Exception {
+        void 방의_진행중인_라운드의_투표_결과를_조회한다() throws Exception {
             // given
             Long roomId = 1L;
             Long contentId = 1L;
 
-            BalanceOptionGroupResponse firstGroupResponse = new BalanceOptionGroupResponse(1L, "민초",
+            OptionRoomBalanceVoteResponse firstGroupResponse = new OptionRoomBalanceVoteResponse(1L, "민초",
                     List.of("mohamedeu al katan", "deundeun", "rupi"), 3, 75);
-            BalanceOptionGroupResponse secondGroupResponse = new BalanceOptionGroupResponse(2L, "반민초",
+            OptionRoomBalanceVoteResponse secondGroupResponse = new OptionRoomBalanceVoteResponse(2L, "반민초",
                     List.of("rapper lee"), 1, 25);
-            BalanceOptionTotalResponse firstTotalResponse = new BalanceOptionTotalResponse(1L, "민초", 50);
-            BalanceOptionTotalResponse secondTotalResponse = new BalanceOptionTotalResponse(2L, "반민초", 50);
-            BalanceVoteResultResponse response = new BalanceVoteResultResponse(
-                    new BalanceContentGroupResponse(firstGroupResponse, secondGroupResponse),
-                    new BalanceContentTotalResponse(firstTotalResponse, secondTotalResponse));
-            when(balanceVoteService.getBalanceVoteResult(roomId, contentId)).thenReturn(response);
+            OptionTotalBalanceVoteResponse firstTotalResponse = new OptionTotalBalanceVoteResponse(1L, "민초", 50);
+            OptionTotalBalanceVoteResponse secondTotalResponse = new OptionTotalBalanceVoteResponse(2L, "반민초", 50);
+            RoomBalanceVoteResultResponse response = new RoomBalanceVoteResultResponse(
+                    new ContentRoomBalanceVoteResponse(firstGroupResponse, secondGroupResponse),
+                    new ContentTotalBalanceVoteResponse(firstTotalResponse, secondTotalResponse));
+            when(roomBalanceVoteService.getAllVoteResult(roomId, contentId)).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(END_POINT, roomId, contentId))
                     .andExpect(status().isOk())
-                    .andDo(document("balanceVote/findRoundResult",
+                    .andDo(document("roomBalanceVote/findVoteResult",
                                     pathParameters(
                                             parameterWithName("roomId").description("방 ID"),
                                             parameterWithName("contentId").description("콘텐츠 ID")
@@ -117,10 +117,10 @@ public class BalanceVoteDocumentationTest extends BaseDocumentationTest {
             Long contentId = 1L;
             Long memberId = 1L;
             Long roomId = 1L;
-            BalanceVoteRequest request = new BalanceVoteRequest(memberId, optionId);
-            BalanceVoteResponse response = new BalanceVoteResponse(optionId);
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(memberId, optionId);
+            RoomBalanceVoteResponse response = new RoomBalanceVoteResponse(optionId);
             String content = objectMapper.writeValueAsString(request);
-            when(balanceVoteService.createBalanceVote(request, roomId, contentId)).thenReturn(response);
+            when(roomBalanceVoteService.createVote(request, roomId, contentId)).thenReturn(response);
 
             // when & then
             mockMvc.perform(post(END_POINT, roomId, contentId)
@@ -128,7 +128,7 @@ public class BalanceVoteDocumentationTest extends BaseDocumentationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().isCreated())
-                    .andDo(document("balanceVote/createBalanceVote",
+                    .andDo(document("roomBalanceVote/create",
                                     pathParameters(
                                             parameterWithName("roomId").description("방 ID"),
                                             parameterWithName("contentId").description("콘텐츠 ID")
@@ -154,12 +154,12 @@ public class BalanceVoteDocumentationTest extends BaseDocumentationTest {
         void 투표가_종료되었는지_조회한다() throws Exception {
             // given
             VoteFinishedResponse response = new VoteFinishedResponse(true);
-            when(balanceVoteService.getAllVoteFinished(anyLong(), anyLong())).thenReturn(response);
+            when(roomBalanceVoteService.getAllVoteFinished(anyLong(), anyLong())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(END_POINT, 1L, 1L))
                     .andExpect(status().isOk())
-                    .andDo(document("balanceVote/voteFinished",
+                    .andDo(document("roomBalanceVote/voteFinished",
                                     pathParameters(
                                             parameterWithName("roomId").description("방 ID"),
                                             parameterWithName("contentId").description("콘텐츠 ID")

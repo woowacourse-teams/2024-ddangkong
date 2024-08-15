@@ -1,7 +1,6 @@
 package ddangkong.domain.balance.vote;
 
 import ddangkong.domain.balance.option.BalanceOption;
-import ddangkong.domain.room.member.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class BalanceVote {
+public class TotalBalanceVote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,20 +25,7 @@ public class BalanceVote {
     @JoinColumn(name = "balance_option_id", nullable = false)
     private BalanceOption balanceOption;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
-
-    public BalanceVote(BalanceOption balanceOption, Member member) {
+    public TotalBalanceVote(BalanceOption balanceOption) {
         this.balanceOption = balanceOption;
-        this.member = member;
-    }
-
-    public Long getOptionId() {
-        return balanceOption.getId();
-    }
-
-    public String getMemberNickname() {
-        return member.getNickname();
     }
 }

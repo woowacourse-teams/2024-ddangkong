@@ -1,4 +1,4 @@
-package ddangkong.controller.balance.vote;
+package ddangkong.controller.room.balance.roomvote;
 
 import static ddangkong.support.fixture.MemberFixture.EDEN;
 import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
@@ -10,13 +10,13 @@ import ddangkong.controller.BaseControllerTest;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
-import ddangkong.domain.balance.vote.BalanceVote;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
+import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
-import ddangkong.service.balance.vote.dto.BalanceVoteRequest;
-import ddangkong.service.balance.vote.dto.BalanceVoteResponse;
-import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
+import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteRequest;
+import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.dto.VoteFinishedResponse;
 import ddangkong.support.annotation.FixedClock;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class BalanceVoteControllerTest extends BaseControllerTest {
+class RoomBalanceVoteControllerTest extends BaseControllerTest {
 
     private Room room;
 
@@ -66,10 +66,10 @@ class BalanceVoteControllerTest extends BaseControllerTest {
             LocalDateTime roundEndedAt = LocalDateTime.parse("2024-07-18T20:00:08");
             roomContentRepository.save(new RoomContent(room, balanceContent, 1, roundEndedAt, false));
 
-            BalanceVoteRequest request = new BalanceVoteRequest(keochan.getId(), optionA.getId());
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(keochan.getId(), optionA.getId());
 
             // when
-            BalanceVoteResponse actual = RestAssured.given().log().all()
+            RoomBalanceVoteResponse actual = RestAssured.given().log().all()
                     .body(request)
                     .contentType(ContentType.JSON)
                     .pathParam("roomId", room.getId())
@@ -77,7 +77,7 @@ class BalanceVoteControllerTest extends BaseControllerTest {
                     .when().post("/api/balances/rooms/{roomId}/contents/{contentId}/votes")
                     .then().log().all()
                     .statusCode(201)
-                    .extract().as(BalanceVoteResponse.class);
+                    .extract().as(RoomBalanceVoteResponse.class);
 
             // then
             assertThat(actual.optionId()).isEqualTo(optionA.getId());
@@ -86,7 +86,7 @@ class BalanceVoteControllerTest extends BaseControllerTest {
         @Test
         void 요청_경로의_아이디가_양수가_아닌_경우_400_에러로_응답한다() {
             // given
-            BalanceVoteRequest request = new BalanceVoteRequest(keochan.getId(), optionA.getId());
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(keochan.getId(), optionA.getId());
             Long roomId = 0L;
 
             // when & then
@@ -96,7 +96,7 @@ class BalanceVoteControllerTest extends BaseControllerTest {
         @Test
         void 요청_바디의_아이디가_양수가_아닌_경우_400_에러로_응답한다() {
             // given
-            BalanceVoteRequest request = new BalanceVoteRequest(0L, optionA.getId());
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(0L, optionA.getId());
 
             // when & then
             assertThatCreateVoteIsBadRequest(room.getId(), balanceContent.getId(), request);
@@ -105,13 +105,13 @@ class BalanceVoteControllerTest extends BaseControllerTest {
         @Test
         void 요청_바디의_아이디가_null인_경우_400_에러로_응답한다() {
             // given
-            BalanceVoteRequest request = new BalanceVoteRequest(null, optionA.getId());
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(null, optionA.getId());
 
             // when & then
             assertThatCreateVoteIsBadRequest(room.getId(), balanceContent.getId(), request);
         }
 
-        void assertThatCreateVoteIsBadRequest(Long roomId, Long contentId, BalanceVoteRequest request) {
+        void assertThatCreateVoteIsBadRequest(Long roomId, Long contentId, RoomBalanceVoteRequest request) {
             RestAssured.given().log().all()
                     .body(request).contentType(ContentType.JSON)
                     .pathParam("roomId", roomId)
@@ -133,10 +133,10 @@ class BalanceVoteControllerTest extends BaseControllerTest {
             // given
             LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T20:00:08");
             roomContentRepository.save(new RoomContent(room, balanceContent, 1, roundEndedAt, false));
-            balanceVoteRepository.save(new BalanceVote(optionA, prin));
-            balanceVoteRepository.save(new BalanceVote(optionA, tacan));
-            balanceVoteRepository.save(new BalanceVote(optionB, keochan));
-            balanceVoteRepository.save(new BalanceVote(optionB, eden));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionB));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionB));
 
             // when
             VoteFinishedResponse actual = RestAssured.given().log().all()

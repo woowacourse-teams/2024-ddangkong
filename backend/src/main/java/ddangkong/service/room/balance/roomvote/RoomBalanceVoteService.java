@@ -1,25 +1,26 @@
-package ddangkong.service.balance.vote;
+package ddangkong.service.room.balance.roomvote;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.domain.balance.option.BalanceOptions;
-import ddangkong.domain.balance.vote.BalanceVote;
-import ddangkong.domain.balance.vote.BalanceVoteRepository;
+import ddangkong.domain.balance.vote.TotalBalanceVoteRepository;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
+import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
+import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
-import ddangkong.service.balance.content.dto.BalanceContentGroupResponse;
-import ddangkong.service.balance.content.dto.BalanceContentTotalResponse;
-import ddangkong.service.balance.vote.dto.BalanceVoteRequest;
-import ddangkong.service.balance.vote.dto.BalanceVoteResponse;
-import ddangkong.service.balance.vote.dto.BalanceVoteResultResponse;
-import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
+import ddangkong.service.balance.vote.dto.ContentTotalBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteRequest;
+import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
+import ddangkong.service.room.balance.roomvote.dto.VoteFinishedResponse;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,32 +30,34 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class BalanceVoteService {
-
-    private final BalanceVoteRepository balanceVoteRepository;
-
-    private final MemberRepository memberRepository;
-
-    private final BalanceOptionRepository balanceOptionRepository;
+public class RoomBalanceVoteService {
 
     private final BalanceContentRepository balanceContentRepository;
 
-    private final RoomContentRepository roomContentRepository;
+    private final BalanceOptionRepository balanceOptionRepository;
+
+    private final TotalBalanceVoteRepository totalBalanceVoteRepository;
 
     private final RoomRepository roomRepository;
+
+    private final MemberRepository memberRepository;
+
+    private final RoomContentRepository roomContentRepository;
+
+    private final RoomBalanceVoteRepository roomBalanceVoteRepository;
 
     private final Clock clock;
 
     @Transactional
-    public BalanceVoteResponse createBalanceVote(BalanceVoteRequest request, Long roomId, Long contentId) {
+    public RoomBalanceVoteResponse createVote(RoomBalanceVoteRequest request, Long roomId, Long contentId) {
         Room room = roomRepository.getById(roomId);
         BalanceContent balanceContent = balanceContentRepository.getById(contentId);
         validateRoundFinished(room, balanceContent);
         BalanceOption balanceOption = getValidOption(request.optionId(), balanceContent);
         Member member = getValidMember(request.memberId(), room);
 
-        BalanceVote balanceVote = balanceVoteRepository.save(new BalanceVote(balanceOption, member));
-        return new BalanceVoteResponse(balanceVote);
+        RoomBalanceVote roomBalanceVote = roomBalanceVoteRepository.save(new RoomBalanceVote(member, balanceOption));
+        return new RoomBalanceVoteResponse(roomBalanceVote);
     }
 
     private void validateRoundFinished(Room room, BalanceContent balanceContent) {
@@ -74,32 +77,33 @@ public class BalanceVoteService {
     }
 
     @Transactional(readOnly = true)
-    public BalanceVoteResultResponse getBalanceVoteResult(Long roomId, Long balanceContentId) {
+    public RoomBalanceVoteResultResponse getAllVoteResult(Long roomId, Long balanceContentId) {
         Room room = roomRepository.getById(roomId);
         BalanceContent balanceContent = balanceContentRepository.getById(balanceContentId);
-        if (isRoundFinished(room, balanceContent) || isAllVoteFinished(room, balanceContent)) {
+        if (isRoundFinished(room, balanceContent)) {
             BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(balanceContent);
-            BalanceContentGroupResponse group = getBalanceContentGroupResponse(room, balanceOptions);
-            BalanceContentTotalResponse total = getBalanceContentTotalResponse(balanceOptions);
-            return new BalanceVoteResultResponse(group, total);
+            // todo 기권 추가
+            ContentRoomBalanceVoteResponse group = getBalanceContentGroupResponse(room, balanceOptions);
+            ContentTotalBalanceVoteResponse total = getBalanceContentTotalResponse(balanceOptions);
+            return new RoomBalanceVoteResultResponse(group, total);
         }
         throw new BadRequestException("투표가 끝나지 않아 투표 결과를 조회할 수 없습니다.");
     }
 
-    private BalanceContentGroupResponse getBalanceContentGroupResponse(Room room, BalanceOptions balanceOptions) {
-        List<BalanceVote> firstOptionVotes = balanceVoteRepository
+    private ContentRoomBalanceVoteResponse getBalanceContentGroupResponse(Room room, BalanceOptions balanceOptions) {
+        List<RoomBalanceVote> firstOptionVotes = roomBalanceVoteRepository
                 .findByMemberRoomAndBalanceOption(room, balanceOptions.getFistOption());
-        List<BalanceVote> secondOptionVotes = balanceVoteRepository
+        List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteRepository
                 .findByMemberRoomAndBalanceOption(room, balanceOptions.getSecondOption());
 
-        return BalanceContentGroupResponse.of(balanceOptions, firstOptionVotes, secondOptionVotes);
+        return ContentRoomBalanceVoteResponse.of(balanceOptions, firstOptionVotes, secondOptionVotes);
     }
 
-    private BalanceContentTotalResponse getBalanceContentTotalResponse(BalanceOptions balanceOptions) {
-        Long firstOptionCount = balanceVoteRepository.countByBalanceOption(balanceOptions.getFistOption());
-        Long secondOptionCount = balanceVoteRepository.countByBalanceOption(balanceOptions.getSecondOption());
+    private ContentTotalBalanceVoteResponse getBalanceContentTotalResponse(BalanceOptions balanceOptions) {
+        Long firstOptionVoteCount = totalBalanceVoteRepository.countByBalanceOption(balanceOptions.getFistOption());
+        Long secondOptionVoteCount = totalBalanceVoteRepository.countByBalanceOption(balanceOptions.getSecondOption());
 
-        return BalanceContentTotalResponse.of(balanceOptions, firstOptionCount, secondOptionCount);
+        return ContentTotalBalanceVoteResponse.of(balanceOptions, firstOptionVoteCount, secondOptionVoteCount);
     }
 
     @Transactional(readOnly = true)
@@ -120,7 +124,7 @@ public class BalanceVoteService {
 
     private boolean isAllVoteFinished(Room room, BalanceContent balanceContent) {
         List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
-        Long voteCount = balanceVoteRepository.countByMemberRoomAndBalanceOptionIn(room, balanceOptions);
+        Long voteCount = roomBalanceVoteRepository.countByMemberRoomAndBalanceOptionIn(room, balanceOptions);
         List<Member> members = memberRepository.findAllByRoom(room);
         return voteCount == members.size();
     }

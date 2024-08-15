@@ -1,4 +1,4 @@
-package ddangkong.service.balance.vote;
+package ddangkong.service.room.balance.roomvote;
 
 import static ddangkong.support.fixture.MemberFixture.EDEN;
 import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
@@ -10,20 +10,20 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
-import ddangkong.domain.balance.vote.BalanceVote;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
+import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.BadRequestException;
 import ddangkong.service.BaseServiceTest;
-import ddangkong.service.balance.content.dto.BalanceContentGroupResponse;
-import ddangkong.service.balance.content.dto.BalanceContentTotalResponse;
-import ddangkong.service.balance.option.dto.BalanceOptionGroupResponse;
-import ddangkong.service.balance.option.dto.BalanceOptionTotalResponse;
-import ddangkong.service.balance.vote.dto.BalanceVoteRequest;
-import ddangkong.service.balance.vote.dto.BalanceVoteResponse;
-import ddangkong.service.balance.vote.dto.BalanceVoteResultResponse;
-import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
+import ddangkong.service.balance.vote.dto.ContentTotalBalanceVoteResponse;
+import ddangkong.service.balance.vote.dto.OptionTotalBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.dto.OptionRoomBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteRequest;
+import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteResponse;
+import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
+import ddangkong.service.room.balance.roomvote.dto.VoteFinishedResponse;
 import ddangkong.support.annotation.FixedClock;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,10 +32,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class BalanceVoteServiceTest extends BaseServiceTest {
+class RoomBalanceVoteServiceTest extends BaseServiceTest {
 
     @Autowired
-    private BalanceVoteService balanceVoteService;
+    private RoomBalanceVoteService roomBalanceVoteService;
 
     private BalanceContent content;
 
@@ -79,10 +79,10 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         @Test
         void 투표를_생성_할_수_있다() {
             // given
-            BalanceVoteRequest request = new BalanceVoteRequest(tacan.getId(), optionA.getId());
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(tacan.getId(), optionA.getId());
 
             // when
-            BalanceVoteResponse actual = balanceVoteService.createBalanceVote(request, room.getId(), content.getId());
+            RoomBalanceVoteResponse actual = roomBalanceVoteService.createVote(request, room.getId(), content.getId());
 
             // then
             assertThat(actual.optionId()).isEqualTo(optionA.getId());
@@ -92,10 +92,10 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         @FixedClock(date = "2024-07-18", time = "20:00:11")
         void 투표_시간이_지난_이후_투표_시_예외를_던진다() {
             // given
-            BalanceVoteRequest request = new BalanceVoteRequest(tacan.getId(), optionA.getId());
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(tacan.getId(), optionA.getId());
 
             // when & then
-            assertThatThrownBy(() -> balanceVoteService.createBalanceVote(request, room.getId(), content.getId()))
+            assertThatThrownBy(() -> roomBalanceVoteService.createVote(request, room.getId(), content.getId()))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("이미 종료된 라운드에는 투표할 수 없습니다.");
         }
@@ -109,10 +109,10 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             int round = 2;
             roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT, false));
 
-            BalanceVoteRequest request = new BalanceVoteRequest(tacan.getId(), optionC.getId());
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(tacan.getId(), optionC.getId());
 
             // when & then
-            assertThatThrownBy(() -> balanceVoteService.createBalanceVote(request, room.getId(), content.getId()))
+            assertThatThrownBy(() -> roomBalanceVoteService.createVote(request, room.getId(), content.getId()))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
         }
@@ -121,10 +121,10 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         void 질문에_해당하는_선택지가_아닌_경우_예외를_던진다() {
             // given
             Long invalidOptionId = 3L;
-            BalanceVoteRequest request = new BalanceVoteRequest(tacan.getId(), invalidOptionId);
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(tacan.getId(), invalidOptionId);
 
             // when & then
-            assertThatThrownBy(() -> balanceVoteService.createBalanceVote(request, room.getId(), content.getId()))
+            assertThatThrownBy(() -> roomBalanceVoteService.createVote(request, room.getId(), content.getId()))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 질문의 선택지가 존재하지 않습니다.");
         }
@@ -133,10 +133,10 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         void 방에_있지_않은_멤버인_경우_예외를_던진다() {
             // given
             Long invalidMemberId = 5L;
-            BalanceVoteRequest request = new BalanceVoteRequest(invalidMemberId, optionA.getId());
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(invalidMemberId, optionA.getId());
 
             // when & then
-            assertThatThrownBy(() -> balanceVoteService.createBalanceVote(request, room.getId(), content.getId()))
+            assertThatThrownBy(() -> roomBalanceVoteService.createVote(request, room.getId(), content.getId()))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방의 멤버가 존재하지 않습니다.");
         }
@@ -148,24 +148,24 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         @Test
         void 투표_결과를_조회한다() {
             // given
-            BalanceVoteResultResponse expected = new BalanceVoteResultResponse(
-                    new BalanceContentGroupResponse(
-                            new BalanceOptionGroupResponse(1L,
+            RoomBalanceVoteResultResponse expected = new RoomBalanceVoteResultResponse(
+                    new ContentRoomBalanceVoteResponse(
+                            new OptionRoomBalanceVoteResponse(1L,
                                     "민초",
                                     List.of("mohamedeu al katan", "deundeun", "rupi"),
                                     3, 75),
-                            new BalanceOptionGroupResponse(2L,
+                            new OptionRoomBalanceVoteResponse(2L,
                                     "반민초",
                                     List.of("rapper lee"), 1, 25)
                     ),
-                    new BalanceContentTotalResponse(
-                            new BalanceOptionTotalResponse(1L, "민초", 50),
-                            new BalanceOptionTotalResponse(2L, "반민초", 50)
+                    new ContentTotalBalanceVoteResponse(
+                            new OptionTotalBalanceVoteResponse(1L, "민초", 50),
+                            new OptionTotalBalanceVoteResponse(2L, "반민초", 50)
                     )
             );
 
             // when
-            BalanceVoteResultResponse actual = balanceVoteService.getBalanceVoteResult(1L, 1L);
+            RoomBalanceVoteResultResponse actual = roomBalanceVoteService.getAllVoteResult(1L, 1L);
 
             // then
             assertThat(actual).isEqualTo(expected);
@@ -174,7 +174,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         @Test
         void 진행중인_주제가_아닌것의_투표_결과를_요청하면_예외를_발생시킨다() { // todo: 테스트명 수정, 테스트 더 추가
             // when & then
-            assertThatThrownBy(() -> balanceVoteService.getBalanceVoteResult(1L, 2L))
+            assertThatThrownBy(() -> roomBalanceVoteService.getAllVoteResult(1L, 2L))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 1, 방 라운드 : 2");
         }
@@ -194,13 +194,13 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             int round = 1;
             LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T11:00:20");
             roomContentRepository.save(new RoomContent(room, content, round, roundEndedAt, IS_USED));
-            balanceVoteRepository.save(new BalanceVote(optionA, prin));
-            balanceVoteRepository.save(new BalanceVote(optionA, tacan));
-            balanceVoteRepository.save(new BalanceVote(optionB, keochan));
-            balanceVoteRepository.save(new BalanceVote(optionB, eden));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionB));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionB));
 
             // when
-            VoteFinishedResponse actual = balanceVoteService.getAllVoteFinished(room.getId(), content.getId());
+            VoteFinishedResponse actual = roomBalanceVoteService.getAllVoteFinished(room.getId(), content.getId());
 
             // then
             assertThat(actual.isFinished()).isTrue();
@@ -215,7 +215,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             roomContentRepository.save(new RoomContent(room, content, roomContentRound, roundEndedAt, IS_USED));
 
             // when
-            VoteFinishedResponse actual = balanceVoteService.getAllVoteFinished(room.getId(), content.getId());
+            VoteFinishedResponse actual = roomBalanceVoteService.getAllVoteFinished(room.getId(), content.getId());
 
             // then
             assertThat(actual.isFinished()).isTrue();
@@ -226,12 +226,12 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             // given
             int round = 1;
             roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT, IS_USED));
-            balanceVoteRepository.save(new BalanceVote(optionA, prin));
-            balanceVoteRepository.save(new BalanceVote(optionA, tacan));
-            balanceVoteRepository.save(new BalanceVote(optionB, eden));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionB));
 
             // when
-            VoteFinishedResponse actual = balanceVoteService.getAllVoteFinished(room.getId(), content.getId());
+            VoteFinishedResponse actual = roomBalanceVoteService.getAllVoteFinished(room.getId(), content.getId());
 
             // then
             assertThat(actual.isFinished()).isFalse();
@@ -240,7 +240,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
         @Test
         void 방에_존재하지_않은_방_컨텐츠의_투표_여부를_조회하면_예외가_발생한다() {
             // when & then
-            assertThatThrownBy(() -> balanceVoteService.getAllVoteFinished(room.getId(), content.getId()))
+            assertThatThrownBy(() -> roomBalanceVoteService.getAllVoteFinished(room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("방에 존재하지 않은 컨텐츠입니다.");
         }
@@ -252,7 +252,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT, IS_USED));
 
             // when & then
-            assertThatThrownBy(() -> balanceVoteService.getAllVoteFinished(room.getId(), content.getId()))
+            assertThatThrownBy(() -> roomBalanceVoteService.getAllVoteFinished(room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
         }
@@ -265,7 +265,7 @@ class BalanceVoteServiceTest extends BaseServiceTest {
             roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT, isUsed));
 
             // when & then
-            assertThatThrownBy(() -> balanceVoteService.getAllVoteFinished(room.getId(), content.getId()))
+            assertThatThrownBy(() -> roomBalanceVoteService.getAllVoteFinished(room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("이미 사용된 컨텐츠입니다.");
         }

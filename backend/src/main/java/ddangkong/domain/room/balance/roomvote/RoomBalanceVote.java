@@ -37,4 +37,12 @@ public class RoomBalanceVote {
         this.member = member;
         this.balanceOption = balanceOption;
     }
+
+    public Long getOptionId() {
+        return balanceOption.getId();
+    }
+
+    public String getMemberNickname() {
+        return member.getNickname();
+    }
 }
