@@ -1,5 +1,5 @@
+import { useMakeOrEnterRoom } from './hooks/useMakeOrEnterRoom';
 import { profile, nicknameBox, nicknameInputWrapper, nicknameInput } from './NicknamePage.styled';
-import { useMakeOrEnterRoom } from './useMakeOrEnterRoom';
 
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
