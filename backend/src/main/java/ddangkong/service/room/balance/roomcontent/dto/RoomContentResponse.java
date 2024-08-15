@@ -19,7 +19,7 @@ public record RoomContentResponse(
 
     public RoomContentResponse(Room room, BalanceContent balanceContent, BalanceOptions balanceOptions) {
         this(balanceContent.getId(),
-                room.getCategory(),
+                balanceContent.getCategory(),
                 room.getTotalRound(),
                 room.getCurrentRound(),
                 room.getTimeLimit(),
