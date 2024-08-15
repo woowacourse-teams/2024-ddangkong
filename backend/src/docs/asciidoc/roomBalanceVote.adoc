@@ -1,4 +1,4 @@
-== 벨런스 게임 투표
+== 방 밸런스 게임 투표
 
 === 방의 투표 결과 조회
 
@@ -48,7 +48,7 @@ include::{snippets}/roomBalanceVote/create/response-fields.adoc[]
 
 '''
 
-=== 투표 종료 여부
+=== 투표 종료 여부 (polling)
 
 ==== curl
 
