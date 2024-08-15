@@ -140,6 +140,33 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방의 멤버가 존재하지 않습니다.");
         }
+
+        @Test
+        void 중복_투표하는_경우_예외를_발생한다() {
+            // given
+            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(prin.getId(), optionA.getId());
+
+            // when & then
+            assertThatThrownBy(() -> roomBalanceVoteService.createVote(request, room.getId(), content.getId()))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("이미 투표한 선택지가 존재합니다. 투표하려는 선택지 : %d, 이미 투표한 선택지 : %d"
+                            .formatted(optionA.getId(), optionA.getId()));
+        }
+
+        @Test
+        void 같은_컨텐츠에_이미_투표했을_경우_예외가_발생한다() {
+            // given
+            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionB));
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(prin.getId(), optionA.getId());
+
+            // when & then
+            assertThatThrownBy(() -> roomBalanceVoteService.createVote(request, room.getId(), content.getId()))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("이미 투표한 선택지가 존재합니다. 투표하려는 선택지 : %d, 이미 투표한 선택지 : %d"
+                            .formatted(optionA.getId(), optionB.getId()));
+
+        }
     }
 
     @Nested

@@ -33,4 +33,8 @@ public class BalanceOption {
         this.name = name;
         this.balanceContent = balanceContent;
     }
+
+    public boolean isSameId(Long id) {
+        return this.id.equals(id);
+    }
 }

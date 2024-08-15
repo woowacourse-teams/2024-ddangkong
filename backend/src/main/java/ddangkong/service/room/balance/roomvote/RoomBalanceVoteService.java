@@ -53,10 +53,9 @@ public class RoomBalanceVoteService {
         Room room = roomRepository.getById(roomId);
         BalanceContent balanceContent = balanceContentRepository.getById(contentId);
         validateRoundFinished(room, balanceContent);
-        BalanceOption balanceOption = getValidOption(request.optionId(), balanceContent);
         Member member = getValidMember(request.memberId(), room);
+        BalanceOption balanceOption = getValidOption(request.optionId(), balanceContent, member);
 
-        // todo 중복 투표 검증
         RoomBalanceVote roomBalanceVote = roomBalanceVoteRepository.save(new RoomBalanceVote(member, balanceOption));
         return new RoomBalanceVoteResponse(roomBalanceVote);
     }
@@ -67,9 +66,26 @@ public class RoomBalanceVoteService {
         }
     }
 
-    private BalanceOption getValidOption(Long optionId, BalanceContent balanceContent) {
-        return balanceOptionRepository.findByIdAndBalanceContent(optionId, balanceContent)
-                .orElseThrow(() -> new BadRequestException("해당 질문의 선택지가 존재하지 않습니다."));
+    private BalanceOption getValidOption(Long optionId, BalanceContent balanceContent, Member member) {
+        BalanceOption selectedOption = null;
+        List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
+        for (BalanceOption balanceOption : balanceOptions) {
+            validDuplicatedVote(optionId, member, balanceOption);
+            if (balanceOption.isSameId(optionId)) {
+                selectedOption = balanceOption;
+            }
+        }
+        if (selectedOption == null) {
+            throw new BadRequestException("해당 질문의 선택지가 존재하지 않습니다.");
+        }
+        return selectedOption;
+    }
+
+    private void validDuplicatedVote(Long optionId, Member member, BalanceOption balanceOption) {
+        if (roomBalanceVoteRepository.existsByMemberAndBalanceOption(member, balanceOption)) {
+            throw new BadRequestException("이미 투표한 선택지가 존재합니다. 투표하려는 선택지 : %d, 이미 투표한 선택지 : %d"
+                    .formatted(optionId, balanceOption.getId()));
+        }
     }
 
     private Member getValidMember(Long memberId, Room room) {
