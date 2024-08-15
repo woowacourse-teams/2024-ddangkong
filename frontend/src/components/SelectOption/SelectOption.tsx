@@ -2,24 +2,25 @@ import { SelectOptionLayout } from './SelectOption.styled';
 
 import { BalanceContent } from '@/types/balanceContent';
 
+interface SelectedOption {
+  id: number;
+  isCompleted: boolean;
+}
+
 interface SelectOptionProps {
   option: BalanceContent['firstOption'];
-  selectedId: number;
-  isSelected: boolean;
+  selectedOption: SelectedOption;
   handleSelectOption: (selectedId: number) => void;
 }
 
-const SelectOption = ({
-  option,
-  selectedId,
-  isSelected,
-  handleSelectOption,
-}: SelectOptionProps) => {
+const SelectOption = ({ option, selectedOption, handleSelectOption }: SelectOptionProps) => {
+  const { id: selectedId, isCompleted } = selectedOption;
+
   return (
     <button
-      css={SelectOptionLayout(Boolean(selectedId === option.optionId), isSelected)}
+      css={SelectOptionLayout(Boolean(selectedId === option.optionId), isCompleted)}
       onClick={() => handleSelectOption(option.optionId)}
-      disabled={isSelected}
+      disabled={isCompleted}
     >
       {option.name}
     </button>
