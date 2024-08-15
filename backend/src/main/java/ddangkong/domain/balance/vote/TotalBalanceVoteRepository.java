@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TotalBalanceVoteRepository extends JpaRepository<TotalBalanceVote, Long> {
 
-    Long countByBalanceOption(BalanceOption balanceOption);
+    long countByBalanceOption(BalanceOption balanceOption);
 }

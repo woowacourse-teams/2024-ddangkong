@@ -1,6 +1,7 @@
 package ddangkong.service.balance.vote.dto;
 
 import ddangkong.domain.balance.option.BalanceOption;
+import ddangkong.util.PercentageCalculator;
 
 public record OptionTotalBalanceVoteResponse(
         Long optionId,
@@ -8,11 +9,10 @@ public record OptionTotalBalanceVoteResponse(
         int percent
 ) {
 
-    public OptionTotalBalanceVoteResponse(BalanceOption balanceOption, Long contentVoteCount, Long optionVoteCount) {
-        this(balanceOption.getId(), balanceOption.getName(), getVotePercent(contentVoteCount, optionVoteCount));
-    }
-
-    private static int getVotePercent(Long contentVoteCount, Long optionVoteCount) {
-        return (int) Math.round(optionVoteCount * 1.0 / contentVoteCount * 100);
+    public OptionTotalBalanceVoteResponse(BalanceOption balanceOption, long contentVoteCount, long optionVoteCount) {
+        this(balanceOption.getId(),
+                balanceOption.getName(),
+                PercentageCalculator.calculatePercent(optionVoteCount, contentVoteCount)
+        );
     }
 }
