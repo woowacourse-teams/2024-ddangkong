@@ -6,22 +6,28 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 interface SelectButtonProps {
   selectedId: number;
+  handleClickSelected: () => void;
 }
 
-const SelectButton = ({ selectedId }: SelectButtonProps) => {
+const SelectButton = ({ selectedId, handleClickSelected }: SelectButtonProps) => {
   const { balanceContent } = useBalanceContentQuery();
   const { data, mutate: selectComplete } = useSelectCompleteMutation({
     selectedId,
     contentId: balanceContent?.contentId,
   });
 
+  const handleClickSelectComplete = () => {
+    selectComplete();
+    handleClickSelected();
+  };
+
   return (
     <div css={bottomButtonLayout}>
       <Button
-        style={{ width: '100%' }}
+        bottom={true}
         disabled={data || !selectedId}
         text={data ? '선택 완료' : '선택'}
-        onClick={selectComplete}
+        onClick={handleClickSelectComplete}
       />
     </div>
   );
