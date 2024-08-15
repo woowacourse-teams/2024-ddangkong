@@ -13,8 +13,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ddangkong.controller.balance.content.BalanceContentController;
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
+import ddangkong.service.balance.content.dto.BalanceContentResponse;
+import ddangkong.service.balance.option.dto.BalanceOptionResponse;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.service.balance.content.BalanceContentService;

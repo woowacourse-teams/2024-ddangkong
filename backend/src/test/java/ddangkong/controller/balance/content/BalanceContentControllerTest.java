@@ -3,8 +3,8 @@ package ddangkong.controller.balance.content;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ddangkong.controller.BaseControllerTest;
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
+import ddangkong.service.balance.content.dto.BalanceContentResponse;
+import ddangkong.service.balance.option.dto.BalanceOptionResponse;
 import ddangkong.domain.balance.content.Category;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Nested;

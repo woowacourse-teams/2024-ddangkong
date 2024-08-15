@@ -1,9 +1,5 @@
 package ddangkong.service.balance.room;
 
-import ddangkong.controller.balance.member.dto.MemberResponse;
-import ddangkong.controller.balance.room.dto.RoomInfoResponse;
-import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.controller.balance.room.dto.RoomSettingRequest;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;
@@ -15,6 +11,10 @@ import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
 import ddangkong.exception.InternalServerException;
+import ddangkong.service.balance.member.dto.MemberResponse;
+import ddangkong.service.balance.room.dto.RoomInfoResponse;
+import ddangkong.service.balance.room.dto.RoomJoinResponse;
+import ddangkong.service.balance.room.dto.RoomSettingRequest;
 import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import java.time.Clock;
 import java.time.LocalDateTime;

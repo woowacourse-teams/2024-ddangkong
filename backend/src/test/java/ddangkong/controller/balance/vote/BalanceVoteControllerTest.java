@@ -7,8 +7,6 @@ import static ddangkong.support.fixture.MemberFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ddangkong.controller.BaseControllerTest;
-import ddangkong.controller.balance.vote.dto.BalanceVoteRequest;
-import ddangkong.controller.balance.vote.dto.BalanceVoteResponse;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
@@ -16,6 +14,8 @@ import ddangkong.domain.balance.room.Room;
 import ddangkong.domain.balance.room.RoomContent;
 import ddangkong.domain.balance.vote.BalanceVote;
 import ddangkong.domain.member.Member;
+import ddangkong.service.balance.vote.dto.BalanceVoteRequest;
+import ddangkong.service.balance.vote.dto.BalanceVoteResponse;
 import ddangkong.service.balance.vote.dto.VoteFinishedResponse;
 import ddangkong.support.annotation.FixedClock;
 import io.restassured.RestAssured;

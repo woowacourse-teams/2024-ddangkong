@@ -1,4 +1,4 @@
-package ddangkong.controller.balance.vote.dto;
+package ddangkong.service.balance.vote.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

@@ -1,6 +1,6 @@
-package ddangkong.controller.balance.content.dto;
+package ddangkong.service.balance.content.dto;
 
-import ddangkong.controller.balance.option.dto.BalanceOptionTotalResponse;
+import ddangkong.service.balance.option.dto.BalanceOptionTotalResponse;
 import ddangkong.domain.balance.option.BalanceOptions;
 
 public record BalanceContentTotalResponse(

@@ -22,16 +22,16 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ddangkong.controller.balance.member.dto.MemberResponse;
 import ddangkong.controller.balance.room.RoomController;
-import ddangkong.controller.balance.room.dto.RoomInfoResponse;
-import ddangkong.controller.balance.room.dto.RoomJoinRequest;
-import ddangkong.controller.balance.room.dto.RoomJoinResponse;
-import ddangkong.controller.balance.room.dto.RoomSettingRequest;
-import ddangkong.controller.balance.room.dto.RoomSettingResponse;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.service.balance.member.dto.MemberResponse;
 import ddangkong.service.balance.room.RoomService;
+import ddangkong.service.balance.room.dto.RoomInfoResponse;
+import ddangkong.service.balance.room.dto.RoomJoinRequest;
+import ddangkong.service.balance.room.dto.RoomJoinResponse;
+import ddangkong.service.balance.room.dto.RoomSettingRequest;
+import ddangkong.service.balance.room.dto.RoomSettingResponse;
 import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
