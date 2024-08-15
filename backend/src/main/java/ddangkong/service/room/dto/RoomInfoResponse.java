@@ -10,12 +10,12 @@ public record RoomInfoResponse(
         RoomSettingResponse roomSetting,
         List<MemberResponse> members
 ) {
-    public static RoomInfoResponse of(List<Member> members, Room room) {
+
+    public static RoomInfoResponse create(List<Member> members, Room room) {
         List<MemberResponse> membersResponse = members.stream()
                 .map(MemberResponse::new)
                 .toList();
-        RoomSettingResponse roomSettingResponse = new RoomSettingResponse(room.getTotalRound(), room.getTimeLimit(),
-                room.getCategory());
+        RoomSettingResponse roomSettingResponse = new RoomSettingResponse(room);
 
         return new RoomInfoResponse(room.isGameProgress(), roomSettingResponse, membersResponse);
     }

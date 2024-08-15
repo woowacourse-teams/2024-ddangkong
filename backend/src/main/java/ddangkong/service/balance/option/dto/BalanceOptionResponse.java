@@ -6,6 +6,7 @@ public record BalanceOptionResponse(
         Long optionId,
         String name
 ) {
+
     public BalanceOptionResponse(BalanceOption balanceOption) {
         this(balanceOption.getId(), balanceOption.getName());
     }

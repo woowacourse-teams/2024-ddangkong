@@ -8,9 +8,9 @@ public record ContentTotalBalanceVoteResponse(
         OptionTotalBalanceVoteResponse secondOption
 ) {
 
-    public static ContentTotalBalanceVoteResponse of(BalanceOptions balanceOptions,
-                                                     Long firstOptionVoteCount,
-                                                     Long secondOptionVoteCount) {
+    public static ContentTotalBalanceVoteResponse create(BalanceOptions balanceOptions,
+                                                         Long firstOptionVoteCount,
+                                                         Long secondOptionVoteCount) {
         BalanceOption fistOption = balanceOptions.getFistOption();
         BalanceOption secondOption = balanceOptions.getSecondOption();
         Long contentVoteCount = firstOptionVoteCount + secondOptionVoteCount;

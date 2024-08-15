@@ -12,9 +12,9 @@ public record OptionRoomBalanceVoteResponse(
         int percent
 ) {
 
-    public static OptionRoomBalanceVoteResponse of(BalanceOption balanceOption,
-                                                   List<RoomBalanceVote> optionVotes,
-                                                   int contentVoteCount) {
+    public static OptionRoomBalanceVoteResponse create(BalanceOption balanceOption,
+                                                       List<RoomBalanceVote> optionVotes,
+                                                       int contentVoteCount) {
         List<String> members = optionVotes.stream()
                 .map(RoomBalanceVote::getMemberNickname)
                 .toList(); // todo member n + 1

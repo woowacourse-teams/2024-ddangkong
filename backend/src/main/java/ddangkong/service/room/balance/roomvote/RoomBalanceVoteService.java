@@ -96,14 +96,14 @@ public class RoomBalanceVoteService {
         List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteRepository
                 .findByMemberRoomAndBalanceOption(room, balanceOptions.getSecondOption());
 
-        return ContentRoomBalanceVoteResponse.of(balanceOptions, firstOptionVotes, secondOptionVotes);
+        return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes);
     }
 
     private ContentTotalBalanceVoteResponse getBalanceContentTotalResponse(BalanceOptions balanceOptions) {
         Long firstOptionVoteCount = totalBalanceVoteRepository.countByBalanceOption(balanceOptions.getFistOption());
         Long secondOptionVoteCount = totalBalanceVoteRepository.countByBalanceOption(balanceOptions.getSecondOption());
 
-        return ContentTotalBalanceVoteResponse.of(balanceOptions, firstOptionVoteCount, secondOptionVoteCount);
+        return ContentTotalBalanceVoteResponse.create(balanceOptions, firstOptionVoteCount, secondOptionVoteCount);
     }
 
     @Transactional(readOnly = true)

@@ -10,16 +10,16 @@ public record ContentRoomBalanceVoteResponse(
         OptionRoomBalanceVoteResponse secondOption
 ) {
 
-    public static ContentRoomBalanceVoteResponse of(BalanceOptions balanceOptions,
-                                                    List<RoomBalanceVote> firstOptionVotes,
-                                                    List<RoomBalanceVote> secondOptionVotes) {
+    public static ContentRoomBalanceVoteResponse create(BalanceOptions balanceOptions,
+                                                        List<RoomBalanceVote> firstOptionVotes,
+                                                        List<RoomBalanceVote> secondOptionVotes) {
         BalanceOption fistOption = balanceOptions.getFistOption();
         BalanceOption secondOption = balanceOptions.getSecondOption();
         int contentVoteCount = firstOptionVotes.size() + secondOptionVotes.size();
 
         return new ContentRoomBalanceVoteResponse(
-                OptionRoomBalanceVoteResponse.of(fistOption, firstOptionVotes, contentVoteCount),
-                OptionRoomBalanceVoteResponse.of(secondOption, secondOptionVotes, contentVoteCount)
+                OptionRoomBalanceVoteResponse.create(fistOption, firstOptionVotes, contentVoteCount),
+                OptionRoomBalanceVoteResponse.create(secondOption, secondOptionVotes, contentVoteCount)
         );
     }
 }

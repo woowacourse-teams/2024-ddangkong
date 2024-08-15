@@ -45,7 +45,7 @@ public class RoomService {
         Room room = roomRepository.getById(roomId);
         List<Member> members = memberRepository.findAllByRoom(room);
 
-        return RoomInfoResponse.of(members, room);
+        return RoomInfoResponse.create(members, room);
     }
 
     @Transactional
