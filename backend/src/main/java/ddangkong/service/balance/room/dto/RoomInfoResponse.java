@@ -1,8 +1,8 @@
 package ddangkong.service.balance.room.dto;
 
-import ddangkong.service.member.dto.MemberResponse;
 import ddangkong.domain.balance.room.Room;
 import ddangkong.domain.member.Member;
+import ddangkong.service.balance.member.dto.MemberResponse;
 import java.util.List;
 
 public record RoomInfoResponse(
