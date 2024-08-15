@@ -1,7 +1,10 @@
 package ddangkong.util;
 
 import ddangkong.exception.InternalServerException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PercentageCalculator {
 
     private static final double SECOND_DECIMAL_PLACE_ROUNDING_FACTOR = 100.0;
