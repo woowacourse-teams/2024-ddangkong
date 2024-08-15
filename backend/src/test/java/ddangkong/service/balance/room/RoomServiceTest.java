@@ -114,6 +114,21 @@ class RoomServiceTest extends BaseServiceTest {
             assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistId))
                     .isExactlyInstanceOf(BadRequestException.class);
         }
+
+        @Test
+        void 최대_인원수가_다_찬_방에_참여하면_예외를_발생한다() {
+            // given
+            String masterNickname = "master";
+            RoomJoinResponse room = roomService.createRoom(masterNickname);
+            for (int i = 0; i < 11; i++) {
+                roomService.joinRoom("member%d".formatted(i), room.roomId());
+            }
+
+            // when & then
+            assertThatThrownBy(() -> roomService.joinRoom("member", room.roomId()))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("방의 인원 수가 가득 찼습니다.");
+        }
     }
 
     @Nested

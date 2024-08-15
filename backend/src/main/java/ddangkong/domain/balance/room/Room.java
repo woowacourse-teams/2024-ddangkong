@@ -21,6 +21,7 @@ public class Room {
     private static final int DEFAULT_TOTAL_ROUND = 5;
     private static final int MIN_TOTAL_ROUND = 3;
     private static final int MAX_TOTAL_ROUND = 10;
+    private static final int MAX_MEMBER_COUNT = 12;
     private static final int MIN_TIME_LIMIT_MSEC = 10_000;
     private static final int MAX_TIME_LIMIT_MSEC = 30_000;
     private static final int START_ROUND = 1;
@@ -138,5 +139,10 @@ public class Room {
         }
         this.currentRound = START_ROUND;
         this.status = RoomStatus.READY;
+    }
+
+    public boolean isOverMaximumMember(long memberCountInRoom) {
+        return memberCountInRoom == MAX_MEMBER_COUNT;
+
     }
 }

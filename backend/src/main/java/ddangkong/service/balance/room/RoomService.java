@@ -13,6 +13,7 @@ import ddangkong.domain.balance.room.RoomContentRepository;
 import ddangkong.domain.balance.room.RoomRepository;
 import ddangkong.domain.member.Member;
 import ddangkong.domain.member.MemberRepository;
+import ddangkong.exception.BadRequestException;
 import ddangkong.exception.InternalServerException;
 import ddangkong.service.balance.room.dto.RoundFinishedResponse;
 import java.time.Clock;
@@ -58,6 +59,12 @@ public class RoomService {
     @Transactional
     public RoomJoinResponse joinRoom(String nickname, Long roomId) {
         Room room = roomRepository.getById(roomId);
+        long memberCountInRoom = memberRepository.countByRoom(room);
+
+        if (room.isOverMaximumMember(memberCountInRoom)) {
+            throw new BadRequestException("방의 인원 수가 가득 찼습니다.");
+        }
+
         Member member = memberRepository.save(Member.createCommon(nickname, room));
         return new RoomJoinResponse(room.getId(), new MemberResponse(member));
     }
