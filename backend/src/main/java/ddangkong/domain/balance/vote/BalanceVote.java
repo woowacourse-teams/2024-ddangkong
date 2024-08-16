@@ -1,7 +1,7 @@
 package ddangkong.domain.balance.vote;
 
 import ddangkong.domain.balance.option.BalanceOption;
-import ddangkong.domain.member.Member;
+import ddangkong.domain.room.member.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
