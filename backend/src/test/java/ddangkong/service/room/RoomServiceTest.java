@@ -75,8 +75,8 @@ class RoomServiceTest extends BaseServiceTest {
         void 방_생성_시_방장_멤버를_생성하고_방을_생성한다() {
             // given
             String nickname = "나는방장";
-            MemberResponse expectedMemberResponse = new MemberResponse(12L, nickname, true);
-            RoomJoinResponse expected = new RoomJoinResponse(6L, expectedMemberResponse);
+            MemberResponse expectedMemberResponse = new MemberResponse(13L, nickname, true);
+            RoomJoinResponse expected = new RoomJoinResponse(7L, expectedMemberResponse);
 
             // when
             RoomJoinResponse actual = roomService.createRoom(nickname);
@@ -94,7 +94,7 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             String nickname = "나는참가자";
             Long joinRoomId = 4L;
-            MemberResponse expectedMemberResponse = new MemberResponse(12L, nickname, false);
+            MemberResponse expectedMemberResponse = new MemberResponse(13L, nickname, false);
             RoomJoinResponse expected = new RoomJoinResponse(joinRoomId, expectedMemberResponse);
 
             // when
@@ -113,6 +113,46 @@ class RoomServiceTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistId))
                     .isExactlyInstanceOf(BadRequestException.class);
+        }
+
+        @Test
+        void 최대_인원수가_다_찬_방에_참여하면_예외를_발생한다() {
+            // given
+            String masterNickname = "master";
+            RoomJoinResponse room = roomService.createRoom(masterNickname);
+            for (int i = 0; i < 11; i++) {
+                roomService.joinRoom("member%d".formatted(i), room.roomId());
+            }
+
+            // when & then
+            assertThatThrownBy(() -> roomService.joinRoom("member", room.roomId()))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("방의 인원 수가 가득 찼습니다.");
+        }
+
+        @Test
+        void 동시에_최대_인원수만큼_방에_참여해도_예외를_발생한다() {
+            String masterNickname = "master";
+            RoomJoinResponse createdRoom = roomService.createRoom(masterNickname);
+            for (int i = 0; i < 10; i++) {
+                roomService.joinRoom("member%d".formatted(i), createdRoom.roomId());
+            }
+
+            Thread t1 = new Thread(() -> roomService.joinRoom("t1member", createdRoom.roomId()));
+            Thread t2 = new Thread(() -> roomService.joinRoom("t2member", createdRoom.roomId()));
+            t1.start();
+            t2.start();
+
+            try {
+                t1.join();
+                t2.join();
+            } catch (InterruptedException e) {
+            }
+
+            Room room = roomRepository.getById(createdRoom.roomId());
+            long memberCountInRoom = memberRepository.countByRoom(room);
+
+            assertThat(memberCountInRoom).isEqualTo(12);
         }
     }
 

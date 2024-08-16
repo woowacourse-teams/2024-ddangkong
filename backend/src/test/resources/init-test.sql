@@ -3,8 +3,8 @@ VALUES (5, 2, 30000, 'PROGRESS', 'EXAMPLE'),
        (5, 1, 30000, 'PROGRESS', 'EXAMPLE'),
        (5, 1, 30000, 'PROGRESS', 'EXAMPLE'),
        (3, 1, 30000, 'READY', 'EXAMPLE'),
-       (3, 1, 30000, 'FINISH', 'EXAMPLE');
-
+       (3, 1, 30000, 'FINISH', 'EXAMPLE'),
+       (3, 1, 30000, 'READY', 'EXAMPLE');
 
 INSERT INTO member (nickname, room_id, is_master)
 VALUES ('mohamedeu al katan', 1, true),
@@ -17,7 +17,8 @@ VALUES ('mohamedeu al katan', 1, true),
        ('maru', 3, false),
        ('pomae', 3, false),
        ('ready player', 4, true),
-       ('finish player', 5, true);
+       ('finish player', 5, true),
+       ('master', 6, true);
 
 INSERT INTO balance_content (category, name)
 VALUES ('EXAMPLE', '민초 vs 반민초'),
