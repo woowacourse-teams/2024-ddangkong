@@ -75,8 +75,8 @@ class RoomServiceTest extends BaseServiceTest {
         void 방_생성_시_방장_멤버를_생성하고_방을_생성한다() {
             // given
             String nickname = "나는방장";
-            MemberResponse expectedMemberResponse = new MemberResponse(12L, nickname, true);
-            RoomJoinResponse expected = new RoomJoinResponse(6L, expectedMemberResponse);
+            MemberResponse expectedMemberResponse = new MemberResponse(13L, nickname, true);
+            RoomJoinResponse expected = new RoomJoinResponse(7L, expectedMemberResponse);
 
             // when
             RoomJoinResponse actual = roomService.createRoom(nickname);
@@ -94,7 +94,7 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             String nickname = "나는참가자";
             Long joinRoomId = 4L;
-            MemberResponse expectedMemberResponse = new MemberResponse(12L, nickname, false);
+            MemberResponse expectedMemberResponse = new MemberResponse(13L, nickname, false);
             RoomJoinResponse expected = new RoomJoinResponse(joinRoomId, expectedMemberResponse);
 
             // when
