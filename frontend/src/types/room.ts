@@ -23,3 +23,5 @@ export interface RoomIdAndMember {
   roomId: number;
   member: Member;
 }
+
+export type Category = '음식' | '연애' | 'MBTI' | '만약에';
