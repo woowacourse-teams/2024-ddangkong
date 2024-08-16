@@ -100,14 +100,14 @@ public class RoomBalanceVoteService {
         if (isRoundFinished(room, balanceContent)) {
             BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(balanceContent);
             // todo 기권 추가
-            ContentRoomBalanceVoteResponse group = getBalanceContentGroupResponse(room, balanceOptions);
-            ContentTotalBalanceVoteResponse total = getBalanceContentTotalResponse(balanceOptions);
+            ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(room, balanceOptions);
+            ContentTotalBalanceVoteResponse total = getContentTotalBalanceVoteResponse(balanceOptions);
             return new RoomBalanceVoteResultResponse(group, total);
         }
         throw new BadRequestException("투표가 끝나지 않아 투표 결과를 조회할 수 없습니다.");
     }
 
-    private ContentRoomBalanceVoteResponse getBalanceContentGroupResponse(Room room, BalanceOptions balanceOptions) {
+    private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(Room room, BalanceOptions balanceOptions) {
         List<RoomBalanceVote> firstOptionVotes = roomBalanceVoteRepository
                 .findByMemberRoomAndBalanceOption(room, balanceOptions.getFistOption());
         List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteRepository
@@ -116,7 +116,7 @@ public class RoomBalanceVoteService {
         return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes);
     }
 
-    private ContentTotalBalanceVoteResponse getBalanceContentTotalResponse(BalanceOptions balanceOptions) {
+    private ContentTotalBalanceVoteResponse getContentTotalBalanceVoteResponse(BalanceOptions balanceOptions) {
         long firstOptionVoteCount = totalBalanceVoteRepository.countByBalanceOption(balanceOptions.getFistOption());
         long secondOptionVoteCount = totalBalanceVoteRepository.countByBalanceOption(balanceOptions.getSecondOption());
 
