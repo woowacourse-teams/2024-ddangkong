@@ -13,6 +13,7 @@ import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.MemberRepository;
+import ddangkong.exception.BadRequestException;
 import ddangkong.exception.InternalServerException;
 import ddangkong.service.room.dto.RoomInfoResponse;
 import ddangkong.service.room.dto.RoomJoinResponse;
@@ -65,7 +66,14 @@ public class RoomService {
 
     @Transactional
     public RoomJoinResponse joinRoom(String nickname, Long roomId) {
-        Room room = roomRepository.getById(roomId);
+        Room room = roomRepository.findByIdWithLock(roomId)
+                .orElseThrow(() -> new BadRequestException("해당 방이 존재하지 않습니다."));
+
+        long memberCountInRoom = memberRepository.countByRoom(room);
+        if (room.isFull(memberCountInRoom)) {
+            throw new BadRequestException("방의 인원 수가 가득 찼습니다.");
+        }
+
         Member member = memberRepository.save(Member.createCommon(nickname, room));
         return new RoomJoinResponse(room.getId(), new MemberResponse(member));
     }
