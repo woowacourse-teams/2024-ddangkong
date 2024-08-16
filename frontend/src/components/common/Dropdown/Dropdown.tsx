@@ -57,7 +57,7 @@ const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
             <button
               css={optionButton(text === option)}
               key={option}
-              data-value={option}
+              value={option}
               onClick={handleClick}
             >
               {option}
