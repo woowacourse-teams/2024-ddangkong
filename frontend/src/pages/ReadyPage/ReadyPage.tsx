@@ -10,20 +10,20 @@ import ReadyMembersContainer from '@/components/ReadyMembersContainer/ReadyMembe
 import useModal from '@/hooks/useModal';
 
 const ReadyPage = () => {
-  const { members, isLoading, isError } = useGetRoomInfo();
+  const { members, roomSetting, isLoading, isError } = useGetRoomInfo();
   const { isMaster, handleGameStart } = useGameStart();
   const { isModalOpen, handleModalOpen, handleModalClose } = useModal();
 
   return (
     <div css={readyPageLayout}>
-      <CategoryContainer category="연애" />
+      <CategoryContainer category={roomSetting?.category} />
       {isError && <div>에러 발생</div>}
       {isLoading && <div>로딩중.......</div>}
       <button onClick={handleModalOpen}>
         <img src={SettingIcon} alt="방 설정" width={24} height={24} />
       </button>
       {members && <ReadyMembersContainer members={members} />}
-      <SettingModal isOpen={isModalOpen} onClose={handleModalClose} />
+      {isModalOpen && <SettingModal isOpen={isModalOpen} onClose={handleModalClose} />}
       <Button
         text={isMaster ? '시작' : '방장이 시작해주세요'}
         disabled={!isMaster}
