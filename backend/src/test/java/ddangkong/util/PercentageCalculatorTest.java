@@ -27,7 +27,7 @@ class PercentageCalculatorTest {
         long count = 3L;
         long totalCount = 0L;
 
-        // when, then
+        // when & then
         assertThatThrownBy(() -> PercentageCalculator.calculatePercent(count, totalCount))
                 .isExactlyInstanceOf(InternalServerException.class)
                 .hasMessageContaining("totalCount는 1이상이어야 합니다. totalCount: 0");
@@ -39,7 +39,7 @@ class PercentageCalculatorTest {
         long count = -1L;
         long totalCount = 4L;
 
-        // when, then
+        // when & then
         assertThatThrownBy(() -> PercentageCalculator.calculatePercent(count, totalCount))
                 .isExactlyInstanceOf(InternalServerException.class)
                 .hasMessageContaining("count는 0이상이어야 합니다. count: -1");

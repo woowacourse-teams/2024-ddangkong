@@ -165,7 +165,6 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("이미 투표한 선택지가 존재합니다. 투표하려는 선택지 : %d, 이미 투표한 선택지 : %d"
                             .formatted(optionA.getId(), optionB.getId()));
-
         }
     }
 
