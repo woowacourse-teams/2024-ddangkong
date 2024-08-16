@@ -4,9 +4,10 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
-import ddangkong.domain.balance.vote.BalanceVoteRepository;
+import ddangkong.domain.balance.vote.TotalBalanceVoteRepository;
 import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
+import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.MemberRepository;
 import ddangkong.support.extension.DatabaseCleanerExtension;
 import java.time.Clock;
@@ -23,20 +24,23 @@ import org.springframework.test.context.jdbc.Sql;
 public abstract class BaseServiceTest {
 
     @Autowired
-    protected RoomRepository roomRepository;
-
-    @Autowired
-    protected MemberRepository memberRepository;
-
-    @Autowired
     protected BalanceContentRepository balanceContentRepository;
 
     @Autowired
     protected BalanceOptionRepository balanceOptionRepository;
 
     @Autowired
-    protected BalanceVoteRepository balanceVoteRepository;
+    protected TotalBalanceVoteRepository totalBalanceVoteRepository;
+
+    @Autowired
+    protected RoomRepository roomRepository;
+
+    @Autowired
+    protected MemberRepository memberRepository;
 
     @Autowired
     protected RoomContentRepository roomContentRepository;
+
+    @Autowired
+    protected RoomBalanceVoteRepository roomBalanceVoteRepository;
 }

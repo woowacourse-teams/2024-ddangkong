@@ -5,6 +5,7 @@ import ddangkong.domain.room.Room;
 import ddangkong.exception.BadRequestException;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoomContentRepository extends JpaRepository<RoomContent, Long> {
@@ -13,6 +14,7 @@ public interface RoomContentRepository extends JpaRepository<RoomContent, Long> 
 
     List<RoomContent> findAllByRoomAndIsUsed(Room room, boolean isUsed);
 
+    @EntityGraph(attributePaths = "balanceContent")
     Optional<RoomContent> findByRoomAndRoundAndIsUsed(Room room, int round, boolean isUsed);
 
     Optional<RoomContent> findByRoomAndBalanceContent(Room room, BalanceContent balanceContent);

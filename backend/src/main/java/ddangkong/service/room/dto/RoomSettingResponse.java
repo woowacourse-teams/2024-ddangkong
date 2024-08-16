@@ -9,7 +9,7 @@ public record RoomSettingResponse(
         Category category
 ) {
 
-    public static RoomSettingResponse from(Room room) {
-        return new RoomSettingResponse(room.getTotalRound(), room.getTimeLimit(), room.getCategory());
+    public RoomSettingResponse(Room room) {
+        this(room.getTotalRound(), room.getTimeLimit(), room.getCategory());
     }
 }

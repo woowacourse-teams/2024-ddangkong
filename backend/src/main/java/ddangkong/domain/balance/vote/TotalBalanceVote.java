@@ -1,7 +1,6 @@
-package ddangkong.domain.balance.option;
+package ddangkong.domain.balance.vote;
 
-import ddangkong.domain.balance.content.BalanceContent;
-import jakarta.persistence.Column;
+import ddangkong.domain.balance.option.BalanceOption;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,25 +15,17 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class BalanceOption {
+public class TotalBalanceVote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
-
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "balance_content_id", nullable = false)
-    private BalanceContent balanceContent;
+    @JoinColumn(name = "balance_option_id", nullable = false)
+    private BalanceOption balanceOption;
 
-    public BalanceOption(String name, BalanceContent balanceContent) {
-        this.name = name;
-        this.balanceContent = balanceContent;
-    }
-
-    public boolean isSameId(Long id) {
-        return this.id.equals(id);
+    public TotalBalanceVote(BalanceOption balanceOption) {
+        this.balanceOption = balanceOption;
     }
 }

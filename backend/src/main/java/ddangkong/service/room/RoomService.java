@@ -3,10 +3,14 @@ package ddangkong.service.room;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.domain.balance.vote.TotalBalanceVote;
+import ddangkong.domain.balance.vote.TotalBalanceVoteRepository;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
+import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
+import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
@@ -39,6 +43,10 @@ public class RoomService {
 
     private final BalanceContentRepository balanceContentRepository;
 
+    private final TotalBalanceVoteRepository totalBalanceVoteRepository;
+
+    private final RoomBalanceVoteRepository roomBalanceVoteRepository;
+
     private final Clock clock;
 
     @Transactional(readOnly = true)
@@ -46,7 +54,7 @@ public class RoomService {
         Room room = roomRepository.getById(roomId);
         List<Member> members = memberRepository.findAllByRoom(room);
 
-        return RoomInfoResponse.of(members, room);
+        return RoomInfoResponse.create(members, room);
     }
 
     @Transactional
@@ -136,6 +144,11 @@ public class RoomService {
     public void resetRoom(Long roomId) {
         Room room = roomRepository.getById(roomId);
         room.reset();
+        finishRoomContents(room);
+        changeRoomVotesToTotalVotes(room);
+    }
+
+    private void finishRoomContents(Room room) {
         List<RoomContent> roomContents = roomContentRepository.findAllByRoomAndIsUsed(room, false);
         for (RoomContent roomContent : roomContents) {
             roomContent.finish();
@@ -143,7 +156,16 @@ public class RoomService {
 
         if (room.getTotalRound() != roomContents.size()) {
             log.error("방의 총 라운드와 방 컨텐츠 개수가 일치하지 않습니다. roomId: {}, totalRound: {}, roomContent 개수: {}",
-                    roomId, room.getTotalRound(), roomContents.size());
+                    room.getId(), room.getTotalRound(), roomContents.size());
+        }
+    }
+
+    private void changeRoomVotesToTotalVotes(Room room) {
+        List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteRepository.findByMemberRoom(room);
+        roomBalanceVoteRepository.deleteAllInBatch(roomBalanceVotes);
+
+        for (RoomBalanceVote roomBalanceVote : roomBalanceVotes) {
+            totalBalanceVoteRepository.save(new TotalBalanceVote(roomBalanceVote.getBalanceOption()));
         }
     }
 }

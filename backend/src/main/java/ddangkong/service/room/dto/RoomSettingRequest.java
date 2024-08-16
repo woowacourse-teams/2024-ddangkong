@@ -6,5 +6,5 @@ public record RoomSettingRequest(
         int totalRound,
         int timeLimit,
         Category category
-) {
+) {  // todo validation
 }

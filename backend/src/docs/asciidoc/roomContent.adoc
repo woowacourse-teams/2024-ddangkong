@@ -1,0 +1,21 @@
+== 방 밸런스 게임 콘텐츠
+
+=== 방의 콘텐츠 및 선택지 조회
+
+==== curl
+
+include::{snippets}/roomContent/find/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/roomContent/find/http-request.adoc[]
+
+include::{snippets}/roomContent/find/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/roomContent/find/http-response.adoc[]
+
+response fields
+
+include::{snippets}/roomContent/find/response-fields.adoc[]
