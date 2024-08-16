@@ -1,10 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { getCategoryList } from '@/apis/room';
+import { applyRoomSetting, getCategoryList } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import { Category } from '@/types/room';
+import { Category, RoomSetting } from '@/types/room';
 
 export const useCategoryListQuery = () => {
   const { roomId } = useParams();
@@ -17,6 +17,15 @@ export const useCategoryListQuery = () => {
   });
 
   return { ...categoryListQuery, categoryList: categoryListQuery.data?.categoryList };
+};
+
+export const useApplyRoomSetting = () => {
+  const { roomId } = useParams();
+
+  return useMutation({
+    mutationFn: async (roomSetting: RoomSetting) =>
+      await applyRoomSetting(Number(roomId), roomSetting),
+  });
 };
 
 export const useDropdown = (selectedCategory?: Category) => {

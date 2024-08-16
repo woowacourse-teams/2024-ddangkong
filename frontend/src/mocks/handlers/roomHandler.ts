@@ -13,7 +13,16 @@ const getCategoryListHandler = () => {
   return HttpResponse.json(CATEGORY_LIST);
 };
 
+const applyRoomSettingHandler = async ({ request }: { request: Request }) => {
+  const body = await request.json();
+
+  ROOM_INFO.roomSetting = body;
+
+  return new HttpResponse(null, { status: 204 });
+};
+
 export const roomHandler = [
   http.get(MOCK_API_URL.roomMembers, getRoomMemberHandler),
   http.get(MOCK_API_URL.categoryList, getCategoryListHandler),
+  http.patch(MOCK_API_URL.applyRoomSetting, applyRoomSettingHandler),
 ];

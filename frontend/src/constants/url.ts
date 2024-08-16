@@ -18,6 +18,7 @@ export const API_URL = {
   roundVoteIsFinished: (roomId: number, contentId: number) =>
     `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/vote-finished`,
   resetRoom: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/reset`,
+  applyRoomSetting: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
 };
 
 export const MOCK_API_URL = {
@@ -31,4 +32,5 @@ export const MOCK_API_URL = {
   roomMembers: `${BASE_URL}/api/balances/rooms/:roomId`,
   roundVoteIsFinished: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-finished`,
   categoryList: `${BASE_URL}/api/balances/rooms/:roomId/categories`,
+  applyRoomSetting: `${BASE_URL}/api/balances/rooms/:roomId`,
 };

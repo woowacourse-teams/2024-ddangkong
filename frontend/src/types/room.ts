@@ -4,7 +4,7 @@ interface Member {
   isMaster: boolean;
 }
 
-interface RoomSetting {
+export interface RoomSetting {
   category: Category;
   totalRound: number;
   timeLimit: number;

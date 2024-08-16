@@ -1,4 +1,5 @@
 import {
+  useApplyRoomSetting,
   useCategoryListQuery,
   useDropdown,
   useTimerPerRound,
@@ -29,10 +30,19 @@ interface SettingModalProps {
 
 const SettingModal = ({ isOpen, onClose }: SettingModalProps) => {
   const { roomSetting } = useGetRoomInfo();
-  const { category, handleClickOption } = useDropdown(roomSetting?.category);
   const { totalRound, handleClickRound } = useTotalRound();
   const { timerPerRound, handleClickTimer } = useTimerPerRound();
   const { categoryList, isLoading } = useCategoryListQuery();
+  const { mutate: applyRoomSetting } = useApplyRoomSetting();
+
+  const { category, handleClickOption } = useDropdown(roomSetting?.category);
+
+  const handleClickApply = () => {
+    if (!category) return;
+
+    applyRoomSetting({ category, totalRound, timeLimit: timerPerRound });
+    onClose();
+  };
 
   if (isLoading) return <div>로딩중...</div>;
 
@@ -88,7 +98,7 @@ const SettingModal = ({ isOpen, onClose }: SettingModalProps) => {
         </div>
       </Modal.Content>
       <Modal.Footer buttonPosition="center">
-        <Modal.TextButton onClick={onClose}>적용</Modal.TextButton>
+        <Modal.TextButton onClick={handleClickApply}>적용</Modal.TextButton>
       </Modal.Footer>
     </Modal>
   );

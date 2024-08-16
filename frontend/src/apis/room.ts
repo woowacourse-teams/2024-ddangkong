@@ -1,7 +1,7 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { RoomInfo, RoomIdAndMember, Category } from '@/types/room';
+import { RoomInfo, RoomIdAndMember, Category, RoomSetting } from '@/types/room';
 
 interface CategoryResponse {
   categoryList: Category[];
@@ -79,4 +79,13 @@ export const getCategoryList = async (roomId: number): Promise<CategoryResponse>
   const data = await res.json();
 
   return data;
+};
+
+// 방 설정 적용
+export const applyRoomSetting = async (roomId: number, roomSetting: RoomSetting): Promise<void> => {
+  const { totalRound, timeLimit, category } = roomSetting;
+  await fetcher.patch({
+    url: API_URL.applyRoomSetting(roomId),
+    body: { totalRound, timeLimit, category },
+  });
 };
