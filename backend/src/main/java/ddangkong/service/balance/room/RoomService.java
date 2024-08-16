@@ -62,7 +62,7 @@ public class RoomService {
                 .orElseThrow(() -> new BadRequestException("해당 방이 존재하지 않습니다."));
 
         long memberCountInRoom = memberRepository.countByRoom(room);
-        if (room.isOverMaximumMember(memberCountInRoom)) {
+        if (room.isFull(memberCountInRoom)) {
             throw new BadRequestException("방의 인원 수가 가득 찼습니다.");
         }
 

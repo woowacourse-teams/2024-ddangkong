@@ -141,7 +141,7 @@ public class Room {
         this.status = RoomStatus.READY;
     }
 
-    public boolean isOverMaximumMember(long memberCountInRoom) {
+    public boolean isFull(long memberCountInRoom) {
         return memberCountInRoom == MAX_MEMBER_COUNT;
     }
 }
