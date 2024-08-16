@@ -154,7 +154,7 @@ public class RoomService {
 
     private void changeRoomVotesToTotalVotes(Room room) {
         List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteRepository.findByMemberRoom(room);
-        roomBalanceVoteRepository.deleteAll(roomBalanceVotes);
+        roomBalanceVoteRepository.deleteAllInBatch(roomBalanceVotes);
 
         for (RoomBalanceVote roomBalanceVote : roomBalanceVotes) {
             totalBalanceVoteRepository.save(new TotalBalanceVote(roomBalanceVote.getBalanceOption()));
