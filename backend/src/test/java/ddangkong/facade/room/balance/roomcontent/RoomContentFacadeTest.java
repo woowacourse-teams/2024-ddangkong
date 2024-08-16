@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class RoomContentServiceTest extends BaseServiceTest {
+class RoomContentFacadeTest extends BaseServiceTest {
 
     @Autowired
-    private RoomContentService roomContentService;
+    private RoomContentFacade roomContentFacade;
 
     @Nested
     class 현재_방의_밸런스_게임_내용_조회 {
@@ -38,7 +38,7 @@ class RoomContentServiceTest extends BaseServiceTest {
         @Test
         void 방의_진행_중인_밸런스_게임_내용을_조회할_수_있다() {
             // when
-            RoomContentResponse actual = roomContentService.getRecentRoomContent(PROGRESS_ROOM_ID);
+            RoomContentResponse actual = roomContentFacade.getRecentRoomContent(PROGRESS_ROOM_ID);
 
             // then
             assertThat(actual).isEqualTo(BALANCE_CONTENT_RESPONSE);
@@ -47,7 +47,7 @@ class RoomContentServiceTest extends BaseServiceTest {
         @Test
         void 방이_없을_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> roomContentService.getRecentRoomContent(NOT_EXIST_ROOM_ID))
+            assertThatThrownBy(() -> roomContentFacade.getRecentRoomContent(NOT_EXIST_ROOM_ID))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방이 존재하지 않습니다.");
         }
@@ -55,7 +55,7 @@ class RoomContentServiceTest extends BaseServiceTest {
         @Test
         void 방의_현재_라운드의_질문이_없을_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> roomContentService.getRecentRoomContent(NOT_PROGRESSED_ROOM_ID))
+            assertThatThrownBy(() -> roomContentFacade.getRecentRoomContent(NOT_PROGRESSED_ROOM_ID))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
         }
@@ -63,7 +63,7 @@ class RoomContentServiceTest extends BaseServiceTest {
         @Test
         void 방이_준비_상태인_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> roomContentService.getRecentRoomContent(READY_ROOM_ID))
+            assertThatThrownBy(() -> roomContentFacade.getRecentRoomContent(READY_ROOM_ID))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
         }
@@ -71,7 +71,7 @@ class RoomContentServiceTest extends BaseServiceTest {
         @Test
         void 방이_종료_상태인_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> roomContentService.getRecentRoomContent(FINISHED_ROOM_ID))
+            assertThatThrownBy(() -> roomContentFacade.getRecentRoomContent(FINISHED_ROOM_ID))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
         }

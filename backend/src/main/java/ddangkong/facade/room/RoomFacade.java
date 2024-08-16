@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class RoomService {
+public class RoomFacade {
 
     private final RoomRepository roomRepository;
 

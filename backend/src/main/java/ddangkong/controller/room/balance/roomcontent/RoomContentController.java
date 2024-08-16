@@ -1,6 +1,6 @@
 package ddangkong.controller.room.balance.roomcontent;
 
-import ddangkong.facade.room.balance.roomcontent.RoomContentService;
+import ddangkong.facade.room.balance.roomcontent.RoomContentFacade;
 import ddangkong.facade.room.balance.roomcontent.dto.RoomContentResponse;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RoomContentController {
 
-    private final RoomContentService roomContentService;
+    private final RoomContentFacade roomContentFacade;
 
     @GetMapping("/balances/rooms/{roomId}/content")
     public RoomContentResponse getRecentRoomContent(@PathVariable @Positive Long roomId) {
-        return roomContentService.getRecentRoomContent(roomId);
+        return roomContentFacade.getRecentRoomContent(roomId);
     }
 }

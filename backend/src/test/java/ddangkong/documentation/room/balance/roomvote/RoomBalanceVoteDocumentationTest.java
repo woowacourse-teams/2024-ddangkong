@@ -21,7 +21,7 @@ import ddangkong.controller.room.balance.roomvote.RoomBalanceVoteController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
 import ddangkong.facade.balance.vote.dto.OptionTotalBalanceVoteResponse;
-import ddangkong.facade.room.balance.roomvote.RoomBalanceVoteService;
+import ddangkong.facade.room.balance.roomvote.RoomBalanceVoteFacade;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.OptionRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
@@ -39,7 +39,7 @@ import org.springframework.http.MediaType;
 public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
-    private RoomBalanceVoteService roomBalanceVoteService;
+    private RoomBalanceVoteFacade roomBalanceVoteFacade;
 
     @Nested
     class 방_투표_결과_조희 {
@@ -61,7 +61,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
             RoomBalanceVoteResultResponse response = new RoomBalanceVoteResultResponse(
                     new ContentRoomBalanceVoteResponse(firstGroupResponse, secondGroupResponse),
                     new ContentTotalBalanceVoteResponse(firstTotalResponse, secondTotalResponse));
-            when(roomBalanceVoteService.getAllVoteResult(roomId, contentId)).thenReturn(response);
+            when(roomBalanceVoteFacade.getAllVoteResult(roomId, contentId)).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(END_POINT, roomId, contentId))
@@ -120,7 +120,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
             RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(memberId, optionId);
             RoomBalanceVoteResponse response = new RoomBalanceVoteResponse(optionId);
             String content = objectMapper.writeValueAsString(request);
-            when(roomBalanceVoteService.createVote(request, roomId, contentId)).thenReturn(response);
+            when(roomBalanceVoteFacade.createVote(request, roomId, contentId)).thenReturn(response);
 
             // when & then
             mockMvc.perform(post(END_POINT, roomId, contentId)
@@ -154,7 +154,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
         void 투표가_종료되었는지_조회한다() throws Exception {
             // given
             VoteFinishedResponse response = new VoteFinishedResponse(true);
-            when(roomBalanceVoteService.getAllVoteFinished(anyLong(), anyLong())).thenReturn(response);
+            when(roomBalanceVoteFacade.getAllVoteFinished(anyLong(), anyLong())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(END_POINT, 1L, 1L))

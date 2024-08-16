@@ -35,10 +35,10 @@ import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class RoomServiceTest extends BaseServiceTest {
+class RoomFacadeTest extends BaseServiceTest {
 
     @Autowired
-    private RoomService roomService;
+    private RoomFacade roomFacade;
 
     @Nested
     class 게임_방_정보_조회 {
@@ -46,12 +46,12 @@ class RoomServiceTest extends BaseServiceTest {
         @Test
         void 게임_방_정보를_조회한다() {
             // given
-            RoomJoinResponse room = roomService.createRoom("방장");
-            roomService.joinRoom("멤버1", room.roomId());
-            roomService.joinRoom("멤버2", room.roomId());
+            RoomJoinResponse room = roomFacade.createRoom("방장");
+            roomFacade.joinRoom("멤버1", room.roomId());
+            roomFacade.joinRoom("멤버2", room.roomId());
 
             // when
-            RoomInfoResponse actual = roomService.findRoomInfo(room.roomId());
+            RoomInfoResponse actual = roomFacade.findRoomInfo(room.roomId());
 
             // then
             assertAll(
@@ -74,7 +74,7 @@ class RoomServiceTest extends BaseServiceTest {
             RoomJoinResponse expected = new RoomJoinResponse(8L, expectedMemberResponse);
 
             // when
-            RoomJoinResponse actual = roomService.createRoom(nickname);
+            RoomJoinResponse actual = roomFacade.createRoom(nickname);
 
             // then
             assertThat(actual).isEqualTo(expected);
@@ -93,7 +93,7 @@ class RoomServiceTest extends BaseServiceTest {
             RoomJoinResponse expected = new RoomJoinResponse(joinRoomId, expectedMemberResponse);
 
             // when
-            RoomJoinResponse actual = roomService.joinRoom(nickname, joinRoomId);
+            RoomJoinResponse actual = roomFacade.joinRoom(nickname, joinRoomId);
 
             // then
             assertThat(actual).isEqualTo(expected);
@@ -106,7 +106,7 @@ class RoomServiceTest extends BaseServiceTest {
             Long nonExistId = 99999999999L;
 
             // when & then
-            assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistId))
+            assertThatThrownBy(() -> roomFacade.joinRoom(nickname, nonExistId))
                     .isExactlyInstanceOf(BadRequestException.class);
         }
 
@@ -114,13 +114,13 @@ class RoomServiceTest extends BaseServiceTest {
         void 최대_인원수가_다_찬_방에_참여하면_예외를_발생한다() {
             // given
             String masterNickname = "master";
-            RoomJoinResponse room = roomService.createRoom(masterNickname);
+            RoomJoinResponse room = roomFacade.createRoom(masterNickname);
             for (int i = 0; i < 11; i++) {
-                roomService.joinRoom("member%d".formatted(i), room.roomId());
+                roomFacade.joinRoom("member%d".formatted(i), room.roomId());
             }
 
             // when & then
-            assertThatThrownBy(() -> roomService.joinRoom("member", room.roomId()))
+            assertThatThrownBy(() -> roomFacade.joinRoom("member", room.roomId()))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("방의 인원 수가 가득 찼습니다.");
         }
@@ -128,13 +128,13 @@ class RoomServiceTest extends BaseServiceTest {
         @Test
         void 동시에_최대_인원수만큼_방에_참여해도_예외를_발생한다() {
             String masterNickname = "master";
-            RoomJoinResponse createdRoom = roomService.createRoom(masterNickname);
+            RoomJoinResponse createdRoom = roomFacade.createRoom(masterNickname);
             for (int i = 0; i < 10; i++) {
-                roomService.joinRoom("member%d".formatted(i), createdRoom.roomId());
+                roomFacade.joinRoom("member%d".formatted(i), createdRoom.roomId());
             }
 
-            Thread t1 = new Thread(() -> roomService.joinRoom("t1member", createdRoom.roomId()));
-            Thread t2 = new Thread(() -> roomService.joinRoom("t2member", createdRoom.roomId()));
+            Thread t1 = new Thread(() -> roomFacade.joinRoom("t1member", createdRoom.roomId()));
+            Thread t2 = new Thread(() -> roomFacade.joinRoom("t2member", createdRoom.roomId()));
             t1.start();
             t2.start();
 
@@ -159,7 +159,7 @@ class RoomServiceTest extends BaseServiceTest {
         @Test
         void 게임_시작_시_방이_진행_상태가_된다() {
             // when
-            roomService.startGame(READY_ROOM_ID);
+            roomFacade.startGame(READY_ROOM_ID);
 
             // then
             Room room = roomRepository.getById(READY_ROOM_ID);
@@ -172,7 +172,7 @@ class RoomServiceTest extends BaseServiceTest {
             long beforeRoomContentCount = roomContentRepository.count();
 
             // when
-            roomService.startGame(READY_ROOM_ID);
+            roomFacade.startGame(READY_ROOM_ID);
 
             // then
             Room room = roomRepository.getById(READY_ROOM_ID);
@@ -195,7 +195,7 @@ class RoomServiceTest extends BaseServiceTest {
             int nextRound = CURRENT_ROUND + 1;
 
             // when
-            roomService.moveToNextRound(PROGRESS_ROOM_ID);
+            roomFacade.moveToNextRound(PROGRESS_ROOM_ID);
 
             // then
             Room room = roomRepository.getById(PROGRESS_ROOM_ID);
@@ -214,7 +214,7 @@ class RoomServiceTest extends BaseServiceTest {
             Long roomId = finalRoundRoomId();
 
             // when
-            roomService.moveToNextRound(roomId);
+            roomFacade.moveToNextRound(roomId);
 
             // then
             Room room = roomRepository.getById(roomId);
@@ -233,7 +233,7 @@ class RoomServiceTest extends BaseServiceTest {
         @Test
         void 방이_없을_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> roomService.moveToNextRound(NOT_EXIST_ROOM_ID))
+            assertThatThrownBy(() -> roomFacade.moveToNextRound(NOT_EXIST_ROOM_ID))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("해당 방이 존재하지 않습니다.");
         }
@@ -253,10 +253,10 @@ class RoomServiceTest extends BaseServiceTest {
             RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);
 
             // when
-            roomService.updateRoomSetting(roomId, request);
+            roomFacade.updateRoomSetting(roomId, request);
 
             // then
-            RoomInfoResponse roomInfo = roomService.findRoomInfo(roomId);
+            RoomInfoResponse roomInfo = roomFacade.findRoomInfo(roomId);
             RoomSettingResponse roomSetting = roomInfo.roomSetting();
 
             assertAll(
@@ -277,7 +277,7 @@ class RoomServiceTest extends BaseServiceTest {
             RoomSettingRequest request = new RoomSettingRequest(notValidTotalRound, timeLimit, category);
 
             // when & then
-            assertThatThrownBy(() -> roomService.updateRoomSetting(roomId, request))
+            assertThatThrownBy(() -> roomFacade.updateRoomSetting(roomId, request))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
                             .formatted(3, 10, notValidTotalRound));
@@ -294,7 +294,7 @@ class RoomServiceTest extends BaseServiceTest {
             RoomSettingRequest request = new RoomSettingRequest(totalRound, notValidTimeLimit, category);
 
             // when & then
-            assertThatThrownBy(() -> roomService.updateRoomSetting(roomId, request))
+            assertThatThrownBy(() -> roomFacade.updateRoomSetting(roomId, request))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
                             .formatted(10000, 30000, notValidTimeLimit));
@@ -318,7 +318,7 @@ class RoomServiceTest extends BaseServiceTest {
             int round = 2;
 
             // when
-            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+            RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
 
             // then
             assertAll(
@@ -335,7 +335,7 @@ class RoomServiceTest extends BaseServiceTest {
             int round = 1;
 
             // when
-            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+            RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
 
             // then
             assertAll(
@@ -353,7 +353,7 @@ class RoomServiceTest extends BaseServiceTest {
             int round = 5;
 
             // when
-            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+            RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
 
             // then
             assertAll(
@@ -370,7 +370,7 @@ class RoomServiceTest extends BaseServiceTest {
             int round = 5;
 
             // when
-            RoundFinishedResponse roundFinishedResponse = roomService.getRoundFinished(room.getId(), round);
+            RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
 
             // then
             assertAll(
@@ -402,7 +402,7 @@ class RoomServiceTest extends BaseServiceTest {
             saveRoomContents(room);
 
             // when
-            roomService.resetRoom(room.getId());
+            roomFacade.resetRoom(room.getId());
 
             // then
             Room resetRoom = roomRepository.getById(room.getId());
@@ -422,7 +422,7 @@ class RoomServiceTest extends BaseServiceTest {
             saveRoomContents(room);
 
             // when & then
-            assertThatThrownBy(() -> roomService.resetRoom(room.getId()))
+            assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("방이 종료되지 않았습니다");
         }
@@ -435,7 +435,7 @@ class RoomServiceTest extends BaseServiceTest {
             saveRoomContents(room);
 
             // when & then
-            assertThatThrownBy(() -> roomService.resetRoom(room.getId()))
+            assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("방이 종료되지 않았습니다");
         }
@@ -462,7 +462,7 @@ class RoomServiceTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionB));
 
             // when
-            roomService.resetRoom(room.getId());
+            roomFacade.resetRoom(room.getId());
 
             // then
             List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteRepository.findByMemberRoom(room);
