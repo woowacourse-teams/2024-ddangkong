@@ -39,6 +39,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: generate environment variables
+        run: |
+          echo "API_BASE_URL=$API_BASE_URL" >> .env
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+
       - name: build storybook
         run: npm run build-storybook
 
