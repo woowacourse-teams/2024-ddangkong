@@ -13,7 +13,6 @@ import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
-import ddangkong.domain.room.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
@@ -21,6 +20,7 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
+import ddangkong.service.room.member.MemberService;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,7 +40,7 @@ public class RoomBalanceVoteFacade {
 
     private final RoomRepository roomRepository;
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     private final RoomContentRepository roomContentRepository;
 
@@ -53,7 +53,7 @@ public class RoomBalanceVoteFacade {
         Room room = roomRepository.getById(roomId);
         BalanceContent balanceContent = balanceContentRepository.getById(contentId);
         validateRoundFinished(room, balanceContent);
-        Member member = getValidMember(request.memberId(), room);
+        Member member = memberService.getRoomMember(request.memberId(), room);
         BalanceOption balanceOption = getValidOption(request.optionId(), balanceContent, member);
 
         RoomBalanceVote roomBalanceVote = roomBalanceVoteRepository.save(new RoomBalanceVote(member, balanceOption));
@@ -86,11 +86,6 @@ public class RoomBalanceVoteFacade {
             throw new BadRequestException("이미 투표한 선택지가 존재합니다. 투표하려는 선택지 : %d, 이미 투표한 선택지 : %d"
                     .formatted(optionId, balanceOption.getId()));
         }
-    }
-
-    private Member getValidMember(Long memberId, Room room) {
-        return memberRepository.findByIdAndRoom(memberId, room)
-                .orElseThrow(() -> new BadRequestException("해당 방의 멤버가 존재하지 않습니다."));
     }
 
     @Transactional(readOnly = true)
@@ -142,7 +137,7 @@ public class RoomBalanceVoteFacade {
     private boolean isAllVoteFinished(Room room, BalanceContent balanceContent) {
         List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
         long voteCount = roomBalanceVoteRepository.countByMemberRoomAndBalanceOptionIn(room, balanceOptions);
-        List<Member> members = memberRepository.findAllByRoom(room);
+        List<Member> members = memberService.findRoomMembers(room);
         return voteCount == members.size();
     }
 }

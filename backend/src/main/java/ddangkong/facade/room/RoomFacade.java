@@ -12,7 +12,6 @@ import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
-import ddangkong.domain.room.member.MemberRepository;
 import ddangkong.exception.BadRequestException;
 import ddangkong.exception.InternalServerException;
 import ddangkong.facade.room.dto.RoomInfoResponse;
@@ -20,6 +19,7 @@ import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
+import ddangkong.service.room.member.MemberService;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -37,7 +37,7 @@ public class RoomFacade {
 
     private final RoomRepository roomRepository;
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     private final RoomContentRepository roomContentRepository;
 
@@ -52,15 +52,14 @@ public class RoomFacade {
     @Transactional(readOnly = true)
     public RoomInfoResponse findRoomInfo(Long roomId) {
         Room room = roomRepository.getById(roomId);
-        List<Member> members = memberRepository.findAllByRoom(room);
-
+        List<Member> members = memberService.findRoomMembers(room);
         return RoomInfoResponse.create(members, room);
     }
 
     @Transactional
     public RoomJoinResponse createRoom(String nickname) {
         Room room = roomRepository.save(Room.createNewRoom());
-        Member member = memberRepository.save(Member.createMaster(nickname, room));
+        Member member = memberService.saveMasterMember(nickname, room);
         return new RoomJoinResponse(room.getId(), new MemberResponse(member));
     }
 
@@ -69,12 +68,12 @@ public class RoomFacade {
         Room room = roomRepository.findByIdWithLock(roomId)
                 .orElseThrow(() -> new BadRequestException("해당 방이 존재하지 않습니다."));
 
-        long memberCountInRoom = memberRepository.countByRoom(room);
+        long memberCountInRoom = memberService.getMemberCount(room);
         if (room.isFull(memberCountInRoom)) {
             throw new BadRequestException("방의 인원 수가 가득 찼습니다.");
         }
 
-        Member member = memberRepository.save(Member.createCommon(nickname, room));
+        Member member = memberService.saveCommonMember(nickname, room);
         return new RoomJoinResponse(room.getId(), new MemberResponse(member));
     }
 
