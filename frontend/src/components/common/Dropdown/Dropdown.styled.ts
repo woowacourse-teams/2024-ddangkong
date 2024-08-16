@@ -2,16 +2,16 @@ import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
 
-export const dropdownLayout = (isOpen: boolean) => css`
-
+export const dropdownLayout = css`
   display: flex;
   position: relative;
   align-items: center;
 
-  width: 100%;
+  width: 12rem;
   height: 3.6rem;
+  margin: 0 auto;
   padding: 0.8rem;
-  border: 1px solid ${isOpen ? 'black' : Theme.color.gray200};
+  border: 1px solid black;
   border-radius: 0.8rem;
 
   background-color: white;
@@ -42,7 +42,6 @@ export const dropdownText = css`
 `;
 
 export const selectOptionList = (isOpen: boolean, count: number) => css`
-
   display: flex;
   overflow: hidden;
   position: absolute;
@@ -71,7 +70,7 @@ export const optionButton = (isSelected: boolean) => css`
   ${Theme.typography.caption}
   background-color: ${isSelected ? Theme.color.gray300 : 'white'};
 
-  color: ${Theme.color.gray400};
+  color: black;
 
   transition: background-color 0.1s ease-in;
 

@@ -39,7 +39,7 @@ const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
 
   return (
     <div
-      css={dropdownLayout(isOpen)}
+      css={dropdownLayout}
       ref={dropdownRef}
       onClick={() => setIsOpen((prev) => !prev)}
       onKeyDown={() => setIsOpen((prev) => !prev)}
