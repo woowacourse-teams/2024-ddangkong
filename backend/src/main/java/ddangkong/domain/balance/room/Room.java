@@ -143,6 +143,5 @@ public class Room {
 
     public boolean isOverMaximumMember(long memberCountInRoom) {
         return memberCountInRoom == MAX_MEMBER_COUNT;
-
     }
 }

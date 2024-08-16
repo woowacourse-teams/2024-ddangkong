@@ -60,8 +60,8 @@ public class RoomService {
     public RoomJoinResponse joinRoom(String nickname, Long roomId) {
         Room room = roomRepository.findByIdWithLock(roomId)
                 .orElseThrow(() -> new BadRequestException("해당 방이 존재하지 않습니다."));
-        long memberCountInRoom = memberRepository.countByRoom(room);
 
+        long memberCountInRoom = memberRepository.countByRoom(room);
         if (room.isOverMaximumMember(memberCountInRoom)) {
             throw new BadRequestException("방의 인원 수가 가득 찼습니다.");
         }
