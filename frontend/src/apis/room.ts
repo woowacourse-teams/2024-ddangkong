@@ -1,7 +1,11 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { RoomInfo, RoomIdAndMember } from '@/types/room';
+import { RoomInfo, RoomIdAndMember, Category } from '@/types/room';
+
+interface CategoryResponse {
+  categoryList: Category[];
+}
 
 // 방 만들기
 export const createRoom = async (nickname: string): Promise<RoomIdAndMember> => {
@@ -64,4 +68,15 @@ export const startGame = async (roomId: number): Promise<void> => {
   await fetcher.patch({
     url: API_URL.startGame(roomId),
   });
+};
+
+// 방 설정 카테고리 리스트 받기
+export const getCategoryList = async (roomId: number): Promise<CategoryResponse> => {
+  const res = await fetcher.get({
+    url: API_URL.categoryList(roomId),
+  });
+
+  const data = await res.json();
+
+  return data;
 };

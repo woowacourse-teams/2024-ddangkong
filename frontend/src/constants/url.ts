@@ -13,6 +13,7 @@ export const API_URL = {
   room: `${BASE_URL}/api/balances/rooms`,
   enterRoom: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/members`,
   getRoomInfo: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
+  categoryList: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/categories`,
   startGame: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/start`,
   roundVoteIsFinished: (roomId: number, contentId: number) =>
     `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/vote-finished`,
@@ -29,4 +30,5 @@ export const MOCK_API_URL = {
   room: `${BASE_URL}/api/balances/rooms`,
   roomMembers: `${BASE_URL}/api/balances/rooms/:roomId`,
   roundVoteIsFinished: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-finished`,
+  categoryList: `${BASE_URL}/api/balances/rooms/:roomId/categories`,
 };

@@ -1,4 +1,9 @@
-import { useDropdown, useTimerPerRound, useTotalRound } from './SettingModal.hook';
+import {
+  useCategoryListQuery,
+  useDropdown,
+  useTimerPerRound,
+  useTotalRound,
+} from './SettingModal.hook';
 import {
   settingModalTitle,
   settingModalLayout,
@@ -12,9 +17,6 @@ import {
 import Dropdown from '../Dropdown/Dropdown';
 import Modal from '../Modal/Modal';
 
-import { Category } from '@/types/room';
-
-const CATEGORY = ['음식', '연애', 'MBTI', '만약에'] as Category[];
 const TOTAL_ROUND_LIST = [5, 7, 10];
 const TIMER_PER_ROUND_LIST = [5, 10, 15];
 
@@ -27,6 +29,11 @@ const SettingModal = ({ isOpen, onClose }: SettingModalProps) => {
   const { category, handleClickOption } = useDropdown();
   const { totalRound, handleClickRound } = useTotalRound();
   const { timerPerRound, handleClickTimer } = useTimerPerRound();
+  const { categoryList, isLoading } = useCategoryListQuery();
+
+  if (isLoading) return <div>로딩중...</div>;
+
+  if (!categoryList) return <div>카테고리가 없습니다</div>;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} css={settingModalLayout}>
@@ -40,7 +47,7 @@ const SettingModal = ({ isOpen, onClose }: SettingModalProps) => {
             <div css={settingTitleWrapper}>
               <span css={settingTitle}>카테고리</span>
             </div>
-            <Dropdown text={category} optionList={CATEGORY} handleClick={handleClickOption} />
+            <Dropdown text={category} optionList={categoryList} handleClick={handleClickOption} />
           </div>
           <div css={settingTitleContainer}>
             <div css={settingTitleWrapper}>
