@@ -1,12 +1,12 @@
 package ddangkong.controller.room;
 
 import ddangkong.aop.logging.Polling;
-import ddangkong.service.room.RoomService;
-import ddangkong.service.room.dto.RoomInfoResponse;
-import ddangkong.service.room.dto.RoomJoinRequest;
-import ddangkong.service.room.dto.RoomJoinResponse;
-import ddangkong.service.room.dto.RoomSettingRequest;
-import ddangkong.service.room.dto.RoundFinishedResponse;
+import ddangkong.facade.room.RoomService;
+import ddangkong.facade.room.dto.RoomInfoResponse;
+import ddangkong.facade.room.dto.RoomJoinRequest;
+import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoundFinishedResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;

@@ -19,15 +19,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ddangkong.controller.room.balance.roomvote.RoomBalanceVoteController;
 import ddangkong.documentation.BaseDocumentationTest;
-import ddangkong.service.balance.vote.dto.ContentTotalBalanceVoteResponse;
-import ddangkong.service.balance.vote.dto.OptionTotalBalanceVoteResponse;
-import ddangkong.service.room.balance.roomvote.RoomBalanceVoteService;
-import ddangkong.service.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
-import ddangkong.service.room.balance.roomvote.dto.OptionRoomBalanceVoteResponse;
-import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteRequest;
-import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteResponse;
-import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
-import ddangkong.service.room.balance.roomvote.dto.VoteFinishedResponse;
+import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
+import ddangkong.facade.balance.vote.dto.OptionTotalBalanceVoteResponse;
+import ddangkong.facade.room.balance.roomvote.RoomBalanceVoteService;
+import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
+import ddangkong.facade.room.balance.roomvote.dto.OptionRoomBalanceVoteResponse;
+import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
+import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
+import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
+import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

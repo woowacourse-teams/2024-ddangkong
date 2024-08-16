@@ -15,9 +15,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ddangkong.controller.room.balance.roomcontent.RoomContentController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.service.balance.option.dto.BalanceOptionResponse;
-import ddangkong.service.room.balance.roomcontent.RoomContentService;
-import ddangkong.service.room.balance.roomcontent.dto.RoomContentResponse;
+import ddangkong.facade.balance.option.dto.BalanceOptionResponse;
+import ddangkong.facade.room.balance.roomcontent.RoomContentService;
+import ddangkong.facade.room.balance.roomcontent.dto.RoomContentResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

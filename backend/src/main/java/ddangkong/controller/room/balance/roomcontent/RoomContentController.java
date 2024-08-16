@@ -1,7 +1,7 @@
 package ddangkong.controller.room.balance.roomcontent;
 
-import ddangkong.service.room.balance.roomcontent.RoomContentService;
-import ddangkong.service.room.balance.roomcontent.dto.RoomContentResponse;
+import ddangkong.facade.room.balance.roomcontent.RoomContentService;
+import ddangkong.facade.room.balance.roomcontent.dto.RoomContentResponse;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
