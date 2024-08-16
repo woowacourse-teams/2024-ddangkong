@@ -5,6 +5,7 @@ interface Member {
 }
 
 interface RoomSetting {
+  category: Category;
   totalRound: number;
   timeLimit: number;
 }

@@ -17,6 +17,8 @@ import {
 import Dropdown from '../Dropdown/Dropdown';
 import Modal from '../Modal/Modal';
 
+import { useGetRoomInfo } from '@/pages/ReadyPage/useGetRoomInfo';
+
 const TOTAL_ROUND_LIST = [5, 7, 10];
 const TIMER_PER_ROUND_LIST = [5, 10, 15];
 
@@ -26,14 +28,15 @@ interface SettingModalProps {
 }
 
 const SettingModal = ({ isOpen, onClose }: SettingModalProps) => {
-  const { category, handleClickOption } = useDropdown();
+  const { roomSetting } = useGetRoomInfo();
+  const { category, handleClickOption } = useDropdown(roomSetting?.category);
   const { totalRound, handleClickRound } = useTotalRound();
   const { timerPerRound, handleClickTimer } = useTimerPerRound();
   const { categoryList, isLoading } = useCategoryListQuery();
 
   if (isLoading) return <div>로딩중...</div>;
 
-  if (!categoryList) return <div>카테고리가 없습니다</div>;
+  if (!categoryList || !category) return <div>카테고리가 없습니다</div>;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} css={settingModalLayout}>

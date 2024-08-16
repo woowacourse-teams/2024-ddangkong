@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { getCategoryList } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
+import { Category } from '@/types/room';
 
 export const useCategoryListQuery = () => {
   const { roomId } = useParams();
@@ -18,17 +19,21 @@ export const useCategoryListQuery = () => {
   return { ...categoryListQuery, categoryList: categoryListQuery.data?.categoryList };
 };
 
-export const useDropdown = () => {
-  const [category, setCategory] = useState('연애');
+export const useDropdown = (selectedCategory?: Category) => {
+  const [category, setCategory] = useState(selectedCategory);
 
   const handleClickOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
-    const clickedCategory = target.value;
+    const clickedCategory = target.value as Category;
 
     if (!clickedCategory) return;
 
     setCategory(clickedCategory);
   };
+
+  useEffect(() => {
+    setCategory(selectedCategory);
+  }, [selectedCategory]);
 
   return { category, handleClickOption };
 };
