@@ -47,8 +47,8 @@ export const useDropdown = (selectedCategory?: Category) => {
   return { category, handleClickOption };
 };
 
-export const useTotalRound = () => {
-  const [totalRound, setTotalRound] = useState(5);
+export const useTotalRound = (selectedTotalRound?: number) => {
+  const [totalRound, setTotalRound] = useState(selectedTotalRound);
 
   const handleClickRound = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const target = e.target as HTMLButtonElement;
@@ -56,17 +56,25 @@ export const useTotalRound = () => {
     setTotalRound(Number(target.textContent));
   };
 
+  useEffect(() => {
+    setTotalRound(selectedTotalRound);
+  }, [selectedTotalRound]);
+
   return { totalRound, handleClickRound };
 };
 
-export const useTimerPerRound = () => {
-  const [timerPerRound, setTimerPerRound] = useState(10);
+export const useTimerPerRound = (selectedTimer?: number) => {
+  const [timerPerRound, setTimerPerRound] = useState(selectedTimer);
 
   const handleClickTimer = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const target = e.target as HTMLButtonElement;
 
     setTimerPerRound(Number(target.value));
   };
+
+  useEffect(() => {
+    setTimerPerRound(selectedTimer);
+  }, [selectedTimer]);
 
   return { timerPerRound, handleClickTimer };
 };

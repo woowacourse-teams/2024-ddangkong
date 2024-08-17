@@ -21,7 +21,7 @@ import Modal from '../Modal/Modal';
 import { useGetRoomInfo } from '@/pages/ReadyPage/useGetRoomInfo';
 
 const TOTAL_ROUND_LIST = [5, 7, 10];
-const TIMER_PER_ROUND_LIST = [5, 10, 15];
+const TIMER_PER_ROUND_LIST = [5000, 10000, 15000];
 
 interface SettingModalProps {
   isOpen: boolean;
@@ -30,15 +30,15 @@ interface SettingModalProps {
 
 const SettingModal = ({ isOpen, onClose }: SettingModalProps) => {
   const { roomSetting } = useGetRoomInfo();
-  const { totalRound, handleClickRound } = useTotalRound();
-  const { timerPerRound, handleClickTimer } = useTimerPerRound();
   const { categoryList, isLoading } = useCategoryListQuery();
   const { mutate: applyRoomSetting } = useApplyRoomSetting();
 
+  const { totalRound, handleClickRound } = useTotalRound(roomSetting?.totalRound);
+  const { timerPerRound, handleClickTimer } = useTimerPerRound(roomSetting?.timeLimit);
   const { category, handleClickOption } = useDropdown(roomSetting?.category);
 
   const handleClickApply = () => {
-    if (!category) return;
+    if (!category || !totalRound || !timerPerRound) return;
 
     applyRoomSetting({ category, totalRound, timeLimit: timerPerRound });
     onClose();
@@ -90,7 +90,7 @@ const SettingModal = ({ isOpen, onClose }: SettingModalProps) => {
                   onClick={handleClickTimer}
                   value={timer}
                 >
-                  {timer}초
+                  {timer / 1000}초
                 </button>
               ))}
             </div>
