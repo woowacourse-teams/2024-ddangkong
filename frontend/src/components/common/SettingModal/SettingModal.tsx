@@ -1,3 +1,4 @@
+import RoomSettingItem from './RoomSettingItem/RoomSettingItem';
 import {
   useApplyRoomSetting,
   useCategoryListQuery,
@@ -9,11 +10,7 @@ import {
   settingModalTitle,
   settingModalLayout,
   settingButton,
-  settingTitle,
-  settingTitleWrapper,
-  settingButtonContainer,
   settingContentContainer,
-  settingTitleContainer,
 } from './SettingModal.styled';
 import Dropdown from '../Dropdown/Dropdown';
 import Modal from '../Modal/Modal';
@@ -56,45 +53,32 @@ const SettingModal = ({ isOpen, onClose }: SettingModalProps) => {
       </Modal.Header>
       <Modal.Content>
         <div css={settingContentContainer}>
-          <div css={settingTitleContainer}>
-            <div css={settingTitleWrapper}>
-              <span css={settingTitle}>카테고리</span>
-            </div>
+          <RoomSettingItem title="카테고리">
             <Dropdown text={category} optionList={categoryList} handleClick={handleClickOption} />
-          </div>
-          <div css={settingTitleContainer}>
-            <div css={settingTitleWrapper}>
-              <span css={settingTitle}>총 라운드</span>
-            </div>
-            <div css={settingButtonContainer}>
-              {TOTAL_ROUND_LIST.map((round) => (
-                <button
-                  key={round}
-                  css={settingButton(totalRound === round)}
-                  onClick={handleClickRound}
-                >
-                  {round}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div css={settingTitleContainer}>
-            <div css={settingTitleWrapper}>
-              <span css={settingTitle}>라운드 당 타이머</span>
-            </div>
-            <div css={settingButtonContainer}>
-              {TIMER_PER_ROUND_LIST.map((timer) => (
-                <button
-                  key={timer}
-                  css={settingButton(timerPerRound === timer)}
-                  onClick={handleClickTimer}
-                  value={timer}
-                >
-                  {timer / 1000}초
-                </button>
-              ))}
-            </div>
-          </div>
+          </RoomSettingItem>
+          <RoomSettingItem title="총 라운드">
+            {TOTAL_ROUND_LIST.map((round) => (
+              <button
+                key={round}
+                css={settingButton(totalRound === round)}
+                onClick={handleClickRound}
+              >
+                {round}
+              </button>
+            ))}
+          </RoomSettingItem>
+          <RoomSettingItem title="라운드 당 타이머">
+            {TIMER_PER_ROUND_LIST.map((timer) => (
+              <button
+                key={timer}
+                css={settingButton(timerPerRound === timer)}
+                onClick={handleClickTimer}
+                value={timer}
+              >
+                {timer / 1000}초
+              </button>
+            ))}
+          </RoomSettingItem>
         </div>
       </Modal.Content>
       <Modal.Footer buttonPosition="center">
