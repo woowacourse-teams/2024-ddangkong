@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import {
+  arrowImage,
   dropdownLayout,
   dropdownText,
   dropdownTextContainer,
@@ -49,7 +50,9 @@ const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
       <div css={dropdownTextContainer}>
         <div css={emptyWrapper}></div>
         <span css={dropdownText}>{text || '선택해주세요'}</span>
-        <img src={isOpen ? ArrowDown : ArrowUp} alt="드랍다운 화살표" />
+        <div>
+          <img src={isOpen ? ArrowDown : ArrowUp} alt="드랍다운 화살표" css={arrowImage} />
+        </div>
       </div>
       <div css={selectOptionList(isOpen, optionList.length)}>
         {isOpen &&

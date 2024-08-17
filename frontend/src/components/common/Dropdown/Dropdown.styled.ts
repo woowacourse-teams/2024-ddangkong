@@ -29,7 +29,13 @@ export const dropdownTextContainer = css`
 `;
 
 export const emptyWrapper = css`
-  width: 1rem;
+  width: 1.2rem;
+  height: 1.2rem;
+`;
+
+export const arrowImage = css`
+  width: 1.2rem;
+  height: 1.2rem;
 `;
 
 export const dropdownText = css`
