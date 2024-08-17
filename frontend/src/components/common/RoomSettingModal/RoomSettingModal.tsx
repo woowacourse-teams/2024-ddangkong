@@ -1,11 +1,9 @@
+import useApplyRoomSetting from './hooks/useApplyRoomSetting';
+import useCategoryDropdown from './hooks/useCategoryDropdown';
+import useCategoryListQuery from './hooks/useCategoryListQuery';
+import useTimerPerRound from './hooks/useTimerPerRound';
+import useTotalRound from './hooks/useTotalRound';
 import RoomSettingItem from './RoomSettingItem/RoomSettingItem';
-import {
-  useApplyRoomSetting,
-  useCategoryListQuery,
-  useDropdown,
-  useTimerPerRound,
-  useTotalRound,
-} from './RoomSettingModal.hook';
 import {
   roomSettingButton,
   roomSettingContainer,
@@ -32,7 +30,7 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
 
   const { totalRound, handleClickRound } = useTotalRound(roomSetting?.totalRound);
   const { timerPerRound, handleClickTimer } = useTimerPerRound(roomSetting?.timeLimit);
-  const { category, handleClickOption } = useDropdown(roomSetting?.category);
+  const { category, handleClickOption } = useCategoryDropdown(roomSetting?.category);
 
   const handleClickApply = () => {
     if (!category || !totalRound || !timerPerRound) return;
