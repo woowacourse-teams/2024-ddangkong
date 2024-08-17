@@ -5,7 +5,7 @@ import { useGetRoomInfo } from './useGetRoomInfo';
 import SettingIcon from '@/assets/images/settingsIcon.svg';
 import CategoryContainer from '@/components/CategoryContainer/CategoryContainer';
 import Button from '@/components/common/Button/Button';
-import SettingModal from '@/components/common/SettingModal/SettingModal';
+import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import ReadyMembersContainer from '@/components/ReadyMembersContainer/ReadyMembersContainer';
 import useModal from '@/hooks/useModal';
 
@@ -23,7 +23,7 @@ const ReadyPage = () => {
         <img src={SettingIcon} alt="방 설정" width={24} height={24} />
       </button>
       {members && <ReadyMembersContainer members={members} />}
-      {isModalOpen && <SettingModal isOpen={isModalOpen} onClose={handleModalClose} />}
+      {isModalOpen && <RoomSettingModal isOpen={isModalOpen} onClose={handleModalClose} />}
       <Button
         text={isMaster ? '시작' : '방장이 시작해주세요'}
         disabled={!isMaster}

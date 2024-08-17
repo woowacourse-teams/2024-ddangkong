@@ -2,12 +2,12 @@ import { StoryObj, Meta } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { useState } from 'react';
 
-import SettingModal from './SettingModal';
+import RoomSettingModal from './RoomSettingModal';
 import Button from '../Button/Button';
 
 const meta = {
-  title: 'SettingModal',
-  component: SettingModal,
+  title: 'RoomSettingModal',
+  component: RoomSettingModal,
   argTypes: {
     isOpen: {
       control: 'boolean',
@@ -20,11 +20,11 @@ const meta = {
   args: {
     onClose: fn(),
   },
-} satisfies Meta<typeof SettingModal>;
+} satisfies Meta<typeof RoomSettingModal>;
 
 export default meta;
 
-type Story = StoryObj<typeof SettingModal>;
+type Story = StoryObj<typeof RoomSettingModal>;
 
 export const 방_설정_모달: Story = {
   render: () => {
@@ -33,7 +33,7 @@ export const 방_설정_모달: Story = {
     return (
       <>
         <Button text="방 설정 모달 열기" onClick={() => setIsOpen(true)} />
-        <SettingModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        <RoomSettingModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
       </>
     );
   },
