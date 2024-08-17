@@ -73,7 +73,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
         @BeforeEach
         void setUp() {
-            roomContentRepository.save(new RoomContent(room, content, 1, ROUND_ENDED_AT, false));
+            roomContentRepository.save(new RoomContent(room, content, 1, ROUND_ENDED_AT));
         }
 
         @Test
@@ -107,7 +107,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             BalanceOption optionC = balanceOptionRepository.save(new BalanceOption("C", content));
             balanceOptionRepository.save(new BalanceOption("D", content));
             int round = 2;
-            roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT, false));
+            roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT));
 
             RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(tacan.getId(), optionC.getId());
 
@@ -211,7 +211,6 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
     class 투표_종료_여부_조회 {
 
         private static final LocalDateTime ROUND_ENDED_AT = LocalDateTime.parse("2024-08-03T11:00:10");
-        private static final boolean IS_USED = false;
 
         @Test
         @FixedClock(date = "2024-08-03", time = "11:00:19")
@@ -219,7 +218,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // given
             int round = 1;
             LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T11:00:20");
-            roomContentRepository.save(new RoomContent(room, content, round, roundEndedAt, IS_USED));
+            roomContentRepository.save(new RoomContent(room, content, round, roundEndedAt));
             roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
             roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionA));
             roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionB));
@@ -238,7 +237,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // given
             int roomContentRound = 1;
             LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T11:00:20");
-            roomContentRepository.save(new RoomContent(room, content, roomContentRound, roundEndedAt, IS_USED));
+            roomContentRepository.save(new RoomContent(room, content, roomContentRound, roundEndedAt));
 
             // when
             VoteFinishedResponse actual = roomBalanceVoteFacade.getAllVoteFinished(room.getId(), content.getId());
@@ -251,7 +250,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
         void 투표_제한_시간이_끝나지_않고_방의_모든_멤버가_투표하지_않았으면_모두_투표하지_않은_것이다() {
             // given
             int round = 1;
-            roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT, IS_USED));
+            roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT));
             roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
             roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionA));
             roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionB));
@@ -275,25 +274,12 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
         void 방의_현재_라운드와_다른_방_컨텐츠의_투표_여부를_조회하면_예외가_발생한다() {
             // given
             int round = 2;
-            roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT, IS_USED));
+            roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT));
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.getAllVoteFinished(room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
-        }
-
-        @Test
-        void 이미_사용된_방_컨텐츠의_투표_여부를_조회하면_예외가_발생한다() {
-            // given
-            int round = 1;
-            boolean isUsed = true;
-            roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT, isUsed));
-
-            // when & then
-            assertThatThrownBy(() -> roomBalanceVoteFacade.getAllVoteFinished(room.getId(), content.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("이미 사용된 컨텐츠입니다.");
         }
     }
 }

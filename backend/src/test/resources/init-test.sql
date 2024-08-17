@@ -44,13 +44,13 @@ VALUES ('mohamedeu al katan', 1, true),
        ('finish player', 5, true),
        ('master', 6, true);
 
-INSERT INTO room_content (room_id, balance_content_id, round, round_ended_at, is_used)
-VALUES (1, 2, 1, '2024-07-18 19:50:32.000', false),
-       (1, 1, 2, '2024-07-18 20:00:32.000', false),
-       (1, 3, 3, null, false),
-       (1, 4, 4, null, false),
-       (1, 5, 5, null, false),
-       (3, 1, 1, '2024-07-18 20:00:32.000', false);
+INSERT INTO room_content (room_id, balance_content_id, round, round_ended_at)
+VALUES (1, 2, 1, '2024-07-18 19:50:32.000'),
+       (1, 1, 2, '2024-07-18 20:00:32.000'),
+       (1, 3, 3, null),
+       (1, 4, 4, null),
+       (1, 5, 5, null),
+       (3, 1, 1, '2024-07-18 20:00:32.000');
 
 INSERT INTO room_balance_vote (member_id, balance_option_id)
 VALUES (1, 1),

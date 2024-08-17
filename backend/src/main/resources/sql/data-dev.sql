@@ -23,12 +23,12 @@ INSERT INTO room(total_round, current_round, time_limit, status, category)
 VALUES (5, 1, 30000, 'PROGRESS', 'EXAMPLE');
 
 
-INSERT INTO room_content(room_id, balance_content_id, round, round_ended_at, is_used)
-VALUES (1, 1, 1, null, false),
-       (1, 2, 2, null, false),
-       (1, 3, 3, null, false),
-       (1, 4, 4, null, false),
-       (1, 5, 5, null, false);
+INSERT INTO room_content(room_id, balance_content_id, round, round_ended_at)
+VALUES (1, 1, 1, null),
+       (1, 2, 2, null),
+       (1, 3, 3, null),
+       (1, 4, 4, null),
+       (1, 5, 5, null);
 
 
 INSERT INTO member(room_id, nickname, is_master)

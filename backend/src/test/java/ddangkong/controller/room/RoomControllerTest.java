@@ -228,9 +228,9 @@ class RoomControllerTest extends BaseControllerTest {
         void setUp() {
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
             room = roomRepository.save(new Room(3, 3, 30, RoomStatus.FINISH, Category.EXAMPLE));
-            roomContentRepository.save(new RoomContent(room, content, 1, null, false));
-            roomContentRepository.save(new RoomContent(room, content, 2, null, false));
-            roomContentRepository.save(new RoomContent(room, content, 3, null, false));
+            roomContentRepository.save(new RoomContent(room, content, 1, null));
+            roomContentRepository.save(new RoomContent(room, content, 2, null));
+            roomContentRepository.save(new RoomContent(room, content, 3, null));
         }
 
         @Test

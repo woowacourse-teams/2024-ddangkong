@@ -44,7 +44,7 @@ class RoomContentServiceTest extends BaseServiceTest {
 
             // then
             // todo false 추후 제거
-            List<RoomContent> roomContents = roomContentRepository.findAllByRoomAndIsUsed(room, false);
+            List<RoomContent> roomContents = roomContentRepository.findAllByRoom(room);
             roomContents.sort(Comparator.comparingInt(RoomContent::getRound));
             assertAll(
                     () -> assertThat(roomContents).hasSize(5),
@@ -76,10 +76,10 @@ class RoomContentServiceTest extends BaseServiceTest {
     }
 
     @Nested
-    class 방_컨텐츠_종료 {
+    class 방_컨텐츠_삭제 {
 
         @Test
-        void 모든_방_컨텐츠를_종료한다() {
+        void 모든_방_컨텐츠를_삭제한다() {
             // given
             Room room = roomRepository.save(Room.createNewRoom());
             List<BalanceContent> contents = balanceContentRepository.saveAll(List.of(
@@ -94,14 +94,11 @@ class RoomContentServiceTest extends BaseServiceTest {
             }
 
             // when
-            roomContentService.finishRoomContents(room);
+            roomContentService.deleteRoomContents(room);
 
             // then
-            List<RoomContent> roomContents = roomContentRepository.findAllByRoomAndIsUsed(room, true);
-            assertAll(
-                    () -> assertThat(roomContents).hasSize(5),
-                    () -> assertThat(roomContents).allMatch(RoomContent::isUsed)
-            );
+            List<RoomContent> roomContents = roomContentRepository.findAllByRoom(room);
+            assertThat(roomContents).hasSize(0);
         }
     }
 
@@ -135,7 +132,7 @@ class RoomContentServiceTest extends BaseServiceTest {
             Room room = roomRepository.save(new Room(5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
             LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-17T16:20:14");
-            roomContentRepository.save(new RoomContent(room, content, currentRound, roundEndedAt, false));
+            roomContentRepository.save(new RoomContent(room, content, currentRound, roundEndedAt));
 
             // when
             boolean isRoundFinished = roomContentService.isRoundFinished(room, content);
