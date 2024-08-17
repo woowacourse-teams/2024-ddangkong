@@ -43,7 +43,6 @@ class RoomContentServiceTest extends BaseServiceTest {
             roomContentService.readyRoomContents(room, contents);
 
             // then
-            // todo false 추후 제거
             List<RoomContent> roomContents = roomContentRepository.findAllByRoom(room);
             roomContents.sort(Comparator.comparingInt(RoomContent::getRound));
             assertAll(
@@ -126,7 +125,7 @@ class RoomContentServiceTest extends BaseServiceTest {
 
         @Test
         @FixedClock(date = "2024-08-17", time = "16:20:15")
-        void 현재_라운드의_방_컨텐츠가_종료되었는지_조회한다() {
+        void 현재_시간이_현재_라운드_방_컨텐츠의_종료_시간보다_이후이면_해당_라운드는_종료된_것이다() {
             // given
             int currentRound = 3;
             Room room = roomRepository.save(new Room(5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
@@ -139,6 +138,23 @@ class RoomContentServiceTest extends BaseServiceTest {
 
             // then
             assertThat(isRoundFinished).isTrue();
+        }
+
+        @Test
+        @FixedClock(date = "2024-08-17", time = "16:20:15")
+        void 현재_시간이_현재_라운드_방_컨텐츠의_종료_시간보다_이전이면_해당_라운드는_종료되지_않은_것이다() {
+            // given
+            int currentRound = 3;
+            Room room = roomRepository.save(new Room(5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-17T16:20:16");
+            roomContentRepository.save(new RoomContent(room, content, currentRound, roundEndedAt));
+
+            // when
+            boolean isRoundFinished = roomContentService.isRoundFinished(room, content);
+
+            // then
+            assertThat(isRoundFinished).isFalse();
         }
     }
 }
