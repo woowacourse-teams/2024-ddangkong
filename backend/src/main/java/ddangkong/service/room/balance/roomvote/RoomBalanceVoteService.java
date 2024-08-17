@@ -61,7 +61,7 @@ public class RoomBalanceVoteService {
     }
 
     private void validateRoundFinished(Room room, BalanceContent balanceContent) {
-        if (isRoundFinished(room, balanceContent)) {
+        if (isVoteFinished(room, balanceContent)) {
             throw new BadRequestException("이미 종료된 라운드에는 투표할 수 없습니다.");
         }
     }
@@ -97,7 +97,7 @@ public class RoomBalanceVoteService {
     public RoomBalanceVoteResultResponse getAllVoteResult(Long roomId, Long balanceContentId) {
         Room room = roomRepository.getById(roomId);
         BalanceContent balanceContent = balanceContentRepository.getById(balanceContentId);
-        if (isRoundFinished(room, balanceContent)) {
+        if (isVoteFinished(room, balanceContent)) {
             BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(balanceContent);
             // todo 기권 추가
             ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(room, balanceOptions);
@@ -112,7 +112,6 @@ public class RoomBalanceVoteService {
                 .findByMemberRoomAndBalanceOption(room, balanceOptions.getFistOption());
         List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteRepository
                 .findByMemberRoomAndBalanceOption(room, balanceOptions.getSecondOption());
-
         return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes);
     }
 
@@ -127,13 +126,14 @@ public class RoomBalanceVoteService {
     public VoteFinishedResponse getAllVoteFinished(Long roomId, Long contentId) {
         Room room = roomRepository.getById(roomId);
         BalanceContent balanceContent = balanceContentRepository.getById(contentId);
-        if (isRoundFinished(room, balanceContent)) {
-            return VoteFinishedResponse.roundFinished();
-        }
-        return VoteFinishedResponse.allVoteFinished(isAllVoteFinished(room, balanceContent));
+        return VoteFinishedResponse.voteFinished(isVoteFinished(room, balanceContent));
     }
 
-    private boolean isRoundFinished(Room room, BalanceContent balanceContent) {
+    private boolean isVoteFinished(Room room, BalanceContent balanceContent) {
+        return isTimeOver(room, balanceContent) || isAllVoteFinished(room, balanceContent);
+    }
+
+    private boolean isTimeOver(Room room, BalanceContent balanceContent) {
         RoomContent roomContent = roomContentRepository.getByRoomAndBalanceContent(room, balanceContent);
         LocalDateTime now = LocalDateTime.now(clock);
         return roomContent.isRoundOver(now, room.getCurrentRound());
