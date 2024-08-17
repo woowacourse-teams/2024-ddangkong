@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class MemberServiceTest extends BaseServiceTest {
 
-    private static final int MAX_MEMBER_COUNT = 12;
     @Autowired
     private MemberService memberService;
 
@@ -65,6 +64,8 @@ class MemberServiceTest extends BaseServiceTest {
 
     @Nested
     class 일반_멤버_생성 {
+
+        private static final int MAX_MEMBER_COUNT = 12;
 
         @Test
         void 일반_멤버를_생성한다() {
@@ -116,7 +117,7 @@ class MemberServiceTest extends BaseServiceTest {
         void 방의_멤버를_조회한다() {
             // given
             Room room = roomRepository.save(Room.createNewRoom());
-            Member prin = memberService.saveMasterMember("prin", room);
+            Member prin = memberRepository.save(PRIN.master(room));
 
             // when
             Member findMember = memberService.getRoomMember(prin.getId(), room);
@@ -129,7 +130,7 @@ class MemberServiceTest extends BaseServiceTest {
         void 방에_존재하지_않은_멤버일_경우_예외가_발생한다() {
             // given
             Room room = roomRepository.save(Room.createNewRoom());
-            Member prin = memberService.saveMasterMember("prin", room);
+            Member prin = memberRepository.save(PRIN.master(room));
             Room otherRoom = roomRepository.save(Room.createNewRoom());
 
             // when & then

@@ -86,12 +86,14 @@ class RoomFacadeTest extends BaseServiceTest {
 
         @Test
         void 동시에_최대_인원수만큼_방에_참여해도_예외를_발생한다() {
+            // given
             Room room = roomRepository.save(Room.createNewRoom());
             memberRepository.save(PRIN.master(room));
             for (int i = 0; i < 10; i++) {
                 memberRepository.save(EDEN.common(room, i));
             }
 
+            // when
             Thread t1 = new Thread(() -> roomFacade.joinRoom("t1member", room.getId()));
             Thread t2 = new Thread(() -> roomFacade.joinRoom("t2member", room.getId()));
             t1.start();
@@ -103,9 +105,9 @@ class RoomFacadeTest extends BaseServiceTest {
             } catch (InterruptedException ignored) {
             }
 
+            // then
             Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
             long memberCountInRoom = memberRepository.countByRoom(foundRoom);
-
             assertThat(memberCountInRoom).isEqualTo(12);
         }
     }

@@ -32,7 +32,7 @@ class RoomBalanceVoteRepositoryTest extends BaseRepositoryTest {
 
             roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
 
-            // when
+            // when & then
             assertThatThrownBy(() -> roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA)))
                     .isInstanceOf(DataIntegrityViolationException.class);
         }
