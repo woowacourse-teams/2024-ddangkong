@@ -29,7 +29,9 @@ public class RoomContentService {
         List<RoomContent> roomContents = IntStream.range(0, balanceContents.size())
                 .mapToObj(index -> RoomContent.newRoomContent(room, balanceContents.get(index), index + 1))
                 .toList();
-        startRound(roomContents.get(0), room.getTimeLimit());
+
+        RoomContent firstRoomContent = roomContents.get(0);
+        startRound(firstRoomContent, room.getTimeLimit());
         roomContentRepository.saveAll(roomContents);
     }
 
