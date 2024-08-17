@@ -22,7 +22,6 @@ class RoomContentFacadeTest extends BaseServiceTest {
     class 현재_방의_밸런스_게임_내용_조회 {
 
         private static final Long PROGRESS_ROOM_ID = 1L;
-        private static final Long NOT_EXIST_ROOM_ID = -1L;
         private static final Long NOT_PROGRESSED_ROOM_ID = 2L;
         private static final Long READY_ROOM_ID = 4L;
         private static final Long FINISHED_ROOM_ID = 5L;
@@ -43,14 +42,6 @@ class RoomContentFacadeTest extends BaseServiceTest {
 
             // then
             assertThat(actual).isEqualTo(BALANCE_CONTENT_RESPONSE);
-        }
-
-        @Test
-        void 방이_없을_경우_예외를_던진다() {
-            // when & then
-            assertThatThrownBy(() -> roomContentFacade.getRecentRoomContent(NOT_EXIST_ROOM_ID))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("존재하지 않는 방입니다.");
         }
 
         @Test

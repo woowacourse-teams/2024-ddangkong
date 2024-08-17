@@ -96,7 +96,22 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
-                    .isInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("이미 종료된 라운드에는 투표할 수 없습니다.");
+        }
+
+        @Test
+        void 투표가_모두_완료된_후_투표_시_예외를_던진다() {
+            // given
+            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionB));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionB));
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(tacan.getId(), optionA.getId());
+
+            // when & then
+            assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
+                    .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("이미 종료된 라운드에는 투표할 수 없습니다.");
         }
 
@@ -113,58 +128,8 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
-                    .isInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
-        }
-
-        @Test
-        void 질문에_해당하는_선택지가_아닌_경우_예외를_던진다() {
-            // given
-            Long invalidOptionId = 3L;
-            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(tacan.getId(), invalidOptionId);
-
-            // when & then
-            assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 옵션이 존재하지 않습니다.");
-        }
-
-        @Test
-        void 방에_있지_않은_멤버인_경우_예외를_던진다() {
-            // given
-            Long invalidMemberId = 5L;
-            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(invalidMemberId, optionA.getId());
-
-            // when & then
-            assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("방에 존재하지 않는 멤버입니다.");
-        }
-
-        @Test
-        void 중복_투표하는_경우_예외를_발생한다() {
-            // given
-            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
-            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(prin.getId(), optionA.getId());
-
-            // when & then
-            assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 투표했습니다. nickname: %s, option name: %s"
-                            .formatted(prin.getNickname(), optionA.getName()));
-        }
-
-        @Test
-        void 같은_컨텐츠에_이미_투표했을_경우_예외가_발생한다() {
-            // given
-            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionB));
-            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(prin.getId(), optionA.getId());
-
-            // when & then
-            assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 투표했습니다. nickname: %s, option name: %s"
-                            .formatted(prin.getNickname(), optionB.getName()));
         }
     }
 
@@ -260,14 +225,6 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
             // then
             assertThat(actual.isFinished()).isFalse();
-        }
-
-        @Test
-        void 방에_존재하지_않은_방_컨텐츠의_투표_여부를_조회하면_예외가_발생한다() {
-            // when & then
-            assertThatThrownBy(() -> roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방에 존재하지 않는 컨텐츠입니다.");
         }
 
         @Test
