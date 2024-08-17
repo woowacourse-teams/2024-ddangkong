@@ -45,11 +45,9 @@ public class RoomContentService {
     }
 
     @Transactional
-    public void finishRoomContents(Room room) {
-        List<RoomContent> roomContents = roomContentRepository.findAllByRoomAndIsUsed(room, false);
-        for (RoomContent roomContent : roomContents) {
-            roomContent.finish();
-        }
+    public void deleteRoomContents(Room room) {
+        List<RoomContent> roomContents = roomContentRepository.findAllByRoom(room);
+        roomContentRepository.deleteAllInBatch(roomContents);
 
         if (room.getTotalRound() != roomContents.size()) {
             log.error("방의 총 라운드와 방 컨텐츠 개수가 일치하지 않습니다. roomId: {}, totalRound: {}, roomContent 개수: {}",
@@ -61,8 +59,8 @@ public class RoomContentService {
     public RoomContent getCurrentRoundRoomContent(Room room) {
         return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
                 .orElseThrow(() -> new InternalServerException(
-                        "해당 방의 현재 라운드의 컨텐츠가 존재하지 않습니다. roomId: %d, currentRound: %d"
-                                .formatted(room.getId(), room.getCurrentRound())));
+                        "해당 방의 현재 라운드의 컨텐츠가 존재하지 않습니다. currentRound: %d"
+                                .formatted(room.getCurrentRound())));
     }
 
     @Transactional(readOnly = true)

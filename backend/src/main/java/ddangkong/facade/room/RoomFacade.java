@@ -1,32 +1,28 @@
 package ddangkong.facade.room;
 
 import ddangkong.domain.balance.content.BalanceContent;
-import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
-import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.member.Member;
-import ddangkong.exception.BadRequestException;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import ddangkong.service.balance.content.BalanceContentService;
+import ddangkong.service.room.RoomService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.balance.roomvote.RoomBalanceVoteMigrator;
 import ddangkong.service.room.member.MemberService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class RoomFacade {
 
-    private final RoomRepository roomRepository;
+    private final RoomService roomService;
 
     private final MemberService memberService;
 
@@ -36,59 +32,43 @@ public class RoomFacade {
 
     private final RoomBalanceVoteMigrator roomBalanceVoteMigrator;
 
-    @Transactional(readOnly = true)
-    public RoomInfoResponse findRoomInfo(Long roomId) {
-        Room room = roomRepository.getById(roomId);
-        List<Member> members = memberService.findRoomMembers(room);
-        return RoomInfoResponse.create(members, room);
-    }
-
     @Transactional
     public RoomJoinResponse createRoom(String nickname) {
-        Room room = roomRepository.save(Room.createNewRoom());
+        Room room = roomService.createRoom();
         Member member = memberService.saveMasterMember(nickname, room);
         return new RoomJoinResponse(room.getId(), new MemberResponse(member));
     }
 
     @Transactional
     public RoomJoinResponse joinRoom(String nickname, Long roomId) {
-        Room room = roomRepository.findByIdWithLock(roomId)
-                .orElseThrow(() -> new BadRequestException("해당 방이 존재하지 않습니다."));
-
-        long memberCountInRoom = memberService.getMemberCount(room);
-        if (room.isFull(memberCountInRoom)) {
-            throw new BadRequestException("방의 인원 수가 가득 찼습니다.");
-        }
-
+        Room room = roomService.getRoom(roomId);
         Member member = memberService.saveCommonMember(nickname, room);
         return new RoomJoinResponse(room.getId(), new MemberResponse(member));
     }
 
+    @Transactional(readOnly = true)
+    public RoomInfoResponse getRoomInfo(Long roomId) {
+        Room room = roomService.getRoom(roomId);
+        List<Member> members = memberService.findRoomMembers(room);
+        return RoomInfoResponse.create(members, room);
+    }
+
     @Transactional
     public void startGame(Long roomId) {
-        Room room = roomRepository.getById(roomId);
-        room.startGame();
-
-        Category category = room.getCategory();
+        Room room = roomService.startGame(roomId);
         int pickCount = room.getTotalRound();
-        List<BalanceContent> balanceContents = balanceContentService.pickBalanceContents(category, pickCount);
+        List<BalanceContent> balanceContents = balanceContentService.pickBalanceContents(room.getCategory(), pickCount);
         roomContentService.readyRoomContents(room, balanceContents);
     }
 
     @Transactional
     public void updateRoomSetting(Long roomId, RoomSettingRequest request) {
-        Room room = roomRepository.getById(roomId);
-
-        room.updateTimeLimit(request.timeLimit());
-        room.updateTotalRound(request.totalRound());
-        room.updateCategory(request.category());
+        roomService.updateRoomSetting(roomId, request.toRoomSetting());
     }
 
     @Transactional
     public void moveToNextRound(Long roomId) {
-        Room room = roomRepository.getById(roomId);
-        room.moveToNextRound();
-
+        Room room = roomService.progressNextRound(roomId);
         if (room.isGameProgress()) {
             roomContentService.progressNextRoomContent(room);
         }
@@ -96,15 +76,14 @@ public class RoomFacade {
 
     @Transactional(readOnly = true)
     public RoundFinishedResponse getRoundFinished(Long roomId, int round) {
-        Room room = roomRepository.getById(roomId);
+        Room room = roomService.getRoom(roomId);
         return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished());
     }
 
     @Transactional
     public void resetRoom(Long roomId) {
-        Room room = roomRepository.getById(roomId);
-        room.reset();
-        roomContentService.finishRoomContents(room);
+        Room room = roomService.reset(roomId);
+        roomContentService.deleteRoomContents(room);
         roomBalanceVoteMigrator.migrateToTotalVote(room);
     }
 }

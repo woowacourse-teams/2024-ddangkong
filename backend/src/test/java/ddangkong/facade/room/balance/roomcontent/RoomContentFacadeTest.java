@@ -50,7 +50,7 @@ class RoomContentFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomContentFacade.getRecentRoomContent(NOT_EXIST_ROOM_ID))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방이 존재하지 않습니다.");
+                    .hasMessage("존재하지 않는 방입니다.");
         }
 
         @Test
@@ -58,7 +58,7 @@ class RoomContentFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomContentFacade.getRecentRoomContent(NOT_PROGRESSED_ROOM_ID))
                     .isExactlyInstanceOf(InternalServerException.class)
-                    .hasMessage("해당 방의 현재 라운드의 컨텐츠가 존재하지 않습니다. roomId: 2, currentRound: 1");
+                    .hasMessage("해당 방의 현재 라운드의 컨텐츠가 존재하지 않습니다. currentRound: 1");
         }
 
         @Test

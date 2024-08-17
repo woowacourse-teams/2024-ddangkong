@@ -39,7 +39,7 @@ public class RoomController {
     @Polling
     @GetMapping("/balances/rooms/{roomId}")
     public RoomInfoResponse getBalanceGameRoomInfo(@Positive @PathVariable Long roomId) {
-        return roomFacade.findRoomInfo(roomId);
+        return roomFacade.getRoomInfo(roomId);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

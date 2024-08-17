@@ -100,7 +100,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             new MemberResponse(1L, "땅콩", true),
                             new MemberResponse(2L, "타콩", false)
                     ));
-            when(roomFacade.findRoomInfo(anyLong())).thenReturn(response);
+            when(roomFacade.getRoomInfo(anyLong())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(ENDPOINT, 1L))

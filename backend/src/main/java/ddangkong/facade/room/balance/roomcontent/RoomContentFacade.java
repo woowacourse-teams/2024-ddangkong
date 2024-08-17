@@ -3,11 +3,11 @@ package ddangkong.facade.room.balance.roomcontent;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
-import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.room.balance.roomcontent.dto.RoomContentResponse;
 import ddangkong.service.balance.option.BalanceOptionService;
+import ddangkong.service.room.RoomService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RoomContentFacade {
 
-    private final RoomRepository roomRepository;
+    private final RoomService roomService;
 
     private final RoomContentService roomContentService;
 
@@ -25,7 +25,7 @@ public class RoomContentFacade {
 
     @Transactional(readOnly = true)
     public RoomContentResponse getRecentRoomContent(Long roomId) {
-        Room room = roomRepository.getById(roomId);
+        Room room = roomService.getRoom(roomId);
         validateProgressing(room);
 
         RoomContent roomContent = roomContentService.getCurrentRoundRoomContent(room);

@@ -50,7 +50,7 @@ class RoomFacadeTest extends BaseServiceTest {
             roomFacade.joinRoom("멤버2", room.roomId());
 
             // when
-            RoomInfoResponse actual = roomFacade.findRoomInfo(room.roomId());
+            RoomInfoResponse actual = roomFacade.getRoomInfo(room.roomId());
 
             // then
             assertAll(
@@ -121,7 +121,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomFacade.joinRoom("member", room.roomId()))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("방의 인원 수가 가득 찼습니다.");
+                    .hasMessage("방의 최대 인원 수가 가득 찼습니다. 현재 멤버 수: 12");
         }
 
         @Test
@@ -143,7 +143,7 @@ class RoomFacadeTest extends BaseServiceTest {
             } catch (InterruptedException e) {
             }
 
-            Room room = roomRepository.getById(createdRoom.roomId());
+            Room room = roomRepository.findById(createdRoom.roomId()).orElseThrow();
             long memberCountInRoom = memberRepository.countByRoom(room);
 
             assertThat(memberCountInRoom).isEqualTo(12);
@@ -161,7 +161,7 @@ class RoomFacadeTest extends BaseServiceTest {
             roomFacade.startGame(READY_ROOM_ID);
 
             // then
-            Room room = roomRepository.getById(READY_ROOM_ID);
+            Room room = roomRepository.findById(READY_ROOM_ID).orElseThrow();
             assertThat(room.isGameProgress()).isTrue();
         }
 
@@ -174,7 +174,7 @@ class RoomFacadeTest extends BaseServiceTest {
             roomFacade.startGame(READY_ROOM_ID);
 
             // then
-            Room room = roomRepository.getById(READY_ROOM_ID);
+            Room room = roomRepository.findById(READY_ROOM_ID).orElseThrow();
             long afterRoomContentCount = roomContentRepository.count();
             long addedRoomContentCount = afterRoomContentCount - beforeRoomContentCount;
             assertThat(addedRoomContentCount).isEqualTo(room.getTotalRound());
@@ -184,25 +184,24 @@ class RoomFacadeTest extends BaseServiceTest {
     @Nested
     class 다음_라운드로_이동 {
 
-        private static final Long PROGRESS_ROOM_ID = 1L;
-        private static final int CURRENT_ROUND = 2;
-        private static final Long NOT_EXIST_ROOM_ID = 999999999L;
-
         @Test
         void 중간_라운드라면_다음_라운드로_넘어갈_수_있다() {
             // given
-            int nextRound = CURRENT_ROUND + 1;
+            int currentRound = 2;
+            Room room = roomRepository.save(new Room(5, currentRound, 30_000, RoomStatus.PROGRESS, Category.EXAMPLE));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            roomContentRepository.save(RoomContent.newRoomContent(room, content, currentRound + 1));
 
             // when
-            roomFacade.moveToNextRound(PROGRESS_ROOM_ID);
+            roomFacade.moveToNextRound(room.getId());
 
             // then
-            Room room = roomRepository.getById(PROGRESS_ROOM_ID);
-            RoomContent roomContent = roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
+            Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
+            RoomContent roomContent = roomContentRepository.findByRoomAndRound(foundRoom, currentRound + 1)
                     .orElseThrow();
             assertAll(
-                    () -> assertThat(room.getCurrentRound()).isEqualTo(nextRound),
-                    () -> assertThat(room.isGameProgress()).isTrue(),
+                    () -> assertThat(foundRoom.getCurrentRound()).isEqualTo(currentRound + 1),
+                    () -> assertThat(foundRoom.isGameProgress()).isTrue(),
                     () -> assertThat(roomContent.getRoundEndedAt()).isNotNull()
             );
         }
@@ -210,31 +209,29 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 마지막_라운드라면_게임을_종료한다() {
             // given
-            Long roomId = finalRoundRoomId();
+            int currentRound = 5;
+            Room room = roomRepository.save(new Room(5, currentRound, 30_000, RoomStatus.PROGRESS, Category.EXAMPLE));
 
             // when
-            roomFacade.moveToNextRound(roomId);
+            roomFacade.moveToNextRound(room.getId());
 
             // then
-            Room room = roomRepository.getById(roomId);
+            Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
             assertAll(
-                    () -> assertThat(room.getCurrentRound()).isEqualTo(room.getTotalRound()),
-                    () -> assertThat(room.getStatus()).isEqualTo(RoomStatus.FINISH)
+                    () -> assertThat(foundRoom.getCurrentRound()).isEqualTo(foundRoom.getTotalRound()),
+                    () -> assertThat(foundRoom.getStatus()).isEqualTo(RoomStatus.FINISH)
             );
-        }
-
-        Long finalRoundRoomId() {
-            Room room = new Room(5, 5, 30_000, RoomStatus.PROGRESS, Category.EXAMPLE);
-            roomRepository.save(room);
-            return room.getId();
         }
 
         @Test
         void 방이_없을_경우_예외를_던진다() {
+            // given
+            Long invalidRoomId = 99L;
+
             // when & then
-            assertThatThrownBy(() -> roomFacade.moveToNextRound(NOT_EXIST_ROOM_ID))
+            assertThatThrownBy(() -> roomFacade.moveToNextRound(invalidRoomId))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방이 존재하지 않습니다.");
+                    .hasMessage("존재하지 않는 방입니다.");
         }
     }
 
@@ -255,7 +252,7 @@ class RoomFacadeTest extends BaseServiceTest {
             roomFacade.updateRoomSetting(roomId, request);
 
             // then
-            RoomInfoResponse roomInfo = roomFacade.findRoomInfo(roomId);
+            RoomInfoResponse roomInfo = roomFacade.getRoomInfo(roomId);
             RoomSettingResponse roomSetting = roomInfo.roomSetting();
 
             assertAll(
@@ -404,12 +401,12 @@ class RoomFacadeTest extends BaseServiceTest {
             roomFacade.resetRoom(room.getId());
 
             // then
-            Room resetRoom = roomRepository.getById(room.getId());
-            List<RoomContent> notUsedRoomContents = roomContentRepository.findAllByRoomAndIsUsed(room, false);
+            Room resetRoom = roomRepository.findById(room.getId()).orElseThrow();
+            List<RoomContent> roomContents = roomContentRepository.findAllByRoom(room);
             assertAll(
                     () -> assertThat(resetRoom.getStatus()).isEqualTo(RoomStatus.READY),
                     () -> assertThat(resetRoom.getCurrentRound()).isEqualTo(1),
-                    () -> assertThat(notUsedRoomContents).isEmpty()
+                    () -> assertThat(roomContents).isEmpty()
             );
         }
 
@@ -441,7 +438,7 @@ class RoomFacadeTest extends BaseServiceTest {
 
         private void saveRoomContents(Room room) {
             for (int i = 1; i < room.getTotalRound(); i++) {
-                roomContentRepository.save(new RoomContent(room, content, i, null, false));
+                roomContentRepository.save(new RoomContent(room, content, i, null));
             }
         }
 
