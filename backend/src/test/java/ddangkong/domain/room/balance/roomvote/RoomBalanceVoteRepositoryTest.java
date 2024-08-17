@@ -34,7 +34,7 @@ class RoomBalanceVoteRepositoryTest extends BaseRepositoryTest {
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA)))
-                    .isInstanceOf(DataIntegrityViolationException.class);
+                    .isExactlyInstanceOf(DataIntegrityViolationException.class);
         }
     }
 }
