@@ -119,7 +119,7 @@ class RoomControllerTest extends BaseControllerTest {
             // when & then
             RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
-                    .pathParam("roomId", 1L)
+                    .pathParam("roomId", 4L)
                     .body(body)
                     .when().post("/api/balances/rooms/{roomId}/members")
                     .then().log().all()
@@ -136,7 +136,7 @@ class RoomControllerTest extends BaseControllerTest {
             // when & then
             RoomJoinResponse actual = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
-                    .pathParam("roomId", 1L)
+                    .pathParam("roomId", 4L)
                     .body(body)
                     .when().post("/api/balances/rooms/{roomId}/members")
                     .then().log().all()

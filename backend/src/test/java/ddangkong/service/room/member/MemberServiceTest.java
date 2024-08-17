@@ -96,7 +96,7 @@ class MemberServiceTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> memberService.saveCommonMember("eden", room))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("게임이 진행 중인 방에는 멤버를 생성할 수 없습니다.");
+                    .hasMessage("이미 시작한 방에는 멤버를 생성할 수 없습니다.");
         }
 
         @Test

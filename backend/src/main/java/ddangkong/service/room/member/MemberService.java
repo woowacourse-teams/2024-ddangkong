@@ -47,8 +47,8 @@ public class MemberService {
     }
 
     private void validateRoomAcceptMember(Room room) {
-        if (room.isGameProgress()) {
-            throw new BadRequestException("게임이 진행 중인 방에는 멤버를 생성할 수 없습니다.");
+        if (room.isAlreadyStart()) {
+            throw new BadRequestException("이미 시작한 방에는 멤버를 생성할 수 없습니다.");
         }
         long memberCountInRoom = memberRepository.countByRoom(room);
         if (room.isFull(memberCountInRoom)) {
