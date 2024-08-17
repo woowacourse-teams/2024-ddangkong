@@ -127,13 +127,14 @@ public class RoomBalanceVoteService {
     public VoteFinishedResponse getAllVoteFinished(Long roomId, Long contentId) {
         Room room = roomRepository.getById(roomId);
         BalanceContent balanceContent = balanceContentRepository.getById(contentId);
-        if (isRoundFinished(room, balanceContent)) {
-            return VoteFinishedResponse.roundFinished();
-        }
-        return VoteFinishedResponse.allVoteFinished(isAllVoteFinished(room, balanceContent));
+        return VoteFinishedResponse.roundFinished(isRoundFinished(room, balanceContent));
     }
 
     private boolean isRoundFinished(Room room, BalanceContent balanceContent) {
+        return isTimeOver(room, balanceContent) || isAllVoteFinished(room, balanceContent);
+    }
+
+    private boolean isTimeOver(Room room, BalanceContent balanceContent) {
         RoomContent roomContent = roomContentRepository.getByRoomAndBalanceContent(room, balanceContent);
         LocalDateTime now = LocalDateTime.now(clock);
         return roomContent.isRoundOver(now, room.getCurrentRound());
