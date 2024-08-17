@@ -1,8 +1,7 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- ddangkong 패키지에 대한 로그를 파일에 출력하기 위한 설정 -->
-    <property name="LOG_PATH" value="logs"/>
+    <property name="LOG_PATH" value="~/app-logs"/>
     <property name="LOG_FILE" value="${LOG_PATH}/ddangkong.log"/>
     <appender name="DDANGKONG_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_FILE}</file>
