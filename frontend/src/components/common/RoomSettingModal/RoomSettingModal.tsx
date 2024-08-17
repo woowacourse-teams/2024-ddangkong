@@ -1,6 +1,3 @@
-import { useParams } from 'react-router-dom';
-
-import useApplyRoomSetting from './hooks/useApplyRoomSetting';
 import useCategoryListQuery from './hooks/useCategoryListQuery';
 import useRoomSetting from './hooks/useRoomSetting';
 import RoomSettingItem from './RoomSettingItem/RoomSettingItem';
@@ -22,19 +19,11 @@ interface RoomSettingModalProps {
 }
 
 const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
-  const { roomId } = useParams();
   const { categoryList } = useCategoryListQuery();
-  const { mutate: applyRoomSetting } = useApplyRoomSetting(Number(roomId));
-  const { roomSetting, handleClickOption, handleClickRound, handleClickTimer } = useRoomSetting();
+  const { roomSetting, handleClickOption, handleClickRound, handleClickTimer, handleClickApply } =
+    useRoomSetting({ onClose });
 
   const { category, totalRound, timerPerRound } = roomSetting;
-
-  const handleClickApply = () => {
-    if (!category || !totalRound || !timerPerRound) return;
-
-    applyRoomSetting({ category, totalRound, timeLimit: timerPerRound });
-    onClose();
-  };
 
   if (!categoryList || !category) return null;
 
