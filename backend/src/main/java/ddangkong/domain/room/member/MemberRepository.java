@@ -12,4 +12,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findAllByRoom(Room room);
 
     long countByRoom(Room room);
+
+    boolean existsByRoomAndIsMaster(Room room, boolean isMaster);
 }

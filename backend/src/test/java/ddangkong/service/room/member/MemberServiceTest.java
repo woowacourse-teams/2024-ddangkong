@@ -1,7 +1,10 @@
 package ddangkong.service.room.member;
 
+import static ddangkong.support.fixture.MemberFixture.EDEN;
+import static ddangkong.support.fixture.MemberFixture.PRIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
@@ -13,8 +16,98 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class MemberServiceTest extends BaseServiceTest {
 
+    private static final int MAX_MEMBER_COUNT = 12;
     @Autowired
     private MemberService memberService;
+
+    @Nested
+    class 방장_멤버_생성 {
+
+        @Test
+        void 방장을_생성한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+
+            // when
+            Member prin = memberService.saveMasterMember("prin", room);
+
+            // then
+            assertAll(
+                    () -> assertThat(prin.getNickname()).isEqualTo("prin"),
+                    () -> assertThat(prin.isMaster()).isTrue()
+            );
+        }
+
+        @Test
+        void 이미_방장이_존재하는_방에_방장을_생성하면_예외가_발생한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            memberRepository.save(PRIN.master(room));
+
+            // when & then
+            assertThatThrownBy(() -> memberService.saveMasterMember("eden", room))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("이미 방장이 존재합니다.");
+        }
+
+        @Test
+        void 방에_멤버가_존재하는_상태에서_방장을_생성하면_예외가_발생한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            memberRepository.save(PRIN.common(room));
+
+            // when & then
+            assertThatThrownBy(() -> memberService.saveMasterMember("eden", room))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("방에 멤버가 존재하면 방장을 생성할 수 없습니다. 현재 멤버 수: 1");
+        }
+    }
+
+    @Nested
+    class 일반_멤버_생성 {
+
+        @Test
+        void 일반_멤버를_생성한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            memberRepository.save(PRIN.master(room));
+
+            // when
+            Member eden = memberService.saveCommonMember("eden", room);
+
+            // then
+            assertAll(
+                    () -> assertThat(eden.getNickname()).isEqualTo("eden"),
+                    () -> assertThat(eden.isMaster()).isFalse()
+            );
+        }
+
+        @Test
+        void 방장이_존재하지_않는_방에_일반_멤버를_생성하면_예외가_발생한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+
+            // when & then
+            assertThatThrownBy(() -> memberService.saveCommonMember("prin", room))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("방장이 존재하지 않습니다.");
+        }
+
+        @Test
+        void 방의_인원이_가득찬_방에_일반_멤버를_생성하면_예외가_발생한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            memberRepository.save(PRIN.master(room));
+            for (int i = 0; i < MAX_MEMBER_COUNT - 1; i++) {
+                memberRepository.save(EDEN.common(room, i));
+            }
+
+            // when & then
+            assertThatThrownBy(() -> memberService.saveCommonMember("tacan", room))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("방의 최대 인원 수가 가득 찼습니다. 현재 멤버 수: 12");
+        }
+    }
 
     @Nested
     class 방_멤버_조회 {

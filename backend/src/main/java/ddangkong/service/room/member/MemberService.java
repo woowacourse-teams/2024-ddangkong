@@ -17,12 +17,40 @@ public class MemberService {
 
     @Transactional
     public Member saveMasterMember(String nickname, Room room) {
+        if (existsMasterInRoom(room)) {
+            throw new BadRequestException("이미 방장이 존재합니다.");
+        }
+        validateMemberNotExists(room);
         return memberRepository.save(Member.createMaster(nickname, room));
+    }
+
+    private void validateMemberNotExists(Room room) {
+        long memberCountInRoom = memberRepository.countByRoom(room);
+        if (memberCountInRoom > 0) {
+            throw new BadRequestException("방에 멤버가 존재하면 방장을 생성할 수 없습니다. 현재 멤버 수: %d"
+                    .formatted(memberCountInRoom));
+        }
     }
 
     @Transactional
     public Member saveCommonMember(String nickname, Room room) {
+        if (!existsMasterInRoom(room)) {
+            throw new BadRequestException("방장이 존재하지 않습니다.");
+        }
+        validateRoomNotFull(room);
+        // todo 중복 닉네임 체크
         return memberRepository.save(Member.createCommon(nickname, room));
+    }
+
+    private boolean existsMasterInRoom(Room room) {
+        return memberRepository.existsByRoomAndIsMaster(room, true);
+    }
+
+    private void validateRoomNotFull(Room room) {
+        long memberCountInRoom = memberRepository.countByRoom(room);
+        if (room.isFull(memberCountInRoom)) {
+            throw new BadRequestException("방의 최대 인원 수가 가득 찼습니다. 현재 멤버 수: %d".formatted(memberCountInRoom));
+        }
     }
 
     @Transactional(readOnly = true)
@@ -34,10 +62,5 @@ public class MemberService {
     public Member getRoomMember(Long memberId, Room room) {
         return memberRepository.findByIdAndRoom(memberId, room)
                 .orElseThrow(() -> new BadRequestException("방에 존재하지 않는 멤버입니다."));
-    }
-
-    @Transactional(readOnly = true)
-    public int getMemberCount(Room room) {
-        return (int) memberRepository.countByRoom(room);
     }
 }
