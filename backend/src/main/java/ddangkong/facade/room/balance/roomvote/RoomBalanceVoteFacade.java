@@ -1,7 +1,6 @@
 package ddangkong.facade.room.balance.roomvote;
 
 import ddangkong.domain.balance.content.BalanceContent;
-import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
@@ -16,6 +15,7 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
+import ddangkong.service.balance.content.BalanceContentService;
 import ddangkong.service.balance.option.BalanceOptionService;
 import ddangkong.service.balance.vote.TotalBalanceVoteService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RoomBalanceVoteFacade {
 
-    private final BalanceContentRepository balanceContentRepository;
+    private final BalanceContentService balanceContentService;
 
     private final BalanceOptionService balanceOptionService;
 
@@ -46,7 +46,7 @@ public class RoomBalanceVoteFacade {
     @Transactional
     public RoomBalanceVoteResponse createVote(RoomBalanceVoteRequest request, Long roomId, Long contentId) {
         Room room = roomRepository.getById(roomId);
-        BalanceContent balanceContent = balanceContentRepository.getById(contentId);
+        BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
         validateRoundFinished(room, balanceContent);
         Member member = memberService.getRoomMember(request.memberId(), room);
         BalanceOption balanceOption = getValidOption(request.optionId(), balanceContent, member);
@@ -79,7 +79,7 @@ public class RoomBalanceVoteFacade {
     @Transactional(readOnly = true)
     public RoomBalanceVoteResultResponse getAllVoteResult(Long roomId, Long balanceContentId) {
         Room room = roomRepository.getById(roomId);
-        BalanceContent balanceContent = balanceContentRepository.getById(balanceContentId);
+        BalanceContent balanceContent = balanceContentService.getBalanceContent(balanceContentId);
         if (isVoteFinished(room, balanceContent)) {
             BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
             // todo 기권 추가
@@ -108,7 +108,7 @@ public class RoomBalanceVoteFacade {
     @Transactional(readOnly = true)
     public VoteFinishedResponse getAllVoteFinished(Long roomId, Long contentId) {
         Room room = roomRepository.getById(roomId);
-        BalanceContent balanceContent = balanceContentRepository.getById(contentId);
+        BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
         return VoteFinishedResponse.voteFinished(isVoteFinished(room, balanceContent));
     }
 

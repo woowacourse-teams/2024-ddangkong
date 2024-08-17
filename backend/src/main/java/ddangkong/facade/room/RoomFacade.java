@@ -1,22 +1,20 @@
 package ddangkong.facade.room;
 
 import ddangkong.domain.balance.content.BalanceContent;
-import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
+import ddangkong.service.balance.content.BalanceContentService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.balance.roomvote.RoomBalanceVoteMigrator;
 import ddangkong.service.room.member.MemberService;
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +32,7 @@ public class RoomFacade {
 
     private final RoomContentService roomContentService;
 
-    private final BalanceContentRepository balanceContentRepository;
+    private final BalanceContentService balanceContentService;
 
     private final RoomBalanceVoteMigrator roomBalanceVoteMigrator;
 
@@ -70,18 +68,11 @@ public class RoomFacade {
     public void startGame(Long roomId) {
         Room room = roomRepository.getById(roomId);
         room.startGame();
-        List<BalanceContent> balanceContents = findByRandom(room.getCategory(), room.getTotalRound());
+
+        Category category = room.getCategory();
+        int pickCount = room.getTotalRound();
+        List<BalanceContent> balanceContents = balanceContentService.pickBalanceContents(category, pickCount);
         roomContentService.readyRoomContents(room, balanceContents);
-    }
-
-    private List<BalanceContent> findByRandom(Category category, int count) {
-        List<BalanceContent> contents = balanceContentRepository.findByCategory(category);
-        if (contents.size() < count) {
-            throw new InternalServerException("DB의 질문 수가 부족합니다. category : " + category);
-        }
-
-        Collections.shuffle(contents);
-        return contents.subList(0, count);
     }
 
     @Transactional
