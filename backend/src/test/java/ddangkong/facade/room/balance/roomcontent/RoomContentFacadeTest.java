@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
+import ddangkong.exception.InternalServerException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.balance.option.dto.BalanceOptionResponse;
 import ddangkong.facade.room.balance.roomcontent.dto.RoomContentResponse;
@@ -56,8 +57,8 @@ class RoomContentFacadeTest extends BaseServiceTest {
         void 방의_현재_라운드의_질문이_없을_경우_예외를_던진다() {
             // when & then
             assertThatThrownBy(() -> roomContentFacade.getRecentRoomContent(NOT_PROGRESSED_ROOM_ID))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
+                    .isExactlyInstanceOf(InternalServerException.class)
+                    .hasMessage("해당 방의 현재 라운드의 컨텐츠가 존재하지 않습니다. roomId: 2, currentRound: 1");
         }
 
         @Test

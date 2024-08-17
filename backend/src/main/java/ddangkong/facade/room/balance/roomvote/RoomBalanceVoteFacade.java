@@ -8,8 +8,6 @@ import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.balance.vote.TotalBalanceVoteRepository;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomRepository;
-import ddangkong.domain.room.balance.roomcontent.RoomContent;
-import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
@@ -20,9 +18,9 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
+import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.member.MemberService;
 import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +40,7 @@ public class RoomBalanceVoteFacade {
 
     private final MemberService memberService;
 
-    private final RoomContentRepository roomContentRepository;
+    private final RoomContentService roomContentService;
 
     private final RoomBalanceVoteRepository roomBalanceVoteRepository;
 
@@ -61,7 +59,7 @@ public class RoomBalanceVoteFacade {
     }
 
     private void validateRoundFinished(Room room, BalanceContent balanceContent) {
-        if (isRoundFinished(room, balanceContent)) {
+        if (roomContentService.isRoundFinished(room, balanceContent)) {
             throw new BadRequestException("이미 종료된 라운드에는 투표할 수 없습니다.");
         }
     }
@@ -92,7 +90,7 @@ public class RoomBalanceVoteFacade {
     public RoomBalanceVoteResultResponse getAllVoteResult(Long roomId, Long balanceContentId) {
         Room room = roomRepository.getById(roomId);
         BalanceContent balanceContent = balanceContentRepository.getById(balanceContentId);
-        if (isRoundFinished(room, balanceContent)) {
+        if (roomContentService.isRoundFinished(room, balanceContent)) {
             BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(balanceContent);
             // todo 기권 추가
             ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(room, balanceOptions);
@@ -122,16 +120,10 @@ public class RoomBalanceVoteFacade {
     public VoteFinishedResponse getAllVoteFinished(Long roomId, Long contentId) {
         Room room = roomRepository.getById(roomId);
         BalanceContent balanceContent = balanceContentRepository.getById(contentId);
-        if (isRoundFinished(room, balanceContent)) {
+        if (roomContentService.isRoundFinished(room, balanceContent)) {
             return VoteFinishedResponse.roundFinished();
         }
         return VoteFinishedResponse.allVoteFinished(isAllVoteFinished(room, balanceContent));
-    }
-
-    private boolean isRoundFinished(Room room, BalanceContent balanceContent) {
-        RoomContent roomContent = roomContentRepository.getByRoomAndBalanceContent(room, balanceContent);
-        LocalDateTime now = LocalDateTime.now(clock);
-        return roomContent.isRoundOver(now, room.getCurrentRound());
     }
 
     private boolean isAllVoteFinished(Room room, BalanceContent balanceContent) {

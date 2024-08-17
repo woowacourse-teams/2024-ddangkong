@@ -7,8 +7,6 @@ import ddangkong.domain.balance.vote.TotalBalanceVote;
 import ddangkong.domain.balance.vote.TotalBalanceVoteRepository;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomRepository;
-import ddangkong.domain.room.balance.roomcontent.RoomContent;
-import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
@@ -19,12 +17,10 @@ import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
+import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.member.MemberService;
-import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,15 +35,13 @@ public class RoomFacade {
 
     private final MemberService memberService;
 
-    private final RoomContentRepository roomContentRepository;
+    private final RoomContentService roomContentService;
 
     private final BalanceContentRepository balanceContentRepository;
 
     private final TotalBalanceVoteRepository totalBalanceVoteRepository;
 
     private final RoomBalanceVoteRepository roomBalanceVoteRepository;
-
-    private final Clock clock;
 
     @Transactional(readOnly = true)
     public RoomInfoResponse findRoomInfo(Long roomId) {
@@ -81,11 +75,8 @@ public class RoomFacade {
     public void startGame(Long roomId) {
         Room room = roomRepository.getById(roomId);
         room.startGame();
-
         List<BalanceContent> balanceContents = findByRandom(room.getCategory(), room.getTotalRound());
-        List<RoomContent> roomContents = createRoomContents(room, balanceContents);
-        startFirstRound(roomContents, room.getTimeLimit());
-        roomContentRepository.saveAll(roomContents);
+        roomContentService.readyRoomContents(room, balanceContents);
     }
 
     private List<BalanceContent> findByRandom(Category category, int count) {
@@ -96,16 +87,6 @@ public class RoomFacade {
 
         Collections.shuffle(contents);
         return contents.subList(0, count);
-    }
-
-    private List<RoomContent> createRoomContents(Room room, List<BalanceContent> balanceContents) {
-        return IntStream.range(0, balanceContents.size())
-                .mapToObj(index -> RoomContent.newRoomContent(room, balanceContents.get(index), index + 1))
-                .toList();
-    }
-
-    private void startFirstRound(List<RoomContent> roomContents, int timeLimit) {
-        roomContents.get(0).updateRoundEndedAt(LocalDateTime.now(clock), timeLimit);
     }
 
     @Transactional
@@ -123,14 +104,8 @@ public class RoomFacade {
         room.moveToNextRound();
 
         if (room.isGameProgress()) {
-            RoomContent roomContent = getCurrentRoomContent(room);
-            roomContent.updateRoundEndedAt(LocalDateTime.now(clock), room.getTimeLimit());
+            roomContentService.progressNextRoomContent(room);
         }
-    }
-
-    private RoomContent getCurrentRoomContent(Room room) {
-        return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
-                .orElseThrow(() -> new InternalServerException("해당 룸에서 진행 중인 라운드 컨텐츠가 존재하지 않습니다."));
     }
 
     @Transactional(readOnly = true)
@@ -143,20 +118,8 @@ public class RoomFacade {
     public void resetRoom(Long roomId) {
         Room room = roomRepository.getById(roomId);
         room.reset();
-        finishRoomContents(room);
+        roomContentService.finishRoomContents(room);
         changeRoomVotesToTotalVotes(room);
-    }
-
-    private void finishRoomContents(Room room) {
-        List<RoomContent> roomContents = roomContentRepository.findAllByRoomAndIsUsed(room, false);
-        for (RoomContent roomContent : roomContents) {
-            roomContent.finish();
-        }
-
-        if (room.getTotalRound() != roomContents.size()) {
-            log.error("방의 총 라운드와 방 컨텐츠 개수가 일치하지 않습니다. roomId: {}, totalRound: {}, roomContent 개수: {}",
-                    room.getId(), room.getTotalRound(), roomContents.size());
-        }
     }
 
     private void changeRoomVotesToTotalVotes(Room room) {

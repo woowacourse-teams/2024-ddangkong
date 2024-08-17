@@ -25,7 +25,6 @@ import ddangkong.facade.room.dto.RoomSettingResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -55,10 +54,10 @@ class RoomFacadeTest extends BaseServiceTest {
 
             // then
             assertAll(
-                    () -> Assertions.assertThat(actual.members()).hasSize(3),
-                    () -> Assertions.assertThat(actual.isGameStart()).isFalse(),
-                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
-                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
+                    () -> assertThat(actual.members()).hasSize(3),
+                    () -> assertThat(actual.isGameStart()).isFalse(),
+                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
+                    () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
             );
         }
     }

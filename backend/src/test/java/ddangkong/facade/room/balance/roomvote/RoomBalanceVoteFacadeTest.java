@@ -138,7 +138,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("방에 존재하지 않는 멤버입니다. memberId : 5, roomId : 8");
+                    .hasMessage("방에 존재하지 않는 멤버입니다.");
         }
 
         @Test
@@ -268,7 +268,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.getAllVoteFinished(room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방에 존재하지 않은 컨텐츠입니다.");
+                    .hasMessageContaining("방에 존재하지 않는 컨텐츠입니다.");
         }
 
         @Test
