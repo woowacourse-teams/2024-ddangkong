@@ -12,7 +12,7 @@ export const useCategoryListQuery = () => {
   const categoryListQuery = useQuery({
     queryKey: [QUERY_KEYS.categoryList, Number(roomId)],
     queryFn: async () => {
-      return await getCategoryList(Number(roomId));
+      return await getCategoryList();
     },
   });
 

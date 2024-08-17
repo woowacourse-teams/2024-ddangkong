@@ -71,9 +71,9 @@ export const startGame = async (roomId: number): Promise<void> => {
 };
 
 // 방 설정 카테고리 리스트 받기
-export const getCategoryList = async (roomId: number): Promise<CategoryResponse> => {
+export const getCategoryList = async (): Promise<CategoryResponse> => {
   const res = await fetcher.get({
-    url: API_URL.categoryList(roomId),
+    url: API_URL.categoryList,
   });
 
   const data = await res.json();
