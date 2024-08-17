@@ -25,7 +25,7 @@ interface RoomSettingModalProps {
 
 const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
   const { roomSetting } = useGetRoomInfo();
-  const { categoryList, isLoading } = useCategoryListQuery();
+  const { categoryList } = useCategoryListQuery();
   const { mutate: applyRoomSetting } = useApplyRoomSetting();
 
   const { totalRound, handleClickRound } = useTotalRound(roomSetting?.totalRound);
@@ -39,9 +39,7 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
     onClose();
   };
 
-  if (isLoading) return <div>로딩중...</div>;
-
-  if (!categoryList || !category) return <div>카테고리가 없습니다</div>;
+  if (!categoryList || !category) return null;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} css={roomSettingModalLayout}>
