@@ -41,7 +41,7 @@ public class RoomFacade {
 
     @Transactional
     public RoomJoinResponse joinRoom(String nickname, Long roomId) {
-        Room room = roomService.getRoom(roomId);
+        Room room = roomService.getRoomWithLock(roomId);
         Member member = memberService.saveCommonMember(nickname, room);
         return new RoomJoinResponse(room.getId(), new MemberResponse(member));
     }

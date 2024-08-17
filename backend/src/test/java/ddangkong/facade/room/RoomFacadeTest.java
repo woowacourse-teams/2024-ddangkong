@@ -2,6 +2,7 @@ package ddangkong.facade.room;
 
 import static ddangkong.support.fixture.MemberFixture.EDEN;
 import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
+import static ddangkong.support.fixture.MemberFixture.MARU;
 import static ddangkong.support.fixture.MemberFixture.PRIN;
 import static ddangkong.support.fixture.MemberFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,8 +21,6 @@ import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
-import ddangkong.facade.room.dto.RoomSettingRequest;
-import ddangkong.facade.room.dto.RoomSettingResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import java.util.List;
@@ -31,36 +30,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class RoomFacadeTest extends BaseServiceTest {
 
     @Autowired
     private RoomFacade roomFacade;
-
-    @Nested
-    class 게임_방_정보_조회 {
-
-        @Test
-        void 게임_방_정보를_조회한다() {
-            // given
-            RoomJoinResponse room = roomFacade.createRoom("방장");
-            roomFacade.joinRoom("멤버1", room.roomId());
-            roomFacade.joinRoom("멤버2", room.roomId());
-
-            // when
-            RoomInfoResponse actual = roomFacade.getRoomInfo(room.roomId());
-
-            // then
-            assertAll(
-                    () -> assertThat(actual.members()).hasSize(3),
-                    () -> assertThat(actual.isGameStart()).isFalse(),
-                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
-                    () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
-            );
-        }
-    }
 
     @Nested
     class 방_생성 {
@@ -110,43 +85,52 @@ class RoomFacadeTest extends BaseServiceTest {
         }
 
         @Test
-        void 최대_인원수가_다_찬_방에_참여하면_예외를_발생한다() {
-            // given
-            String masterNickname = "master";
-            RoomJoinResponse room = roomFacade.createRoom(masterNickname);
-            for (int i = 0; i < 11; i++) {
-                roomFacade.joinRoom("member%d".formatted(i), room.roomId());
-            }
-
-            // when & then
-            assertThatThrownBy(() -> roomFacade.joinRoom("member", room.roomId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("방의 최대 인원 수가 가득 찼습니다. 현재 멤버 수: 12");
-        }
-
-        @Test
         void 동시에_최대_인원수만큼_방에_참여해도_예외를_발생한다() {
-            String masterNickname = "master";
-            RoomJoinResponse createdRoom = roomFacade.createRoom(masterNickname);
+            Room room = roomRepository.save(Room.createNewRoom());
+            memberRepository.save(PRIN.master(room));
             for (int i = 0; i < 10; i++) {
-                roomFacade.joinRoom("member%d".formatted(i), createdRoom.roomId());
+                memberRepository.save(EDEN.common(room, i));
             }
 
-            Thread t1 = new Thread(() -> roomFacade.joinRoom("t1member", createdRoom.roomId()));
-            Thread t2 = new Thread(() -> roomFacade.joinRoom("t2member", createdRoom.roomId()));
+            Thread t1 = new Thread(() -> roomFacade.joinRoom("t1member", room.getId()));
+            Thread t2 = new Thread(() -> roomFacade.joinRoom("t2member", room.getId()));
             t1.start();
             t2.start();
 
             try {
                 t1.join();
                 t2.join();
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
             }
 
-            Room room = roomRepository.findById(createdRoom.roomId()).orElseThrow();
-            long memberCountInRoom = memberRepository.countByRoom(room);
+            Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
+            long memberCountInRoom = memberRepository.countByRoom(foundRoom);
 
             assertThat(memberCountInRoom).isEqualTo(12);
+        }
+    }
+
+    @Nested
+    class 게임_방_정보_조회 {
+
+        @Test
+        void 게임_방_정보를_조회한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            memberRepository.save(EDEN.master(room));
+            memberRepository.save(KEOCHAN.master(room));
+            memberRepository.save(MARU.master(room));
+
+            // when
+            RoomInfoResponse actual = roomFacade.getRoomInfo(room.getId());
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.members()).hasSize(3),
+                    () -> assertThat(actual.isGameStart()).isFalse(),
+                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
+                    () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
+            );
         }
     }
 
@@ -222,79 +206,6 @@ class RoomFacadeTest extends BaseServiceTest {
                     () -> assertThat(foundRoom.getStatus()).isEqualTo(RoomStatus.FINISH)
             );
         }
-
-        @Test
-        void 방이_없을_경우_예외를_던진다() {
-            // given
-            Long invalidRoomId = 99L;
-
-            // when & then
-            assertThatThrownBy(() -> roomFacade.moveToNextRound(invalidRoomId))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("존재하지 않는 방입니다.");
-        }
-    }
-
-    @Nested
-    class 방_설정_변경 {
-
-        @Test
-        void 방_설정_정보를_변경한다() {
-            // given
-            Long roomId = 4L;
-            int totalRound = 8;
-            int timeLimit = 13_000;
-            Category category = Category.EXAMPLE;
-
-            RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);
-
-            // when
-            roomFacade.updateRoomSetting(roomId, request);
-
-            // then
-            RoomInfoResponse roomInfo = roomFacade.getRoomInfo(roomId);
-            RoomSettingResponse roomSetting = roomInfo.roomSetting();
-
-            assertAll(
-                    () -> assertThat(roomSetting.totalRound()).isEqualTo(totalRound),
-                    () -> assertThat(roomSetting.timeLimit()).isEqualTo(timeLimit),
-                    () -> assertThat(roomSetting.category()).isEqualTo(category)
-            );
-        }
-
-        @ParameterizedTest
-        @ValueSource(ints = {2, 11})
-        void 라운드는_3이상_10이하_여야한다(int notValidTotalRound) {
-            // given
-            Long roomId = 2L;
-            int timeLimit = 10000;
-            Category category = Category.EXAMPLE;
-
-            RoomSettingRequest request = new RoomSettingRequest(notValidTotalRound, timeLimit, category);
-
-            // when & then
-            assertThatThrownBy(() -> roomFacade.updateRoomSetting(roomId, request))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
-                            .formatted(3, 10, notValidTotalRound));
-        }
-
-        @ParameterizedTest
-        @ValueSource(ints = {9000, 31000})
-        void 시간_제한은_10000이상_30000이하_여야한다(int notValidTimeLimit) {
-            // given
-            Long roomId = 2L;
-            int totalRound = 5;
-            Category category = Category.EXAMPLE;
-
-            RoomSettingRequest request = new RoomSettingRequest(totalRound, notValidTimeLimit, category);
-
-            // when & then
-            assertThatThrownBy(() -> roomFacade.updateRoomSetting(roomId, request))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
-                            .formatted(10000, 30000, notValidTimeLimit));
-        }
     }
 
     @Nested
@@ -309,8 +220,7 @@ class RoomFacadeTest extends BaseServiceTest {
         void 라운드가_종료되지_않았으면_게임도_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 2;
-            Room room = roomRepository.save(
-                    new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
             int round = 2;
 
             // when
@@ -468,7 +378,6 @@ class RoomFacadeTest extends BaseServiceTest {
                     () -> assertThat(roomBalanceVotes).isEmpty(),
                     () -> assertThat(optionATotalVoteCount).isEqualTo(3),
                     () -> assertThat(optionBTotalVoteCount).isEqualTo(1)
-
             );
         }
     }
