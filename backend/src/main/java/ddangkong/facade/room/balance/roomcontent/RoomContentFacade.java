@@ -25,19 +25,18 @@ public class RoomContentFacade {
 
     @Transactional(readOnly = true)
     public RoomContentResponse getRecentRoomContent(Long roomId) {
-        Room room = roomService.getRoom(roomId);
-        validateProgressing(room);
-
+        Room room = getProgressRoom(roomId);
         RoomContent roomContent = roomContentService.getCurrentRoundRoomContent(room);
         BalanceContent balanceContent = roomContent.getBalanceContent();
         BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-
         return new RoomContentResponse(room, balanceContent, balanceOptions);
     }
 
-    private static void validateProgressing(Room room) {
+    private Room getProgressRoom(Long roomId) {
+        Room room = roomService.getRoom(roomId);
         if (!room.isGameProgress()) {
             throw new BadRequestException("해당 방은 게임을 진행하고 있지 않습니다.");
         }
+        return room;
     }
 }
