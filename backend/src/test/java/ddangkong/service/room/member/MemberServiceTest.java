@@ -6,7 +6,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
@@ -81,6 +83,20 @@ class MemberServiceTest extends BaseServiceTest {
                     () -> assertThat(eden.getNickname()).isEqualTo("eden"),
                     () -> assertThat(eden.isMaster()).isFalse()
             );
+        }
+
+        @Test
+        void 진행_상태인_방이면_일반_멤버를_생성할_수_없다() {
+            // given
+
+            RoomStatus roomStatus = RoomStatus.PROGRESS;
+            Room room = roomRepository.save(new Room(5, 2, 30, roomStatus, Category.EXAMPLE));
+            memberRepository.save(PRIN.master(room));
+
+            // when & then
+            assertThatThrownBy(() -> memberService.saveCommonMember("eden", room))
+                    .isExactlyInstanceOf(BadRequestException.class)
+                    .hasMessage("게임이 진행 중인 방에는 멤버를 생성할 수 없습니다.");
         }
 
         @Test

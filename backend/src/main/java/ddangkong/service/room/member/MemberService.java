@@ -37,7 +37,7 @@ public class MemberService {
         if (!existsMasterInRoom(room)) {
             throw new BadRequestException("방장이 존재하지 않습니다.");
         }
-        validateRoomNotFull(room);
+        validateRoomAcceptMember(room);
         // todo 중복 닉네임 체크
         return memberRepository.save(Member.createCommon(nickname, room));
     }
@@ -46,7 +46,10 @@ public class MemberService {
         return memberRepository.existsByRoomAndIsMaster(room, true);
     }
 
-    private void validateRoomNotFull(Room room) {
+    private void validateRoomAcceptMember(Room room) {
+        if (room.isGameProgress()) {
+            throw new BadRequestException("게임이 진행 중인 방에는 멤버를 생성할 수 없습니다.");
+        }
         long memberCountInRoom = memberRepository.countByRoom(room);
         if (room.isFull(memberCountInRoom)) {
             throw new BadRequestException("방의 최대 인원 수가 가득 찼습니다. 현재 멤버 수: %d".formatted(memberCountInRoom));
