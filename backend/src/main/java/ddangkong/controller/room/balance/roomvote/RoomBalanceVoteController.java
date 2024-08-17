@@ -43,8 +43,8 @@ public class RoomBalanceVoteController {
 
     @Polling
     @GetMapping("/balances/rooms/{roomId}/contents/{contentId}/vote-finished")
-    public VoteFinishedResponse getAllVoteFinished(@PathVariable @Positive Long roomId,
-                                                   @PathVariable @Positive Long contentId) {
-        return roomBalanceVoteFacade.getAllVoteFinished(roomId, contentId);
+    public VoteFinishedResponse getVoteFinished(@PathVariable @Positive Long roomId,
+                                                @PathVariable @Positive Long contentId) {
+        return roomBalanceVoteFacade.getVoteFinished(roomId, contentId);
     }
 }

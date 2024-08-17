@@ -225,7 +225,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionB));
 
             // when
-            VoteFinishedResponse actual = roomBalanceVoteFacade.getAllVoteFinished(room.getId(), content.getId());
+            VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
             assertThat(actual.isFinished()).isTrue();
@@ -240,7 +240,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             roomContentRepository.save(new RoomContent(room, content, roomContentRound, roundEndedAt));
 
             // when
-            VoteFinishedResponse actual = roomBalanceVoteFacade.getAllVoteFinished(room.getId(), content.getId());
+            VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
             assertThat(actual.isFinished()).isTrue();
@@ -256,7 +256,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionB));
 
             // when
-            VoteFinishedResponse actual = roomBalanceVoteFacade.getAllVoteFinished(room.getId(), content.getId());
+            VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
             assertThat(actual.isFinished()).isFalse();
@@ -265,7 +265,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
         @Test
         void 방에_존재하지_않은_방_컨텐츠의_투표_여부를_조회하면_예외가_발생한다() {
             // when & then
-            assertThatThrownBy(() -> roomBalanceVoteFacade.getAllVoteFinished(room.getId(), content.getId()))
+            assertThatThrownBy(() -> roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("방에 존재하지 않는 컨텐츠입니다.");
         }
@@ -277,7 +277,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT));
 
             // when & then
-            assertThatThrownBy(() -> roomBalanceVoteFacade.getAllVoteFinished(room.getId(), content.getId()))
+            assertThatThrownBy(() -> roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
         }

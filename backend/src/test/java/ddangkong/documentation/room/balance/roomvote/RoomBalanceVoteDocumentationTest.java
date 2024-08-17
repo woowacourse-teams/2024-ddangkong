@@ -154,7 +154,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
         void 투표가_종료되었는지_조회한다() throws Exception {
             // given
             VoteFinishedResponse response = new VoteFinishedResponse(true);
-            when(roomBalanceVoteFacade.getAllVoteFinished(anyLong(), anyLong())).thenReturn(response);
+            when(roomBalanceVoteFacade.getVoteFinished(anyLong(), anyLong())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(END_POINT, 1L, 1L))

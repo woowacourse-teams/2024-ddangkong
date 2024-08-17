@@ -1,11 +1,9 @@
 package ddangkong.facade.room.balance.roomvote;
 
 import ddangkong.domain.balance.content.BalanceContent;
-import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
-import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
@@ -19,6 +17,7 @@ import ddangkong.service.balance.option.BalanceOptionService;
 import ddangkong.service.balance.vote.TotalBalanceVoteService;
 import ddangkong.service.room.RoomService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
+import ddangkong.service.room.balance.roomvote.RoomBalanceVoteService;
 import ddangkong.service.room.member.MemberService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -41,39 +40,26 @@ public class RoomBalanceVoteFacade {
 
     private final RoomContentService roomContentService;
 
-    private final RoomBalanceVoteRepository roomBalanceVoteRepository;
+    private final RoomBalanceVoteService roomBalanceVoteService;
 
     @Transactional
     public RoomBalanceVoteResponse createVote(RoomBalanceVoteRequest request, Long roomId, Long contentId) {
         Room room = roomService.getRoom(roomId);
         BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
-        validateRoundFinished(room, balanceContent);
-        Member member = memberService.getRoomMember(request.memberId(), room);
-        BalanceOption balanceOption = getValidOption(request.optionId(), balanceContent, member);
-
-        RoomBalanceVote roomBalanceVote = roomBalanceVoteRepository.save(new RoomBalanceVote(member, balanceOption));
-        return new RoomBalanceVoteResponse(roomBalanceVote);
-    }
-
-    private void validateRoundFinished(Room room, BalanceContent balanceContent) {
         if (isVoteFinished(room, balanceContent)) {
             throw new BadRequestException("이미 종료된 라운드에는 투표할 수 없습니다.");
         }
-    }
-
-    private BalanceOption getValidOption(Long optionId, BalanceContent balanceContent, Member member) {
+        Member member = memberService.getRoomMember(request.memberId(), room);
         BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-        for (BalanceOption option : balanceOptions.getOptions()) {
-            validDuplicatedVote(member, option);
-        }
-        return balanceOptions.getOptionById(optionId);
+        RoomBalanceVote roomBalanceVote = roomBalanceVoteService.createVote(member, balanceOptions, request.optionId());
+        return new RoomBalanceVoteResponse(roomBalanceVote);
     }
 
-    private void validDuplicatedVote(Member member, BalanceOption balanceOption) {
-        if (roomBalanceVoteRepository.existsByMemberAndBalanceOption(member, balanceOption)) {
-            throw new BadRequestException("이미 투표했습니다. nickname: %s, option name: %s"
-                    .formatted(member.getNickname(), balanceOption.getName()));
-        }
+    private boolean isVoteFinished(Room room, BalanceContent balanceContent) {
+        List<Member> members = memberService.findRoomMembers(room);
+        BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
+        return roomContentService.isRoundFinished(room, balanceContent)
+                || roomBalanceVoteService.isVoteFinished(members, balanceOptions);
     }
 
     @Transactional(readOnly = true)
@@ -91,36 +77,23 @@ public class RoomBalanceVoteFacade {
     }
 
     private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(Room room, BalanceOptions balanceOptions) {
-        List<RoomBalanceVote> firstOptionVotes = roomBalanceVoteRepository
-                .findByMemberRoomAndBalanceOption(room, balanceOptions.getFirstOption());
-        List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteRepository
-                .findByMemberRoomAndBalanceOption(room, balanceOptions.getSecondOption());
+        List<RoomBalanceVote> firstOptionVotes = roomBalanceVoteService
+                .getVotesInRoom(room, balanceOptions.getFirstOption());
+        List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteService
+                .getVotesInRoom(room, balanceOptions.getSecondOption());
         return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes);
     }
 
     private ContentTotalBalanceVoteResponse getContentTotalBalanceVoteResponse(BalanceOptions balanceOptions) {
         long firstOptionVoteCount = totalBalanceVoteService.getVoteCount(balanceOptions.getFirstOption());
         long secondOptionVoteCount = totalBalanceVoteService.getVoteCount(balanceOptions.getSecondOption());
-
         return ContentTotalBalanceVoteResponse.create(balanceOptions, firstOptionVoteCount, secondOptionVoteCount);
     }
 
     @Transactional(readOnly = true)
-    public VoteFinishedResponse getAllVoteFinished(Long roomId, Long contentId) {
+    public VoteFinishedResponse getVoteFinished(Long roomId, Long contentId) {
         Room room = roomService.getRoom(roomId);
         BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
         return VoteFinishedResponse.voteFinished(isVoteFinished(room, balanceContent));
-    }
-
-    private boolean isVoteFinished(Room room, BalanceContent balanceContent) {
-        return roomContentService.isRoundFinished(room, balanceContent) || isAllVoteFinished(room, balanceContent);
-    }
-
-    private boolean isAllVoteFinished(Room room, BalanceContent balanceContent) {
-        BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-        long voteCount = roomBalanceVoteRepository.countByMemberRoomAndBalanceOptionIn(room,
-                balanceOptions.getOptions());
-        List<Member> members = memberService.findRoomMembers(room);
-        return voteCount == members.size();
     }
 }
