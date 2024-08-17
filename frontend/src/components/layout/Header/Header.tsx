@@ -1,9 +1,12 @@
 import { useLocation, useParams } from 'react-router-dom';
 
-import { gameTitle, headerLayout, roundText } from './Header.styled';
+import { emptyBox, gameTitle, headerLayout, roundText, settingImage } from './Header.styled';
 
+import SettingIcon from '@/assets/images/settingsIcon.svg';
+import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useModal from '@/hooks/useModal';
 
 interface HeaderProps {
   title: string;
@@ -17,10 +20,25 @@ const Header = ({ title }: HeaderProps) => {
   const { balanceContent } = useBalanceContentQuery();
   const location = useLocation();
   const { roomId } = useParams();
+  const { isModalOpen, handleModalOpen, handleModalClose } = useModal();
 
+  const isReadyPage = location.pathname === ROUTES.ready(Number(roomId));
   const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
   const isFinalPage = location.pathname === ROUTES.gameResult(Number(roomId));
   const isNicknamePage = location.pathname.startsWith(ROUTES.nickname);
+
+  if (isReadyPage) {
+    return (
+      <header css={headerLayout}>
+        <div css={emptyBox}></div>
+        <span css={gameTitle}>밸런스 게임</span>
+        <button onClick={handleModalOpen}>
+          <img src={SettingIcon} alt="방 설정" css={settingImage} />
+        </button>
+        {isModalOpen && <RoomSettingModal isOpen={isModalOpen} onClose={handleModalClose} />}
+      </header>
+    );
+  }
 
   if (isFinalPage) {
     return <header css={headerLayout}></header>;
@@ -49,7 +67,7 @@ const Header = ({ title }: HeaderProps) => {
   return (
     <header css={headerLayout}>
       <span css={roundText}>
-        {balanceContent ? `${balanceContent.currentRound}/${balanceContent.totalRound}` : '1/5'}
+        {balanceContent && `${balanceContent.currentRound}/${balanceContent.totalRound}`}
       </span>
       <span css={gameTitle}>{title}</span>
       <div css={roundText}></div>
