@@ -11,7 +11,7 @@ public record ContentTotalBalanceVoteResponse(
     public static ContentTotalBalanceVoteResponse create(BalanceOptions balanceOptions,
                                                          long firstOptionVoteCount,
                                                          long secondOptionVoteCount) {
-        BalanceOption fistOption = balanceOptions.getFistOption();
+        BalanceOption fistOption = balanceOptions.getFirstOption();
         BalanceOption secondOption = balanceOptions.getSecondOption();
         long contentVoteCount = firstOptionVoteCount + secondOptionVoteCount;
 

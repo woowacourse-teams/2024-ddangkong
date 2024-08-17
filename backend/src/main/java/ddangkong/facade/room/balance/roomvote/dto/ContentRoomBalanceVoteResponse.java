@@ -13,7 +13,7 @@ public record ContentRoomBalanceVoteResponse(
     public static ContentRoomBalanceVoteResponse create(BalanceOptions balanceOptions,
                                                         List<RoomBalanceVote> firstOptionVotes,
                                                         List<RoomBalanceVote> secondOptionVotes) {
-        BalanceOption fistOption = balanceOptions.getFistOption();
+        BalanceOption fistOption = balanceOptions.getFirstOption();
         BalanceOption secondOption = balanceOptions.getSecondOption();
         int contentVoteCount = firstOptionVotes.size() + secondOptionVotes.size();
 

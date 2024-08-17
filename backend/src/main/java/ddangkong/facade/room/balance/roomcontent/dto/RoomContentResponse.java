@@ -24,7 +24,7 @@ public record RoomContentResponse(
                 room.getCurrentRound(),
                 room.getTimeLimit(),
                 balanceContent.getName(),
-                new BalanceOptionResponse(balanceOptions.getFistOption()),
+                new BalanceOptionResponse(balanceOptions.getFirstOption()),
                 new BalanceOptionResponse(balanceOptions.getSecondOption()));
     }
 }

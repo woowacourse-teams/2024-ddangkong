@@ -126,7 +126,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
                     .isInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 질문의 선택지가 존재하지 않습니다.");
+                    .hasMessage("해당 옵션이 존재하지 않습니다.");
         }
 
         @Test
@@ -150,8 +150,8 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 투표한 선택지가 존재합니다. 투표하려는 선택지 : %d, 이미 투표한 선택지 : %d"
-                            .formatted(optionA.getId(), optionA.getId()));
+                    .hasMessage("이미 투표했습니다. nickname: %s, option name: %s"
+                            .formatted(prin.getNickname(), optionA.getName()));
         }
 
         @Test
@@ -163,8 +163,8 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 투표한 선택지가 존재합니다. 투표하려는 선택지 : %d, 이미 투표한 선택지 : %d"
-                            .formatted(optionA.getId(), optionB.getId()));
+                    .hasMessage("이미 투표했습니다. nickname: %s, option name: %s"
+                            .formatted(prin.getNickname(), optionB.getName()));
         }
     }
 

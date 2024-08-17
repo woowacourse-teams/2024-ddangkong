@@ -3,7 +3,6 @@ package ddangkong.facade.room.balance.roomvote;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.option.BalanceOption;
-import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.balance.vote.TotalBalanceVoteRepository;
 import ddangkong.domain.room.Room;
@@ -18,6 +17,7 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
+import ddangkong.service.balance.option.BalanceOptionService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.member.MemberService;
 import java.time.Clock;
@@ -32,7 +32,7 @@ public class RoomBalanceVoteFacade {
 
     private final BalanceContentRepository balanceContentRepository;
 
-    private final BalanceOptionRepository balanceOptionRepository;
+    private final BalanceOptionService balanceOptionService;
 
     private final TotalBalanceVoteRepository totalBalanceVoteRepository;
 
@@ -65,24 +65,17 @@ public class RoomBalanceVoteFacade {
     }
 
     private BalanceOption getValidOption(Long optionId, BalanceContent balanceContent, Member member) {
-        BalanceOption selectedOption = null;
-        List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
-        for (BalanceOption balanceOption : balanceOptions) {
-            validDuplicatedVote(optionId, member, balanceOption);
-            if (balanceOption.isSameId(optionId)) {
-                selectedOption = balanceOption;
-            }
+        BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
+        for (BalanceOption option : balanceOptions.getOptions()) {
+            validDuplicatedVote(member, option);
         }
-        if (selectedOption == null) {
-            throw new BadRequestException("해당 질문의 선택지가 존재하지 않습니다.");
-        }
-        return selectedOption;
+        return balanceOptions.getOptionById(optionId);
     }
 
-    private void validDuplicatedVote(Long optionId, Member member, BalanceOption balanceOption) {
+    private void validDuplicatedVote(Member member, BalanceOption balanceOption) {
         if (roomBalanceVoteRepository.existsByMemberAndBalanceOption(member, balanceOption)) {
-            throw new BadRequestException("이미 투표한 선택지가 존재합니다. 투표하려는 선택지 : %d, 이미 투표한 선택지 : %d"
-                    .formatted(optionId, balanceOption.getId()));
+            throw new BadRequestException("이미 투표했습니다. nickname: %s, option name: %s"
+                    .formatted(member.getNickname(), balanceOption.getName()));
         }
     }
 
@@ -91,7 +84,7 @@ public class RoomBalanceVoteFacade {
         Room room = roomRepository.getById(roomId);
         BalanceContent balanceContent = balanceContentRepository.getById(balanceContentId);
         if (isVoteFinished(room, balanceContent)) {
-            BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(balanceContent);
+            BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
             // todo 기권 추가
             ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(room, balanceOptions);
             ContentTotalBalanceVoteResponse total = getContentTotalBalanceVoteResponse(balanceOptions);
@@ -102,14 +95,14 @@ public class RoomBalanceVoteFacade {
 
     private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(Room room, BalanceOptions balanceOptions) {
         List<RoomBalanceVote> firstOptionVotes = roomBalanceVoteRepository
-                .findByMemberRoomAndBalanceOption(room, balanceOptions.getFistOption());
+                .findByMemberRoomAndBalanceOption(room, balanceOptions.getFirstOption());
         List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteRepository
                 .findByMemberRoomAndBalanceOption(room, balanceOptions.getSecondOption());
         return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes);
     }
 
     private ContentTotalBalanceVoteResponse getContentTotalBalanceVoteResponse(BalanceOptions balanceOptions) {
-        long firstOptionVoteCount = totalBalanceVoteRepository.countByBalanceOption(balanceOptions.getFistOption());
+        long firstOptionVoteCount = totalBalanceVoteRepository.countByBalanceOption(balanceOptions.getFirstOption());
         long secondOptionVoteCount = totalBalanceVoteRepository.countByBalanceOption(balanceOptions.getSecondOption());
 
         return ContentTotalBalanceVoteResponse.create(balanceOptions, firstOptionVoteCount, secondOptionVoteCount);
@@ -127,8 +120,9 @@ public class RoomBalanceVoteFacade {
     }
 
     private boolean isAllVoteFinished(Room room, BalanceContent balanceContent) {
-        List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
-        long voteCount = roomBalanceVoteRepository.countByMemberRoomAndBalanceOptionIn(room, balanceOptions);
+        BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
+        long voteCount = roomBalanceVoteRepository.countByMemberRoomAndBalanceOptionIn(room,
+                balanceOptions.getOptions());
         List<Member> members = memberService.findRoomMembers(room);
         return voteCount == members.size();
     }
