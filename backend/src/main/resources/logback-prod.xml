@@ -1,0 +1,49 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- ddangkong 패키지에 대한 로그를 파일에 출력하기 위한 설정 -->
+    <property name="LOG_PATH" value="logs"/>
+    <property name="LOG_FILE" value="${LOG_PATH}/ddangkong.log"/>
+    <appender name="DDANGKONG_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/ddangkong-%d{yyyy-MM-dd}.log</fileNamePattern> <!-- 매일 새로운 파일 생성 -->
+            <maxHistory>365</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Discord Webhook 설정 -->
+    <springProperty name="DISCORD_WEBHOOK_URL" source="logging.discord.webhook-url"/>
+    <appender name="DISCORD" class="com.github.napstr.logback.DiscordAppender">
+        <webhookUri>${DISCORD_WEBHOOK_URL}</webhookUri>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] [%-5level] %logger{36} - %msg%n```%ex{full}```
+            </pattern>
+        </layout>
+        <username>prod-error-alert-bot</username>
+        <avatarUrl>
+            https://velog.velcdn.com/images/gwichanlee/post/c03a74cc-07fd-45ee-bfff-7b5147522f89/image.png
+        </avatarUrl>
+        <tts>false</tts>
+    </appender>
+
+    <appender name="ASYNC_DISCORD" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="DISCORD"/>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
+    <!-- ddangkong 하위 패키지의 logger 설정 -->
+    <logger name="ddangkong" level="DEBUG" additivity="false">
+        <appender-ref ref="DDANGKONG_LOG"/>
+        <appender-ref ref="ASYNC_DISCORD"/>
+    </logger>
+
+    <!-- root logger 설정 -->
+    <root level="OFF">
+    </root>
+</configuration>

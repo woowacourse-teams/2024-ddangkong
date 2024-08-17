@@ -26,3 +26,7 @@ server:
 cors:
   origin: ${secret.cors.origin}
 
+logging:
+  config: classpath:logback-dev.xml
+  discord:
+    webhook-url: ${secret.discord.webhook-url}
