@@ -1,10 +1,8 @@
 import { useParams } from 'react-router-dom';
 
 import useApplyRoomSetting from './hooks/useApplyRoomSetting';
-import useCategoryDropdown from './hooks/useCategoryDropdown';
 import useCategoryListQuery from './hooks/useCategoryListQuery';
-import useTimerPerRound from './hooks/useTimerPerRound';
-import useTotalRound from './hooks/useTotalRound';
+import useRoomSetting from './hooks/useRoomSetting';
 import RoomSettingItem from './RoomSettingItem/RoomSettingItem';
 import {
   roomSettingButton,
@@ -14,8 +12,6 @@ import {
 } from './RoomSettingModal.styled';
 import Dropdown from '../Dropdown/Dropdown';
 import Modal from '../Modal/Modal';
-
-import { useGetRoomInfo } from '@/pages/ReadyPage/useGetRoomInfo';
 
 const TOTAL_ROUND_LIST = [5, 7, 10];
 const TIMER_PER_ROUND_LIST = [5000, 10000, 15000];
@@ -29,11 +25,9 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
   const { roomId } = useParams();
   const { categoryList } = useCategoryListQuery();
   const { mutate: applyRoomSetting } = useApplyRoomSetting(Number(roomId));
+  const { roomSetting, handleClickOption, handleClickRound, handleClickTimer } = useRoomSetting();
 
-  const { roomSetting } = useGetRoomInfo();
-  const { totalRound, handleClickRound } = useTotalRound(roomSetting?.totalRound);
-  const { timerPerRound, handleClickTimer } = useTimerPerRound(roomSetting?.timeLimit);
-  const { category, handleClickOption } = useCategoryDropdown(roomSetting?.category);
+  const { category, totalRound, timerPerRound } = roomSetting;
 
   const handleClickApply = () => {
     if (!category || !totalRound || !timerPerRound) return;
