@@ -11,7 +11,7 @@ on:
 jobs:
   deploy:
     timeout-minutes: 3
-    runs-on: ubuntu-latest
+    runs-on: [ self-hosted, linux, ARM64, prod ]
 
     defaults:
       run:
