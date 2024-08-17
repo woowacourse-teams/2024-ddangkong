@@ -38,15 +38,7 @@ jobs:
         run: ./gradlew bootJar
 
       - name: Stop existing Java Application
-        run: |
-          if [ -f app.pid ]; then
-          PID=$(cat app.pid)
-          kill $PID
-          rm -f app.pid
-          echo "Existing Java application stopped with PID $PID"
-          else
-          echo "No existing application running."
-          fi
+        run: ps -ef | grep 'ddangkong-0.0.1-SNAPSHOT.jar' | awk '{print $2}' | xargs sudo kill -15
 
       - name: Start Java Application
         run: |
