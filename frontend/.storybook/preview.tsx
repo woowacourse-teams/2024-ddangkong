@@ -5,10 +5,14 @@ import { MemoryRouter } from 'react-router-dom';
 import { Global, ThemeProvider } from '@emotion/react';
 import GlobalStyle from '../src/styles/GlobalStyle';
 import { Theme } from '../src/styles/Theme';
-import { initialize, mswDecorator } from 'msw-storybook-addon';
+import { initialize, mswLoader } from 'msw-storybook-addon';
 import { handlers } from '../src/mocks/handlers';
 
-initialize();
+initialize({
+  serviceWorker: {
+    url: './mockServiceWorker.js',
+  },
+});
 
 const queryClient = new QueryClient();
 
@@ -24,6 +28,7 @@ const preview: Preview = {
       },
     },
   },
+  loaders: [mswLoader],
   decorators: [
     (Story) => (
       <QueryClientProvider client={queryClient}>
@@ -35,7 +40,6 @@ const preview: Preview = {
         </ThemeProvider>
       </QueryClientProvider>
     ),
-    mswDecorator,
   ],
 };
 

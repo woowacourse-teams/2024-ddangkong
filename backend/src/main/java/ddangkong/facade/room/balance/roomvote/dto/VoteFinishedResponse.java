@@ -4,11 +4,7 @@ public record VoteFinishedResponse(
         boolean isFinished
 ) {
 
-    public static VoteFinishedResponse roundFinished() {
-        return new VoteFinishedResponse(true);
-    }
-
-    public static VoteFinishedResponse allVoteFinished(boolean isAllVoteFinished) {
+    public static VoteFinishedResponse voteFinished(boolean isAllVoteFinished) {
         return new VoteFinishedResponse(isAllVoteFinished);
     }
 }
