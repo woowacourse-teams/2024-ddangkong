@@ -1,0 +1,28 @@
+spring:
+  config:
+    import: prod-secret.yml
+
+  datasource:
+    url: jdbc:mysql://${secret.datasource.url}:${secret.datasource.port}/${secret.datasource.database}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+    username: ${secret.datasource.username}
+    password: ${secret.datasource.password}
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show-sql: true
+        format-sql: true
+        highlight_sql: true
+        jdbc:
+          batch_size: 1000
+
+server:
+  port: ${secret.application.port}
+
+cors:
+  origin: ${secret.cors.origin}
+
