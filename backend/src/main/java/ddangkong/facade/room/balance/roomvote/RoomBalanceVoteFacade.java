@@ -94,6 +94,6 @@ public class RoomBalanceVoteFacade {
     public VoteFinishedResponse getVoteFinished(Long roomId, Long contentId) {
         Room room = roomService.getRoom(roomId);
         BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
-        return VoteFinishedResponse.voteFinished(isVoteFinished(room, balanceContent));
+        return new VoteFinishedResponse(isVoteFinished(room, balanceContent));
     }
 }
