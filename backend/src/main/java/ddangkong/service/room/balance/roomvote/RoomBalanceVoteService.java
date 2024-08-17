@@ -112,7 +112,6 @@ public class RoomBalanceVoteService {
                 .findByMemberRoomAndBalanceOption(room, balanceOptions.getFistOption());
         List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteRepository
                 .findByMemberRoomAndBalanceOption(room, balanceOptions.getSecondOption());
-
         return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes);
     }
 

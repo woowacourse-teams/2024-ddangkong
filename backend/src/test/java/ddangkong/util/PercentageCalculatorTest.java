@@ -22,15 +22,28 @@ class PercentageCalculatorTest {
     }
 
     @Test
-    void totalCount가_1보다_작으면_예외가_발생한다() {
+    void totalCount가_0인_경우_기본값을_반환한다() {
+        // given
+        long count = 0L;
+        long totalCount = 0L;
+
+        // when
+        int percent = PercentageCalculator.calculatePercent(count, totalCount);
+
+        // then
+        assertThat(percent).isEqualTo(50);
+    }
+
+    @Test
+    void totalCount가_0보다_작으면_예외가_발생한다() {
         // given
         long count = 3L;
-        long totalCount = 0L;
+        long totalCount = -1L;
 
         // when & then
         assertThatThrownBy(() -> PercentageCalculator.calculatePercent(count, totalCount))
                 .isExactlyInstanceOf(InternalServerException.class)
-                .hasMessageContaining("totalCount는 1이상이어야 합니다. totalCount: 0");
+                .hasMessageContaining("totalCount는 0이상이어야 합니다. totalCount: -1");
     }
 
     @Test
@@ -44,4 +57,5 @@ class PercentageCalculatorTest {
                 .isExactlyInstanceOf(InternalServerException.class)
                 .hasMessageContaining("count는 0이상이어야 합니다. count: -1");
     }
+
 }
