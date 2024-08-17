@@ -17,8 +17,8 @@ export const roundText = css`
 `;
 
 export const emptyBox = css`
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 1.6rem;
+  height: 1.6rem;
 `;
 
 export const gameTitle = css`
@@ -27,6 +27,6 @@ export const gameTitle = css`
 `;
 
 export const settingImage = css`
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 1.6rem;
+  height: 1.6rem;
 `;
