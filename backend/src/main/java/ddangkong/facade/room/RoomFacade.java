@@ -3,12 +3,8 @@ package ddangkong.facade.room;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.domain.balance.vote.TotalBalanceVote;
-import ddangkong.domain.balance.vote.TotalBalanceVoteRepository;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomRepository;
-import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
-import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.BadRequestException;
 import ddangkong.exception.InternalServerException;
@@ -18,6 +14,7 @@ import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
+import ddangkong.service.room.balance.roomvote.RoomBalanceVoteMigrator;
 import ddangkong.service.room.member.MemberService;
 import java.util.Collections;
 import java.util.List;
@@ -39,9 +36,7 @@ public class RoomFacade {
 
     private final BalanceContentRepository balanceContentRepository;
 
-    private final TotalBalanceVoteRepository totalBalanceVoteRepository;
-
-    private final RoomBalanceVoteRepository roomBalanceVoteRepository;
+    private final RoomBalanceVoteMigrator roomBalanceVoteMigrator;
 
     @Transactional(readOnly = true)
     public RoomInfoResponse findRoomInfo(Long roomId) {
@@ -119,15 +114,6 @@ public class RoomFacade {
         Room room = roomRepository.getById(roomId);
         room.reset();
         roomContentService.finishRoomContents(room);
-        changeRoomVotesToTotalVotes(room);
-    }
-
-    private void changeRoomVotesToTotalVotes(Room room) {
-        List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteRepository.findByMemberRoom(room);
-        roomBalanceVoteRepository.deleteAllInBatch(roomBalanceVotes);
-
-        for (RoomBalanceVote roomBalanceVote : roomBalanceVotes) {
-            totalBalanceVoteRepository.save(new TotalBalanceVote(roomBalanceVote.getBalanceOption()));
-        }
+        roomBalanceVoteMigrator.migrateToTotalVote(room);
     }
 }

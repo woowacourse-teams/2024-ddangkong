@@ -4,7 +4,6 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptions;
-import ddangkong.domain.balance.vote.TotalBalanceVoteRepository;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
@@ -18,9 +17,9 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
 import ddangkong.service.balance.option.BalanceOptionService;
+import ddangkong.service.balance.vote.TotalBalanceVoteService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.member.MemberService;
-import java.time.Clock;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class RoomBalanceVoteFacade {
 
     private final BalanceOptionService balanceOptionService;
 
-    private final TotalBalanceVoteRepository totalBalanceVoteRepository;
+    private final TotalBalanceVoteService totalBalanceVoteService;
 
     private final RoomRepository roomRepository;
 
@@ -43,8 +42,6 @@ public class RoomBalanceVoteFacade {
     private final RoomContentService roomContentService;
 
     private final RoomBalanceVoteRepository roomBalanceVoteRepository;
-
-    private final Clock clock;
 
     @Transactional
     public RoomBalanceVoteResponse createVote(RoomBalanceVoteRequest request, Long roomId, Long contentId) {
@@ -102,8 +99,8 @@ public class RoomBalanceVoteFacade {
     }
 
     private ContentTotalBalanceVoteResponse getContentTotalBalanceVoteResponse(BalanceOptions balanceOptions) {
-        long firstOptionVoteCount = totalBalanceVoteRepository.countByBalanceOption(balanceOptions.getFirstOption());
-        long secondOptionVoteCount = totalBalanceVoteRepository.countByBalanceOption(balanceOptions.getSecondOption());
+        long firstOptionVoteCount = totalBalanceVoteService.getVoteCount(balanceOptions.getFirstOption());
+        long secondOptionVoteCount = totalBalanceVoteService.getVoteCount(balanceOptions.getSecondOption());
 
         return ContentTotalBalanceVoteResponse.create(balanceOptions, firstOptionVoteCount, secondOptionVoteCount);
     }
