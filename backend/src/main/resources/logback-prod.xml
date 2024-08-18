@@ -37,7 +37,7 @@
     </appender>
 
     <!-- ddangkong 하위 패키지의 logger 설정 -->
-    <logger name="ddangkong" level="DEBUG" additivity="false">
+    <logger name="ddangkong" level="INFO" additivity="false">
         <appender-ref ref="DDANGKONG_LOG"/>
         <appender-ref ref="ASYNC_DISCORD"/>
     </logger>
