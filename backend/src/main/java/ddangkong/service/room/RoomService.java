@@ -61,12 +61,12 @@ public class RoomService {
     public RoomJoinResponse createRoom(String nickname) {
         Room room = roomRepository.save(Room.createNewRoom());
         Member member = memberRepository.save(Member.createMaster(nickname, room));
-        return new RoomJoinResponse(room.getId(), new MemberResponse(member));
+        return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }
 
     @Transactional
-    public RoomJoinResponse joinRoom(String nickname, Long roomId) {
-        Room room = roomRepository.findByIdWithLock(roomId)
+    public RoomJoinResponse joinRoom(String nickname, String roomUuid) {
+        Room room = roomRepository.findByUuidWithLock(roomUuid)
                 .orElseThrow(() -> new BadRequestException("해당 방이 존재하지 않습니다."));
 
         long memberCountInRoom = memberRepository.countByRoom(room);
@@ -75,7 +75,7 @@ public class RoomService {
         }
 
         Member member = memberRepository.save(Member.createCommon(nickname, room));
-        return new RoomJoinResponse(room.getId(), new MemberResponse(member));
+        return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }
 
     @Transactional

@@ -50,9 +50,9 @@ public class RoomController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/balances/rooms/{roomId}/members")
-    public RoomJoinResponse joinRoom(@PathVariable @Positive Long roomId, @Valid @RequestBody RoomJoinRequest request) {
-        return roomService.joinRoom(request.nickname(), roomId);
+    @PostMapping("/balances/rooms/{uuid}/members")
+    public RoomJoinResponse joinRoom(@PathVariable String uuid, @Valid @RequestBody RoomJoinRequest request) {
+        return roomService.joinRoom(request.nickname(), uuid);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

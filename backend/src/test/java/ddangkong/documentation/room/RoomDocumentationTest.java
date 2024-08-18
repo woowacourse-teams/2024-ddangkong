@@ -55,14 +55,14 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방을_생성한다() throws Exception {
             // given
             MemberResponse memberResponse = new MemberResponse(1L, "땅콩", true);
-            RoomJoinResponse response = new RoomJoinResponse(1L, memberResponse);
+            RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c", memberResponse);
             when(roomService.createRoom(anyString())).thenReturn(response);
 
             RoomJoinRequest request = new RoomJoinRequest("땅콩");
             String content = objectMapper.writeValueAsString(request);
 
             // when & then
-            mockMvc.perform(post(ENDPOINT, 1L)
+            mockMvc.perform(post(ENDPOINT)
                             .content(content)
                             .contentType(MediaType.APPLICATION_JSON)
                     )
@@ -73,6 +73,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
+                                    fieldWithPath("roomUuid").type(STRING).description("생성된 방의 UUID"),
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
@@ -158,32 +159,34 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 방_참여 {
 
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members";
+        private static final String ENDPOINT = "/api/balances/rooms/{uuid}/members";
 
         @Test
         void 방에_참여한다() throws Exception {
             // given
-            RoomJoinResponse response = new RoomJoinResponse(1L, new MemberResponse(2L, "타콩", false));
-            when(roomService.joinRoom(anyString(), anyLong())).thenReturn(response);
+            RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
+                    new MemberResponse(2L, "타콩", false));
+            when(roomService.joinRoom(anyString(), anyString())).thenReturn(response);
 
             RoomJoinRequest request = new RoomJoinRequest("타콩");
             String content = objectMapper.writeValueAsString(request);
 
             //when & then
-            mockMvc.perform(post(ENDPOINT, 1L)
+            mockMvc.perform(post(ENDPOINT, "488fd79f92a34131bf2a628bd58c5d2c")
                             .content(content)
                             .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().isCreated())
                     .andDo(document("room/join",
                             pathParameters(
-                                    parameterWithName("roomId").description("참여방 ID")
+                                    parameterWithName("uuid").description("참여하는 방 UUID")
                             ),
                             requestFields(
                                     fieldWithPath("nickname").description("닉네임")
                             ),
                             responseFields(
-                                    fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
+                                    fieldWithPath("roomId").type(NUMBER).description("참여한 방 ID"),
+                                    fieldWithPath("roomUuid").type(STRING).description("참여한 방 UUID"),
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")

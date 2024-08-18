@@ -47,8 +47,8 @@ class RoomServiceTest extends BaseServiceTest {
         void 게임_방_정보를_조회한다() {
             // given
             RoomJoinResponse room = roomService.createRoom("방장");
-            roomService.joinRoom("멤버1", room.roomId());
-            roomService.joinRoom("멤버2", room.roomId());
+            roomService.joinRoom("멤버1", room.roomUuid());
+            roomService.joinRoom("멤버2", room.roomUuid());
 
             // when
             RoomInfoResponse actual = roomService.findRoomInfo(room.roomId());
@@ -71,13 +71,13 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             String nickname = "나는방장";
             MemberResponse expectedMemberResponse = new MemberResponse(13L, nickname, true);
-            RoomJoinResponse expected = new RoomJoinResponse(8L, expectedMemberResponse);
 
             // when
             RoomJoinResponse actual = roomService.createRoom(nickname);
 
             // then
-            assertThat(actual).isEqualTo(expected);
+            assertThat(actual.roomId()).isEqualTo(8L);
+            assertThat(actual.member()).isEqualTo(expectedMemberResponse);
         }
     }
 
@@ -87,26 +87,28 @@ class RoomServiceTest extends BaseServiceTest {
         @Test
         void 이미_생성된_방에_참여한다() {
             // given
+            Room room = roomRepository.save(Room.createNewRoom());
+
             String nickname = "나는참가자";
-            Long joinRoomId = 4L;
             MemberResponse expectedMemberResponse = new MemberResponse(13L, nickname, false);
-            RoomJoinResponse expected = new RoomJoinResponse(joinRoomId, expectedMemberResponse);
 
             // when
-            RoomJoinResponse actual = roomService.joinRoom(nickname, joinRoomId);
+            RoomJoinResponse actual = roomService.joinRoom(nickname, room.getUuid());
 
             // then
-            assertThat(actual).isEqualTo(expected);
+            assertThat(actual.roomId()).isEqualTo(room.getId());
+            assertThat(actual.roomUuid()).isEqualTo(room.getUuid());
+            assertThat(actual.member()).isEqualTo(expectedMemberResponse);
         }
 
         @Test
         void 존재하지_않는_방에_참여시_예외를_던진다() {
             // given
             String nickname = "나는참가자";
-            Long nonExistId = 99999999999L;
+            String nonExistUuid = "hi";
 
             // when & then
-            assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistId))
+            assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistUuid))
                     .isExactlyInstanceOf(BadRequestException.class);
         }
 
@@ -116,11 +118,11 @@ class RoomServiceTest extends BaseServiceTest {
             String masterNickname = "master";
             RoomJoinResponse room = roomService.createRoom(masterNickname);
             for (int i = 0; i < 11; i++) {
-                roomService.joinRoom("member%d".formatted(i), room.roomId());
+                roomService.joinRoom("member%d".formatted(i), room.roomUuid());
             }
 
             // when & then
-            assertThatThrownBy(() -> roomService.joinRoom("member", room.roomId()))
+            assertThatThrownBy(() -> roomService.joinRoom("member", room.roomUuid()))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("방의 인원 수가 가득 찼습니다.");
         }
@@ -130,11 +132,11 @@ class RoomServiceTest extends BaseServiceTest {
             String masterNickname = "master";
             RoomJoinResponse createdRoom = roomService.createRoom(masterNickname);
             for (int i = 0; i < 10; i++) {
-                roomService.joinRoom("member%d".formatted(i), createdRoom.roomId());
+                roomService.joinRoom("member%d".formatted(i), createdRoom.roomUuid());
             }
 
-            Thread t1 = new Thread(() -> roomService.joinRoom("t1member", createdRoom.roomId()));
-            Thread t2 = new Thread(() -> roomService.joinRoom("t2member", createdRoom.roomId()));
+            Thread t1 = new Thread(() -> roomService.joinRoom("t1member", createdRoom.roomUuid()));
+            Thread t2 = new Thread(() -> roomService.joinRoom("t2member", createdRoom.roomUuid()));
             t1.start();
             t2.start();
 
@@ -225,7 +227,7 @@ class RoomServiceTest extends BaseServiceTest {
         }
 
         Long finalRoundRoomId() {
-            Room room = new Room(5, 5, 30_000, RoomStatus.PROGRESS, Category.EXAMPLE);
+            Room room = new Room("uuid", 5, 5, 30_000, RoomStatus.PROGRESS, Category.EXAMPLE);
             roomRepository.save(room);
             return room.getId();
         }
@@ -314,7 +316,7 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             int currentRound = 2;
             Room room = roomRepository.save(
-                    new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+                    new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
             int round = 2;
 
             // when
@@ -331,7 +333,7 @@ class RoomServiceTest extends BaseServiceTest {
         void 라운드가_종료되면_게임은_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 2;
-            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
             int round = 1;
 
             // when
@@ -349,7 +351,7 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             int currentRound = 5;
             RoomStatus status = RoomStatus.FINISH;
-            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY));
+            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY));
             int round = 5;
 
             // when
@@ -366,7 +368,7 @@ class RoomServiceTest extends BaseServiceTest {
         void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_라운드도_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 5;
-            Room room = roomRepository.save(new Room(TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
+            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
             int round = 5;
 
             // when
@@ -398,7 +400,7 @@ class RoomServiceTest extends BaseServiceTest {
         @Test
         void 방을_초기_상태로_초기화한다() {
             // given
-            Room room = roomRepository.save(new Room(TOTAL_ROUND, 5, TIME_LIMIT, STATUS, CATEGORY));
+            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, 5, TIME_LIMIT, STATUS, CATEGORY));
             saveRoomContents(room);
 
             // when
@@ -418,7 +420,8 @@ class RoomServiceTest extends BaseServiceTest {
         void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
             // given
             int invalidCurrentRound = 4;
-            Room room = roomRepository.save(new Room(TOTAL_ROUND, invalidCurrentRound, TIME_LIMIT, STATUS, CATEGORY));
+            Room room = roomRepository.save(
+                    new Room("uuid", TOTAL_ROUND, invalidCurrentRound, TIME_LIMIT, STATUS, CATEGORY));
             saveRoomContents(room);
 
             // when & then
@@ -431,7 +434,7 @@ class RoomServiceTest extends BaseServiceTest {
         @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
         void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
             // given
-            Room room = roomRepository.save(new Room(TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY));
+            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY));
             saveRoomContents(room);
 
             // when & then
@@ -451,7 +454,7 @@ class RoomServiceTest extends BaseServiceTest {
             // given
             BalanceOption optionA = balanceOptionRepository.save(new BalanceOption("A", content));
             BalanceOption optionB = balanceOptionRepository.save(new BalanceOption("B", content));
-            Room room = roomRepository.save(new Room(TOTAL_ROUND, 5, TIME_LIMIT, STATUS, CATEGORY));
+            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, 5, TIME_LIMIT, STATUS, CATEGORY));
             Member prin = memberRepository.save(PRIN.master(room));
             Member eden = memberRepository.save(EDEN.common(room));
             Member keochan = memberRepository.save(KEOCHAN.common(room));
