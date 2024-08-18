@@ -15,6 +15,6 @@ export const optionInfo = css`
 export const participantsListWrapper = css`
   display: flex;
   flex-wrap: wrap;
-  row-gap: 1.2rem;
+  row-gap: 1.4rem;
   list-style: none;
 `;
