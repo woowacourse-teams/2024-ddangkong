@@ -1,11 +1,11 @@
 package ddangkong.controller.room.balance.roomvote;
 
 import ddangkong.aop.logging.Polling;
-import ddangkong.service.room.balance.roomvote.RoomBalanceVoteService;
-import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteRequest;
-import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteResponse;
-import ddangkong.service.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
-import ddangkong.service.room.balance.roomvote.dto.VoteFinishedResponse;
+import ddangkong.facade.room.balance.roomvote.RoomBalanceVoteFacade;
+import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
+import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
+import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
+import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RoomBalanceVoteController {
 
-    private final RoomBalanceVoteService roomBalanceVoteService;
+    private final RoomBalanceVoteFacade roomBalanceVoteFacade;
 
     @GetMapping("/balances/rooms/{roomId}/contents/{contentId}/vote-result")
     public RoomBalanceVoteResultResponse getAllVoteResult(@PathVariable @Positive Long roomId,
                                                           @PathVariable @Positive Long contentId) {
-        return roomBalanceVoteService.getAllVoteResult(roomId, contentId);
+        return roomBalanceVoteFacade.getAllVoteResult(roomId, contentId);
     }
 
     @PostMapping("/balances/rooms/{roomId}/contents/{contentId}/votes")
@@ -38,13 +38,13 @@ public class RoomBalanceVoteController {
     public RoomBalanceVoteResponse createVote(@PathVariable @Positive Long roomId,
                                               @PathVariable @Positive Long contentId,
                                               @RequestBody @Valid RoomBalanceVoteRequest request) {
-        return roomBalanceVoteService.createVote(request, roomId, contentId);
+        return roomBalanceVoteFacade.createVote(request, roomId, contentId);
     }
 
     @Polling
     @GetMapping("/balances/rooms/{roomId}/contents/{contentId}/vote-finished")
-    public VoteFinishedResponse getAllVoteFinished(@PathVariable @Positive Long roomId,
-                                                   @PathVariable @Positive Long contentId) {
-        return roomBalanceVoteService.getAllVoteFinished(roomId, contentId);
+    public VoteFinishedResponse getVoteFinished(@PathVariable @Positive Long roomId,
+                                                @PathVariable @Positive Long contentId) {
+        return roomBalanceVoteFacade.getVoteFinished(roomId, contentId);
     }
 }

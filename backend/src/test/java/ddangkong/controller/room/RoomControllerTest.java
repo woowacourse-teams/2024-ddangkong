@@ -9,11 +9,11 @@ import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
-import ddangkong.service.room.dto.RoomInfoResponse;
-import ddangkong.service.room.dto.RoomJoinRequest;
-import ddangkong.service.room.dto.RoomJoinResponse;
-import ddangkong.service.room.dto.RoomSettingRequest;
-import ddangkong.service.room.dto.RoundFinishedResponse;
+import ddangkong.facade.room.dto.RoomInfoResponse;
+import ddangkong.facade.room.dto.RoomJoinRequest;
+import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.Map;
@@ -113,14 +113,13 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 방에_참가할_수_있다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
             String nickname = "참가자";
             Map<String, Object> body = Map.of("nickname", nickname);
 
             // when & then
             RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
-                    .pathParam("uuid", room.getUuid())
+                    .pathParam("uuid", "uuid4")
                     .body(body)
                     .when().post("/api/balances/rooms/{uuid}/members")
                     .then().log().all()
@@ -131,14 +130,13 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 방에_참가한_멤버는_방장이_아니다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
             String nickname = "참가자";
             Map<String, Object> body = Map.of("nickname", nickname);
 
             // when & then
             RoomJoinResponse actual = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
-                    .pathParam("uuid", room.getUuid())
+                    .pathParam("uuid", "uuid4")
                     .body(body)
                     .when().post("/api/balances/rooms/{uuid}/members")
                     .then().log().all()
@@ -231,9 +229,9 @@ class RoomControllerTest extends BaseControllerTest {
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
             room = roomRepository.save(new Room("roomResetSetUpUUID", 3, 3, 30,
                     RoomStatus.FINISH, Category.EXAMPLE));
-            roomContentRepository.save(new RoomContent(room, content, 1, null, false));
-            roomContentRepository.save(new RoomContent(room, content, 2, null, false));
-            roomContentRepository.save(new RoomContent(room, content, 3, null, false));
+            roomContentRepository.save(new RoomContent(room, content, 1, null));
+            roomContentRepository.save(new RoomContent(room, content, 2, null));
+            roomContentRepository.save(new RoomContent(room, content, 3, null));
         }
 
         @Test

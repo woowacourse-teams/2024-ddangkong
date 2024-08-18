@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import ddangkong.controller.BaseControllerTest;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.service.balance.option.dto.BalanceOptionResponse;
-import ddangkong.service.room.balance.roomcontent.dto.RoomContentResponse;
+import ddangkong.facade.balance.option.dto.BalanceOptionResponse;
+import ddangkong.facade.room.balance.roomcontent.dto.RoomContentResponse;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

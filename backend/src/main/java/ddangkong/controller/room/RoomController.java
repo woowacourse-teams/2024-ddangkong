@@ -1,12 +1,12 @@
 package ddangkong.controller.room;
 
 import ddangkong.aop.logging.Polling;
-import ddangkong.service.room.RoomService;
-import ddangkong.service.room.dto.RoomInfoResponse;
-import ddangkong.service.room.dto.RoomJoinRequest;
-import ddangkong.service.room.dto.RoomJoinResponse;
-import ddangkong.service.room.dto.RoomSettingRequest;
-import ddangkong.service.room.dto.RoundFinishedResponse;
+import ddangkong.facade.room.RoomFacade;
+import ddangkong.facade.room.dto.RoomInfoResponse;
+import ddangkong.facade.room.dto.RoomJoinRequest;
+import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoundFinishedResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -28,55 +28,55 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RoomController {
 
-    private final RoomService roomService;
+    private final RoomFacade roomFacade;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms")
     public RoomJoinResponse createRoom(@Valid @RequestBody RoomJoinRequest request) {
-        return roomService.createRoom(request.nickname());
+        return roomFacade.createRoom(request.nickname());
     }
 
     @Polling
     @GetMapping("/balances/rooms/{roomId}")
     public RoomInfoResponse getBalanceGameRoomInfo(@Positive @PathVariable Long roomId) {
-        return roomService.findRoomInfo(roomId);
+        return roomFacade.getRoomInfo(roomId);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/balances/rooms/{roomId}")
     public void updateRoomSetting(@PathVariable @Positive Long roomId,
                                   @RequestBody RoomSettingRequest request) {
-        roomService.updateRoomSetting(roomId, request);
+        roomFacade.updateRoomSetting(roomId, request);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms/{uuid}/members")
     public RoomJoinResponse joinRoom(@PathVariable String uuid, @Valid @RequestBody RoomJoinRequest request) {
-        return roomService.joinRoom(request.nickname(), uuid);
+        return roomFacade.joinRoom(request.nickname(), uuid);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/balances/rooms/{roomId}/start")
     public void startGame(@PathVariable @Positive Long roomId) {
-        roomService.startGame(roomId);
+        roomFacade.startGame(roomId);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/balances/rooms/{roomId}/next-round")
     public void moveToNextRound(@PathVariable @Positive Long roomId) {
-        roomService.moveToNextRound(roomId);
+        roomFacade.moveToNextRound(roomId);
     }
 
     @Polling
     @GetMapping("/balances/rooms/{roomId}/round-finished")
     public RoundFinishedResponse getRoundFinished(@Positive @PathVariable Long roomId,
                                                   @Positive @RequestParam int round) {
-        return roomService.getRoundFinished(roomId, round);
+        return roomFacade.getRoundFinished(roomId, round);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/balances/rooms/{roomId}/reset")
     public void resetRoom(@PathVariable @Positive Long roomId) {
-        roomService.resetRoom(roomId);
+        roomFacade.resetRoom(roomId);
     }
 }

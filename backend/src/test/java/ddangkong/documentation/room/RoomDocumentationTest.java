@@ -25,14 +25,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.service.room.RoomService;
-import ddangkong.service.room.dto.RoomInfoResponse;
-import ddangkong.service.room.dto.RoomJoinRequest;
-import ddangkong.service.room.dto.RoomJoinResponse;
-import ddangkong.service.room.dto.RoomSettingRequest;
-import ddangkong.service.room.dto.RoomSettingResponse;
-import ddangkong.service.room.dto.RoundFinishedResponse;
-import ddangkong.service.room.member.dto.MemberResponse;
+import ddangkong.facade.room.RoomFacade;
+import ddangkong.facade.room.dto.RoomInfoResponse;
+import ddangkong.facade.room.dto.RoomJoinRequest;
+import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoomSettingResponse;
+import ddangkong.facade.room.dto.RoundFinishedResponse;
+import ddangkong.facade.room.member.dto.MemberResponse;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ import org.springframework.http.MediaType;
 class RoomDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
-    private RoomService roomService;
+    private RoomFacade roomFacade;
 
     @Nested
     class 방_생성 {
@@ -56,7 +56,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             // given
             MemberResponse memberResponse = new MemberResponse(1L, "땅콩", true);
             RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c", memberResponse);
-            when(roomService.createRoom(anyString())).thenReturn(response);
+            when(roomFacade.createRoom(anyString())).thenReturn(response);
 
             RoomJoinRequest request = new RoomJoinRequest("땅콩");
             String content = objectMapper.writeValueAsString(request);
@@ -101,7 +101,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             new MemberResponse(1L, "땅콩", true),
                             new MemberResponse(2L, "타콩", false)
                     ));
-            when(roomService.findRoomInfo(anyLong())).thenReturn(response);
+            when(roomFacade.getRoomInfo(anyLong())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(ENDPOINT, 1L))
@@ -166,7 +166,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             // given
             RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
                     new MemberResponse(2L, "타콩", false));
-            when(roomService.joinRoom(anyString(), anyString())).thenReturn(response);
+            when(roomFacade.joinRoom(anyString(), anyString())).thenReturn(response);
 
             RoomJoinRequest request = new RoomJoinRequest("타콩");
             String content = objectMapper.writeValueAsString(request);
@@ -246,7 +246,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 라운드가_종료되었는지_조회한다() throws Exception {
             // given
             RoundFinishedResponse response = new RoundFinishedResponse(true, false);
-            when(roomService.getRoundFinished(anyLong(), anyInt())).thenReturn(response);
+            when(roomFacade.getRoundFinished(anyLong(), anyInt())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(ENDPOINT, 1)
@@ -276,7 +276,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 방을_초기화한다() throws Exception {
             // given
-            doNothing().when(roomService).resetRoom(anyLong());
+            doNothing().when(roomFacade).resetRoom(anyLong());
 
             // when & then
             mockMvc.perform(patch(ENDPOINT, 1L))

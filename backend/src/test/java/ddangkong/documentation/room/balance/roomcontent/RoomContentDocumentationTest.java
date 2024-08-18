@@ -15,9 +15,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ddangkong.controller.room.balance.roomcontent.RoomContentController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.service.balance.option.dto.BalanceOptionResponse;
-import ddangkong.service.room.balance.roomcontent.RoomContentService;
-import ddangkong.service.room.balance.roomcontent.dto.RoomContentResponse;
+import ddangkong.facade.balance.option.dto.BalanceOptionResponse;
+import ddangkong.facade.room.balance.roomcontent.RoomContentFacade;
+import ddangkong.facade.room.balance.roomcontent.dto.RoomContentResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,7 +27,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 class RoomContentDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
-    private RoomContentService roomContentService;
+    private RoomContentFacade roomContentFacade;
 
     @Nested
     class 방의_콘텐츠_조회 {
@@ -49,7 +49,7 @@ class RoomContentDocumentationTest extends BaseDocumentationTest {
                     firstOptionResponse,
                     secondOptionResponse
             );
-            when(roomContentService.getRecentRoomContent(anyLong())).thenReturn(response);
+            when(roomContentFacade.getRecentRoomContent(anyLong())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(ENDPOINT, 1L)

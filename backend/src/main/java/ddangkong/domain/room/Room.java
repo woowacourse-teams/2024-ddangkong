@@ -89,10 +89,10 @@ public class Room {
     }
 
     public void startGame() {
-        if (status.isAlreadyStart()) {
+        if (isAlreadyStart()) {
             throw new BadRequestException("이미 게임이 시작했습니다.");
         }
-        status = RoomStatus.PROGRESS;
+        this.status = RoomStatus.PROGRESS;
     }
 
     public void moveToNextRound() {
@@ -100,10 +100,14 @@ public class Room {
             throw new BadRequestException("게임이 진행 중이 아닙니다.");
         }
         if (isFinalRound()) {
-            status = RoomStatus.FINISH;
+            this.status = RoomStatus.FINISH;
             return;
         }
         currentRound++;
+    }
+
+    public boolean isAlreadyStart() {
+        return status.isAlreadyStart();
     }
 
     public boolean isGameProgress() {

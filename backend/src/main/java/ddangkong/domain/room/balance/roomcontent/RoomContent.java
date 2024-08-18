@@ -40,23 +40,15 @@ public class RoomContent {
 
     private LocalDateTime roundEndedAt;
 
-    @Column(nullable = false)
-    private boolean isUsed;
-
     public static RoomContent newRoomContent(Room room, BalanceContent balanceContent, int round) {
-        return new RoomContent(room, balanceContent, round, null, false);
+        return new RoomContent(room, balanceContent, round, null);
     }
 
-    public RoomContent(Room room,
-                       BalanceContent balanceContent,
-                       int round,
-                       LocalDateTime roundEndedAt,
-                       boolean isUsed) {
+    public RoomContent(Room room, BalanceContent balanceContent, int round, LocalDateTime roundEndedAt) {
         this.room = room;
         this.balanceContent = balanceContent;
         this.round = round;
         this.roundEndedAt = roundEndedAt;
-        this.isUsed = isUsed;
     }
 
     public void updateRoundEndedAt(LocalDateTime currentTime, int timeLimit) {
@@ -70,7 +62,6 @@ public class RoomContent {
 
     public boolean isRoundOver(LocalDateTime currentTime, int round) {
         validateSameRound(round);
-        validateAlreadyUsed();
         return currentTime.isAfter(getRoundEndedAt());
     }
 
@@ -79,16 +70,6 @@ public class RoomContent {
             throw new BadRequestException("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : %d, 방 라운드 : %d"
                     .formatted(this.round, round));
         }
-    }
-
-    private void validateAlreadyUsed() {
-        if (isUsed) {
-            throw new BadRequestException("이미 사용된 컨텐츠입니다.");
-        }
-    }
-
-    public void finish() {
-        isUsed = true;
     }
 
     public LocalDateTime getRoundEndedAt() {
