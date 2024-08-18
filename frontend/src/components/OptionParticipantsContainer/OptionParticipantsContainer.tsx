@@ -41,6 +41,12 @@ const OptionParticipantsContainer = () => {
           members={groupRoundResult.secondOption.members}
           memberCount={groupRoundResult.secondOption.memberCount}
         />
+        <div css={dividerLine}></div>
+        <OptionParticipants
+          optionName={'투표에 참여하지 않으셨어요'}
+          members={groupRoundResult.giveUp.members}
+          memberCount={groupRoundResult.giveUp.memberCount}
+        />
       </section>
     </>
   );
