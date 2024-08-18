@@ -90,7 +90,7 @@ class MemberServiceTest extends BaseServiceTest {
             // given
 
             RoomStatus roomStatus = RoomStatus.PROGRESS;
-            Room room = roomRepository.save(new Room(5, 2, 30, roomStatus, Category.EXAMPLE));
+            Room room = roomRepository.save(new Room("uuid", 5, 2, 30, roomStatus, Category.EXAMPLE));
             memberRepository.save(PRIN.master(room));
 
             // when & then

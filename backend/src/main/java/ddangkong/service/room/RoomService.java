@@ -26,8 +26,8 @@ public class RoomService {
     }
 
     @Transactional(readOnly = true)
-    public Room getRoomWithLock(Long roomId) {
-        return roomRepository.findByIdWithLock(roomId)
+    public Room getRoomWithLock(String roomId) {
+        return roomRepository.findByUuidWithLock(roomId)
                 .orElseThrow(() -> new BadRequestException("존재하지 않는 방입니다."));
     }
 

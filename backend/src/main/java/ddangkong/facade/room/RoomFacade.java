@@ -36,14 +36,14 @@ public class RoomFacade {
     public RoomJoinResponse createRoom(String nickname) {
         Room room = roomService.createRoom();
         Member member = memberService.saveMasterMember(nickname, room);
-        return new RoomJoinResponse(room.getId(), new MemberResponse(member));
+        return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }
 
     @Transactional
-    public RoomJoinResponse joinRoom(String nickname, Long roomId) {
-        Room room = roomService.getRoomWithLock(roomId);
+    public RoomJoinResponse joinRoom(String nickname, String uuid) {
+        Room room = roomService.getRoomWithLock(uuid);
         Member member = memberService.saveCommonMember(nickname, room);
-        return new RoomJoinResponse(room.getId(), new MemberResponse(member));
+        return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }
 
     @Transactional(readOnly = true)

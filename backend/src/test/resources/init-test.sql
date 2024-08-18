@@ -21,14 +21,14 @@ INSERT INTO total_balance_vote(balance_option_id)
 VALUES (1),
        (2);
 
-INSERT INTO room (total_round, current_round, time_limit, status, category)
-VALUES (5, 2, 30000, 'PROGRESS', 'EXAMPLE'),
-       (5, 1, 30000, 'PROGRESS', 'EXAMPLE'),
-       (5, 1, 30000, 'PROGRESS', 'EXAMPLE'),
-       (3, 1, 30000, 'READY', 'EXAMPLE'),
-       (3, 1, 30000, 'FINISH', 'EXAMPLE'),
-       (3, 1, 30000, 'FINISH', 'EXAMPLE'),
-       (3, 1, 30000, 'READY', 'EXAMPLE');
+INSERT INTO room (uuid, total_round, current_round, time_limit, status, category)
+VALUES ('uuid1', 5, 2, 30000, 'PROGRESS', 'EXAMPLE'),
+       ('uuid2', 5, 1, 30000, 'PROGRESS', 'EXAMPLE'),
+       ('uuid3', 5, 1, 30000, 'PROGRESS', 'EXAMPLE'),
+       ('uuid4', 3, 1, 30000, 'READY', 'EXAMPLE'),
+       ('uuid5', 3, 1, 30000, 'FINISH', 'EXAMPLE'),
+       ('uuid6', 3, 1, 30000, 'FINISH', 'EXAMPLE'),
+       ('uuid7', 3, 1, 30000, 'READY', 'EXAMPLE');
 
 INSERT INTO member (nickname, room_id, is_master)
 VALUES ('mohamedeu al katan', 1, true),

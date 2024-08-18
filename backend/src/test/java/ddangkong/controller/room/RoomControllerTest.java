@@ -119,9 +119,9 @@ class RoomControllerTest extends BaseControllerTest {
             // when & then
             RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
-                    .pathParam("roomId", 4L)
+                    .pathParam("uuid", "uuid4")
                     .body(body)
-                    .when().post("/api/balances/rooms/{roomId}/members")
+                    .when().post("/api/balances/rooms/{uuid}/members")
                     .then().log().all()
                     .statusCode(201)
                     .extract().as(RoomJoinResponse.class);
@@ -136,9 +136,9 @@ class RoomControllerTest extends BaseControllerTest {
             // when & then
             RoomJoinResponse actual = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
-                    .pathParam("roomId", 4L)
+                    .pathParam("uuid", "uuid4")
                     .body(body)
-                    .when().post("/api/balances/rooms/{roomId}/members")
+                    .when().post("/api/balances/rooms/{uuid}/members")
                     .then().log().all()
                     .statusCode(201)
                     .extract().as(RoomJoinResponse.class);
@@ -227,7 +227,8 @@ class RoomControllerTest extends BaseControllerTest {
         @BeforeEach
         void setUp() {
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
-            room = roomRepository.save(new Room(3, 3, 30, RoomStatus.FINISH, Category.EXAMPLE));
+            room = roomRepository.save(new Room("roomResetSetUpUUID", 3, 3, 30,
+                    RoomStatus.FINISH, Category.EXAMPLE));
             roomContentRepository.save(new RoomContent(room, content, 1, null));
             roomContentRepository.save(new RoomContent(room, content, 2, null));
             roomContentRepository.save(new RoomContent(room, content, 3, null));

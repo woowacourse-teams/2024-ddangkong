@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,9 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String uuid;
+
     @Column(nullable = false)
     private int totalRound;
 
@@ -48,7 +52,8 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    public Room(int totalRound, int currentRound, int timeLimit, RoomStatus status, Category category) {
+    public Room(String uuid, int totalRound, int currentRound, int timeLimit, RoomStatus status, Category category) {
+        this.uuid = uuid;
         this.totalRound = totalRound;
         this.currentRound = currentRound;
         this.timeLimit = timeLimit;
@@ -57,7 +62,10 @@ public class Room {
     }
 
     public static Room createNewRoom() {
-        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, MAX_TIME_LIMIT_MSEC, RoomStatus.READY, Category.EXAMPLE);
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+
+        return new Room(uuid, DEFAULT_TOTAL_ROUND, START_ROUND, MAX_TIME_LIMIT_MSEC, RoomStatus.READY,
+                Category.EXAMPLE);
     }
 
     public void updateTimeLimit(int timeLimit) {
