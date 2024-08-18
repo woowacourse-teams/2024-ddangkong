@@ -33,10 +33,10 @@ const Header = () => {
 };
 
 // 1. 공간만 차지하는 빈 헤더 : 최종 게임 결과 화면
-const EmptyHeader = () => <header css={headerLayout}></header>;
+export const EmptyHeader = () => <header css={headerLayout}></header>;
 
 // 2. 가운데 제목만 차지하는 헤더 : 닉네임 설정 화면
-const TitleHeader = ({ title }: HeaderProps) => (
+export const TitleHeader = ({ title }: HeaderProps) => (
   <header css={headerLayout}>
     <span></span>
     <span css={gameTitle}>{title}</span>
@@ -45,7 +45,7 @@ const TitleHeader = ({ title }: HeaderProps) => (
 );
 
 // 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
-const RoomSettingHeader = ({ title }: HeaderProps) => {
+export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { isModalOpen, handleModalOpen, handleModalClose } = useModal();
 
   return (
@@ -61,7 +61,7 @@ const RoomSettingHeader = ({ title }: HeaderProps) => {
 };
 
 // 4. 좌측 상단 라운드, 가운데 제목 차지하는 헤더 (API 호출 O) : 게임 화면, 라운드 통계 화면
-const RoundHeader = () => {
+export const RoundHeader = () => {
   const { roomId } = useParams();
   const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
@@ -80,7 +80,7 @@ const RoundHeader = () => {
 };
 
 // 5. 좌측 상단 뒤로가기, 가운데 제목 차지하는 헤더 (API 호출 X) : 라운드 투표 현황
-const BackHeader = ({ title }: HeaderProps) => {
+export const BackHeader = ({ title }: HeaderProps) => {
   const navigate = useNavigate();
 
   const goToBack = () => {
