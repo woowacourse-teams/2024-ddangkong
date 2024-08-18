@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- ddangkong 패키지에 대한 로그를 파일에 출력하기 위한 설정 -->
-    <springProperty name="HOME_PATH" source="user.home"/>
+    <springProperty name="LOG_HOME_PATH" source="logging.location"/>
     <property name="LOG_PATH" value="${HOME_PATH}/app-logs"/>
-    <property name="LOG_FILE" value="${LOG_PATH}/ddangkong.log"/>
     <appender name="DDANGKONG_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_FILE}</file>
+        <file>${LOG_PATH}/ddangkong.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/ddangkong-%d{yyyy-MM-dd}.log</fileNamePattern> <!-- 매일 새로운 파일 생성 -->
             <maxHistory>365</maxHistory>
