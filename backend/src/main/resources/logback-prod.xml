@@ -2,7 +2,7 @@
 <configuration>
     <!-- ddangkong 패키지에 대한 로그를 파일에 출력하기 위한 설정 -->
     <springProperty name="LOG_HOME_PATH" source="logging.location"/>
-    <property name="LOG_PATH" value="${HOME_PATH}/app-logs"/>
+    <property name="LOG_PATH" value="${LOG_HOME_PATH}/app-logs"/>
     <appender name="DDANGKONG_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/ddangkong.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
