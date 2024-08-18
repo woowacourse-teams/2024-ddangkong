@@ -56,11 +56,18 @@ export const useRoundIsFinished = ({ contentId, isFetching }: UseRoundIsFinished
 };
 
 export const useSelectOption = () => {
-  const [selectedId, setSelectedId] = useState(0);
+  const [selectedOption, setSelectedOption] = useState({
+    id: 0,
+    isCompleted: false,
+  });
 
   const handleSelectOption = (selectedId: number) => {
-    setSelectedId(selectedId);
+    setSelectedOption((prev) => ({ ...prev, id: selectedId }));
   };
 
-  return { selectedId, handleSelectOption };
+  const handleClickSelected = () => {
+    setSelectedOption((prev) => ({ ...prev, isCompleted: true }));
+  };
+
+  return { selectedOption, handleSelectOption, handleClickSelected };
 };

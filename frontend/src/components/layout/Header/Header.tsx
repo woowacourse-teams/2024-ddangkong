@@ -4,6 +4,7 @@ import { emptyBox, gameTitle, headerLayout, roundText, settingImage } from './He
 
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
 import SettingIcon from '@/assets/images/settingsIcon.svg';
+import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useModal from '@/hooks/useModal';
@@ -54,7 +55,7 @@ const RoomSettingHeader = ({ title }: HeaderProps) => {
       <button onClick={handleModalOpen}>
         <img src={SettingIcon} alt="방 설정" css={settingImage} />
       </button>
-      {/* {isModalOpen && <RoomSettingModal isOpen={isModalOpen} onClose={handleModalClose} />} */}
+      {isModalOpen && <RoomSettingModal isOpen={isModalOpen} onClose={handleModalClose} />}
     </header>
   );
 };

@@ -11,14 +11,14 @@ const color = {
   gray500: '#7A7A7A',
 } as const;
 
-export const borderRadius = {
+const borderRadius = {
   none: '0',
   radius10: '0.8rem',
   radius20: '2rem',
   radius30: '3.2rem',
 } as const;
 
-export const typography = {
+const typography = {
   slogan: {
     fontSize: '2.8rem',
     fontWeight: 'bold',
@@ -53,8 +53,14 @@ export const typography = {
   },
 } as const;
 
+const opacity = {
+  transparency: 0.6,
+  normal: 1,
+};
+
 export const Theme = {
   color,
   borderRadius,
   typography,
+  opacity,
 };
