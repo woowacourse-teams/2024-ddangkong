@@ -1,3 +1,5 @@
+import { useParams } from 'react-router-dom';
+
 import { useRoundIsFinished, useSelectOption } from './SelectContainer.hook';
 import { selectContainerLayout, selectSection } from './SelectContainer.styled';
 import SelectButton from '../common/SelectButton/SelectButton';
@@ -6,7 +8,8 @@ import SelectOption from '@/components/SelectOption/SelectOption';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const SelectContainer = () => {
-  const { balanceContent, isLoading, isFetching } = useBalanceContentQuery();
+  const { roomId } = useParams();
+  const { balanceContent, isLoading, isFetching } = useBalanceContentQuery(Number(roomId));
   const { selectedId, handleSelectOption } = useSelectOption();
 
   useRoundIsFinished({
