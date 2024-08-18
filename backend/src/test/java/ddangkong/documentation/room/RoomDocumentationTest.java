@@ -166,7 +166,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             // given
             RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
                     new MemberResponse(2L, "타콩", false));
-            when(roomService.joinRoom(anyString(), anyLong())).thenReturn(response);
+            when(roomService.joinRoom(anyString(), anyString())).thenReturn(response);
 
             RoomJoinRequest request = new RoomJoinRequest("타콩");
             String content = objectMapper.writeValueAsString(request);

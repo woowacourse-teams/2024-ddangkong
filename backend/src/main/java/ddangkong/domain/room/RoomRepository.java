@@ -18,6 +18,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints(@QueryHint(name = "jakarta.persistence.lock.timeout", value = "5000"))
-    @Query("SELECT r FROM Room r WHERE r.id = :id")
-    Optional<Room> findByIdWithLock(Long id);
+    @Query("SELECT r FROM Room r WHERE r.uuid = :uuid")
+    Optional<Room> findByUuidWithLock(String uuid);
 }

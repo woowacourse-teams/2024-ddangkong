@@ -47,8 +47,8 @@ class RoomServiceTest extends BaseServiceTest {
         void 게임_방_정보를_조회한다() {
             // given
             RoomJoinResponse room = roomService.createRoom("방장");
-            roomService.joinRoom("멤버1", room.roomId());
-            roomService.joinRoom("멤버2", room.roomId());
+            roomService.joinRoom("멤버1", room.roomUuid());
+            roomService.joinRoom("멤버2", room.roomUuid());
 
             // when
             RoomInfoResponse actual = roomService.findRoomInfo(room.roomId());
@@ -87,15 +87,17 @@ class RoomServiceTest extends BaseServiceTest {
         @Test
         void 이미_생성된_방에_참여한다() {
             // given
+            Room room = roomRepository.save(Room.createNewRoom());
+
             String nickname = "나는참가자";
-            Long joinRoomId = 4L;
             MemberResponse expectedMemberResponse = new MemberResponse(13L, nickname, false);
 
             // when
-            RoomJoinResponse actual = roomService.joinRoom(nickname, joinRoomId);
+            RoomJoinResponse actual = roomService.joinRoom(nickname, room.getUuid());
 
             // then
-            assertThat(actual.roomId()).isEqualTo(joinRoomId);
+            assertThat(actual.roomId()).isEqualTo(room.getId());
+            assertThat(actual.roomUuid()).isEqualTo(room.getUuid());
             assertThat(actual.member()).isEqualTo(expectedMemberResponse);
         }
 
@@ -103,10 +105,10 @@ class RoomServiceTest extends BaseServiceTest {
         void 존재하지_않는_방에_참여시_예외를_던진다() {
             // given
             String nickname = "나는참가자";
-            Long nonExistId = 99999999999L;
+            String nonExistUuid = "hi";
 
             // when & then
-            assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistId))
+            assertThatThrownBy(() -> roomService.joinRoom(nickname, nonExistUuid))
                     .isExactlyInstanceOf(BadRequestException.class);
         }
 
@@ -116,11 +118,11 @@ class RoomServiceTest extends BaseServiceTest {
             String masterNickname = "master";
             RoomJoinResponse room = roomService.createRoom(masterNickname);
             for (int i = 0; i < 11; i++) {
-                roomService.joinRoom("member%d".formatted(i), room.roomId());
+                roomService.joinRoom("member%d".formatted(i), room.roomUuid());
             }
 
             // when & then
-            assertThatThrownBy(() -> roomService.joinRoom("member", room.roomId()))
+            assertThatThrownBy(() -> roomService.joinRoom("member", room.roomUuid()))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("방의 인원 수가 가득 찼습니다.");
         }
@@ -130,11 +132,11 @@ class RoomServiceTest extends BaseServiceTest {
             String masterNickname = "master";
             RoomJoinResponse createdRoom = roomService.createRoom(masterNickname);
             for (int i = 0; i < 10; i++) {
-                roomService.joinRoom("member%d".formatted(i), createdRoom.roomId());
+                roomService.joinRoom("member%d".formatted(i), createdRoom.roomUuid());
             }
 
-            Thread t1 = new Thread(() -> roomService.joinRoom("t1member", createdRoom.roomId()));
-            Thread t2 = new Thread(() -> roomService.joinRoom("t2member", createdRoom.roomId()));
+            Thread t1 = new Thread(() -> roomService.joinRoom("t1member", createdRoom.roomUuid()));
+            Thread t2 = new Thread(() -> roomService.joinRoom("t2member", createdRoom.roomUuid()));
             t1.start();
             t2.start();
 

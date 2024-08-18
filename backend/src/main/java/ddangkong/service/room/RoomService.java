@@ -65,8 +65,8 @@ public class RoomService {
     }
 
     @Transactional
-    public RoomJoinResponse joinRoom(String nickname, Long roomId) {
-        Room room = roomRepository.findByIdWithLock(roomId)
+    public RoomJoinResponse joinRoom(String nickname, String roomUuid) {
+        Room room = roomRepository.findByUuidWithLock(roomUuid)
                 .orElseThrow(() -> new BadRequestException("해당 방이 존재하지 않습니다."));
 
         long memberCountInRoom = memberRepository.countByRoom(room);

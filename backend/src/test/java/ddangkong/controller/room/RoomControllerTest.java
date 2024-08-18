@@ -113,15 +113,16 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 방에_참가할_수_있다() {
             // given
+            Room room = roomRepository.save(Room.createNewRoom());
             String nickname = "참가자";
             Map<String, Object> body = Map.of("nickname", nickname);
 
             // when & then
             RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
-                    .pathParam("roomId", 1L)
+                    .pathParam("uuid", room.getUuid())
                     .body(body)
-                    .when().post("/api/balances/rooms/{roomId}/members")
+                    .when().post("/api/balances/rooms/{uuid}/members")
                     .then().log().all()
                     .statusCode(201)
                     .extract().as(RoomJoinResponse.class);
@@ -130,15 +131,16 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 방에_참가한_멤버는_방장이_아니다() {
             // given
+            Room room = roomRepository.save(Room.createNewRoom());
             String nickname = "참가자";
             Map<String, Object> body = Map.of("nickname", nickname);
 
             // when & then
             RoomJoinResponse actual = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
-                    .pathParam("roomId", 1L)
+                    .pathParam("uuid", room.getUuid())
                     .body(body)
-                    .when().post("/api/balances/rooms/{roomId}/members")
+                    .when().post("/api/balances/rooms/{uuid}/members")
                     .then().log().all()
                     .statusCode(201)
                     .extract().as(RoomJoinResponse.class);
