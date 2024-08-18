@@ -9,6 +9,8 @@ export const headerLayout = css`
 `;
 
 export const roundText = css`
+  display: flex;
+  align-items: center;
   width: 2.4rem;
   height: 2.4rem;
 
@@ -21,12 +23,22 @@ export const emptyBox = css`
   height: 1.6rem;
 `;
 
+export const buttonWrapper = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+`;
+
 export const gameTitle = css`
   font-weight: bold;
   font-size: 1.6rem;
 `;
 
 export const settingImage = css`
+  display: flex;
+  align-items: center;
   width: 1.6rem;
   height: 1.6rem;
 `;

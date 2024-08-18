@@ -1,6 +1,13 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { emptyBox, gameTitle, headerLayout, roundText, settingImage } from './Header.styled';
+import {
+  buttonWrapper,
+  emptyBox,
+  gameTitle,
+  headerLayout,
+  roundText,
+  settingImage,
+} from './Header.styled';
 
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
 import SettingIcon from '@/assets/images/settingsIcon.svg';
@@ -52,7 +59,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
     <header css={headerLayout}>
       <div css={emptyBox}></div>
       <span css={gameTitle}>{title}</span>
-      <button onClick={handleModalOpen}>
+      <button onClick={handleModalOpen} css={buttonWrapper}>
         <img src={SettingIcon} alt="방 설정" css={settingImage} />
       </button>
       {isModalOpen && <RoomSettingModal isOpen={isModalOpen} onClose={handleModalClose} />}
@@ -89,7 +96,7 @@ export const BackHeader = ({ title }: HeaderProps) => {
 
   return (
     <header css={headerLayout}>
-      <button onClick={goToBack}>
+      <button onClick={goToBack} css={buttonWrapper}>
         <img src={ArrowLeft} alt="뒤로 가기" />
       </button>
       <span css={gameTitle}>{title}</span>
