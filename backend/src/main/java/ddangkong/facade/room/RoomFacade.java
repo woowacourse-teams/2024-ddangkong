@@ -58,7 +58,7 @@ public class RoomFacade {
         Room room = roomService.startGame(roomId);
         int pickCount = room.getTotalRound();
         List<BalanceContent> balanceContents = balanceContentService.pickBalanceContents(room.getCategory(), pickCount);
-        roomContentService.readyRoomContents(room, balanceContents);
+        roomContentService.prepareRoomContents(room, balanceContents);
     }
 
     @Transactional

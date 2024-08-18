@@ -40,7 +40,7 @@ class RoomContentServiceTest extends BaseServiceTest {
             ));
 
             // when
-            roomContentService.readyRoomContents(room, contents);
+            roomContentService.prepareRoomContents(room, contents);
 
             // then
             List<RoomContent> roomContents = roomContentRepository.findAllByRoom(room);

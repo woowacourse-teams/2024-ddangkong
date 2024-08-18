@@ -25,7 +25,7 @@ public class RoomContentService {
     private final RoomContentRepository roomContentRepository;
 
     @Transactional
-    public void readyRoomContents(Room room, List<BalanceContent> balanceContents) {
+    public void prepareRoomContents(Room room, List<BalanceContent> balanceContents) {
         List<RoomContent> roomContents = IntStream.range(0, balanceContents.size())
                 .mapToObj(index -> RoomContent.newRoomContent(room, balanceContents.get(index), index + 1))
                 .toList();
