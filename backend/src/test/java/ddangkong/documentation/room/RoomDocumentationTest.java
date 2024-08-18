@@ -159,7 +159,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 방_참여 {
 
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members";
+        private static final String ENDPOINT = "/api/balances/rooms/{uuid}/members";
 
         @Test
         void 방에_참여한다() throws Exception {
@@ -172,14 +172,14 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             String content = objectMapper.writeValueAsString(request);
 
             //when & then
-            mockMvc.perform(post(ENDPOINT, 1L)
+            mockMvc.perform(post(ENDPOINT, "488fd79f92a34131bf2a628bd58c5d2c")
                             .content(content)
                             .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().isCreated())
                     .andDo(document("room/join",
                             pathParameters(
-                                    parameterWithName("roomId").description("참여방 ID")
+                                    parameterWithName("uuid").description("참여하는 방 UUID")
                             ),
                             requestFields(
                                     fieldWithPath("nickname").description("닉네임")
