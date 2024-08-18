@@ -186,7 +186,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("참여한 방 ID"),
-                                    fieldWithPath("roomUuid").type(STRING).description("참여한 방의 UUID"),
+                                    fieldWithPath("roomUuid").type(STRING).description("참여한 방 UUID"),
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
