@@ -17,7 +17,7 @@ class RoomContentTest {
     @Nested
     class 라운드_시작 {
 
-        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.EXAMPLE, "다음 중 가고 싶은 곳은?");
+        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.IF, "다음 중 가고 싶은 곳은?");
         private static final LocalDateTime CURRENT_TIME = LocalDateTime.of(2024, 8, 2, 14, 14, 10);
 
         @Test
@@ -25,7 +25,7 @@ class RoomContentTest {
             // given
             int currentRound = 1;
             int timeLimit = 10_000;
-            Room room = new Room("uuid", 5, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
+            Room room = new Room("uuid", 5, currentRound, timeLimit, RoomStatus.PROGRESS, Category.IF);
             RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null);
             int expectedAfterSec = (timeLimit + 2_000) / 1_000;
             LocalDateTime expectedRoundEnded = CURRENT_TIME.plusSeconds(expectedAfterSec);
@@ -41,7 +41,7 @@ class RoomContentTest {
         void 이미_라운드가_시작되었다면_예외를_던진다() {
             // given
             int currentRound = 1;
-            Room room = new Room("uuid", 5, currentRound, 10_000, RoomStatus.PROGRESS, Category.EXAMPLE);
+            Room room = new Room("uuid", 5, currentRound, 10_000, RoomStatus.PROGRESS, Category.IF);
             RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null);
             roomContent.updateRoundEndedAt(CURRENT_TIME, 10_000);
 
@@ -56,7 +56,7 @@ class RoomContentTest {
     class 라운드_종료_여부 {
 
         private static final Room ROOM = Room.createNewRoom();
-        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.EXAMPLE, "치킨 vs 피자");
+        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.IF, "치킨 vs 피자");
         private static final int ROUND = 1;
         private static final LocalDateTime ROUND_ENDED_AT = LocalDateTime.parse("2024-08-03T20:00:02");
 

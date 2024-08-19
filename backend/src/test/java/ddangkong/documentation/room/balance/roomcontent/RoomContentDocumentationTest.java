@@ -41,7 +41,7 @@ class RoomContentDocumentationTest extends BaseDocumentationTest {
             BalanceOptionResponse secondOptionResponse = new BalanceOptionResponse(2L, "100억 부자 송강호");
             RoomContentResponse response = new RoomContentResponse(
                     1L,
-                    Category.EXAMPLE,
+                    Category.IF,
                     5,
                     2,
                     30_000, // TODO sec 단위로 수정

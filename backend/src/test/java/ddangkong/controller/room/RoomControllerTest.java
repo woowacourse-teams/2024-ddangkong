@@ -92,7 +92,7 @@ class RoomControllerTest extends BaseControllerTest {
             // given
             int totalRound = 5;
             int timeLimit = 10000;
-            Category category = Category.EXAMPLE;
+            Category category = Category.IF;
 
             RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);
 
@@ -226,9 +226,9 @@ class RoomControllerTest extends BaseControllerTest {
 
         @BeforeEach
         void setUp() {
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             room = roomRepository.save(new Room("roomResetSetUpUUID", 3, 3, 30,
-                    RoomStatus.FINISH, Category.EXAMPLE));
+                    RoomStatus.FINISH, Category.IF));
             roomContentRepository.save(new RoomContent(room, content, 1, null));
             roomContentRepository.save(new RoomContent(room, content, 2, null));
             roomContentRepository.save(new RoomContent(room, content, 3, null));

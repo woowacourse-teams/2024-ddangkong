@@ -27,7 +27,7 @@ class RoomBalanceVoteRepositoryTest extends BaseRepositoryTest {
             // given
             Room room = save(Room.createNewRoom());
             Member prin = save(PRIN.master(room));
-            BalanceContent content = save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            BalanceContent content = save(new BalanceContent(Category.IF, "A vs B"));
             BalanceOption optionA = save(new BalanceOption("A", content));
 
             roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));

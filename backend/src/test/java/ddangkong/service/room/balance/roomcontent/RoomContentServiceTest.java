@@ -32,11 +32,11 @@ class RoomContentServiceTest extends BaseServiceTest {
             // given
             Room room = roomRepository.save(Room.createNewRoom());
             List<BalanceContent> contents = balanceContentRepository.saveAll(List.of(
-                    new BalanceContent(Category.EXAMPLE, "민초 vs 반민초"),
-                    new BalanceContent(Category.EXAMPLE, "카리나 vs 윈터"),
-                    new BalanceContent(Category.EXAMPLE, "산 vs 바다"),
-                    new BalanceContent(Category.EXAMPLE, "얼굴 vs 성격"),
-                    new BalanceContent(Category.EXAMPLE, "부먹 vs 찍먹")
+                    new BalanceContent(Category.FOOD, "민초 vs 반민초"),
+                    new BalanceContent(Category.ROMANCE, "카리나 vs 윈터"),
+                    new BalanceContent(Category.IF, "산 vs 바다"),
+                    new BalanceContent(Category.ROMANCE, "얼굴 vs 성격"),
+                    new BalanceContent(Category.FOOD, "부먹 vs 찍먹")
             ));
 
             // when
@@ -62,8 +62,8 @@ class RoomContentServiceTest extends BaseServiceTest {
             // given
             int currentRound = 2;
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.IF));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             roomContentRepository.save(RoomContent.newRoomContent(room, content, currentRound));
 
             // when
@@ -83,11 +83,11 @@ class RoomContentServiceTest extends BaseServiceTest {
             // given
             Room room = roomRepository.save(Room.createNewRoom());
             List<BalanceContent> contents = balanceContentRepository.saveAll(List.of(
-                    new BalanceContent(Category.EXAMPLE, "민초 vs 반민초"),
-                    new BalanceContent(Category.EXAMPLE, "카리나 vs 윈터"),
-                    new BalanceContent(Category.EXAMPLE, "산 vs 바다"),
-                    new BalanceContent(Category.EXAMPLE, "얼굴 vs 성격"),
-                    new BalanceContent(Category.EXAMPLE, "부먹 vs 찍먹")
+                    new BalanceContent(Category.FOOD, "민초 vs 반민초"),
+                    new BalanceContent(Category.ROMANCE, "카리나 vs 윈터"),
+                    new BalanceContent(Category.IF, "산 vs 바다"),
+                    new BalanceContent(Category.ROMANCE, "얼굴 vs 성격"),
+                    new BalanceContent(Category.FOOD, "부먹 vs 찍먹")
             ));
             for (int i = 0; i < contents.size(); i++) {
                 roomContentRepository.save(RoomContent.newRoomContent(room, contents.get(i), i + 1));
@@ -110,8 +110,8 @@ class RoomContentServiceTest extends BaseServiceTest {
             // given
             int currentRound = 3;
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.IF));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             roomContentRepository.save(RoomContent.newRoomContent(room, content, currentRound));
 
             // when
@@ -131,8 +131,8 @@ class RoomContentServiceTest extends BaseServiceTest {
             // given
             int currentRound = 3;
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.IF));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-17T16:20:14");
             roomContentRepository.save(new RoomContent(room, content, currentRound, roundEndedAt));
 
@@ -149,8 +149,8 @@ class RoomContentServiceTest extends BaseServiceTest {
             // given
             int currentRound = 3;
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.IF));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-17T16:20:16");
             roomContentRepository.save(new RoomContent(room, content, currentRound, roundEndedAt));
 
