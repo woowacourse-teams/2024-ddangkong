@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ddangkong.controller.room.balance.roomvote.RoomBalanceVoteController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
+import ddangkong.facade.balance.vote.dto.GiveUpVoteMemberResponse;
 import ddangkong.facade.balance.vote.dto.OptionTotalBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.RoomBalanceVoteFacade;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
@@ -58,9 +59,13 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                     List.of("rapper lee"), 1, 25);
             OptionTotalBalanceVoteResponse firstTotalResponse = new OptionTotalBalanceVoteResponse(1L, "민초", 50);
             OptionTotalBalanceVoteResponse secondTotalResponse = new OptionTotalBalanceVoteResponse(2L, "반민초", 50);
+            GiveUpVoteMemberResponse giveUpVoteMemberResponse = new GiveUpVoteMemberResponse(List.of("jason"), 1);
+
             RoomBalanceVoteResultResponse response = new RoomBalanceVoteResultResponse(
-                    new ContentRoomBalanceVoteResponse(firstGroupResponse, secondGroupResponse),
-                    new ContentTotalBalanceVoteResponse(firstTotalResponse, secondTotalResponse));
+                    new ContentRoomBalanceVoteResponse(firstGroupResponse, secondGroupResponse,
+                            giveUpVoteMemberResponse),
+                    new ContentTotalBalanceVoteResponse(firstTotalResponse, secondTotalResponse)
+            );
             when(roomBalanceVoteFacade.getAllVoteResult(roomId, contentId)).thenReturn(response);
 
             // when & then
@@ -90,6 +95,11 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                                     .description("선택지를 선택한 사람 수"),
                                             fieldWithPath("group.secondOption.percent").type(NUMBER)
                                                     .description("선택지를 선택한 퍼센트"),
+                                            fieldWithPath("group.giveUp").type(OBJECT).description("기권한 멤버 정보"),
+                                            fieldWithPath("group.giveUp.members").type(ARRAY)
+                                                    .description("기권한 멤버 이름들"),
+                                            fieldWithPath("group.giveUp.memberCount").type(NUMBER)
+                                                    .description("기권한 멤버 수"),
                                             fieldWithPath("total").type(OBJECT).description("전체 유저 결과"),
                                             fieldWithPath("total.firstOption").type(OBJECT).description("전체 유저 첫 번째 선택지 결과"),
                                             fieldWithPath("total.firstOption.optionId").type(NUMBER).description("선택지 ID"),

@@ -17,6 +17,7 @@ import ddangkong.domain.room.member.Member;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
+import ddangkong.facade.balance.vote.dto.GiveUpVoteMemberResponse;
 import ddangkong.facade.balance.vote.dto.OptionTotalBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.OptionRoomBalanceVoteResponse;
@@ -147,7 +148,8 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
                                     3, 75),
                             new OptionRoomBalanceVoteResponse(2L,
                                     "반민초",
-                                    List.of("rapper lee"), 1, 25)
+                                    List.of("rapper lee"), 1, 25),
+                            new GiveUpVoteMemberResponse(List.of("giveUpMember"), 1)
                     ),
                     new ContentTotalBalanceVoteResponse(
                             new OptionTotalBalanceVoteResponse(1L, "민초", 50),
