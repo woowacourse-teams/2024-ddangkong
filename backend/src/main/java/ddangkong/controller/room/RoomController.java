@@ -56,6 +56,12 @@ public class RoomController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/balances/rooms/{roomId}/member/{memberId}")
+    public void leaveRoom(Long roomId, Long memberId) {
+        roomFacade.leaveRoom(roomId, memberId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/balances/rooms/{roomId}/start")
     public void startGame(@PathVariable @Positive Long roomId) {
         roomFacade.startGame(roomId);
