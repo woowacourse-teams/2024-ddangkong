@@ -23,7 +23,8 @@ public class RoomMembers {
                 .count();
 
         if (masterCount != ALLOWED_MASTER_COUNT) {
-            throw new InternalServerException("방장이 %d명이 아닙니다. 방장 수: %d".formatted(ALLOWED_MASTER_COUNT, masterCount));
+            throw new InternalServerException("방장이 %d명이 아닙니다. 현재 방장 수: %d, roomId: %d"
+                    .formatted(ALLOWED_MASTER_COUNT, masterCount, members.get(0).getRoom().getId()));
         }
     }
 
