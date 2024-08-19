@@ -5,6 +5,7 @@ import ddangkong.facade.room.RoomFacade;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomProgressedResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import jakarta.validation.Valid;
@@ -78,5 +79,10 @@ public class RoomController {
     @PatchMapping("/balances/rooms/{roomId}/reset")
     public void resetRoom(@PathVariable @Positive Long roomId) {
         roomFacade.resetRoom(roomId);
+    }
+
+    @GetMapping("/balances/rooms/{roomId}/progress")
+    public RoomProgressedResponse getRoomProgressed(@Positive @PathVariable Long roomId) {
+        return roomFacade.getRoomProgressed(roomId);
     }
 }

@@ -12,12 +12,12 @@ import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomProgressedResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.Map;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -76,11 +76,47 @@ class RoomControllerTest extends BaseControllerTest {
 
             //then
             assertAll(
-                    () -> Assertions.assertThat(actual.members()).hasSize(4),
-                    () -> Assertions.assertThat(actual.isGameStart()).isTrue(),
-                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
-                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
+                    () -> assertThat(actual.members()).hasSize(4),
+                    () -> assertThat(actual.isGameStart()).isTrue(),
+                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
+                    () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
             );
+        }
+
+        @Test
+        void 게임_진행중인_방_진행여부_조회() {
+            //when & then
+            RoomProgressedResponse actual = RestAssured.given()
+                    .pathParam("roomId", 1L)
+                    .when().get("/api/balances/rooms/{roomId}/progress")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomProgressedResponse.class);
+            assertThat(actual.isProgress()).isTrue();
+        }
+
+        @Test
+        void 게임_준비중인_방_진행여부_조회() {
+            //when & then
+            RoomProgressedResponse actual = RestAssured.given()
+                    .pathParam("roomId", 4L)
+                    .when().get("/api/balances/rooms/{roomId}/progress")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomProgressedResponse.class);
+            assertThat(actual.isProgress()).isFalse();
+        }
+
+        @Test
+        void 게임_종료된_방_진행여부_조회() {
+            //when & then
+            RoomProgressedResponse actual = RestAssured.given()
+                    .pathParam("roomId", 5L)
+                    .when().get("/api/balances/rooms/{roomId}/progress")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomProgressedResponse.class);
+            assertThat(actual.isProgress()).isFalse();
         }
     }
 
