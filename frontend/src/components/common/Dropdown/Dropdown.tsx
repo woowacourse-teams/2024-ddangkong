@@ -22,7 +22,7 @@ interface DropdownProps {
 
 const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const dropdownRef = useRef<HTMLButtonElement | null>(null);
 
   const handleToggleDropdown = () => {
     setIsOpen((prev) => !prev);
@@ -43,14 +43,7 @@ const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
   }, [isOpen]);
 
   return (
-    <div
-      css={dropdownLayout}
-      ref={dropdownRef}
-      onClick={handleToggleDropdown}
-      onKeyDown={handleToggleDropdown}
-      role="button"
-      tabIndex={0}
-    >
+    <button css={dropdownLayout} ref={dropdownRef} onClick={handleToggleDropdown}>
       <div css={dropdownTextContainer}>
         <div css={emptyWrapper}></div>
         <span css={dropdownText}>{text || '선택해주세요'}</span>
@@ -58,20 +51,17 @@ const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
           <img src={isOpen ? ArrowDown : ArrowUp} alt="드랍다운 화살표" css={arrowImage} />
         </div>
       </div>
-      <div css={selectOptionList(isOpen, optionList.length)}>
+      <ul css={selectOptionList(isOpen, optionList.length)}>
         {isOpen &&
           optionList.map((option) => (
-            <button
-              css={optionButton(text === option)}
-              key={option}
-              value={option}
-              onClick={handleClick}
-            >
-              {option}
-            </button>
+            <li key={option}>
+              <button css={optionButton(text === option)} value={option} onClick={handleClick}>
+                {option}
+              </button>
+            </li>
           ))}
-      </div>
-    </div>
+      </ul>
+    </button>
   );
 };
 
