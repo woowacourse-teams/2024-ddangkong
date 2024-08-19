@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 
-const useTimerPerRound = (selectedTimer?: number) => {
-  const [timerPerRound, setTimerPerRound] = useState(selectedTimer);
+const useTimeLimitPerRound = (selectedTimeLimit?: number) => {
+  const [timeLimitPerRound, setTimeLimitPerRound] = useState(selectedTimeLimit);
 
-  const handleClickTimer = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleClickTimeLimit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const target = e.target as HTMLButtonElement;
 
-    setTimerPerRound(Number(target.value));
+    setTimeLimitPerRound(Number(target.value));
   };
 
   useEffect(() => {
-    setTimerPerRound(selectedTimer);
-  }, [selectedTimer]);
+    setTimeLimitPerRound(selectedTimeLimit);
+  }, [selectedTimeLimit]);
 
-  return { timerPerRound, handleClickTimer };
+  return { timeLimitPerRound, handleClickTimeLimit };
 };
 
-export default useTimerPerRound;
+export default useTimeLimitPerRound;

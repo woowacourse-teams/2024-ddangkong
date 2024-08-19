@@ -20,10 +20,15 @@ interface RoomSettingModalProps {
 
 const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
   const { categoryList } = useCategoryListQuery();
-  const { roomSetting, handleClickOption, handleClickRound, handleClickTimer, handleClickApply } =
-    useRoomSetting({ onClose });
+  const {
+    roomSetting,
+    handleClickOption,
+    handleClickRound,
+    handleClickTimeLimit,
+    handleClickApply,
+  } = useRoomSetting({ onClose });
 
-  const { category, totalRound, timerPerRound } = roomSetting;
+  const { category, totalRound, timeLimitPerRound } = roomSetting;
 
   if (!categoryList || !category) return null;
 
@@ -48,14 +53,14 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
             ))}
           </RoomSettingContainer>
           <RoomSettingContainer title="라운드 당 타이머">
-            {TIMER_PER_ROUND_LIST.map((timer) => (
-              <li key={timer}>
+            {TIMER_PER_ROUND_LIST.map((timeLimit) => (
+              <li key={timeLimit}>
                 <button
-                  css={roomSettingButton(timerPerRound === timer)}
-                  onClick={handleClickTimer}
-                  value={timer}
+                  css={roomSettingButton(timeLimitPerRound === timeLimit)}
+                  onClick={handleClickTimeLimit}
+                  value={timeLimit}
                 >
-                  {timer / 1000}초
+                  {timeLimit / 1000}초
                 </button>
               </li>
             ))}
