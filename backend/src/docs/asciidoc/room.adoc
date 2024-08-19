@@ -152,6 +152,30 @@ include::{snippets}/room/roundFinished/response-fields.adoc[]
 
 '''
 
+'''
+
+=== 게임 활성화 여부
+
+==== curl
+
+include::{snippets}/room/activate/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/activate/http-request.adoc[]
+
+include::{snippets}/room/activate/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/activate/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/activate/response-fields.adoc[]
+
+'''
+
 === 방 초기화
 
 ==== curl

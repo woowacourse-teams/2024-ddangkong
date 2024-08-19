@@ -26,6 +26,7 @@ import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.room.RoomFacade;
+import ddangkong.facade.room.dto.RoomActivatedResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -263,6 +264,30 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             responseFields(
                                     fieldWithPath("isRoundFinished").description("라운드 종료 여부"),
                                     fieldWithPath("isGameFinished").description("게임 종료 여부")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    class 방_게임_활성화_여부 {
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/activate";
+
+        @Test
+        void 방에서_게임이_활성화_여부를_조회한다() throws Exception {
+            // given
+            RoomActivatedResponse response = new RoomActivatedResponse(true);
+            when(roomFacade.getRoomActivated(anyLong())).thenReturn(response);
+
+            // when & then
+            mockMvc.perform(get(ENDPOINT, 1))
+                    .andExpect(status().isOk())
+                    .andDo(document("room/activate",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            ),
+                            responseFields(
+                                    fieldWithPath("isActivated").description("게임 활성화 여부(게임 상태가 READY or PROGRESS)")
                             )
                     ));
         }

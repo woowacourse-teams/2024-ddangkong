@@ -150,7 +150,7 @@ class RoomFacadeTest extends BaseServiceTest {
             RoomActivatedResponse actual = roomFacade.getRoomActivated(room.getId());
 
             // then
-            assertThat(actual.isActivate()).isTrue();
+            assertThat(actual.isActivated()).isTrue();
         }
 
         @Test
@@ -164,7 +164,7 @@ class RoomFacadeTest extends BaseServiceTest {
             RoomActivatedResponse actual = roomFacade.getRoomActivated(room.getId());
 
             // then
-            assertThat(actual.isActivate()).isTrue();
+            assertThat(actual.isActivated()).isTrue();
         }
 
         @Test
@@ -178,7 +178,7 @@ class RoomFacadeTest extends BaseServiceTest {
             RoomActivatedResponse actual = roomFacade.getRoomActivated(room.getId());
 
             // then
-            assertThat(actual.isActivate()).isFalse();
+            assertThat(actual.isActivated()).isFalse();
         }
 
         @Test
