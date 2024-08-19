@@ -24,6 +24,10 @@ const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
+  const handleToggleDropdown = () => {
+    setIsOpen((prev) => !prev);
+  };
+
   useEffect(() => {
     const handleOutsideClose = (e: MouseEvent) => {
       const isOutsideDropdown = isOpen && !dropdownRef.current?.contains(e.target as Element);
@@ -42,8 +46,8 @@ const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
     <div
       css={dropdownLayout}
       ref={dropdownRef}
-      onClick={() => setIsOpen((prev) => !prev)}
-      onKeyDown={() => setIsOpen((prev) => !prev)}
+      onClick={handleToggleDropdown}
+      onKeyDown={handleToggleDropdown}
       role="button"
       tabIndex={0}
     >
