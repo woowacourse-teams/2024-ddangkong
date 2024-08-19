@@ -1,0 +1,21 @@
+== 밸런스 게임
+
+=== 카테고리 목록 조회
+
+==== curl
+
+include::{snippets}/balance/category/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/balance/category/http-request.adoc[]
+
+==== response
+
+include::{snippets}/balance/category/http-response.adoc[]
+
+response fields
+
+include::{snippets}/balance/category/response-fields.adoc[]
+
+'''
