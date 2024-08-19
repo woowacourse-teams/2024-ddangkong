@@ -23,6 +23,7 @@ class RoomMembersTest {
         @BeforeEach
         void setUp() {
             room = Room.createNewRoom();
+            EntityTestUtils.setId(room, 1L);
         }
 
         @Test
@@ -53,7 +54,7 @@ class RoomMembersTest {
             // when & then
             assertThatThrownBy(() -> new RoomMembers(members))
                     .isExactlyInstanceOf(InternalServerException.class)
-                    .hasMessageContaining("방장이 1명이 아닙니다. 방장 수: 2");
+                    .hasMessageContaining("방장이 1명이 아닙니다. 현재 방장 수: 2, roomId: 1");
         }
 
         @Test
@@ -68,7 +69,7 @@ class RoomMembersTest {
             // when & then
             assertThatThrownBy(() -> new RoomMembers(members))
                     .isExactlyInstanceOf(InternalServerException.class)
-                    .hasMessageContaining("방장이 1명이 아닙니다. 방장 수: 0");
+                    .hasMessageContaining("방장이 1명이 아닙니다. 현재 방장 수: 0, roomId: 1");
         }
     }
 
