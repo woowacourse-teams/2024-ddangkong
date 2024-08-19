@@ -115,7 +115,6 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
 
         private BalanceOptions balanceOptions;
 
-        //        private List<Member> members;
         private RoomMembers members;
 
 
