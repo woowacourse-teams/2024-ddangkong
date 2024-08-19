@@ -12,7 +12,7 @@ import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
-import ddangkong.facade.room.dto.RoomProgressedResponse;
+import ddangkong.facade.room.dto.RoomActivatedResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
@@ -86,37 +86,37 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 게임_진행중인_방_진행여부_조회() {
             //when & then
-            RoomProgressedResponse actual = RestAssured.given()
+            RoomActivatedResponse actual = RestAssured.given()
                     .pathParam("roomId", 1L)
-                    .when().get("/api/balances/rooms/{roomId}/progress")
+                    .when().get("/api/balances/rooms/{roomId}/activate")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
-                    .extract().as(RoomProgressedResponse.class);
-            assertThat(actual.isProgress()).isTrue();
+                    .extract().as(RoomActivatedResponse.class);
+            assertThat(actual.isActivate()).isTrue();
         }
 
         @Test
         void 게임_준비중인_방_진행여부_조회() {
             //when & then
-            RoomProgressedResponse actual = RestAssured.given()
+            RoomActivatedResponse actual = RestAssured.given()
                     .pathParam("roomId", 4L)
-                    .when().get("/api/balances/rooms/{roomId}/progress")
+                    .when().get("/api/balances/rooms/{roomId}/activate")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
-                    .extract().as(RoomProgressedResponse.class);
-            assertThat(actual.isProgress()).isFalse();
+                    .extract().as(RoomActivatedResponse.class);
+            assertThat(actual.isActivate()).isTrue();
         }
 
         @Test
         void 게임_종료된_방_진행여부_조회() {
             //when & then
-            RoomProgressedResponse actual = RestAssured.given()
+            RoomActivatedResponse actual = RestAssured.given()
                     .pathParam("roomId", 5L)
-                    .when().get("/api/balances/rooms/{roomId}/progress")
+                    .when().get("/api/balances/rooms/{roomId}/activate")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
-                    .extract().as(RoomProgressedResponse.class);
-            assertThat(actual.isProgress()).isFalse();
+                    .extract().as(RoomActivatedResponse.class);
+            assertThat(actual.isActivate()).isFalse();
         }
     }
 
