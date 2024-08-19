@@ -47,7 +47,7 @@ public class RoomBalanceVoteService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoomBalanceVote> getVotesInRoom(Room room, BalanceOption balanceOption) {
+    public List<RoomBalanceVote> getVotesInRoomByOption(Room room, BalanceOption balanceOption) {
         return roomVoteRepository.findByMemberRoomAndBalanceOption(room, balanceOption);
     }
 }

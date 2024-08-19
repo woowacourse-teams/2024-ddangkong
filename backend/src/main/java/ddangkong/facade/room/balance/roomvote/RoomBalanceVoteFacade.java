@@ -78,9 +78,9 @@ public class RoomBalanceVoteFacade {
 
     private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(Room room, BalanceOptions balanceOptions) {
         List<RoomBalanceVote> firstOptionVotes = roomBalanceVoteService
-                .getVotesInRoom(room, balanceOptions.getFirstOption());
+                .getVotesInRoomByOption(room, balanceOptions.getFirstOption());
         List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteService
-                .getVotesInRoom(room, balanceOptions.getSecondOption());
+                .getVotesInRoomByOption(room, balanceOptions.getSecondOption());
         return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes);
     }
 
