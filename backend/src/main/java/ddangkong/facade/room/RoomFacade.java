@@ -3,6 +3,7 @@ package ddangkong.facade.room;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
+import ddangkong.exception.BadRequestException;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
@@ -44,6 +45,34 @@ public class RoomFacade {
         Room room = roomService.getRoomWithLock(uuid);
         Member member = memberService.saveCommonMember(nickname, room);
         return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
+    }
+
+    @Transactional
+    public void leaveRoom(Long roomId, Long memberId) {
+        Room room = roomService.getRoom(roomId);
+        List<Member> members = memberService.findRoomMembers(room);
+        Member member = getContainedMember(members, memberId);
+
+        memberService.delete(member);
+        if (members.size() == 1) {
+            deleteRoom(room);
+            return;
+        }
+        if (member.isMaster()) {
+            memberService.promoteOtherMember(room);
+        }
+    }
+
+    private Member getContainedMember(List<Member> members, Long memberId) {
+        return members.stream()
+                .filter(member -> member.isSameId(memberId))
+                .findAny()
+                .orElseThrow(() -> new BadRequestException("방에 존재하지 않는 멤버입니다."));
+    }
+
+    private void deleteRoom(Room room) {
+        roomBalanceVoteMigrator.migrateToTotalVote(room);
+        roomService.delete(room);
     }
 
     @Transactional(readOnly = true)

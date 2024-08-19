@@ -59,4 +59,9 @@ public class RoomService {
         room.reset();
         return room;
     }
+
+    @Transactional
+    public void delete(Room room) {
+        roomRepository.delete(room);
+    }
 }
