@@ -1,4 +1,6 @@
-import { nicknameListLayout, nicknameText } from './NicknameItem.styled';
+import { nicknameListLayout, nicknameText, profileImage } from './NicknameItem.styled';
+
+import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
 
 interface NicknameItemProp {
   member: string;
@@ -7,7 +9,7 @@ interface NicknameItemProp {
 const NicknameItem = ({ member }: NicknameItemProp) => {
   return (
     <li css={nicknameListLayout}>
-      <span>🥜</span>
+      <img src={SillyDdangkong} alt="" css={profileImage} />
       <span css={nicknameText}>{member}</span>
     </li>
   );
