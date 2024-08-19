@@ -28,6 +28,7 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
+import ddangkong.facade.room.member.dto.MasterResponse;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -153,7 +154,8 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
         @Test
         void 투표가_종료되었는지_조회한다() throws Exception {
             // given
-            VoteFinishedResponse response = new VoteFinishedResponse(true);
+            MasterResponse prin = new MasterResponse(1L, "프콩");
+            VoteFinishedResponse response = new VoteFinishedResponse(true, prin);
             when(roomBalanceVoteFacade.getVoteFinished(anyLong(), anyLong())).thenReturn(response);
 
             // when & then
@@ -165,7 +167,10 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             parameterWithName("contentId").description("콘텐츠 ID")
                                     ),
                                     responseFields(
-                                            fieldWithPath("isFinished").type(BOOLEAN).description("투표 종료 여부")
+                                            fieldWithPath("isFinished").type(BOOLEAN).description("투표 종료 여부"),
+                                            fieldWithPath("master").type(OBJECT).description("방장 정보"),
+                                            fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
+                                            fieldWithPath("master.nickname").type(STRING).description("닉네임")
                                     )
                             )
                     );

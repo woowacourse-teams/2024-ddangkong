@@ -18,6 +18,7 @@ import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
+import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
 import java.util.List;
@@ -114,12 +115,14 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
 
         private BalanceOptions balanceOptions;
 
-        private List<Member> members;
+        //        private List<Member> members;
+        private RoomMembers members;
+
 
         @BeforeEach
         void setUp() {
             balanceOptions = new BalanceOptions(List.of(optionA, optionB));
-            members = List.of(prin, tacan, keochan, eden);
+            members = new RoomMembers(List.of(prin, tacan, keochan, eden));
         }
 
         @Test

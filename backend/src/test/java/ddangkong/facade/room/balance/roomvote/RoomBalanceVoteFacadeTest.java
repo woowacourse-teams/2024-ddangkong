@@ -6,6 +6,7 @@ import static ddangkong.support.fixture.MemberFixture.PRIN;
 import static ddangkong.support.fixture.MemberFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
@@ -97,7 +98,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 종료된 라운드에는 투표할 수 없습니다.");
+                    .hasMessage("이미 투표가 종료되었습니다.");
         }
 
         @Test
@@ -112,7 +113,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 종료된 라운드에는 투표할 수 없습니다.");
+                    .hasMessage("이미 투표가 종료되었습니다.");
         }
 
         @Test
@@ -193,7 +194,10 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
-            assertThat(actual.isFinished()).isTrue();
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isTrue(),
+                    () -> assertThat(actual.master().memberId()).isEqualTo(prin.getId())
+            );
         }
 
         @Test
@@ -208,7 +212,10 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
-            assertThat(actual.isFinished()).isTrue();
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isTrue(),
+                    () -> assertThat(actual.master().memberId()).isEqualTo(prin.getId())
+            );
         }
 
         @Test
@@ -224,7 +231,10 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
-            assertThat(actual.isFinished()).isFalse();
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isFalse(),
+                    () -> assertThat(actual.master().memberId()).isEqualTo(prin.getId())
+            );
         }
 
         @Test

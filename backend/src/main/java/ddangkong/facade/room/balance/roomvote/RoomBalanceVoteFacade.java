@@ -5,6 +5,7 @@ import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
+import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
@@ -12,6 +13,8 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
+import ddangkong.facade.room.balance.roomvote.operation.VoteContext;
+import ddangkong.facade.room.balance.roomvote.operation.VoteOperation;
 import ddangkong.service.balance.content.BalanceContentService;
 import ddangkong.service.balance.option.BalanceOptionService;
 import ddangkong.service.balance.vote.TotalBalanceVoteService;
@@ -44,43 +47,48 @@ public class RoomBalanceVoteFacade {
 
     @Transactional
     public RoomBalanceVoteResponse createVote(RoomBalanceVoteRequest request, Long roomId, Long contentId) {
-        Room room = roomService.getRoom(roomId);
-        BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
-        if (isVoteFinished(room, balanceContent)) {
-            throw new BadRequestException("이미 종료된 라운드에는 투표할 수 없습니다.");
-        }
-        Member member = memberService.getRoomMember(request.memberId(), room);
-        BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-        RoomBalanceVote roomBalanceVote = roomBalanceVoteService.createVote(member, balanceOptions, request.optionId());
-        return new RoomBalanceVoteResponse(roomBalanceVote);
-    }
-
-    private boolean isVoteFinished(Room room, BalanceContent balanceContent) {
-        List<Member> members = memberService.findRoomMembers(room);
-        BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-        return roomContentService.isRoundFinished(room, balanceContent)
-                || roomBalanceVoteService.isVoteFinished(members, balanceOptions);
+        return handleVoteOperation(roomId, contentId, voteContext -> {
+            if (voteContext.isVoteFinished()) {
+                throw new BadRequestException("이미 투표가 종료되었습니다.");
+            }
+            Member member = voteContext.getRoomMembers().getMember(request.memberId());
+            RoomBalanceVote roomBalanceVote = roomBalanceVoteService.createVote(member, voteContext.getBalanceOptions(),
+                    request.optionId());
+            return new RoomBalanceVoteResponse(roomBalanceVote);
+        });
     }
 
     @Transactional(readOnly = true)
-    public RoomBalanceVoteResultResponse getAllVoteResult(Long roomId, Long balanceContentId) {
-        Room room = roomService.getRoom(roomId);
-        BalanceContent balanceContent = balanceContentService.getBalanceContent(balanceContentId);
-        if (isVoteFinished(room, balanceContent)) {
-            BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-            // todo 기권 추가
-            ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(room, balanceOptions);
-            ContentTotalBalanceVoteResponse total = getContentTotalBalanceVoteResponse(balanceOptions);
+    public RoomBalanceVoteResultResponse getAllVoteResult(Long roomId, Long contentId) {
+        return handleVoteOperation(roomId, contentId, voteContext -> {
+            if (voteContext.isVoteNotFinished()) {
+                throw new BadRequestException("투표가 끝나지 않아 투표 결과를 조회할 수 없습니다.");
+            }
+            ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(voteContext.getRoomMembers(),
+                    voteContext.getBalanceOptions());
+            ContentTotalBalanceVoteResponse total = getContentTotalBalanceVoteResponse(voteContext.getBalanceOptions());
             return new RoomBalanceVoteResultResponse(group, total);
-        }
-        throw new BadRequestException("투표가 끝나지 않아 투표 결과를 조회할 수 없습니다.");
+        });
     }
 
-    private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(Room room, BalanceOptions balanceOptions) {
+    private <T> T handleVoteOperation(Long roomId, Long contentId, VoteOperation<T> voteOperation) {
+        Room room = roomService.getRoom(roomId);
+        BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
+        RoomMembers roomMembers = memberService.findRoomMembers(room);
+        BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
+        boolean roundFinished = roomContentService.isRoundFinished(room, balanceContent);
+        boolean voteFinished = roomBalanceVoteService.isVoteFinished(roomMembers, balanceOptions);
+
+        return voteOperation.execute(new VoteContext(roomMembers, balanceOptions, roundFinished || voteFinished));
+    }
+
+    private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(RoomMembers roomMembers,
+                                                                             BalanceOptions balanceOptions) {
         List<RoomBalanceVote> firstOptionVotes = roomBalanceVoteService
-                .getVotesInRoom(room, balanceOptions.getFirstOption());
+                .getVotesInRoom(roomMembers, balanceOptions.getFirstOption());
         List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteService
-                .getVotesInRoom(room, balanceOptions.getSecondOption());
+                .getVotesInRoom(roomMembers, balanceOptions.getSecondOption());
+        // todo 기권 추가
         return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes);
     }
 
@@ -92,8 +100,9 @@ public class RoomBalanceVoteFacade {
 
     @Transactional(readOnly = true)
     public VoteFinishedResponse getVoteFinished(Long roomId, Long contentId) {
-        Room room = roomService.getRoom(roomId);
-        BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
-        return new VoteFinishedResponse(isVoteFinished(room, balanceContent));
+        return handleVoteOperation(roomId, contentId, voteContext -> {
+            Member master = voteContext.getRoomMembers().getMaster();
+            return new VoteFinishedResponse(voteContext.isVoteFinished(), master);
+        });
     }
 }
