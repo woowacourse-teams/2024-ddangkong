@@ -22,7 +22,7 @@ interface DropdownProps {
 
 const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLButtonElement | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const handleToggleDropdown = () => {
     setIsOpen((prev) => !prev);
@@ -43,7 +43,14 @@ const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
   }, [isOpen]);
 
   return (
-    <button css={dropdownLayout} ref={dropdownRef} onClick={handleToggleDropdown}>
+    <div
+      css={dropdownLayout}
+      ref={dropdownRef}
+      onClick={handleToggleDropdown}
+      onKeyDown={handleToggleDropdown}
+      role="button"
+      tabIndex={0}
+    >
       <div css={dropdownTextContainer}>
         <div css={emptyWrapper}></div>
         <span css={dropdownText}>{text || '선택해주세요'}</span>
@@ -61,7 +68,7 @@ const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
             </li>
           ))}
       </ul>
-    </button>
+    </div>
   );
 };
 
