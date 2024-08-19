@@ -1,6 +1,6 @@
 import useCategoryListQuery from './hooks/useCategoryListQuery';
 import useRoomSetting from './hooks/useRoomSetting';
-import RoomSettingItem from './RoomSettingItem/RoomSettingItem';
+import RoomSettingContainer from './RoomSettingContainer/RoomSettingContainer';
 import {
   roomSettingButton,
   roomSettingContainer,
@@ -35,32 +35,31 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
       </Modal.Header>
       <Modal.Content>
         <div css={roomSettingContainer}>
-          <RoomSettingItem title="카테고리">
+          <RoomSettingContainer title="카테고리">
             <Dropdown text={category} optionList={categoryList} handleClick={handleClickOption} />
-          </RoomSettingItem>
-          <RoomSettingItem title="총 라운드">
+          </RoomSettingContainer>
+          <RoomSettingContainer title="총 라운드">
             {TOTAL_ROUND_LIST.map((round) => (
-              <button
-                key={round}
-                css={roomSettingButton(totalRound === round)}
-                onClick={handleClickRound}
-              >
-                {round}
-              </button>
+              <li key={round}>
+                <button css={roomSettingButton(totalRound === round)} onClick={handleClickRound}>
+                  {round}
+                </button>
+              </li>
             ))}
-          </RoomSettingItem>
-          <RoomSettingItem title="라운드 당 타이머">
+          </RoomSettingContainer>
+          <RoomSettingContainer title="라운드 당 타이머">
             {TIMER_PER_ROUND_LIST.map((timer) => (
-              <button
-                key={timer}
-                css={roomSettingButton(timerPerRound === timer)}
-                onClick={handleClickTimer}
-                value={timer}
-              >
-                {timer / 1000}초
-              </button>
+              <li key={timer}>
+                <button
+                  css={roomSettingButton(timerPerRound === timer)}
+                  onClick={handleClickTimer}
+                  value={timer}
+                >
+                  {timer / 1000}초
+                </button>
+              </li>
             ))}
-          </RoomSettingItem>
+          </RoomSettingContainer>
         </div>
       </Modal.Content>
       <Modal.Footer buttonPosition="center">
