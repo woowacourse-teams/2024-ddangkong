@@ -35,7 +35,8 @@ public class RoomMembers {
         return members.stream()
                 .filter(Member::isMaster)
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new InternalServerException("방장이 존재하지 않습니다. roomId: %d"
+                        .formatted(members.get(0).getRoom().getId())));
     }
 
     public Member getMember(Long memberId) {
