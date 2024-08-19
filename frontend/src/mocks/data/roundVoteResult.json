@@ -4,7 +4,7 @@
       "optionId": 1,
       "name": "100억 빚 송강",
       "members": ["d"],
-      "memberCount": 7,
+      "memberCount": 1,
       "percent": 73
     },
     "secondOption": {
@@ -22,12 +22,12 @@
         "일이삼사오육칠팔구십일이",
         "일이삼사오육칠팔구십일이"
       ],
-      "memberCount": 3,
+      "memberCount": 10,
       "percent": 27
     },
     "giveUp": {
       "members": ["ㅁ"],
-      "memberCount": 3
+      "memberCount": 1
     }
   },
   "total": {
