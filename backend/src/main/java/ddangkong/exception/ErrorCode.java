@@ -7,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
+    // BalanceContent
+    NOT_FOUND_BALANCE_CONTENT("존재하지 않는 컨텐츠입니다."),
+    NOT_ENOUGH_BALANCE_CONTENT("질문 수가 부족합니다. category: %s"),
+
     // Room
     INVALID_RANGE_TOTAL_ROUND("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"),
     INVALID_RANGE_TIME_LIMIT("시간 제한은 %ds 이상, %ds 이하만 가능합니다. requested timeLimit: %d"),
