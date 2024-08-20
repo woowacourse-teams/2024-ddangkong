@@ -65,3 +65,25 @@ export const startGame = async (roomId: number): Promise<void> => {
     url: API_URL.startGame(roomId),
   });
 };
+
+// 방 활성화 여부 확인
+export const isRoomActivate = async (roomId: number) => {
+  const res = await fetcher.get({
+    url: API_URL.isRoomActivate(roomId),
+  });
+
+  const data = await res.json();
+
+  return data;
+};
+
+// 방 초기화 여부 확인
+export const isRoomReset = async (roomId: number) => {
+  const res = await fetcher.get({
+    url: API_URL.isRoomReset(roomId),
+  });
+
+  const data = await res.json();
+
+  return data;
+};
