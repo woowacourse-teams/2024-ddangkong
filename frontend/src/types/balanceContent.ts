@@ -20,7 +20,7 @@ export interface MyGameStatus {
   isGameFinished: boolean;
 }
 
-export interface MemberMatchResult {
+export interface MemberMatchingInfo {
   memberId: number;
   nickname: string;
   matchingPercent: number;
