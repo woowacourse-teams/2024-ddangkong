@@ -4,7 +4,7 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.NotProgressedRoomException;
 import ddangkong.facade.room.balance.roomcontent.dto.RoomContentResponse;
 import ddangkong.service.balance.option.BalanceOptionService;
 import ddangkong.service.room.RoomService;
@@ -35,7 +35,7 @@ public class RoomContentFacade {
     private Room getProgressRoom(Long roomId) {
         Room room = roomService.getRoom(roomId);
         if (!room.isGameProgress()) {
-            throw new BadRequestException("해당 방은 게임을 진행하고 있지 않습니다.");
+            throw new NotProgressedRoomException();
         }
         return room;
     }

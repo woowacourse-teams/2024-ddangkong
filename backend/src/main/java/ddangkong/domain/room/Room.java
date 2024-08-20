@@ -1,7 +1,14 @@
 package ddangkong.domain.room;
 
 import ddangkong.domain.balance.content.Category;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.InvalidRangeTimeLimitException;
+import ddangkong.exception.room.InvalidRangeTotalRoundException;
+import ddangkong.exception.room.NotAllowedRoundGapException;
+import ddangkong.exception.room.NotFinishedRoomException;
+import ddangkong.exception.room.NotProgressedRoomException;
+import ddangkong.exception.room.NotReadyRoomException;
+import ddangkong.exception.room.RoundGreaterThanCurrentRoundException;
+import ddangkong.exception.room.RoundLessThanStartRoundException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -70,16 +77,14 @@ public class Room {
 
     public void updateTimeLimit(int timeLimit) {
         if (timeLimit < MIN_TIME_LIMIT_MSEC || timeLimit > MAX_TIME_LIMIT_MSEC) {
-            throw new BadRequestException("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
-                    .formatted(MIN_TIME_LIMIT_MSEC, MAX_TIME_LIMIT_MSEC, timeLimit));
+            throw new InvalidRangeTimeLimitException(MIN_TIME_LIMIT_MSEC, MAX_TIME_LIMIT_MSEC, timeLimit);
         }
         this.timeLimit = timeLimit;
     }
 
     public void updateTotalRound(int totalRound) {
         if (totalRound < MIN_TOTAL_ROUND || totalRound > MAX_TOTAL_ROUND) {
-            throw new BadRequestException("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
-                    .formatted(MIN_TOTAL_ROUND, MAX_TOTAL_ROUND, totalRound));
+            throw new InvalidRangeTotalRoundException(MIN_TOTAL_ROUND, MAX_TOTAL_ROUND, totalRound);
         }
         this.totalRound = totalRound;
     }
@@ -90,14 +95,14 @@ public class Room {
 
     public void startGame() {
         if (isAlreadyStart()) {
-            throw new BadRequestException("이미 게임이 시작했습니다.");
+            throw new NotReadyRoomException();
         }
         this.status = RoomStatus.PROGRESS;
     }
 
     public void moveToNextRound() {
         if (!isGameProgress()) {
-            throw new BadRequestException("게임이 진행 중이 아닙니다.");
+            throw new NotProgressedRoomException();
         }
         if (isFinalRound()) {
             this.status = RoomStatus.FINISH;
@@ -121,19 +126,13 @@ public class Room {
 
     private void validateRound(int round) {
         if (round < START_ROUND) {
-            throw new BadRequestException("startRound보다 크거나 같아야 합니다. startRound : %d, round : %d"
-                    .formatted(START_ROUND, round)
-            );
+            throw new RoundLessThanStartRoundException(START_ROUND, round);
         }
         if (round > currentRound) {
-            throw new BadRequestException("currentRound보다 작거나 같아야 합니다. currentRound : %d, round : %d"
-                    .formatted(currentRound, round)
-            );
+            throw new RoundGreaterThanCurrentRoundException(currentRound, round);
         }
         if (currentRound - round > ALLOWED_ROUND_GAP) {
-            throw new BadRequestException("currentRound과 round의 차이는 %d이하여야 합니다. currentRound : %d, round : %d"
-                    .formatted(ALLOWED_ROUND_GAP, currentRound, round)
-            );
+            throw new NotAllowedRoundGapException(ALLOWED_ROUND_GAP, currentRound, round);
         }
     }
 
@@ -147,7 +146,7 @@ public class Room {
 
     public void reset() {
         if (!isAllRoundFinished()) {
-            throw new BadRequestException("방이 종료되지 않았습니다.");
+            throw new NotFinishedRoomException();
         }
         this.currentRound = START_ROUND;
         this.status = RoomStatus.READY;
