@@ -44,7 +44,7 @@ class RoomFacadeTest extends BaseServiceTest {
         void 방_생성_시_방장_멤버를_생성하고_방을_생성한다() {
             // given
             String nickname = "나는방장";
-            MemberResponse expectedMemberResponse = new MemberResponse(13L, nickname, true);
+            MemberResponse expectedMemberResponse = new MemberResponse(14L, nickname, true);
 
             // when
             RoomJoinResponse actual = roomFacade.createRoom(nickname);
@@ -63,7 +63,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             String nickname = "나는참가자";
             String uuid = "uuid4";
-            MemberResponse expectedMemberResponse = new MemberResponse(13L, nickname, false);
+            MemberResponse expectedMemberResponse = new MemberResponse(14L, nickname, false);
 
             // when
             RoomJoinResponse actual = roomFacade.joinRoom(nickname, uuid);
