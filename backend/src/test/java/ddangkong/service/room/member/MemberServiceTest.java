@@ -89,8 +89,9 @@ class MemberServiceTest extends BaseServiceTest {
         @Test
         void 진행_상태인_방이면_일반_멤버를_생성할_수_없다() {
             // given
+
             RoomStatus roomStatus = RoomStatus.PROGRESS;
-            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
 
             Room room = roomRepository.save(new Room("uuid", 2, roomStatus, roomSetting));
             memberRepository.save(PRIN.master(room));

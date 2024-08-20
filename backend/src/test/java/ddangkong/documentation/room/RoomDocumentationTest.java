@@ -93,7 +93,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             // given
             int totalRound = 5;
             int timeLimit = 10_000;
-            Category category = Category.EXAMPLE;
+            Category category = Category.IF;
             RoomInfoResponse response = new RoomInfoResponse(
                     false,
                     new RoomSettingResponse(totalRound, timeLimit, category),
@@ -135,7 +135,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             // given
             int totalRound = 5;
             int timeLimit = 10_000;
-            Category category = Category.EXAMPLE;
+            Category category = Category.IF;
             RoomSettingRequest content = new RoomSettingRequest(totalRound, timeLimit, category);
 
             // then

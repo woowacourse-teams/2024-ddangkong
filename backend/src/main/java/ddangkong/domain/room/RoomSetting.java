@@ -35,7 +35,7 @@ public class RoomSetting {
     private Category category;
 
     public static RoomSetting createNewRoomSetting() {
-        return new RoomSetting(DEFAULT_TOTAL_ROUND, DEFAULT_TIME_LIMIT_MSEC, Category.EXAMPLE);
+        return new RoomSetting(DEFAULT_TOTAL_ROUND, DEFAULT_TIME_LIMIT_MSEC, Category.IF);
     }
 
     public RoomSetting(int totalRound, int timeLimit, Category category) {

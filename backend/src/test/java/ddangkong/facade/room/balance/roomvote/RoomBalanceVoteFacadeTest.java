@@ -17,6 +17,7 @@ import ddangkong.domain.room.member.Member;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
+import ddangkong.facade.balance.vote.dto.GiveUpVoteMemberResponse;
 import ddangkong.facade.balance.vote.dto.OptionTotalBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.OptionRoomBalanceVoteResponse;
@@ -55,7 +56,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
     @BeforeEach
     void setUp() {
-        content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+        content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
         optionA = balanceOptionRepository.save(new BalanceOption("A", content));
         optionB = balanceOptionRepository.save(new BalanceOption("B", content));
         room = roomRepository.save(Room.createNewRoom());
@@ -118,7 +119,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
         @Test
         void 방의_현재_라운드와_다른_방_컨텐츠의_투표하면_예외를_던진다() {
             // given
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "C vs D"));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "C vs D"));
             BalanceOption optionC = balanceOptionRepository.save(new BalanceOption("C", content));
             balanceOptionRepository.save(new BalanceOption("D", content));
             int round = 2;
@@ -147,7 +148,8 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
                                     3, 75),
                             new OptionRoomBalanceVoteResponse(2L,
                                     "반민초",
-                                    List.of("rapper lee"), 1, 25)
+                                    List.of("rapper lee"), 1, 25),
+                            new GiveUpVoteMemberResponse(List.of("giveUpMember"), 1)
                     ),
                     new ContentTotalBalanceVoteResponse(
                             new OptionTotalBalanceVoteResponse(1L, "민초", 50),

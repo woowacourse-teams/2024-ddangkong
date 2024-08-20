@@ -33,7 +33,7 @@ class RoomTest {
         @EnumSource(mode = Mode.EXCLUDE, names = {"READY"})
         void 게임이_이미_시작했다면_예외를_던진다(RoomStatus status) {
             // given
-            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
             Room room = new Room("uuid", 1, status, roomSetting);
 
             // when & then
@@ -52,7 +52,7 @@ class RoomTest {
             int totalRound = 5;
             int currentRound = 1;
             int timeLimit = 10_000;
-            RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, Category.IF);
             Room room = new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting);
             int expectedRound = currentRound + 1;
 
@@ -70,7 +70,7 @@ class RoomTest {
             int currentRound = 5;
             int timeLimit = 10_000;
             RoomStatus status = RoomStatus.PROGRESS;
-            RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, Category.IF);
             Room room = new Room("uuid", currentRound, status, roomSetting);
 
             // when
@@ -90,7 +90,7 @@ class RoomTest {
             int totalRound = 5;
             int currentRound = 5;
             int timeLimit = 10_000;
-            RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, Category.IF);
             Room room = new Room("uuid", currentRound, status, roomSetting);
 
             // when & then
@@ -107,7 +107,7 @@ class RoomTest {
         void 방의_전체라운드_시간제한_카테고리를_변경한다() {
             // given
             Room room = Room.createNewRoom();
-            RoomSetting roomSetting = new RoomSetting(8, 15000, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(8, 15000, Category.IF);
 
             // when
             room.updateRoomSetting(roomSetting);
@@ -123,7 +123,7 @@ class RoomTest {
         private static final int TOTAL_ROUND = 5;
         private static final int TIME_LIMIT = 10_000;
         private static final RoomStatus STATUS = RoomStatus.PROGRESS;
-        private static final Category CATEGORY = Category.EXAMPLE;
+        private static final Category CATEGORY = Category.IF;
 
         @Test
         void 라운드가_방의_현재_라운드보다_작으면_라운드는_종료된_것이다() {
@@ -229,7 +229,7 @@ class RoomTest {
     class 방_초기화 {
         private static final int TOTAL_ROUND = 5;
         private static final int TIME_LIMIT = 10_000;
-        private static final Category CATEGORY = Category.EXAMPLE;
+        private static final Category CATEGORY = Category.IF;
 
         @Test
         void 방을_초기_상태로_초기화한다() {

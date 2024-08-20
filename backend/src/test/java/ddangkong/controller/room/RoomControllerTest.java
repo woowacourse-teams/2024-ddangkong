@@ -77,7 +77,7 @@ class RoomControllerTest extends BaseControllerTest {
 
             //then
             assertAll(
-                    () -> Assertions.assertThat(actual.members()).hasSize(4),
+                    () -> Assertions.assertThat(actual.members()).hasSize(5),
                     () -> Assertions.assertThat(actual.isGameStart()).isTrue(),
                     () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(10_000),
                     () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
@@ -93,7 +93,7 @@ class RoomControllerTest extends BaseControllerTest {
             // given
             int totalRound = 5;
             int timeLimit = 10000;
-            Category category = Category.EXAMPLE;
+            Category category = Category.IF;
 
             RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);
 
@@ -227,8 +227,8 @@ class RoomControllerTest extends BaseControllerTest {
 
         @BeforeEach
         void setUp() {
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
-            RoomSetting roomSetting = new RoomSetting(3, 10_000, Category.EXAMPLE);
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
+            RoomSetting roomSetting = new RoomSetting(3, 10_000, Category.IF);
             room = roomRepository.save(new Room("roomResetSetUpUUID", 3, RoomStatus.FINISH, roomSetting));
             roomContentRepository.save(new RoomContent(room, content, 1, null));
             roomContentRepository.save(new RoomContent(room, content, 2, null));

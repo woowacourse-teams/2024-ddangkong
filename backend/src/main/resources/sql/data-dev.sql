@@ -1,9 +1,9 @@
 INSERT INTO balance_content (category, name)
-VALUES ('EXAMPLE', '민초 vs 반민초'),
-       ('EXAMPLE', '월 150 백수 vs 월 500 직장인'),
-       ('EXAMPLE', '팔만대장경 다 읽기 vs 대장내시경 팔만번 하기'),
-       ('EXAMPLE', '개구리 맛 초콜릿 vs 초콜릿 맛 개구리'),
-       ('EXAMPLE', '언제 죽을 지 알기 vs 어떻게 죽을 지 알기');
+VALUES ('IF', '민초 vs 반민초'),
+       ('IF', '월 150 백수 vs 월 500 직장인'),
+       ('IF', '팔만대장경 다 읽기 vs 대장내시경 팔만번 하기'),
+       ('IF', '개구리 맛 초콜릿 vs 초콜릿 맛 개구리'),
+       ('IF', '언제 죽을 지 알기 vs 어떻게 죽을 지 알기');
 
 
 INSERT INTO balance_option (name, balance_content_id)
@@ -20,7 +20,7 @@ VALUES ('민초', 1),
 
 
 INSERT INTO room(uuid, total_round, current_round, time_limit, status, category)
-VALUES ('uuid1', 5, 1, 10000, 'PROGRESS', 'EXAMPLE');
+VALUES ('uuid1', 5, 1, 30000, 'PROGRESS', 'IF');
 
 
 INSERT INTO room_content(room_id, balance_content_id, round, round_ended_at)

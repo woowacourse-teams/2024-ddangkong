@@ -18,7 +18,7 @@ class RoomContentTest {
     @Nested
     class 라운드_시작 {
 
-        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.EXAMPLE, "다음 중 가고 싶은 곳은?");
+        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.IF, "다음 중 가고 싶은 곳은?");
         private static final LocalDateTime CURRENT_TIME = LocalDateTime.of(2024, 8, 2, 14, 14, 10);
 
         @Test
@@ -26,7 +26,7 @@ class RoomContentTest {
             // given
             int currentRound = 1;
             int timeLimit = 10_000;
-            RoomSetting roomSetting = new RoomSetting(5, timeLimit, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(5, timeLimit, Category.IF);
 
             Room room = new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting);
             RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null);
@@ -44,7 +44,7 @@ class RoomContentTest {
         void 이미_라운드가_시작되었다면_예외를_던진다() {
             // given
             int currentRound = 1;
-            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
             Room room = new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting);
             RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null);
             roomContent.updateRoundEndedAt(CURRENT_TIME, 10_000);
@@ -60,7 +60,7 @@ class RoomContentTest {
     class 라운드_종료_여부 {
 
         private static final Room ROOM = Room.createNewRoom();
-        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.EXAMPLE, "치킨 vs 피자");
+        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.IF, "치킨 vs 피자");
         private static final int ROUND = 1;
         private static final LocalDateTime ROUND_ENDED_AT = LocalDateTime.parse("2024-08-03T20:00:02");
 
