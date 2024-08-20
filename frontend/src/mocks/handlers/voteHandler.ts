@@ -1,4 +1,4 @@
-import { http, HttpResponse, PathParams } from 'msw';
+import { http, HttpResponse } from 'msw';
 
 import BALANCE_CONTENT from '../data/balanceContent.json';
 import FINAL_RESULT from '../data/finalResult.json';
@@ -8,25 +8,10 @@ import VOTE_RESULT from '../data/roundVoteResult.json';
 import { MOCK_API_URL } from '@/constants/url';
 import { RoundVoteResult } from '@/types/roundVoteResult';
 
-const voteBalanceContentHandler = async ({
-  params,
-  request,
-}: {
-  params: PathParams;
-  request: Request;
-}) => {
-  const { roomId } = params;
-  if (typeof roomId === 'string' && roomId !== '1') {
-    return new HttpResponse(null, { status: 400 });
-  }
+const voteBalanceContentHandler = async ({ request }: { request: Request }) => {
   const body = await request.json();
 
-  return HttpResponse.json(
-    {
-      choiceId: body.optionId,
-    },
-    { status: 201 },
-  );
+  return HttpResponse.json(body, { status: 201 });
 };
 
 const fetchVoteResultHandler = async () => {
