@@ -82,7 +82,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             fieldWithPath("group.firstOption.optionId").type(NUMBER).description("선택지 ID"),
                                             fieldWithPath("group.firstOption.name").type(STRING).description("선택지 이름"),
                                             fieldWithPath("group.firstOption.members").type(ARRAY)
-                                                    .description("선택지를 선택한 멤버 이름들"),
+                                                    .description("선택지를 선택한 멤버들의 닉네임"),
                                             fieldWithPath("group.firstOption.memberCount").type(NUMBER)
                                                     .description("선택지를 선택한 사람 수"),
                                             fieldWithPath("group.firstOption.percent").type(NUMBER).description("선택지를 선택한 퍼센트"),
@@ -90,14 +90,14 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             fieldWithPath("group.secondOption.optionId").type(NUMBER).description("선택지 ID"),
                                             fieldWithPath("group.secondOption.name").type(STRING).description("선택지 이름"),
                                             fieldWithPath("group.secondOption.members").type(ARRAY)
-                                                    .description("선택지를 선택한 멤버 이름들"),
+                                                    .description("선택지를 선택한 멤버들의 닉네임"),
                                             fieldWithPath("group.secondOption.memberCount").type(NUMBER)
                                                     .description("선택지를 선택한 사람 수"),
                                             fieldWithPath("group.secondOption.percent").type(NUMBER)
                                                     .description("선택지를 선택한 퍼센트"),
                                             fieldWithPath("group.giveUp").type(OBJECT).description("기권한 멤버 정보"),
                                             fieldWithPath("group.giveUp.members").type(ARRAY)
-                                                    .description("기권한 멤버 이름들"),
+                                                    .description("기권한 멤버들의 닉네임"),
                                             fieldWithPath("group.giveUp.memberCount").type(NUMBER)
                                                     .description("기권한 멤버 수"),
                                             fieldWithPath("total").type(OBJECT).description("전체 유저 결과"),
