@@ -30,7 +30,7 @@ class RoomServiceTest extends BaseServiceTest {
 
             int totalRound = 8;
             int timeLimit = 13_000;
-            Category category = Category.EXAMPLE;
+            Category category = Category.IF;
             RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, category);
 
             // when
@@ -53,7 +53,7 @@ class RoomServiceTest extends BaseServiceTest {
             Room room = roomRepository.save(Room.createNewRoom());
 
             int timeLimit = 10000;
-            Category category = Category.EXAMPLE;
+            Category category = Category.IF;
             RoomSetting roomSetting = new RoomSetting(inValidTotalRound, timeLimit, category);
 
             // when & then
@@ -70,7 +70,7 @@ class RoomServiceTest extends BaseServiceTest {
             Room room = roomRepository.save(Room.createNewRoom());
 
             int totalRound = 5;
-            Category category = Category.EXAMPLE;
+            Category category = Category.IF;
             RoomSetting roomSetting = new RoomSetting(totalRound, inValidTimeLimit, category);
 
             // when & then

@@ -29,7 +29,7 @@ class RoomContentRepositoryTest extends BaseRepositoryTest {
         @BeforeEach
         void setUp() {
             room = save(Room.createNewRoom());
-            balanceContent = save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            balanceContent = save(new BalanceContent(Category.IF, "A vs B"));
         }
 
         @Test

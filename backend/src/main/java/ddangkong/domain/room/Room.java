@@ -65,7 +65,7 @@ public class Room {
         String uuid = UUID.randomUUID().toString().replace("-", "");
 
         return new Room(uuid, DEFAULT_TOTAL_ROUND, START_ROUND, MAX_TIME_LIMIT_MSEC, RoomStatus.READY,
-                Category.EXAMPLE);
+                Category.IF);
     }
 
     public void updateTimeLimit(int timeLimit) {

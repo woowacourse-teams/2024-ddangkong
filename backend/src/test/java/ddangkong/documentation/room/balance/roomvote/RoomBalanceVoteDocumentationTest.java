@@ -44,7 +44,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 방_투표_결과_조희 {
 
-        private static final String END_POINT = "/api/balances/rooms/{roomId}/contents/{contentId}/vote-result";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/contents/{contentId}/vote-result";
 
         @Test
         void 방의_진행중인_라운드의_투표_결과를_조회한다() throws Exception {
@@ -64,7 +64,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
             when(roomBalanceVoteFacade.getAllVoteResult(roomId, contentId)).thenReturn(response);
 
             // when & then
-            mockMvc.perform(get(END_POINT, roomId, contentId))
+            mockMvc.perform(get(ENDPOINT, roomId, contentId))
                     .andExpect(status().isOk())
                     .andDo(document("roomBalanceVote/findVoteResult",
                                     pathParameters(
@@ -108,7 +108,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 투표_생성 {
 
-        private static final String END_POINT = "/api/balances/rooms/{roomId}/contents/{contentId}/votes";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/contents/{contentId}/votes";
 
         @Test
         void 선택지에_투표를_할_수_있다() throws Exception {
@@ -123,7 +123,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
             when(roomBalanceVoteFacade.createVote(request, roomId, contentId)).thenReturn(response);
 
             // when & then
-            mockMvc.perform(post(END_POINT, roomId, contentId)
+            mockMvc.perform(post(ENDPOINT, roomId, contentId)
                             .content(content)
                             .contentType(MediaType.APPLICATION_JSON)
                     )
@@ -148,7 +148,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 투표_종료_여부_조회 {
 
-        private static final String END_POINT = "/api/balances/rooms/{roomId}/contents/{contentId}/vote-finished";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/contents/{contentId}/vote-finished";
 
         @Test
         void 투표가_종료되었는지_조회한다() throws Exception {
@@ -157,7 +157,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
             when(roomBalanceVoteFacade.getVoteFinished(anyLong(), anyLong())).thenReturn(response);
 
             // when & then
-            mockMvc.perform(get(END_POINT, 1L, 1L))
+            mockMvc.perform(get(ENDPOINT, 1L, 1L))
                     .andExpect(status().isOk())
                     .andDo(document("roomBalanceVote/voteFinished",
                                     pathParameters(

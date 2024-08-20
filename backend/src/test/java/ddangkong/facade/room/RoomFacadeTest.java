@@ -178,9 +178,9 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             int currentRound = 2;
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE)
+                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.IF)
             );
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             roomContentRepository.save(RoomContent.newRoomContent(room, content, currentRound + 1));
 
             // when
@@ -202,7 +202,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             int currentRound = 5;
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30_000, RoomStatus.PROGRESS, Category.EXAMPLE)
+                    new Room("uuid", 5, currentRound, 30_000, RoomStatus.PROGRESS, Category.IF)
             );
 
             // when
@@ -223,7 +223,7 @@ class RoomFacadeTest extends BaseServiceTest {
         private static final int TOTAL_ROUND = 5;
         private static final int TIME_LIMIT = 30_000;
         private static final RoomStatus STATUS = RoomStatus.PROGRESS;
-        private static final Category CATEGORY = Category.EXAMPLE;
+        private static final Category CATEGORY = Category.IF;
 
         @Test
         void 라운드가_종료되지_않았으면_게임도_종료되지_않은_상태여야_한다() {
@@ -301,7 +301,7 @@ class RoomFacadeTest extends BaseServiceTest {
         private static final int TOTAL_ROUND = 5;
         private static final int TIME_LIMIT = 30;
         private static final RoomStatus STATUS = RoomStatus.FINISH;
-        private static final Category CATEGORY = Category.EXAMPLE;
+        private static final Category CATEGORY = Category.IF;
 
         private BalanceContent content;
 

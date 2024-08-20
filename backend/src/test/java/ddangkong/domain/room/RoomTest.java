@@ -34,7 +34,7 @@ class RoomTest {
         @EnumSource(mode = Mode.EXCLUDE, names = {"READY"})
         void 게임이_이미_시작했다면_예외를_던진다(RoomStatus status) {
             // given
-            Room room = new Room("uuid", 5, 1, 30_000, status, Category.EXAMPLE);
+            Room room = new Room("uuid", 5, 1, 30_000, status, Category.IF);
 
             // when & then
             assertThatThrownBy(room::startGame)
@@ -52,7 +52,7 @@ class RoomTest {
             int totalRound = 5;
             int currentRound = 1;
             int timeLimit = 30_000;
-            Room room = new Room("uuid", totalRound, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
+            Room room = new Room("uuid", totalRound, currentRound, timeLimit, RoomStatus.PROGRESS, Category.IF);
             int expectedRound = currentRound + 1;
 
             // when
@@ -69,7 +69,7 @@ class RoomTest {
             int currentRound = 5;
             int timeLimit = 30_000;
             RoomStatus status = RoomStatus.PROGRESS;
-            Room room = new Room("uuid", totalRound, currentRound, timeLimit, status, Category.EXAMPLE);
+            Room room = new Room("uuid", totalRound, currentRound, timeLimit, status, Category.IF);
 
             // when
             room.moveToNextRound();
@@ -88,7 +88,7 @@ class RoomTest {
             int totalRound = 5;
             int currentRound = 5;
             int timeLimit = 30_000;
-            Room room = new Room("uuid", totalRound, currentRound, timeLimit, status, Category.EXAMPLE);
+            Room room = new Room("uuid", totalRound, currentRound, timeLimit, status, Category.IF);
 
             // when & then
             assertThatThrownBy(room::moveToNextRound)
@@ -133,7 +133,7 @@ class RoomTest {
         private static final int TOTAL_ROUND = 5;
         private static final int TIME_LIMIT = 30;
         private static final RoomStatus STATUS = RoomStatus.PROGRESS;
-        private static final Category CATEGORY = Category.EXAMPLE;
+        private static final Category CATEGORY = Category.IF;
 
         @Test
         void 라운드가_방의_현재_라운드보다_작으면_라운드는_종료된_것이다() {
@@ -231,7 +231,7 @@ class RoomTest {
     class 방_초기화 {
         private static final int TOTAL_ROUND = 5;
         private static final int TIME_LIMIT = 30;
-        private static final Category CATEGORY = Category.EXAMPLE;
+        private static final Category CATEGORY = Category.IF;
 
         @Test
         void 방을_초기_상태로_초기화한다() {
