@@ -20,8 +20,8 @@ export interface MyGameStatus {
   isGameFinished: boolean;
 }
 
-export interface GameFinalResult {
-  rank: number;
-  name: string;
-  percent: number;
+export interface MemberMatchResult {
+  memberId: number;
+  nickname: string;
+  matchingPercent: number;
 }
