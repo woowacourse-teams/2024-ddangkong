@@ -9,12 +9,14 @@ interface UseSelectCompleteMutationProps {
   selectedId: number;
   contentId?: number;
   completeSelection: () => void;
+  showModal: () => void;
 }
 
 const useCompleteSelectionMutation = ({
   selectedId,
   contentId,
   completeSelection,
+  showModal,
 }: UseSelectCompleteMutationProps) => {
   const { roomId } = useParams();
   const memberInfo = useRecoilValue(memberInfoState);
@@ -34,6 +36,9 @@ const useCompleteSelectionMutation = ({
     },
     onSuccess: () => {
       completeSelection();
+    },
+    onError: () => {
+      showModal();
     },
   });
 };

@@ -7,9 +7,10 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 interface SelectButtonProps {
   selectedId: number;
   completeSelection: () => void;
+  showModal: () => void;
 }
 
-const SelectButton = ({ selectedId, completeSelection }: SelectButtonProps) => {
+const SelectButton = ({ selectedId, completeSelection, showModal }: SelectButtonProps) => {
   const { balanceContent } = useBalanceContentQuery();
   const {
     data,
@@ -19,6 +20,7 @@ const SelectButton = ({ selectedId, completeSelection }: SelectButtonProps) => {
     selectedId,
     contentId: balanceContent?.contentId,
     completeSelection,
+    showModal,
   });
 
   return (
