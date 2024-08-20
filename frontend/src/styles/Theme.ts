@@ -54,8 +54,9 @@ const typography = {
 } as const;
 
 const opacity = {
-  transparency: 0.6,
-  normal: 1,
+  invisible: 0,
+  disabled: 0.6,
+  default: 1,
 };
 
 export const Theme = {

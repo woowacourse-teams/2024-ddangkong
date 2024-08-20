@@ -13,7 +13,7 @@ export const SelectOptionLayout = (selected: boolean, isSelected: boolean) => cs
 
   background-color: ${selected ? Theme.color.peanut500 : Theme.color.peanut300};
   cursor: ${isSelected ? 'not-allowed' : 'pointer'};
-  opacity: ${isSelected ? Theme.opacity.transparency : Theme.opacity.normal};
+  opacity: ${isSelected ? Theme.opacity.disabled : Theme.opacity.default};
 
   color: #000;
   font-weight: bold;

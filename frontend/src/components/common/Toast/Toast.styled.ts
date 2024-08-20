@@ -22,22 +22,22 @@ export const toastLayout = (isVisible: boolean) => css`
 
 const fadeIn = keyframes`
   from {
-    opacity: 0;
+    opacity: ${Theme.opacity.invisible};
     transform: translateX(-50%) translateY(1rem);
   }
   to {
-    opacity: 1;
+    opacity: ${Theme.opacity.default};
     transform: translateX(-50%) translateY(0);
   }
 `;
 
 const fadeOut = keyframes`
   from {
-    opacity: 1;
+    opacity: ${Theme.opacity.invisible};
     transform: translateX(-50%) translateY(0);
   }
   to {
-    opacity: 0;
+    opacity: ${Theme.opacity.default};
     transform: translateX(-50%) translateY(1rem);
   }
 `;
