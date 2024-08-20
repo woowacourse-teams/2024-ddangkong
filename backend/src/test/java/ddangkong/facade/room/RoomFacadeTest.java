@@ -194,7 +194,7 @@ class RoomFacadeTest extends BaseServiceTest {
             assertAll(
                     () -> assertThat(foundRoom.getCurrentRound()).isEqualTo(currentRound + 1),
                     () -> assertThat(foundRoom.isGameProgress()).isTrue(),
-                    () -> assertThat(roomContent.getRoundEndedAt()).isNotNull()
+                    () -> assertThat(roomContent.getVoteDeadline()).isNotNull()
             );
         }
 
@@ -231,7 +231,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             int currentRound = 2;
             Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
-            Member prin = memberRepository.save(PRIN.master(room));
+            Member master = memberRepository.save(PRIN.master(room));
             int round = 2;
 
             // when
@@ -241,7 +241,7 @@ class RoomFacadeTest extends BaseServiceTest {
             assertAll(
                     () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
                     () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(prin.getId())
+                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(master.getId())
             );
         }
 
@@ -250,7 +250,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             int currentRound = 2;
             Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
-            Member prin = memberRepository.save(PRIN.master(room));
+            Member master = memberRepository.save(PRIN.master(room));
             int round = 1;
 
             // when
@@ -260,7 +260,7 @@ class RoomFacadeTest extends BaseServiceTest {
             assertAll(
                     () -> assertThat(roundFinishedResponse.isRoundFinished()).isTrue(),
                     () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(prin.getId())
+                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(master.getId())
             );
         }
 
@@ -270,7 +270,7 @@ class RoomFacadeTest extends BaseServiceTest {
             int currentRound = 5;
             RoomStatus status = RoomStatus.FINISH;
             Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY));
-            Member prin = memberRepository.save(PRIN.master(room));
+            Member master = memberRepository.save(PRIN.master(room));
             int round = 5;
 
             // when
@@ -280,7 +280,7 @@ class RoomFacadeTest extends BaseServiceTest {
             assertAll(
                     () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
                     () -> assertThat(roundFinishedResponse.isGameFinished()).isTrue(),
-                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(prin.getId())
+                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(master.getId())
             );
         }
 
@@ -289,7 +289,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             int currentRound = 5;
             Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
-            Member prin = memberRepository.save(PRIN.master(room));
+            Member master = memberRepository.save(PRIN.master(room));
             int round = 5;
 
             // when
@@ -299,7 +299,7 @@ class RoomFacadeTest extends BaseServiceTest {
             assertAll(
                     () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
                     () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(prin.getId())
+                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(master.getId())
             );
         }
     }

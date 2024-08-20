@@ -111,7 +111,7 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
     }
 
     @Nested
-    class 투표_완료_여부 {
+    class 모든_멤버_투표_완료_여부 {
 
         private BalanceOptions balanceOptions;
 
@@ -133,10 +133,10 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionB));
 
             // when
-            boolean isVoteFinished = roomBalanceVoteService.isVoteFinished(members, balanceOptions);
+            boolean isAllMemberVoted = roomBalanceVoteService.isAllMemberVoted(members, balanceOptions);
 
             // then
-            assertThat(isVoteFinished).isTrue();
+            assertThat(isAllMemberVoted).isTrue();
         }
 
         @Test
@@ -147,10 +147,10 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionB));
 
             // when
-            boolean isVoteFinished = roomBalanceVoteService.isVoteFinished(members, balanceOptions);
+            boolean isAllMemberVoted = roomBalanceVoteService.isAllMemberVoted(members, balanceOptions);
 
             // then
-            assertThat(isVoteFinished).isFalse();
+            assertThat(isAllMemberVoted).isFalse();
         }
     }
 }

@@ -50,7 +50,7 @@ public class RoomBalanceVoteFacade {
         if (voteContext.isVoteFinished()) {
             throw new BadRequestException("이미 투표가 종료되었습니다.");
         }
-        Member member = voteContext.getRoomMembers().getMember(request.memberId());
+        Member member = voteContext.getMember(request.memberId());
         RoomBalanceVote roomBalanceVote = roomBalanceVoteService.createVote(member, voteContext.getBalanceOptions(),
                 request.optionId());
         return new RoomBalanceVoteResponse(roomBalanceVote);
@@ -87,7 +87,7 @@ public class RoomBalanceVoteFacade {
     @Transactional(readOnly = true)
     public VoteFinishedResponse getVoteFinished(Long roomId, Long contentId) {
         VoteContext voteContext = getVoteContext(roomId, contentId);
-        Member master = voteContext.getRoomMembers().getMaster();
+        Member master = voteContext.getMaster();
         return new VoteFinishedResponse(voteContext.isVoteFinished(), master);
     }
 
@@ -96,9 +96,9 @@ public class RoomBalanceVoteFacade {
         BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
         RoomMembers roomMembers = memberService.findRoomMembers(room);
         BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-        boolean roundFinished = roomContentService.isRoundFinished(room, balanceContent);
-        boolean voteFinished = roomBalanceVoteService.isVoteFinished(roomMembers, balanceOptions);
+        boolean isOverVoteDeadline = roomContentService.isOverVoteDeadline(room, balanceContent);
+        boolean isAllMemberVoted = roomBalanceVoteService.isAllMemberVoted(roomMembers, balanceOptions);
 
-        return new VoteContext(roomMembers, balanceOptions, roundFinished || voteFinished);
+        return new VoteContext(roomMembers, balanceOptions, isOverVoteDeadline || isAllMemberVoted);
     }
 }

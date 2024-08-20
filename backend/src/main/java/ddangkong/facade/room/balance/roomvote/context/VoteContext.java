@@ -1,6 +1,7 @@
 package ddangkong.facade.room.balance.roomvote.context;
 
 import ddangkong.domain.balance.option.BalanceOptions;
+import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import lombok.Getter;
 
@@ -17,6 +18,14 @@ public class VoteContext {
         this.roomMembers = roomMembers;
         this.balanceOptions = balanceOptions;
         this.voteFinished = voteFinished;
+    }
+
+    public Member getMaster() {
+        return roomMembers.getMaster();
+    }
+
+    public Member getMember(Long memberId) {
+        return roomMembers.getMember(memberId);
     }
 
     public boolean isVoteNotFinished() {

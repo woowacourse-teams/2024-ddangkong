@@ -23,7 +23,7 @@ INSERT INTO room(uuid, total_round, current_round, time_limit, status, category)
 VALUES ('uuid1', 5, 1, 30000, 'PROGRESS', 'EXAMPLE');
 
 
-INSERT INTO room_content(room_id, balance_content_id, round, round_ended_at)
+INSERT INTO room_content(room_id, balance_content_id, round, vote_deadline)
 VALUES (1, 1, 1, null),
        (1, 2, 2, null),
        (1, 3, 3, null),

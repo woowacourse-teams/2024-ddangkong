@@ -44,7 +44,7 @@ VALUES ('mohamedeu al katan', 1, true),
        ('finish player', 5, true),
        ('master', 6, true);
 
-INSERT INTO room_content (room_id, balance_content_id, round, round_ended_at)
+INSERT INTO room_content (room_id, balance_content_id, round, vote_deadline)
 VALUES (1, 2, 1, '2024-07-18 19:50:32.000'),
        (1, 1, 2, '2024-07-18 20:00:32.000'),
        (1, 3, 3, null),

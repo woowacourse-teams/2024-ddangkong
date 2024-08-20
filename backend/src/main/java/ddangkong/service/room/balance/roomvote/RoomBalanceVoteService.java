@@ -37,7 +37,7 @@ public class RoomBalanceVoteService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isVoteFinished(RoomMembers roomMembers, BalanceOptions balanceOptions) {
+    public boolean isAllMemberVoted(RoomMembers roomMembers, BalanceOptions balanceOptions) {
         long voteCount = roomVoteRepository.countByMemberInAndBalanceOptionIn(roomMembers.getMembers(),
                 balanceOptions.getOptions());
         if (voteCount > roomMembers.size()) {
