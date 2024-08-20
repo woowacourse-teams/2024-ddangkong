@@ -19,7 +19,7 @@ public class RoomService {
         return roomRepository.save(Room.createNewRoom());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Room getRoom(Long roomId) {
         return roomRepository.findById(roomId)
                 .orElseThrow(() -> new BadRequestException("존재하지 않는 방입니다."));
