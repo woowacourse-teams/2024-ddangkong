@@ -6,8 +6,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.exception.BadRequestException;
+import ddangkong.exception.InternalServerException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,97 +17,87 @@ import org.junit.jupiter.api.Test;
 class RoomContentTest {
 
     @Nested
-    class 라운드_시작 {
+    class 투표_마감_시간_설정 {
 
-        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.EXAMPLE, "다음 중 가고 싶은 곳은?");
-        private static final LocalDateTime CURRENT_TIME = LocalDateTime.of(2024, 8, 2, 14, 14, 10);
+        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.IF, "다음 중 가고 싶은 곳은?");
+        private static final LocalDateTime NOW = LocalDateTime.parse("2024-08-02T14:14:10");
 
         @Test
-        void 라운드를_시작할_때_종료_시각을_기록한다() {
+        void 투표_마감_시간을_설정한다() {
             // given
             int currentRound = 1;
             int timeLimit = 10_000;
-            Room room = new Room(5, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
-            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null, false);
-            int expectedAfterSec = (timeLimit + 2_000) / 1_000;
-            LocalDateTime expectedRoundEnded = CURRENT_TIME.plusSeconds(expectedAfterSec);
+            RoomSetting roomSetting = new RoomSetting(5, timeLimit, Category.IF);
+
+            Room room = new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting);
+            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null);
+            LocalDateTime expectedVoteDeadline = LocalDateTime.parse("2024-08-02T14:14:22");
 
             // when
-            roomContent.updateRoundEndedAt(CURRENT_TIME, timeLimit);
+            roomContent.updateVoteDeadline(NOW, timeLimit);
 
             // then
-            assertThat(roomContent.getRoundEndedAt()).isEqualTo(expectedRoundEnded);
+            assertThat(roomContent.getVoteDeadline()).isEqualTo(expectedVoteDeadline);
         }
 
         @Test
-        void 이미_라운드가_시작되었다면_예외를_던진다() {
+        void 이미_투표_마감_시간을_설정했을_경우_예외가_발생한다() {
             // given
             int currentRound = 1;
-            Room room = new Room(5, currentRound, 10_000, RoomStatus.PROGRESS, Category.EXAMPLE);
-            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null, false);
-            roomContent.updateRoundEndedAt(CURRENT_TIME, 10_000);
+            int timeLimit = 10_000;
+
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
+            Room room = new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting);
+            RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null);
+            roomContent.updateVoteDeadline(NOW, timeLimit);
 
             // when & then
-            assertThatThrownBy(() -> roomContent.updateRoundEndedAt(CURRENT_TIME, 10_000))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 라운드는 이미 시작했습니다.");
+            assertThatThrownBy(() -> roomContent.updateVoteDeadline(NOW, timeLimit))
+                    .isInstanceOf(InternalServerException.class)
+                    .hasMessage("해당 라운드의 투표 마감 시간은 이미 설정되었습니다.");
         }
     }
 
     @Nested
-    class 라운드_종료_여부 {
+    class 투표_마감_시간_지남_여부 {
 
         private static final Room ROOM = Room.createNewRoom();
-        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.EXAMPLE, "치킨 vs 피자");
+        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.IF, "치킨 vs 피자");
         private static final int ROUND = 1;
-        private static final LocalDateTime ROUND_ENDED_AT = LocalDateTime.parse("2024-08-03T20:00:02");
-        private static final boolean IS_USED = false;
 
         @Test
-        void 라운드_종료_시간보다_이전_시간이면_라운드가_종료되지_않은_것이다() {
+        void 투표_마감_시간보다_이전_시간이면_투표가_마감되지_않은_것이다() {
             // given
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T20:00:02");
-            RoomContent roomContent = new RoomContent(ROOM, BALANCE_CONTENT, ROUND, roundEndedAt, IS_USED);
-            LocalDateTime now = LocalDateTime.parse("2024-08-03T20:00:01");
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:01");
+            RoomContent roomContent = new RoomContent(ROOM, BALANCE_CONTENT, ROUND, voteDeadline);
+            LocalDateTime now = LocalDateTime.parse("2024-08-03T20:00:00");
 
             // when & then
-            assertThat(roomContent.isRoundOver(now, ROUND)).isFalse();
+            assertThat(roomContent.isOverVoteDeadline(now, ROUND)).isFalse();
         }
 
         @Test
-        void 라운드_종료_시간보다_이후_시간이면_라운드가_종료되지_않은_것이다() {
+        void 투표_마감_시간보다_이후_시간이면_투표가_마감되지_않은_것이다() {
             // given
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T20:00:02");
-            RoomContent roomContent = new RoomContent(ROOM, BALANCE_CONTENT, ROUND, roundEndedAt, IS_USED);
-            LocalDateTime now = LocalDateTime.parse("2024-08-03T20:00:03");
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:03");
+            RoomContent roomContent = new RoomContent(ROOM, BALANCE_CONTENT, ROUND, voteDeadline);
+            LocalDateTime now = LocalDateTime.parse("2024-08-03T20:00:04");
 
             // when & then
-            assertThat(roomContent.isRoundOver(now, ROUND)).isTrue();
-        }
-
-        @Test
-        void 사용된_컨텐츠면_예외가_발생한다() {
-            // given
-            boolean isUsed = true;
-            RoomContent roomContent = new RoomContent(ROOM, BALANCE_CONTENT, ROUND, ROUND_ENDED_AT, isUsed);
-            LocalDateTime now = LocalDateTime.parse("2024-08-03T20:00:01");
-
-            // when & then
-            assertThatThrownBy(() -> roomContent.isRoundOver(now, ROUND))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("이미 사용된 컨텐츠입니다.");
+            assertThat(roomContent.isOverVoteDeadline(now, ROUND)).isTrue();
         }
 
         @Test
         void 라운드가_일치하지_않으면_예외가_발생한다() {
             // given
             int round = 2;
-            RoomContent roomContent = new RoomContent(ROOM, BALANCE_CONTENT, round, ROUND_ENDED_AT, IS_USED);
-            int invalidRound = 1;
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:02");
+            RoomContent roomContent = new RoomContent(ROOM, BALANCE_CONTENT, round, voteDeadline);
             LocalDateTime now = LocalDateTime.parse("2024-08-03T20:00:01");
+            int invalidRound = 1;
 
             // when & then
-            assertThatThrownBy(() -> roomContent.isRoundOver(now, invalidRound))
+            assertThatThrownBy(() -> roomContent.isOverVoteDeadline(now, invalidRound))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("라운드가 일치하지 않습니다.");
         }

@@ -20,4 +20,8 @@ public enum MemberFixture {
     public Member common(Room room) {
         return Member.createCommon(name().toLowerCase(), room);
     }
+
+    public Member common(Room room, Object suffix) {
+        return Member.createCommon(name() + suffix, room);
+    }
 }

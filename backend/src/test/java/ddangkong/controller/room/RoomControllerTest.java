@@ -7,13 +7,14 @@ import ddangkong.controller.BaseControllerTest;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
-import ddangkong.service.room.dto.RoomInfoResponse;
-import ddangkong.service.room.dto.RoomJoinRequest;
-import ddangkong.service.room.dto.RoomJoinResponse;
-import ddangkong.service.room.dto.RoomSettingRequest;
-import ddangkong.service.room.dto.RoundFinishedResponse;
+import ddangkong.facade.room.dto.RoomInfoResponse;
+import ddangkong.facade.room.dto.RoomJoinRequest;
+import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.Map;
@@ -76,9 +77,9 @@ class RoomControllerTest extends BaseControllerTest {
 
             //then
             assertAll(
-                    () -> Assertions.assertThat(actual.members()).hasSize(4),
+                    () -> Assertions.assertThat(actual.members()).hasSize(5),
                     () -> Assertions.assertThat(actual.isGameStart()).isTrue(),
-                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
+                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(10_000),
                     () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
             );
         }
@@ -92,7 +93,7 @@ class RoomControllerTest extends BaseControllerTest {
             // given
             int totalRound = 5;
             int timeLimit = 10000;
-            Category category = Category.EXAMPLE;
+            Category category = Category.IF;
 
             RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);
 
@@ -119,9 +120,9 @@ class RoomControllerTest extends BaseControllerTest {
             // when & then
             RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
-                    .pathParam("roomId", 1L)
+                    .pathParam("uuid", "uuid4")
                     .body(body)
-                    .when().post("/api/balances/rooms/{roomId}/members")
+                    .when().post("/api/balances/rooms/{uuid}/members")
                     .then().log().all()
                     .statusCode(201)
                     .extract().as(RoomJoinResponse.class);
@@ -136,9 +137,9 @@ class RoomControllerTest extends BaseControllerTest {
             // when & then
             RoomJoinResponse actual = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
-                    .pathParam("roomId", 1L)
+                    .pathParam("uuid", "uuid4")
                     .body(body)
-                    .when().post("/api/balances/rooms/{roomId}/members")
+                    .when().post("/api/balances/rooms/{uuid}/members")
                     .then().log().all()
                     .statusCode(201)
                     .extract().as(RoomJoinResponse.class);
@@ -226,11 +227,12 @@ class RoomControllerTest extends BaseControllerTest {
 
         @BeforeEach
         void setUp() {
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
-            room = roomRepository.save(new Room(3, 3, 30, RoomStatus.FINISH, Category.EXAMPLE));
-            roomContentRepository.save(new RoomContent(room, content, 1, null, false));
-            roomContentRepository.save(new RoomContent(room, content, 2, null, false));
-            roomContentRepository.save(new RoomContent(room, content, 3, null, false));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
+            RoomSetting roomSetting = new RoomSetting(3, 10_000, Category.IF);
+            room = roomRepository.save(new Room("roomResetSetUpUUID", 3, RoomStatus.FINISH, roomSetting));
+            roomContentRepository.save(new RoomContent(room, content, 1, null));
+            roomContentRepository.save(new RoomContent(room, content, 2, null));
+            roomContentRepository.save(new RoomContent(room, content, 3, null));
         }
 
         @Test

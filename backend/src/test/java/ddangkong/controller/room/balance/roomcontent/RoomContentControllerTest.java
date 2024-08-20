@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import ddangkong.controller.BaseControllerTest;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.service.balance.option.dto.BalanceOptionResponse;
-import ddangkong.service.room.balance.roomcontent.dto.RoomContentResponse;
+import ddangkong.facade.balance.option.dto.BalanceOptionResponse;
+import ddangkong.facade.room.balance.roomcontent.dto.RoomContentResponse;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,10 +17,10 @@ class RoomContentControllerTest extends BaseControllerTest {
 
         private static final RoomContentResponse EXPECTED_RESPONSE = new RoomContentResponse(
                 1L,
-                Category.EXAMPLE,
+                Category.IF,
                 5,
                 2,
-                30_000, // TODO 추후 sec으로 변경
+                10_000, // TODO 추후 sec으로 변경
                 "민초 vs 반민초",
                 new BalanceOptionResponse(1L, "민초"),
                 new BalanceOptionResponse(2L, "반민초"));

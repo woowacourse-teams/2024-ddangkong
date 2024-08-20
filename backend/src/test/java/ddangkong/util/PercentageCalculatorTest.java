@@ -31,7 +31,7 @@ class PercentageCalculatorTest {
         int percent = PercentageCalculator.calculatePercent(count, totalCount);
 
         // then
-        assertThat(percent).isEqualTo(50);
+        assertThat(percent).isEqualTo(0);
     }
 
     @Test

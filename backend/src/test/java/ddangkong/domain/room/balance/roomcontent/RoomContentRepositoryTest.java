@@ -29,14 +29,14 @@ class RoomContentRepositoryTest extends BaseRepositoryTest {
         @BeforeEach
         void setUp() {
             room = save(Room.createNewRoom());
-            balanceContent = save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            balanceContent = save(new BalanceContent(Category.IF, "A vs B"));
         }
 
         @Test
         void 방의_현재_라운드에_해당하는_룸_컨텐츠를_조회할_수_있다() {
             // given
             int round = 1;
-            RoomContent roomContent = new RoomContent(room, balanceContent, round, ROUND_ENDED_AT, false);
+            RoomContent roomContent = new RoomContent(room, balanceContent, round, ROUND_ENDED_AT);
             roomContentRepository.save(roomContent);
 
             // when

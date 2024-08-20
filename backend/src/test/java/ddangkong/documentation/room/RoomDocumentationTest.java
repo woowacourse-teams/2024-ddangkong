@@ -25,14 +25,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.service.room.RoomService;
-import ddangkong.service.room.dto.RoomInfoResponse;
-import ddangkong.service.room.dto.RoomJoinRequest;
-import ddangkong.service.room.dto.RoomJoinResponse;
-import ddangkong.service.room.dto.RoomSettingRequest;
-import ddangkong.service.room.dto.RoomSettingResponse;
-import ddangkong.service.room.dto.RoundFinishedResponse;
-import ddangkong.service.room.member.dto.MemberResponse;
+import ddangkong.facade.room.RoomFacade;
+import ddangkong.facade.room.dto.RoomInfoResponse;
+import ddangkong.facade.room.dto.RoomJoinRequest;
+import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoomSettingResponse;
+import ddangkong.facade.room.dto.RoundFinishedResponse;
+import ddangkong.facade.room.member.dto.MasterResponse;
+import ddangkong.facade.room.member.dto.MemberResponse;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ import org.springframework.http.MediaType;
 class RoomDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
-    private RoomService roomService;
+    private RoomFacade roomFacade;
 
     @Nested
     class 방_생성 {
@@ -55,14 +56,14 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방을_생성한다() throws Exception {
             // given
             MemberResponse memberResponse = new MemberResponse(1L, "땅콩", true);
-            RoomJoinResponse response = new RoomJoinResponse(1L, memberResponse);
-            when(roomService.createRoom(anyString())).thenReturn(response);
+            RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c", memberResponse);
+            when(roomFacade.createRoom(anyString())).thenReturn(response);
 
             RoomJoinRequest request = new RoomJoinRequest("땅콩");
             String content = objectMapper.writeValueAsString(request);
 
             // when & then
-            mockMvc.perform(post(ENDPOINT, 1L)
+            mockMvc.perform(post(ENDPOINT)
                             .content(content)
                             .contentType(MediaType.APPLICATION_JSON)
                     )
@@ -73,6 +74,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
+                                    fieldWithPath("roomUuid").type(STRING).description("생성된 방의 UUID"),
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
@@ -91,16 +93,16 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방_정보를_조회한다() throws Exception {
             // given
             int totalRound = 5;
-            int timeLimit = 30000;
-            Category category = Category.EXAMPLE;
-            RoomInfoResponse response = new RoomInfoResponse(
-                    false,
-                    new RoomSettingResponse(totalRound, timeLimit, category),
-                    List.of(
-                            new MemberResponse(1L, "땅콩", true),
-                            new MemberResponse(2L, "타콩", false)
-                    ));
-            when(roomService.findRoomInfo(anyLong())).thenReturn(response);
+            int timeLimit = 10_000;
+            Category category = Category.IF;
+            RoomSettingResponse roomSetting = new RoomSettingResponse(5, 30, category);
+            List<MemberResponse> members = List.of(
+                    new MemberResponse(1L, "땅콩", true),
+                    new MemberResponse(2L, "타콩", false)
+            );
+            MasterResponse master = new MasterResponse(1L, "땅콩");
+            RoomInfoResponse response = new RoomInfoResponse(false, roomSetting, members, master);
+            when(roomFacade.getRoomInfo(anyLong())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(ENDPOINT, 1L))
@@ -118,7 +120,10 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("members").type(ARRAY).description("방에 참여중 인원 목록"),
                                     fieldWithPath("members[].memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("members[].nickname").type(STRING).description("멤버 닉네임"),
-                                    fieldWithPath("members[].isMaster").type(BOOLEAN).description("방장 여부")
+                                    fieldWithPath("members[].isMaster").type(BOOLEAN).description("방장 여부"),
+                                    fieldWithPath("master").type(OBJECT).description("방장 정보"),
+                                    fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("master.nickname").type(STRING).description("닉네임")
                             )
                     ));
         }
@@ -133,8 +138,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방의_설정_정보를_변경한다() throws Exception {
             // given
             int totalRound = 5;
-            int timeLimit = 30_000;
-            Category category = Category.EXAMPLE;
+            int timeLimit = 10_000;
+            Category category = Category.IF;
             RoomSettingRequest content = new RoomSettingRequest(totalRound, timeLimit, category);
 
             // then
@@ -158,32 +163,34 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 방_참여 {
 
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members";
+        private static final String ENDPOINT = "/api/balances/rooms/{uuid}/members";
 
         @Test
         void 방에_참여한다() throws Exception {
             // given
-            RoomJoinResponse response = new RoomJoinResponse(1L, new MemberResponse(2L, "타콩", false));
-            when(roomService.joinRoom(anyString(), anyLong())).thenReturn(response);
+            RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
+                    new MemberResponse(2L, "타콩", false));
+            when(roomFacade.joinRoom(anyString(), anyString())).thenReturn(response);
 
             RoomJoinRequest request = new RoomJoinRequest("타콩");
             String content = objectMapper.writeValueAsString(request);
 
             //when & then
-            mockMvc.perform(post(ENDPOINT, 1L)
+            mockMvc.perform(post(ENDPOINT, "488fd79f92a34131bf2a628bd58c5d2c")
                             .content(content)
                             .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().isCreated())
                     .andDo(document("room/join",
                             pathParameters(
-                                    parameterWithName("roomId").description("참여방 ID")
+                                    parameterWithName("uuid").description("참여하는 방 UUID")
                             ),
                             requestFields(
                                     fieldWithPath("nickname").description("닉네임")
                             ),
                             responseFields(
-                                    fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
+                                    fieldWithPath("roomId").type(NUMBER).description("참여한 방 ID"),
+                                    fieldWithPath("roomUuid").type(STRING).description("참여한 방 UUID"),
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
@@ -242,8 +249,9 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 라운드가_종료되었는지_조회한다() throws Exception {
             // given
-            RoundFinishedResponse response = new RoundFinishedResponse(true, false);
-            when(roomService.getRoundFinished(anyLong(), anyInt())).thenReturn(response);
+            MasterResponse prin = new MasterResponse(1L, "프콩");
+            RoundFinishedResponse response = new RoundFinishedResponse(true, false, prin);
+            when(roomFacade.getRoundFinished(anyLong(), anyInt())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(ENDPOINT, 1)
@@ -259,7 +267,10 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             ),
                             responseFields(
                                     fieldWithPath("isRoundFinished").description("라운드 종료 여부"),
-                                    fieldWithPath("isGameFinished").description("게임 종료 여부")
+                                    fieldWithPath("isGameFinished").description("게임 종료 여부"),
+                                    fieldWithPath("master").type(OBJECT).description("방장 정보"),
+                                    fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("master.nickname").type(STRING).description("닉네임")
                             )
                     ));
         }
@@ -273,7 +284,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 방을_초기화한다() throws Exception {
             // given
-            doNothing().when(roomService).resetRoom(anyLong());
+            doNothing().when(roomFacade).resetRoom(anyLong());
 
             // when & then
             mockMvc.perform(patch(ENDPOINT, 1L))

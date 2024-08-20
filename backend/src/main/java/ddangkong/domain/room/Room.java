@@ -3,12 +3,14 @@ package ddangkong.domain.room;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,73 +20,44 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Room {
 
-    private static final int DEFAULT_TOTAL_ROUND = 5;
-    private static final int MIN_TOTAL_ROUND = 3;
-    private static final int MAX_TOTAL_ROUND = 10;
-    private static final int MAX_MEMBER_COUNT = 12;
-    private static final int MIN_TIME_LIMIT_MSEC = 10_000;
-    private static final int MAX_TIME_LIMIT_MSEC = 30_000;
     private static final int START_ROUND = 1;
     private static final int ALLOWED_ROUND_GAP = 1;
+    private static final int MAX_MEMBER_COUNT = 12;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private int totalRound;
+    @Column(nullable = false, unique = true)
+    private String uuid;
 
     @Column(nullable = false)
     private int currentRound;
 
-    @Column(nullable = false)
-    private int timeLimit;
+    @Embedded
+    private RoomSetting roomSetting;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RoomStatus status;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Category category;
-
-    public Room(int totalRound, int currentRound, int timeLimit, RoomStatus status, Category category) {
-        this.totalRound = totalRound;
+    public Room(String uuid, int currentRound, RoomStatus status, RoomSetting roomSetting) {
+        this.uuid = uuid;
         this.currentRound = currentRound;
-        this.timeLimit = timeLimit;
         this.status = status;
-        this.category = category;
+        this.roomSetting = roomSetting;
     }
 
     public static Room createNewRoom() {
-        return new Room(DEFAULT_TOTAL_ROUND, START_ROUND, MAX_TIME_LIMIT_MSEC, RoomStatus.READY, Category.EXAMPLE);
-    }
-
-    public void updateTimeLimit(int timeLimit) {
-        if (timeLimit < MIN_TIME_LIMIT_MSEC || timeLimit > MAX_TIME_LIMIT_MSEC) {
-            throw new BadRequestException("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
-                    .formatted(MIN_TIME_LIMIT_MSEC, MAX_TIME_LIMIT_MSEC, timeLimit));
-        }
-        this.timeLimit = timeLimit;
-    }
-
-    public void updateTotalRound(int totalRound) {
-        if (totalRound < MIN_TOTAL_ROUND || totalRound > MAX_TOTAL_ROUND) {
-            throw new BadRequestException("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
-                    .formatted(MIN_TOTAL_ROUND, MAX_TOTAL_ROUND, totalRound));
-        }
-        this.totalRound = totalRound;
-    }
-
-    public void updateCategory(Category category) {
-        this.category = category;
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        return new Room(uuid, START_ROUND, RoomStatus.READY, RoomSetting.createNewRoomSetting());
     }
 
     public void startGame() {
-        if (status.isAlreadyStart()) {
+        if (isAlreadyStart()) {
             throw new BadRequestException("이미 게임이 시작했습니다.");
         }
-        status = RoomStatus.PROGRESS;
+        this.status = RoomStatus.PROGRESS;
     }
 
     public void moveToNextRound() {
@@ -92,10 +65,14 @@ public class Room {
             throw new BadRequestException("게임이 진행 중이 아닙니다.");
         }
         if (isFinalRound()) {
-            status = RoomStatus.FINISH;
+            this.status = RoomStatus.FINISH;
             return;
         }
         currentRound++;
+    }
+
+    public boolean isAlreadyStart() {
+        return status.isAlreadyStart();
     }
 
     public boolean isGameProgress() {
@@ -126,11 +103,11 @@ public class Room {
     }
 
     private boolean isFinalRound() {
-        return currentRound == totalRound;
+        return roomSetting.isFinalRound(currentRound);
     }
 
     public boolean isAllRoundFinished() {
-        return currentRound == totalRound && status.isGameFinish();
+        return roomSetting.isFinalRound(currentRound) && status.isGameFinish();
     }
 
     public void reset() {
@@ -143,5 +120,23 @@ public class Room {
 
     public boolean isFull(long memberCountInRoom) {
         return memberCountInRoom == MAX_MEMBER_COUNT;
+    }
+
+    public void updateRoomSetting(RoomSetting roomSetting) {
+        this.roomSetting.updateTimeLimit(roomSetting.getTimeLimit());
+        this.roomSetting.updateTotalRound(roomSetting.getTotalRound());
+        this.roomSetting.updateCategory(roomSetting.getCategory());
+    }
+
+    public int getTotalRound() {
+        return roomSetting.getTotalRound();
+    }
+
+    public Category getCategory() {
+        return roomSetting.getCategory();
+    }
+
+    public int getTimeLimit() {
+        return roomSetting.getTimeLimit();
     }
 }
