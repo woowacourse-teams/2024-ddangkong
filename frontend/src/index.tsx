@@ -30,6 +30,7 @@ const enableMocking = async () => {
 enableMocking().then(() => {
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
+      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={true} />}
       <RecoilRoot>
         <ThemeProvider theme={Theme}>
           <Global styles={GlobalStyle} />

@@ -1,6 +1,6 @@
+import { useGameStart } from './hooks/useGameStart';
+import { useGetRoomInfo } from './hooks/useGetRoomInfo';
 import { readyPageLayout } from './ReadyPage.styled';
-import { useGameStart } from './useGameStart';
-import { useGetRoomInfo } from './useGetRoomInfo';
 
 import CategoryContainer from '@/components/CategoryContainer/CategoryContainer';
 import Button from '@/components/common/Button/Button';
