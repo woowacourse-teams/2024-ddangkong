@@ -40,7 +40,7 @@ class RoomBalanceVoteMigratorTest extends BaseServiceTest {
 
         @BeforeEach
         void setUp() {
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             optionA = balanceOptionRepository.save(new BalanceOption("A", content));
             optionB = balanceOptionRepository.save(new BalanceOption("B", content));
             room = roomRepository.save(Room.createNewRoom());

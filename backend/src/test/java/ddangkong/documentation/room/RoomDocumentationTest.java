@@ -92,7 +92,10 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 방_정보를_조회한다() throws Exception {
             // given
-            RoomSettingResponse roomSetting = new RoomSettingResponse(5, 30, Category.EXAMPLE);
+            int totalRound = 5;
+            int timeLimit = 10_000;
+            Category category = Category.IF;
+            RoomSettingResponse roomSetting = new RoomSettingResponse(5, 30, category);
             List<MemberResponse> members = List.of(
                     new MemberResponse(1L, "땅콩", true),
                     new MemberResponse(2L, "타콩", false)
@@ -135,8 +138,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방의_설정_정보를_변경한다() throws Exception {
             // given
             int totalRound = 5;
-            int timeLimit = 30_000;
-            Category category = Category.EXAMPLE;
+            int timeLimit = 10_000;
+            Category category = Category.IF;
             RoomSettingRequest content = new RoomSettingRequest(totalRound, timeLimit, category);
 
             // then

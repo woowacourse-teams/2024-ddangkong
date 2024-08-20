@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.exception.BadRequestException;
 import ddangkong.exception.InternalServerException;
@@ -18,7 +19,7 @@ class RoomContentTest {
     @Nested
     class 투표_마감_시간_설정 {
 
-        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.EXAMPLE, "다음 중 가고 싶은 곳은?");
+        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.IF, "다음 중 가고 싶은 곳은?");
         private static final LocalDateTime NOW = LocalDateTime.parse("2024-08-02T14:14:10");
 
         @Test
@@ -26,8 +27,9 @@ class RoomContentTest {
             // given
             int currentRound = 1;
             int timeLimit = 10_000;
-            Room room = new Room("uuid", 5, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(5, timeLimit, Category.IF);
 
+            Room room = new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting);
             RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null);
             LocalDateTime expectedVoteDeadline = LocalDateTime.parse("2024-08-02T14:14:22");
 
@@ -43,8 +45,9 @@ class RoomContentTest {
             // given
             int currentRound = 1;
             int timeLimit = 10_000;
-            Room room = new Room("uuid", 5, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
 
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
+            Room room = new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting);
             RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null);
             roomContent.updateVoteDeadline(NOW, timeLimit);
 
@@ -59,7 +62,7 @@ class RoomContentTest {
     class 투표_마감_시간_지남_여부 {
 
         private static final Room ROOM = Room.createNewRoom();
-        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.EXAMPLE, "치킨 vs 피자");
+        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.IF, "치킨 vs 피자");
         private static final int ROUND = 1;
 
         @Test

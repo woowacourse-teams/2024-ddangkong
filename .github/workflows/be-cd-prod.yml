@@ -38,7 +38,7 @@ jobs:
         run: ./gradlew bootJar
 
       - name: Stop existing Java Application
-        run: ps -ef | grep 'ddangkong-0.0.1-SNAPSHOT.jar' | awk '{print $2}' | xargs sudo kill -15
+        run: ps -ef | grep 'java -jar' | awk '{print $2}' | xargs sudo kill -15 || true
 
       - name: Start Java Application
-        run: sudo nohup java -jar ddangkong-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod &
+        run: sudo nohup java -jar -Dspring.profiles.active=prod ./build/libs/ddangkong-0.0.1-SNAPSHOT.jar &

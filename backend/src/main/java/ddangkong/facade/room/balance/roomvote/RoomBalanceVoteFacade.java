@@ -22,6 +22,7 @@ import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.balance.roomvote.RoomBalanceVoteService;
 import ddangkong.service.room.member.MemberService;
 import java.util.List;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,8 +75,24 @@ public class RoomBalanceVoteFacade {
                 .getVotesInRoom(roomMembers, balanceOptions.getFirstOption());
         List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteService
                 .getVotesInRoom(roomMembers, balanceOptions.getSecondOption());
-        // todo 기권 추가
-        return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes);
+        List<Member> giveUpMembers = getGiveUpVoteMemberResponse(roomMembers,
+                getVoteMembers(firstOptionVotes, secondOptionVotes));
+        return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes,
+                giveUpMembers);
+    }
+
+    private List<Member> getGiveUpVoteMemberResponse(RoomMembers roomMembers, List<Member> voteMembers) {
+        return roomMembers.getMembers()
+                .stream()
+                .filter(roomMember -> !voteMembers.contains(roomMember))
+                .toList();
+    }
+
+    private List<Member> getVoteMembers(List<RoomBalanceVote> firstOptionVotes,
+                                        List<RoomBalanceVote> secondOptionVotes) {
+        return Stream.concat(firstOptionVotes.stream(), secondOptionVotes.stream())
+                .map(RoomBalanceVote::getMember)
+                .toList();
     }
 
     private ContentTotalBalanceVoteResponse getContentTotalBalanceVoteResponse(BalanceOptions balanceOptions) {

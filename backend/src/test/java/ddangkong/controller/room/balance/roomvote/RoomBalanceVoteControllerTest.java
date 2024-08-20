@@ -45,7 +45,7 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
 
     @BeforeEach
     void setUp() {
-        balanceContent = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+        balanceContent = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
         optionA = balanceOptionRepository.save(new BalanceOption("A", balanceContent));
         optionB = balanceOptionRepository.save(new BalanceOption("B", balanceContent));
 

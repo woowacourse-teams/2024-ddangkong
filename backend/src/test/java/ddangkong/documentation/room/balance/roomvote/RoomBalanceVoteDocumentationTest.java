@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ddangkong.controller.room.balance.roomvote.RoomBalanceVoteController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
+import ddangkong.facade.balance.vote.dto.GiveUpVoteMemberResponse;
 import ddangkong.facade.balance.vote.dto.OptionTotalBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.RoomBalanceVoteFacade;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
@@ -45,7 +46,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 방_투표_결과_조희 {
 
-        private static final String END_POINT = "/api/balances/rooms/{roomId}/contents/{contentId}/vote-result";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/contents/{contentId}/vote-result";
 
         @Test
         void 방의_진행중인_라운드의_투표_결과를_조회한다() throws Exception {
@@ -59,13 +60,17 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                     List.of("rapper lee"), 1, 25);
             OptionTotalBalanceVoteResponse firstTotalResponse = new OptionTotalBalanceVoteResponse(1L, "민초", 50);
             OptionTotalBalanceVoteResponse secondTotalResponse = new OptionTotalBalanceVoteResponse(2L, "반민초", 50);
+            GiveUpVoteMemberResponse giveUpVoteMemberResponse = new GiveUpVoteMemberResponse(List.of("jason"), 1);
+
             RoomBalanceVoteResultResponse response = new RoomBalanceVoteResultResponse(
-                    new ContentRoomBalanceVoteResponse(firstGroupResponse, secondGroupResponse),
-                    new ContentTotalBalanceVoteResponse(firstTotalResponse, secondTotalResponse));
+                    new ContentRoomBalanceVoteResponse(firstGroupResponse, secondGroupResponse,
+                            giveUpVoteMemberResponse),
+                    new ContentTotalBalanceVoteResponse(firstTotalResponse, secondTotalResponse)
+            );
             when(roomBalanceVoteFacade.getAllVoteResult(roomId, contentId)).thenReturn(response);
 
             // when & then
-            mockMvc.perform(get(END_POINT, roomId, contentId))
+            mockMvc.perform(get(ENDPOINT, roomId, contentId))
                     .andExpect(status().isOk())
                     .andDo(document("roomBalanceVote/findVoteResult",
                                     pathParameters(
@@ -78,7 +83,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             fieldWithPath("group.firstOption.optionId").type(NUMBER).description("선택지 ID"),
                                             fieldWithPath("group.firstOption.name").type(STRING).description("선택지 이름"),
                                             fieldWithPath("group.firstOption.members").type(ARRAY)
-                                                    .description("선택지를 선택한 멤버 이름들"),
+                                                    .description("선택지를 선택한 멤버들의 닉네임"),
                                             fieldWithPath("group.firstOption.memberCount").type(NUMBER)
                                                     .description("선택지를 선택한 사람 수"),
                                             fieldWithPath("group.firstOption.percent").type(NUMBER).description("선택지를 선택한 퍼센트"),
@@ -86,11 +91,16 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             fieldWithPath("group.secondOption.optionId").type(NUMBER).description("선택지 ID"),
                                             fieldWithPath("group.secondOption.name").type(STRING).description("선택지 이름"),
                                             fieldWithPath("group.secondOption.members").type(ARRAY)
-                                                    .description("선택지를 선택한 멤버 이름들"),
+                                                    .description("선택지를 선택한 멤버들의 닉네임"),
                                             fieldWithPath("group.secondOption.memberCount").type(NUMBER)
                                                     .description("선택지를 선택한 사람 수"),
                                             fieldWithPath("group.secondOption.percent").type(NUMBER)
                                                     .description("선택지를 선택한 퍼센트"),
+                                            fieldWithPath("group.giveUp").type(OBJECT).description("기권한 멤버 정보"),
+                                            fieldWithPath("group.giveUp.members").type(ARRAY)
+                                                    .description("기권한 멤버들의 닉네임"),
+                                            fieldWithPath("group.giveUp.memberCount").type(NUMBER)
+                                                    .description("기권한 멤버 수"),
                                             fieldWithPath("total").type(OBJECT).description("전체 유저 결과"),
                                             fieldWithPath("total.firstOption").type(OBJECT).description("전체 유저 첫 번째 선택지 결과"),
                                             fieldWithPath("total.firstOption.optionId").type(NUMBER).description("선택지 ID"),
@@ -109,7 +119,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 투표_생성 {
 
-        private static final String END_POINT = "/api/balances/rooms/{roomId}/contents/{contentId}/votes";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/contents/{contentId}/votes";
 
         @Test
         void 선택지에_투표를_할_수_있다() throws Exception {
@@ -124,7 +134,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
             when(roomBalanceVoteFacade.createVote(request, roomId, contentId)).thenReturn(response);
 
             // when & then
-            mockMvc.perform(post(END_POINT, roomId, contentId)
+            mockMvc.perform(post(ENDPOINT, roomId, contentId)
                             .content(content)
                             .contentType(MediaType.APPLICATION_JSON)
                     )
@@ -149,7 +159,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 투표_종료_여부_조회 {
 
-        private static final String END_POINT = "/api/balances/rooms/{roomId}/contents/{contentId}/vote-finished";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/contents/{contentId}/vote-finished";
 
         @Test
         void 투표가_종료되었는지_조회한다() throws Exception {
@@ -159,7 +169,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
             when(roomBalanceVoteFacade.getVoteFinished(anyLong(), anyLong())).thenReturn(response);
 
             // when & then
-            mockMvc.perform(get(END_POINT, 1L, 1L))
+            mockMvc.perform(get(ENDPOINT, 1L, 1L))
                     .andExpect(status().isOk())
                     .andDo(document("roomBalanceVote/voteFinished",
                                     pathParameters(
