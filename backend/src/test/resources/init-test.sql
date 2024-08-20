@@ -22,13 +22,13 @@ VALUES (1),
        (2);
 
 INSERT INTO room (uuid, total_round, current_round, time_limit, status, category)
-VALUES ('uuid1', 5, 2, 30000, 'PROGRESS', 'IF'),
-       ('uuid2', 5, 1, 30000, 'PROGRESS', 'IF'),
-       ('uuid3', 5, 1, 30000, 'PROGRESS', 'IF'),
-       ('uuid4', 3, 1, 30000, 'READY', 'IF'),
-       ('uuid5', 3, 1, 30000, 'FINISH', 'IF'),
-       ('uuid6', 3, 1, 30000, 'FINISH', 'IF'),
-       ('uuid7', 3, 1, 30000, 'READY', 'IF');
+VALUES ('uuid1', 5, 2, 10000, 'PROGRESS', 'IF'),
+       ('uuid2', 5, 1, 10000, 'PROGRESS', 'IF'),
+       ('uuid3', 5, 1, 10000, 'PROGRESS', 'IF'),
+       ('uuid4', 3, 1, 10000, 'READY', 'IF'),
+       ('uuid5', 3, 1, 10000, 'FINISH', 'IF'),
+       ('uuid6', 3, 1, 10000, 'FINISH', 'IF'),
+       ('uuid7', 3, 1, 10000, 'READY', 'IF');
 
 INSERT INTO member (nickname, room_id, is_master)
 VALUES ('mohamedeu al katan', 1, true),

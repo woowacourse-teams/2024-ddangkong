@@ -30,7 +30,7 @@ class RoomContentFacadeTest extends BaseServiceTest {
                 Category.IF,
                 5,
                 2,
-                30_000, // TODO 추후 sec으로 변경
+                10_000, // TODO 추후 sec으로 변경
                 "민초 vs 반민초",
                 new BalanceOptionResponse(1L, "민초"),
                 new BalanceOptionResponse(2L, "반민초"));

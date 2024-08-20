@@ -13,6 +13,7 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
@@ -21,6 +22,7 @@ import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import java.util.List;
@@ -133,262 +135,299 @@ class RoomFacadeTest extends BaseServiceTest {
             assertAll(
                     () -> assertThat(actual.members()).hasSize(3),
                     () -> assertThat(actual.isGameStart()).isFalse(),
-                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
+                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(10_000),
                     () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
             );
         }
     }
 
     @Nested
-    class 게임_시작 {
-
-        private static final Long READY_ROOM_ID = 4L;
+    class 방_설정_변경 {
 
         @Test
-        void 게임_시작_시_방이_진행_상태가_된다() {
-            // when
-            roomFacade.startGame(READY_ROOM_ID);
-
-            // then
-            Room room = roomRepository.findById(READY_ROOM_ID).orElseThrow();
-            assertThat(room.isGameProgress()).isTrue();
-        }
-
-        @Test
-        void 게임_시작_시_해당_방의_컨텐츠가_생성된다() {
+        void 방_설정_정보를_변경한다() {
             // given
-            long beforeRoomContentCount = roomContentRepository.count();
+            Room room = roomRepository.save(Room.createNewRoom());
+
+            int totalRound = 8;
+            int timeLimit = 10_000;
+            Category category = Category.IF;
+            RoomSettingRequest roomSetting = new RoomSettingRequest(totalRound, timeLimit, category);
 
             // when
-            roomFacade.startGame(READY_ROOM_ID);
-
-            // then
-            Room room = roomRepository.findById(READY_ROOM_ID).orElseThrow();
-            long afterRoomContentCount = roomContentRepository.count();
-            long addedRoomContentCount = afterRoomContentCount - beforeRoomContentCount;
-            assertThat(addedRoomContentCount).isEqualTo(room.getTotalRound());
-        }
-    }
-
-    @Nested
-    class 다음_라운드로_이동 {
-
-        @Test
-        void 중간_라운드라면_다음_라운드로_넘어갈_수_있다() {
-            // given
-            int currentRound = 2;
-            Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.IF)
-            );
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
-            roomContentRepository.save(RoomContent.newRoomContent(room, content, currentRound + 1));
-
-            // when
-            roomFacade.moveToNextRound(room.getId());
+            roomFacade.updateRoomSetting(room.getId(), roomSetting);
 
             // then
             Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
-            RoomContent roomContent = roomContentRepository.findByRoomAndRound(foundRoom, currentRound + 1)
-                    .orElseThrow();
+
             assertAll(
-                    () -> assertThat(foundRoom.getCurrentRound()).isEqualTo(currentRound + 1),
-                    () -> assertThat(foundRoom.isGameProgress()).isTrue(),
-                    () -> assertThat(roomContent.getRoundEndedAt()).isNotNull()
+                    () -> assertThat(foundRoom.getTotalRound()).isEqualTo(totalRound),
+                    () -> assertThat(foundRoom.getTimeLimit()).isEqualTo(timeLimit),
+                    () -> assertThat(foundRoom.getCategory()).isEqualTo(category)
             );
         }
 
-        @Test
-        void 마지막_라운드라면_게임을_종료한다() {
-            // given
-            int currentRound = 5;
-            Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30_000, RoomStatus.PROGRESS, Category.IF)
-            );
+        @Nested
+        class 게임_시작 {
 
-            // when
-            roomFacade.moveToNextRound(room.getId());
+            private static final Long READY_ROOM_ID = 4L;
 
-            // then
-            Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
-            assertAll(
-                    () -> assertThat(foundRoom.getCurrentRound()).isEqualTo(foundRoom.getTotalRound()),
-                    () -> assertThat(foundRoom.getStatus()).isEqualTo(RoomStatus.FINISH)
-            );
-        }
-    }
+            @Test
+            void 게임_시작_시_방이_진행_상태가_된다() {
+                // when
+                roomFacade.startGame(READY_ROOM_ID);
 
-    @Nested
-    class 라운드_종료_여부 {
+                // then
+                Room room = roomRepository.findById(READY_ROOM_ID).orElseThrow();
+                assertThat(room.isGameProgress()).isTrue();
+            }
 
-        private static final int TOTAL_ROUND = 5;
-        private static final int TIME_LIMIT = 30_000;
-        private static final RoomStatus STATUS = RoomStatus.PROGRESS;
-        private static final Category CATEGORY = Category.IF;
+            @Test
+            void 게임_시작_시_해당_방의_컨텐츠가_생성된다() {
+                // given
+                long beforeRoomContentCount = roomContentRepository.count();
 
-        @Test
-        void 라운드가_종료되지_않았으면_게임도_종료되지_않은_상태여야_한다() {
-            // given
-            int currentRound = 2;
-            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
-            int round = 2;
+                // when
+                roomFacade.startGame(READY_ROOM_ID);
 
-            // when
-            RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
-
-            // then
-            assertAll(
-                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
-            );
-        }
-
-        @Test
-        void 라운드가_종료되면_게임은_종료되지_않은_상태여야_한다() {
-            // given
-            int currentRound = 2;
-            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
-            int round = 1;
-
-            // when
-            RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
-
-            // then
-            assertAll(
-                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isTrue(),
-                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
-            );
-        }
-
-        @Test
-        void 게임이_종료되면_라운드는_종료되지_않은_상태여야_한다() {
-            // given
-            int currentRound = 5;
-            RoomStatus status = RoomStatus.FINISH;
-            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY));
-            int round = 5;
-
-            // when
-            RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
-
-            // then
-            assertAll(
-                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.isGameFinished()).isTrue()
-            );
-        }
-
-        @Test
-        void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_라운드도_종료되지_않은_상태여야_한다() {
-            // given
-            int currentRound = 5;
-            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY));
-            int round = 5;
-
-            // when
-            RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
-
-            // then
-            assertAll(
-                    () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
-            );
-        }
-    }
-
-    @Nested
-    class 방_초기화 {
-
-        private static final int TOTAL_ROUND = 5;
-        private static final int TIME_LIMIT = 30;
-        private static final RoomStatus STATUS = RoomStatus.FINISH;
-        private static final Category CATEGORY = Category.IF;
-
-        private BalanceContent content;
-
-        @BeforeEach
-        void setUp() {
-            content = balanceContentRepository.save(new BalanceContent(CATEGORY, "A vs B"));
-        }
-
-        @Test
-        void 방을_초기_상태로_초기화한다() {
-            // given
-            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, 5, TIME_LIMIT, STATUS, CATEGORY));
-            saveRoomContents(room);
-
-            // when
-            roomFacade.resetRoom(room.getId());
-
-            // then
-            Room resetRoom = roomRepository.findById(room.getId()).orElseThrow();
-            List<RoomContent> roomContents = roomContentRepository.findAllByRoom(room);
-            assertAll(
-                    () -> assertThat(resetRoom.getStatus()).isEqualTo(RoomStatus.READY),
-                    () -> assertThat(resetRoom.getCurrentRound()).isEqualTo(1),
-                    () -> assertThat(roomContents).isEmpty()
-            );
-        }
-
-        @Test
-        void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
-            // given
-            int invalidCurrentRound = 4;
-            Room room = roomRepository.save(
-                    new Room("uuid", TOTAL_ROUND, invalidCurrentRound, TIME_LIMIT, STATUS, CATEGORY));
-            saveRoomContents(room);
-
-            // when & then
-            assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
-        }
-
-        @ParameterizedTest
-        @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
-        void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
-            // given
-            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY));
-            saveRoomContents(room);
-
-            // when & then
-            assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
-        }
-
-        private void saveRoomContents(Room room) {
-            for (int i = 1; i < room.getTotalRound(); i++) {
-                roomContentRepository.save(new RoomContent(room, content, i, null));
+                // then
+                Room room = roomRepository.findById(READY_ROOM_ID).orElseThrow();
+                long afterRoomContentCount = roomContentRepository.count();
+                long addedRoomContentCount = afterRoomContentCount - beforeRoomContentCount;
+                assertThat(addedRoomContentCount).isEqualTo(room.getTotalRound());
             }
         }
 
-        @Test
-        void 방을_초기화하면_방_투표를_삭제하고_전체_투표에_저장한다() {
-            // given
-            BalanceOption optionA = balanceOptionRepository.save(new BalanceOption("A", content));
-            BalanceOption optionB = balanceOptionRepository.save(new BalanceOption("B", content));
-            Room room = roomRepository.save(new Room("uuid", TOTAL_ROUND, 5, TIME_LIMIT, STATUS, CATEGORY));
-            Member prin = memberRepository.save(PRIN.master(room));
-            Member eden = memberRepository.save(EDEN.common(room));
-            Member keochan = memberRepository.save(KEOCHAN.common(room));
-            Member tacan = memberRepository.save(TACAN.common(room));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionA));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionA));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionB));
+        @Nested
+        class 다음_라운드로_이동 {
 
-            // when
-            roomFacade.resetRoom(room.getId());
+            @Test
+            void 중간_라운드라면_다음_라운드로_넘어갈_수_있다() {
+                // given
+                int currentRound = 2;
+                RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
+                Room room = roomRepository.save(
+                        new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting)
+                );
+                BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
+                roomContentRepository.save(RoomContent.newRoomContent(room, content, currentRound + 1));
 
-            // then
-            List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteRepository.findByMemberRoom(room);
-            Long optionATotalVoteCount = totalBalanceVoteRepository.countByBalanceOption(optionA);
-            Long optionBTotalVoteCount = totalBalanceVoteRepository.countByBalanceOption(optionB);
-            assertAll(
-                    () -> assertThat(roomBalanceVotes).isEmpty(),
-                    () -> assertThat(optionATotalVoteCount).isEqualTo(3),
-                    () -> assertThat(optionBTotalVoteCount).isEqualTo(1)
-            );
+                // when
+                roomFacade.moveToNextRound(room.getId());
+
+                // then
+                Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
+                RoomContent roomContent = roomContentRepository.findByRoomAndRound(foundRoom, currentRound + 1)
+                        .orElseThrow();
+                assertAll(
+                        () -> assertThat(foundRoom.getCurrentRound()).isEqualTo(currentRound + 1),
+                        () -> assertThat(foundRoom.isGameProgress()).isTrue(),
+                        () -> assertThat(roomContent.getRoundEndedAt()).isNotNull()
+                );
+            }
+
+            @Test
+            void 마지막_라운드라면_게임을_종료한다() {
+                // given
+                int currentRound = 5;
+                RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
+                Room room = roomRepository.save(
+                        new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting)
+                );
+
+                // when
+                roomFacade.moveToNextRound(room.getId());
+
+                // then
+                Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
+                assertAll(
+                        () -> assertThat(foundRoom.getCurrentRound()).isEqualTo(foundRoom.getTotalRound()),
+                        () -> assertThat(foundRoom.getStatus()).isEqualTo(RoomStatus.FINISH)
+                );
+            }
+        }
+
+        @Nested
+        class 라운드_종료_여부 {
+
+            private static final int TOTAL_ROUND = 5;
+            private static final int TIME_LIMIT = 10_000;
+            private static final RoomStatus STATUS = RoomStatus.PROGRESS;
+            private static final Category CATEGORY = Category.IF;
+
+            @Test
+            void 라운드가_종료되지_않았으면_게임도_종료되지_않은_상태여야_한다() {
+                // given
+                int currentRound = 2;
+                RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+                Room room = roomRepository.save(new Room("uuid", currentRound, STATUS, roomSetting));
+                int round = 2;
+
+                // when
+                RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
+
+                // then
+                assertAll(
+                        () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                        () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+                );
+            }
+
+            @Test
+            void 라운드가_종료되면_게임은_종료되지_않은_상태여야_한다() {
+                // given
+                int currentRound = 2;
+                RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+                Room room = roomRepository.save(new Room("uuid", currentRound, STATUS, roomSetting));
+                int round = 1;
+
+                // when
+                RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
+
+                // then
+                assertAll(
+                        () -> assertThat(roundFinishedResponse.isRoundFinished()).isTrue(),
+                        () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+                );
+            }
+
+            @Test
+            void 게임이_종료되면_라운드는_종료되지_않은_상태여야_한다() {
+                // given
+                int currentRound = 5;
+                RoomStatus status = RoomStatus.FINISH;
+                RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+                Room room = roomRepository.save(new Room("uuid", currentRound, status, roomSetting));
+                int round = 5;
+
+                // when
+                RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
+
+                // then
+                assertAll(
+                        () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                        () -> assertThat(roundFinishedResponse.isGameFinished()).isTrue()
+                );
+            }
+
+            @Test
+            void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_라운드도_종료되지_않은_상태여야_한다() {
+                // given
+                int currentRound = 5;
+                RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+                Room room = roomRepository.save(new Room("uuid", currentRound, STATUS, roomSetting));
+                int round = 5;
+
+                // when
+                RoundFinishedResponse roundFinishedResponse = roomFacade.getRoundFinished(room.getId(), round);
+
+                // then
+                assertAll(
+                        () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
+                        () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
+                );
+            }
+        }
+
+        @Nested
+        class 방_초기화 {
+
+            private static final int TOTAL_ROUND = 5;
+            private static final int TIME_LIMIT = 5000;
+            private static final RoomStatus STATUS = RoomStatus.FINISH;
+            private static final Category CATEGORY = Category.IF;
+
+            private BalanceContent content;
+
+            @BeforeEach
+            void setUp() {
+                content = balanceContentRepository.save(new BalanceContent(CATEGORY, "A vs B"));
+            }
+
+            @Test
+            void 방을_초기_상태로_초기화한다() {
+                // given
+                RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+                Room room = roomRepository.save(new Room("uuid", 5, STATUS, roomSetting));
+                saveRoomContents(room);
+
+                // when
+                roomFacade.resetRoom(room.getId());
+
+                // then
+                Room resetRoom = roomRepository.findById(room.getId()).orElseThrow();
+                List<RoomContent> roomContents = roomContentRepository.findAllByRoom(room);
+                assertAll(
+                        () -> assertThat(resetRoom.getStatus()).isEqualTo(RoomStatus.READY),
+                        () -> assertThat(resetRoom.getCurrentRound()).isEqualTo(1),
+                        () -> assertThat(roomContents).isEmpty()
+                );
+            }
+
+            @Test
+            void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
+                // given
+                int invalidCurrentRound = 4;
+                RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+                Room room = roomRepository.save(
+                        new Room("uuid", invalidCurrentRound, STATUS, roomSetting));
+                saveRoomContents(room);
+
+                // when & then
+                assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
+                        .isExactlyInstanceOf(BadRequestException.class)
+                        .hasMessageContaining("방이 종료되지 않았습니다");
+            }
+
+            @ParameterizedTest
+            @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
+            void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
+                // given
+                RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+                Room room = roomRepository.save(new Room("uuid", 5, status, roomSetting));
+                saveRoomContents(room);
+
+                // when & then
+                assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
+                        .isExactlyInstanceOf(BadRequestException.class)
+                        .hasMessageContaining("방이 종료되지 않았습니다");
+            }
+
+            private void saveRoomContents(Room room) {
+                for (int i = 1; i < room.getTotalRound(); i++) {
+                    roomContentRepository.save(new RoomContent(room, content, i, null));
+                }
+            }
+
+            @Test
+            void 방을_초기화하면_방_투표를_삭제하고_전체_투표에_저장한다() {
+                // given
+                RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+                BalanceOption optionA = balanceOptionRepository.save(new BalanceOption("A", content));
+                BalanceOption optionB = balanceOptionRepository.save(new BalanceOption("B", content));
+                Room room = roomRepository.save(new Room("uuid", 5, STATUS, roomSetting));
+                Member prin = memberRepository.save(PRIN.master(room));
+                Member eden = memberRepository.save(EDEN.common(room));
+                Member keochan = memberRepository.save(KEOCHAN.common(room));
+                Member tacan = memberRepository.save(TACAN.common(room));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionA));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionA));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionB));
+
+                // when
+                roomFacade.resetRoom(room.getId());
+
+                // then
+                List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteRepository.findByMemberRoom(room);
+                Long optionATotalVoteCount = totalBalanceVoteRepository.countByBalanceOption(optionA);
+                Long optionBTotalVoteCount = totalBalanceVoteRepository.countByBalanceOption(optionB);
+                assertAll(
+                        () -> assertThat(roomBalanceVotes).isEmpty(),
+                        () -> assertThat(optionATotalVoteCount).isEqualTo(3),
+                        () -> assertThat(optionBTotalVoteCount).isEqualTo(1)
+                );
+            }
         }
     }
 }
