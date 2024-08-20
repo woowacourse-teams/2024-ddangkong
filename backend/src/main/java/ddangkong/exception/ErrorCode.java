@@ -11,6 +11,10 @@ public enum ErrorCode {
     NOT_FOUND_BALANCE_CONTENT("존재하지 않는 컨텐츠입니다."),
     NOT_ENOUGH_BALANCE_CONTENT("질문 수가 부족합니다. category: %s"),
 
+    // BalanceOption
+    INVALID_BALANCE_OPTION_COUNT("밸런스 컨텐츠의 옵션이 %d개입니다."),
+    NOT_FOUND_BALANCE_OPTION("해당 옵션이 존재하지 않습니다."),
+
     // Room
     INVALID_RANGE_TOTAL_ROUND("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"),
     INVALID_RANGE_TIME_LIMIT("시간 제한은 %ds 이상, %ds 이하만 가능합니다. requested timeLimit: %d"),
@@ -22,7 +26,7 @@ public enum ErrorCode {
     NOT_FINISHED_ROOM("방이 종료 상태가 아닙니다."),
     NOT_FOUND_ROOM("방이 존재하지 않습니다."),
 
-    // Member,
+    // Member
     ALREADY_EXIST_MASTER("이미 방장이 존재합니다."),
     INVALID_MASTER_CREATION("방에 멤버가 존재하면 방장을 생성할 수 없습니다. 현재 멤버 수: %d"),
     NOT_EXIST_MASTER("방장이 존재하지 않습니다."),

@@ -1,7 +1,7 @@
 package ddangkong.domain.balance.option;
 
-import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.balance.option.InvalidBalanceOptionCountException;
+import ddangkong.exception.balance.option.NotFoundBalanceOptionException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +14,7 @@ public class BalanceOptions {
 
     public BalanceOptions(List<BalanceOption> options) {
         if (options.size() != BALANCE_OPTION_SIZE) {
-            throw new InternalServerException("밸런스 게임의 선택지가 %d개입니다".formatted(options.size()));
+            throw new InvalidBalanceOptionCountException(options.size());
         }
         this.options = new ArrayList<>(options);
     }
@@ -31,7 +31,7 @@ public class BalanceOptions {
         return options.stream()
                 .filter(option -> option.isSameId(id))
                 .findFirst()
-                .orElseThrow(() -> new BadRequestException("해당 옵션이 존재하지 않습니다."));
+                .orElseThrow(NotFoundBalanceOptionException::new);
     }
 
     public List<BalanceOption> getOptions() {
