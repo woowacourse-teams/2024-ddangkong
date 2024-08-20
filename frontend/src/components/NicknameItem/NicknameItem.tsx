@@ -9,7 +9,7 @@ interface NicknameItemProp {
 const NicknameItem = ({ member }: NicknameItemProp) => {
   return (
     <li css={nicknameItemLayout}>
-      <img src={SillyDdangkong} alt="" css={profileImage} />
+      <img src={SillyDdangkong} alt="사용자 프로필" css={profileImage} />
       <span css={nicknameText}>{member}</span>
     </li>
   );
