@@ -32,6 +32,10 @@ public enum ErrorCode {
     MISMATCH_ROUND("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : %d, 방 라운드 : %d"),
     EMPTY_ROUND_ENDED_AT("라운드 종료 시간이 설정되지 않았습니다."),
 
+    // RoomVote
+    ALREADY_VOTED("이미 투표했습니다. nickname: %s, option name: %s"),
+    VOTE_FINISHED("투표가 종료되었습니다."),
+    VOTE_NOT_FINISHED("아직 투표가 종료되지 않았습니다."),
     ;
 
     private final String message;

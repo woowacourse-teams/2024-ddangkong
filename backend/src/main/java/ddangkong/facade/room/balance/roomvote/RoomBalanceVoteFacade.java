@@ -5,7 +5,8 @@ import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.balance.roomvote.VoteFinishedException;
+import ddangkong.exception.room.balance.roomvote.VoteNotFinishedException;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
@@ -47,7 +48,7 @@ public class RoomBalanceVoteFacade {
         Room room = roomService.getRoom(roomId);
         BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
         if (isVoteFinished(room, balanceContent)) {
-            throw new BadRequestException("이미 종료된 라운드에는 투표할 수 없습니다.");
+            throw new VoteFinishedException();
         }
         Member member = memberService.getRoomMember(request.memberId(), room);
         BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
@@ -73,7 +74,7 @@ public class RoomBalanceVoteFacade {
             ContentTotalBalanceVoteResponse total = getContentTotalBalanceVoteResponse(balanceOptions);
             return new RoomBalanceVoteResultResponse(group, total);
         }
-        throw new BadRequestException("투표가 끝나지 않아 투표 결과를 조회할 수 없습니다.");
+        throw new VoteNotFinishedException();
     }
 
     private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(Room room, BalanceOptions balanceOptions) {
