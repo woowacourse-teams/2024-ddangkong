@@ -24,6 +24,7 @@ import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -112,6 +113,83 @@ class RoomFacadeTest extends BaseServiceTest {
             Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
             long memberCountInRoom = memberRepository.countByRoom(foundRoom);
             assertThat(memberCountInRoom).isEqualTo(12);
+        }
+    }
+
+    @Nested
+    class 방_나가기 {
+
+        @Test
+        void 해당_멤버의_투표를_옮긴_후에_요청한_멤버를_삭제한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            memberRepository.save(EDEN.master(room));
+            Member commonMember = memberRepository.save(KEOCHAN.common(room));
+
+            BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
+            RoomBalanceVote roomBalanceVote = getRoomBalanceVote(commonMember, balanceContent);
+            long countOfTotalVotes = totalBalanceVoteRepository.count();
+
+            // when
+            roomFacade.leaveRoom(room.getId(), commonMember.getId());
+
+            // then
+            Optional<Member> leavedMember = memberRepository.findById(commonMember.getId());
+            Optional<RoomBalanceVote> deletedRoomBalanceVote =
+                    roomBalanceVoteRepository.findById(roomBalanceVote.getId());
+            long afterCountOfBalanceVotes = totalBalanceVoteRepository.count();
+            assertAll(
+                    () -> assertThat(leavedMember).isEmpty(),
+                    () -> assertThat(deletedRoomBalanceVote).isEmpty(),
+                    () -> assertThat(afterCountOfBalanceVotes).isEqualTo(countOfTotalVotes + 1)
+            );
+        }
+
+        private RoomBalanceVote getRoomBalanceVote(Member member, BalanceContent balanceContent) {
+            BalanceOption balanceOption = balanceOptionRepository.findAllByBalanceContent(balanceContent).get(0);
+            RoomBalanceVote roomBalanceVote = new RoomBalanceVote(member, balanceOption);
+            return roomBalanceVoteRepository.save(roomBalanceVote);
+        }
+
+        @Test
+        void 요청한_멤버를_삭제한_후에_방에_아무도_없다면_방을_삭제한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            Member member = memberRepository.save(EDEN.master(room));
+
+            BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
+            RoomContent roomContent = getSavedRoomContent(room, balanceContent);
+
+            // when
+            roomFacade.leaveRoom(room.getId(), member.getId());
+
+            // then
+            Optional<RoomContent> deletedRoomContent = roomContentRepository.findById(roomContent.getId());
+            Optional<Room> deletedRoom = roomRepository.findById(room.getId());
+            assertAll(
+                    () -> assertThat(deletedRoomContent).isEmpty(),
+                    () -> assertThat(deletedRoom).isEmpty()
+            );
+        }
+
+        private RoomContent getSavedRoomContent(Room room, BalanceContent content) {
+            RoomContent roomContent = RoomContent.newRoomContent(room, content, 1);
+            return roomContentRepository.save(roomContent);
+        }
+
+        @Test
+        void 방의_마스터가_나가면_다른_일반_멤버를_마스터로_승급한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            Member master = memberRepository.save(EDEN.master(room));
+            Member commonMember = memberRepository.save(KEOCHAN.common(room));
+
+            // when
+            roomFacade.leaveRoom(room.getId(), master.getId());
+
+            // then
+            Member foundCommonMember = memberRepository.findById(commonMember.getId()).get();
+            assertThat(foundCommonMember.isMaster()).isTrue();
         }
     }
 

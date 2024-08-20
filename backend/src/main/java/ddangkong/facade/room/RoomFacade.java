@@ -54,8 +54,10 @@ public class RoomFacade {
         Member member = getContainedMember(members, memberId);
 
         memberService.delete(member);
+        roomBalanceVoteMigrator.migrateToTotalVote(member);
         if (members.size() == 1) {
-            deleteRoom(room);
+            roomContentService.deleteRoomContents(room);
+            roomService.delete(room);
             return;
         }
         if (member.isMaster()) {
@@ -68,11 +70,6 @@ public class RoomFacade {
                 .filter(member -> member.isSameId(memberId))
                 .findAny()
                 .orElseThrow(() -> new BadRequestException("방에 존재하지 않는 멤버입니다."));
-    }
-
-    private void deleteRoom(Room room) {
-        roomBalanceVoteMigrator.migrateToTotalVote(room);
-        roomService.delete(room);
     }
 
     @Transactional(readOnly = true)
