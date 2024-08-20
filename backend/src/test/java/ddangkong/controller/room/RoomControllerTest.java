@@ -148,6 +148,58 @@ class RoomControllerTest extends BaseControllerTest {
     }
 
     @Nested
+    class 방_나가기 {
+
+        @Test
+        void 방에사_나갈_수_있다() {
+            // given
+            Long roomId = 1L;
+            Long memberId = 1L;
+
+            // when & then
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .pathParam("roomId", roomId)
+                    .pathParam("memberId", memberId)
+                    .when().delete("/api/balances/rooms/{roomId}/member/{memberId}")
+                    .then().log().all()
+                    .statusCode(204);
+        }
+
+        @Test
+        void 방_식별자가_0이하인_경우_예외를_발생한다() {
+            // given
+            Long roomId = 0L;
+            Long memberId = 1L;
+
+            // when & then
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .pathParam("roomId", roomId)
+                    .pathParam("memberId", memberId)
+                    .when().delete("/api/balances/rooms/{roomId}/member/{memberId}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @Test
+        void 멤버_식별자가_0이하인_경우_예외를_발생한다() {
+            // given
+            Long roomId = 0L;
+            Long memberId = 1L;
+
+            // when & then
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .pathParam("roomId", roomId)
+                    .pathParam("memberId", memberId)
+                    .when().delete("/api/balances/rooms/{roomId}/member/{memberId}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
+
+    @Nested
     class 게임_시작 {
 
         private static final Long READY_ROOM_ID = 4L;

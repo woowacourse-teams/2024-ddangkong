@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -193,7 +194,31 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             )
                     ));
         }
+    }
 
+    @Nested
+    class 방_나가기 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/member/{memberId}";
+
+        @Test
+        void 방에서_나간다() throws Exception {
+            // given
+            Long roomId = 1L;
+            Long memberId = 1L;
+
+            //when & then
+            mockMvc.perform(delete(ENDPOINT, roomId, memberId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/leave",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID"),
+                                    parameterWithName("memberId").description("멤버 ID")
+                            )
+                    ));
+        }
     }
 
     @Nested
