@@ -33,4 +33,5 @@ export const MOCK_API_URL = {
   roundVoteIsFinished: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-finished`,
   categoryList: `${BASE_URL}/api/balances/categories`,
   applyRoomSetting: `${BASE_URL}/api/balances/rooms/:roomId`,
+  startGame: `${BASE_URL}/api/balances/rooms/:roomId/start`,
 };
