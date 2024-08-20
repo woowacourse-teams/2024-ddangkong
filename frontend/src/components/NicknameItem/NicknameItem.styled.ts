@@ -4,7 +4,6 @@ export const nicknameItemLayout = css`
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  width: 50%;
 `;
 
 export const nicknameText = css`

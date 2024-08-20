@@ -13,8 +13,7 @@ export const optionInfo = css`
 `;
 
 export const participantsListWrapper = css`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   row-gap: 1.4rem;
-  list-style: none;
 `;
