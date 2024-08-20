@@ -19,8 +19,8 @@ VALUES ('민초', 1),
        ('어떻게 죽을 지 알기', 5);
 
 
-INSERT INTO room(uuid, total_round, current_round, time_limit, status, category)
-VALUES ('uuid1', 5, 1, 30000, 'PROGRESS', 'EXAMPLE');
+INSERT INTO room(uuid, total_round, current_round, time_limit, status, category, last_modified_at)
+VALUES ('uuid1', 5, 1, 30000, 'PROGRESS', 'EXAMPLE', '2024-07-18 19:50:32.000');
 
 
 INSERT INTO room_content(room_id, balance_content_id, round, round_ended_at)

@@ -1,5 +1,6 @@
 package ddangkong.domain.room;
 
+import ddangkong.domain.BaseEntity;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
 import jakarta.persistence.Column;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Room {
+public class Room extends BaseEntity {
 
     private static final int DEFAULT_TOTAL_ROUND = 5;
     private static final int MIN_TOTAL_ROUND = 3;
