@@ -122,8 +122,4 @@ export const currentVoteButtonWrapper = (isGroupTabActive: boolean) => css`
 export const buttonStyle = css`
   color: black;
   font-weight: bold;
-
-  &:active {
-    opacity: 0.7;
-  }
 `;
