@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Embeddable
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomSetting {
 
     private static final int DEFAULT_TOTAL_ROUND = 5;
