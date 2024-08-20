@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.room.NotReadyRoomException;
@@ -94,7 +95,9 @@ class MemberServiceTest extends BaseServiceTest {
             // given
 
             RoomStatus roomStatus = RoomStatus.PROGRESS;
-            Room room = roomRepository.save(new Room("uuid", 5, 2, 30, roomStatus, Category.EXAMPLE));
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
+
+            Room room = roomRepository.save(new Room("uuid", 2, roomStatus, roomSetting));
             memberRepository.save(PRIN.master(room));
 
             // when & then

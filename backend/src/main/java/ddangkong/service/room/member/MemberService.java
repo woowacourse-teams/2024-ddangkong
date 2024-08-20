@@ -3,6 +3,7 @@ package ddangkong.service.room.member;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.MemberRepository;
+import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.room.NotReadyRoomException;
 import ddangkong.exception.room.member.AlreadyExistMasterException;
 import ddangkong.exception.room.member.ExceedMaxMemberCountException;
@@ -61,13 +62,19 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<Member> findRoomMembers(Room room) {
-        return memberRepository.findAllByRoom(room);
+    public RoomMembers findRoomMembers(Room room) {
+        List<Member> members = memberRepository.findAllByRoom(room);
+        return new RoomMembers(members);
     }
 
     @Transactional(readOnly = true)
     public Member getRoomMember(Long memberId, Room room) {
         return memberRepository.findByIdAndRoom(memberId, room)
                 .orElseThrow(NotRoomMemberException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Member getMaster(Room room) {
+        return findRoomMembers(room).getMaster();
     }
 }

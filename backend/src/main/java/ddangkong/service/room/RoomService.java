@@ -19,7 +19,7 @@ public class RoomService {
         return roomRepository.save(Room.createNewRoom());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Room getRoom(Long roomId) {
         return roomRepository.findById(roomId)
                 .orElseThrow(NotFoundRoomException::new);
@@ -48,9 +48,7 @@ public class RoomService {
     @Transactional
     public void updateRoomSetting(Long roomId, RoomSetting roomSetting) {
         Room room = getRoom(roomId);
-        room.updateTimeLimit(roomSetting.getTimeLimit());
-        room.updateTotalRound(roomSetting.getTotalRound());
-        room.updateCategory(roomSetting.getCategory());
+        room.updateRoomSetting(roomSetting);
     }
 
     @Transactional

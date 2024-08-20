@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public class PercentageCalculator {
 
     private static final double SECOND_DECIMAL_PLACE_ROUNDING_FACTOR = 100.0;
-    private static final int DEFAULT_PERCENTAGE = 50;
+    private static final int NON_TOTAL_COUNT_PERCENTAGE = 0;
 
     public static int calculatePercent(long count, long totalCount) {
         if (count < 0) {
@@ -19,7 +19,7 @@ public class PercentageCalculator {
         }
 
         if (totalCount == 0) {
-            return DEFAULT_PERCENTAGE;
+            return NON_TOTAL_COUNT_PERCENTAGE;
         }
         return (int) Math.round(count * SECOND_DECIMAL_PLACE_ROUNDING_FACTOR / totalCount);
     }

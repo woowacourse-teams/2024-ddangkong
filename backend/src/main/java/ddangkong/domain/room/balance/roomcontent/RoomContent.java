@@ -2,9 +2,9 @@ package ddangkong.domain.room.balance.roomcontent;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
-import ddangkong.exception.room.balance.roomcontent.AlreadyRoundStartedException;
-import ddangkong.exception.room.balance.roomcontent.EmptyRoundEndedAtException;
+import ddangkong.exception.room.balance.roomcontent.EmptyVoteDeadlineException;
 import ddangkong.exception.room.balance.roomcontent.MismatchRoundException;
+import ddangkong.exception.room.balance.roomcontent.VoteDeadlineConfiguredException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,31 +40,31 @@ public class RoomContent {
     @Column(nullable = false)
     private int round;
 
-    private LocalDateTime roundEndedAt;
+    private LocalDateTime voteDeadline;
 
     public static RoomContent newRoomContent(Room room, BalanceContent balanceContent, int round) {
         return new RoomContent(room, balanceContent, round, null);
     }
 
-    public RoomContent(Room room, BalanceContent balanceContent, int round, LocalDateTime roundEndedAt) {
+    public RoomContent(Room room, BalanceContent balanceContent, int round, LocalDateTime voteDeadline) {
         this.room = room;
         this.balanceContent = balanceContent;
         this.round = round;
-        this.roundEndedAt = roundEndedAt;
+        this.voteDeadline = voteDeadline;
     }
 
-    public void updateRoundEndedAt(LocalDateTime currentTime, int timeLimit) {
-        if (roundEndedAt != null) {
-            throw new AlreadyRoundStartedException();
+    public void updateVoteDeadline(LocalDateTime now, int timeLimit) {
+        if (voteDeadline != null) {
+            throw new VoteDeadlineConfiguredException();
         }
 
         int afterSec = (timeLimit + DELAY_MSEC) / 1_000;
-        roundEndedAt = currentTime.plusSeconds(afterSec);
+        voteDeadline = now.plusSeconds(afterSec);
     }
 
-    public boolean isRoundOver(LocalDateTime currentTime, int round) {
+    public boolean isOverVoteDeadline(LocalDateTime now, int round) {
         validateSameRound(round);
-        return currentTime.isAfter(getRoundEndedAt());
+        return now.isAfter(getVoteDeadline());
     }
 
     private void validateSameRound(int round) {
@@ -73,10 +73,10 @@ public class RoomContent {
         }
     }
 
-    public LocalDateTime getRoundEndedAt() {
-        if (roundEndedAt == null) {
-            throw new EmptyRoundEndedAtException();
+    public LocalDateTime getVoteDeadline() {
+        if (voteDeadline == null) {
+            throw new EmptyVoteDeadlineException();
         }
-        return roundEndedAt;
+        return voteDeadline;
     }
 }

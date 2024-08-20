@@ -24,7 +24,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 아이디로_컨텐츠를_조회한다() {
             // given
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
 
             // when
             BalanceContent foundContent = balanceContentService.getBalanceContent(content.getId());
@@ -50,7 +50,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 카테고리에_해당하는_컨텐츠를_주어진_개수만큼_선택한다() {
             // given
-            Category category = Category.EXAMPLE;
+            Category category = Category.IF;
             balanceContentRepository.saveAll(List.of(
                     new BalanceContent(category, "민초 vs 반민초"),
                     new BalanceContent(category, "카리나 vs 윈터"),
@@ -71,7 +71,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
             // todo init-test.sql 제거되면 pickCount 3으로 수정
         void 카테고리에_해당하는_컨텐츠가_부족하면_예외가_발생한다() {
             // given
-            Category category = Category.EXAMPLE;
+            Category category = Category.IF;
             balanceContentRepository.saveAll(List.of(
                     new BalanceContent(category, "민초 vs 반민초"),
                     new BalanceContent(category, "카리나 vs 윈터")

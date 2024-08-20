@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 class BalanceOptionsTest {
 
-    private final BalanceContent content = new BalanceContent(Category.EXAMPLE, "A vs B");
+    private final BalanceContent content = new BalanceContent(Category.IF, "A vs B");
 
     @Nested
     class 일급_컬렉션_생성 {
