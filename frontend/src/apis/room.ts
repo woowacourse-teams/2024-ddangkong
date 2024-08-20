@@ -86,6 +86,9 @@ export const applyRoomSetting = async (roomId: number, roomSetting: RoomSetting)
   const { totalRound, timeLimit, category } = roomSetting;
   await fetcher.patch({
     url: API_URL.applyRoomSetting(roomId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
     body: { totalRound, timeLimit, category },
   });
 };

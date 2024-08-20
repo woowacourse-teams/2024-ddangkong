@@ -10,16 +10,16 @@ interface SelectedOption {
 interface SelectOptionProps {
   option: BalanceContent['firstOption'];
   selectedOption: SelectedOption;
-  handleSelectOption: (selectedId: number) => void;
+  handleClickOption: (selectedId: number) => void;
 }
 
-const SelectOption = ({ option, selectedOption, handleSelectOption }: SelectOptionProps) => {
+const SelectOption = ({ option, selectedOption, handleClickOption }: SelectOptionProps) => {
   const { id: selectedId, isCompleted } = selectedOption;
 
   return (
     <button
       css={SelectOptionLayout(Boolean(selectedId === option.optionId), isCompleted)}
-      onClick={() => handleSelectOption(option.optionId)}
+      onClick={() => handleClickOption(option.optionId)}
       disabled={isCompleted}
     >
       {option.name}

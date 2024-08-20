@@ -12,17 +12,24 @@ import {
 
 import ArrowDown from '@/assets/images/arrowDown.svg';
 import ArrowUp from '@/assets/images/arrowUp.svg';
-import { Category } from '@/types/room';
 
-interface DropdownProps {
-  text: string;
-  optionList: Category[];
+interface DropdownProps<T> {
+  text: T;
+  optionList: T[];
   handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
+const Dropdown = <T extends string | number>({
+  text,
+  optionList,
+  handleClick,
+}: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const handleToggleDropdown = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     const handleOutsideClose = (e: MouseEvent) => {
@@ -42,8 +49,8 @@ const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
     <div
       css={dropdownLayout}
       ref={dropdownRef}
-      onClick={() => setIsOpen((prev) => !prev)}
-      onKeyDown={() => setIsOpen((prev) => !prev)}
+      onClick={handleToggleDropdown}
+      onKeyDown={handleToggleDropdown}
       role="button"
       tabIndex={0}
     >
@@ -54,19 +61,16 @@ const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
           <img src={isOpen ? ArrowDown : ArrowUp} alt="드랍다운 화살표" css={arrowImage} />
         </div>
       </div>
-      <div css={selectOptionList(isOpen, optionList.length)}>
+      <ul css={selectOptionList(isOpen, optionList.length)}>
         {isOpen &&
           optionList.map((option) => (
-            <button
-              css={optionButton(text === option)}
-              key={option}
-              value={option}
-              onClick={handleClick}
-            >
-              {option}
-            </button>
+            <li key={option}>
+              <button css={optionButton(text === option)} value={option} onClick={handleClick}>
+                {option}
+              </button>
+            </li>
           ))}
-      </div>
+      </ul>
     </div>
   );
 };

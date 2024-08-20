@@ -9,7 +9,6 @@ export const dropdownLayout = css`
 
   width: 12rem;
   height: 3.6rem;
-  margin: 0 auto;
   padding: 0.8rem;
   border: 1px solid black;
   border-radius: 0.8rem;

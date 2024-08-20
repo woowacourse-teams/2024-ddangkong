@@ -2,15 +2,18 @@ import { useParams } from 'react-router-dom';
 
 import { useRoundIsFinished, useSelectOption } from './SelectContainer.hook';
 import { selectContainerLayout, selectSection } from './SelectContainer.styled';
+import AlertModal from '../common/AlertModal/AlertModal';
 import SelectButton from '../common/SelectButton/SelectButton';
 
 import SelectOption from '@/components/SelectOption/SelectOption';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useModal from '@/hooks/useModal';
 
 const SelectContainer = () => {
   const { roomId } = useParams();
   const { balanceContent, isLoading, isFetching } = useBalanceContentQuery(Number(roomId));
-  const { selectedOption, handleSelectOption, handleClickSelected } = useSelectOption();
+  const { selectedOption, handleClickOption, completeSelection } = useSelectOption();
+  const { isOpen, show, close } = useModal();
 
   useRoundIsFinished({
     contentId: balanceContent?.contentId,
@@ -27,16 +30,26 @@ const SelectContainer = () => {
         <SelectOption
           option={balanceContent.firstOption}
           selectedOption={selectedOption}
-          handleSelectOption={handleSelectOption}
+          handleClickOption={handleClickOption}
         />
         <span>VS</span>
         <SelectOption
           option={balanceContent.secondOption}
           selectedOption={selectedOption}
-          handleSelectOption={handleSelectOption}
+          handleClickOption={handleClickOption}
         />
       </section>
-      <SelectButton selectedId={selectedOption.id} handleClickSelected={handleClickSelected} />
+      <SelectButton
+        selectedId={selectedOption.id}
+        completeSelection={completeSelection}
+        showModal={show}
+      />
+      <AlertModal
+        isOpen={isOpen}
+        onClose={close}
+        title="선택 에러"
+        message={'선택이 정상적으로 반영되지 않았어요.'}
+      />
     </div>
   );
 };

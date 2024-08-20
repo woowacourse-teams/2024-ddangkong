@@ -5,21 +5,24 @@ import {
   roomSettingTitle,
   roomSettingTitleContainer,
   roomSettingTitleWrapper,
-} from './RoomSettingItem.styled';
+} from './RoomSettingContainer.styled';
 
-interface RoomSettingItemProps {
+interface RoomSettingContainerProps {
   title: '카테고리' | '총 라운드' | '라운드 당 타이머';
 }
 
-const RoomSettingItem = ({ children, title }: PropsWithChildren<RoomSettingItemProps>) => {
+const RoomSettingContainer = ({
+  children,
+  title,
+}: PropsWithChildren<RoomSettingContainerProps>) => {
   return (
     <div css={roomSettingTitleContainer}>
       <div css={roomSettingTitleWrapper}>
         <span css={roomSettingTitle}>{title}</span>
       </div>
-      <div css={roomSettingButtonContainer}>{children}</div>
+      <ul css={roomSettingButtonContainer}>{children}</ul>
     </div>
   );
 };
 
-export default RoomSettingItem;
+export default RoomSettingContainer;

@@ -1,13 +1,12 @@
-import useCategoryListQuery from './hooks/useCategoryListQuery';
+import CategoryDropdown from './CategoryDropdown/CategoryDropdown';
 import useRoomSetting from './hooks/useRoomSetting';
-import RoomSettingItem from './RoomSettingItem/RoomSettingItem';
+import RoomSettingContainer from './RoomSettingContainer/RoomSettingContainer';
 import {
   roomSettingButton,
   roomSettingContainer,
   roomSettingModalLayout,
   roomSettingModalTitle,
 } from './RoomSettingModal.styled';
-import Dropdown from '../Dropdown/Dropdown';
 import Modal from '../Modal/Modal';
 
 const TOTAL_ROUND_LIST = [5, 7, 10];
@@ -19,13 +18,15 @@ interface RoomSettingModalProps {
 }
 
 const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
-  const { categoryList } = useCategoryListQuery();
-  const { roomSetting, handleClickOption, handleClickRound, handleClickTimer, handleClickApply } =
-    useRoomSetting({ onClose });
+  const {
+    roomSetting,
+    handleClickOption,
+    handleClickRound,
+    handleClickTimeLimit,
+    handleClickApply,
+  } = useRoomSetting({ onClose });
 
-  const { category, totalRound, timerPerRound } = roomSetting;
-
-  if (!categoryList || !category) return null;
+  const { category, totalRound, timeLimitPerRound } = roomSetting;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} css={roomSettingModalLayout}>
@@ -35,32 +36,31 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
       </Modal.Header>
       <Modal.Content>
         <div css={roomSettingContainer}>
-          <RoomSettingItem title="카테고리">
-            <Dropdown text={category} optionList={categoryList} handleClick={handleClickOption} />
-          </RoomSettingItem>
-          <RoomSettingItem title="총 라운드">
+          <RoomSettingContainer title="카테고리">
+            <CategoryDropdown category={category} handleClickOption={handleClickOption} />
+          </RoomSettingContainer>
+          <RoomSettingContainer title="총 라운드">
             {TOTAL_ROUND_LIST.map((round) => (
-              <button
-                key={round}
-                css={roomSettingButton(totalRound === round)}
-                onClick={handleClickRound}
-              >
-                {round}
-              </button>
+              <li key={round}>
+                <button css={roomSettingButton(totalRound === round)} onClick={handleClickRound}>
+                  {round}
+                </button>
+              </li>
             ))}
-          </RoomSettingItem>
-          <RoomSettingItem title="라운드 당 타이머">
-            {TIMER_PER_ROUND_LIST.map((timer) => (
-              <button
-                key={timer}
-                css={roomSettingButton(timerPerRound === timer)}
-                onClick={handleClickTimer}
-                value={timer}
-              >
-                {timer / 1000}초
-              </button>
+          </RoomSettingContainer>
+          <RoomSettingContainer title="라운드 당 타이머">
+            {TIMER_PER_ROUND_LIST.map((timeLimit) => (
+              <li key={timeLimit}>
+                <button
+                  css={roomSettingButton(timeLimitPerRound === timeLimit)}
+                  onClick={handleClickTimeLimit}
+                  value={timeLimit}
+                >
+                  {timeLimit / 1000}초
+                </button>
+              </li>
             ))}
-          </RoomSettingItem>
+          </RoomSettingContainer>
         </div>
       </Modal.Content>
       <Modal.Footer buttonPosition="center">

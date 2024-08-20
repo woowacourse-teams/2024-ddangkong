@@ -21,8 +21,15 @@ const applyRoomSettingHandler = async ({ request }: { request: Request }) => {
   return new HttpResponse(null, { status: 204 });
 };
 
+const startGameHandler = () => {
+  ROOM_INFO.isGameStart = true;
+
+  return new HttpResponse(null, { status: 204 });
+};
+
 export const roomHandler = [
   http.get(MOCK_API_URL.roomMembers, getRoomMemberHandler),
   http.get(MOCK_API_URL.categoryList, getCategoryListHandler),
   http.patch(MOCK_API_URL.applyRoomSetting, applyRoomSettingHandler),
+  http.patch(MOCK_API_URL.startGame, startGameHandler),
 ];

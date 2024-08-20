@@ -53,16 +53,16 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 
 // 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
-  const { isModalOpen, handleModalOpen, handleModalClose } = useModal();
+  const { isOpen, show, close } = useModal();
 
   return (
     <header css={headerLayout}>
       <div css={emptyBox}></div>
       <span css={gameTitle}>{title}</span>
-      <button onClick={handleModalOpen} css={buttonWrapper}>
+      <button onClick={show} css={buttonWrapper}>
         <img src={SettingIcon} alt="방 설정" css={settingImage} />
       </button>
-      {isModalOpen && <RoomSettingModal isOpen={isModalOpen} onClose={handleModalClose} />}
+      {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
     </header>
   );
 };

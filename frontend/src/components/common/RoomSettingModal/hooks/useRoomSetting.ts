@@ -18,18 +18,26 @@ const useRoomSetting = ({ onClose }: UseRoomSettingProps) => {
 
   const { category, handleClickOption } = useCategoryDropdown(selectedRoomSetting?.category);
   const { totalRound, handleClickRound } = useTotalRound(selectedRoomSetting?.totalRound);
-  const { timerPerRound, handleClickTimer } = useTimerPerRound(selectedRoomSetting?.timeLimit);
+  const { timeLimitPerRound, handleClickTimeLimit } = useTimerPerRound(
+    selectedRoomSetting?.timeLimit,
+  );
 
-  const roomSetting = { category, totalRound, timerPerRound };
+  const roomSetting = { category, totalRound, timeLimitPerRound };
 
   const handleClickApply = () => {
-    if (!category || !totalRound || !timerPerRound) return;
+    if (!category || !totalRound || !timeLimitPerRound) return;
 
-    applyRoomSetting({ category, totalRound, timeLimit: timerPerRound });
+    applyRoomSetting({ category, totalRound, timeLimit: timeLimitPerRound });
     onClose();
   };
 
-  return { roomSetting, handleClickOption, handleClickRound, handleClickTimer, handleClickApply };
+  return {
+    roomSetting,
+    handleClickOption,
+    handleClickRound,
+    handleClickTimeLimit,
+    handleClickApply,
+  };
 };
 
 export default useRoomSetting;

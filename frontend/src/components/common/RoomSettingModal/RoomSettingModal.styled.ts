@@ -3,10 +3,7 @@ import { css } from '@emotion/react';
 import { Theme } from '@/styles/Theme';
 
 export const roomSettingModalLayout = css`
-  width: 70vw;
-
   background-color: ${Theme.color.peanut300};
-  max-width: 768px;
 `;
 
 export const roomSettingModalTitle = css`

@@ -5,7 +5,7 @@ import SelectOption from './SelectOption';
 
 const meta = {
   title: 'SelectOption',
-  args: { handleSelectOption: fn() },
+  args: { handleClickOption: fn() },
 
   component: SelectOption,
 } satisfies Meta<typeof SelectOption>;
