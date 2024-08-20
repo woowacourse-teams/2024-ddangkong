@@ -1,4 +1,4 @@
-import useCategoryListQuery from './hooks/useCategoryListQuery';
+import CategoryDropdown from './CategoryDropdown/CategoryDropdown';
 import useRoomSetting from './hooks/useRoomSetting';
 import RoomSettingContainer from './RoomSettingContainer/RoomSettingContainer';
 import {
@@ -7,10 +7,7 @@ import {
   roomSettingModalLayout,
   roomSettingModalTitle,
 } from './RoomSettingModal.styled';
-import Dropdown from '../Dropdown/Dropdown';
 import Modal from '../Modal/Modal';
-
-import { Category } from '@/types/room';
 
 const TOTAL_ROUND_LIST = [5, 7, 10];
 const TIMER_PER_ROUND_LIST = [5000, 10000, 15000];
@@ -21,7 +18,6 @@ interface RoomSettingModalProps {
 }
 
 const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
-  const { categoryList } = useCategoryListQuery();
   const {
     roomSetting,
     handleClickOption,
@@ -32,8 +28,6 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
 
   const { category, totalRound, timeLimitPerRound } = roomSetting;
 
-  if (!categoryList || !category) return null;
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} css={roomSettingModalLayout}>
       <Modal.Header position="center">
@@ -43,11 +37,7 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
       <Modal.Content>
         <div css={roomSettingContainer}>
           <RoomSettingContainer title="카테고리">
-            <Dropdown<Category>
-              text={category}
-              optionList={categoryList}
-              handleClick={handleClickOption}
-            />
+            <CategoryDropdown category={category} handleClickOption={handleClickOption} />
           </RoomSettingContainer>
           <RoomSettingContainer title="총 라운드">
             {TOTAL_ROUND_LIST.map((round) => (
