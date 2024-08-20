@@ -12,15 +12,18 @@ import {
 
 import ArrowDown from '@/assets/images/arrowDown.svg';
 import ArrowUp from '@/assets/images/arrowUp.svg';
-import { Category } from '@/types/room';
 
-interface DropdownProps {
-  text: string;
-  optionList: Category[];
+interface DropdownProps<T> {
+  text: T;
+  optionList: T[];
   handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Dropdown = ({ text, optionList, handleClick }: DropdownProps) => {
+const Dropdown = <T extends string | number>({
+  text,
+  optionList,
+  handleClick,
+}: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 

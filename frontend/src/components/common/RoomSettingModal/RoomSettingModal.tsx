@@ -10,6 +10,8 @@ import {
 import Dropdown from '../Dropdown/Dropdown';
 import Modal from '../Modal/Modal';
 
+import { Category } from '@/types/room';
+
 const TOTAL_ROUND_LIST = [5, 7, 10];
 const TIMER_PER_ROUND_LIST = [5000, 10000, 15000];
 
@@ -41,7 +43,11 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
       <Modal.Content>
         <div css={roomSettingContainer}>
           <RoomSettingContainer title="카테고리">
-            <Dropdown text={category} optionList={categoryList} handleClick={handleClickOption} />
+            <Dropdown<Category>
+              text={category}
+              optionList={categoryList}
+              handleClick={handleClickOption}
+            />
           </RoomSettingContainer>
           <RoomSettingContainer title="총 라운드">
             {TOTAL_ROUND_LIST.map((round) => (
