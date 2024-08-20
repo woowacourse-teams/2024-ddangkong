@@ -20,7 +20,7 @@ const Header = ({ title }: HeaderProps) => {
   const { balanceContent } = useBalanceContentQuery();
   const location = useLocation();
   const { roomId } = useParams();
-  const { isModalOpen, handleModalOpen, handleModalClose } = useModal();
+  const { isOpen, show, close } = useModal();
 
   const isReadyPage = location.pathname === ROUTES.ready(Number(roomId));
   const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
@@ -32,10 +32,10 @@ const Header = ({ title }: HeaderProps) => {
       <header css={headerLayout}>
         <div css={emptyBox}></div>
         <span css={gameTitle}>밸런스 게임</span>
-        <button onClick={handleModalOpen}>
+        <button onClick={show}>
           <img src={SettingIcon} alt="방 설정" css={settingImage} />
         </button>
-        {isModalOpen && <RoomSettingModal isOpen={isModalOpen} onClose={handleModalClose} />}
+        {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
       </header>
     );
   }
