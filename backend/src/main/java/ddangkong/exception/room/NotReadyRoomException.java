@@ -1,11 +1,17 @@
 package ddangkong.exception.room;
 
+import static ddangkong.exception.ErrorCode.NOT_READY_ROOM;
+
 import ddangkong.exception.BadRequestException;
-import ddangkong.exception.ErrorCode;
 
 public class NotReadyRoomException extends BadRequestException {
 
     public NotReadyRoomException() {
-        super(ErrorCode.NOT_READY_ROOM.getMessage());
+        super(NOT_READY_ROOM.getMessage());
+    }
+
+    @Override
+    public String getErrorCode() {
+        return NOT_READY_ROOM.name();
     }
 }

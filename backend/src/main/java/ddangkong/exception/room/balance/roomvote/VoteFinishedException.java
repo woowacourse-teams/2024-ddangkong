@@ -9,4 +9,9 @@ public class VoteFinishedException extends BadRequestException {
     public VoteFinishedException() {
         super(VOTE_FINISHED.getMessage());
     }
+
+    @Override
+    public String getErrorCode() {
+        return VOTE_FINISHED.name();
+    }
 }

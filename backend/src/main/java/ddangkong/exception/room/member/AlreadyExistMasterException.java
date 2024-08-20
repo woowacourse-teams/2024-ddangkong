@@ -9,4 +9,9 @@ public class AlreadyExistMasterException extends BadRequestException {
     public AlreadyExistMasterException() {
         super(ALREADY_EXIST_MASTER.getMessage());
     }
+
+    @Override
+    public String getErrorCode() {
+        return ALREADY_EXIST_MASTER.name();
+    }
 }

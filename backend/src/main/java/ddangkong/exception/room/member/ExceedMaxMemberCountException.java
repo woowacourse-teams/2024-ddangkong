@@ -9,4 +9,9 @@ public class ExceedMaxMemberCountException extends BadRequestException {
     public ExceedMaxMemberCountException(long memberCount) {
         super(EXCEED_MAX_MEMBER_COUNT.getMessage().formatted(memberCount));
     }
+
+    @Override
+    public String getErrorCode() {
+        return EXCEED_MAX_MEMBER_COUNT.name();
+    }
 }

@@ -26,4 +26,10 @@ class ExceptionController {
             String memberName
     ) {
     }
+
+    record ExceptionResponse(
+            String errorCode,
+            String message
+    ) {
+    }
 }

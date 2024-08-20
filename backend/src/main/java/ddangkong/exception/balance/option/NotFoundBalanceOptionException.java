@@ -9,4 +9,9 @@ public class NotFoundBalanceOptionException extends BadRequestException {
     public NotFoundBalanceOptionException() {
         super(NOT_FOUND_BALANCE_OPTION.getMessage());
     }
+
+    @Override
+    public String getErrorCode() {
+        return NOT_FOUND_BALANCE_OPTION.name();
+    }
 }

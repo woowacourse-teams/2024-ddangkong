@@ -45,6 +45,15 @@ public enum ErrorCode {
     ALREADY_VOTED("이미 투표했습니다. nickname: %s, option name: %s"),
     VOTE_FINISHED("투표가 종료되었습니다."),
     VOTE_NOT_FINISHED("아직 투표가 종료되지 않았습니다."),
+
+    // Common
+    FIELD_ERROR("입력이 잘못되었습니다."),
+    URL_PARAMETER_ERROR("입력이 잘못되었습니다."),
+    METHOD_ARGUMENT_TYPE_MISMATCH("입력한 값의 타입이 잘못되었습니다."),
+    NO_RESOURCE_FOUND("요청한 리소스를 찾을 수 없습니다."),
+    METHOD_NOT_ALLOWED("허용되지 않은 메서드입니다."),
+    INTERNAL_SERVER_ERROR("서버 오류가 발생했습니다. 관리자에게 문의하세요."),
+
     ;
 
     private final String message;

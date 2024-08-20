@@ -3,6 +3,8 @@ package ddangkong.controller.exception;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import ddangkong.exception.BadRequestException;
+import ddangkong.exception.ErrorCode;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Path;
 import java.util.List;
@@ -18,16 +20,26 @@ public record ErrorResponse(
         List<ConstraintViolationError> violationErrors
 ) {
 
-    public ErrorResponse(String message) {
-        this("BUSINESS_LOGIC_ERROR", message, null, null);
+    public <T extends BadRequestException> ErrorResponse(T e) {
+        this(e.getErrorCode(), e.getMessage(), null, null);
     }
 
-    public ErrorResponse(BindingResult bindingResult) {
-        this("FIELD_ERROR", "입력이 잘못되었습니다.", FieldError.from(bindingResult), null);
+    public ErrorResponse(ErrorCode errorCode) {
+        this(errorCode, null, null);
     }
 
-    public ErrorResponse(Set<ConstraintViolation<?>> constraintViolations) {
-        this("URL_PARAMETER_ERROR", "입력이 잘못되었습니다.", null, ConstraintViolationError.from(constraintViolations));
+    public ErrorResponse(ErrorCode errorCode, BindingResult bindingResult) {
+        this(errorCode, FieldError.from(bindingResult), null);
+    }
+
+    public ErrorResponse(ErrorCode errorCode, Set<ConstraintViolation<?>> constraintViolations) {
+        this(errorCode, null, ConstraintViolationError.from(constraintViolations));
+    }
+
+    private ErrorResponse(ErrorCode errorCode,
+                          List<FieldError> fieldErrors,
+                          List<ConstraintViolationError> violationErrors) {
+        this(errorCode.name(), errorCode.getMessage(), fieldErrors, violationErrors);
     }
 
     private record FieldError(String field, Object rejectedValue, String reason) {

@@ -9,4 +9,9 @@ public class NotFoundRoomException extends BadRequestException {
     public NotFoundRoomException() {
         super(NOT_FOUND_ROOM.getMessage());
     }
+
+    @Override
+    public String getErrorCode() {
+        return NOT_FOUND_ROOM.name();
+    }
 }

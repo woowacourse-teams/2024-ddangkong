@@ -9,4 +9,9 @@ public class NotFinishedRoomException extends BadRequestException {
     public NotFinishedRoomException() {
         super(NOT_FINISHED_ROOM.getMessage());
     }
+
+    @Override
+    public String getErrorCode() {
+        return NOT_FINISHED_ROOM.name();
+    }
 }
