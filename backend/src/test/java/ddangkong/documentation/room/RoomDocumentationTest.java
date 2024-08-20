@@ -26,7 +26,7 @@ import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.room.RoomFacade;
-import ddangkong.facade.room.dto.RoomActivatedResponse;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -270,24 +270,26 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     }
 
     @Nested
-    class 방_게임_활성화_여부 {
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/activate";
+    class 방_게임_참여_가능_여부 {
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/status";
 
         @Test
-        void 방에서_게임이_활성화_여부를_조회한다() throws Exception {
+        void 방에서_게임이_참여_가능_여부를_조회한다() throws Exception {
             // given
-            RoomActivatedResponse response = new RoomActivatedResponse(true);
-            when(roomFacade.getRoomActivated(anyLong())).thenReturn(response);
+            RoomStatusResponse response = new RoomStatusResponse(true, false);
+            when(roomFacade.getRoomStatus(anyLong())).thenReturn(response);
 
             // when & then
             mockMvc.perform(get(ENDPOINT, 1))
                     .andExpect(status().isOk())
-                    .andDo(document("room/activate",
+                    .andDo(document("room/status",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
                             ),
                             responseFields(
-                                    fieldWithPath("isActivated").description("게임 활성화 여부(게임 상태가 READY or PROGRESS)")
+                                    fieldWithPath("isReady").description("게임 상태가 READY인지 여부"),
+                                    fieldWithPath("isActivated").description("게임이 참여할 수 있는 상태인지 여부. "
+                                            + "방에서 멤버들이 전부 나간 경우는 삭제될 방이라고 판단하여 false가 된다.")
                             )
                     ));
         }

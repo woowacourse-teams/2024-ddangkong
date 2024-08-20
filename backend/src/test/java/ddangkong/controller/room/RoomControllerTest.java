@@ -12,7 +12,7 @@ import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
-import ddangkong.facade.room.dto.RoomActivatedResponse;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
@@ -84,39 +84,63 @@ class RoomControllerTest extends BaseControllerTest {
         }
 
         @Test
-        void 게임_진행중인_방_진행여부_조회() {
+        void 유저가_있고_대기중인_방_참여_가능_여부_조회() {
             //when & then
-            RoomActivatedResponse actual = RestAssured.given()
-                    .pathParam("roomId", 1L)
-                    .when().get("/api/balances/rooms/{roomId}/activate")
-                    .then().contentType(ContentType.JSON).log().all()
-                    .statusCode(200)
-                    .extract().as(RoomActivatedResponse.class);
-            assertThat(actual.isActivated()).isTrue();
-        }
-
-        @Test
-        void 게임_준비중인_방_진행여부_조회() {
-            //when & then
-            RoomActivatedResponse actual = RestAssured.given()
+            RoomStatusResponse actual = RestAssured.given()
                     .pathParam("roomId", 4L)
-                    .when().get("/api/balances/rooms/{roomId}/activate")
+                    .when().get("/api/balances/rooms/{roomId}/status")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
-                    .extract().as(RoomActivatedResponse.class);
-            assertThat(actual.isActivated()).isTrue();
+                    .extract().as(RoomStatusResponse.class);
+            assertAll(
+                    () -> assertThat(actual.isReady()).isTrue(),
+                    () -> assertThat(actual.isActivated()).isTrue()
+            );
         }
 
         @Test
-        void 게임_종료된_방_진행여부_조회() {
+        void 유저가_없고_대기중인_방_참여_가능_여부_조회() {
             //when & then
-            RoomActivatedResponse actual = RestAssured.given()
-                    .pathParam("roomId", 5L)
-                    .when().get("/api/balances/rooms/{roomId}/activate")
+            RoomStatusResponse actual = RestAssured.given()
+                    .pathParam("roomId", 7L)
+                    .when().get("/api/balances/rooms/{roomId}/status")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
-                    .extract().as(RoomActivatedResponse.class);
-            assertThat(actual.isActivated()).isFalse();
+                    .extract().as(RoomStatusResponse.class);
+            assertAll(
+                    () -> assertThat(actual.isReady()).isTrue(),
+                    () -> assertThat(actual.isActivated()).isFalse()
+            );
+        }
+
+        @Test
+        void 게임_진행중인_방_참여_가능_여부_조회() {
+            //when & then
+            RoomStatusResponse actual = RestAssured.given()
+                    .pathParam("roomId", 1L)
+                    .when().get("/api/balances/rooms/{roomId}/status")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomStatusResponse.class);
+            assertAll(
+                    () -> assertThat(actual.isReady()).isFalse(),
+                    () -> assertThat(actual.isActivated()).isTrue()
+            );
+        }
+
+        @Test
+        void 게임_종료된_방_참여_가능_여부_조회() {
+            //when & then
+            RoomStatusResponse actual = RestAssured.given()
+                    .pathParam("roomId", 5L)
+                    .when().get("/api/balances/rooms/{roomId}/status")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomStatusResponse.class);
+            assertAll(
+                    () -> assertThat(actual.isReady()).isFalse(),
+                    () -> assertThat(actual.isActivated()).isTrue()
+            );
         }
     }
 

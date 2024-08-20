@@ -21,7 +21,7 @@ import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
-import ddangkong.facade.room.dto.RoomActivatedResponse;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import java.util.List;
@@ -140,51 +140,80 @@ class RoomFacadeTest extends BaseServiceTest {
         }
 
         @Test
-        void 진행중인_방의_활성화_여부를_조회한다() {
+        void 준비중이고_유저가_존재하는_방_참여_가능를_조회한다() {
             // given
             Room room = roomRepository.save(
-                    new Room("uuid", 5, 1, 30, RoomStatus.PROGRESS, Category.EXAMPLE)
+                    new Room("uuid", 5, 1, 30, RoomStatus.READY, Category.EXAMPLE)
             );
+            memberRepository.save(TACAN.master(room));
 
             // when
-            RoomActivatedResponse actual = roomFacade.getRoomActivated(room.getId());
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getId());
 
             // then
-            assertThat(actual.isActivated()).isTrue();
+            assertAll(
+                    () -> assertThat(actual.isReady()).isTrue(),
+                    () -> assertThat(actual.isActivated()).isTrue()
+            );
         }
 
         @Test
-        void 준비중인_방의_활성화_여부를_조회한다() {
+        void 준비중이고_유저가_존재하지_않는_방_참여_가능를_조회한다() {
             // given
             Room room = roomRepository.save(
                     new Room("uuid", 5, 1, 30, RoomStatus.READY, Category.EXAMPLE)
             );
 
             // when
-            RoomActivatedResponse actual = roomFacade.getRoomActivated(room.getId());
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getId());
 
             // then
-            assertThat(actual.isActivated()).isTrue();
+            assertAll(
+                    () -> assertThat(actual.isReady()).isTrue(),
+                    () -> assertThat(actual.isActivated()).isFalse()
+            );
         }
 
         @Test
-        void 종료된_방의_활성화_여부를_조회한다() {
+        void 진행중인_방의_참여_가능_여부를_조회한다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, 1, 30, RoomStatus.PROGRESS, Category.EXAMPLE)
+            );
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getId());
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.isReady()).isFalse(),
+                    () -> assertThat(actual.isActivated()).isTrue()
+            );
+        }
+
+        @Test
+        void 종료된_방의_참여_가능_여부를_조회한다() {
             // given
             Room room = roomRepository.save(
                     new Room("uuid", 5, 1, 30, RoomStatus.FINISH, Category.EXAMPLE)
             );
+            memberRepository.save(TACAN.master(room));
 
             // when
-            RoomActivatedResponse actual = roomFacade.getRoomActivated(room.getId());
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getId());
 
             // then
-            assertThat(actual.isActivated()).isFalse();
+            assertAll(
+                    () -> assertThat(actual.isReady()).isFalse(),
+                    () -> assertThat(actual.isActivated()).isTrue()
+            );
         }
 
         @Test
-        void 존재하지_않는_방에_활성화_여부를_조회하면_예외가_발생한다() {
+        void 존재하지_않는_방에_참여_가능_여부를_조회하면_예외가_발생한다() {
             // when & then
-            assertThatThrownBy(() -> roomFacade.getRoomActivated(-1L))
+            assertThatThrownBy(() -> roomFacade.getRoomStatus(-1L))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("존재하지 않는 방입니다.");
         }

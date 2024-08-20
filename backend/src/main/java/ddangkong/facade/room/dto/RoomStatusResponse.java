@@ -1,6 +1,7 @@
 package ddangkong.facade.room.dto;
 
-public record RoomActivatedResponse(
+public record RoomStatusResponse(
+        boolean isReady,
         boolean isActivated
 ) {
 }

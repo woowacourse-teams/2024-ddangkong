@@ -114,8 +114,8 @@ public class Room {
         return status.isGameProgress();
     }
 
-    public boolean isActivate() {
-        return status.isGameReady() || status.isGameProgress();
+    public boolean isReady() {
+        return status.isGameReady();
     }
 
     public boolean isRoundFinished(int round) {
