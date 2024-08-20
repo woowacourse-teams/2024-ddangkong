@@ -11,7 +11,11 @@ interface SelectButtonProps {
 
 const SelectButton = ({ selectedId, completeSelection }: SelectButtonProps) => {
   const { balanceContent } = useBalanceContentQuery();
-  const { data, mutate: completeSelectionMutate } = useCompleteSelectionMutation({
+  const {
+    data,
+    isPending,
+    mutate: completeSelectionMutate,
+  } = useCompleteSelectionMutation({
     selectedId,
     contentId: balanceContent?.contentId,
     completeSelection,
@@ -21,8 +25,8 @@ const SelectButton = ({ selectedId, completeSelection }: SelectButtonProps) => {
     <div css={bottomButtonLayout}>
       <Button
         bottom={true}
-        disabled={data || !selectedId}
-        text={data ? '선택 완료' : '선택'}
+        disabled={data || !selectedId || isPending}
+        text={data || isPending ? '선택 완료' : '선택'}
         onClick={completeSelectionMutate}
       />
     </div>
