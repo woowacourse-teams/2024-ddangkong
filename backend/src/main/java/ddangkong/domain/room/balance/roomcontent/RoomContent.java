@@ -2,7 +2,9 @@ package ddangkong.domain.room.balance.roomcontent;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.balance.roomcontent.AlreadyRoundStartedException;
+import ddangkong.exception.room.balance.roomcontent.EmptyRoundEndedAtException;
+import ddangkong.exception.room.balance.roomcontent.MismatchRoundException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -53,7 +55,7 @@ public class RoomContent {
 
     public void updateRoundEndedAt(LocalDateTime currentTime, int timeLimit) {
         if (roundEndedAt != null) {
-            throw new BadRequestException("해당 라운드는 이미 시작했습니다.");
+            throw new AlreadyRoundStartedException();
         }
 
         int afterSec = (timeLimit + DELAY_MSEC) / 1_000;
@@ -67,14 +69,13 @@ public class RoomContent {
 
     private void validateSameRound(int round) {
         if (this.round != round) {
-            throw new BadRequestException("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : %d, 방 라운드 : %d"
-                    .formatted(this.round, round));
+            throw new MismatchRoundException(this.round, round);
         }
     }
 
     public LocalDateTime getRoundEndedAt() {
         if (roundEndedAt == null) {
-            throw new BadRequestException("라운드 종료 시간이 설정되지 않습니다.");
+            throw new EmptyRoundEndedAtException();
         }
         return roundEndedAt;
     }
