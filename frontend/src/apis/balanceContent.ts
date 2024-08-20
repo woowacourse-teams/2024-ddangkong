@@ -1,7 +1,7 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { BalanceContent, GameFinalResult, MyGameStatus } from '@/types/balanceContent';
+import { BalanceContent, MemberMatchResult, MyGameStatus } from '@/types/balanceContent';
 import { RoundVoteResult } from '@/types/roundVoteResult';
 
 interface ContentResultParams {
@@ -21,6 +21,11 @@ interface myGameStatusParams {
 
 interface RoundVoteIsFinished {
   isFinished: boolean;
+}
+
+interface MatchingResultParams {
+  roomId: number;
+  memberId: number;
 }
 
 // 밸런스 게임 컨텐츠 가져오기
@@ -91,9 +96,15 @@ export const moveNextRound = async (roomId: number) => {
 };
 
 // 최종 결과 가져오기
-export const fetchFinalGameResult = async (roomId: number): Promise<GameFinalResult[]> => {
+export const fetchMatchingResult = async ({
+  roomId,
+  memberId,
+}: MatchingResultParams): Promise<MemberMatchResult[]> => {
   const res = await fetcher.get({
-    url: API_URL.finalResult(roomId),
+    url: API_URL.matchingResult(roomId, memberId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
   });
 
   const data = await res.json();
