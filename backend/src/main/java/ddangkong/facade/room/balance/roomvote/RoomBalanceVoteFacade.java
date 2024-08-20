@@ -94,15 +94,19 @@ public class RoomBalanceVoteFacade {
 
     private List<Member> getGiveUpVoteMemberResponse(Room room, BalanceContent balanceContent) {
         List<Member> roomMembers = memberService.findRoomMembers(room);
-        List<RoomBalanceVote> votesInRoomByContent = roomBalanceVoteService.getVotesInRoomByContent(room,
-                balanceContent);
-
-        List<Member> voteMembers = votesInRoomByContent.stream()
-                .map(RoomBalanceVote::getMember)
-                .toList();
+        List<Member> voteMembers = getVoteMembers(room, balanceContent);
 
         return roomMembers.stream()
                 .filter(roomMember -> !voteMembers.contains(roomMember))
+                .toList();
+    }
+
+    private List<Member> getVoteMembers(Room room, BalanceContent balanceContent) {
+        List<RoomBalanceVote> votesInRoomByContent = roomBalanceVoteService.getVotesInRoomByContent(room,
+                balanceContent);
+
+        return votesInRoomByContent.stream()
+                .map(RoomBalanceVote::getMember)
                 .toList();
     }
 
