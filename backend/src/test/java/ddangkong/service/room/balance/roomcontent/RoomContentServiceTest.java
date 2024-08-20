@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.exception.BadRequestException;
@@ -28,15 +29,15 @@ class RoomContentServiceTest extends BaseServiceTest {
     class 방_컨텐츠들_준비 {
 
         @Test
-        void 컨텐츠_개수만큼_방_컨텐츠를_생성하고_첫_번째_방_컨텐츠를_시작한다() {
+        void 컨텐츠_개수만큼_방_컨텐츠를_생성하고_첫_번째_방_컨텐츠의_투표를_시작한다() {
             // given
             Room room = roomRepository.save(Room.createNewRoom());
             List<BalanceContent> contents = balanceContentRepository.saveAll(List.of(
-                    new BalanceContent(Category.EXAMPLE, "민초 vs 반민초"),
-                    new BalanceContent(Category.EXAMPLE, "카리나 vs 윈터"),
-                    new BalanceContent(Category.EXAMPLE, "산 vs 바다"),
-                    new BalanceContent(Category.EXAMPLE, "얼굴 vs 성격"),
-                    new BalanceContent(Category.EXAMPLE, "부먹 vs 찍먹")
+                    new BalanceContent(Category.FOOD, "민초 vs 반민초"),
+                    new BalanceContent(Category.ROMANCE, "카리나 vs 윈터"),
+                    new BalanceContent(Category.IF, "산 vs 바다"),
+                    new BalanceContent(Category.ROMANCE, "얼굴 vs 성격"),
+                    new BalanceContent(Category.FOOD, "부먹 vs 찍먹")
             ));
 
             // when
@@ -47,8 +48,8 @@ class RoomContentServiceTest extends BaseServiceTest {
             roomContents.sort(Comparator.comparingInt(RoomContent::getRound));
             assertAll(
                     () -> assertThat(roomContents).hasSize(5),
-                    () -> assertThat(roomContents.get(0).getRoundEndedAt()).isNotNull(),
-                    () -> assertThatThrownBy(() -> roomContents.get(1).getRoundEndedAt())
+                    () -> assertThat(roomContents.get(0).getVoteDeadline()).isNotNull(),
+                    () -> assertThatThrownBy(() -> roomContents.get(1).getVoteDeadline())
                             .isExactlyInstanceOf(BadRequestException.class)
             );
         }
@@ -61,9 +62,10 @@ class RoomContentServiceTest extends BaseServiceTest {
         void 다음_방_컨텐츠를_진행한다() {
             // given
             int currentRound = 2;
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+                    new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             roomContentRepository.save(RoomContent.newRoomContent(room, content, currentRound));
 
             // when
@@ -71,7 +73,7 @@ class RoomContentServiceTest extends BaseServiceTest {
 
             // then
             RoomContent roomContent = roomContentRepository.findByRoomAndRound(room, currentRound).orElseThrow();
-            assertThat(roomContent.getRoundEndedAt()).isNotNull();
+            assertThat(roomContent.getVoteDeadline()).isNotNull();
         }
     }
 
@@ -83,11 +85,11 @@ class RoomContentServiceTest extends BaseServiceTest {
             // given
             Room room = roomRepository.save(Room.createNewRoom());
             List<BalanceContent> contents = balanceContentRepository.saveAll(List.of(
-                    new BalanceContent(Category.EXAMPLE, "민초 vs 반민초"),
-                    new BalanceContent(Category.EXAMPLE, "카리나 vs 윈터"),
-                    new BalanceContent(Category.EXAMPLE, "산 vs 바다"),
-                    new BalanceContent(Category.EXAMPLE, "얼굴 vs 성격"),
-                    new BalanceContent(Category.EXAMPLE, "부먹 vs 찍먹")
+                    new BalanceContent(Category.FOOD, "민초 vs 반민초"),
+                    new BalanceContent(Category.ROMANCE, "카리나 vs 윈터"),
+                    new BalanceContent(Category.IF, "산 vs 바다"),
+                    new BalanceContent(Category.ROMANCE, "얼굴 vs 성격"),
+                    new BalanceContent(Category.FOOD, "부먹 vs 찍먹")
             ));
             for (int i = 0; i < contents.size(); i++) {
                 roomContentRepository.save(RoomContent.newRoomContent(room, contents.get(i), i + 1));
@@ -109,9 +111,10 @@ class RoomContentServiceTest extends BaseServiceTest {
         void 현재_라운드의_방_컨텐츠를_조회한다() {
             // given
             int currentRound = 3;
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+                    new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             roomContentRepository.save(RoomContent.newRoomContent(room, content, currentRound));
 
             // when
@@ -123,42 +126,44 @@ class RoomContentServiceTest extends BaseServiceTest {
     }
 
     @Nested
-    class 라운드_종료_여부_조회 {
+    class 투표_마감_여부_조회 {
 
         @Test
         @FixedClock(date = "2024-08-17", time = "16:20:15")
-        void 현재_시간이_현재_라운드_방_컨텐츠의_종료_시간보다_이후이면_해당_라운드는_종료된_것이다() {
+        void 현재_시간이_현재_라운드_방_컨텐츠의_투표_마감_시간보다_이후이면_해당_라운드의_투표는_마감된_것이다() {
             // given
             int currentRound = 3;
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-17T16:20:14");
-            roomContentRepository.save(new RoomContent(room, content, currentRound, roundEndedAt));
+                    new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-17T16:20:14");
+            roomContentRepository.save(new RoomContent(room, content, currentRound, voteDeadline));
 
             // when
-            boolean isRoundFinished = roomContentService.isRoundFinished(room, content);
+            boolean isOverVoteDeadline = roomContentService.isOverVoteDeadline(room, content);
 
             // then
-            assertThat(isRoundFinished).isTrue();
+            assertThat(isOverVoteDeadline).isTrue();
         }
 
         @Test
         @FixedClock(date = "2024-08-17", time = "16:20:15")
-        void 현재_시간이_현재_라운드_방_컨텐츠의_종료_시간보다_이전이면_해당_라운드는_종료되지_않은_것이다() {
+        void 현재_시간이_현재_라운드_방_컨텐츠의_투표_마감_시간보다_이전이면_해당_라운드의_투표는_마감되지_않은_것이다() {
             // given
             int currentRound = 3;
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-17T16:20:16");
-            roomContentRepository.save(new RoomContent(room, content, currentRound, roundEndedAt));
+                    new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-17T16:20:16");
+            roomContentRepository.save(new RoomContent(room, content, currentRound, voteDeadline));
 
             // when
-            boolean isRoundFinished = roomContentService.isRoundFinished(room, content);
+            boolean isOverVoteDeadline = roomContentService.isOverVoteDeadline(room, content);
 
             // then
-            assertThat(isRoundFinished).isFalse();
+            assertThat(isOverVoteDeadline).isFalse();
         }
     }
 }

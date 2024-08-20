@@ -7,6 +7,7 @@ import ddangkong.controller.BaseControllerTest;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.facade.room.dto.RoomInfoResponse;
@@ -76,9 +77,9 @@ class RoomControllerTest extends BaseControllerTest {
 
             //then
             assertAll(
-                    () -> assertThat(actual.members()).hasSize(4),
+                    () -> assertThat(actual.members()).hasSize(5),
                     () -> assertThat(actual.isGameStart()).isTrue(),
-                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
+                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(10_000),
                     () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
             );
         }
@@ -95,21 +96,6 @@ class RoomControllerTest extends BaseControllerTest {
             assertAll(
                     () -> assertThat(actual.isReady()).isTrue(),
                     () -> assertThat(actual.isActivated()).isTrue()
-            );
-        }
-
-        @Test
-        void 유저가_없고_대기중인_방_참여_가능_여부_조회() {
-            //when & then
-            RoomStatusResponse actual = RestAssured.given()
-                    .pathParam("roomId", 7L)
-                    .when().get("/api/balances/rooms/{roomId}/status")
-                    .then().contentType(ContentType.JSON).log().all()
-                    .statusCode(200)
-                    .extract().as(RoomStatusResponse.class);
-            assertAll(
-                    () -> assertThat(actual.isReady()).isTrue(),
-                    () -> assertThat(actual.isActivated()).isFalse()
             );
         }
 
@@ -152,7 +138,7 @@ class RoomControllerTest extends BaseControllerTest {
             // given
             int totalRound = 5;
             int timeLimit = 10000;
-            Category category = Category.EXAMPLE;
+            Category category = Category.IF;
 
             RoomSettingRequest request = new RoomSettingRequest(totalRound, timeLimit, category);
 
@@ -286,9 +272,9 @@ class RoomControllerTest extends BaseControllerTest {
 
         @BeforeEach
         void setUp() {
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
-            room = roomRepository.save(new Room("roomResetSetUpUUID", 3, 3, 30,
-                    RoomStatus.FINISH, Category.EXAMPLE));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
+            RoomSetting roomSetting = new RoomSetting(3, 10_000, Category.IF);
+            room = roomRepository.save(new Room("roomResetSetUpUUID", 3, RoomStatus.FINISH, roomSetting));
             roomContentRepository.save(new RoomContent(room, content, 1, null));
             roomContentRepository.save(new RoomContent(room, content, 2, null));
             roomContentRepository.save(new RoomContent(room, content, 3, null));

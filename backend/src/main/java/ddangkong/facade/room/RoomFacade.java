@@ -3,6 +3,7 @@ package ddangkong.facade.room;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
+import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -50,8 +51,8 @@ public class RoomFacade {
     @Transactional(readOnly = true)
     public RoomInfoResponse getRoomInfo(Long roomId) {
         Room room = roomService.getRoom(roomId);
-        List<Member> members = memberService.findRoomMembers(room);
-        return RoomInfoResponse.create(members, room);
+        RoomMembers roomMembers = memberService.findRoomMembers(room);
+        return RoomInfoResponse.create(roomMembers, room);
     }
 
     @Transactional
@@ -78,7 +79,8 @@ public class RoomFacade {
     @Transactional(readOnly = true)
     public RoundFinishedResponse getRoundFinished(Long roomId, int round) {
         Room room = roomService.getRoom(roomId);
-        return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished());
+        Member master = memberService.getMaster(room);
+        return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished(), master);
     }
 
     @Transactional
@@ -94,7 +96,7 @@ public class RoomFacade {
         if (!room.isReady()) {
             return new RoomStatusResponse(false, true);
         }
-        List<Member> roomMembers = memberService.findRoomMembers(room);
+        RoomMembers roomMembers = memberService.findRoomMembers(room);
         return new RoomStatusResponse(room.isReady(), !roomMembers.isEmpty());
     }
 }
