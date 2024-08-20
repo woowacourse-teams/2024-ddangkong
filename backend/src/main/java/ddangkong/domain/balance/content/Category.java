@@ -12,6 +12,7 @@ public enum Category {
     FOOD("음식"),
     ;
 
+    private static final List<Category> CATEGORIES = Arrays.stream(Category.values()).toList();
     private final String name;
 
     Category(String name) {
@@ -19,6 +20,6 @@ public enum Category {
     }
 
     public static List<Category> getCategories() {
-        return Arrays.stream(Category.values()).toList();
+        return CATEGORIES;
     }
 }

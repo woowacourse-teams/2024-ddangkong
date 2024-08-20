@@ -9,6 +9,6 @@ public class BalanceFacade {
 
     public BalanceCategoriesResponse getBalanceCategories() {
         List<Category> categories = Category.getCategories();
-        return BalanceCategoriesResponse.from(categories);
+        return BalanceCategoriesResponse.create(categories);
     }
 }

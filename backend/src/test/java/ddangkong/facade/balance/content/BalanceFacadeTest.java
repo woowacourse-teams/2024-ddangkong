@@ -19,7 +19,7 @@ class BalanceFacadeTest extends BaseServiceTest {
         @Test
         void 카테고리_목록을_가져온다() {
             // given
-            BalanceCategoriesResponse expected = BalanceCategoriesResponse.from(Category.getCategories());
+            BalanceCategoriesResponse expected = BalanceCategoriesResponse.create(Category.getCategories());
 
             // when & then
             assertThat(balanceFacade.getBalanceCategories()).isEqualTo(expected);

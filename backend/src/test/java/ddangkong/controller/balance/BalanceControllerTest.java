@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 
-class BalancesControllerTest extends BaseControllerTest {
+class BalanceControllerTest extends BaseControllerTest {
 
     @Nested
     class 카테고리_조회{

@@ -32,7 +32,7 @@ public class BalanceDocumentationTest extends BaseDocumentationTest {
         @Test
         void 카테고리_목록을_조회한다() throws Exception {
             // given
-            BalanceCategoriesResponse response = BalanceCategoriesResponse.from(Category.getCategories());
+            BalanceCategoriesResponse response = BalanceCategoriesResponse.create(Category.getCategories());
             when(balanceFacade.getBalanceCategories()).thenReturn(response);
 
             // when & then

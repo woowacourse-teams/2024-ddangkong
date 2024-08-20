@@ -6,7 +6,7 @@ import java.util.List;
 public record BalanceCategoriesResponse(
         List<String> categories
 ) {
-    public static BalanceCategoriesResponse from(List<Category> categories) {
+    public static BalanceCategoriesResponse create(List<Category> categories) {
         List<String> categoryNames = categories.stream()
                 .map(Category::getName)
                 .toList();
