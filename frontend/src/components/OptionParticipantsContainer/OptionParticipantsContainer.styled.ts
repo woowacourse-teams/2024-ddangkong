@@ -9,7 +9,7 @@ export const optionParticipantsContainerLayout = css`
   row-gap: 1.2rem;
 `;
 
-export const dividerLine = css`
+export const horizontalDivider = css`
   width: 100%;
   height: 1px;
   margin: 1.4rem 0;
