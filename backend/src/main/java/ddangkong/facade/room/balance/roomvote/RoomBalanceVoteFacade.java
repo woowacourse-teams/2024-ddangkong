@@ -79,6 +79,19 @@ public class RoomBalanceVoteFacade {
         return new RoomBalanceVoteResultResponse(group, total);
     }
 
+    private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(Room room,
+                                                                             BalanceOptions balanceOptions,
+                                                                             BalanceContent balanceContent) {
+        List<Member> giveUpMembers = getGiveUpVoteMemberResponse(room, balanceContent);
+        List<RoomBalanceVote> firstOptionVotes = roomBalanceVoteService
+                .getVotesInRoomByOption(room, balanceOptions.getFirstOption());
+        List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteService
+                .getVotesInRoomByOption(room, balanceOptions.getSecondOption());
+
+        return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes,
+                giveUpMembers);
+    }
+
     private List<Member> getGiveUpVoteMemberResponse(Room room, BalanceContent balanceContent) {
         List<Member> roomMembers = memberService.findRoomMembers(room);
         List<RoomBalanceVote> votesInRoomByContent = roomBalanceVoteService.getVotesInRoomByContent(room,
@@ -91,19 +104,6 @@ public class RoomBalanceVoteFacade {
         return roomMembers.stream()
                 .filter(roomMember -> !voteMembers.contains(roomMember))
                 .toList();
-    }
-
-    private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(Room room,
-                                                                             BalanceOptions balanceOptions,
-                                                                             BalanceContent balanceContent) {
-        List<Member> giveUpMembers = getGiveUpVoteMemberResponse(room, balanceContent);
-        List<RoomBalanceVote> firstOptionVotes = roomBalanceVoteService
-                .getVotesInRoomByOption(room, balanceOptions.getFirstOption());
-        List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteService
-                .getVotesInRoomByOption(room, balanceOptions.getSecondOption());
-
-        return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes,
-                giveUpMembers);
     }
 
     private ContentTotalBalanceVoteResponse getContentTotalBalanceVoteResponse(BalanceOptions balanceOptions) {
