@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-export const nicknameListLayout = css`
+export const nicknameItemLayout = css`
   display: flex;
   align-items: center;
   gap: 0.6rem;
