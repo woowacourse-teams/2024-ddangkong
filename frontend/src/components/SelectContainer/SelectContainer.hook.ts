@@ -61,13 +61,13 @@ export const useSelectOption = () => {
     isCompleted: false,
   });
 
-  const handleSelectOption = (selectedId: number) => {
+  const handleClickOption = (selectedId: number) => {
     setSelectedOption((prev) => ({ ...prev, id: selectedId }));
   };
 
-  const handleClickSelected = () => {
+  const completeSelection = () => {
     setSelectedOption((prev) => ({ ...prev, isCompleted: true }));
   };
 
-  return { selectedOption, handleSelectOption, handleClickSelected };
+  return { selectedOption, handleClickOption, completeSelection };
 };

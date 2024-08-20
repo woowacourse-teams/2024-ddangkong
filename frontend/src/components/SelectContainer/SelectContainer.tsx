@@ -7,7 +7,7 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const SelectContainer = () => {
   const { balanceContent, isLoading, isFetching } = useBalanceContentQuery();
-  const { selectedOption, handleSelectOption, handleClickSelected } = useSelectOption();
+  const { selectedOption, handleClickOption, completeSelection } = useSelectOption();
 
   useRoundIsFinished({
     contentId: balanceContent?.contentId,
@@ -24,16 +24,16 @@ const SelectContainer = () => {
         <SelectOption
           option={balanceContent.firstOption}
           selectedOption={selectedOption}
-          handleSelectOption={handleSelectOption}
+          handleClickOption={handleClickOption}
         />
         <span>VS</span>
         <SelectOption
           option={balanceContent.secondOption}
           selectedOption={selectedOption}
-          handleSelectOption={handleSelectOption}
+          handleClickOption={handleClickOption}
         />
       </section>
-      <SelectButton selectedId={selectedOption.id} handleClickSelected={handleClickSelected} />
+      <SelectButton selectedId={selectedOption.id} completeSelection={completeSelection} />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import useSelectCompleteMutation from './SelectButton.hook';
+import useCompleteSelectionMutation from './SelectButton.hook';
 import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 
@@ -6,20 +6,16 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 interface SelectButtonProps {
   selectedId: number;
-  handleClickSelected: () => void;
+  completeSelection: () => void;
 }
 
-const SelectButton = ({ selectedId, handleClickSelected }: SelectButtonProps) => {
+const SelectButton = ({ selectedId, completeSelection }: SelectButtonProps) => {
   const { balanceContent } = useBalanceContentQuery();
-  const { data, mutate: selectComplete } = useSelectCompleteMutation({
+  const { data, mutate: completeSelectionMutate } = useCompleteSelectionMutation({
     selectedId,
     contentId: balanceContent?.contentId,
+    completeSelection,
   });
-
-  const handleClickSelectComplete = () => {
-    selectComplete();
-    handleClickSelected();
-  };
 
   return (
     <div css={bottomButtonLayout}>
@@ -27,7 +23,7 @@ const SelectButton = ({ selectedId, handleClickSelected }: SelectButtonProps) =>
         bottom={true}
         disabled={data || !selectedId}
         text={data ? '선택 완료' : '선택'}
-        onClick={handleClickSelectComplete}
+        onClick={completeSelectionMutate}
       />
     </div>
   );
