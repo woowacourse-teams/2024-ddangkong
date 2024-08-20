@@ -7,7 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomSetting;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.InvalidRangeTimeLimitException;
+import ddangkong.exception.room.InvalidRangeTotalRoundException;
 import ddangkong.facade.BaseServiceTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,7 @@ class RoomServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomService.updateRoomSetting(room.getId(), roomSetting))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(InvalidRangeTotalRoundException.class)
                     .hasMessage("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
                             .formatted(3, 10, inValidTotalRound));
         }
@@ -75,7 +76,7 @@ class RoomServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomService.updateRoomSetting(room.getId(), roomSetting))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(InvalidRangeTimeLimitException.class)
                     .hasMessage("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
                             .formatted(10000, 30000, inValidTimeLimit));
         }

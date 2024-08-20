@@ -1,6 +1,5 @@
 package ddangkong.documentation.exception;
 
-import ddangkong.exception.BadRequestException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -19,7 +18,7 @@ class ExceptionController {
     void postException(@Valid @RequestBody ExceptionRequest request,
                        @Positive @PathVariable Long id,
                        @NotBlank @RequestParam String teamName) {
-        throw new BadRequestException("이미 존재하는 멤버입니다.");
+//        throw new BadRequestException("이미 존재하는 멤버입니다.");
     }
 
     record ExceptionRequest(

@@ -7,8 +7,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.support.EntityTestUtils;
-import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.balance.option.InvalidBalanceOptionCountException;
+import ddangkong.exception.balance.option.NotFoundBalanceOptionException;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -43,8 +43,7 @@ class BalanceOptionsTest {
 
             // when & then
             assertThatThrownBy(() -> new BalanceOptions(options))
-                    .isExactlyInstanceOf(InternalServerException.class)
-                    .hasMessageContaining("밸런스 게임의 선택지가 3개입니다");
+                    .isExactlyInstanceOf(InvalidBalanceOptionCountException.class);
         }
     }
 
@@ -110,8 +109,7 @@ class BalanceOptionsTest {
 
             // when & then
             assertThatThrownBy(() -> balanceOptions.getOptionById(3L))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("해당 옵션이 존재하지 않습니다");
+                    .isExactlyInstanceOf(NotFoundBalanceOptionException.class);
         }
     }
 }

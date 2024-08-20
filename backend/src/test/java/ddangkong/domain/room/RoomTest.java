@@ -5,7 +5,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.balance.content.Category;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.InvalidRangeTimeLimitException;
+import ddangkong.exception.room.InvalidRangeTotalRoundException;
+import ddangkong.exception.room.NotAllowedRoundGapException;
+import ddangkong.exception.room.NotFinishedRoomException;
+import ddangkong.exception.room.NotProgressedRoomException;
+import ddangkong.exception.room.NotReadyRoomException;
+import ddangkong.exception.room.RoundGreaterThanCurrentRoundException;
+import ddangkong.exception.room.RoundLessThanStartRoundException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,8 +45,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(room::startGame)
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 게임이 시작했습니다.");
+                    .isExactlyInstanceOf(NotReadyRoomException.class);
         }
     }
 
@@ -92,8 +98,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(room::moveToNextRound)
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("게임이 진행 중이 아닙니다.");
+                    .isExactlyInstanceOf(NotProgressedRoomException.class);
         }
     }
 
@@ -108,7 +113,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(() -> room.updateTotalRound(notValidTotalRound))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(InvalidRangeTotalRoundException.class)
                     .hasMessage("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
                             .formatted(3, 10, notValidTotalRound));
         }
@@ -121,7 +126,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(() -> room.updateTimeLimit(notValidTimeLimit))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(InvalidRangeTimeLimitException.class)
                     .hasMessage("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
                             .formatted(10000, 30000, notValidTimeLimit));
         }
@@ -165,7 +170,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(() -> room.isRoundFinished(invalidRound))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(RoundLessThanStartRoundException.class)
                     .hasMessageContaining("startRound보다 크거나 같아야 합니다. startRound : 1, round : 0");
         }
 
@@ -178,7 +183,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(() -> room.isRoundFinished(invalidRound))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(RoundGreaterThanCurrentRoundException.class)
                     .hasMessageContaining("currentRound보다 작거나 같아야 합니다. currentRound : 1, round : 2");
         }
 
@@ -191,7 +196,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(() -> room.isRoundFinished(invalidRound))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(NotAllowedRoundGapException.class)
                     .hasMessageContaining("currentRound과 round의 차이는 1이하여야 합니다. currentRound : 4, round : 2");
         }
 
@@ -258,8 +263,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(room::reset)
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
+                    .isExactlyInstanceOf(NotFinishedRoomException.class);
         }
 
         @ParameterizedTest
@@ -270,8 +274,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(room::reset)
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
+                    .isExactlyInstanceOf(NotFinishedRoomException.class);
         }
     }
 }

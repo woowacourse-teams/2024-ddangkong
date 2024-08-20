@@ -7,7 +7,8 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomStatus;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.balance.roomcontent.AlreadyRoundStartedException;
+import ddangkong.exception.room.balance.roomcontent.MismatchRoundException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -47,8 +48,7 @@ class RoomContentTest {
 
             // when & then
             assertThatThrownBy(() -> roomContent.updateRoundEndedAt(CURRENT_TIME, 10_000))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 라운드는 이미 시작했습니다.");
+                    .isExactlyInstanceOf(AlreadyRoundStartedException.class);
         }
     }
 
@@ -92,8 +92,7 @@ class RoomContentTest {
 
             // when & then
             assertThatThrownBy(() -> roomContent.isRoundOver(now, invalidRound))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("라운드가 일치하지 않습니다.");
+                    .isExactlyInstanceOf(MismatchRoundException.class);
         }
     }
 }

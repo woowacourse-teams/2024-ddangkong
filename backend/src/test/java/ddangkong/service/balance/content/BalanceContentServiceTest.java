@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.balance.content.NotEnoughBalanceContentException;
+import ddangkong.exception.balance.content.NotFoundBalanceContentException;
 import ddangkong.facade.BaseServiceTest;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -40,8 +40,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> balanceContentService.getBalanceContent(invalidContentId))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("존재하지 않는 컨텐츠입니다.");
+                    .isExactlyInstanceOf(NotFoundBalanceContentException.class);
         }
     }
 
@@ -81,8 +80,8 @@ class BalanceContentServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> balanceContentService.pickBalanceContents(category, pickCount))
-                    .isExactlyInstanceOf(InternalServerException.class)
-                    .hasMessageContaining("질문 수가 부족합니다. category: %s ".formatted(category));
+                    .isExactlyInstanceOf(NotEnoughBalanceContentException.class)
+                    .hasMessageContaining("질문 수가 부족합니다. category: %s".formatted(category));
         }
     }
 }

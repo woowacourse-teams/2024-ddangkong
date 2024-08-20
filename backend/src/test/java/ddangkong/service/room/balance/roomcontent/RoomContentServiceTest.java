@@ -9,7 +9,7 @@ import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.balance.roomcontent.EmptyRoundEndedAtException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.support.annotation.FixedClock;
 import java.time.LocalDateTime;
@@ -49,7 +49,7 @@ class RoomContentServiceTest extends BaseServiceTest {
                     () -> assertThat(roomContents).hasSize(5),
                     () -> assertThat(roomContents.get(0).getRoundEndedAt()).isNotNull(),
                     () -> assertThatThrownBy(() -> roomContents.get(1).getRoundEndedAt())
-                            .isExactlyInstanceOf(BadRequestException.class)
+                            .isExactlyInstanceOf(EmptyRoundEndedAtException.class)
             );
         }
     }
