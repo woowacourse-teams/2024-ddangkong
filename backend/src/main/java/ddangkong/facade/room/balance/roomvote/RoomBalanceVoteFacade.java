@@ -73,8 +73,7 @@ public class RoomBalanceVoteFacade {
 
         BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
 
-        List<Member> giveUpMembers = getGiveUpVoteMemberResponse(room, balanceContent);
-        ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(room, balanceOptions, giveUpMembers);
+        ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(room, balanceOptions, balanceContent);
         ContentTotalBalanceVoteResponse total = getContentTotalBalanceVoteResponse(balanceOptions);
 
         return new RoomBalanceVoteResultResponse(group, total);
@@ -96,7 +95,8 @@ public class RoomBalanceVoteFacade {
 
     private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(Room room,
                                                                              BalanceOptions balanceOptions,
-                                                                             List<Member> giveUpMembers) {
+                                                                             BalanceContent balanceContent) {
+        List<Member> giveUpMembers = getGiveUpVoteMemberResponse(room, balanceContent);
         List<RoomBalanceVote> firstOptionVotes = roomBalanceVoteService
                 .getVotesInRoomByOption(room, balanceOptions.getFirstOption());
         List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteService
