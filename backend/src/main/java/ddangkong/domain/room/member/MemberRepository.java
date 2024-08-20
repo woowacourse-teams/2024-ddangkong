@@ -9,7 +9,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByIdAndRoom(Long id, Room room);
 
-    Optional<Member> findByRoomAndIsMaster(Room room, boolean isMaster);
+    Optional<Member> findTopByRoomAndIsMaster(Room room, boolean isMaster);
 
     List<Member> findAllByRoom(Room room);
 

@@ -69,7 +69,7 @@ public class MemberService {
 
     @Transactional
     public void promoteOtherMember(Room room) {
-        Member commonMember = memberRepository.findByRoomAndIsMaster(room, false)
+        Member commonMember = memberRepository.findTopByRoomAndIsMaster(room, false)
                 .orElseThrow(() -> new BadRequestException("방에 일반 멤버가 존재하지 않습니다."));
         commonMember.promoteToMaster();
     }

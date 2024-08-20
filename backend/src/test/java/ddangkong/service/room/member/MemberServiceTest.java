@@ -1,10 +1,12 @@
 package ddangkong.service.room.member;
 
 import static ddangkong.support.fixture.MemberFixture.EDEN;
+import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
 import static ddangkong.support.fixture.MemberFixture.PRIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
@@ -153,6 +155,39 @@ class MemberServiceTest extends BaseServiceTest {
             assertThatThrownBy(() -> memberService.getRoomMember(prin.getId(), otherRoom))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("방에 존재하지 않는 멤버입니다.");
+        }
+    }
+
+    @Nested
+    class 방장_넘겨주기 {
+
+        @Test
+        void 방장을_임의의_일반_멤버에게_넘겨준다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            memberRepository.save(PRIN.master(room));
+            Member common1 = memberRepository.save(KEOCHAN.common(room));
+            Member common2 = memberRepository.save(EDEN.common(room));
+
+            // when
+            memberService.promoteOtherMember(room);
+
+            // then
+            Member foundCommon1 = memberRepository.findById(common1.getId()).get();
+            Member foundCommon2 = memberRepository.findById(common2.getId()).get();
+            assertTrue(foundCommon1.isMaster() || foundCommon2.isMaster());
+        }
+
+        @Test
+        void 해당_방에_일반_멤버가_없다면_예외를_던진다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            memberRepository.save(PRIN.master(room));
+
+            // when & then
+            assertThatThrownBy(() -> memberService.promoteOtherMember(room))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("방에 일반 멤버가 존재하지 않습니다.");
         }
     }
 }
