@@ -3,6 +3,7 @@ package ddangkong.domain.room.balance.roomcontent;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
 import ddangkong.exception.BadRequestException;
+import ddangkong.exception.InternalServerException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,31 +39,31 @@ public class RoomContent {
     @Column(nullable = false)
     private int round;
 
-    private LocalDateTime roundEndedAt;
+    private LocalDateTime voteDeadline;
 
     public static RoomContent newRoomContent(Room room, BalanceContent balanceContent, int round) {
         return new RoomContent(room, balanceContent, round, null);
     }
 
-    public RoomContent(Room room, BalanceContent balanceContent, int round, LocalDateTime roundEndedAt) {
+    public RoomContent(Room room, BalanceContent balanceContent, int round, LocalDateTime voteDeadline) {
         this.room = room;
         this.balanceContent = balanceContent;
         this.round = round;
-        this.roundEndedAt = roundEndedAt;
+        this.voteDeadline = voteDeadline;
     }
 
-    public void updateRoundEndedAt(LocalDateTime currentTime, int timeLimit) {
-        if (roundEndedAt != null) {
-            throw new BadRequestException("해당 라운드는 이미 시작했습니다.");
+    public void updateVoteDeadline(LocalDateTime now, int timeLimit) {
+        if (voteDeadline != null) {
+            throw new InternalServerException("해당 라운드의 투표 마감 시간은 이미 설정되었습니다.");
         }
 
         int afterSec = (timeLimit + DELAY_MSEC) / 1_000;
-        roundEndedAt = currentTime.plusSeconds(afterSec);
+        voteDeadline = now.plusSeconds(afterSec);
     }
 
-    public boolean isRoundOver(LocalDateTime currentTime, int round) {
+    public boolean isOverVoteDeadline(LocalDateTime now, int round) {
         validateSameRound(round);
-        return currentTime.isAfter(getRoundEndedAt());
+        return now.isAfter(getVoteDeadline());
     }
 
     private void validateSameRound(int round) {
@@ -72,10 +73,10 @@ public class RoomContent {
         }
     }
 
-    public LocalDateTime getRoundEndedAt() {
-        if (roundEndedAt == null) {
-            throw new BadRequestException("라운드 종료 시간이 설정되지 않습니다.");
+    public LocalDateTime getVoteDeadline() {
+        if (voteDeadline == null) {
+            throw new BadRequestException("투표 마감 시간이 설정되지 않습니다.");
         }
-        return roundEndedAt;
+        return voteDeadline;
     }
 }

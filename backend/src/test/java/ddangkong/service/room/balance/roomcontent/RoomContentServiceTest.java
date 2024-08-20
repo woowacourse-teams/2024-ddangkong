@@ -29,7 +29,7 @@ class RoomContentServiceTest extends BaseServiceTest {
     class 방_컨텐츠들_준비 {
 
         @Test
-        void 컨텐츠_개수만큼_방_컨텐츠를_생성하고_첫_번째_방_컨텐츠를_시작한다() {
+        void 컨텐츠_개수만큼_방_컨텐츠를_생성하고_첫_번째_방_컨텐츠의_투표를_시작한다() {
             // given
             Room room = roomRepository.save(Room.createNewRoom());
             List<BalanceContent> contents = balanceContentRepository.saveAll(List.of(
@@ -48,8 +48,8 @@ class RoomContentServiceTest extends BaseServiceTest {
             roomContents.sort(Comparator.comparingInt(RoomContent::getRound));
             assertAll(
                     () -> assertThat(roomContents).hasSize(5),
-                    () -> assertThat(roomContents.get(0).getRoundEndedAt()).isNotNull(),
-                    () -> assertThatThrownBy(() -> roomContents.get(1).getRoundEndedAt())
+                    () -> assertThat(roomContents.get(0).getVoteDeadline()).isNotNull(),
+                    () -> assertThatThrownBy(() -> roomContents.get(1).getVoteDeadline())
                             .isExactlyInstanceOf(BadRequestException.class)
             );
         }
@@ -73,7 +73,7 @@ class RoomContentServiceTest extends BaseServiceTest {
 
             // then
             RoomContent roomContent = roomContentRepository.findByRoomAndRound(room, currentRound).orElseThrow();
-            assertThat(roomContent.getRoundEndedAt()).isNotNull();
+            assertThat(roomContent.getVoteDeadline()).isNotNull();
         }
     }
 
@@ -126,44 +126,44 @@ class RoomContentServiceTest extends BaseServiceTest {
     }
 
     @Nested
-    class 라운드_종료_여부_조회 {
+    class 투표_마감_여부_조회 {
 
         @Test
         @FixedClock(date = "2024-08-17", time = "16:20:15")
-        void 현재_시간이_현재_라운드_방_컨텐츠의_종료_시간보다_이후이면_해당_라운드는_종료된_것이다() {
+        void 현재_시간이_현재_라운드_방_컨텐츠의_투표_마감_시간보다_이후이면_해당_라운드의_투표는_마감된_것이다() {
             // given
             int currentRound = 3;
             RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
             Room room = roomRepository.save(
                     new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting));
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-17T16:20:14");
-            roomContentRepository.save(new RoomContent(room, content, currentRound, roundEndedAt));
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-17T16:20:14");
+            roomContentRepository.save(new RoomContent(room, content, currentRound, voteDeadline));
 
             // when
-            boolean isRoundFinished = roomContentService.isRoundFinished(room, content);
+            boolean isOverVoteDeadline = roomContentService.isOverVoteDeadline(room, content);
 
             // then
-            assertThat(isRoundFinished).isTrue();
+            assertThat(isOverVoteDeadline).isTrue();
         }
 
         @Test
         @FixedClock(date = "2024-08-17", time = "16:20:15")
-        void 현재_시간이_현재_라운드_방_컨텐츠의_종료_시간보다_이전이면_해당_라운드는_종료되지_않은_것이다() {
+        void 현재_시간이_현재_라운드_방_컨텐츠의_투표_마감_시간보다_이전이면_해당_라운드의_투표는_마감되지_않은_것이다() {
             // given
             int currentRound = 3;
             RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
             Room room = roomRepository.save(
                     new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting));
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-17T16:20:16");
-            roomContentRepository.save(new RoomContent(room, content, currentRound, roundEndedAt));
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-17T16:20:16");
+            roomContentRepository.save(new RoomContent(room, content, currentRound, voteDeadline));
 
             // when
-            boolean isRoundFinished = roomContentService.isRoundFinished(room, content);
+            boolean isOverVoteDeadline = roomContentService.isOverVoteDeadline(room, content);
 
             // then
-            assertThat(isRoundFinished).isFalse();
+            assertThat(isOverVoteDeadline).isFalse();
         }
     }
 }

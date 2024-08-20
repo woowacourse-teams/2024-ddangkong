@@ -1,12 +1,11 @@
 package ddangkong.service.room.balance.roomvote;
 
-import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptions;
-import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
+import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.BadRequestException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +37,9 @@ public class RoomBalanceVoteService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isVoteFinished(List<Member> roomMembers, BalanceOptions balanceOptions) {
-        long voteCount = roomVoteRepository.countByMemberInAndBalanceOptionIn(roomMembers, balanceOptions.getOptions());
+    public boolean isAllMemberVoted(RoomMembers roomMembers, BalanceOptions balanceOptions) {
+        long voteCount = roomVoteRepository.countByMemberInAndBalanceOptionIn(roomMembers.getMembers(),
+                balanceOptions.getOptions());
         if (voteCount > roomMembers.size()) {
             log.error("[Concurrency Error] 투표한 인원 수가 방 인원 수보다 많습니다. 투표한 인원 수: {}, 방 인원 수: {}",
                     voteCount, roomMembers.size());
@@ -48,12 +48,7 @@ public class RoomBalanceVoteService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoomBalanceVote> getVotesInRoomByOption(Room room, BalanceOption balanceOption) {
-        return roomVoteRepository.findByMemberRoomAndBalanceOption(room, balanceOption);
-    }
-
-    @Transactional(readOnly = true)
-    public List<RoomBalanceVote> getVotesInRoomByContent(Room room, BalanceContent balanceContent) {
-        return roomVoteRepository.findByMemberRoomAndBalanceOptionBalanceContent(room, balanceContent);
+    public List<RoomBalanceVote> getVotesInRoom(RoomMembers roomMembers, BalanceOption balanceOption) {
+        return roomVoteRepository.findByMemberInAndBalanceOption(roomMembers.getMembers(), balanceOption);
     }
 }
