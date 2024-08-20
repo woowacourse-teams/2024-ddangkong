@@ -78,7 +78,7 @@ export const isRoomActivate = async (roomId: number) => {
 };
 
 // 방 초기화 여부 확인
-export const isRoomReset = async (roomId: number) => {
+export const checkRoomReset = async (roomId: number) => {
   const res = await fetcher.get({
     url: API_URL.isRoomReset(roomId),
   });
