@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.exception.BadRequestException;
 import java.time.LocalDateTime;
@@ -25,7 +26,9 @@ class RoomContentTest {
             // given
             int currentRound = 1;
             int timeLimit = 10_000;
-            Room room = new Room("uuid", 5, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(5, timeLimit, Category.EXAMPLE);
+
+            Room room = new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting);
             RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null);
             int expectedAfterSec = (timeLimit + 2_000) / 1_000;
             LocalDateTime expectedRoundEnded = CURRENT_TIME.plusSeconds(expectedAfterSec);
@@ -41,7 +44,8 @@ class RoomContentTest {
         void 이미_라운드가_시작되었다면_예외를_던진다() {
             // given
             int currentRound = 1;
-            Room room = new Room("uuid", 5, currentRound, 10_000, RoomStatus.PROGRESS, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.EXAMPLE);
+            Room room = new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting);
             RoomContent roomContent = new RoomContent(room, BALANCE_CONTENT, currentRound, null);
             roomContent.updateRoundEndedAt(CURRENT_TIME, 10_000);
 

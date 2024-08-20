@@ -44,7 +44,7 @@ class RoomContentDocumentationTest extends BaseDocumentationTest {
                     Category.EXAMPLE,
                     5,
                     2,
-                    30_000, // TODO sec 단위로 수정
+                    10_000, // TODO sec 단위로 수정
                     "100억 빚 송강 vs 100억 부자 송강호",
                     firstOptionResponse,
                     secondOptionResponse

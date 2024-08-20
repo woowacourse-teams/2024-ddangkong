@@ -20,7 +20,7 @@ VALUES ('민초', 1),
 
 
 INSERT INTO room(uuid, total_round, current_round, time_limit, status, category)
-VALUES ('uuid1', 5, 1, 30000, 'PROGRESS', 'EXAMPLE');
+VALUES ('uuid1', 5, 1, 10000, 'PROGRESS', 'EXAMPLE');
 
 
 INSERT INTO room_content(room_id, balance_content_id, round, round_ended_at)

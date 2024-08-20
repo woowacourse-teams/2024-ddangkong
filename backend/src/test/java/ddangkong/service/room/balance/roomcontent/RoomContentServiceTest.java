@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.exception.BadRequestException;
@@ -61,8 +62,9 @@ class RoomContentServiceTest extends BaseServiceTest {
         void 다음_방_컨텐츠를_진행한다() {
             // given
             int currentRound = 2;
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.EXAMPLE);
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
+                    new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting));
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
             roomContentRepository.save(RoomContent.newRoomContent(room, content, currentRound));
 
@@ -109,8 +111,9 @@ class RoomContentServiceTest extends BaseServiceTest {
         void 현재_라운드의_방_컨텐츠를_조회한다() {
             // given
             int currentRound = 3;
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.EXAMPLE);
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
+                    new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting));
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
             roomContentRepository.save(RoomContent.newRoomContent(room, content, currentRound));
 
@@ -130,8 +133,9 @@ class RoomContentServiceTest extends BaseServiceTest {
         void 현재_시간이_현재_라운드_방_컨텐츠의_종료_시간보다_이후이면_해당_라운드는_종료된_것이다() {
             // given
             int currentRound = 3;
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.EXAMPLE);
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
+                    new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting));
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
             LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-17T16:20:14");
             roomContentRepository.save(new RoomContent(room, content, currentRound, roundEndedAt));
@@ -148,8 +152,9 @@ class RoomContentServiceTest extends BaseServiceTest {
         void 현재_시간이_현재_라운드_방_컨텐츠의_종료_시간보다_이전이면_해당_라운드는_종료되지_않은_것이다() {
             // given
             int currentRound = 3;
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.EXAMPLE);
             Room room = roomRepository.save(
-                    new Room("uuid", 5, currentRound, 30, RoomStatus.PROGRESS, Category.EXAMPLE));
+                    new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting));
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
             LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-17T16:20:16");
             roomContentRepository.save(new RoomContent(room, content, currentRound, roundEndedAt));

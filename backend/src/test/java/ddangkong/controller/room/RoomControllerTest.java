@@ -7,6 +7,7 @@ import ddangkong.controller.BaseControllerTest;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.facade.room.dto.RoomInfoResponse;
@@ -78,7 +79,7 @@ class RoomControllerTest extends BaseControllerTest {
             assertAll(
                     () -> Assertions.assertThat(actual.members()).hasSize(4),
                     () -> Assertions.assertThat(actual.isGameStart()).isTrue(),
-                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(30000),
+                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(10_000),
                     () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
             );
         }
@@ -227,8 +228,8 @@ class RoomControllerTest extends BaseControllerTest {
         @BeforeEach
         void setUp() {
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
-            room = roomRepository.save(new Room("roomResetSetUpUUID", 3, 3, 30,
-                    RoomStatus.FINISH, Category.EXAMPLE));
+            RoomSetting roomSetting = new RoomSetting(3, 10_000, Category.EXAMPLE);
+            room = roomRepository.save(new Room("roomResetSetUpUUID", 3, RoomStatus.FINISH, roomSetting));
             roomContentRepository.save(new RoomContent(room, content, 1, null));
             roomContentRepository.save(new RoomContent(room, content, 2, null));
             roomContentRepository.save(new RoomContent(room, content, 3, null));

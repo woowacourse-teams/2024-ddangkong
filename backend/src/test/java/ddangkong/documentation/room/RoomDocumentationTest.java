@@ -92,7 +92,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방_정보를_조회한다() throws Exception {
             // given
             int totalRound = 5;
-            int timeLimit = 30000;
+            int timeLimit = 10_000;
             Category category = Category.EXAMPLE;
             RoomInfoResponse response = new RoomInfoResponse(
                     false,
@@ -134,7 +134,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방의_설정_정보를_변경한다() throws Exception {
             // given
             int totalRound = 5;
-            int timeLimit = 30_000;
+            int timeLimit = 10_000;
             Category category = Category.EXAMPLE;
             RoomSettingRequest content = new RoomSettingRequest(totalRound, timeLimit, category);
 

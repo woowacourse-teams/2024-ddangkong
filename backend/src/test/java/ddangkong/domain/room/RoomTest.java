@@ -34,7 +34,8 @@ class RoomTest {
         @EnumSource(mode = Mode.EXCLUDE, names = {"READY"})
         void 게임이_이미_시작했다면_예외를_던진다(RoomStatus status) {
             // given
-            Room room = new Room("uuid", 5, 1, 30_000, status, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.EXAMPLE);
+            Room room = new Room("uuid", 1, status, roomSetting);
 
             // when & then
             assertThatThrownBy(room::startGame)
@@ -51,8 +52,9 @@ class RoomTest {
             // given
             int totalRound = 5;
             int currentRound = 1;
-            int timeLimit = 30_000;
-            Room room = new Room("uuid", totalRound, currentRound, timeLimit, RoomStatus.PROGRESS, Category.EXAMPLE);
+            int timeLimit = 10_000;
+            RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, Category.EXAMPLE);
+            Room room = new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting);
             int expectedRound = currentRound + 1;
 
             // when
@@ -67,9 +69,10 @@ class RoomTest {
             // given
             int totalRound = 5;
             int currentRound = 5;
-            int timeLimit = 30_000;
+            int timeLimit = 10_000;
             RoomStatus status = RoomStatus.PROGRESS;
-            Room room = new Room("uuid", totalRound, currentRound, timeLimit, status, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, Category.EXAMPLE);
+            Room room = new Room("uuid", currentRound, status, roomSetting);
 
             // when
             room.moveToNextRound();
@@ -87,8 +90,9 @@ class RoomTest {
             // given
             int totalRound = 5;
             int currentRound = 5;
-            int timeLimit = 30_000;
-            Room room = new Room("uuid", totalRound, currentRound, timeLimit, status, Category.EXAMPLE);
+            int timeLimit = 10_000;
+            RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, Category.EXAMPLE);
+            Room room = new Room("uuid", currentRound, status, roomSetting);
 
             // when & then
             assertThatThrownBy(room::moveToNextRound)
@@ -114,16 +118,16 @@ class RoomTest {
         }
 
         @ParameterizedTest
-        @ValueSource(ints = {9000, 31000})
-        void 시간_제한은_10000이상_30000이하_여야한다(int notValidTimeLimit) {
+        @ValueSource(ints = {4000, 16000})
+        void 시간_제한은_5000이상_15000이하_여야한다(int notValidTimeLimit) {
             // given
             Room room = Room.createNewRoom();
 
             // when & then
             assertThatThrownBy(() -> room.updateTimeLimit(notValidTimeLimit))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("시간 제한은 %dms 이상, %dms 이하만 가능합니다. requested timeLimit: %d"
-                            .formatted(10000, 30000, notValidTimeLimit));
+                    .hasMessage("시간 제한은 %dms / %dms / %dms 만 가능합니다. requested timeLimit: %d"
+                            .formatted(5000, 10000, 15000, notValidTimeLimit));
         }
     }
 
@@ -131,7 +135,7 @@ class RoomTest {
     class 라운드_종료 {
 
         private static final int TOTAL_ROUND = 5;
-        private static final int TIME_LIMIT = 30;
+        private static final int TIME_LIMIT = 10_000;
         private static final RoomStatus STATUS = RoomStatus.PROGRESS;
         private static final Category CATEGORY = Category.EXAMPLE;
 
@@ -139,7 +143,8 @@ class RoomTest {
         void 라운드가_방의_현재_라운드보다_작으면_라운드는_종료된_것이다() {
             // given
             int currentRound = 2;
-            Room room = new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
+            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+            Room room = new Room("uuid", currentRound, STATUS, roomSetting);
             int round = 1;
 
             // when & then
@@ -150,7 +155,8 @@ class RoomTest {
         void 라운드가_방의_현재_라운드와_같으면_라운드는_종료되지_않은_것이다() {
             // given
             int currentRound = 2;
-            Room room = new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
+            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+            Room room = new Room("uuid", currentRound, STATUS, roomSetting);
             int round = 2;
 
             // when & then
@@ -160,7 +166,8 @@ class RoomTest {
         @Test
         void 라운드가_방의_시작_라운드보다_작으면_예외가_발생한다() {
             // given
-            Room room = new Room("uuid", TOTAL_ROUND, 1, TIME_LIMIT, STATUS, CATEGORY);
+            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+            Room room = new Room("uuid", 1, STATUS, roomSetting);
             int invalidRound = 0;
 
             // when & then
@@ -173,7 +180,8 @@ class RoomTest {
         void 라운드가_방의_현재_라운드보다_크면_예외가_발생한다() {
             // given
             int currentRound = 1;
-            Room room = new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
+            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+            Room room = new Room("uuid", currentRound, STATUS, roomSetting);
             int invalidRound = 2;
 
             // when & then
@@ -186,7 +194,8 @@ class RoomTest {
         void 라운드가_방의_현재_라운드보다_2이상_작으면_예외가_발생한다() {
             // given
             int currentRound = 4;
-            Room room = new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, STATUS, CATEGORY);
+            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+            Room room = new Room("uuid", currentRound, STATUS, roomSetting);
             int invalidRound = 2;
 
             // when & then
@@ -199,7 +208,8 @@ class RoomTest {
         void 현재_라운드와_전체_라운드가_같고_방_상태가_FINISH이면_방의_전체_라운드가_종료된_것이다() {
             // given
             RoomStatus status = RoomStatus.FINISH;
-            Room room = new Room("uuid", TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
+            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+            Room room = new Room("uuid", 5, status, roomSetting);
 
             // when & then
             assertThat(room.isAllRoundFinished()).isTrue();
@@ -210,7 +220,8 @@ class RoomTest {
             // given
             int currentRound = 3;
             int totalRound = 5;
-            Room room = new Room("uuid", totalRound, currentRound, TIME_LIMIT, STATUS, CATEGORY);
+            RoomSetting roomSetting = new RoomSetting(totalRound, TIME_LIMIT, CATEGORY);
+            Room room = new Room("uuid", currentRound, STATUS, roomSetting);
 
             // when & then
             assertThat(room.isAllRoundFinished()).isFalse();
@@ -220,7 +231,8 @@ class RoomTest {
         @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
         void 방_상태가_FINISH가_아니면_현재_라운드가_전체_라운드와_같아도_전체_라운드는_종료되지_않은_것이다(RoomStatus status) {
             // given
-            Room room = new Room("uuid", TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
+            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+            Room room = new Room("uuid", 5, status, roomSetting);
 
             // when & then
             assertThat(room.isAllRoundFinished()).isFalse();
@@ -230,7 +242,7 @@ class RoomTest {
     @Nested
     class 방_초기화 {
         private static final int TOTAL_ROUND = 5;
-        private static final int TIME_LIMIT = 30;
+        private static final int TIME_LIMIT = 10_000;
         private static final Category CATEGORY = Category.EXAMPLE;
 
         @Test
@@ -238,7 +250,8 @@ class RoomTest {
             // given
             int currentRound = 5;
             RoomStatus status = RoomStatus.FINISH;
-            Room room = new Room("uuid", TOTAL_ROUND, currentRound, TIME_LIMIT, status, CATEGORY);
+            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+            Room room = new Room("uuid", currentRound, status, roomSetting);
 
             // when
             room.reset();
@@ -254,7 +267,8 @@ class RoomTest {
         void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
             // given
             int invalidCurrentRound = 4;
-            Room room = new Room("uuid", TOTAL_ROUND, invalidCurrentRound, TIME_LIMIT, RoomStatus.FINISH, CATEGORY);
+            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+            Room room = new Room("uuid", invalidCurrentRound, RoomStatus.FINISH, roomSetting);
 
             // when & then
             assertThatThrownBy(room::reset)
@@ -266,7 +280,8 @@ class RoomTest {
         @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
         void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
             // given
-            Room room = new Room("uuid", TOTAL_ROUND, 5, TIME_LIMIT, status, CATEGORY);
+            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
+            Room room = new Room("uuid", 5, status, roomSetting);
 
             // when & then
             assertThatThrownBy(room::reset)
