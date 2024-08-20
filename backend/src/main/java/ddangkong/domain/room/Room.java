@@ -123,9 +123,9 @@ public class Room {
     }
 
     public void updateRoomSetting(RoomSetting roomSetting) {
-        roomSetting.updateTimeLimit(roomSetting.getTimeLimit());
-        roomSetting.updateTotalRound(roomSetting.getTotalRound());
-        roomSetting.updateCategory(roomSetting.getCategory());
+        this.roomSetting.updateTimeLimit(roomSetting.getTimeLimit());
+        this.roomSetting.updateTotalRound(roomSetting.getTotalRound());
+        this.roomSetting.updateCategory(roomSetting.getCategory());
     }
 
     public int getTotalRound() {

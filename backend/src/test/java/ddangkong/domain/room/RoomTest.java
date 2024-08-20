@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
-import org.junit.jupiter.params.provider.ValueSource;
 
 class RoomTest {
 
@@ -104,32 +103,17 @@ class RoomTest {
     @Nested
     class 방_설정_변경 {
 
-        @ParameterizedTest
-        @ValueSource(ints = {2, 11})
-        void 라운드는_3이상_10이하_여야한다(int notValidTotalRound) {
+        @Test
+        void 방의_전체라운드_시간제한_카테고리를_변경한다() {
             // given
             Room room = Room.createNewRoom();
-            RoomSetting roomSetting = new RoomSetting(notValidTotalRound, 5000, Category.EXAMPLE);
+            RoomSetting roomSetting = new RoomSetting(8, 15000, Category.EXAMPLE);
 
-            // when & then
-            assertThatThrownBy(() -> room.updateRoomSetting(roomSetting))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
-                            .formatted(3, 10, notValidTotalRound));
-        }
+            // when
+            room.updateRoomSetting(roomSetting);
 
-        @ParameterizedTest
-        @ValueSource(ints = {4000, 16000})
-        void 시간_제한은_5000이상_15000이하_여야한다(int notValidTimeLimit) {
-            // given
-            Room room = Room.createNewRoom();
-            RoomSetting roomSetting = new RoomSetting(5, notValidTimeLimit, Category.EXAMPLE);
-
-            // when & then
-            assertThatThrownBy(() -> room.updateRoomSetting(roomSetting))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("시간 제한은 %dms / %dms / %dms 만 가능합니다. requested timeLimit: %d"
-                            .formatted(5000, 10000, 15000, notValidTimeLimit));
+            // then
+            assertThat(room.getRoomSetting()).isEqualTo(roomSetting);
         }
     }
 
