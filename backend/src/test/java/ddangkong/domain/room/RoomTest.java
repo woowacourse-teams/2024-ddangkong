@@ -109,9 +109,10 @@ class RoomTest {
         void 라운드는_3이상_10이하_여야한다(int notValidTotalRound) {
             // given
             Room room = Room.createNewRoom();
+            RoomSetting roomSetting = new RoomSetting(notValidTotalRound, 5000, Category.EXAMPLE);
 
             // when & then
-            assertThatThrownBy(() -> room.updateTotalRound(notValidTotalRound))
+            assertThatThrownBy(() -> room.updateRoomSetting(roomSetting))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
                             .formatted(3, 10, notValidTotalRound));
@@ -122,9 +123,10 @@ class RoomTest {
         void 시간_제한은_5000이상_15000이하_여야한다(int notValidTimeLimit) {
             // given
             Room room = Room.createNewRoom();
+            RoomSetting roomSetting = new RoomSetting(5, notValidTimeLimit, Category.EXAMPLE);
 
             // when & then
-            assertThatThrownBy(() -> room.updateTimeLimit(notValidTimeLimit))
+            assertThatThrownBy(() -> room.updateRoomSetting(roomSetting))
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessage("시간 제한은 %dms / %dms / %dms 만 가능합니다. requested timeLimit: %d"
                             .formatted(5000, 10000, 15000, notValidTimeLimit));

@@ -123,21 +123,9 @@ public class Room {
     }
 
     public void updateRoomSetting(RoomSetting roomSetting) {
-        updateTimeLimit(roomSetting.getTimeLimit());
-        updateTotalRound(roomSetting.getTotalRound());
-        updateCategory(roomSetting.getCategory());
-    }
-
-    public void updateTimeLimit(int timeLimit) {
-        roomSetting.updateTimeLimit(timeLimit);
-    }
-
-    public void updateTotalRound(int totalRound) {
-        roomSetting.updateTotalRound(totalRound);
-    }
-
-    public void updateCategory(Category category) {
-        roomSetting.updateCategory(category);
+        roomSetting.updateTimeLimit(roomSetting.getTimeLimit());
+        roomSetting.updateTotalRound(roomSetting.getTotalRound());
+        roomSetting.updateCategory(roomSetting.getCategory());
     }
 
     public int getTotalRound() {
