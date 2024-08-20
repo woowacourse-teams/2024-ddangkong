@@ -1,4 +1,4 @@
-package ddangkong.facade.room.balance.roomvote.operation;
+package ddangkong.facade.room.balance.roomvote.context;
 
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.member.RoomMembers;
