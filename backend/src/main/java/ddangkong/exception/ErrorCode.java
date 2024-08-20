@@ -17,6 +17,13 @@ public enum ErrorCode {
     NOT_PROGRESSED_ROOM("해당 방은 게임을 진행하고 있지 않습니다."),
     NOT_FINISHED_ROOM("방이 종료 상태가 아닙니다."),
     NOT_FOUND_ROOM("방이 존재하지 않습니다."),
+
+    // Member,
+    ALREADY_EXIST_MASTER("이미 방장이 존재합니다."),
+    INVALID_MASTER_CREATION("방에 멤버가 존재하면 방장을 생성할 수 없습니다. 현재 멤버 수: %d"),
+    NOT_EXIST_MASTER("방장이 존재하지 않습니다."),
+    EXCEED_MAX_MEMBER_COUNT("방의 최대 인원을 초과했습니다. 현재 멤버 수: %d"),
+    NOT_ROOM_MEMBER("방에 존재하지 않는 멤버입니다."),
     ;
 
     private final String message;

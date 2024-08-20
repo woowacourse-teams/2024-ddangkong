@@ -3,7 +3,12 @@ package ddangkong.service.room.member;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.MemberRepository;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.NotReadyRoomException;
+import ddangkong.exception.room.member.AlreadyExistMasterException;
+import ddangkong.exception.room.member.ExceedMaxMemberCountException;
+import ddangkong.exception.room.member.InvalidMasterCreationException;
+import ddangkong.exception.room.member.NotExistMasterException;
+import ddangkong.exception.room.member.NotRoomMemberException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +23,7 @@ public class MemberService {
     @Transactional
     public Member saveMasterMember(String nickname, Room room) {
         if (existsMasterInRoom(room)) {
-            throw new BadRequestException("이미 방장이 존재합니다.");
+            throw new AlreadyExistMasterException();
         }
         validateMemberNotExists(room);
         return memberRepository.save(Member.createMaster(nickname, room));
@@ -27,15 +32,14 @@ public class MemberService {
     private void validateMemberNotExists(Room room) {
         long memberCountInRoom = memberRepository.countByRoom(room);
         if (memberCountInRoom > 0) {
-            throw new BadRequestException("방에 멤버가 존재하면 방장을 생성할 수 없습니다. 현재 멤버 수: %d"
-                    .formatted(memberCountInRoom));
+            throw new InvalidMasterCreationException(memberCountInRoom);
         }
     }
 
     @Transactional
     public Member saveCommonMember(String nickname, Room room) {
         if (!existsMasterInRoom(room)) {
-            throw new BadRequestException("방장이 존재하지 않습니다.");
+            throw new NotExistMasterException();
         }
         validateRoomAcceptMember(room);
         // todo 중복 닉네임 체크
@@ -48,11 +52,11 @@ public class MemberService {
 
     private void validateRoomAcceptMember(Room room) {
         if (room.isAlreadyStart()) {
-            throw new BadRequestException("이미 시작한 방에는 멤버를 생성할 수 없습니다.");
+            throw new NotReadyRoomException();
         }
         long memberCountInRoom = memberRepository.countByRoom(room);
         if (room.isFull(memberCountInRoom)) {
-            throw new BadRequestException("방의 최대 인원 수가 가득 찼습니다. 현재 멤버 수: %d".formatted(memberCountInRoom));
+            throw new ExceedMaxMemberCountException(memberCountInRoom);
         }
     }
 
@@ -64,6 +68,6 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member getRoomMember(Long memberId, Room room) {
         return memberRepository.findByIdAndRoom(memberId, room)
-                .orElseThrow(() -> new BadRequestException("방에 존재하지 않는 멤버입니다."));
+                .orElseThrow(NotRoomMemberException::new);
     }
 }
