@@ -74,7 +74,14 @@ public class MemberService {
         commonMember.promoteToMaster();
     }
 
+    @Transactional
     public void delete(Member member) {
         memberRepository.delete(member);
+    }
+
+    @Transactional
+    public void deleteMember(Room room) {
+        List<Member> members = findRoomMembers(room);
+        memberRepository.deleteAllInBatch(members);
     }
 }

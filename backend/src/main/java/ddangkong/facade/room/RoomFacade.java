@@ -14,6 +14,7 @@ import ddangkong.service.room.RoomService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.balance.roomvote.RoomBalanceVoteMigrator;
 import ddangkong.service.room.member.MemberService;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -111,5 +112,23 @@ public class RoomFacade {
         Room room = roomService.reset(roomId);
         roomContentService.deleteRoomContents(room);
         roomBalanceVoteMigrator.migrateToTotalVote(room);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> findRoomIdsBefore(LocalDateTime modifiedAt) {
+        return roomService.findRoomsBefore(modifiedAt)
+                .stream()
+                .map(Room::getId)
+                .toList();
+    }
+
+    @Transactional
+    public void deleteRoom(Long roomId) {
+        Room room = roomService.getRoom(roomId);
+
+        roomBalanceVoteMigrator.migrateToTotalVote(room);
+        roomContentService.deleteRoomContents(room);
+        memberService.deleteMember(room);
+        roomService.delete(room);
     }
 }

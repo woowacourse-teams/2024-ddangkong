@@ -23,6 +23,7 @@ import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -467,6 +468,68 @@ class RoomFacadeTest extends BaseServiceTest {
                     () -> assertThat(optionATotalVoteCount).isEqualTo(3),
                     () -> assertThat(optionBTotalVoteCount).isEqualTo(1)
             );
+        }
+    }
+
+    @Nested
+    class 특정_시각_이전_방_조회 {
+
+        @Test
+        void 특정_시각_이전의_방을_조회할_수_았다() {
+            // given
+            LocalDateTime modifiedAt = LocalDateTime.of(2024, 7, 18, 19, 51, 0);
+            int expectedSize = 2;
+
+            // when
+            List<Long> actual = roomFacade.findRoomIdsBefore(modifiedAt);
+
+            // then
+            assertThat(actual).hasSize(expectedSize);
+        }
+    }
+
+    @Nested
+    class 방_삭제 {
+
+        @Test
+        void 해당_방과_연관된_모든_정보를_삭제할_수_있다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            Member master = memberRepository.save(EDEN.master(room));
+            Member common = memberRepository.save(KEOCHAN.common(room));
+
+            BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
+            RoomContent roomContent = getSavedRoomContent(room, balanceContent);
+            RoomBalanceVote roomVote = getRoomBalanceVote(master, balanceContent);
+            long countOfTotalVotes = totalBalanceVoteRepository.count();
+
+            // when
+            roomFacade.deleteRoom(room.getId());
+
+            // then
+            Optional<Room> deletedRoom = roomRepository.findById(room.getId());
+            Optional<Member> deletedMember = memberRepository.findById(common.getId());
+            Optional<RoomContent> deletedRoomContent = roomContentRepository.findById(roomContent.getId());
+            Optional<RoomBalanceVote> deletedRoomVote = roomBalanceVoteRepository.findById(roomVote.getId());
+            long afterCountOfTotalVotes = totalBalanceVoteRepository.count();
+            assertAll(
+                    () -> assertThat(deletedRoom).isEmpty(),
+                    () -> assertThat(deletedMember).isEmpty(),
+                    () -> assertThat(deletedRoomContent).isEmpty(),
+                    () -> assertThat(deletedRoomVote).isEmpty(),
+                    () -> assertThat(afterCountOfTotalVotes).isEqualTo(countOfTotalVotes + 1)
+            );
+        }
+
+        private RoomBalanceVote getRoomBalanceVote(Member member, BalanceContent balanceContent) {
+            BalanceOption balanceOption = balanceOptionRepository.findAllByBalanceContent(balanceContent).get(0);
+            RoomBalanceVote roomBalanceVote = new RoomBalanceVote(member, balanceOption);
+            return roomBalanceVoteRepository.save(roomBalanceVote);
+        }
+
+        private RoomContent getSavedRoomContent(Room room, BalanceContent content) {
+            RoomContent roomContent = RoomContent.newRoomContent(room, content, 1);
+            return roomContentRepository.save(roomContent);
         }
     }
 }

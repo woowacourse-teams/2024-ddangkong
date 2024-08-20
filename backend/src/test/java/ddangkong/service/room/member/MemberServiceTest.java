@@ -190,4 +190,25 @@ class MemberServiceTest extends BaseServiceTest {
                     .hasMessage("방에 일반 멤버가 존재하지 않습니다.");
         }
     }
+
+    @Nested
+    class 방의_멤버_삭제 {
+
+        @Test
+        void 해당_방에_있는_멤버를_모두_삭제한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            Member master = memberRepository.save(PRIN.master(room));
+            Member common = memberRepository.save(KEOCHAN.common(room));
+
+            // when
+            memberService.deleteMember(room);
+
+            // then
+            assertAll(
+                    () -> assertThat(memberRepository.findById(master.getId())).isEmpty(),
+                    () -> assertThat(memberRepository.findById(common.getId())).isEmpty()
+            );
+        }
+    }
 }
