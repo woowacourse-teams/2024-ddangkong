@@ -1,6 +1,7 @@
 package ddangkong.facade.room.balance.roomvote;
 
 import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
@@ -13,6 +14,7 @@ import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
+import ddangkong.facade.room.balance.roomvote.dto.RoomMembersVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
 import ddangkong.service.balance.content.BalanceContentService;
 import ddangkong.service.balance.option.BalanceOptionService;
@@ -21,7 +23,11 @@ import ddangkong.service.room.RoomService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.balance.roomvote.RoomBalanceVoteService;
 import ddangkong.service.room.member.MemberService;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -117,5 +123,45 @@ public class RoomBalanceVoteFacade {
         boolean isAllMemberVoted = roomBalanceVoteService.isAllMemberVoted(roomMembers, balanceOptions);
 
         return new VoteContext(roomMembers, balanceOptions, isOverVoteDeadline || isAllMemberVoted);
+    }
+
+    @Transactional(readOnly = true)
+    public RoomMembersVoteMatchingResponse getRoomMembersVoteMatching(Long roomId, Long memberId) {
+        Room room = roomService.getRoom(roomId);
+        if (!room.isAllRoundFinished()) {
+            throw new BadRequestException("종료되지 않은 게임의 매칭도는 확인할 수 없습니다.");
+        }
+
+        Member member = memberService.getRoomMember(memberId, room);
+        Map<Member, Long> membersVoteMatchingCount = getRoomMembersVoteMatchingCountWithoutSelf(room, member);
+
+        return getRoomMembersVoteMatchingPercent(membersVoteMatchingCount, room, member);
+    }
+
+    private Map<Member, Long> getRoomMembersVoteMatchingCountWithoutSelf(Room room, Member member) {
+        List<BalanceOption> memberRoomVoteOptions = balanceOptionService.findMemberRoomBalanceVoteOptions(member);
+        List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteService.findRoomVotesByBalanceOptionsWithoutMember(
+                memberRoomVoteOptions, room, member);
+
+        Map<Member, Long> membersVoteMatchingCount = roomBalanceVotes.stream()
+                .map(RoomBalanceVote::getMember)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        return membersVoteMatchingCount;
+    }
+
+    private RoomMembersVoteMatchingResponse getRoomMembersVoteMatchingPercent(Map<Member, Long> membersAndMatchingCount,
+                                                                              Room room,
+                                                                              Member member) {
+        Map<Member, Long> membersVoteMatchingPercent = new HashMap<>();
+        for (Member roomMember : memberService.findAllRoomMembers(room)) {
+            if (roomMember.equals(member)) {
+                continue;
+            }
+
+            long matchingCount = membersAndMatchingCount.getOrDefault(roomMember, 0L);
+            long matchingPercent = (matchingCount / room.getTotalRound()) * 100;
+            membersVoteMatchingPercent.put(roomMember, matchingPercent);
+        }
+        return RoomMembersVoteMatchingResponse.create(membersVoteMatchingPercent);
     }
 }

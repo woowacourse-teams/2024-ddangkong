@@ -73,4 +73,8 @@ public class MemberService {
     public Member getMaster(Room room) {
         return findRoomMembers(room).getMaster();
     }
+
+    public List<Member> findAllRoomMembers(Room room) {
+        return memberRepository.findAllByRoom(room);
+    }
 }
