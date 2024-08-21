@@ -23,6 +23,7 @@ export const rankNumber = css`
 export const nicknameContainer = (percent: number) => css`
   display: flex;
   overflow: visible;
+  align-items: center;
   gap: 1rem;
   width: ${percent > 5 ? percent - 5 : percent}%;
   height: 100%;
@@ -39,4 +40,9 @@ export const rankPercent = css`
 
 export const nickname = css`
   min-width: 5.6rem;
+`;
+
+export const profileImage = css`
+  width: 1.8rem;
+  height: 1.8rem;
 `;
