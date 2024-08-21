@@ -6,28 +6,16 @@ import ddangkong.domain.BaseRepositoryTest;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
-import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 class RoomContentRepositoryTest extends BaseRepositoryTest {
 
     @Autowired
     private RoomContentRepository roomContentRepository;
-
-    @Autowired
-    TestEntityManager entityManager;
-
-    EntityManager em;
-
-    @BeforeEach
-    void beforeEach() {
-        em = entityManager.getEntityManager();
-    }
 
     @Nested
     class 방의_해당_라운드_질문_조회 {
@@ -50,10 +38,10 @@ class RoomContentRepositoryTest extends BaseRepositoryTest {
             int round = 1;
             RoomContent roomContent = new RoomContent(room, balanceContent, round, ROUND_ENDED_AT);
             roomContentRepository.save(roomContent);
-            em.flush();
-            em.clear();
+
             // when
             RoomContent actual = roomContentRepository.findByRoomAndRound(room, room.getCurrentRound()).orElseThrow();
+
             // then
             assertThat(actual.getId()).isEqualTo(1L);
 
