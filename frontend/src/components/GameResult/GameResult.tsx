@@ -1,7 +1,16 @@
 import { useMatchingResultQuery } from './GameResult.hook';
-import { gameResultTitle, gameResultLayout, rankListContainer } from './GameResult.styled';
+import {
+  gameResultTitle,
+  gameResultLayout,
+  rankListContainer,
+  noMatchingLayout,
+  noMatchingImg,
+  noMatchingText,
+} from './GameResult.styled';
 import FinalButton from '../common/FinalButton/FinalButton';
 import GameResultItem from '../GameResultItem/GameResultItem';
+
+import SadDdangKong from '@/assets/images/sadDdangkong.png';
 
 const GameResult = () => {
   const { matchedMembers, existMatching, isLoading } = useMatchingResultQuery();
@@ -19,6 +28,14 @@ const GameResult = () => {
                 />
               ))}
           </ol>
+        )}
+        {!existMatching && (
+          <div css={noMatchingLayout}>
+            <img src={SadDdangKong} alt="서운한 땅콩" css={noMatchingImg} />
+            <span css={noMatchingText}>
+              {'이번에는 나와 같은 선택을 한 사람이 없지만,\n다음 게임을 기대해 볼까요?'}
+            </span>
+          </div>
         )}
       </div>
       <FinalButton />
