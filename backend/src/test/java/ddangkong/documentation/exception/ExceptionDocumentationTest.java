@@ -1,7 +1,9 @@
 package ddangkong.documentation.exception;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -13,9 +15,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.documentation.exception.ExceptionController.ExceptionRequest;
+import ddangkong.documentation.exception.snippet.ErrorCodeResponseFieldsSnippet;
+import ddangkong.exception.ClientErrorCode;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.FieldDescriptor;
 
 @WebMvcTest(ExceptionController.class)
 class ExceptionDocumentationTest extends BaseDocumentationTest {
@@ -44,6 +51,7 @@ class ExceptionDocumentationTest extends BaseDocumentationTest {
                         responseFields(
                                 fieldWithPath("errorCode").type(STRING).description("에러 코드"),
                                 fieldWithPath("message").type(STRING).description("에러 메시지"),
+                                fieldWithPath("fieldErrors").type(ARRAY).description("request body 에러"),
                                 fieldWithPath("fieldErrors.[].field").type(STRING).description("필드명"),
                                 fieldWithPath("fieldErrors.[].rejectedValue").type(STRING).description("거부된 값"),
                                 fieldWithPath("fieldErrors.[].reason").type(STRING).description("거부된 이유")
@@ -75,6 +83,8 @@ class ExceptionDocumentationTest extends BaseDocumentationTest {
                         responseFields(
                                 fieldWithPath("errorCode").type(STRING).description("에러 코드"),
                                 fieldWithPath("message").type(STRING).description("에러 메시지"),
+                                fieldWithPath("violationErrors").type(ARRAY)
+                                        .description("query parameter 또는 path variable 에러"),
                                 fieldWithPath("violationErrors.[].field").type(STRING).description("필드명"),
                                 fieldWithPath("violationErrors.[].rejectedValue").type(STRING).description("거부된 값"),
                                 fieldWithPath("violationErrors.[].reason").type(STRING).description("거부된 이유")
@@ -102,5 +112,31 @@ class ExceptionDocumentationTest extends BaseDocumentationTest {
                                 fieldWithPath("message").type(STRING).description("에러 메시지")
                         )
                 ));
+    }
+
+    @Test
+    void 클라이언트_에러_코드를_문서화한다() throws Exception {
+        // given
+        String endpoint = "/exception/errorCode";
+
+        // when & then
+        mockMvc.perform(get(endpoint)
+                )
+                .andExpect(status().isBadRequest())
+                .andDo(document("exception/error-code",
+                        errorCodeResponseFields(
+                                errorCodeFieldDescriptors()
+                        )
+                ));
+    }
+
+    private ErrorCodeResponseFieldsSnippet errorCodeResponseFields(List<FieldDescriptor> descriptors) {
+        return new ErrorCodeResponseFieldsSnippet(descriptors);
+    }
+
+    private List<FieldDescriptor> errorCodeFieldDescriptors() {
+        return Arrays.stream(ClientErrorCode.values())
+                .map(errorCode -> fieldWithPath(errorCode.name()).description(errorCode.getMessage()))
+                .toList();
     }
 }

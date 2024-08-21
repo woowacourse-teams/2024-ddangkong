@@ -1,10 +1,8 @@
 == 예외
 
-=== business error
+=== Client Error Code
 
-==== example request
-
-include::{snippets}/exception/business-error/http-request.adoc[]
+include::{snippets}/exception/error-code/error-code-response-fields.adoc[]
 
 ==== response
 
@@ -16,7 +14,7 @@ include::{snippets}/exception/business-error/response-fields.adoc[]
 
 '''
 
-=== field error
+=== Field Error
 
 ==== example request
 
@@ -34,7 +32,7 @@ include::{snippets}/exception/field-error/response-fields.adoc[]
 
 '''
 
-=== url parameter error
+=== Url Parameter Error
 
 ==== example request
 
