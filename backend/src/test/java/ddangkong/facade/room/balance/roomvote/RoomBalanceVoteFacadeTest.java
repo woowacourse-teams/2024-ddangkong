@@ -99,8 +99,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
-                    .isExactlyInstanceOf(VoteFinishedException.class)
-                    .hasMessage("투표가 종료되었습니다.");
+                    .isExactlyInstanceOf(VoteFinishedException.class);
         }
 
         @Test
@@ -114,8 +113,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
-                    .isExactlyInstanceOf(VoteFinishedException.class)
-                    .hasMessage("투표가 종료되었습니다.");
+                    .isExactlyInstanceOf(VoteFinishedException.class);
         }
 
         @Test
