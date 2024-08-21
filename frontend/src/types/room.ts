@@ -22,6 +22,9 @@ export interface RoomMembers {
 
 export interface RoomIdAndMember {
   roomId: number;
+
+  // 초대링크 생성용으로 roomUuid를 사용, 방장만 필요한 값
+  roomUuid?: string;
   member: Member;
 }
 

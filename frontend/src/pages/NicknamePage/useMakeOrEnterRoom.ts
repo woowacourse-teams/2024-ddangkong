@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil';
 
 import { enterRoom, createRoom } from '@/apis/room';
 import { ROUTES } from '@/constants/routes';
-import { memberInfoState } from '@/recoil/atom';
+import { memberInfoState, roomUuidState } from '@/recoil/atom';
 import { RoomIdAndMember } from '@/types/room';
 import { createRandomNickname } from '@/utils/nickname';
 
@@ -14,29 +14,38 @@ export const useMakeOrEnterRoom = () => {
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
+  const [roomUuid, setRoomUuidState] = useRecoilState(roomUuidState);
 
   const { roomId } = useParams();
 
   const createRoomMutation = useMutation<RoomIdAndMember, Error, string>({
     mutationFn: createRoom,
     onSuccess: (data) => {
-      setMemberInfo((prev) => ({ ...prev, memberId: data.member.memberId }));
+      setMemberInfo((prev) => ({
+        ...prev,
+        memberId: data.member.memberId,
+      }));
+      setRoomUuidState(data.roomUuid || '');
       navigate(ROUTES.ready(Number(data.roomId)));
     },
-    onError: (error: Error) => {},
+    onError: (error: Error) => {
+      alert('방 생성 실패');
+    },
   });
 
   const enterRoomMutation = useMutation<
     RoomIdAndMember,
     Error,
-    { nickname: string; roomId: number }
+    { nickname: string; roomUuid: string }
   >({
-    mutationFn: ({ nickname, roomId }) => enterRoom(roomId, nickname),
+    mutationFn: ({ nickname, roomUuid }) => enterRoom(roomUuid, nickname),
     onSuccess: (data) => {
       setMemberInfo((prev) => ({ ...prev, memberId: data.member.memberId }));
       navigate(ROUTES.ready(Number(roomId)));
     },
-    onError: (error: Error) => {},
+    onError: (error: Error) => {
+      alert('방 참여 실패');
+    },
   });
 
   const handleMakeOrEnterRoom = () => {
@@ -44,7 +53,7 @@ export const useMakeOrEnterRoom = () => {
     if (memberInfo.isMaster) {
       createRoomMutation.mutate(nickname);
     } else {
-      enterRoomMutation.mutate({ nickname, roomId: Number(roomId) });
+      enterRoomMutation.mutate({ nickname, roomUuid });
     }
   };
 

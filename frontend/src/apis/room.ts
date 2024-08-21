@@ -36,9 +36,9 @@ export const resetRoom = async (roomId: number) => {
 };
 
 // 방 참여하기
-export const enterRoom = async (roomId: number, nickname: string): Promise<RoomIdAndMember> => {
+export const enterRoom = async (roomUuid: string, nickname: string): Promise<RoomIdAndMember> => {
   const res = await fetcher.post({
-    url: API_URL.enterRoom(roomId),
+    url: API_URL.enterRoom(roomUuid),
     headers: {
       'Content-Type': `application/json`,
     },

@@ -14,3 +14,8 @@ export const memberInfoState = atom<MemberInfoState>({
     isMaster: false,
   },
 });
+
+export const roomUuidState = atom<string>({
+  key: 'roomUuid',
+  default: '',
+});
