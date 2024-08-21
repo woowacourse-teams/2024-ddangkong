@@ -63,8 +63,8 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
         @Test
         void 현재_방에서_투표할_수_있다() {
             // given
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-07-18T20:00:08");
-            roomContentRepository.save(new RoomContent(room, balanceContent, 1, roundEndedAt));
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-07-18T20:00:08");
+            roomContentRepository.save(new RoomContent(room, balanceContent, 1, voteDeadline));
 
             RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(keochan.getId(), optionA.getId());
 
@@ -131,8 +131,8 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
         @Test
         void 방의_모든_멤버가_투표하면_투표가_종료된다() {
             // given
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T20:00:08");
-            roomContentRepository.save(new RoomContent(room, balanceContent, 1, roundEndedAt));
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:08");
+            roomContentRepository.save(new RoomContent(room, balanceContent, 1, voteDeadline));
             roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
             roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionA));
             roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionB));
@@ -152,10 +152,10 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
         }
 
         @Test
-        void 방_컨텐츠의_투표_제한_시간이_끝나면_투표가_종료된다() {
+        void 방_컨텐츠의_투표_마감_시간이_지나면_투표가_종료된다() {
             // given
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T20:00:00");
-            roomContentRepository.save(new RoomContent(room, balanceContent, 1, roundEndedAt));
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:00");
+            roomContentRepository.save(new RoomContent(room, balanceContent, 1, voteDeadline));
 
             // when
             VoteFinishedResponse actual = RestAssured.given().log().all()
@@ -171,10 +171,10 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
         }
 
         @Test
-        void 투표_제한_시간이_끝나지_않고_방의_모든_멤버가_투표하지_않으면_투표가_종료되지_않는다() {
+        void 투표_마감_시간이_지나지_않고_방의_모든_멤버가_투표하지_않으면_투표가_종료되지_않는다() {
             // given
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T20:00:08");
-            roomContentRepository.save(new RoomContent(room, balanceContent, 1, roundEndedAt));
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:08");
+            roomContentRepository.save(new RoomContent(room, balanceContent, 1, voteDeadline));
 
             // when
             VoteFinishedResponse actual = RestAssured.given().log().all()

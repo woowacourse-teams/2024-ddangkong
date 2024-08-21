@@ -18,6 +18,7 @@ import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
+import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
 import java.util.List;
@@ -110,16 +111,17 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
     }
 
     @Nested
-    class 투표_완료_여부 {
+    class 모든_멤버_투표_완료_여부 {
 
         private BalanceOptions balanceOptions;
 
-        private List<Member> members;
+        private RoomMembers members;
+
 
         @BeforeEach
         void setUp() {
             balanceOptions = new BalanceOptions(List.of(optionA, optionB));
-            members = List.of(prin, tacan, keochan, eden);
+            members = new RoomMembers(List.of(prin, tacan, keochan, eden));
         }
 
         @Test
@@ -131,10 +133,10 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionB));
 
             // when
-            boolean isVoteFinished = roomBalanceVoteService.isVoteFinished(members, balanceOptions);
+            boolean isAllMemberVoted = roomBalanceVoteService.isAllMemberVoted(members, balanceOptions);
 
             // then
-            assertThat(isVoteFinished).isTrue();
+            assertThat(isAllMemberVoted).isTrue();
         }
 
         @Test
@@ -145,10 +147,10 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionB));
 
             // when
-            boolean isVoteFinished = roomBalanceVoteService.isVoteFinished(members, balanceOptions);
+            boolean isAllMemberVoted = roomBalanceVoteService.isAllMemberVoted(members, balanceOptions);
 
             // then
-            assertThat(isVoteFinished).isFalse();
+            assertThat(isAllMemberVoted).isFalse();
         }
     }
 }
