@@ -152,7 +152,7 @@ class RoomControllerTest extends BaseControllerTest {
     class 방_나가기 {
 
         @Test
-        void 방에사_나갈_수_있다() {
+        void 방에_나갈_수_있다() {
             // given
             Long roomId = 1L;
             Long memberId = 1L;

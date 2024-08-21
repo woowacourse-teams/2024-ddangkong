@@ -181,7 +181,7 @@ class MemberServiceTest extends BaseServiceTest {
             memberService.promoteOtherMember(roomMembers);
 
             // then
-            assertTrue(COMMON1.isMaster() || COMMON2.isMaster());
+            assertTrue((COMMON1.isMaster() && COMMON2.isCommon()) || (COMMON1.isCommon() && COMMON2.isMaster()));
         }
 
         @Test

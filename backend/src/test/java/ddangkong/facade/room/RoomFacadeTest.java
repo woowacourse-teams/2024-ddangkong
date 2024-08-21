@@ -155,7 +155,7 @@ class RoomFacadeTest extends BaseServiceTest {
         }
 
         @Test
-        void 요청한_멤버를_삭제한_후에_방에_아무도_없다면_방을_삭제한다() {
+        void 방에서_마지막_멤버가_나가면_방을_삭제한다() {
             // given
             Room room = roomRepository.save(Room.createNewRoom());
             Member member = memberRepository.save(EDEN.master(room));
