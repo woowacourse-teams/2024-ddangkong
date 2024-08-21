@@ -9,7 +9,7 @@ import { memberInfoState, roomUuidState } from '@/recoil/atom';
 import { RoomIdAndMember } from '@/types/room';
 import { createRandomNickname } from '@/utils/nickname';
 
-export const useMakeOrEnterRoom = () => {
+export const useMakeOrEnterRoom = (showModal: () => void) => {
   const randomNickname = createRandomNickname();
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export const useMakeOrEnterRoom = () => {
       navigate(ROUTES.ready(Number(data.roomId)));
     },
     onError: (error: Error) => {
-      alert('방 생성 실패');
+      showModal();
     },
   });
 
@@ -44,7 +44,7 @@ export const useMakeOrEnterRoom = () => {
       navigate(ROUTES.ready(Number(roomId)));
     },
     onError: (error: Error) => {
-      alert('방 참여 실패');
+      showModal();
     },
   });
 

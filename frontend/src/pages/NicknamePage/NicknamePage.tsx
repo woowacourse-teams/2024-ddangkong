@@ -1,11 +1,14 @@
 import { profile, nicknameBox, nicknameInputWrapper, nicknameInput } from './NicknamePage.styled';
 import { useMakeOrEnterRoom } from './useMakeOrEnterRoom';
 
+import AlertModal from '@/components/common/AlertModal/AlertModal';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
+import useModal from '@/hooks/useModal';
 
 const NicknamePage = () => {
-  const { randomNickname, nicknameInputRef, handleMakeOrEnterRoom } = useMakeOrEnterRoom();
+  const { isOpen, show, close } = useModal();
+  const { randomNickname, nicknameInputRef, handleMakeOrEnterRoom } = useMakeOrEnterRoom(show);
 
   return (
     <Content>
@@ -20,6 +23,12 @@ const NicknamePage = () => {
         />
       </div>
       <Button onClick={handleMakeOrEnterRoom} text="확인" bottom></Button>
+      <AlertModal
+        isOpen={isOpen}
+        onClose={close}
+        message="방 참가 실패했습니다"
+        title="방 참가 실패"
+      />
     </Content>
   );
 };

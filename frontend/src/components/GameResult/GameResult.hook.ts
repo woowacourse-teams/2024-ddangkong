@@ -21,8 +21,11 @@ export const useGameResultQuery = (): GameResultQueryResponse => {
   return { ...gameResultQuery, gameResult: gameResultQuery.data };
 };
 
-export const useResetRoomMutation = (roomId: number) => {
+export const useResetRoomMutation = (roomId: number, showModal: () => void) => {
   return useMutation({
     mutationFn: async () => await resetRoom(roomId),
+    onError: () => {
+      showModal();
+    },
   });
 };
