@@ -40,7 +40,7 @@ export const EmptyHeader = () => <header css={headerLayout}></header>;
 export const TitleHeader = ({ title }: HeaderProps) => (
   <header css={headerLayout}>
     <span></span>
-    <span css={gameTitle}>{title}</span>
+    <h1 css={gameTitle}>{title}</h1>
     <span></span>
   </header>
 );
@@ -52,7 +52,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   return (
     <header css={headerLayout}>
       <div css={emptyBox}></div>
-      <span css={gameTitle}>{title}</span>
+      <h1 css={gameTitle}>{title}</h1>
       <button onClick={show} css={buttonWrapper}>
         <img src={SettingIcon} alt="방 설정" css={settingImage} />
       </button>
@@ -74,7 +74,7 @@ export const RoundHeader = () => {
   return (
     <header css={headerLayout}>
       <span css={roundText}>{`${balanceContent?.currentRound}/${balanceContent?.totalRound}`}</span>
-      <span css={gameTitle}>{title}</span>
+      <h1 css={gameTitle}>{title}</h1>
       <span css={roundText}></span>
     </header>
   );
@@ -93,7 +93,7 @@ export const BackHeader = ({ title }: HeaderProps) => {
       <button onClick={goToBack} css={buttonWrapper}>
         <img src={ArrowLeft} alt="뒤로 가기" />
       </button>
-      <span css={gameTitle}>{title}</span>
+      <h1 css={gameTitle}>{title}</h1>
       <span css={roundText}></span>
     </header>
   );
