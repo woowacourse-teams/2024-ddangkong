@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 
-export const headerLayout = css`
+export const headerLayout = (isCenter?: boolean) => css`
   display: flex;
-  justify-content: space-between;
+  justify-content: ${isCenter ? 'center' : 'space-between'};
   align-items: center;
   height: 8rem;
   padding: 0 2.4rem;

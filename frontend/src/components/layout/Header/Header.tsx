@@ -34,14 +34,12 @@ const Header = () => {
 };
 
 // 1. 공간만 차지하는 빈 헤더 : 최종 게임 결과 화면
-export const EmptyHeader = () => <header css={headerLayout}></header>;
+export const EmptyHeader = () => <header css={headerLayout()}></header>;
 
 // 2. 가운데 제목만 차지하는 헤더 : 닉네임 설정 화면
 export const TitleHeader = ({ title }: HeaderProps) => (
-  <header css={headerLayout}>
-    <span></span>
+  <header css={headerLayout(true)}>
     <h1 css={gameTitle}>{title}</h1>
-    <span></span>
   </header>
 );
 
@@ -50,7 +48,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { isOpen, show, close } = useModal();
 
   return (
-    <header css={headerLayout}>
+    <header css={headerLayout()}>
       <div css={emptyBox}></div>
       <h1 css={gameTitle}>{title}</h1>
       <button onClick={show} css={buttonWrapper}>
@@ -72,7 +70,7 @@ export const RoundHeader = () => {
   if (!balanceContent) return null;
 
   return (
-    <header css={headerLayout}>
+    <header css={headerLayout()}>
       <span css={roundText}>{`${balanceContent?.currentRound}/${balanceContent?.totalRound}`}</span>
       <h1 css={gameTitle}>{title}</h1>
       <span css={roundText}></span>
@@ -89,7 +87,7 @@ export const BackHeader = ({ title }: HeaderProps) => {
   };
 
   return (
-    <header css={headerLayout}>
+    <header css={headerLayout()}>
       <button onClick={goToBack} css={buttonWrapper}>
         <img src={ArrowLeft} alt="뒤로 가기" />
       </button>
