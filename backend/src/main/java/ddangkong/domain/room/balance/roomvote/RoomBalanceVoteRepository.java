@@ -21,10 +21,9 @@ public interface RoomBalanceVoteRepository extends JpaRepository<RoomBalanceVote
             SELECT rbv
             FROM RoomBalanceVote rbv
                 JOIN FETCH Member m ON rbv.member = m
-                INNER JOIN Room r ON m.room = r
-                INNER JOIN BalanceOption bo ON rbv.balanceOption = bo
             WHERE m.room = :room AND rbv.balanceOption IN (:balanceOptions)
             AND m != :member
+            AND m.room = :room
             """)
     List<RoomBalanceVote> findRoomBalanceVotesByBalanceOptionsAndRoomWithoutMember(List<BalanceOption> balanceOptions,
                                                                                    Room room,
