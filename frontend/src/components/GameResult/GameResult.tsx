@@ -8,17 +8,24 @@ import {
   noMatchingText,
 } from './GameResult.styled';
 import FinalButton from '../common/FinalButton/FinalButton';
+import Spinner from '../common/Spinner/Spinner';
 import GameResultItem from '../GameResultItem/GameResultItem';
 
 import SadDdangKong from '@/assets/images/sadDdangkong.png';
 
 const GameResult = () => {
   const { matchedMembers, existMatching, isLoading } = useMatchingResultQuery();
+
   return (
     <>
       <div css={gameResultLayout}>
         <h1 css={gameResultTitle}>게임 결과</h1>
-        {existMatching && (
+
+        {isLoading && (
+          <Spinner message="결과를 불러오는 중입니다..." imageSrc={SadDdangKong} imageSize={150} />
+        )}
+
+        {!isLoading && existMatching && (
           <ol css={rankListContainer}>
             {matchedMembers &&
               matchedMembers.map((memberMatchingInfo) => (
@@ -29,7 +36,8 @@ const GameResult = () => {
               ))}
           </ol>
         )}
-        {!existMatching && (
+
+        {!isLoading && !existMatching && (
           <div css={noMatchingLayout}>
             <img src={SadDdangKong} alt="서운한 땅콩" css={noMatchingImg} />
             <span css={noMatchingText}>
