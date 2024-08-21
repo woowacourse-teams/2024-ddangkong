@@ -27,5 +27,6 @@ public interface RoomBalanceVoteRepository extends JpaRepository<RoomBalanceVote
             AND m != :member
             """)
     List<RoomBalanceVote> findRoomBalanceVotesByBalanceOptionsAndRoomWithoutMember(List<BalanceOption> balanceOptions,
-                                                                                   Room room, Member member);
+                                                                                   Room room,
+                                                                                   Member member);
 }
