@@ -1,7 +1,8 @@
 import { useLocation, useParams } from 'react-router-dom';
 
-import { emptyBox, gameTitle, headerLayout, roundText, settingImage } from './Header.styled';
+import { emptyBox, gameTitle, headerLayout, roundText, iconImage } from './Header.styled';
 
+import GoOutIcon from '@/assets/images/goOutIcon.png';
 import SettingIcon from '@/assets/images/settingsIcon.svg';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
@@ -30,10 +31,12 @@ const Header = ({ title }: HeaderProps) => {
   if (isReadyPage) {
     return (
       <header css={headerLayout}>
-        <div css={emptyBox}></div>
+        <button onClick={show}>
+          <img src={GoOutIcon} alt="방 나가기" css={iconImage} />
+        </button>
         <span css={gameTitle}>밸런스 게임</span>
         <button onClick={show}>
-          <img src={SettingIcon} alt="방 설정" css={settingImage} />
+          <img src={SettingIcon} alt="방 설정" css={iconImage} />
         </button>
         {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
       </header>

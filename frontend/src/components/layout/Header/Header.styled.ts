@@ -26,7 +26,7 @@ export const gameTitle = css`
   font-size: 1.6rem;
 `;
 
-export const settingImage = css`
+export const iconImage = css`
   width: 1.6rem;
   height: 1.6rem;
 `;

@@ -112,3 +112,10 @@ export const applyRoomSetting = async (roomId: number, roomSetting: RoomSetting)
     body: { totalRound, timeLimit, category },
   });
 };
+
+// 방에서 나가기
+export const exitRoom = async (roomId: number, memberId: number) => {
+  await fetcher.delete({
+    url: API_URL.deleteRoom(roomId, memberId),
+  });
+};

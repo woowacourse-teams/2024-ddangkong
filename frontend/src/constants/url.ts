@@ -21,6 +21,8 @@ export const API_URL = {
   isRoomActivate: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/activate`,
   isRoomReset: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/reset`,
   applyRoomSetting: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
+  deleteRoom: (roomId: number, memberId: number) =>
+    `${BASE_URL}/api/balances/rooms/${roomId}/members/${memberId}`,
 };
 
 type API_URL_KEYS = keyof typeof API_URL;
@@ -42,4 +44,5 @@ export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
   isRoomReset: `${BASE_URL}/api/balances/rooms/:roomId/reset`,
   categoryList: `${BASE_URL}/api/balances/categories`,
   applyRoomSetting: `${BASE_URL}/api/balances/rooms/:roomId`,
+  deleteRoom: `${BASE_URL}/api/balances/rooms/:roomId/members/:memberId`,
 };
