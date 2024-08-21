@@ -14,9 +14,9 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
-  const [roomUuid, setRoomUuidState] = useRecoilState(roomUuidState);
 
-  const { roomId } = useParams();
+  const [, setRoomUuidState] = useRecoilState(roomUuidState);
+  const { roomUuid } = useParams();
 
   const createRoomMutation = useMutation<RoomIdAndMember, Error, string>({
     mutationFn: createRoom,
@@ -28,7 +28,7 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
       setRoomUuidState(data.roomUuid || '');
       navigate(ROUTES.ready(Number(data.roomId)));
     },
-    onError: (error: Error) => {
+    onError: () => {
       showModal();
     },
   });
@@ -41,9 +41,9 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
     mutationFn: ({ nickname, roomUuid }) => enterRoom(roomUuid, nickname),
     onSuccess: (data) => {
       setMemberInfo((prev) => ({ ...prev, memberId: data.member.memberId }));
-      navigate(ROUTES.ready(Number(roomId)));
+      navigate(ROUTES.ready(Number(data.roomId)));
     },
-    onError: (error: Error) => {
+    onError: () => {
       showModal();
     },
   });
@@ -53,7 +53,7 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
     if (memberInfo.isMaster) {
       createRoomMutation.mutate(nickname);
     } else {
-      enterRoomMutation.mutate({ nickname, roomUuid });
+      enterRoomMutation.mutate({ nickname, roomUuid: roomUuid || '' });
     }
   };
 

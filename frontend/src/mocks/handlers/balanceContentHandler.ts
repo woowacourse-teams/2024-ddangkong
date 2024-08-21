@@ -13,7 +13,7 @@ const fetchBalanceContentHandler = () => {
 
 const fetchIsFinishedHandler = () => {
   setTimeout(() => {
-    ROUND_VOTE_IS_FINISHED.finished = true;
+    ROUND_VOTE_IS_FINISHED.isFinished = true;
   }, 17 * 1000);
 
   return HttpResponse.json(ROUND_VOTE_IS_FINISHED);
