@@ -8,8 +8,8 @@ const INITIAL_WIDTH = 100;
 const DELAY = 1000;
 const DEFAULT_TIME_LIMIT_MSEC = 10000;
 
-const useRoundTimer = () => {
-  const { balanceContent } = useBalanceContentQuery();
+const useRoundTimer = (roomId: number) => {
+  const { balanceContent } = useBalanceContentQuery(roomId);
   const timeLimit = balanceContent?.timeLimit || DEFAULT_TIME_LIMIT_MSEC;
 
   const [leftRoundTime, setLeftRoundTime] = useState(convertMsecToSecond(timeLimit));

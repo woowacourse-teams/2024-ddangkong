@@ -11,7 +11,7 @@ import { Theme } from '@/styles/Theme';
 
 const NextRoundButton = () => {
   const { roomId } = useParams();
-  const { balanceContent } = useBalanceContentQuery();
+  const { balanceContent } = useBalanceContentQuery(Number(roomId));
   const { mutate: moveNextRound } = useMoveNextRoundMutation(Number(roomId));
   const memberInfo = useRecoilValue(memberInfoState);
   const isLastRound = balanceContent?.currentRound === balanceContent?.totalRound;
