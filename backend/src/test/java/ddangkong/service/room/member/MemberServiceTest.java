@@ -13,8 +13,10 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.member.Member;
+import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,31 +166,32 @@ class MemberServiceTest extends BaseServiceTest {
     @Nested
     class 방장_넘겨주기 {
 
+        private static final Room ROOM = Room.createNewRoom();
+        private static final Member MASTER = Member.createMaster("master", ROOM);
+        private static final Member COMMON1 = Member.createCommon("common1", ROOM);
+        private static final Member COMMON2 = Member.createCommon("common2", ROOM);
+
         @Test
-        void 방장을_임의의_일반_멤버에게_넘겨준다() {
+        void 임의의_일반_멤버에게_방장_권한을_준다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            memberRepository.save(PRIN.master(room));
-            Member common1 = memberRepository.save(KEOCHAN.common(room));
-            Member common2 = memberRepository.save(EDEN.common(room));
+            List<Member> members = List.of(MASTER, COMMON1, COMMON2);
+            RoomMembers roomMembers = new RoomMembers(members);
 
             // when
-            memberService.promoteOtherMember(room);
+            memberService.promoteOtherMember(roomMembers);
 
             // then
-            Member foundCommon1 = memberRepository.findById(common1.getId()).get();
-            Member foundCommon2 = memberRepository.findById(common2.getId()).get();
-            assertTrue(foundCommon1.isMaster() || foundCommon2.isMaster());
+            assertTrue(COMMON1.isMaster() || COMMON2.isMaster());
         }
 
         @Test
         void 해당_방에_일반_멤버가_없다면_예외를_던진다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            memberRepository.save(PRIN.master(room));
+            List<Member> members = List.of(MASTER);
+            RoomMembers roomMembers = new RoomMembers(members);
 
             // when & then
-            assertThatThrownBy(() -> memberService.promoteOtherMember(room))
+            assertThatThrownBy(() -> memberService.promoteOtherMember(roomMembers))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("방에 일반 멤버가 존재하지 않습니다.");
         }

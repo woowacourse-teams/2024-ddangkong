@@ -4,7 +4,6 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
-import ddangkong.exception.BadRequestException;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
@@ -53,7 +52,7 @@ public class RoomFacade {
     public void leaveRoom(Long roomId, Long memberId) {
         Room room = roomService.getRoom(roomId);
         RoomMembers members = memberService.findRoomMembers(room);
-        Member member = getContainedMember(members.getMembers(), memberId); // TODO 리팩토링
+        Member member = members.getMember(memberId);
 
         memberService.delete(member);
         roomBalanceVoteMigrator.migrateToTotalVote(member);
@@ -63,15 +62,8 @@ public class RoomFacade {
             return;
         }
         if (member.isMaster()) {
-            memberService.promoteOtherMember(room);
+            memberService.promoteOtherMember(members);
         }
-    }
-
-    private Member getContainedMember(List<Member> members, Long memberId) {
-        return members.stream()
-                .filter(member -> member.isSameId(memberId))
-                .findAny()
-                .orElseThrow(() -> new BadRequestException("방에 존재하지 않는 멤버입니다."));
     }
 
     @Transactional(readOnly = true)

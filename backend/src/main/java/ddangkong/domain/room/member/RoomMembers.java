@@ -40,6 +40,13 @@ public class RoomMembers {
                         .formatted(members.get(0).getRoom().getId())));
     }
 
+    public Member getAnyCommonMember() {
+        return members.stream()
+                .filter(Member::isCommon)
+                .findAny()
+                .orElseThrow(() -> new BadRequestException("방에 일반 멤버가 존재하지 않습니다."));
+    }
+
     public Member getMember(Long memberId) {
         return members.stream()
                 .filter(member -> member.getId().equals(memberId))
