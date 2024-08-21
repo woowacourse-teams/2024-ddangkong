@@ -47,5 +47,5 @@ export const voteHandler = [
   http.post(MOCK_API_URL.vote, voteBalanceContentHandler),
   http.get(MOCK_API_URL.roundVoteResult, fetchVoteResultHandler),
   http.patch(MOCK_API_URL.moveNextRound, goToNextRoundHandler),
-  http.get(MOCK_API_URL.finalResult, fetchFinalResultHandler),
+  http.get(MOCK_API_URL.matchingResult, fetchFinalResultHandler),
 ];
