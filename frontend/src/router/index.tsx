@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: 'nickname/:roomId?',
+        path: 'nickname/:roomUuid?',
         element: <NicknamePage />,
       },
       {

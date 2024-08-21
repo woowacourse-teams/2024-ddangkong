@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
@@ -45,6 +46,29 @@ const Header = ({ title }: HeaderProps) => {
   const handleClick = () => {
     exitRoomMutation.mutate({ roomId: Number(roomId), memberId: Number(memberId) });
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'F5' || (event.ctrlKey && event.key === 'r')) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      alert('페이지를 새로 고침하려고 합니다.');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Cleanup 이벤트 리스너
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   if (isReadyPage) {
     return (

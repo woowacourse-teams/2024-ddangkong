@@ -158,6 +158,10 @@ const GlobalStyle = css`
     box-sizing: border-box;
     font-family: 'Pretendard Variable', Pretendard, sans-serif;
   }
+
+  body {
+    overflow: hidden;
+  }
 `;
 
 export default GlobalStyle;
