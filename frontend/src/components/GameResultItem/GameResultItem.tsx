@@ -8,24 +8,25 @@ import {
 } from './GameResultItem.styled';
 
 import useCountAnimation from '@/hooks/useCountAnimation';
-import { GameFinalResult } from '@/types/balanceContent';
+import { MemberMatchingInfo } from '@/types/balanceContent';
 
 interface GameResultItemProps {
-  gameFinalResult: GameFinalResult;
+  memberMatchingInfo: MemberMatchingInfo;
 }
-const GameResultItem = ({ gameFinalResult }: GameResultItemProps) => {
+
+const GameResultItem = ({ memberMatchingInfo }: GameResultItemProps) => {
   const animatedRankPercent = useCountAnimation({
-    target: gameFinalResult.percent,
+    target: memberMatchingInfo.matchingPercent,
     duration: 3000,
   });
 
   return (
     <li css={rankItem}>
       <div css={rankInfoContainer}>
-        <span css={rankNumber}>{gameFinalResult.rank}</span>
+        <span css={rankNumber}>{memberMatchingInfo.rank}</span>
         <div css={nicknameContainer(animatedRankPercent)}>
           <span>🥜</span>
-          <span css={nickname}>{gameFinalResult.name}</span>
+          <span css={nickname}>{memberMatchingInfo.nickname}</span>
         </div>
       </div>
       <span css={rankPercent}>{animatedRankPercent}%</span>

@@ -1,24 +1,31 @@
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
-import { fetchFinalGameResult } from '@/apis/balanceContent';
+import { fetchMatchingResult } from '@/apis/balanceContent';
 import { resetRoom } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import { GameFinalResult } from '@/types/balanceContent';
+import { memberInfoState } from '@/recoil/atom';
 
-type GameResultQueryResponse = UseQueryResult<GameFinalResult[], Error> & {
-  gameResult?: GameFinalResult[];
-};
-
-export const useGameResultQuery = (): GameResultQueryResponse => {
+export const useMatchingResultQuery = () => {
   const { roomId } = useParams();
+  const memberInfo = useRecoilValue(memberInfoState);
 
-  const gameResultQuery = useQuery({
-    queryKey: [QUERY_KEYS.gameResult, roomId],
-    queryFn: async () => await fetchFinalGameResult(Number(roomId)),
+  const matchingResultQuery = useQuery({
+    queryKey: [QUERY_KEYS.matchingResult, roomId, memberInfo.memberId],
+    queryFn: async () => {
+      if (!memberInfo.memberId) {
+        throw new Error('Member ID is required');
+      }
+      return await fetchMatchingResult({ roomId: Number(roomId), memberId: memberInfo.memberId });
+    },
   });
 
-  return { ...gameResultQuery, gameResult: gameResultQuery.data };
+  return {
+    ...matchingResultQuery,
+    matchedMembers: matchingResultQuery.data?.matchedMembers,
+    existMatching: matchingResultQuery.data?.existMatching,
+  };
 };
 
 export const useResetRoomMutation = (roomId: number) => {

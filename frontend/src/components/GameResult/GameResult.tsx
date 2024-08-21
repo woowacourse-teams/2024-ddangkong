@@ -1,19 +1,25 @@
-import { useGameResultQuery } from './GameResult.hook';
+import { useMatchingResultQuery } from './GameResult.hook';
 import { gameResultTitle, gameResultLayout, rankListContainer } from './GameResult.styled';
 import FinalButton from '../common/FinalButton/FinalButton';
 import GameResultItem from '../GameResultItem/GameResultItem';
 
 const GameResult = () => {
-  const { gameResult } = useGameResultQuery();
-
+  const { matchedMembers, existMatching, isLoading } = useMatchingResultQuery();
   return (
     <>
       <div css={gameResultLayout}>
         <h1 css={gameResultTitle}>게임 결과</h1>
-        <ol css={rankListContainer}>
-          {gameResult &&
-            gameResult.map((item) => <GameResultItem key={item.rank} gameFinalResult={item} />)}
-        </ol>
+        {existMatching && (
+          <ol css={rankListContainer}>
+            {matchedMembers &&
+              matchedMembers.map((memberMatchingInfo) => (
+                <GameResultItem
+                  key={memberMatchingInfo.rank}
+                  memberMatchingInfo={memberMatchingInfo}
+                />
+              ))}
+          </ol>
+        )}
       </div>
       <FinalButton />
     </>
