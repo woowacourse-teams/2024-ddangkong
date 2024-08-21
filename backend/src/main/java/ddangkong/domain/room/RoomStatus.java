@@ -17,4 +17,8 @@ public enum RoomStatus {
     public boolean isGameFinish() {
         return this == FINISH;
     }
+
+    public boolean isGameReady() {
+        return this == READY;
+    }
 }

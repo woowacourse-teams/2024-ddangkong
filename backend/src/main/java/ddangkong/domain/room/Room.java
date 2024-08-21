@@ -118,6 +118,10 @@ public class Room {
         this.status = RoomStatus.READY;
     }
 
+    public boolean isResetRoom() {
+        return status.isGameReady() && currentRound == START_ROUND;
+    }
+
     public boolean isFull(long memberCountInRoom) {
         return memberCountInRoom == MAX_MEMBER_COUNT;
     }

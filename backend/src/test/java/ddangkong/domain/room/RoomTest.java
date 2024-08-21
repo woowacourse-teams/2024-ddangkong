@@ -227,17 +227,15 @@ class RoomTest {
 
     @Nested
     class 방_초기화 {
-        private static final int TOTAL_ROUND = 5;
-        private static final int TIME_LIMIT = 10_000;
-        private static final Category CATEGORY = Category.IF;
+
+        private static final RoomSetting ROOM_SETTING = new RoomSetting(5, 10_000, Category.IF);
 
         @Test
         void 방을_초기_상태로_초기화한다() {
             // given
             int currentRound = 5;
             RoomStatus status = RoomStatus.FINISH;
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = new Room("uuid", currentRound, status, roomSetting);
+            Room room = new Room("uuid", currentRound, status, ROOM_SETTING);
 
             // when
             room.reset();
@@ -253,8 +251,7 @@ class RoomTest {
         void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
             // given
             int invalidCurrentRound = 4;
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = new Room("uuid", invalidCurrentRound, RoomStatus.FINISH, roomSetting);
+            Room room = new Room("uuid", invalidCurrentRound, RoomStatus.FINISH, ROOM_SETTING);
 
             // when & then
             assertThatThrownBy(room::reset)
@@ -266,13 +263,52 @@ class RoomTest {
         @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
         void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
             // given
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = new Room("uuid", 5, status, roomSetting);
+            Room room = new Room("uuid", 5, status, ROOM_SETTING);
 
             // when & then
             assertThatThrownBy(room::reset)
                     .isExactlyInstanceOf(BadRequestException.class)
                     .hasMessageContaining("방이 종료되지 않았습니다");
+        }
+
+        @Test
+        void 방_상태가_READY이고_현재_라운드가_시작_라운드와_같을_경우_초기화된_방이다() {
+            // given
+            int currentRound = 1;
+            RoomStatus status = RoomStatus.READY;
+            Room room = new Room("uuid", currentRound, status, ROOM_SETTING);
+
+            // when
+            boolean isResetRoom = room.isResetRoom();
+
+            // then
+            assertThat(isResetRoom).isTrue();
+        }
+
+        @ParameterizedTest
+        @EnumSource(mode = Mode.EXCLUDE, names = {"READY"})
+        void 방_상태가_READY가_아닐_경우_초기화된_방이_아니다(RoomStatus status) {
+            // given
+            Room room = new Room("uuid", 1, status, ROOM_SETTING);
+
+            // when
+            boolean isResetRoom = room.isResetRoom();
+
+            // then
+            assertThat(isResetRoom).isFalse();
+        }
+
+        @Test
+        void 현재_라운드가_시작_라운드와_다를_경우_초기화된_방이_아니다() {
+            // given
+            int currentRound = 2;
+            Room room = new Room("uuid", currentRound, RoomStatus.READY, ROOM_SETTING);
+
+            // when
+            boolean isResetRoom = room.isResetRoom();
+
+            // then
+            assertThat(isResetRoom).isFalse();
         }
     }
 }
