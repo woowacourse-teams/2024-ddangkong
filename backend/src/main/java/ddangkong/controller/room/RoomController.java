@@ -57,7 +57,7 @@ public class RoomController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/balances/rooms/{roomId}/member/{memberId}")
+    @DeleteMapping("/balances/rooms/{roomId}/members/{memberId}")
     public void leaveRoom(@PathVariable @Positive Long roomId,
                           @PathVariable @Positive Long memberId) {
         roomFacade.leaveRoom(roomId, memberId);

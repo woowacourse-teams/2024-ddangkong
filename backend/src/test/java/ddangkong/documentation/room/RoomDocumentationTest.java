@@ -203,7 +203,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 방_나가기 {
 
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/member/{memberId}";
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members/{memberId}";
 
         @Test
         void 방에서_나간다() throws Exception {

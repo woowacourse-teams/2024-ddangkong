@@ -162,7 +162,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .contentType(ContentType.JSON)
                     .pathParam("roomId", roomId)
                     .pathParam("memberId", memberId)
-                    .when().delete("/api/balances/rooms/{roomId}/member/{memberId}")
+                    .when().delete("/api/balances/rooms/{roomId}/members/{memberId}")
                     .then().log().all()
                     .statusCode(204);
         }
@@ -178,7 +178,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .contentType(ContentType.JSON)
                     .pathParam("roomId", roomId)
                     .pathParam("memberId", memberId)
-                    .when().delete("/api/balances/rooms/{roomId}/member/{memberId}")
+                    .when().delete("/api/balances/rooms/{roomId}/members/{memberId}")
                     .then().log().all()
                     .statusCode(400);
         }
@@ -194,7 +194,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .contentType(ContentType.JSON)
                     .pathParam("roomId", roomId)
                     .pathParam("memberId", memberId)
-                    .when().delete("/api/balances/rooms/{roomId}/member/{memberId}")
+                    .when().delete("/api/balances/rooms/{roomId}/members/{memberId}")
                     .then().log().all()
                     .statusCode(400);
         }
