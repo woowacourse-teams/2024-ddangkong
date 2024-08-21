@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoomBalanceVoteRepository extends JpaRepository<RoomBalanceVote, Long> {
 
-    List<RoomBalanceVote> findByMemberRoomAndBalanceOption(Room room, BalanceOption balanceOption);
+    List<RoomBalanceVote> findByMemberInAndBalanceOption(List<Member> members, BalanceOption balanceOption);
 
     long countByMemberInAndBalanceOptionIn(List<Member> members, List<BalanceOption> balanceOptions);
 

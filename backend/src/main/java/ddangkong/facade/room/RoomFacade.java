@@ -3,6 +3,7 @@ package ddangkong.facade.room;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
+import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -51,8 +52,8 @@ public class RoomFacade {
     @Transactional
     public void leaveRoom(Long roomId, Long memberId) {
         Room room = roomService.getRoom(roomId);
-        List<Member> members = memberService.findRoomMembers(room);
-        Member member = getContainedMember(members, memberId);
+        RoomMembers members = memberService.findRoomMembers(room);
+        Member member = getContainedMember(members.getMembers(), memberId); // TODO 리팩토링
 
         memberService.delete(member);
         roomBalanceVoteMigrator.migrateToTotalVote(member);
@@ -76,8 +77,8 @@ public class RoomFacade {
     @Transactional(readOnly = true)
     public RoomInfoResponse getRoomInfo(Long roomId) {
         Room room = roomService.getRoom(roomId);
-        List<Member> members = memberService.findRoomMembers(room);
-        return RoomInfoResponse.create(members, room);
+        RoomMembers roomMembers = memberService.findRoomMembers(room);
+        return RoomInfoResponse.create(roomMembers, room);
     }
 
     @Transactional
@@ -104,7 +105,8 @@ public class RoomFacade {
     @Transactional(readOnly = true)
     public RoundFinishedResponse getRoundFinished(Long roomId, int round) {
         Room room = roomService.getRoom(roomId);
-        return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished());
+        Member master = memberService.getMaster(room);
+        return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished(), master);
     }
 
     @Transactional

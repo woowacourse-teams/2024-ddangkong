@@ -3,6 +3,7 @@ package ddangkong.service.room.member;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.MemberRepository;
+import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.BadRequestException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -57,8 +58,9 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<Member> findRoomMembers(Room room) {
-        return memberRepository.findAllByRoom(room);
+    public RoomMembers findRoomMembers(Room room) {
+        List<Member> members = memberRepository.findAllByRoom(room);
+        return new RoomMembers(members);
     }
 
     @Transactional(readOnly = true)
@@ -81,7 +83,12 @@ public class MemberService {
 
     @Transactional
     public void deleteMember(Room room) {
-        List<Member> members = findRoomMembers(room);
-        memberRepository.deleteAllInBatch(members);
+        RoomMembers members = findRoomMembers(room);
+        memberRepository.deleteAllInBatch(members.getMembers());
+    }
+
+    @Transactional(readOnly = true)
+    public Member getMaster(Room room) {
+        return findRoomMembers(room).getMaster();
     }
 }

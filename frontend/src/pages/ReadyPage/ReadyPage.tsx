@@ -7,12 +7,12 @@ import Button from '@/components/common/Button/Button';
 import ReadyMembersContainer from '@/components/ReadyMembersContainer/ReadyMembersContainer';
 
 const ReadyPage = () => {
-  const { members, isLoading, isError } = useGetRoomInfo();
+  const { members, roomSetting, isLoading, isError } = useGetRoomInfo();
   const { isMaster, handleGameStart } = useGameStart();
 
   return (
     <div css={readyPageLayout}>
-      <CategoryContainer category="연애" />
+      <CategoryContainer category={roomSetting?.category} />
       {isError && <div>에러 발생</div>}
       {isLoading && <div>로딩중.......</div>}
       {members && <ReadyMembersContainer members={members} />}

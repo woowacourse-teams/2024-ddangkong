@@ -43,7 +43,7 @@ public class RoomContentService {
 
     private void startRound(RoomContent roomContent, int timeLimit) {
         LocalDateTime now = LocalDateTime.now(clock);
-        roomContent.updateRoundEndedAt(now, timeLimit);
+        roomContent.updateVoteDeadline(now, timeLimit);
     }
 
     @Transactional
@@ -66,10 +66,10 @@ public class RoomContentService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isRoundFinished(Room room, BalanceContent balanceContent) {
+    public boolean isOverVoteDeadline(Room room, BalanceContent balanceContent) {
         RoomContent roomContent = roomContentRepository.findByRoomAndBalanceContent(room, balanceContent)
                 .orElseThrow(() -> new BadRequestException("방에 존재하지 않는 컨텐츠입니다."));
         LocalDateTime now = LocalDateTime.now(clock);
-        return roomContent.isRoundOver(now, room.getCurrentRound());
+        return roomContent.isOverVoteDeadline(now, room.getCurrentRound());
     }
 }
