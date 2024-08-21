@@ -93,7 +93,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
                     .extract().as(RoomStatusResponse.class);
-            assertThat(actual.isReady()).isTrue();
+            assertThat(actual.isJoinable()).isTrue();
         }
 
         @Test
@@ -105,7 +105,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
                     .extract().as(RoomStatusResponse.class);
-            assertThat(actual.isReady()).isFalse();
+            assertThat(actual.isJoinable()).isFalse();
         }
 
         @Test
@@ -117,7 +117,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
                     .extract().as(RoomStatusResponse.class);
-            assertThat(actual.isReady()).isFalse();
+            assertThat(actual.isJoinable()).isFalse();
         }
     }
 

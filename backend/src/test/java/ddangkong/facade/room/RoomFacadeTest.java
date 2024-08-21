@@ -456,7 +456,7 @@ class RoomFacadeTest extends BaseServiceTest {
             RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
 
             // then
-            assertThat(actual.isReady()).isTrue();
+            assertThat(actual.isJoinable()).isTrue();
         }
 
         @Test
@@ -471,7 +471,7 @@ class RoomFacadeTest extends BaseServiceTest {
             RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
 
             // then
-            assertThat(actual.isReady()).isFalse();
+            assertThat(actual.isJoinable()).isFalse();
         }
 
         @Test
@@ -486,7 +486,7 @@ class RoomFacadeTest extends BaseServiceTest {
             RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
 
             // then
-            assertThat(actual.isReady()).isFalse();
+            assertThat(actual.isJoinable()).isFalse();
         }
 
         @Test

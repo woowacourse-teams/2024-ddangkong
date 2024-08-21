@@ -295,7 +295,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     parameterWithName("uuid").description("방의 UUID")
                             ),
                             responseFields(
-                                    fieldWithPath("isReady").description("게임 상태가 READY인지 여부")
+                                    fieldWithPath("isJoinable").description("방에 참가 가능 여부")
                             )
                     ));
         }
