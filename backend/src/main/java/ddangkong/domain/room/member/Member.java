@@ -59,6 +59,10 @@ public class Member {
         return Objects.equals(this.id, id);
     }
 
+    public boolean isCommon() {
+        return !isMaster();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
