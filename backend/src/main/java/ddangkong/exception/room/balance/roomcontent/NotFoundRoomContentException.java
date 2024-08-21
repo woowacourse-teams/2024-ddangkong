@@ -1,6 +1,6 @@
 package ddangkong.exception.room.balance.roomcontent;
 
-import static ddangkong.exception.ErrorCode.NOT_FOUND_ROOM_CONTENT;
+import static ddangkong.exception.ClientErrorCode.NOT_FOUND_ROOM_CONTENT;
 
 import ddangkong.exception.BadRequestException;
 

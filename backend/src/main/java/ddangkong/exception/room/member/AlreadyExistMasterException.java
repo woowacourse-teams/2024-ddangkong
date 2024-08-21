@@ -1,6 +1,6 @@
 package ddangkong.exception.room.member;
 
-import static ddangkong.exception.ErrorCode.ALREADY_EXIST_MASTER;
+import static ddangkong.exception.ClientErrorCode.ALREADY_EXIST_MASTER;
 
 import ddangkong.exception.BadRequestException;
 

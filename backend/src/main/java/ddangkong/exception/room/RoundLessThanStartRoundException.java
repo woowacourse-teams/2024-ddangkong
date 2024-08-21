@@ -1,6 +1,6 @@
 package ddangkong.exception.room;
 
-import static ddangkong.exception.ErrorCode.ROUND_LESS_THAN_START_ROUND;
+import static ddangkong.exception.ClientErrorCode.ROUND_LESS_THAN_START_ROUND;
 
 import ddangkong.exception.BadRequestException;
 

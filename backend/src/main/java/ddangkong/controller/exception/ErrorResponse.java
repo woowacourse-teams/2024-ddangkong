@@ -4,7 +4,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import ddangkong.exception.BadRequestException;
-import ddangkong.exception.ErrorCode;
+import ddangkong.exception.ClientErrorCode;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Path;
 import java.util.List;
@@ -24,19 +24,19 @@ public record ErrorResponse(
         this(e.getErrorCode(), e.getMessage(), null, null);
     }
 
-    public ErrorResponse(ErrorCode errorCode) {
+    public ErrorResponse(ClientErrorCode errorCode) {
         this(errorCode, null, null);
     }
 
-    public ErrorResponse(ErrorCode errorCode, BindingResult bindingResult) {
+    public ErrorResponse(ClientErrorCode errorCode, BindingResult bindingResult) {
         this(errorCode, FieldError.from(bindingResult), null);
     }
 
-    public ErrorResponse(ErrorCode errorCode, Set<ConstraintViolation<?>> constraintViolations) {
+    public ErrorResponse(ClientErrorCode errorCode, Set<ConstraintViolation<?>> constraintViolations) {
         this(errorCode, null, ConstraintViolationError.from(constraintViolations));
     }
 
-    private ErrorResponse(ErrorCode errorCode,
+    private ErrorResponse(ClientErrorCode errorCode,
                           List<FieldError> fieldErrors,
                           List<ConstraintViolationError> violationErrors) {
         this(errorCode.name(), errorCode.getMessage(), fieldErrors, violationErrors);

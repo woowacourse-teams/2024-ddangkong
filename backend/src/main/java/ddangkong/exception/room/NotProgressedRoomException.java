@@ -1,6 +1,6 @@
 package ddangkong.exception.room;
 
-import static ddangkong.exception.ErrorCode.NOT_PROGRESSED_ROOM;
+import static ddangkong.exception.ClientErrorCode.NOT_PROGRESSED_ROOM;
 
 import ddangkong.exception.BadRequestException;
 

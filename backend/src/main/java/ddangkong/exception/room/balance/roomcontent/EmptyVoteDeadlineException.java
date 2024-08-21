@@ -1,6 +1,6 @@
 package ddangkong.exception.room.balance.roomcontent;
 
-import static ddangkong.exception.ErrorCode.EMPTY_VOTE_DEADLINE;
+import static ddangkong.exception.ClientErrorCode.EMPTY_VOTE_DEADLINE;
 
 import ddangkong.exception.BadRequestException;
 

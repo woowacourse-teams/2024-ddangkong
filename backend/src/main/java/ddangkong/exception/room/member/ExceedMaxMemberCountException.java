@@ -1,6 +1,6 @@
 package ddangkong.exception.room.member;
 
-import static ddangkong.exception.ErrorCode.EXCEED_MAX_MEMBER_COUNT;
+import static ddangkong.exception.ClientErrorCode.EXCEED_MAX_MEMBER_COUNT;
 
 import ddangkong.exception.BadRequestException;
 

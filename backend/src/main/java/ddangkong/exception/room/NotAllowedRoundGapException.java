@@ -1,6 +1,6 @@
 package ddangkong.exception.room;
 
-import static ddangkong.exception.ErrorCode.NOT_ALLOWED_ROUND_GAP;
+import static ddangkong.exception.ClientErrorCode.NOT_ALLOWED_ROUND_GAP;
 
 import ddangkong.exception.BadRequestException;
 

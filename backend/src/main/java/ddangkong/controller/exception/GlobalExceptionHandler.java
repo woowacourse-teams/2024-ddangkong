@@ -1,7 +1,7 @@
 package ddangkong.controller.exception;
 
 import ddangkong.exception.BadRequestException;
-import ddangkong.exception.ErrorCode;
+import ddangkong.exception.ClientErrorCode;
 import ddangkong.exception.InternalServerException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleBindingException(BindException e) {
         log.warn(e.getMessage());
 
-        return new ErrorResponse(ErrorCode.FIELD_ERROR, e.getBindingResult());
+        return new ErrorResponse(ClientErrorCode.FIELD_ERROR, e.getBindingResult());
     }
 
     @ExceptionHandler
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleConstraintViolationException(ConstraintViolationException e) {
         log.warn(e.getMessage());
 
-        return new ErrorResponse(ErrorCode.URL_PARAMETER_ERROR, e.getConstraintViolations());
+        return new ErrorResponse(ClientErrorCode.URL_PARAMETER_ERROR, e.getConstraintViolations());
     }
 
     @ExceptionHandler
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         log.warn(e.getMessage());
 
-        return new ErrorResponse(ErrorCode.METHOD_ARGUMENT_TYPE_MISMATCH);
+        return new ErrorResponse(ClientErrorCode.METHOD_ARGUMENT_TYPE_MISMATCH);
     }
 
     @ExceptionHandler
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleNoResourceFoundException(NoResourceFoundException e) {
         log.warn(e.getMessage());
 
-        return new ErrorResponse(ErrorCode.NO_RESOURCE_FOUND);
+        return new ErrorResponse(ClientErrorCode.NO_RESOURCE_FOUND);
     }
 
     @ExceptionHandler
@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleMethodNotAllowedException(HttpRequestMethodNotSupportedException e) {
         log.warn(e.getMessage());
 
-        return new ErrorResponse(ErrorCode.METHOD_NOT_ALLOWED);
+        return new ErrorResponse(ClientErrorCode.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler
@@ -71,7 +71,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleInternalServerErrorException(InternalServerException e) {
         log.error(e.getMessage(), e);
 
-        return new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR);
+        return new ErrorResponse(ClientErrorCode.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler
@@ -79,6 +79,6 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleException(Exception e) {
         log.error(e.getMessage(), e);
 
-        return new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR);
+        return new ErrorResponse(ClientErrorCode.INTERNAL_SERVER_ERROR);
     }
 }

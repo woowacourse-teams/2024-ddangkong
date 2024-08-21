@@ -1,6 +1,6 @@
 package ddangkong.exception.room.balance.roomcontent;
 
-import static ddangkong.exception.ErrorCode.VOTE_DEADLINE_CONFIGURED;
+import static ddangkong.exception.ServerErrorCode.VOTE_DEADLINE_CONFIGURED;
 
 import ddangkong.exception.InternalServerException;
 

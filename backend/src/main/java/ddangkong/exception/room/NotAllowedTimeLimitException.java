@@ -1,6 +1,6 @@
 package ddangkong.exception.room;
 
-import static ddangkong.exception.ErrorCode.NOT_ALLOWED_TIME_LIMIT;
+import static ddangkong.exception.ClientErrorCode.NOT_ALLOWED_TIME_LIMIT;
 
 import ddangkong.exception.BadRequestException;
 import java.util.List;

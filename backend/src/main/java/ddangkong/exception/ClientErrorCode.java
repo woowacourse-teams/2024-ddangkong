@@ -5,14 +5,12 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ErrorCode {
+public enum ClientErrorCode {
 
     // BalanceContent
     NOT_FOUND_BALANCE_CONTENT("존재하지 않는 컨텐츠입니다."),
-    NOT_ENOUGH_BALANCE_CONTENT("질문 수가 부족합니다. category: %s"),
 
     // BalanceOption
-    INVALID_BALANCE_OPTION_COUNT("밸런스 컨텐츠의 옵션이 %d개입니다."),
     NOT_FOUND_BALANCE_OPTION("해당 옵션이 존재하지 않습니다."),
 
     // Room
@@ -33,14 +31,11 @@ public enum ErrorCode {
     ALREADY_EXIST_MASTER("이미 방장이 존재합니다."),
     INVALID_MASTER_CREATION("방에 멤버가 존재하면 방장을 생성할 수 없습니다. 현재 멤버 수: %d"),
     NOT_EXIST_MASTER("방장이 존재하지 않습니다."),
-    NOT_ALLOWED_MASTER_COUNT("방장이 %d명이 아닙니다. 현재 방장 수: %d, roomId: %d"),
     EXCEED_MAX_MEMBER_COUNT("방의 최대 인원을 초과했습니다. 현재 멤버 수: %d"),
     NOT_ROOM_MEMBER("방에 존재하지 않는 멤버입니다."),
 
     // RoomContent
-    NOT_FOUND_CURRENT_ROUND_ROOM_CONTENT("해당 방의 현재 라운드의 컨텐츠가 존재하지 않습니다. currentRound: %d"),
     NOT_FOUND_ROOM_CONTENT("방에 존재하지 않는 컨텐츠입니다."),
-    VOTE_DEADLINE_CONFIGURED("해당 라운드의 투표 마감 시간은 이미 설정되었습니다."),
     MISMATCH_ROUND("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : %d, 방 라운드 : %d"),
     EMPTY_VOTE_DEADLINE("라운드 종료 시간이 설정되지 않았습니다."),
 

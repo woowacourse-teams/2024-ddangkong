@@ -1,6 +1,6 @@
 package ddangkong.exception.room;
 
-import static ddangkong.exception.ErrorCode.NOT_FINISHED_ROOM;
+import static ddangkong.exception.ClientErrorCode.NOT_FINISHED_ROOM;
 
 import ddangkong.exception.BadRequestException;
 

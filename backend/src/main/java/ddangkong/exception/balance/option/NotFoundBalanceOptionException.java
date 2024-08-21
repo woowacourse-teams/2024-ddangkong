@@ -1,6 +1,6 @@
 package ddangkong.exception.balance.option;
 
-import static ddangkong.exception.ErrorCode.NOT_FOUND_BALANCE_OPTION;
+import static ddangkong.exception.ClientErrorCode.NOT_FOUND_BALANCE_OPTION;
 
 import ddangkong.exception.BadRequestException;
 

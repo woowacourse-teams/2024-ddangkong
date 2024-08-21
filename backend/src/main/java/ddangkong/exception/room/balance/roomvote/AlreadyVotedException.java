@@ -1,6 +1,6 @@
 package ddangkong.exception.room.balance.roomvote;
 
-import static ddangkong.exception.ErrorCode.ALREADY_VOTED;
+import static ddangkong.exception.ClientErrorCode.ALREADY_VOTED;
 
 import ddangkong.exception.BadRequestException;
 

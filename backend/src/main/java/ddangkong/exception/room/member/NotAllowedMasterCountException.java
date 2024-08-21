@@ -1,6 +1,6 @@
 package ddangkong.exception.room.member;
 
-import static ddangkong.exception.ErrorCode.NOT_ALLOWED_MASTER_COUNT;
+import static ddangkong.exception.ServerErrorCode.NOT_ALLOWED_MASTER_COUNT;
 
 import ddangkong.exception.InternalServerException;
 

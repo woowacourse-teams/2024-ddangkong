@@ -1,6 +1,6 @@
 package ddangkong.exception.room.member;
 
-import static ddangkong.exception.ErrorCode.NOT_ROOM_MEMBER;
+import static ddangkong.exception.ClientErrorCode.NOT_ROOM_MEMBER;
 
 import ddangkong.exception.BadRequestException;
 

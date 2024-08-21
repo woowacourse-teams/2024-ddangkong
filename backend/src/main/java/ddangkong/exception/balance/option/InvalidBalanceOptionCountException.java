@@ -1,6 +1,6 @@
 package ddangkong.exception.balance.option;
 
-import static ddangkong.exception.ErrorCode.INVALID_BALANCE_OPTION_COUNT;
+import static ddangkong.exception.ServerErrorCode.INVALID_BALANCE_OPTION_COUNT;
 
 import ddangkong.exception.InternalServerException;
 

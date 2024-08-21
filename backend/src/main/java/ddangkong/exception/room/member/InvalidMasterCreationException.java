@@ -1,6 +1,6 @@
 package ddangkong.exception.room.member;
 
-import static ddangkong.exception.ErrorCode.INVALID_MASTER_CREATION;
+import static ddangkong.exception.ClientErrorCode.INVALID_MASTER_CREATION;
 
 import ddangkong.exception.BadRequestException;
 

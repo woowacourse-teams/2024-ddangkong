@@ -1,6 +1,6 @@
 package ddangkong.exception.room;
 
-import static ddangkong.exception.ErrorCode.INVALID_RANGE_TOTAL_ROUND;
+import static ddangkong.exception.ClientErrorCode.INVALID_RANGE_TOTAL_ROUND;
 
 import ddangkong.exception.BadRequestException;
 

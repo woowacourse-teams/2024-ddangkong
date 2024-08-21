@@ -1,6 +1,6 @@
 package ddangkong.exception.balance.content;
 
-import static ddangkong.exception.ErrorCode.NOT_FOUND_BALANCE_CONTENT;
+import static ddangkong.exception.ClientErrorCode.NOT_FOUND_BALANCE_CONTENT;
 
 import ddangkong.exception.BadRequestException;
 

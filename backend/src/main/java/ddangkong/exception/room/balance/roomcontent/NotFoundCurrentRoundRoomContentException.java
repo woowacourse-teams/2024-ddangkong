@@ -1,6 +1,6 @@
 package ddangkong.exception.room.balance.roomcontent;
 
-import static ddangkong.exception.ErrorCode.NOT_FOUND_CURRENT_ROUND_ROOM_CONTENT;
+import static ddangkong.exception.ServerErrorCode.NOT_FOUND_CURRENT_ROUND_ROOM_CONTENT;
 
 import ddangkong.exception.InternalServerException;
 
