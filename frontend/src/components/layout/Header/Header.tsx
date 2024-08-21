@@ -1,18 +1,15 @@
-import { useMutation } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 
-import { emptyBox, gameTitle, headerLayout, roundText, iconImage } from './Header.styled';
+import { gameTitle, headerLayout, roundText, iconImage } from './Header.styled';
+import { useBlockRefresh } from './hooks/useBlockRefresh';
+import { useExit } from './hooks/useExit';
 
-import { exitRoom } from '@/apis/room';
 import GoOutIcon from '@/assets/images/goOutIcon.png';
 import SettingIcon from '@/assets/images/settingsIcon.svg';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useModal from '@/hooks/useModal';
-import { memberInfoState } from '@/recoil/atom';
 
 interface HeaderProps {
   title: string;
@@ -32,48 +29,14 @@ const Header = ({ title }: HeaderProps) => {
   const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
   const isFinalPage = location.pathname === ROUTES.gameResult(Number(roomId));
   const isNicknamePage = location.pathname.startsWith(ROUTES.nickname);
+  const { handleExit } = useExit();
 
-  const { memberId } = useRecoilValue(memberInfoState);
-  const navigate = useNavigate();
-
-  const exitRoomMutation = useMutation<void, Error, { roomId: number; memberId: number }>({
-    mutationFn: ({ roomId, memberId }) => exitRoom(roomId, memberId),
-    onSuccess: () => {
-      navigate('/');
-    },
-  });
-
-  const handleClick = () => {
-    exitRoomMutation.mutate({ roomId: Number(roomId), memberId: Number(memberId) });
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'F5' || (event.ctrlKey && event.key === 'r')) {
-        event.preventDefault();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      alert('페이지를 새로 고침하려고 합니다.');
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    // Cleanup 이벤트 리스너
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
+  useBlockRefresh();
 
   if (isReadyPage) {
     return (
       <header css={headerLayout}>
-        <button onClick={handleClick}>
+        <button onClick={handleExit}>
           <img src={GoOutIcon} alt="방 나가기" css={iconImage} />
         </button>
         <span css={gameTitle}>밸런스 게임</span>
