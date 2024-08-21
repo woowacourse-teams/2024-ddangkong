@@ -1,6 +1,8 @@
 import { http, HttpResponse } from 'msw';
 
 import CATEGORY_LIST from '../data/categoryList.json';
+import CREATE_ROOM_RESPONSE from '../data/createRoomResponse.json';
+import ENTER_ROOM_RESPONSE from '../data/enterRoomResponse.json';
 import MASTER_AND_RESET from '../data/masterAndReset.json';
 import ROOM_INFO from '../data/roomInfo.json';
 
@@ -44,8 +46,18 @@ const deleteRoomHandler = () => {
   return HttpResponse.json(undefined, { status: 204 });
 };
 
+const createRoomHandler = () => {
+  return HttpResponse.json(CREATE_ROOM_RESPONSE, { status: 201 });
+};
+
+const enterRoomHandler = () => {
+  return HttpResponse.json(ENTER_ROOM_RESPONSE, { status: 201 });
+};
+
 export const roomHandler = [
   http.get(MOCK_API_URL.getRoomInfo, getRoomInfoHandler),
+  http.post(MOCK_API_URL.room, createRoomHandler),
+  http.post(MOCK_API_URL.enterRoom, enterRoomHandler),
   http.patch(MOCK_API_URL.startGame, startGameHandler),
   http.get(MOCK_API_URL.resetRoom, checkResetRoomHandler),
   http.patch(MOCK_API_URL.resetRoom, resetRoomHandler),
