@@ -2,7 +2,7 @@ package ddangkong.domain.room;
 
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.room.InvalidRangeTotalRoundException;
-import ddangkong.exception.room.NotAllowedTimeLimitException;
+import ddangkong.exception.room.InvalidTimeLimitException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -56,7 +56,7 @@ public class RoomSetting {
 
     private void validateTimeLimit(int timeLimit) {
         if (!ALLOWED_TIME_LIMIT.contains(timeLimit)) {
-            throw new NotAllowedTimeLimitException(ALLOWED_TIME_LIMIT, timeLimit);
+            throw new InvalidTimeLimitException(ALLOWED_TIME_LIMIT, timeLimit);
         }
     }
 

@@ -14,7 +14,7 @@ public enum ServerErrorCode {
     INVALID_BALANCE_OPTION_COUNT("밸런스 컨텐츠의 옵션이 %d개입니다."),
 
     // Member
-    NOT_ALLOWED_MASTER_COUNT("방장이 %d명이 아닙니다. 현재 방장 수: %d, roomId: %d"),
+    INVALID_MASTER_COUNT("방장이 %d명이 아닙니다. 현재 방장 수: %d, roomId: %d"),
 
     // RoomContent
     NOT_FOUND_CURRENT_ROUND_ROOM_CONTENT("해당 방의 현재 라운드의 컨텐츠가 존재하지 않습니다. currentRound: %d"),

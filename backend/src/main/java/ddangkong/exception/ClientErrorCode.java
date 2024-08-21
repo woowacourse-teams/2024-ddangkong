@@ -20,11 +20,11 @@ public enum ClientErrorCode {
     NOT_FOUND_ROOM("방이 존재하지 않습니다."),
     ROUND_LESS_THAN_START_ROUND("startRound보다 크거나 같아야 합니다. startRound : %d, round : %d"),
     ROUND_GREATER_THAN_CURRENT_ROUND("currentRound보다 작거나 같아야 합니다. currentRound : %d, round : %d"),
-    NOT_ALLOWED_ROUND_GAP("currentRound과 round의 차이는 %d이하여야 합니다. currentRound : %d, round : %d"),
+    INVALID_ROUND_GAP("currentRound과 round의 차이는 %d이하여야 합니다. currentRound : %d, round : %d"),
 
     // RoomSetting
     // todo s로 변경
-    NOT_ALLOWED_TIME_LIMIT("시간 제한은 %dms / %dms / %dms 만 가능합니다. requested timeLimit: %d"),
+    INVALID_TIME_LIMIT("시간 제한은 %dms / %dms / %dms 만 가능합니다. requested timeLimit: %d"),
     INVALID_RANGE_TOTAL_ROUND("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"),
 
     // Member
@@ -49,7 +49,7 @@ public enum ClientErrorCode {
     URL_PARAMETER_ERROR("입력이 잘못되었습니다."),
     METHOD_ARGUMENT_TYPE_MISMATCH("입력한 값의 타입이 잘못되었습니다."),
     NO_RESOURCE_FOUND("요청한 리소스를 찾을 수 없습니다."),
-    METHOD_NOT_ALLOWED("허용되지 않은 메서드입니다."),
+    METHOD_NOT_SUPPORTED("허용되지 않은 메서드입니다."),
     INTERNAL_SERVER_ERROR("서버 오류가 발생했습니다. 관리자에게 문의하세요."),
     ;
 

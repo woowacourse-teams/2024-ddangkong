@@ -1,7 +1,7 @@
 package ddangkong.domain.room;
 
 import ddangkong.domain.balance.content.Category;
-import ddangkong.exception.room.NotAllowedRoundGapException;
+import ddangkong.exception.room.InvalidRoundGapException;
 import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.exception.room.NotProgressedRoomException;
 import ddangkong.exception.room.NotReadyRoomException;
@@ -97,7 +97,7 @@ public class Room {
             throw new RoundGreaterThanCurrentRoundException(currentRound, round);
         }
         if (currentRound - round > ALLOWED_ROUND_GAP) {
-            throw new NotAllowedRoundGapException(ALLOWED_ROUND_GAP, currentRound, round);
+            throw new InvalidRoundGapException(ALLOWED_ROUND_GAP, currentRound, round);
         }
     }
 

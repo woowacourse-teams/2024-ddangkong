@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleMethodNotAllowedException(HttpRequestMethodNotSupportedException e) {
         log.warn(e.getMessage());
 
-        return new ErrorResponse(ClientErrorCode.METHOD_NOT_ALLOWED);
+        return new ErrorResponse(ClientErrorCode.METHOD_NOT_SUPPORTED);
     }
 
     @ExceptionHandler

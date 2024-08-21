@@ -1,6 +1,6 @@
 package ddangkong.domain.room.member;
 
-import ddangkong.exception.room.member.NotAllowedMasterCountException;
+import ddangkong.exception.room.member.InvalidMasterCountException;
 import ddangkong.exception.room.member.NotExistMasterException;
 import ddangkong.exception.room.member.NotRoomMemberException;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class RoomMembers {
                 .count();
 
         if (masterCount != ALLOWED_MASTER_COUNT) {
-            throw new NotAllowedMasterCountException(ALLOWED_MASTER_COUNT, masterCount,
+            throw new InvalidMasterCountException(ALLOWED_MASTER_COUNT, masterCount,
                     members.get(0).getRoom().getId());
         }
     }

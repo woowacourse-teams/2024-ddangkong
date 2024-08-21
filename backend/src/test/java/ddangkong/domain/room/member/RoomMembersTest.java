@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.room.Room;
 import ddangkong.domain.support.EntityTestUtils;
-import ddangkong.exception.room.member.NotAllowedMasterCountException;
+import ddangkong.exception.room.member.InvalidMasterCountException;
 import ddangkong.exception.room.member.NotRoomMemberException;
 import ddangkong.support.fixture.MemberFixture;
 import java.util.List;
@@ -53,7 +53,7 @@ class RoomMembersTest {
 
             // when & then
             assertThatThrownBy(() -> new RoomMembers(members))
-                    .isExactlyInstanceOf(NotAllowedMasterCountException.class)
+                    .isExactlyInstanceOf(InvalidMasterCountException.class)
                     .hasMessageContaining("방장이 1명이 아닙니다. 현재 방장 수: 2, roomId: 1");
         }
 
@@ -68,7 +68,7 @@ class RoomMembersTest {
 
             // when & then
             assertThatThrownBy(() -> new RoomMembers(members))
-                    .isExactlyInstanceOf(NotAllowedMasterCountException.class)
+                    .isExactlyInstanceOf(InvalidMasterCountException.class)
                     .hasMessageContaining("방장이 1명이 아닙니다. 현재 방장 수: 0, roomId: 1");
         }
     }

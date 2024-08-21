@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.room.InvalidRangeTotalRoundException;
-import ddangkong.exception.room.NotAllowedTimeLimitException;
+import ddangkong.exception.room.InvalidTimeLimitException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -27,7 +27,7 @@ class RoomSettingTest {
         void 시간_제한은_5000_10000_15000중_하나_여야한다(int notValidTimeLimit) {
             // when & then
             assertThatThrownBy(() -> new RoomSetting(5, notValidTimeLimit, Category.IF))
-                    .isExactlyInstanceOf(NotAllowedTimeLimitException.class)
+                    .isExactlyInstanceOf(InvalidTimeLimitException.class)
                     .hasMessage("시간 제한은 %dms / %dms / %dms 만 가능합니다. requested timeLimit: %d"
                             .formatted(5000, 10000, 15000, notValidTimeLimit));
         }

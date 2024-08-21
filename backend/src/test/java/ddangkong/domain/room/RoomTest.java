@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.balance.content.Category;
-import ddangkong.exception.room.NotAllowedRoundGapException;
+import ddangkong.exception.room.InvalidRoundGapException;
 import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.exception.room.NotProgressedRoomException;
 import ddangkong.exception.room.NotReadyRoomException;
@@ -189,7 +189,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(() -> room.isRoundFinished(invalidRound))
-                    .isExactlyInstanceOf(NotAllowedRoundGapException.class)
+                    .isExactlyInstanceOf(InvalidRoundGapException.class)
                     .hasMessageContaining("currentRound과 round의 차이는 1이하여야 합니다. currentRound : 4, round : 2");
         }
 
