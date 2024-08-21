@@ -2,6 +2,9 @@
 
 === Client Error Code
 
+HTTP Status Code는 4xx이며, 클라이언트가 확인할 수 있는 에러 코드, 메시지는 다음과 같습니다. +
+(단, INTERNAL_SERVER_ERROR 에러 코드는 500으로 응답합니다.)
+
 include::{snippets}/exception/error-code/error-code-response-fields.adoc[]
 
 ==== response
