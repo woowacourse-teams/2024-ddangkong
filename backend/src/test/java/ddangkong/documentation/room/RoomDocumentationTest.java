@@ -279,25 +279,23 @@ class RoomDocumentationTest extends BaseDocumentationTest {
 
     @Nested
     class 방_게임_참여_가능_여부 {
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/status";
+        private static final String ENDPOINT = "/api/balances/rooms/{uuid}/status";
 
         @Test
         void 방에서_게임이_참여_가능_여부를_조회한다() throws Exception {
             // given
-            RoomStatusResponse response = new RoomStatusResponse(true, false);
-            when(roomFacade.getRoomStatus(anyLong())).thenReturn(response);
+            RoomStatusResponse response = new RoomStatusResponse(true);
+            when(roomFacade.getRoomStatus(anyString())).thenReturn(response);
 
             // when & then
-            mockMvc.perform(get(ENDPOINT, 1))
+            mockMvc.perform(get(ENDPOINT, "488fd79f92a34131bf2a628bd58c5d2c"))
                     .andExpect(status().isOk())
                     .andDo(document("room/status",
                             pathParameters(
-                                    parameterWithName("roomId").description("방 ID")
+                                    parameterWithName("uuid").description("방의 UUID")
                             ),
                             responseFields(
-                                    fieldWithPath("isReady").description("게임 상태가 READY인지 여부"),
-                                    fieldWithPath("isActivated").description("게임이 참여할 수 있는 상태인지 여부. "
-                                            + "방에서 멤버들이 전부 나간 경우는 삭제될 방이라고 판단하여 false가 된다.")
+                                    fieldWithPath("isReady").description("게임 상태가 READY인지 여부")
                             )
                     ));
         }

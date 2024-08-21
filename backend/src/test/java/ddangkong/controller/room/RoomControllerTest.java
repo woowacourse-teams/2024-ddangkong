@@ -85,48 +85,39 @@ class RoomControllerTest extends BaseControllerTest {
         }
 
         @Test
-        void 유저가_있고_대기중인_방_참여_가능_여부_조회() {
+        void 대기중인_방_참여_가능_여부_조회() {
             //when & then
             RoomStatusResponse actual = RestAssured.given()
-                    .pathParam("roomId", 4L)
-                    .when().get("/api/balances/rooms/{roomId}/status")
+                    .pathParam("uuid", "uuid4")
+                    .when().get("/api/balances/rooms/{uuid}/status")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
                     .extract().as(RoomStatusResponse.class);
-            assertAll(
-                    () -> assertThat(actual.isReady()).isTrue(),
-                    () -> assertThat(actual.isActivated()).isTrue()
-            );
+            assertThat(actual.isReady()).isTrue();
         }
 
         @Test
         void 게임_진행중인_방_참여_가능_여부_조회() {
             //when & then
             RoomStatusResponse actual = RestAssured.given()
-                    .pathParam("roomId", 1L)
-                    .when().get("/api/balances/rooms/{roomId}/status")
+                    .pathParam("uuid", "uuid1")
+                    .when().get("/api/balances/rooms/{uuid}/status")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
                     .extract().as(RoomStatusResponse.class);
-            assertAll(
-                    () -> assertThat(actual.isReady()).isFalse(),
-                    () -> assertThat(actual.isActivated()).isTrue()
-            );
+            assertThat(actual.isReady()).isFalse();
         }
 
         @Test
         void 게임_종료된_방_참여_가능_여부_조회() {
             //when & then
             RoomStatusResponse actual = RestAssured.given()
-                    .pathParam("roomId", 5L)
-                    .when().get("/api/balances/rooms/{roomId}/status")
+                    .pathParam("uuid", "uuid5")
+                    .when().get("/api/balances/rooms/{uuid}/status")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
                     .extract().as(RoomStatusResponse.class);
-            assertAll(
-                    () -> assertThat(actual.isReady()).isFalse(),
-                    () -> assertThat(actual.isActivated()).isTrue()
-            );
+            assertThat(actual.isReady()).isFalse();
         }
     }
 

@@ -91,12 +91,8 @@ public class RoomFacade {
     }
 
     @Transactional(readOnly = true)
-    public RoomStatusResponse getRoomStatus(Long roomId) {
-        Room room = roomService.getRoom(roomId);
-        if (!room.isReady()) {
-            return new RoomStatusResponse(false, true);
-        }
-        RoomMembers roomMembers = memberService.findRoomMembers(room);
-        return new RoomStatusResponse(room.isReady(), !roomMembers.isEmpty());
+    public RoomStatusResponse getRoomStatus(String uuid) {
+        Room room = roomService.getRoomWithLock(uuid);
+        return new RoomStatusResponse(room.isReady());
     }
 }
