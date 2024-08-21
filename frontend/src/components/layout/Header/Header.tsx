@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   buttonWrapper,
@@ -8,6 +8,7 @@ import {
   roundText,
   settingImage,
 } from './Header.styled';
+import useRoutePath from './hooks/useRoutePath';
 
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
 import SettingIcon from '@/assets/images/settingsIcon.svg';
@@ -21,20 +22,13 @@ interface HeaderProps {
 }
 
 const Header = () => {
-  const location = useLocation();
-  const { roomId } = useParams();
+  const { isNicknamePage, isReadyPage, isRoundResultStatusPage, isFinalResultPage } =
+    useRoutePath();
 
-  const currentPath = {
-    isNicknamePage: location.pathname === ROUTES.nickname,
-    isReadyPage: location.pathname === ROUTES.ready(Number(roomId)),
-    isFinalResultPage: location.pathname === ROUTES.gameResult(Number(roomId)),
-    isRoundResultStatusPage: location.pathname === ROUTES.roundResultStatus(Number(roomId)),
-  };
-
-  if (currentPath.isNicknamePage) return <TitleHeader title="닉네임 설정" />;
-  if (currentPath.isReadyPage) return <RoomSettingHeader title="밸런스 게임" />;
-  if (currentPath.isRoundResultStatusPage) return <BackHeader title="투표 현황" />;
-  if (currentPath.isFinalResultPage) return <EmptyHeader />;
+  if (isNicknamePage) return <TitleHeader title="닉네임 설정" />;
+  if (isReadyPage) return <RoomSettingHeader title="밸런스 게임" />;
+  if (isRoundResultStatusPage) return <BackHeader title="투표 현황" />;
+  if (isFinalResultPage) return <EmptyHeader />;
 
   return <RoundHeader />;
 };
