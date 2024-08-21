@@ -32,6 +32,7 @@ import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomSettingResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
+import ddangkong.facade.room.member.dto.MasterResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -92,15 +93,15 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방_정보를_조회한다() throws Exception {
             // given
             int totalRound = 5;
-            int timeLimit = 30000;
-            Category category = Category.EXAMPLE;
-            RoomInfoResponse response = new RoomInfoResponse(
-                    false,
-                    new RoomSettingResponse(totalRound, timeLimit, category),
-                    List.of(
-                            new MemberResponse(1L, "땅콩", true),
-                            new MemberResponse(2L, "타콩", false)
-                    ));
+            int timeLimit = 10_000;
+            Category category = Category.IF;
+            RoomSettingResponse roomSetting = new RoomSettingResponse(5, 30, category);
+            List<MemberResponse> members = List.of(
+                    new MemberResponse(1L, "땅콩", true),
+                    new MemberResponse(2L, "타콩", false)
+            );
+            MasterResponse master = new MasterResponse(1L, "땅콩");
+            RoomInfoResponse response = new RoomInfoResponse(false, roomSetting, members, master);
             when(roomFacade.getRoomInfo(anyLong())).thenReturn(response);
 
             // when & then
@@ -119,7 +120,10 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("members").type(ARRAY).description("방에 참여중 인원 목록"),
                                     fieldWithPath("members[].memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("members[].nickname").type(STRING).description("멤버 닉네임"),
-                                    fieldWithPath("members[].isMaster").type(BOOLEAN).description("방장 여부")
+                                    fieldWithPath("members[].isMaster").type(BOOLEAN).description("방장 여부"),
+                                    fieldWithPath("master").type(OBJECT).description("방장 정보"),
+                                    fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("master.nickname").type(STRING).description("닉네임")
                             )
                     ));
         }
@@ -134,8 +138,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방의_설정_정보를_변경한다() throws Exception {
             // given
             int totalRound = 5;
-            int timeLimit = 30_000;
-            Category category = Category.EXAMPLE;
+            int timeLimit = 10_000;
+            Category category = Category.IF;
             RoomSettingRequest content = new RoomSettingRequest(totalRound, timeLimit, category);
 
             // then
@@ -245,7 +249,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 라운드가_종료되었는지_조회한다() throws Exception {
             // given
-            RoundFinishedResponse response = new RoundFinishedResponse(true, false);
+            MasterResponse prin = new MasterResponse(1L, "프콩");
+            RoundFinishedResponse response = new RoundFinishedResponse(true, false, prin);
             when(roomFacade.getRoundFinished(anyLong(), anyInt())).thenReturn(response);
 
             // when & then
@@ -262,7 +267,10 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             ),
                             responseFields(
                                     fieldWithPath("isRoundFinished").description("라운드 종료 여부"),
-                                    fieldWithPath("isGameFinished").description("게임 종료 여부")
+                                    fieldWithPath("isGameFinished").description("게임 종료 여부"),
+                                    fieldWithPath("master").type(OBJECT).description("방장 정보"),
+                                    fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("master.nickname").type(STRING).description("닉네임")
                             )
                     ));
         }

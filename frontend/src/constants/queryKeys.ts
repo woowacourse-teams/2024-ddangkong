@@ -6,4 +6,5 @@ export const QUERY_KEYS = {
   roundIsFinished: 'roundIsFinished',
   roomMembers: 'roomMembers',
   roomReset: 'roomReset',
+  categoryList: 'categoryList',
 } as const;

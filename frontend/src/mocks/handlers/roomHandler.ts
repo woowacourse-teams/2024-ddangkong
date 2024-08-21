@@ -1,36 +1,51 @@
 import { http, HttpResponse } from 'msw';
 
+import CATEGORY_LIST from '../data/categoryList.json';
 import MASTER_AND_RESET from '../data/masterAndReset.json';
 import ROOM_INFO from '../data/roomInfo.json';
 
 import { MOCK_API_URL } from '@/constants/url';
 
-const getRoomInfo = () => {
+const getRoomInfoHandler = () => {
   return HttpResponse.json(ROOM_INFO);
 };
 
-const startGame = async () => {
+const startGameHandler = async () => {
   ROOM_INFO.isGameStart = true;
   return HttpResponse.json(undefined, { status: 204 });
 };
 
-const resetRoom = () => {
+const resetRoomHandler = () => {
   MASTER_AND_RESET.isReset = true;
   return HttpResponse.json(undefined, { status: 204 });
 };
 
-const checkResetRoom = () => {
+const checkResetRoomHandler = () => {
   return HttpResponse.json(MASTER_AND_RESET);
 };
 
-const isRoomActivate = () => {
+const isRoomActivateHandler = () => {
   return HttpResponse.json({ isActivated: true });
 };
 
+const getCategoryListHandler = () => {
+  return HttpResponse.json(CATEGORY_LIST);
+};
+
+const applyRoomSettingHandler = async ({ request }: { request: Request }) => {
+  const body = await request.json();
+
+  ROOM_INFO.roomSetting = body;
+
+  return new HttpResponse(null, { status: 204 });
+};
+
 export const roomHandler = [
-  http.get(MOCK_API_URL.getRoomInfo, getRoomInfo),
-  http.patch(MOCK_API_URL.startGame, startGame),
-  http.get(MOCK_API_URL.resetRoom, checkResetRoom),
-  http.patch(MOCK_API_URL.resetRoom, resetRoom),
-  http.patch(MOCK_API_URL.isRoomActivate, isRoomActivate),
+  http.get(MOCK_API_URL.getRoomInfo, getRoomInfoHandler),
+  http.patch(MOCK_API_URL.startGame, startGameHandler),
+  http.get(MOCK_API_URL.resetRoom, checkResetRoomHandler),
+  http.patch(MOCK_API_URL.resetRoom, resetRoomHandler),
+  http.patch(MOCK_API_URL.isRoomActivate, isRoomActivateHandler),
+  http.get(MOCK_API_URL.categoryList, getCategoryListHandler),
+  http.patch(MOCK_API_URL.applyRoomSetting, applyRoomSettingHandler),
 ];

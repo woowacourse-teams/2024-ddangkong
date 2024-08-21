@@ -5,8 +5,10 @@ import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
+import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
+import ddangkong.facade.room.balance.roomvote.context.VoteContext;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
@@ -20,6 +22,7 @@ import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.balance.roomvote.RoomBalanceVoteService;
 import ddangkong.service.room.member.MemberService;
 import java.util.List;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,44 +47,52 @@ public class RoomBalanceVoteFacade {
 
     @Transactional
     public RoomBalanceVoteResponse createVote(RoomBalanceVoteRequest request, Long roomId, Long contentId) {
-        Room room = roomService.getRoom(roomId);
-        BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
-        if (isVoteFinished(room, balanceContent)) {
-            throw new BadRequestException("이미 종료된 라운드에는 투표할 수 없습니다.");
+        VoteContext voteContext = getVoteContext(roomId, contentId);
+        if (voteContext.isVoteFinished()) {
+            throw new BadRequestException("이미 투표가 종료되었습니다.");
         }
-        Member member = memberService.getRoomMember(request.memberId(), room);
-        BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-        RoomBalanceVote roomBalanceVote = roomBalanceVoteService.createVote(member, balanceOptions, request.optionId());
+        Member member = voteContext.getMember(request.memberId());
+        RoomBalanceVote roomBalanceVote = roomBalanceVoteService.createVote(member, voteContext.getBalanceOptions(),
+                request.optionId());
         return new RoomBalanceVoteResponse(roomBalanceVote);
     }
 
-    private boolean isVoteFinished(Room room, BalanceContent balanceContent) {
-        List<Member> members = memberService.findRoomMembers(room);
-        BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-        return roomContentService.isRoundFinished(room, balanceContent)
-                || roomBalanceVoteService.isVoteFinished(members, balanceOptions);
-    }
-
     @Transactional(readOnly = true)
-    public RoomBalanceVoteResultResponse getAllVoteResult(Long roomId, Long balanceContentId) {
-        Room room = roomService.getRoom(roomId);
-        BalanceContent balanceContent = balanceContentService.getBalanceContent(balanceContentId);
-        if (isVoteFinished(room, balanceContent)) {
-            BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-            // todo 기권 추가
-            ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(room, balanceOptions);
-            ContentTotalBalanceVoteResponse total = getContentTotalBalanceVoteResponse(balanceOptions);
-            return new RoomBalanceVoteResultResponse(group, total);
+    public RoomBalanceVoteResultResponse getAllVoteResult(Long roomId, Long contentId) {
+        VoteContext voteContext = getVoteContext(roomId, contentId);
+        if (voteContext.isVoteNotFinished()) {
+            throw new BadRequestException("투표가 끝나지 않아 투표 결과를 조회할 수 없습니다.");
         }
-        throw new BadRequestException("투표가 끝나지 않아 투표 결과를 조회할 수 없습니다.");
+        ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(voteContext.getRoomMembers(),
+                voteContext.getBalanceOptions());
+        ContentTotalBalanceVoteResponse total = getContentTotalBalanceVoteResponse(voteContext.getBalanceOptions());
+        return new RoomBalanceVoteResultResponse(group, total);
     }
 
-    private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(Room room, BalanceOptions balanceOptions) {
+    private ContentRoomBalanceVoteResponse getContentRoomBalanceVoteResponse(RoomMembers roomMembers,
+                                                                             BalanceOptions balanceOptions) {
         List<RoomBalanceVote> firstOptionVotes = roomBalanceVoteService
-                .getVotesInRoom(room, balanceOptions.getFirstOption());
+                .getVotesInRoom(roomMembers, balanceOptions.getFirstOption());
         List<RoomBalanceVote> secondOptionVotes = roomBalanceVoteService
-                .getVotesInRoom(room, balanceOptions.getSecondOption());
-        return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes);
+                .getVotesInRoom(roomMembers, balanceOptions.getSecondOption());
+        List<Member> giveUpMembers = getGiveUpVoteMemberResponse(roomMembers,
+                getVoteMembers(firstOptionVotes, secondOptionVotes));
+        return ContentRoomBalanceVoteResponse.create(balanceOptions, firstOptionVotes, secondOptionVotes,
+                giveUpMembers);
+    }
+
+    private List<Member> getGiveUpVoteMemberResponse(RoomMembers roomMembers, List<Member> voteMembers) {
+        return roomMembers.getMembers()
+                .stream()
+                .filter(roomMember -> !voteMembers.contains(roomMember))
+                .toList();
+    }
+
+    private List<Member> getVoteMembers(List<RoomBalanceVote> firstOptionVotes,
+                                        List<RoomBalanceVote> secondOptionVotes) {
+        return Stream.concat(firstOptionVotes.stream(), secondOptionVotes.stream())
+                .map(RoomBalanceVote::getMember)
+                .toList();
     }
 
     private ContentTotalBalanceVoteResponse getContentTotalBalanceVoteResponse(BalanceOptions balanceOptions) {
@@ -92,8 +103,19 @@ public class RoomBalanceVoteFacade {
 
     @Transactional(readOnly = true)
     public VoteFinishedResponse getVoteFinished(Long roomId, Long contentId) {
+        VoteContext voteContext = getVoteContext(roomId, contentId);
+        Member master = voteContext.getMaster();
+        return new VoteFinishedResponse(voteContext.isVoteFinished(), master);
+    }
+
+    private VoteContext getVoteContext(Long roomId, Long contentId) {
         Room room = roomService.getRoom(roomId);
         BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
-        return new VoteFinishedResponse(isVoteFinished(room, balanceContent));
+        RoomMembers roomMembers = memberService.findRoomMembers(room);
+        BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
+        boolean isOverVoteDeadline = roomContentService.isOverVoteDeadline(room, balanceContent);
+        boolean isAllMemberVoted = roomBalanceVoteService.isAllMemberVoted(roomMembers, balanceOptions);
+
+        return new VoteContext(roomMembers, balanceOptions, isOverVoteDeadline || isAllMemberVoted);
     }
 }

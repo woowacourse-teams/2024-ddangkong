@@ -1,7 +1,11 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { RoomInfo, RoomIdAndMember } from '@/types/room';
+import { RoomInfo, RoomIdAndMember, Category, RoomSetting } from '@/types/room';
+
+interface CategoryResponse {
+  categoryList: Category[];
+}
 
 // 방 만들기
 export const createRoom = async (nickname: string): Promise<RoomIdAndMember> => {
@@ -71,6 +75,15 @@ export const isRoomActivate = async (roomId: number) => {
   const res = await fetcher.get({
     url: API_URL.isRoomActivate(roomId),
   });
+  const data = await res.json();
+  return data;
+};
+
+// 방 설정 카테고리 리스트 받기
+export const getCategoryList = async (): Promise<CategoryResponse> => {
+  const res = await fetcher.get({
+    url: API_URL.categoryList,
+  });
 
   const data = await res.json();
 
@@ -86,4 +99,16 @@ export const checkRoomReset = async (roomId: number) => {
   const data = await res.json();
 
   return data;
+};
+
+// 방 설정 적용
+export const applyRoomSetting = async (roomId: number, roomSetting: RoomSetting): Promise<void> => {
+  const { totalRound, timeLimit, category } = roomSetting;
+  await fetcher.patch({
+    url: API_URL.applyRoomSetting(roomId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
+    body: { totalRound, timeLimit, category },
+  });
 };

@@ -6,6 +6,7 @@ import static ddangkong.support.fixture.MemberFixture.PRIN;
 import static ddangkong.support.fixture.MemberFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
@@ -17,6 +18,7 @@ import ddangkong.domain.room.member.Member;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
+import ddangkong.facade.balance.vote.dto.GiveUpVoteMemberResponse;
 import ddangkong.facade.balance.vote.dto.OptionTotalBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.OptionRoomBalanceVoteResponse;
@@ -55,7 +57,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
     @BeforeEach
     void setUp() {
-        content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "A vs B"));
+        content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
         optionA = balanceOptionRepository.save(new BalanceOption("A", content));
         optionB = balanceOptionRepository.save(new BalanceOption("B", content));
         room = roomRepository.save(Room.createNewRoom());
@@ -90,18 +92,18 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
         @Test
         @FixedClock(date = "2024-07-18", time = "20:00:11")
-        void 투표_시간이_지난_이후_투표_시_예외를_던진다() {
+        void 투표_마감_시간_이후에_투표하면_예외를_던진다() {
             // given
             RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(tacan.getId(), optionA.getId());
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 종료된 라운드에는 투표할 수 없습니다.");
+                    .hasMessage("이미 투표가 종료되었습니다.");
         }
 
         @Test
-        void 투표가_모두_완료된_후_투표_시_예외를_던진다() {
+        void 모든_멤버가_투표한_이후에_투표_시_예외를_던진다() {
             // given
             roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
             roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionA));
@@ -112,13 +114,13 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 종료된 라운드에는 투표할 수 없습니다.");
+                    .hasMessage("이미 투표가 종료되었습니다.");
         }
 
         @Test
         void 방의_현재_라운드와_다른_방_컨텐츠의_투표하면_예외를_던진다() {
             // given
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.EXAMPLE, "C vs D"));
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "C vs D"));
             BalanceOption optionC = balanceOptionRepository.save(new BalanceOption("C", content));
             balanceOptionRepository.save(new BalanceOption("D", content));
             int round = 2;
@@ -147,7 +149,8 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
                                     3, 75),
                             new OptionRoomBalanceVoteResponse(2L,
                                     "반민초",
-                                    List.of("rapper lee"), 1, 25)
+                                    List.of("rapper lee"), 1, 25),
+                            new GiveUpVoteMemberResponse(List.of("giveUpMember"), 1)
                     ),
                     new ContentTotalBalanceVoteResponse(
                             new OptionTotalBalanceVoteResponse(1L, "민초", 50),
@@ -179,11 +182,11 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
         @Test
         @FixedClock(date = "2024-08-03", time = "11:00:19")
-        void 투표_제한_시간이_끝나지_않았지만_방의_모든_멤버가_컨텐츠에_투표했으면_모두_투표한_것이다() {
+        void 투표_마감_시간이_지나지_않았지만_방의_모든_멤버가_컨텐츠에_투표했으면_투표가_종료된_것이다() {
             // given
             int round = 1;
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T11:00:20");
-            roomContentRepository.save(new RoomContent(room, content, round, roundEndedAt));
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T11:00:20");
+            roomContentRepository.save(new RoomContent(room, content, round, voteDeadline));
             roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
             roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionA));
             roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionB));
@@ -193,26 +196,32 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
-            assertThat(actual.isFinished()).isTrue();
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isTrue(),
+                    () -> assertThat(actual.master().memberId()).isEqualTo(prin.getId())
+            );
         }
 
         @Test
         @FixedClock(date = "2024-08-03", time = "11:00:21")
-        void 방의_모든_멤버가_투표하지_않았지만_컨텐츠의_투표_제한_시간이_지나면_모두_투표한_것이다() {
+        void 방의_모든_멤버가_투표하지_않았지만_투표_마감_시간이_지났으면_투표가_종료된_것이다() {
             // given
             int roomContentRound = 1;
-            LocalDateTime roundEndedAt = LocalDateTime.parse("2024-08-03T11:00:20");
-            roomContentRepository.save(new RoomContent(room, content, roomContentRound, roundEndedAt));
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T11:00:20");
+            roomContentRepository.save(new RoomContent(room, content, roomContentRound, voteDeadline));
 
             // when
             VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
-            assertThat(actual.isFinished()).isTrue();
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isTrue(),
+                    () -> assertThat(actual.master().memberId()).isEqualTo(prin.getId())
+            );
         }
 
         @Test
-        void 투표_제한_시간이_끝나지_않고_방의_모든_멤버가_투표하지_않았으면_모두_투표하지_않은_것이다() {
+        void 투표_마감_시간이_지나지_않고_방의_모든_멤버가_투표하지_않았으면_투표가_종료되지_않은_것이다() {
             // given
             int round = 1;
             roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT));
@@ -224,11 +233,14 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
-            assertThat(actual.isFinished()).isFalse();
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isFalse(),
+                    () -> assertThat(actual.master().memberId()).isEqualTo(prin.getId())
+            );
         }
 
         @Test
-        void 방의_현재_라운드와_다른_방_컨텐츠의_투표_여부를_조회하면_예외가_발생한다() {
+        void 방의_현재_라운드와_다른_방_컨텐츠의_투표_종료_여부를_조회하면_예외가_발생한다() {
             // given
             int round = 2;
             roomContentRepository.save(new RoomContent(room, content, round, ROUND_ENDED_AT));

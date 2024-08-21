@@ -3,6 +3,7 @@ package ddangkong.service.room.member;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.MemberRepository;
+import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.BadRequestException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -57,13 +58,19 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<Member> findRoomMembers(Room room) {
-        return memberRepository.findAllByRoom(room);
+    public RoomMembers findRoomMembers(Room room) {
+        List<Member> members = memberRepository.findAllByRoom(room);
+        return new RoomMembers(members);
     }
 
     @Transactional(readOnly = true)
     public Member getRoomMember(Long memberId, Room room) {
         return memberRepository.findByIdAndRoom(memberId, room)
                 .orElseThrow(() -> new BadRequestException("방에 존재하지 않는 멤버입니다."));
+    }
+
+    @Transactional(readOnly = true)
+    public Member getMaster(Room room) {
+        return findRoomMembers(room).getMaster();
     }
 }
