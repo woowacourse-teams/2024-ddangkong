@@ -29,6 +29,7 @@ import ddangkong.facade.room.RoomFacade;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomResetResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomSettingResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
@@ -294,6 +295,30 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     parameterWithName("roomId").description("방 ID")
                             )
                     ));
+        }
+
+        @Test
+        void 방이_초기화되었는지_확인한다() throws Exception {
+            // given
+            MasterResponse prin = new MasterResponse(1L, "프콩");
+            RoomResetResponse response = new RoomResetResponse(true, prin);
+            when(roomFacade.checkResetRoom(anyLong())).thenReturn(response);
+            
+            // when & then
+            mockMvc.perform(get(ENDPOINT, 1L))
+                    .andExpect(status().isOk())
+                    .andDo(document("room/checkReset",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            ),
+                            responseFields(
+                                    fieldWithPath("isReset").description("방 초기화 여부"),
+                                    fieldWithPath("master").type(OBJECT).description("방장 정보"),
+                                    fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("master.nickname").type(STRING).description("닉네임")
+                            )
+                    ));
+
         }
     }
 }
