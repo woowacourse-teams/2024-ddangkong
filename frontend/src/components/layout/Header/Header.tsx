@@ -1,13 +1,17 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import { emptyBox, gameTitle, headerLayout, roundText, iconImage } from './Header.styled';
 
+import { exitRoom } from '@/apis/room';
 import GoOutIcon from '@/assets/images/goOutIcon.png';
 import SettingIcon from '@/assets/images/settingsIcon.svg';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useModal from '@/hooks/useModal';
+import { memberInfoState } from '@/recoil/atom';
 
 interface HeaderProps {
   title: string;
@@ -28,10 +32,24 @@ const Header = ({ title }: HeaderProps) => {
   const isFinalPage = location.pathname === ROUTES.gameResult(Number(roomId));
   const isNicknamePage = location.pathname.startsWith(ROUTES.nickname);
 
+  const { memberId } = useRecoilValue(memberInfoState);
+  const navigate = useNavigate();
+
+  const exitRoomMutation = useMutation<void, Error, { roomId: number; memberId: number }>({
+    mutationFn: ({ roomId, memberId }) => exitRoom(roomId, memberId),
+    onSuccess: () => {
+      navigate('/');
+    },
+  });
+
+  const handleClick = () => {
+    exitRoomMutation.mutate({ roomId: Number(roomId), memberId: Number(memberId) });
+  };
+
   if (isReadyPage) {
     return (
       <header css={headerLayout}>
-        <button onClick={show}>
+        <button onClick={handleClick}>
           <img src={GoOutIcon} alt="방 나가기" css={iconImage} />
         </button>
         <span css={gameTitle}>밸런스 게임</span>

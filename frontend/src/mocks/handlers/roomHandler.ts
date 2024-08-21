@@ -40,6 +40,10 @@ const applyRoomSettingHandler = async ({ request }: { request: Request }) => {
   return new HttpResponse(null, { status: 204 });
 };
 
+const deleteRoomHandler = () => {
+  return HttpResponse.json(undefined, { status: 204 });
+};
+
 export const roomHandler = [
   http.get(MOCK_API_URL.getRoomInfo, getRoomInfoHandler),
   http.patch(MOCK_API_URL.startGame, startGameHandler),
@@ -48,4 +52,5 @@ export const roomHandler = [
   http.patch(MOCK_API_URL.isRoomActivate, isRoomActivateHandler),
   http.get(MOCK_API_URL.categoryList, getCategoryListHandler),
   http.patch(MOCK_API_URL.applyRoomSetting, applyRoomSettingHandler),
+  http.delete(MOCK_API_URL.deleteRoom, deleteRoomHandler),
 ];
