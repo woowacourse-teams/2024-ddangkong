@@ -154,7 +154,7 @@ include::{snippets}/room/roundFinished/response-fields.adoc[]
 
 '''
 
-=== 게임 활성화 여부
+=== 게임 참여 가능 여부
 
 ==== curl
 

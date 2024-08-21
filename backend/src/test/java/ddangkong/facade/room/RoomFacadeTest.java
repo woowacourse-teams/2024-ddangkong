@@ -168,59 +168,6 @@ class RoomFacadeTest extends BaseServiceTest {
                     () -> assertThat(foundRoom.getCategory()).isEqualTo(category)
             );
         }
-
-        @Test
-        void 준비중인_방에_참여_가능_여부를_조회한다() {
-            // given
-            Room room = roomRepository.save(
-                    new Room("uuid", 5, RoomStatus.READY, new RoomSetting(3, 10_000, Category.IF)
-                    ));
-            memberRepository.save(TACAN.master(room));
-
-            // when
-            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
-
-            // then
-            assertThat(actual.isReady()).isTrue();
-        }
-
-        @Test
-        void 진행중인_방의_참여_가능_여부를_조회한다() {
-            // given
-            Room room = roomRepository.save(
-                    new Room("uuid", 5, RoomStatus.PROGRESS, new RoomSetting(3, 10_000, Category.IF))
-            );
-            memberRepository.save(TACAN.master(room));
-
-            // when
-            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
-
-            // then
-            assertThat(actual.isReady()).isFalse();
-        }
-
-        @Test
-        void 종료된_방의_참여_가능_여부를_조회한다() {
-            // given
-            Room room = roomRepository.save(
-                    new Room("uuid", 5, RoomStatus.FINISH, new RoomSetting(3, 10_000, Category.IF))
-            );
-            memberRepository.save(TACAN.master(room));
-
-            // when
-            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
-
-            // then
-            assertThat(actual.isReady()).isFalse();
-        }
-
-        @Test
-        void 존재하지_않는_방에_참여_가능_여부를_조회하면_예외가_발생한다() {
-            // when & then
-            assertThatThrownBy(() -> roomFacade.getRoomStatus("NotExist"))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("존재하지 않는 방입니다.");
-        }
     }
 
     @Nested
@@ -491,6 +438,63 @@ class RoomFacadeTest extends BaseServiceTest {
                     () -> assertThat(optionATotalVoteCount).isEqualTo(3),
                     () -> assertThat(optionBTotalVoteCount).isEqualTo(1)
             );
+        }
+    }
+
+    @Nested
+    class 방에_참여_가능_여부 {
+
+        @Test
+        void 준비중인_방에_참여_가능_여부를_조회한다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.READY, new RoomSetting(3, 10_000, Category.IF)
+                    ));
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isReady()).isTrue();
+        }
+
+        @Test
+        void 진행중인_방의_참여_가능_여부를_조회한다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.PROGRESS, new RoomSetting(3, 10_000, Category.IF))
+            );
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isReady()).isFalse();
+        }
+
+        @Test
+        void 종료된_방의_참여_가능_여부를_조회한다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.FINISH, new RoomSetting(3, 10_000, Category.IF))
+            );
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isReady()).isFalse();
+        }
+
+        @Test
+        void 존재하지_않는_방에_참여_가능_여부를_조회하면_예외가_발생한다() {
+            // when & then
+            assertThatThrownBy(() -> roomFacade.getRoomStatus("NotExist"))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("존재하지 않는 방입니다.");
         }
     }
 }

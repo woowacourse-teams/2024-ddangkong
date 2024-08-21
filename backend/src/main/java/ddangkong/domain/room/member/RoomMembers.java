@@ -57,8 +57,4 @@ public class RoomMembers {
     public int size() {
         return members.size();
     }
-
-    public boolean isEmpty() {
-        return members.isEmpty();
-    }
 }
