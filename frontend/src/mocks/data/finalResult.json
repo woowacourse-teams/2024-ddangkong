@@ -1,37 +1,23 @@
-[
-  {
-    "rank": 1,
-    "name": "타콩",
-    "percent": 100
-  },
-  {
-    "rank": 2,
-    "name": "프콩",
-    "percent": 80
-  },
-  {
-    "rank": 3,
-    "name": "마콩",
-    "percent": 80
-  },
-  {
-    "rank": 4,
-    "name": "썬콩",
-    "percent": 60
-  },
-  {
-    "rank": 5,
-    "name": "포콩",
-    "percent": 40
-  },
-  {
-    "rank": 6,
-    "name": "강콩",
-    "percent": 20
-  },
-  {
-    "rank": 7,
-    "name": "프콩",
-    "percent": 0
-  }
-]
+{
+  "matchedMembers": [
+    {
+      "rank": 1,
+      "memberId": 1,
+      "nickname": "프콩",
+      "matchingPercent": 100
+    },
+    {
+      "rank": 1,
+      "memberId": 2,
+      "nickname": "커콩",
+      "matchingPercent": 100
+    },
+    {
+      "rank": 3,
+      "memberId": 3,
+      "nickname": "타콩",
+      "matchingPercent": 99
+    }
+  ],
+  "existMatching": true
+}

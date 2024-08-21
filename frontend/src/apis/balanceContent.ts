@@ -1,7 +1,7 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { BalanceContent, MemberMatchingInfo, MyGameStatus } from '@/types/balanceContent';
+import { BalanceContent, MatchingResult, MyGameStatus } from '@/types/balanceContent';
 import { RoundVoteResult } from '@/types/roundVoteResult';
 
 interface ContentResultParams {
@@ -99,7 +99,7 @@ export const moveNextRound = async (roomId: number) => {
 export const fetchMatchingResult = async ({
   roomId,
   memberId,
-}: MatchingResultParams): Promise<MemberMatchingInfo[]> => {
+}: MatchingResultParams): Promise<MatchingResult> => {
   const res = await fetcher.get({
     url: API_URL.matchingResult(roomId, memberId),
     headers: {
