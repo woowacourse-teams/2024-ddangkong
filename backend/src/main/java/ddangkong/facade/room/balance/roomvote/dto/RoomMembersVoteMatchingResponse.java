@@ -3,7 +3,6 @@ package ddangkong.facade.room.balance.roomvote.dto;
 import ddangkong.domain.room.member.Member;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -53,7 +52,7 @@ public record RoomMembersVoteMatchingResponse(
 
     private static List<Entry<Member, Long>> orderMembersVoteMatchingPercentDesc(
             Map<Member, Long> membersVoteMatchingPercent) {
-        LinkedList<Entry<Member, Long>> matchedMembersPercents = new LinkedList<>(
+        List<Entry<Member, Long>> matchedMembersPercents = new ArrayList<>(
                 membersVoteMatchingPercent.entrySet()
         );
 
