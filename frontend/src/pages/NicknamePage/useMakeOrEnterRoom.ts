@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
@@ -13,7 +13,8 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
   const randomNickname = createRandomNickname();
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-  const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
+  const [{ isMaster }, setMemberInfo] = useRecoilState(memberInfoState);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [, setRoomUuidState] = useRecoilState(roomUuidState);
   const { roomUuid } = useParams();
@@ -27,6 +28,7 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
       }));
       setRoomUuidState(data.roomUuid || '');
       navigate(ROUTES.ready(Number(data.roomId)));
+      setIsLoading(false);
     },
     onError: () => {
       showModal();
@@ -42,6 +44,7 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
     onSuccess: (data) => {
       setMemberInfo((prev) => ({ ...prev, memberId: data.member.memberId }));
       navigate(ROUTES.ready(Number(data.roomId)));
+      setIsLoading(false);
     },
     onError: () => {
       showModal();
@@ -50,12 +53,17 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
 
   const handleMakeOrEnterRoom = () => {
     const nickname = nicknameInputRef.current?.value || randomNickname;
-    if (memberInfo.isMaster) {
+    if (isMaster) {
       createRoomMutation.mutate(nickname);
     } else {
       enterRoomMutation.mutate({ nickname, roomUuid: roomUuid || '' });
     }
   };
 
-  return { randomNickname, nicknameInputRef, handleMakeOrEnterRoom };
+  return {
+    randomNickname,
+    nicknameInputRef,
+    handleMakeOrEnterRoom,
+    isLoading: isMaster ? createRoomMutation.isPending : enterRoomMutation.isPending,
+  };
 };
