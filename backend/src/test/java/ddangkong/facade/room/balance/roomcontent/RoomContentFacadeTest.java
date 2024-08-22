@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.balance.content.Category;
-import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.room.NotProgressedRoomException;
+import ddangkong.exception.room.balance.roomcontent.NotFoundCurrentRoundRoomContentException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.balance.option.dto.BalanceOptionResponse;
 import ddangkong.facade.room.balance.roomcontent.dto.RoomContentResponse;
@@ -48,7 +48,7 @@ class RoomContentFacadeTest extends BaseServiceTest {
         void 방의_현재_라운드의_질문이_없을_경우_예외를_던진다() {
             // when & then
             assertThatThrownBy(() -> roomContentFacade.getRecentRoomContent(NOT_PROGRESSED_ROOM_ID))
-                    .isExactlyInstanceOf(InternalServerException.class)
+                    .isExactlyInstanceOf(NotFoundCurrentRoundRoomContentException.class)
                     .hasMessage("해당 방의 현재 라운드의 컨텐츠가 존재하지 않습니다. currentRound: 1");
         }
 
@@ -56,16 +56,14 @@ class RoomContentFacadeTest extends BaseServiceTest {
         void 방이_준비_상태인_경우_예외를_던진다() {
             // when & then
             assertThatThrownBy(() -> roomContentFacade.getRecentRoomContent(READY_ROOM_ID))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
+                    .isExactlyInstanceOf(NotProgressedRoomException.class);
         }
 
         @Test
         void 방이_종료_상태인_경우_예외를_던진다() {
             // when & then
             assertThatThrownBy(() -> roomContentFacade.getRecentRoomContent(FINISHED_ROOM_ID))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
+                    .isExactlyInstanceOf(NotProgressedRoomException.class);
         }
     }
 }

@@ -2,8 +2,9 @@ package ddangkong.domain.room.balance.roomcontent;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
-import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.room.balance.roomcontent.EmptyVoteDeadlineException;
+import ddangkong.exception.room.balance.roomcontent.MismatchRoundException;
+import ddangkong.exception.room.balance.roomcontent.VoteDeadlineConfiguredException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -54,7 +55,7 @@ public class RoomContent {
 
     public void updateVoteDeadline(LocalDateTime now, int timeLimit) {
         if (voteDeadline != null) {
-            throw new InternalServerException("해당 라운드의 투표 마감 시간은 이미 설정되었습니다.");
+            throw new VoteDeadlineConfiguredException();
         }
 
         int afterSec = (timeLimit + DELAY_MSEC) / 1_000;
@@ -68,14 +69,13 @@ public class RoomContent {
 
     private void validateSameRound(int round) {
         if (this.round != round) {
-            throw new BadRequestException("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : %d, 방 라운드 : %d"
-                    .formatted(this.round, round));
+            throw new MismatchRoundException(this.round, round);
         }
     }
 
     public LocalDateTime getVoteDeadline() {
         if (voteDeadline == null) {
-            throw new BadRequestException("투표 마감 시간이 설정되지 않습니다.");
+            throw new EmptyVoteDeadlineException();
         }
         return voteDeadline;
     }
