@@ -79,7 +79,7 @@ public class Room {
         return status.isGameProgress();
     }
 
-    public boolean isReady() {
+    public boolean isGameReady() {
         return status.isGameReady();
     }
 

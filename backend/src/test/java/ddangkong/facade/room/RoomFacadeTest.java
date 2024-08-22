@@ -445,7 +445,7 @@ class RoomFacadeTest extends BaseServiceTest {
     class 방에_참여_가능_여부 {
 
         @Test
-        void 준비중인_방에_참여_가능_여부를_조회한다() {
+        void 준비중인_방에_참여할_수_있다() {
             // given
             Room room = roomRepository.save(
                     new Room("uuid", 5, RoomStatus.READY, new RoomSetting(3, 10_000, Category.IF)
@@ -460,7 +460,7 @@ class RoomFacadeTest extends BaseServiceTest {
         }
 
         @Test
-        void 진행중인_방의_참여_가능_여부를_조회한다() {
+        void 진행중인_방에_참여할_수_없다() {
             // given
             Room room = roomRepository.save(
                     new Room("uuid", 5, RoomStatus.PROGRESS, new RoomSetting(3, 10_000, Category.IF))
@@ -475,7 +475,7 @@ class RoomFacadeTest extends BaseServiceTest {
         }
 
         @Test
-        void 종료된_방의_참여_가능_여부를_조회한다() {
+        void 종료된_방에_참여할_수_없다() {
             // given
             Room room = roomRepository.save(
                     new Room("uuid", 5, RoomStatus.FINISH, new RoomSetting(3, 10_000, Category.IF))

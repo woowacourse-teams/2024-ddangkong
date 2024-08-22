@@ -67,7 +67,7 @@ class RoomControllerTest extends BaseControllerTest {
 
         @Test
         void 게임_방_정보_조회() {
-            //when
+            // when
             RoomInfoResponse actual = RestAssured.given()
                     .pathParam("roomId", 1L)
                     .when().get("/api/balances/rooms/{roomId}")
@@ -75,7 +75,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .statusCode(200)
                     .extract().as(RoomInfoResponse.class);
 
-            //then
+            // then
             assertAll(
                     () -> assertThat(actual.members()).hasSize(5),
                     () -> assertThat(actual.isGameStart()).isTrue(),
@@ -83,10 +83,13 @@ class RoomControllerTest extends BaseControllerTest {
                     () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
             );
         }
+    }
 
+    @Nested
+    class 방_참여_가능_여부_조회 {
         @Test
         void 대기중인_방_참여_가능_여부_조회() {
-            //when & then
+            // when & then
             RoomStatusResponse actual = RestAssured.given()
                     .pathParam("uuid", "uuid4")
                     .when().get("/api/balances/rooms/{uuid}/status")
@@ -98,7 +101,7 @@ class RoomControllerTest extends BaseControllerTest {
 
         @Test
         void 게임_진행중인_방_참여_가능_여부_조회() {
-            //when & then
+            // when & then
             RoomStatusResponse actual = RestAssured.given()
                     .pathParam("uuid", "uuid1")
                     .when().get("/api/balances/rooms/{uuid}/status")
@@ -110,7 +113,7 @@ class RoomControllerTest extends BaseControllerTest {
 
         @Test
         void 게임_종료된_방_참여_가능_여부_조회() {
-            //when & then
+            // when & then
             RoomStatusResponse actual = RestAssured.given()
                     .pathParam("uuid", "uuid5")
                     .when().get("/api/balances/rooms/{uuid}/status")

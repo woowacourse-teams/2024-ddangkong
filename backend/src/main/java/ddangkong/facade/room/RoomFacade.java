@@ -93,6 +93,6 @@ public class RoomFacade {
     @Transactional(readOnly = true)
     public RoomStatusResponse getRoomStatus(String uuid) {
         Room room = roomService.getRoomWithLock(uuid);
-        return new RoomStatusResponse(room.isReady());
+        return new RoomStatusResponse(room.isGameReady());
     }
 }
