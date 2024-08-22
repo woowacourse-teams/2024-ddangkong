@@ -7,7 +7,7 @@ const useRoutePath = () => {
   const { roomId } = useParams();
 
   const currentPath = {
-    isNicknamePage: location.pathname === ROUTES.nickname,
+    isNicknamePage: location.pathname.startsWith(ROUTES.nickname),
     isReadyPage: location.pathname === ROUTES.ready(Number(roomId)),
     isFinalResultPage: location.pathname === ROUTES.gameResult(Number(roomId)),
     isRoundResultStatusPage: location.pathname === ROUTES.roundResultStatus(Number(roomId)),
