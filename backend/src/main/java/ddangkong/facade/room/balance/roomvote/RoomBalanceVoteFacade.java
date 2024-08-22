@@ -23,6 +23,7 @@ import ddangkong.service.room.RoomService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.balance.roomvote.RoomBalanceVoteService;
 import ddangkong.service.room.member.MemberService;
+import ddangkong.util.PercentageCalculator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -159,7 +160,7 @@ public class RoomBalanceVoteFacade {
             }
 
             long matchingCount = membersAndMatchingCount.getOrDefault(roomMember, 0L);
-            long matchingPercent = (matchingCount / room.getTotalRound()) * 100;
+            long matchingPercent = PercentageCalculator.calculatePercent(matchingCount, room.getTotalRound());
             membersVoteMatchingPercent.put(roomMember, matchingPercent);
         }
         return RoomMembersVoteMatchingResponse.create(membersVoteMatchingPercent);
