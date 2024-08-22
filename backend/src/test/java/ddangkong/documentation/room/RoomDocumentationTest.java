@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
+import ddangkong.facade.balance.content.BalanceCategoryResponse;
 import ddangkong.facade.room.RoomFacade;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.InitialRoomResponse;
@@ -95,10 +96,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 방_정보를_조회한다() throws Exception {
             // given
-            int totalRound = 5;
-            int timeLimit = 10_000;
             Category category = Category.IF;
-            RoomSettingResponse roomSetting = new RoomSettingResponse(5, 30, category);
+            RoomSettingResponse roomSetting = new RoomSettingResponse(5, 30, BalanceCategoryResponse.create(category));
             List<MemberResponse> members = List.of(
                     new MemberResponse(1L, "땅콩", true),
                     new MemberResponse(2L, "타콩", false)
@@ -119,7 +118,9 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("roomSetting").type(OBJECT).description("현재 방 설정 값"),
                                     fieldWithPath("roomSetting.totalRound").type(NUMBER).description("전체 라운드"),
                                     fieldWithPath("roomSetting.timeLimit").type(NUMBER).description("라운드 당 시간제한(ms)"),
-                                    fieldWithPath("roomSetting.category").type(STRING).description("컨텐츠 카테고리"),
+                                    fieldWithPath("roomSetting.category").type(OBJECT).description("컨텐츠 카테고리"),
+                                    fieldWithPath("roomSetting.category.value").type(STRING).description("카테고리 값"),
+                                    fieldWithPath("roomSetting.category.label").type(STRING).description("카테고리 표기"),
                                     fieldWithPath("members").type(ARRAY).description("방에 참여중 인원 목록"),
                                     fieldWithPath("members[].memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("members[].nickname").type(STRING).description("멤버 닉네임"),
