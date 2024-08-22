@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { checkMyGameStatus } from '@/apis/balanceContent';
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import { ONE_MINUTE } from '@/constants/time';
+import { ONE_SECOND } from '@/constants/time';
 
 interface useMyGameStatusQueryProps {
   currentRound: number | undefined;
@@ -22,7 +22,7 @@ const useMyGameStatusQuery = ({ roomId, currentRound }: useMyGameStatusQueryProp
       });
     },
     enabled: !!currentRound,
-    refetchInterval: ONE_MINUTE,
+    refetchInterval: ONE_SECOND,
   });
 
   return {

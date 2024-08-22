@@ -12,7 +12,7 @@ export const useBlockRefresh = () => {
 
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
-      alert('페이지를 새로 고침하려고 합니다.');
+      alert('새로고침 시 게임에서 나가질 수 있습니다');
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);

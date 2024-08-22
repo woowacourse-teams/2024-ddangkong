@@ -1,4 +1,4 @@
-import { ONE_MINUTE } from '@/constants/time';
+import { ONE_SECOND } from '@/constants/time';
 
 export const formatLeftRoundTime = (leftRoundTime: number) => {
   const minutes = Math.floor(leftRoundTime / 60);
@@ -11,6 +11,6 @@ export const formatLeftRoundTime = (leftRoundTime: number) => {
 };
 
 export const convertMsecToSecond = (msec: number) => {
-  const UNIT_MSEC = ONE_MINUTE;
+  const UNIT_MSEC = ONE_SECOND;
   return msec / UNIT_MSEC;
 };
