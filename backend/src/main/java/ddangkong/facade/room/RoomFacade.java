@@ -52,18 +52,18 @@ public class RoomFacade {
     @Transactional
     public void leaveRoom(Long roomId, Long memberId) {
         Room room = roomService.getRoom(roomId);
-        RoomMembers members = memberService.findRoomMembers(room);
-        Member member = members.getMember(memberId);
+        RoomMembers roomMembers = memberService.findRoomMembers(room);
+        Member member = roomMembers.getMember(memberId);
 
-        memberService.delete(member);
         roomBalanceVoteMigrator.migrateToTotalVote(member);
-        if (members.size() == 1) {
+        memberService.delete(member);
+        if (roomMembers.isExistOnlyOneMember()) {
             roomContentService.deleteRoomContents(room);
             roomService.delete(room);
             return;
         }
         if (member.isMaster()) {
-            memberService.promoteOtherMember(members);
+            memberService.promoteOtherMember(roomMembers);
         }
     }
 

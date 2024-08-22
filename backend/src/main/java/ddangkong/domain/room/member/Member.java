@@ -1,7 +1,6 @@
 package ddangkong.domain.room.member;
 
 import ddangkong.domain.room.Room;
-import ddangkong.exception.BadRequestException;
 import ddangkong.exception.room.member.AlreadyMasterException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -61,7 +60,7 @@ public class Member {
     }
 
     public boolean isCommon() {
-        return !isMaster();
+        return !isMaster;
     }
 
     @Override

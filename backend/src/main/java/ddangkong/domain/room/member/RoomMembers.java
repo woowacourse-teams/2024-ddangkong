@@ -63,6 +63,10 @@ public class RoomMembers {
                 .orElseThrow(NotRoomMemberException::new);
     }
 
+    public boolean isExistOnlyOneMember() {
+        return members.size() == 1;
+    }
+
     public int size() {
         return members.size();
     }
