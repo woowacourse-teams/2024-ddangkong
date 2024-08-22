@@ -1,0 +1,81 @@
+import randomPicker from '@/utils/randomPicker';
+
+const createRandomNickname = () => {
+  const adjectives = [
+    '춤추는',
+    '노래하는',
+    '웃긴',
+    '귀여운',
+    '사랑스러운',
+    '재치있는',
+    '기운찬',
+    '활발한',
+    '지적인',
+    '영리한',
+    '장난꾸러기',
+    '유쾌한',
+    '깔끔한',
+    '매력적인',
+    '화려한',
+    '신나는',
+    '용감한',
+    '상냥한',
+    '달콤한',
+    '기발한',
+    '짜릿한',
+    '다정한',
+    '평온한',
+    '쾌활한',
+    '따뜻한',
+    '호기심 많은',
+    '재빠른',
+    '천재적인',
+    '엉뚱한',
+    '호탕한',
+    '멋진',
+    '섹시한',
+    '발랄한',
+    '당당한',
+    '명랑한',
+    '흥미로운',
+  ];
+  const nouns = [
+    '강아지',
+    '고양이',
+    '개구리',
+    '딱다구리',
+    '사자',
+    '호랑이',
+    '코끼리',
+    '기린',
+    '고래',
+    '판다',
+    '토끼',
+    '햄스터',
+    '다람쥐',
+    '수달',
+    '원숭이',
+    '여우',
+    '늑대',
+    '말',
+    '돼지',
+    '소',
+    '양',
+    '염소',
+    '치타',
+    '타조',
+    '참새',
+    '비둘기',
+    '까마귀',
+    '공룡',
+    '거북이',
+    '독수리',
+  ];
+
+  const randomAdjective = randomPicker(adjectives);
+  const randomNoun = randomPicker(nouns);
+
+  return `${randomAdjective} ${randomNoun}`;
+};
+
+export default createRandomNickname;

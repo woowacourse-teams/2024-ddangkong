@@ -1,0 +1,15 @@
+= Ddangkong API Guide
+:doctype: book
+:icons: font
+:toc: left
+:toc-title: ToC
+:toclevels: 2
+:source-highlighter: highlightjs
+:sectlinks:
+:sectnums:
+
+include::exception.adoc[]
+include::room.adoc[]
+include::roomContent.adoc[]
+include::roomBalanceVote.adoc[]
+include::balance.adoc[]

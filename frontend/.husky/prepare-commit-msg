@@ -1,0 +1,27 @@
+#!/bin/sh
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat $1)
+
+# 허용하는 commit prefix
+ALLOWED_PREFIXES="^(feat|fix|refactor|build|docs|chore|test|style|design|init|merge): "
+
+# 현재 브랜치명
+CURRENT_BRANCH=$(git branch --show-current)
+
+# 브랜치명에서 이슈 번호 추출. 브랜치명 : {prefix}/#{issue_number}
+ISSUE_NUMBER=$(echo $CURRENT_BRANCH | sed -n 's/.*#\([0-9]*\).*/\1/p')
+
+if ! echo "$COMMIT_MSG" | grep -Eq "$ALLOWED_PREFIXES"; then
+  echo "Error: Commit message does not follow the convention."
+  echo "Allowed prefixes: feat:, fix:, refactor:, build:, docs:, chore:, test:, style:, design:, init:, merge:"
+  exit 1
+fi
+
+# 이슈 번호가 이미 커밋 메시지에 있는지 확인
+if ! echo "$COMMIT_MSG" | grep -q "#$ISSUE_NUMBER"; then
+  # 이슈 번호가 없으면 커밋 메시지 끝에 추가
+  NEW_COMMIT_MSG="$COMMIT_MSG #$ISSUE_NUMBER"
+  echo "$NEW_COMMIT_MSG" > "$COMMIT_MSG_FILE"
+  echo "Issue number #$ISSUE_NUMBER has been automatically added to the commit message."
+fi

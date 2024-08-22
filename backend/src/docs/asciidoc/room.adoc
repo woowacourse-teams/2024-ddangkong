@@ -1,0 +1,233 @@
+== 방
+
+=== 방 생성
+
+==== curl
+
+include::{snippets}/room/create/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/create/http-request.adoc[]
+
+request fields
+
+include::{snippets}/room/create/request-fields.adoc[]
+
+==== response
+
+include::{snippets}/room/create/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/create/response-fields.adoc[]
+
+'''
+
+=== 방 참여
+
+==== curl
+
+include::{snippets}/room/join/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/join/http-request.adoc[]
+
+include::{snippets}/room/join/path-parameters.adoc[]
+
+request fields
+
+include::{snippets}/room/join/request-fields.adoc[]
+
+==== response
+
+include::{snippets}/room/join/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/join/response-fields.adoc[]
+
+'''
+
+=== 방 나가기
+
+==== curl
+
+include::{snippets}/room/leave/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/leave/http-request.adoc[]
+
+include::{snippets}/room/leave/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/leave/http-response.adoc[]
+
+'''
+
+=== 방 설정 변경
+
+==== curl
+
+include::{snippets}/room/setting/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/setting/http-request.adoc[]
+
+include::{snippets}/room/setting/path-parameters.adoc[]
+
+include::{snippets}/room/setting/request-fields.adoc[]
+
+==== response
+
+include::{snippets}/room/setting/http-response.adoc[]
+
+'''
+
+=== 방 정보 조회 (polling)
+
+==== curl
+
+include::{snippets}/room/info/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/info/http-request.adoc[]
+
+include::{snippets}/room/info/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/info/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/info/response-fields.adoc[]
+
+'''
+
+=== 게임 시작
+
+==== curl
+
+include::{snippets}/room/start/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/start/http-request.adoc[]
+
+include::{snippets}/room/start/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/start/http-response.adoc[]
+
+'''
+
+=== 다음 라운드로 이동
+
+==== curl
+
+include::{snippets}/room/nextRound/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/nextRound/http-request.adoc[]
+
+include::{snippets}/room/nextRound/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/nextRound/http-response.adoc[]
+
+'''
+
+=== 라운드 종료 여부 (polling)
+
+==== curl
+
+include::{snippets}/room/roundFinished/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/roundFinished/http-request.adoc[]
+
+include::{snippets}/room/roundFinished/path-parameters.adoc[]
+
+include::{snippets}/room/roundFinished/query-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/roundFinished/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/roundFinished/response-fields.adoc[]
+
+'''
+
+'''
+
+=== 게임 참여 가능 여부
+
+==== curl
+
+include::{snippets}/room/status/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/status/http-request.adoc[]
+
+include::{snippets}/room/status/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/status/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/status/response-fields.adoc[]
+
+'''
+
+=== 방 초기화
+
+==== curl
+
+include::{snippets}/room/reset/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/reset/http-request.adoc[]
+
+include::{snippets}/room/reset/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/reset/http-response.adoc[]
+
+=== 방 초기화 여부 (Polling)
+
+==== curl
+
+include::{snippets}/room/initial/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/initial/http-request.adoc[]
+
+include::{snippets}/room/initial/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/initial/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/initial/response-fields.adoc[]
+
+'''

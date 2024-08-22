@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", // 코드의 변환 대상 ECMAScript 버전을 최신 버전으로 지정
+    "module": "ESNext", // 최신 ECMAScript 버전 모듈 시스템을 타겟으로 컴파일
+    "moduleResolution": "node", // TypeScript가 모듈을 해석하고 처리하는 방식 지정
+    "outDir": "./dist", // 컴파일된 파일이 저장될 출력 디렉토리 지정
+    "noImplicitAny": true, // 암시적 any를 허용하지 않음
+    "strict": true, // 엄격한 타입 검사
+    "jsx": "react-jsx", // 새로운 JSX 변환 방식(React 17+)으로 css prop 사용하기 위해 필요
+    "jsxImportSource": "@emotion/react", // React jsx 함수가 아닌 emotion jsx 함수 사용
+    "allowSyntheticDefaultImports": true, // default export 가 없어도 import 허용
+    "sourceMap": true, // 디버깅 시 어떤 파일에서 에러났는지 추적 용이
+    "resolveJsonModule": true, // JSON 파일 resolve
+    "types": ["jest", "@emotion/react/types/css-prop"],
+    "baseUrl": ".", // 모듈 해석 기본 경로
+    "paths": {
+      // 경로 별칭 설정
+      "@/*": ["src/*"],
+      "@/test-utils": ["./src/utils/test-utils"]
+    }
+  },
+  "include": ["src", "jest.setup.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,34 @@
+{
+  "group": {
+    "firstOption": {
+      "optionId": 1,
+      "name": "Loading...",
+      "members": [],
+      "memberCount": 0,
+      "percent": 50
+    },
+    "secondOption": {
+      "optionId": 2,
+      "name": "Loading...",
+      "members": [],
+      "memberCount": 0,
+      "percent": 50
+    },
+    "giveUp": {
+      "members": [],
+      "memberCount": 0
+    }
+  },
+  "total": {
+    "firstOption": {
+      "optionId": 1,
+      "name": "Loading...",
+      "percent": 50
+    },
+    "secondOption": {
+      "optionId": 2,
+      "name": "Loading...",
+      "percent": 50
+    }
+  }
+}

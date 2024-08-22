@@ -1,0 +1,89 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.1'
+    id 'io.spring.dependency-management' version '1.1.5'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+}
+
+group = 'ddangkong'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    asciidoctorExt
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // rest assured
+    testImplementation 'io.rest-assured:rest-assured:5.5.0'
+
+    // Spring REST Docs
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:3.0.1'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:3.0.1'
+
+    // Discord Webhook Appender
+    implementation 'com.github.napstr:logback-discord-appender:1.0.0'
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    reports.html.required = false
+    reports.junitXml.required = false
+}
+
+tasks.register('restDocsTest', Test) {
+    outputs.dir snippetsDir
+    filter {
+        includeTestsMatching 'ddangkong.documentation.*'
+    }
+}
+
+tasks.named('asciidoctor') {
+    dependsOn restDocsTest
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    sources {
+        include("**/index.adoc")
+    }
+    baseDirFollowsSourceFile()
+}
+
+tasks.named('bootJar') {
+    if (project.hasProperty('createRestDocs')) {
+        dependsOn asciidoctor
+        from("${asciidoctor.outputDir}") {
+            into 'static/docs'
+        }
+    }
+}

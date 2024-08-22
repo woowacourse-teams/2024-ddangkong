@@ -1,0 +1,16 @@
+{
+  "contentId": 1,
+  "category": "연애",
+  "question": "당신의 결혼 상대는?",
+  "timeLimit": 10000,
+  "totalRound": 5,
+  "currentRound": 1,
+  "firstOption": {
+    "optionId": 1,
+    "name": "100억 빚 송강"
+  },
+  "secondOption": {
+    "optionId": 2,
+    "name": "100억 부자 송강호"
+  }
+}

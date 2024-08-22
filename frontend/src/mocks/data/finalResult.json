@@ -1,0 +1,23 @@
+{
+  "matchedMembers": [
+    {
+      "rank": 1,
+      "memberId": 1,
+      "nickname": "프콩",
+      "matchingPercent": 100
+    },
+    {
+      "rank": 1,
+      "memberId": 2,
+      "nickname": "커콩",
+      "matchingPercent": 100
+    },
+    {
+      "rank": 3,
+      "memberId": 3,
+      "nickname": "타콩",
+      "matchingPercent": 99
+    }
+  ],
+  "existMatching": true
+}

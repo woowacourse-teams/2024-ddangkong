@@ -1,0 +1,45 @@
+{
+  "group": {
+    "firstOption": {
+      "optionId": 1,
+      "name": "100억 빚 송강",
+      "members": ["d"],
+      "memberCount": 1,
+      "percent": 73
+    },
+    "secondOption": {
+      "optionId": 2,
+      "name": "100억 부자 송강호",
+      "members": [
+        "일이삼사오육칠팔구십일이",
+        "일이삼사오육칠팔구십일이",
+        "일이삼사오육칠팔구십일이",
+        "일이삼사오육칠팔구십일이",
+        "일이삼사오육칠팔구십일이",
+        "일이삼사오육칠팔구십일이",
+        "일이삼사오육칠팔구십일이",
+        "일이삼사오육칠팔구십일이",
+        "일이삼사오육칠팔구십일이",
+        "일이삼사오육칠팔구십일이"
+      ],
+      "memberCount": 10,
+      "percent": 27
+    },
+    "giveUp": {
+      "members": ["ㅁ"],
+      "memberCount": 1
+    }
+  },
+  "total": {
+    "firstOption": {
+      "optionId": 1,
+      "name": "100억 빚 송강",
+      "percent": 16
+    },
+    "secondOption": {
+      "optionId": 2,
+      "name": "100억 부자 송강호",
+      "percent": 84
+    }
+  }
+}

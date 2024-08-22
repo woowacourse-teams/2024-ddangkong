@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  ddangkong-api-dev:
+    platform: linux/arm64/v8
+    build:
+      context: ../
+      dockerfile: Dockerfile
+      args:
+        SPRING_PROFILE: dev
+    environment:
+      - SPRING_PROFILE=dev
+    ports:
+      - "80:8080"
