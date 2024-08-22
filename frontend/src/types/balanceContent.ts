@@ -20,8 +20,14 @@ export interface MyGameStatus {
   isGameFinished: boolean;
 }
 
-export interface GameFinalResult {
+export interface MatchingResult {
+  matchedMembers: MemberMatchingInfo[];
+  existMatching: boolean;
+}
+
+export interface MemberMatchingInfo {
   rank: number;
-  name: string;
-  percent: number;
+  memberId: number;
+  nickname: string;
+  matchingPercent: number;
 }

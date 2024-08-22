@@ -9,7 +9,8 @@ export const API_URL = {
   moveNextRound: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/next-round`,
   myGameStatus: (roomId: number, round: number) =>
     `${BASE_URL}/api/balances/rooms/${roomId}/round-finished?round=${round}`,
-  finalResult: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/final`,
+  matchingResult: (roomId: number, memberId: number) =>
+    `${BASE_URL}/api/balances/rooms/${roomId}/members/${memberId}/matching`,
   room: `${BASE_URL}/api/balances/rooms`,
   enterRoom: (roomUuid: string) => `${BASE_URL}/api/balances/rooms/${roomUuid}/members`,
   getRoomInfo: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
@@ -33,7 +34,7 @@ export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
   roundVoteResult: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-result`,
   myGameStatus: `${BASE_URL}/api/balances/rooms/:roomId/round-finished`,
   moveNextRound: `${BASE_URL}/api/balances/rooms/:roomId/next-round`,
-  finalResult: `${BASE_URL}/api/balances/rooms/:roomId/final`,
+  matchingResult: `${BASE_URL}/api/balances/rooms/:roomId/members/:memberId/matching`,
   room: `${BASE_URL}/api/balances/rooms`,
   enterRoom: `${BASE_URL}/api/balances/rooms/:roomUuid/members`,
   getRoomInfo: `${BASE_URL}/api/balances/rooms/:roomId`,
