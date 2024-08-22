@@ -3,16 +3,16 @@ import { useParams } from 'react-router-dom';
 import createRandomNextRoundMessage from './createRandomNextRoundMessage';
 
 import InfoModal from '@/components/common/InfoModal/InfoModal';
-import useModalHandler from '@/components/common/Modal/hooks/useModalHandler';
 import NextRoundButton from '@/components/common/NextRoundButton/NextRoundButton';
 import useMoveNextRoundMutation from '@/components/common/NextRoundButton/NextRoundButton.hook';
 import Content from '@/components/layout/Content/Content';
 import RoundVoteContainer from '@/components/RoundVoteContainer/RoundVoteContainer';
 import TopicContainer from '@/components/TopicContainer/TopicContainer';
+import useModal from '@/hooks/useModal';
 
 const RoundResultPage = () => {
   const { roomId } = useParams();
-  const { isModalOpen, handleModalOpen, handleModalClose } = useModalHandler();
+  const { isOpen, show, close } = useModal();
   const { mutate: moveNextRound } = useMoveNextRoundMutation(Number(roomId));
   const randomRoundNextMessage = createRandomNextRoundMessage();
 
@@ -20,10 +20,10 @@ const RoundResultPage = () => {
     <Content>
       <TopicContainer />
       <RoundVoteContainer />
-      <NextRoundButton handleModalOpen={handleModalOpen} />
+      <NextRoundButton showModal={show} />
       <InfoModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
+        isOpen={isOpen}
+        onClose={close}
         onConfirm={moveNextRound}
         text={randomRoundNextMessage}
       />
