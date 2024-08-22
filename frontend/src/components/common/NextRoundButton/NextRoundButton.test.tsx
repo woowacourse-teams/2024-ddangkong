@@ -16,7 +16,7 @@ describe('NextRoundButton 컴포넌트 테스트', () => {
           snap.set(memberInfoState, { memberId: 1, nickname: 'Test User', isMaster });
         }}
       >
-        <NextRoundButton handleModalOpen={jest.fn()} />
+        <NextRoundButton showModal={jest.fn()} />
       </RecoilRoot>,
     );
   };
@@ -45,7 +45,7 @@ describe('NextRoundButton 컴포넌트 테스트', () => {
           snap.set(memberInfoState, { memberId: 1, nickname: 'Test User', isMaster: true });
         }}
       >
-        <NextRoundButton handleModalOpen={handleModalOpen} />
+        <NextRoundButton showModal={handleModalOpen} />
       </RecoilRoot>,
     );
 
