@@ -10,17 +10,17 @@ export const useGetRoomInfo = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
     queryFn: ({ queryKey: [, roomId] }) => getRoomInfo(Number(roomId)),
     refetchInterval: ONE_SECOND,
   });
 
   useEffect(() => {
-    if (data?.isGameStart) {
+    if (!isFetching && data?.isGameStart) {
       navigate(`/${roomId}/game`);
     }
-  }, [data?.isGameStart, roomId, navigate]);
+  }, [data?.isGameStart, roomId, navigate, isFetching]);
 
   return { members: data?.members, roomSetting: data?.roomSetting, isLoading, isError };
 };
