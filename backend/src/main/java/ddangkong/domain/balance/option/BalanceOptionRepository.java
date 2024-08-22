@@ -13,7 +13,7 @@ public interface BalanceOptionRepository extends JpaRepository<BalanceOption, Lo
     @Query("""
             SELECT bo
             FROM BalanceOption bo
-                RIGHT JOIN RoomBalanceVote rbv ON bo = rbv.balanceOption
+                JOIN RoomBalanceVote rbv ON bo = rbv.balanceOption
             WHERE rbv.member = :member
              """)
     List<BalanceOption> findMemberRoomBalanceVoteOptions(Member member);
