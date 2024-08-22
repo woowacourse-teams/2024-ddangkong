@@ -154,7 +154,7 @@ public class RoomBalanceVoteFacade {
                                                                               Room room,
                                                                               Member member) {
         Map<Member, Long> membersVoteMatchingPercent = new HashMap<>();
-        for (Member roomMember : memberService.findAllRoomMembers(room)) {
+        for (Member roomMember : memberService.findRoomMembers(room).getMembers()) {
             if (roomMember.equals(member)) {
                 continue;
             }
