@@ -2,13 +2,20 @@ import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
 
-export const profile = css`
+export const profileWrapper = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 8rem;
   height: 8rem;
   margin-top: 4rem;
   border-radius: 50%;
 
   background-color: ${Theme.color.gray300};
+`;
+
+export const profileImg = css`
+  width: 60%;
 `;
 
 export const nicknameBox = css`
