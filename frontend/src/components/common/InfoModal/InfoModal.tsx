@@ -15,7 +15,7 @@ const InfoModal = ({ isOpen, onClose, onConfirm, text }: InfoModalProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} onConfirm={onConfirm}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <Modal.Header position="center">
         <Modal.IconButton onClick={onClose} />
       </Modal.Header>
