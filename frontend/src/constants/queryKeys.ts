@@ -1,6 +1,6 @@
 export const QUERY_KEYS = {
   balanceContent: 'balanceContent',
-  gameResult: 'gameResult',
+  matchingResult: 'matchingResult',
   roundVoteResult: 'roundVoteResult',
   myGameStatus: 'myGameStatus',
   roundIsFinished: 'roundIsFinished',
