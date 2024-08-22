@@ -6,8 +6,14 @@ import { fetchMatchingResult } from '@/apis/balanceContent';
 import { resetRoom } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { memberInfoState } from '@/recoil/atom';
+import { MatchingResult, MemberMatchingInfo } from '@/types/balanceContent';
 
-export const useMatchingResultQuery = () => {
+type MatchingResultQueryResponse = UseQueryResult<MatchingResult, Error> & {
+  matchedMembers?: MemberMatchingInfo[];
+  existMatching?: boolean;
+};
+
+export const useMatchingResultQuery = (): MatchingResultQueryResponse => {
   const { roomId } = useParams();
   const memberInfo = useRecoilValue(memberInfoState);
 
