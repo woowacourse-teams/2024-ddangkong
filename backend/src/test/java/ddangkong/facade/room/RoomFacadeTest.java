@@ -492,8 +492,7 @@ class RoomFacadeTest extends BaseServiceTest {
         void 존재하지_않는_방에_참여_가능_여부를_조회하면_예외가_발생한다() {
             // when & then
             assertThatThrownBy(() -> roomFacade.getRoomStatus("NotExist"))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("존재하지 않는 방입니다.");
+                    .isExactlyInstanceOf(NotFoundRoomException.class);
         }
     }
 }
