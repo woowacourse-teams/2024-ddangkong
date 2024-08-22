@@ -8,8 +8,8 @@ import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
-import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.room.balance.roomcontent.MismatchRoundException;
+import ddangkong.exception.room.balance.roomcontent.VoteDeadlineConfiguredException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -53,8 +53,7 @@ class RoomContentTest {
 
             // when & then
             assertThatThrownBy(() -> roomContent.updateVoteDeadline(NOW, timeLimit))
-                    .isInstanceOf(InternalServerException.class)
-                    .hasMessage("해당 라운드의 투표 마감 시간은 이미 설정되었습니다.");
+                    .isExactlyInstanceOf(VoteDeadlineConfiguredException.class);
         }
     }
 
@@ -98,8 +97,7 @@ class RoomContentTest {
 
             // when & then
             assertThatThrownBy(() -> roomContent.isOverVoteDeadline(now, invalidRound))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("라운드가 일치하지 않습니다.");
+                    .isExactlyInstanceOf(MismatchRoundException.class);
         }
     }
 }

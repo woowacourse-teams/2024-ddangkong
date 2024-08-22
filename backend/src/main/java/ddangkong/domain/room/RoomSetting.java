@@ -1,7 +1,8 @@
 package ddangkong.domain.room;
 
 import ddangkong.domain.balance.content.Category;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.InvalidRangeTotalRoundException;
+import ddangkong.exception.room.InvalidTimeLimitException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -49,16 +50,13 @@ public class RoomSetting {
 
     private void validateTotalRound(int totalRound) {
         if (totalRound < MIN_TOTAL_ROUND || totalRound > MAX_TOTAL_ROUND) {
-            throw new BadRequestException("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"
-                    .formatted(MIN_TOTAL_ROUND, MAX_TOTAL_ROUND, totalRound));
+            throw new InvalidRangeTotalRoundException(MIN_TOTAL_ROUND, MAX_TOTAL_ROUND, totalRound);
         }
     }
 
     private void validateTimeLimit(int timeLimit) {
         if (!ALLOWED_TIME_LIMIT.contains(timeLimit)) {
-            throw new BadRequestException("시간 제한은 %dms / %dms / %dms 만 가능합니다. requested timeLimit: %d"
-                    .formatted(ALLOWED_TIME_LIMIT.get(0), ALLOWED_TIME_LIMIT.get(1), ALLOWED_TIME_LIMIT.get(2),
-                            timeLimit));
+            throw new InvalidTimeLimitException(ALLOWED_TIME_LIMIT, timeLimit);
         }
     }
 

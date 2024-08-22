@@ -170,6 +170,30 @@ include::{snippets}/room/roundFinished/response-fields.adoc[]
 
 '''
 
+'''
+
+=== 게임 참여 가능 여부
+
+==== curl
+
+include::{snippets}/room/status/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/status/http-request.adoc[]
+
+include::{snippets}/room/status/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/status/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/status/response-fields.adoc[]
+
+'''
+
 === 방 초기화
 
 ==== curl

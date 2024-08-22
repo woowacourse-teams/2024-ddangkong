@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.room.Room;
+import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.member.AlreadyMasterException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -31,11 +33,12 @@ class MemberTest {
         void 마스터_유저인_경우_예외를_발생한다() {
             // given
             Member master = Member.createMaster("prin", ROOM);
+            EntityTestUtils.setId(master, 3L);
 
             // when & then
             assertThatThrownBy(() -> master.promoteToMaster())
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 멤버는 이미 마스터입니다.");
+                    .isExactlyInstanceOf(AlreadyMasterException.class)
+                    .hasMessage("해당 멤버는 이미 방장입니다. memberId : 3");
         }
     }
 

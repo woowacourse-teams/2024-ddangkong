@@ -15,6 +15,13 @@ import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.NotReadyRoomException;
+import ddangkong.exception.room.member.AlreadyExistMasterException;
+import ddangkong.exception.room.member.ExceedMaxMemberCountException;
+import ddangkong.exception.room.member.InvalidMasterCreationException;
+import ddangkong.exception.room.member.NotExistCommonMemberException;
+import ddangkong.exception.room.member.NotExistMasterException;
+import ddangkong.exception.room.member.NotRoomMemberException;
 import ddangkong.facade.BaseServiceTest;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -52,8 +59,7 @@ class MemberServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> memberService.saveMasterMember("eden", room))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 방장이 존재합니다.");
+                    .isExactlyInstanceOf(AlreadyExistMasterException.class);
         }
 
         @Test
@@ -64,7 +70,7 @@ class MemberServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> memberService.saveMasterMember("eden", room))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(InvalidMasterCreationException.class)
                     .hasMessage("방에 멤버가 존재하면 방장을 생성할 수 없습니다. 현재 멤버 수: 1");
         }
     }
@@ -102,8 +108,7 @@ class MemberServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> memberService.saveCommonMember("eden", room))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 시작한 방에는 멤버를 생성할 수 없습니다.");
+                    .isExactlyInstanceOf(NotReadyRoomException.class);
         }
 
         @Test
@@ -113,8 +118,7 @@ class MemberServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> memberService.saveCommonMember("prin", room))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("방장이 존재하지 않습니다.");
+                    .isExactlyInstanceOf(NotExistMasterException.class);
         }
 
         @Test
@@ -128,8 +132,8 @@ class MemberServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> memberService.saveCommonMember("tacan", room))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("방의 최대 인원 수가 가득 찼습니다. 현재 멤버 수: 12");
+                    .isExactlyInstanceOf(ExceedMaxMemberCountException.class)
+                    .hasMessage("방의 최대 인원을 초과했습니다. 현재 멤버 수: 12");
         }
     }
 
@@ -158,8 +162,7 @@ class MemberServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> memberService.getRoomMember(prin.getId(), otherRoom))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("방에 존재하지 않는 멤버입니다.");
+                    .isExactlyInstanceOf(NotRoomMemberException.class);
         }
     }
 
@@ -192,8 +195,7 @@ class MemberServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> memberService.promoteOtherMember(roomMembers))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("방에 일반 멤버가 존재하지 않습니다.");
+                    .isInstanceOf(NotExistCommonMemberException.class);
         }
     }
 

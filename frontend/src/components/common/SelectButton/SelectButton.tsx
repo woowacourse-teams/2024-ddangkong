@@ -1,3 +1,5 @@
+import { useParams } from 'react-router-dom';
+
 import useCompleteSelectionMutation from './SelectButton.hook';
 import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
@@ -11,7 +13,8 @@ interface SelectButtonProps {
 }
 
 const SelectButton = ({ selectedId, completeSelection, showModal }: SelectButtonProps) => {
-  const { balanceContent } = useBalanceContentQuery();
+  const { roomId } = useParams();
+  const { balanceContent } = useBalanceContentQuery(Number(roomId));
   const {
     data,
     isPending,

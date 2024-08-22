@@ -16,10 +16,6 @@ export const router = createBrowserRouter([
     element: <MainPage />,
   },
   {
-    path: ':roomId/round/result/status',
-    element: <VoteStatusPage />,
-  },
-  {
     path: '/',
     element: <Layout />,
     children: [
@@ -38,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: ':roomId/round/result',
         element: <RoundResultPage />,
+      },
+      {
+        path: ':roomId/round/result/status',
+        element: <VoteStatusPage />,
       },
       {
         path: ':roomId/game/result',

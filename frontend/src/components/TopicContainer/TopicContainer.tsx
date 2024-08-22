@@ -6,9 +6,9 @@ import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const TopicContainer = () => {
-  const { balanceContent } = useBalanceContentQuery();
   const location = useLocation();
-  const roomId = useParams();
+  const { roomId } = useParams();
+  const { balanceContent } = useBalanceContentQuery(Number(roomId));
 
   const isGamePage = location.pathname === ROUTES.game(Number(roomId));
 

@@ -2,6 +2,7 @@ package ddangkong.domain.room.member;
 
 import ddangkong.domain.room.Room;
 import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.member.AlreadyMasterException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -50,7 +51,7 @@ public class Member {
 
     public void promoteToMaster() {
         if (isMaster) {
-            throw new BadRequestException("해당 멤버는 이미 마스터입니다.");
+            throw new AlreadyMasterException(id);
         }
         isMaster = true;
     }

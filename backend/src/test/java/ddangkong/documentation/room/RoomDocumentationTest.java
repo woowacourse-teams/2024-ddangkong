@@ -27,6 +27,7 @@ import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.room.RoomFacade;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -296,6 +297,30 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("master").type(OBJECT).description("방장 정보"),
                                     fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("master.nickname").type(STRING).description("닉네임")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    class 방_게임_참여_가능_여부 {
+        private static final String ENDPOINT = "/api/balances/rooms/{uuid}/status";
+
+        @Test
+        void 방에서_게임이_참여_가능_여부를_조회한다() throws Exception {
+            // given
+            RoomStatusResponse response = new RoomStatusResponse(true);
+            when(roomFacade.getRoomStatus(anyString())).thenReturn(response);
+
+            // when & then
+            mockMvc.perform(get(ENDPOINT, "488fd79f92a34131bf2a628bd58c5d2c"))
+                    .andExpect(status().isOk())
+                    .andDo(document("room/status",
+                            pathParameters(
+                                    parameterWithName("uuid").description("방의 UUID")
+                            ),
+                            responseFields(
+                                    fieldWithPath("isJoinable").description("방에 참가 가능 여부")
                             )
                     ));
         }

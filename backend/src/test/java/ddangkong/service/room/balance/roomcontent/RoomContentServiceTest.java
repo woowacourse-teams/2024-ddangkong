@@ -10,7 +10,7 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.balance.roomcontent.EmptyVoteDeadlineException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.support.annotation.FixedClock;
 import java.time.LocalDateTime;
@@ -50,7 +50,7 @@ class RoomContentServiceTest extends BaseServiceTest {
                     () -> assertThat(roomContents).hasSize(5),
                     () -> assertThat(roomContents.get(0).getVoteDeadline()).isNotNull(),
                     () -> assertThatThrownBy(() -> roomContents.get(1).getVoteDeadline())
-                            .isExactlyInstanceOf(BadRequestException.class)
+                            .isExactlyInstanceOf(EmptyVoteDeadlineException.class)
             );
         }
     }

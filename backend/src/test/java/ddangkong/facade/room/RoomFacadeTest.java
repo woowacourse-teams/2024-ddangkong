@@ -19,11 +19,13 @@ import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.support.EntityTestUtils;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.NotFinishedRoomException;
+import ddangkong.exception.room.NotFoundRoomException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import java.time.LocalDateTime;
@@ -37,10 +39,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 class RoomFacadeTest extends BaseServiceTest {
 
@@ -94,7 +92,7 @@ class RoomFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomFacade.joinRoom(nickname, nonExistUuid))
-                    .isExactlyInstanceOf(BadRequestException.class);
+                    .isExactlyInstanceOf(NotFoundRoomException.class);
         }
 
         @Test
@@ -470,8 +468,7 @@ class RoomFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
+                    .isExactlyInstanceOf(NotFinishedRoomException.class);
         }
 
         @ParameterizedTest
@@ -484,8 +481,7 @@ class RoomFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
+                    .isExactlyInstanceOf(NotFinishedRoomException.class);
         }
 
         private void saveRoomContents(Room room) {
@@ -543,7 +539,8 @@ class RoomFacadeTest extends BaseServiceTest {
         }
 
         @Test
-        @Disabled // TODO @LastModifiedDate 비활성화 후 테스트
+        @Disabled
+            // TODO @LastModifiedDate 비활성화 후 테스트
         void 해당_방과_연관된_모든_정보를_삭제할_수_있다() {
             // given
             LocalDateTime standardModified = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
@@ -591,5 +588,60 @@ class RoomFacadeTest extends BaseServiceTest {
             return roomContentRepository.save(roomContent);
         }
     }
-}
 
+    @Nested
+    class 방에_참여_가능_여부 {
+
+        @Test
+        void 준비중인_방에_참여할_수_있다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.READY, new RoomSetting(3, 10_000, Category.IF)
+                    ));
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isJoinable()).isTrue();
+        }
+
+        @Test
+        void 진행중인_방에_참여할_수_없다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.PROGRESS, new RoomSetting(3, 10_000, Category.IF))
+            );
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isJoinable()).isFalse();
+        }
+
+        @Test
+        void 종료된_방에_참여할_수_없다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.FINISH, new RoomSetting(3, 10_000, Category.IF))
+            );
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isJoinable()).isFalse();
+        }
+
+        @Test
+        void 존재하지_않는_방에_참여_가능_여부를_조회하면_예외가_발생한다() {
+            // when & then
+            assertThatThrownBy(() -> roomFacade.getRoomStatus("NotExist"))
+                    .isExactlyInstanceOf(NotFoundRoomException.class);
+        }
+    }
+}
