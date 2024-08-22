@@ -6,7 +6,7 @@ import { useRecoilState } from 'recoil';
 import { enterRoom, createRoom } from '@/apis/room';
 import { ROUTES } from '@/constants/routes';
 import { memberInfoState, roomUuidState } from '@/recoil/atom';
-import { RoomIdAndMember } from '@/types/room';
+import { CreateOrEnterRoomResponse } from '@/types/room';
 import { createRandomNickname } from '@/utils/nickname';
 
 export const useMakeOrEnterRoom = (showModal: () => void) => {
@@ -19,7 +19,7 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
   const [, setRoomUuidState] = useRecoilState(roomUuidState);
   const { roomUuid } = useParams();
 
-  const createRoomMutation = useMutation<RoomIdAndMember, Error, string>({
+  const createRoomMutation = useMutation<CreateOrEnterRoomResponse, Error, string>({
     mutationFn: createRoom,
     onSuccess: (data) => {
       setMemberInfo((prev) => ({
@@ -36,7 +36,7 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
   });
 
   const enterRoomMutation = useMutation<
-    RoomIdAndMember,
+    CreateOrEnterRoomResponse,
     Error,
     { nickname: string; roomUuid: string }
   >({

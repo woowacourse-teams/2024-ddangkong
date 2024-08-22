@@ -1,14 +1,14 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { RoomInfo, RoomIdAndMember, Category, RoomSetting } from '@/types/room';
+import { RoomInfo, CreateOrEnterRoomResponse, Category, RoomSetting } from '@/types/room';
 
 interface CategoryResponse {
   categoryList: Category[];
 }
 
 // 방 만들기
-export const createRoom = async (nickname: string): Promise<RoomIdAndMember> => {
+export const createRoom = async (nickname: string): Promise<CreateOrEnterRoomResponse> => {
   const res = await fetcher.post({
     url: API_URL.room,
     headers: {
@@ -36,7 +36,10 @@ export const resetRoom = async (roomId: number) => {
 };
 
 // 방 참여하기
-export const enterRoom = async (roomUuid: string, nickname: string): Promise<RoomIdAndMember> => {
+export const enterRoom = async (
+  roomUuid: string,
+  nickname: string,
+): Promise<CreateOrEnterRoomResponse> => {
   const res = await fetcher.post({
     url: API_URL.enterRoom(roomUuid),
     headers: {
