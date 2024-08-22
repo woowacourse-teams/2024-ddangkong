@@ -27,18 +27,18 @@ export const buttonWrapper = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2rem;
+  height: 2rem;
 `;
 
 export const gameTitle = css`
   font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 2rem;
 `;
 
 export const iconImage = css`
   display: flex;
   align-items: center;
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 2.4rem;
+  height: 2.4rem;
 `;
