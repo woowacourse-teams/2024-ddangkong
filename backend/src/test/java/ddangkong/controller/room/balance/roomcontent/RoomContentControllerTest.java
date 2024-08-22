@@ -17,7 +17,7 @@ class RoomContentControllerTest extends BaseControllerTest {
 
         private static final RoomContentResponse EXPECTED_RESPONSE = new RoomContentResponse(
                 1L,
-                Category.IF,
+                Category.IF.getValue(),
                 5,
                 2,
                 10_000, // TODO 추후 sec으로 변경

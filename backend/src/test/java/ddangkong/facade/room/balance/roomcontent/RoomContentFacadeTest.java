@@ -27,7 +27,7 @@ class RoomContentFacadeTest extends BaseServiceTest {
         private static final Long FINISHED_ROOM_ID = 5L;
         private static final RoomContentResponse BALANCE_CONTENT_RESPONSE = new RoomContentResponse(
                 1L,
-                Category.IF,
+                Category.IF.getValue(),
                 5,
                 2,
                 10_000, // TODO 추후 sec으로 변경
