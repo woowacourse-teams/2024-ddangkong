@@ -9,7 +9,7 @@ interface RoundResultTabProps {
 }
 
 const TAB_TITLE = {
-  group: '그룹',
+  group: '방',
   total: '전체',
 } as const;
 
