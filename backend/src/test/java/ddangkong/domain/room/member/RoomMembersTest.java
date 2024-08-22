@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.room.Room;
 import ddangkong.domain.support.EntityTestUtils;
-import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.room.member.InvalidMasterCountException;
+import ddangkong.exception.room.member.NotRoomMemberException;
 import ddangkong.support.fixture.MemberFixture;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +53,7 @@ class RoomMembersTest {
 
             // when & then
             assertThatThrownBy(() -> new RoomMembers(members))
-                    .isExactlyInstanceOf(InternalServerException.class)
+                    .isExactlyInstanceOf(InvalidMasterCountException.class)
                     .hasMessageContaining("방장이 1명이 아닙니다. 현재 방장 수: 2, roomId: 1");
         }
 
@@ -68,7 +68,7 @@ class RoomMembersTest {
 
             // when & then
             assertThatThrownBy(() -> new RoomMembers(members))
-                    .isExactlyInstanceOf(InternalServerException.class)
+                    .isExactlyInstanceOf(InvalidMasterCountException.class)
                     .hasMessageContaining("방장이 1명이 아닙니다. 현재 방장 수: 0, roomId: 1");
         }
     }
@@ -140,8 +140,7 @@ class RoomMembersTest {
 
             // when & then
             assertThatThrownBy(() -> roomMembers.getMember(100L))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("멤버가 존재하지 않습니다.");
+                    .isExactlyInstanceOf(NotRoomMemberException.class);
         }
     }
 }

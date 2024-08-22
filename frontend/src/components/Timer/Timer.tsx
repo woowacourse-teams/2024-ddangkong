@@ -1,3 +1,5 @@
+import { useParams } from 'react-router-dom';
+
 import useRoundTimer from './Timer.hook';
 import {
   timerIcon,
@@ -12,7 +14,8 @@ import { formatLeftRoundTime } from './Timer.util';
 import DdangkongTimer from '@/assets/images/ddangkongTimer.png';
 
 const Timer = () => {
-  const { barWidthPercent, leftRoundTime, isAlmostFinished } = useRoundTimer();
+  const { roomId } = useParams();
+  const { barWidthPercent, leftRoundTime, isAlmostFinished } = useRoundTimer(Number(roomId));
 
   return (
     <section css={timerLayout}>

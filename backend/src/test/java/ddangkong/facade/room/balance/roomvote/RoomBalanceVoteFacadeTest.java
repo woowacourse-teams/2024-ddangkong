@@ -15,7 +15,8 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.balance.roomcontent.MismatchRoundException;
+import ddangkong.exception.room.balance.roomvote.VoteFinishedException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
 import ddangkong.facade.balance.vote.dto.GiveUpVoteMemberResponse;
@@ -98,8 +99,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 투표가 종료되었습니다.");
+                    .isExactlyInstanceOf(VoteFinishedException.class);
         }
 
         @Test
@@ -113,8 +113,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 투표가 종료되었습니다.");
+                    .isExactlyInstanceOf(VoteFinishedException.class);
         }
 
         @Test
@@ -130,7 +129,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.createVote(request, room.getId(), content.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(MismatchRoundException.class)
                     .hasMessage("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
         }
     }
@@ -169,7 +168,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
         void 진행중인_주제가_아닌것의_투표_결과를_요청하면_예외를_발생시킨다() { // todo: 테스트명 수정, 테스트 더 추가
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.getAllVoteResult(1L, 2L))
-                    .isInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(MismatchRoundException.class)
                     .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 1, 방 라운드 : 2");
         }
     }
@@ -247,7 +246,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(MismatchRoundException.class)
                     .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
         }
     }
