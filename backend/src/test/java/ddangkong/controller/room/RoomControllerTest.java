@@ -251,7 +251,7 @@ class RoomControllerTest extends BaseControllerTest {
         }
 
         @Test
-        void 초기화된_방_상태인지_확인한다() {
+        void 방이_초기화되었는지_확인한다() {
             // given
             방을_초기화한다();
 
