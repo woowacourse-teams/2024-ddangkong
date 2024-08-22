@@ -14,7 +14,7 @@ public record RoomMembersVoteMatchingResponse(
 ) {
 
     public static RoomMembersVoteMatchingResponse create(Map<Member, Long> membersVoteMatchingPercent) {
-        LinkedList<Entry<Member, Long>> matchedMembersPercents = orderMembersVoteMatchingPercentDesc(
+        List<Entry<Member, Long>> matchedMembersPercents = orderMembersVoteMatchingPercentDesc(
                 membersVoteMatchingPercent);
 
         if (matchedMembersPercents.isEmpty()) {
@@ -24,7 +24,7 @@ public record RoomMembersVoteMatchingResponse(
     }
 
     private static RoomMembersVoteMatchingResponse getRoomMemberVoteMatching(
-            LinkedList<Entry<Member, Long>> matchedMembersPercents) {
+            List<Entry<Member, Long>> matchedMembersPercents) {
         boolean existMatching = false;
         int previousRank = 0;
         long previousMatchingPercent = Integer.MAX_VALUE;
@@ -51,7 +51,7 @@ public record RoomMembersVoteMatchingResponse(
         return new RoomMembersVoteMatchingResponse(matchedMembers, existMatching);
     }
 
-    private static LinkedList<Entry<Member, Long>> orderMembersVoteMatchingPercentDesc(
+    private static List<Entry<Member, Long>> orderMembersVoteMatchingPercentDesc(
             Map<Member, Long> membersVoteMatchingPercent) {
         LinkedList<Entry<Member, Long>> matchedMembersPercents = new LinkedList<>(
                 membersVoteMatchingPercent.entrySet()
