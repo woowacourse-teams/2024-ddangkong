@@ -50,11 +50,6 @@ public class RoomContentService {
     public void deleteRoomContents(Room room) {
         List<RoomContent> roomContents = roomContentRepository.findAllByRoom(room);
         roomContentRepository.deleteAllInBatch(roomContents);
-
-        if (room.getTotalRound() != roomContents.size()) {
-            log.error("방의 총 라운드와 방 컨텐츠 개수가 일치하지 않습니다. roomId: {}, totalRound: {}, roomContent 개수: {}",
-                    room.getId(), room.getTotalRound(), roomContents.size());
-        }
     }
 
     @Transactional(readOnly = true)
