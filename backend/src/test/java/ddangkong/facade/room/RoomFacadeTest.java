@@ -22,6 +22,7 @@ import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.exception.room.NotFoundRoomException;
 import ddangkong.facade.BaseServiceTest;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
@@ -425,23 +426,21 @@ class RoomFacadeTest extends BaseServiceTest {
     @Nested
     class 방_초기화 {
 
-        private static final int TOTAL_ROUND = 5;
-        private static final int TIME_LIMIT = 5000;
         private static final RoomStatus STATUS = RoomStatus.FINISH;
-        private static final Category CATEGORY = Category.IF;
+
+        private static final RoomSetting ROOM_SETTING = new RoomSetting(5, 5000, Category.IF);
 
         private BalanceContent content;
 
         @BeforeEach
         void setUp() {
-            content = balanceContentRepository.save(new BalanceContent(CATEGORY, "A vs B"));
+            content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
         }
 
         @Test
         void 방을_초기_상태로_초기화한다() {
             // given
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = roomRepository.save(new Room("uuid", 5, STATUS, roomSetting));
+            Room room = roomRepository.save(new Room("uuid", 5, STATUS, ROOM_SETTING));
             saveRoomContents(room);
 
             // when
@@ -461,9 +460,7 @@ class RoomFacadeTest extends BaseServiceTest {
         void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
             // given
             int invalidCurrentRound = 4;
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = roomRepository.save(
-                    new Room("uuid", invalidCurrentRound, STATUS, roomSetting));
+            Room room = roomRepository.save(new Room("uuid", invalidCurrentRound, STATUS, ROOM_SETTING));
             saveRoomContents(room);
 
             // when & then
@@ -475,8 +472,7 @@ class RoomFacadeTest extends BaseServiceTest {
         @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
         void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
             // given
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = roomRepository.save(new Room("uuid", 5, status, roomSetting));
+            Room room = roomRepository.save(new Room("uuid", 5, status, ROOM_SETTING));
             saveRoomContents(room);
 
             // when & then
@@ -493,10 +489,9 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 방을_초기화하면_방_투표를_삭제하고_전체_투표에_저장한다() {
             // given
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
             BalanceOption optionA = balanceOptionRepository.save(new BalanceOption("A", content));
             BalanceOption optionB = balanceOptionRepository.save(new BalanceOption("B", content));
-            Room room = roomRepository.save(new Room("uuid", 5, STATUS, roomSetting));
+            Room room = roomRepository.save(new Room("uuid", 5, STATUS, ROOM_SETTING));
             Member prin = memberRepository.save(PRIN.master(room));
             Member eden = memberRepository.save(EDEN.common(room));
             Member keochan = memberRepository.save(KEOCHAN.common(room));
@@ -517,6 +512,22 @@ class RoomFacadeTest extends BaseServiceTest {
                     () -> assertThat(roomBalanceVotes).isEmpty(),
                     () -> assertThat(optionATotalVoteCount).isEqualTo(3),
                     () -> assertThat(optionBTotalVoteCount).isEqualTo(1)
+            );
+        }
+
+        @Test
+        void 초기화된_방인지_확인한다() {
+            // given
+            Room room = roomRepository.save(new Room("uuid", 5, RoomStatus.READY, ROOM_SETTING));
+            Member master = memberRepository.save(PRIN.master(room));
+
+            // when
+            InitialRoomResponse actual = roomFacade.isInitialRoom(room.getId());
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.isInitial()).isFalse(),
+                    () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
             );
         }
     }

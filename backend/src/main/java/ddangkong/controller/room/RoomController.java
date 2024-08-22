@@ -2,6 +2,7 @@ package ddangkong.controller.room;
 
 import ddangkong.aop.logging.Polling;
 import ddangkong.facade.room.RoomFacade;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -93,5 +94,11 @@ public class RoomController {
     @GetMapping("/balances/rooms/{uuid}/status")
     public RoomStatusResponse getRoomStatus(@NotBlank @PathVariable String uuid) {
         return roomFacade.getRoomStatus(uuid);
+    }
+
+    @Polling
+    @GetMapping("/balances/rooms/{roomId}/initial")
+    public InitialRoomResponse isInitialRoom(@PathVariable @Positive Long roomId) {
+        return roomFacade.isInitialRoom(roomId);
     }
 }

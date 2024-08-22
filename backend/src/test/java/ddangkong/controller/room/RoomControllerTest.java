@@ -1,5 +1,6 @@
 package ddangkong.controller.room;
 
+import static ddangkong.support.fixture.MemberFixture.PRIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -10,6 +11,8 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
+import ddangkong.domain.room.member.Member;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -317,12 +320,14 @@ class RoomControllerTest extends BaseControllerTest {
     class 방_초기화 {
 
         private Room room;
+        private Member master;
 
         @BeforeEach
         void setUp() {
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             RoomSetting roomSetting = new RoomSetting(3, 10_000, Category.IF);
             room = roomRepository.save(new Room("roomResetSetUpUUID", 3, RoomStatus.FINISH, roomSetting));
+            master = memberRepository.save(PRIN.master(room));
             roomContentRepository.save(new RoomContent(room, content, 1, null));
             roomContentRepository.save(new RoomContent(room, content, 2, null));
             roomContentRepository.save(new RoomContent(room, content, 3, null));
@@ -336,6 +341,27 @@ class RoomControllerTest extends BaseControllerTest {
                     .when().patch("/api/balances/rooms/{roomId}/reset")
                     .then().log().all()
                     .statusCode(HttpStatus.NO_CONTENT.value());
+        }
+
+        @Test
+        void 방이_초기화되었는지_확인한다() {
+            // given
+            방을_초기화한다();
+
+            // when
+            InitialRoomResponse actual = RestAssured.given().log().all()
+                    .pathParam("roomId", room.getId())
+                    .when().get("/api/balances/rooms/{roomId}/initial")
+                    .then().log().all()
+                    .statusCode(HttpStatus.OK.value())
+                    .extract()
+                    .as(InitialRoomResponse.class);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.isInitial()).isTrue(),
+                    () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
+            );
         }
     }
 }

@@ -209,3 +209,25 @@ include::{snippets}/room/reset/path-parameters.adoc[]
 ==== response
 
 include::{snippets}/room/reset/http-response.adoc[]
+
+=== 방 초기화 여부 (Polling)
+
+==== curl
+
+include::{snippets}/room/initial/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/initial/http-request.adoc[]
+
+include::{snippets}/room/initial/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/initial/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/initial/response-fields.adoc[]
+
+'''

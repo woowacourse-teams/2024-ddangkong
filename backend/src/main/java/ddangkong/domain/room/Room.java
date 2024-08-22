@@ -122,6 +122,10 @@ public class Room extends BaseEntity {
         this.status = RoomStatus.READY;
     }
 
+    public boolean isInitialRoom() {
+        return status.isGameReady() && currentRound == START_ROUND;
+    }
+
     public boolean isFull(long memberCountInRoom) {
         return memberCountInRoom == MAX_MEMBER_COUNT;
     }

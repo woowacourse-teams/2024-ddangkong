@@ -28,6 +28,7 @@ import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.room.RoomFacade;
 import ddangkong.facade.room.dto.RoomStatusResponse;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -329,21 +330,45 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     @Nested
     class 방_초기화 {
 
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/reset";
-
         @Test
         void 방을_초기화한다() throws Exception {
             // given
+            String endpoint = "/api/balances/rooms/{roomId}/reset";
             doNothing().when(roomFacade).resetRoom(anyLong());
 
             // when & then
-            mockMvc.perform(patch(ENDPOINT, 1L))
+            mockMvc.perform(patch(endpoint, 1L))
                     .andExpect(status().isNoContent())
                     .andDo(document("room/reset",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
                             )
                     ));
+        }
+
+        @Test
+        void 방이_초기화되었는지_확인한다() throws Exception {
+            // given
+            String endpoint = "/api/balances/rooms/{roomId}/initial";
+            MasterResponse prin = new MasterResponse(1L, "프콩");
+            InitialRoomResponse response = new InitialRoomResponse(true, prin);
+            when(roomFacade.isInitialRoom(anyLong())).thenReturn(response);
+
+            // when & then
+            mockMvc.perform(get(endpoint, 1L))
+                    .andExpect(status().isOk())
+                    .andDo(document("room/initial",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            ),
+                            responseFields(
+                                    fieldWithPath("isInitial").description("방 초기화 여부"),
+                                    fieldWithPath("master").type(OBJECT).description("방장 정보"),
+                                    fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("master.nickname").type(STRING).description("닉네임")
+                            )
+                    ));
+
         }
     }
 }
