@@ -307,7 +307,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             // when & then
             mockMvc.perform(get(endpoint, 1L))
                     .andExpect(status().isOk())
-                    .andDo(document("room/checkReset",
+                    .andDo(document("room/initial",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
                             ),

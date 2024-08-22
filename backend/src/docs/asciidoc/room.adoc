@@ -172,20 +172,20 @@ include::{snippets}/room/reset/http-response.adoc[]
 
 ==== curl
 
-include::{snippets}/room/checkReset/curl-request.adoc[]
+include::{snippets}/room/initial/curl-request.adoc[]
 
 ==== request
 
-include::{snippets}/room/checkReset/http-request.adoc[]
+include::{snippets}/room/initial/http-request.adoc[]
 
-include::{snippets}/room/checkReset/path-parameters.adoc[]
+include::{snippets}/room/initial/path-parameters.adoc[]
 
 ==== response
 
-include::{snippets}/room/checkReset/http-response.adoc[]
+include::{snippets}/room/initial/http-response.adoc[]
 
 response fields
 
-include::{snippets}/room/checkReset/response-fields.adoc[]
+include::{snippets}/room/initial/response-fields.adoc[]
 
 '''
