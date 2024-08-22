@@ -12,7 +12,7 @@ interface UseMyGameStatusProps {
 
 const useMyGameStatus = ({ roomId }: UseMyGameStatusProps) => {
   const navigate = useNavigate();
-  const { balanceContent } = useBalanceContentQuery();
+  const { balanceContent } = useBalanceContentQuery(Number(roomId));
 
   const { isRoundFinished, isGameFinished } = useMyGameStatusQuery({
     roomId: Number(roomId),

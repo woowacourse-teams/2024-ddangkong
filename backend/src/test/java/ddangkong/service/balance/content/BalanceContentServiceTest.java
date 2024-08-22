@@ -3,11 +3,12 @@ package ddangkong.service.balance.content;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
-import ddangkong.controller.balance.option.dto.BalanceOptionResponse;
+import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
-import ddangkong.service.BaseServiceTest;
+import ddangkong.exception.InternalServerException;
+import ddangkong.facade.BaseServiceTest;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,62 +19,70 @@ class BalanceContentServiceTest extends BaseServiceTest {
     private BalanceContentService balanceContentService;
 
     @Nested
-    class 현재_방의_밸런스_게임_내용_조회 {
-
-        private static final Long PROGRESS_ROOM_ID = 1L;
-        private static final Long NOT_EXIST_ROOM_ID = -1L;
-        private static final Long NOT_PROGRESSED_ROOM_ID = 2L;
-        private static final Long READY_ROOM_ID = 4L;
-        private static final Long FINISHED_ROOM_ID = 5L;
-        private static final BalanceContentResponse BALANCE_CONTENT_RESPONSE = new BalanceContentResponse(
-                1L,
-                Category.EXAMPLE,
-                5,
-                2,
-                30_000, // TODO 추후 sec으로 변경
-                "민초 vs 반민초",
-                new BalanceOptionResponse(1L, "민초"),
-                new BalanceOptionResponse(2L, "반민초"));
+    class 컨텐츠_조회 {
 
         @Test
-        void 방의_진행_중인_밸런스_게임_내용을_조회할_수_있다() {
+        void 아이디로_컨텐츠를_조회한다() {
+            // given
+            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
+
             // when
-            BalanceContentResponse actual = balanceContentService.getRecentBalanceContent(PROGRESS_ROOM_ID);
+            BalanceContent foundContent = balanceContentService.getBalanceContent(content.getId());
 
             // then
-            assertThat(actual).isEqualTo(BALANCE_CONTENT_RESPONSE);
+            assertThat(foundContent.getId()).isEqualTo(content.getId());
         }
 
         @Test
-        void 방이_없을_경우_예외를_던진다() {
+        void 존재하지_않는_컨텐츠를_조회하면_예외가_발생한다() {
+            // given
+            Long invalidContentId = 99L;
+
             // when & then
-            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(NOT_EXIST_ROOM_ID))
+            assertThatThrownBy(() -> balanceContentService.getBalanceContent(invalidContentId))
                     .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방이 존재하지 않습니다.");
+                    .hasMessageContaining("존재하지 않는 컨텐츠입니다.");
+        }
+    }
+
+    @Nested
+    class 컨텐츠_선택 {
+
+        @Test
+        void 카테고리에_해당하는_컨텐츠를_주어진_개수만큼_선택한다() {
+            // given
+            Category category = Category.IF;
+            balanceContentRepository.saveAll(List.of(
+                    new BalanceContent(category, "민초 vs 반민초"),
+                    new BalanceContent(category, "카리나 vs 윈터"),
+                    new BalanceContent(category, "산 vs 바다"),
+                    new BalanceContent(category, "얼굴 vs 성격"),
+                    new BalanceContent(category, "부먹 vs 찍먹")
+            ));
+            int pickCount = 3;
+
+            // when
+            List<BalanceContent> pickedContents = balanceContentService.pickBalanceContents(category, pickCount);
+
+            // then
+            assertThat(pickedContents).hasSize(pickCount);
         }
 
         @Test
-        void 방의_현재_라운드의_질문이_없을_경우_예외를_던진다() {
-            // when & then
-            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(NOT_PROGRESSED_ROOM_ID))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방의 현재 진행중인 질문이 존재하지 않습니다.");
-        }
+            // todo init-test.sql 제거되면 pickCount 3으로 수정
+        void 카테고리에_해당하는_컨텐츠가_부족하면_예외가_발생한다() {
+            // given
+            Category category = Category.IF;
+            balanceContentRepository.saveAll(List.of(
+                    new BalanceContent(category, "민초 vs 반민초"),
+                    new BalanceContent(category, "카리나 vs 윈터")
+            ));
+            int pickCount = 10;
 
-        @Test
-        void 방이_준비_상태인_경우_예외를_던진다() {
             // when & then
-            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(READY_ROOM_ID))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
-        }
-
-        @Test
-        void 방이_종료_상태인_경우_예외를_던진다() {
-            // when & then
-            assertThatThrownBy(() -> balanceContentService.getRecentBalanceContent(FINISHED_ROOM_ID))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessage("해당 방은 게임을 진행하고 있지 않습니다.");
+            assertThatThrownBy(() -> balanceContentService.pickBalanceContents(category, pickCount))
+                    .isExactlyInstanceOf(InternalServerException.class)
+                    .hasMessageContaining("질문 수가 부족합니다. category: %s ".formatted(category));
         }
     }
 }

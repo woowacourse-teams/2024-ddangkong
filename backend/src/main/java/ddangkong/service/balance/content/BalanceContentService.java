@@ -1,13 +1,12 @@
 package ddangkong.service.balance.content;
 
-import ddangkong.controller.balance.content.dto.BalanceContentResponse;
-import ddangkong.domain.balance.option.BalanceOptionRepository;
-import ddangkong.domain.balance.option.BalanceOptions;
-import ddangkong.domain.balance.room.Room;
-import ddangkong.domain.balance.room.RoomContent;
-import ddangkong.domain.balance.room.RoomContentRepository;
-import ddangkong.domain.balance.room.RoomRepository;
+import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.content.BalanceContentRepository;
+import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.BadRequestException;
+import ddangkong.exception.InternalServerException;
+import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,35 +15,22 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BalanceContentService {
 
-    private final RoomRepository roomRepository;
-
-    private final RoomContentRepository roomContentRepository;
-
-    private final BalanceOptionRepository balanceOptionRepository;
+    private final BalanceContentRepository balanceContentRepository;
 
     @Transactional(readOnly = true)
-    public BalanceContentResponse getRecentBalanceContent(Long roomId) {
-        Room room = roomRepository.getById(roomId);
-        validateProgressing(room);
-
-        RoomContent roomContent = getCurrentRoomContent(room);
-        BalanceOptions balanceOptions = balanceOptionRepository.getBalanceOptionsByBalanceContent(
-                roomContent.getBalanceContent());
-
-        return BalanceContentResponse.builder()
-                .roomContent(roomContent)
-                .balanceOptions(balanceOptions)
-                .build();
+    public BalanceContent getBalanceContent(Long contentId) {
+        return balanceContentRepository.findById(contentId)
+                .orElseThrow(() -> new BadRequestException("존재하지 않는 컨텐츠입니다."));
     }
 
-    private static void validateProgressing(Room room) {
-        if (!room.isGameProgress()) {
-            throw new BadRequestException("해당 방은 게임을 진행하고 있지 않습니다.");
+    @Transactional(readOnly = true)
+    public List<BalanceContent> pickBalanceContents(Category category, int pickCount) {
+        List<BalanceContent> contents = balanceContentRepository.findByCategory(category);
+        if (contents.size() < pickCount) {
+            throw new InternalServerException("질문 수가 부족합니다. category: %s ".formatted(category));
         }
-    }
 
-    private RoomContent getCurrentRoomContent(Room room) {
-        return roomContentRepository.findByRoomAndRoundAndIsUsed(room, room.getCurrentRound(), false)
-                .orElseThrow(() -> new BadRequestException("해당 방의 현재 진행중인 질문이 존재하지 않습니다."));
+        Collections.shuffle(contents);
+        return contents.subList(0, pickCount);
     }
 }

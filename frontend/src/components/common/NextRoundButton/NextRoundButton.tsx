@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import Button from '../Button/Button';
@@ -7,11 +8,12 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import { memberInfoState } from '@/recoil/atom';
 
 interface NextRoundButtonProps {
-  handleModalOpen: () => void;
+  showModal: () => void;
 }
 
-const NextRoundButton = ({ handleModalOpen }: NextRoundButtonProps) => {
-  const { balanceContent } = useBalanceContentQuery();
+const NextRoundButton = ({ showModal }: NextRoundButtonProps) => {
+  const { roomId } = useParams();
+  const { balanceContent } = useBalanceContentQuery(Number(roomId));
   const memberInfo = useRecoilValue(memberInfoState);
   const isLastRound = balanceContent?.currentRound === balanceContent?.totalRound;
 
@@ -21,14 +23,14 @@ const NextRoundButton = ({ handleModalOpen }: NextRoundButtonProps) => {
         <Button
           style={{ width: '100%' }}
           text={isLastRound ? '결과 확인' : '다음'}
-          onClick={handleModalOpen}
+          onClick={showModal}
           disabled={!memberInfo.isMaster}
         />
       ) : (
         <Button
           style={{ width: '100%' }}
           text={'방장이 진행해 주세요'}
-          onClick={handleModalOpen}
+          onClick={showModal}
           disabled={!memberInfo.isMaster}
         />
       )}

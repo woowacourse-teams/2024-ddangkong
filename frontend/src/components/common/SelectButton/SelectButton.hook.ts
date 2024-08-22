@@ -8,9 +8,16 @@ import { memberInfoState } from '@/recoil/atom';
 interface UseSelectCompleteMutationProps {
   selectedId: number;
   contentId?: number;
+  completeSelection: () => void;
+  showModal: () => void;
 }
 
-const useSelectCompleteMutation = ({ selectedId, contentId }: UseSelectCompleteMutationProps) => {
+const useCompleteSelectionMutation = ({
+  selectedId,
+  contentId,
+  completeSelection,
+  showModal,
+}: UseSelectCompleteMutationProps) => {
   const { roomId } = useParams();
   const memberInfo = useRecoilValue(memberInfoState);
 
@@ -27,7 +34,13 @@ const useSelectCompleteMutation = ({ selectedId, contentId }: UseSelectCompleteM
         memberId: Number(memberInfo.memberId),
       });
     },
+    onSuccess: () => {
+      completeSelection();
+    },
+    onError: () => {
+      showModal();
+    },
   });
 };
 
-export default useSelectCompleteMutation;
+export default useCompleteSelectionMutation;

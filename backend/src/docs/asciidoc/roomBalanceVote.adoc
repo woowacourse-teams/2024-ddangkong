@@ -1,0 +1,69 @@
+== 방 밸런스 게임 투표
+
+=== 방의 투표 결과 조회
+
+==== curl
+
+include::{snippets}/roomBalanceVote/findVoteResult/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/roomBalanceVote/findVoteResult/http-request.adoc[]
+
+include::{snippets}/roomBalanceVote/findVoteResult/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/roomBalanceVote/findVoteResult/http-response.adoc[]
+
+response fields
+
+include::{snippets}/roomBalanceVote/findVoteResult/response-fields.adoc[]
+
+'''
+
+=== 투표 생성
+
+==== curl
+
+include::{snippets}/roomBalanceVote/create/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/roomBalanceVote/create/http-request.adoc[]
+
+include::{snippets}/roomBalanceVote/create/path-parameters.adoc[]
+
+request fields
+
+include::{snippets}/roomBalanceVote/create/request-fields.adoc[]
+
+==== response
+
+include::{snippets}/roomBalanceVote/create/http-response.adoc[]
+
+response fields
+
+include::{snippets}/roomBalanceVote/create/response-fields.adoc[]
+
+'''
+
+=== 투표 종료 여부 (polling)
+
+==== curl
+
+include::{snippets}/roomBalanceVote/voteFinished/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/roomBalanceVote/voteFinished/http-request.adoc[]
+
+include::{snippets}/roomBalanceVote/voteFinished/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/roomBalanceVote/voteFinished/http-response.adoc[]
+
+response fields
+
+include::{snippets}/roomBalanceVote/voteFinished/response-fields.adoc[]

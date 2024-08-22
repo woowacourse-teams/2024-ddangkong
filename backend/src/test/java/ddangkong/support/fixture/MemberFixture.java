@@ -1,7 +1,7 @@
 package ddangkong.support.fixture;
 
-import ddangkong.domain.balance.room.Room;
-import ddangkong.domain.member.Member;
+import ddangkong.domain.room.Room;
+import ddangkong.domain.room.member.Member;
 
 public enum MemberFixture {
     PRIN,
@@ -19,5 +19,9 @@ public enum MemberFixture {
 
     public Member common(Room room) {
         return Member.createCommon(name().toLowerCase(), room);
+    }
+
+    public Member common(Room room, Object suffix) {
+        return Member.createCommon(name() + suffix, room);
     }
 }

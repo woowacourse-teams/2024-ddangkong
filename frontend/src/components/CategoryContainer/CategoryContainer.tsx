@@ -1,7 +1,7 @@
 import { categoryContainerLayout, title, subtitle } from './CategoryContainer.styled';
 
 interface CategoryContainerProps {
-  category: string;
+  category?: string;
 }
 
 const CategoryContainer = ({ category }: CategoryContainerProps) => {
