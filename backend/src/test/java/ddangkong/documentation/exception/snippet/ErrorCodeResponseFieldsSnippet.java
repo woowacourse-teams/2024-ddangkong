@@ -1,6 +1,5 @@
 package ddangkong.documentation.exception.snippet;
 
-import java.io.IOException;
 import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.operation.Operation;
@@ -19,7 +18,7 @@ public class ErrorCodeResponseFieldsSnippet extends AbstractFieldsSnippet {
     }
 
     @Override
-    protected byte[] getContent(Operation operation) throws IOException {
+    protected byte[] getContent(Operation operation) {
         return operation.getResponse().getContent();
     }
 }
