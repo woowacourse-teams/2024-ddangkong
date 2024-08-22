@@ -14,13 +14,14 @@ export const useGetRoomInfo = () => {
     queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
     queryFn: ({ queryKey: [, roomId] }) => getRoomInfo(Number(roomId)),
     refetchInterval: ONE_SECOND,
+    gcTime: 0,
   });
 
   useEffect(() => {
-    if (!isFetching && data?.isGameStart) {
+    if (data?.isGameStart) {
       navigate(`/${roomId}/game`);
     }
-  }, [data?.isGameStart, roomId, navigate, isFetching]);
+  }, [data?.isGameStart, roomId, navigate]);
 
   return { members: data?.members, roomSetting: data?.roomSetting, isLoading, isError };
 };
