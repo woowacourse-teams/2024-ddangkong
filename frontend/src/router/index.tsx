@@ -18,11 +18,6 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: ':roomId/round/result/status',
-    element: <VoteStatusPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
     path: '/',
     element: <Layout />,
     children: [
