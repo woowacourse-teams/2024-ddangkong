@@ -1,0 +1,9 @@
+{
+  "roomId": 1,
+  "roomUuid": "488fd79f92a34131bf2a628bd58c5d2c",
+  "member": {
+    "memberId": 2,
+    "nickname": "타콩",
+    "isMaster": true
+  }
+}

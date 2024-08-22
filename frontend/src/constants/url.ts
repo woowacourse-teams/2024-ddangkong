@@ -12,17 +12,23 @@ export const API_URL = {
   matchingResult: (roomId: number, memberId: number) =>
     `${BASE_URL}/api/balances/rooms/${roomId}/members/${memberId}/matching`,
   room: `${BASE_URL}/api/balances/rooms`,
-  enterRoom: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/members`,
+  enterRoom: (roomUuid: string) => `${BASE_URL}/api/balances/rooms/${roomUuid}/members`,
   getRoomInfo: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
   categoryList: `${BASE_URL}/api/balances/categories`,
   startGame: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/start`,
   roundVoteIsFinished: (roomId: number, contentId: number) =>
     `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/vote-finished`,
   resetRoom: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/reset`,
+  isRoomActivate: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/activate`,
+  isRoomInitial: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/initial`,
   applyRoomSetting: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
+  deleteRoom: (roomId: number, memberId: number) =>
+    `${BASE_URL}/api/balances/rooms/${roomId}/members/${memberId}`,
 };
 
-export const MOCK_API_URL = {
+type API_URL_KEYS = keyof typeof API_URL;
+
+export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
   balanceContent: `${BASE_URL}/api/balances/rooms/:roomId/content`,
   vote: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/votes`,
   roundVoteResult: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-result`,
@@ -30,9 +36,18 @@ export const MOCK_API_URL = {
   moveNextRound: `${BASE_URL}/api/balances/rooms/:roomId/next-round`,
   matchingResult: `${BASE_URL}/api/balances/rooms/:roomId/members/:memberId/matching`,
   room: `${BASE_URL}/api/balances/rooms`,
-  roomMembers: `${BASE_URL}/api/balances/rooms/:roomId`,
+  enterRoom: `${BASE_URL}/api/balances/rooms/:roomUuid/members`,
+  getRoomInfo: `${BASE_URL}/api/balances/rooms/:roomId`,
+  startGame: `${BASE_URL}/api/balances/rooms/:roomId/start`,
   roundVoteIsFinished: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-finished`,
+  resetRoom: `${BASE_URL}/api/balances/rooms/:roomId/reset`,
+  isRoomActivate: `${BASE_URL}/api/balances/rooms/:roomId/activate`,
+  isRoomInitial: `${BASE_URL}/api/balances/rooms/:roomId/initial`,
   categoryList: `${BASE_URL}/api/balances/categories`,
   applyRoomSetting: `${BASE_URL}/api/balances/rooms/:roomId`,
-  startGame: `${BASE_URL}/api/balances/rooms/:roomId/start`,
+  deleteRoom: `${BASE_URL}/api/balances/rooms/:roomId/members/:memberId`,
+};
+
+export const INVITE_URL = (roomUuid: string) => {
+  return `${window.location.origin}${`/nickname/${roomUuid}`}`;
 };

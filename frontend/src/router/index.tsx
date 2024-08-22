@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { Layout } from './layout';
 
+import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 import GamePage from '@/pages/GamePage/GamePage';
 import GameResultPage from '@/pages/GameResultPage/GameResultPage';
 import MainPage from '@/pages/MainPage/MainPage';
@@ -14,13 +15,19 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <MainPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: ':roomId/round/result/status',
+    element: <VoteStatusPage />,
+    errorElement: <ErrorPage />,
   },
   {
     path: '/',
     element: <Layout />,
     children: [
       {
-        path: 'nickname/:roomId?',
+        path: 'nickname/:roomUuid?',
         element: <NicknamePage />,
       },
       {
@@ -44,5 +51,6 @@ export const router = createBrowserRouter([
         element: <GameResultPage />,
       },
     ],
+    errorElement: <ErrorPage />,
   },
 ]);

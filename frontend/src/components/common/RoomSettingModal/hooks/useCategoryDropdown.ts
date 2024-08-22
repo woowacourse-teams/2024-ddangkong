@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react';
 
-import { Category } from '@/types/room';
+import { Category, CategoryLabel, CategoryValue } from '@/types/room';
 
 const useCategoryDropdown = (selectedCategory?: Category) => {
   const [category, setCategory] = useState(selectedCategory);
 
   const handleClickOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
-    const clickedCategory = target.value as Category;
+    const clickedCategoryValue = target.value as CategoryValue;
+    const clickedCategoryLabel = target.textContent as CategoryLabel;
 
-    if (!clickedCategory) return;
+    if (!clickedCategoryValue) return;
 
-    setCategory(clickedCategory);
+    setCategory({ value: clickedCategoryValue, label: clickedCategoryLabel });
   };
 
   useEffect(() => {

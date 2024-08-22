@@ -36,7 +36,7 @@ export const gameTitle = css`
   font-size: 1.6rem;
 `;
 
-export const settingImage = css`
+export const iconImage = css`
   display: flex;
   align-items: center;
   width: 1.6rem;

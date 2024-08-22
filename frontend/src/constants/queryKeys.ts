@@ -5,5 +5,6 @@ export const QUERY_KEYS = {
   myGameStatus: 'myGameStatus',
   roundIsFinished: 'roundIsFinished',
   roomMembers: 'roomMembers',
+  isRoomInitial: 'isRoomInitial',
   categoryList: 'categoryList',
 } as const;

@@ -1,16 +1,12 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
-import {
-  buttonWrapper,
-  emptyBox,
-  gameTitle,
-  headerLayout,
-  roundText,
-  settingImage,
-} from './Header.styled';
+import { buttonWrapper, gameTitle, headerLayout, roundText, iconImage } from './Header.styled';
+import { useBlockRefresh } from './hooks/useBlockRefresh';
+import { useExit } from './hooks/useExit';
 import useRoutePath from './hooks/useRoutePath';
 
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
+import ExitIcon from '@/assets/images/exitIcon.png';
 import SettingIcon from '@/assets/images/settingsIcon.svg';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
@@ -24,6 +20,8 @@ interface HeaderProps {
 const Header = () => {
   const { isNicknamePage, isReadyPage, isRoundResultStatusPage, isFinalResultPage } =
     useRoutePath();
+
+  useBlockRefresh();
 
   if (isNicknamePage) return <TitleHeader title="닉네임 설정" />;
   if (isReadyPage) return <RoomSettingHeader title="밸런스 게임" />;
@@ -46,13 +44,16 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 // 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { isOpen, show, close } = useModal();
+  const { handleExit } = useExit();
 
   return (
     <header css={headerLayout()}>
-      <div css={emptyBox}></div>
+      <button onClick={handleExit} css={buttonWrapper}>
+        <img src={ExitIcon} alt="방 설정" css={iconImage} />
+      </button>
       <h1 css={gameTitle}>{title}</h1>
       <button onClick={show} css={buttonWrapper}>
-        <img src={SettingIcon} alt="방 설정" css={settingImage} />
+        <img src={SettingIcon} alt="방 설정" css={iconImage} />
       </button>
       {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
     </header>
@@ -63,6 +64,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
 export const RoundHeader = () => {
   const { roomId } = useParams();
   const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
+
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
 
   const title = isRoundResultPage ? '투표 결과' : '밸런스 게임';
@@ -85,7 +87,6 @@ export const BackHeader = ({ title }: HeaderProps) => {
   const goToBack = () => {
     navigate(-1);
   };
-
   return (
     <header css={headerLayout()}>
       <button onClick={goToBack} css={buttonWrapper}>

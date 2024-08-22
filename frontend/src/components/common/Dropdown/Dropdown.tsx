@@ -14,19 +14,18 @@ import ArrowDown from '@/assets/images/arrowDown.svg';
 import ArrowUp from '@/assets/images/arrowUp.svg';
 
 interface DropdownProps<T> {
-  text: T;
+  text: string;
   optionList: T[];
   handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Dropdown = <T extends string | number>({
+const Dropdown = <T extends { value: string; label: string }>({
   text,
   optionList,
   handleClick,
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-
   const handleToggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
@@ -64,9 +63,13 @@ const Dropdown = <T extends string | number>({
       <ul css={selectOptionList(isOpen, optionList.length)}>
         {isOpen &&
           optionList.map((option) => (
-            <li key={option}>
-              <button css={optionButton(text === option)} value={option} onClick={handleClick}>
-                {option}
+            <li key={option.value}>
+              <button
+                css={optionButton(text === option.label)}
+                value={option.value}
+                onClick={handleClick}
+              >
+                {option.label}
               </button>
             </li>
           ))}

@@ -1,3 +1,20 @@
 {
-  "categoryList": ["음식", "연애", "MBTI", "만약에"]
+  "categories": [
+    {
+      "value": "ROMNCE",
+      "label": "연애"
+    },
+    {
+      "value": "IF",
+      "label": "만약에"
+    },
+    {
+      "value": "MBTI",
+      "label": "MBTI"
+    },
+    {
+      "value": "FOOD",
+      "label": "음식"
+    }
+  ]
 }

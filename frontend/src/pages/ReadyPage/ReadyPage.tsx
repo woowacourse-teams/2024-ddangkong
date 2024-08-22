@@ -12,7 +12,7 @@ const ReadyPage = () => {
 
   return (
     <div css={readyPageLayout}>
-      <CategoryContainer category={roomSetting?.category} />
+      <CategoryContainer category={roomSetting?.category.label} />
       {isError && <div>에러 발생</div>}
       {isLoading && <div>로딩중.......</div>}
       {members && <ReadyMembersContainer members={members} />}

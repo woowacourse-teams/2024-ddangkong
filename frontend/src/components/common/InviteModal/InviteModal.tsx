@@ -1,4 +1,5 @@
-import { useParams } from 'react-router-dom';
+import QRCode from 'react-qr-code';
+import { useRecoilValue } from 'recoil';
 
 import {
   inviteModalLi,
@@ -9,12 +10,15 @@ import {
   inviteModalCopyIcon,
   inviteModalLayout,
   inviteModalText,
+  qrcodeWrapper,
 } from './InviteModal.styled';
 import useClipBoard from './useClipBoard';
 import Modal from '../Modal/Modal';
 import Toast from '../Toast/Toast';
 
 import CopyIcon from '@/assets/images/copyIcon.png';
+import { INVITE_URL } from '@/constants/url';
+import { roomUuidState } from '@/recoil/atom';
 
 interface InviteModalProps {
   isOpen: boolean;
@@ -22,8 +26,8 @@ interface InviteModalProps {
 }
 
 const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
-  const { roomId } = useParams();
-  const inviteUrl = `${window.location.origin}${`/nickname/${roomId}`}`;
+  const roomUuid = useRecoilValue(roomUuidState);
+  const inviteUrl = INVITE_URL(roomUuid);
 
   const { isCopied, copyToClipboard } = useClipBoard();
 
@@ -39,7 +43,11 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
       </Modal.Header>
       <Modal.Content>
         <ul css={inviteModalUl}>
-          <li>{/* TODO: P2에 QR 추가 */}</li>
+          <li>
+            <div css={qrcodeWrapper}>
+              <QRCode style={{ width: '50%', height: '50%' }} value={inviteUrl} />
+            </div>
+          </li>
           <li css={inviteModalLi}>
             <button onClick={handleCopy} css={inviteModalLinkButton}>
               <div css={inviteModalLinkButtonInfoWrapper}>

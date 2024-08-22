@@ -3,7 +3,10 @@
   "roomSetting": {
     "totalRound": 5,
     "timeLimit": 10000,
-    "category": "음식"
+    "category": {
+      "value": "FOOD",
+      "label": "음식"
+    }
   },
   "members": [
     {

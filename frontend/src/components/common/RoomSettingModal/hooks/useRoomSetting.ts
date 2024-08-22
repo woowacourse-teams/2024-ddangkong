@@ -27,7 +27,7 @@ const useRoomSetting = ({ onClose }: UseRoomSettingProps) => {
   const handleClickApply = () => {
     if (!category || !totalRound || !timeLimitPerRound) return;
 
-    applyRoomSetting({ category, totalRound, timeLimit: timeLimitPerRound });
+    applyRoomSetting({ category: category.value, totalRound, timeLimit: timeLimitPerRound });
     onClose();
   };
 

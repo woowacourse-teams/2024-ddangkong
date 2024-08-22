@@ -14,7 +14,7 @@ const useCategoryListQuery = () => {
     },
   });
 
-  return { ...categoryListQuery, categoryList: categoryListQuery.data?.categoryList };
+  return { ...categoryListQuery, categoryList: categoryListQuery.data?.categories };
 };
 
 export default useCategoryListQuery;

@@ -34,7 +34,24 @@ export const 기본_드랍다운: Story = {
     return (
       <Dropdown
         text={text}
-        optionList={['음식', '연애', 'MBTI', '만약에']}
+        optionList={[
+          {
+            value: 'ROMANCE',
+            label: '연애',
+          },
+          {
+            value: 'IF',
+            label: '만약에',
+          },
+          {
+            value: 'MBTI',
+            label: 'MBTI',
+          },
+          {
+            value: 'FOOD',
+            label: '음식',
+          },
+        ]}
         handleClick={(e) => setText(e.currentTarget.value)}
       />
     );

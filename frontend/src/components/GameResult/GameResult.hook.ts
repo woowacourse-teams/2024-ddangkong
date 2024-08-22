@@ -34,8 +34,11 @@ export const useMatchingResultQuery = (): MatchingResultQueryResponse => {
   };
 };
 
-export const useResetRoomMutation = (roomId: number) => {
+export const useResetRoomMutation = (roomId: number, showModal: () => void) => {
   return useMutation({
     mutationFn: async () => await resetRoom(roomId),
+    onError: () => {
+      showModal();
+    },
   });
 };

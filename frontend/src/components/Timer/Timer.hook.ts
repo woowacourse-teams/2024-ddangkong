@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 
 import { convertMsecToSecond } from './Timer.util';
 
+import { ONE_SECOND } from '@/constants/time';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const INITIAL_WIDTH = 100;
-const DELAY = 1000;
 const DEFAULT_TIME_LIMIT_MSEC = 10000;
 
 const useRoundTimer = (roomId: number) => {
@@ -33,7 +33,7 @@ const useRoundTimer = (roomId: number) => {
     timeout.current = setInterval(() => {
       setLeftRoundTime((prev) => prev - 1);
       setBarWidthPercent((prevWidth) => (prevWidth > 0 ? prevWidth - DECREASE_RATE : 0));
-    }, DELAY);
+    }, ONE_SECOND);
 
     return () => {
       clearInterval(timeout.current);

@@ -5,9 +5,13 @@ import { bottomButtonLayout } from '../Button/Button.styled';
 
 import { useResetRoomMutation } from '@/components/GameResult/GameResult.hook';
 
-const FinalButton = () => {
+interface FinalButtonProps {
+  showModal: () => void;
+}
+
+const FinalButton = ({ showModal }: FinalButtonProps) => {
   const { roomId } = useParams();
-  const { mutate: resetRoom } = useResetRoomMutation(Number(roomId));
+  const { mutate: resetRoom } = useResetRoomMutation(Number(roomId), showModal);
 
   return (
     <div css={bottomButtonLayout}>

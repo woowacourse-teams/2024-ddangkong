@@ -1,14 +1,20 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { RoomInfo, RoomIdAndMember, Category, RoomSetting } from '@/types/room';
+import {
+  RoomInfo,
+  CreateOrEnterRoomResponse,
+  Category,
+  RoomSetting,
+  RoomSettingApply,
+} from '@/types/room';
 
 interface CategoryResponse {
-  categoryList: Category[];
+  categories: Category[];
 }
 
 // 방 만들기
-export const createRoom = async (nickname: string): Promise<RoomIdAndMember> => {
+export const createRoom = async (nickname: string): Promise<CreateOrEnterRoomResponse> => {
   const res = await fetcher.post({
     url: API_URL.room,
     headers: {
@@ -36,9 +42,12 @@ export const resetRoom = async (roomId: number) => {
 };
 
 // 방 참여하기
-export const enterRoom = async (roomId: number, nickname: string): Promise<RoomIdAndMember> => {
+export const enterRoom = async (
+  roomUuid: string,
+  nickname: string,
+): Promise<CreateOrEnterRoomResponse> => {
   const res = await fetcher.post({
-    url: API_URL.enterRoom(roomId),
+    url: API_URL.enterRoom(roomUuid),
     headers: {
       'Content-Type': `application/json`,
     },
@@ -70,6 +79,15 @@ export const startGame = async (roomId: number): Promise<void> => {
   });
 };
 
+// 방 활성화 여부 확인
+export const isRoomActivate = async (roomId: number) => {
+  const res = await fetcher.get({
+    url: API_URL.isRoomActivate(roomId),
+  });
+  const data = await res.json();
+  return data;
+};
+
 // 방 설정 카테고리 리스트 받기
 export const getCategoryList = async (): Promise<CategoryResponse> => {
   const res = await fetcher.get({
@@ -81,8 +99,22 @@ export const getCategoryList = async (): Promise<CategoryResponse> => {
   return data;
 };
 
+// 방 초기화 여부 확인
+export const isRoomInitial = async (roomId: number) => {
+  const res = await fetcher.get({
+    url: API_URL.isRoomInitial(roomId),
+  });
+
+  const data = await res.json();
+
+  return data;
+};
+
 // 방 설정 적용
-export const applyRoomSetting = async (roomId: number, roomSetting: RoomSetting): Promise<void> => {
+export const applyRoomSetting = async (
+  roomId: number,
+  roomSetting: RoomSettingApply,
+): Promise<void> => {
   const { totalRound, timeLimit, category } = roomSetting;
   await fetcher.patch({
     url: API_URL.applyRoomSetting(roomId),
@@ -90,5 +122,12 @@ export const applyRoomSetting = async (roomId: number, roomSetting: RoomSetting)
       'Content-Type': `application/json`,
     },
     body: { totalRound, timeLimit, category },
+  });
+};
+
+// 방에서 나가기
+export const exitRoom = async (roomId: number, memberId: number) => {
+  await fetcher.delete({
+    url: API_URL.deleteRoom(roomId, memberId),
   });
 };
