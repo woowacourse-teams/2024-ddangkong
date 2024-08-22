@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import {
@@ -16,6 +15,7 @@ import Modal from '../Modal/Modal';
 import Toast from '../Toast/Toast';
 
 import CopyIcon from '@/assets/images/copyIcon.png';
+import { INVITE_URL } from '@/constants/url';
 import { memberInfoState, roomUuidState } from '@/recoil/atom';
 
 interface InviteModalProps {
@@ -24,8 +24,8 @@ interface InviteModalProps {
 }
 
 const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
-  const roomUUid = useRecoilValue(roomUuidState);
-  const inviteUrl = `${window.location.origin}${`/nickname/${roomUUid}`}`;
+  const roomUuid = useRecoilValue(roomUuidState);
+  const inviteUrl = INVITE_URL(roomUuid);
 
   const { isCopied, copyToClipboard } = useClipBoard();
 

@@ -9,6 +9,8 @@ import {
 } from './RoomSettingModal.styled';
 import Modal from '../Modal/Modal';
 
+import { ONE_MINUTE } from '@/constants/time';
+
 const TOTAL_ROUND_LIST = [5, 7, 10];
 const TIMER_PER_ROUND_LIST = [5000, 10000, 15000];
 
@@ -56,7 +58,7 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
                   onClick={handleClickTimeLimit}
                   value={timeLimit}
                 >
-                  {timeLimit / 1000}초
+                  {timeLimit / ONE_MINUTE}초
                 </button>
               </li>
             ))}

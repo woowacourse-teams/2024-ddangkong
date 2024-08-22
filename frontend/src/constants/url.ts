@@ -46,3 +46,7 @@ export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
   applyRoomSetting: `${BASE_URL}/api/balances/rooms/:roomId`,
   deleteRoom: `${BASE_URL}/api/balances/rooms/:roomId/members/:memberId`,
 };
+
+export const INVITE_URL = (roomUuid: string) => {
+  return `${window.location.origin}${`/nickname/${roomUuid}`}`;
+};

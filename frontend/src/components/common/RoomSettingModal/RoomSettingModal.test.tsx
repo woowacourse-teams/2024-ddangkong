@@ -3,6 +3,7 @@ import { userEvent } from '@testing-library/user-event';
 
 import RoomSettingModal from './RoomSettingModal';
 
+import { ONE_MINUTE } from '@/constants/time';
 import ROOM_INFO from '@/mocks/data/roomInfo.json';
 import { useGetRoomInfo } from '@/pages/ReadyPage/useGetRoomInfo';
 import { customRender, wrapper } from '@/utils/test-utils';
@@ -87,7 +88,7 @@ describe('RoomSettingModal 방 설정 모달 테스트', () => {
       expect(result.current.roomSetting).toEqual(ROOM_INFO.roomSetting);
     });
 
-    await clickButton(`${TIME_LIMIT / 1000}초`);
+    await clickButton(`${TIME_LIMIT / ONE_MINUTE}초`);
     await clickButton('적용');
 
     await waitFor(() => {

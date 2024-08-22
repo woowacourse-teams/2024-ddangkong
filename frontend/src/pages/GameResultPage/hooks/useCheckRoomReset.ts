@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { checkRoomReset } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
+import { ONE_MINUTE } from '@/constants/time';
 
 export const useCheckRoomReset = () => {
   const { roomId } = useParams();
@@ -11,7 +12,7 @@ export const useCheckRoomReset = () => {
   const { data } = useQuery({
     queryKey: [QUERY_KEYS.roomReset, Number(roomId)],
     queryFn: async () => await checkRoomReset(Number(roomId)),
-    refetchInterval: 1000,
+    refetchInterval: ONE_MINUTE,
   });
 
   useEffect(() => {

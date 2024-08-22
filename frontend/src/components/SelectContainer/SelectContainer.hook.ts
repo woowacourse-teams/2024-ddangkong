@@ -5,8 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchRoundVoteIsFinished } from '@/apis/balanceContent';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { ROUTES } from '@/constants/routes';
-
-const POLLING_DELAY = 1000;
+import { POLLING_DELAY } from '@/constants/time';
 
 interface UseRoundIsFinishedQueryProps {
   contentId?: number;

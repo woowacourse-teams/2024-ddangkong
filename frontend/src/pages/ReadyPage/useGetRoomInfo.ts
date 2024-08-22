@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { getRoomInfo } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
+import { ONE_MINUTE } from '@/constants/time';
 
 export const useGetRoomInfo = () => {
   const { roomId } = useParams();
@@ -12,7 +13,7 @@ export const useGetRoomInfo = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
     queryFn: ({ queryKey: [_, roomId] }) => getRoomInfo(Number(roomId)),
-    refetchInterval: 1000,
+    refetchInterval: ONE_MINUTE,
   });
 
   useEffect(() => {
