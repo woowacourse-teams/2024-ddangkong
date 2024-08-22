@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,7 +41,9 @@ public class BalanceDocumentationTest extends BaseDocumentationTest {
                     .andExpect(status().isOk())
                     .andDo(document("balance/category",
                             responseFields(
-                                    fieldWithPath("categories").type(ARRAY).description("카테고리 목록")
+                                    fieldWithPath("categories").type(ARRAY).description("카테고리 목록"),
+                                    fieldWithPath("categories.[].value").type(STRING).description("카테고리 값"),
+                                    fieldWithPath("categories.[].label").type(STRING).description("카테고리 표기")
                             )
                     ));
         }
