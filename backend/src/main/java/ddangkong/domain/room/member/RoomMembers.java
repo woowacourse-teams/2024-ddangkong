@@ -49,7 +49,7 @@ public class RoomMembers {
 
     public Member getMember(Long memberId) {
         return members.stream()
-                .filter(member -> member.getId().equals(memberId))
+                .filter(member -> member.isSameId(memberId))
                 .findFirst()
                 .orElseThrow(() -> new BadRequestException("멤버가 존재하지 않습니다."));
     }
