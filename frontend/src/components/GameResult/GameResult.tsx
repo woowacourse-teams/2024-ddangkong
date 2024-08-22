@@ -21,9 +21,7 @@ const GameResult = () => {
       <div css={gameResultLayout}>
         <h1 css={gameResultTitle}>게임 결과</h1>
 
-        {isLoading && (
-          <Spinner message="결과를 불러오는 중입니다..." imageSrc={SadDdangKong} imageSize={150} />
-        )}
+        {isLoading && <Spinner message="매칭 결과를 불러오는 중입니다..." />}
 
         {!isLoading && existMatching && (
           <ol css={rankListContainer}>
