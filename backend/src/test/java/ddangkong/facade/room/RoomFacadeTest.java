@@ -18,7 +18,8 @@ import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.NotFinishedRoomException;
+import ddangkong.exception.room.NotFoundRoomException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -86,7 +87,7 @@ class RoomFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomFacade.joinRoom(nickname, nonExistUuid))
-                    .isExactlyInstanceOf(BadRequestException.class);
+                    .isExactlyInstanceOf(NotFoundRoomException.class);
         }
 
         @Test
@@ -385,8 +386,7 @@ class RoomFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
+                    .isExactlyInstanceOf(NotFinishedRoomException.class);
         }
 
         @ParameterizedTest
@@ -399,8 +399,7 @@ class RoomFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
+                    .isExactlyInstanceOf(NotFinishedRoomException.class);
         }
 
         private void saveRoomContents(Room room) {

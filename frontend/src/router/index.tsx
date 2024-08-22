@@ -43,6 +43,10 @@ export const router = createBrowserRouter([
         element: <RoundResultPage />,
       },
       {
+        path: ':roomId/round/result/status',
+        element: <VoteStatusPage />,
+      },
+      {
         path: ':roomId/game/result',
         element: <GameResultPage />,
       },

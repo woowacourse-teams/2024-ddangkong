@@ -1,10 +1,12 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { gameTitle, headerLayout, roundText, iconImage } from './Header.styled';
+import { buttonWrapper, gameTitle, headerLayout, roundText, iconImage } from './Header.styled';
 import { useBlockRefresh } from './hooks/useBlockRefresh';
 import { useExit } from './hooks/useExit';
+import useRoutePath from './hooks/useRoutePath';
 
-import GoOutIcon from '@/assets/images/goOutIcon.png';
+import ArrowLeft from '@/assets/images/arrowLeft.svg';
+import ExitIcon from '@/assets/images/exitIcon.png';
 import SettingIcon from '@/assets/images/settingsIcon.svg';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
@@ -15,70 +17,83 @@ interface HeaderProps {
   title: string;
 }
 
-// TODO: Header 분리
-// 1. 공간만 차지하는 빈 헤더 : 게임 결과 화면
-// 2. 가운데 제목만 차지하는 헤더 : 닉네임 설정 화면, 게임 대기 화면
-// 3. 좌측 상단과 가운데 제목 차지하는 헤더 : 게임 화면, 라운드 통계 화면, 라운드 투표 현황
-const Header = ({ title }: HeaderProps) => {
-  const { balanceContent } = useBalanceContentQuery();
-  const location = useLocation();
-  const { roomId } = useParams();
-  const { isOpen, show, close } = useModal();
-
-  const isReadyPage = location.pathname === ROUTES.ready(Number(roomId));
-  const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
-  const isFinalPage = location.pathname === ROUTES.gameResult(Number(roomId));
-  const isNicknamePage = location.pathname.startsWith(ROUTES.nickname);
-  const { handleExit } = useExit();
+const Header = () => {
+  const { isNicknamePage, isReadyPage, isRoundResultStatusPage, isFinalResultPage } =
+    useRoutePath();
 
   useBlockRefresh();
 
-  if (isReadyPage) {
-    return (
-      <header css={headerLayout}>
-        <button onClick={handleExit}>
-          <img src={GoOutIcon} alt="방 나가기" css={iconImage} />
-        </button>
-        <span css={gameTitle}>밸런스 게임</span>
-        <button onClick={show}>
-          <img src={SettingIcon} alt="방 설정" css={iconImage} />
-        </button>
-        {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
-      </header>
-    );
-  }
+  if (isNicknamePage) return <TitleHeader title="닉네임 설정" />;
+  if (isReadyPage) return <RoomSettingHeader title="밸런스 게임" />;
+  if (isRoundResultStatusPage) return <BackHeader title="투표 현황" />;
+  if (isFinalResultPage) return <EmptyHeader />;
 
-  if (isFinalPage) {
-    return <header css={headerLayout}></header>;
-  }
+  return <RoundHeader />;
+};
 
-  if (isRoundResultPage) {
-    return (
-      <header css={headerLayout}>
-        <span></span>
-        <span css={gameTitle}>투표 결과</span>
-        <span></span>
-      </header>
-    );
-  }
+// 1. 공간만 차지하는 빈 헤더 : 최종 게임 결과 화면
+export const EmptyHeader = () => <header css={headerLayout()}></header>;
 
-  if (isNicknamePage) {
-    return (
-      <header css={headerLayout}>
-        <span></span>
-        <span css={gameTitle}>닉네임 설정</span>
-        <span></span>
-      </header>
-    );
-  }
+// 2. 가운데 제목만 차지하는 헤더 : 닉네임 설정 화면
+export const TitleHeader = ({ title }: HeaderProps) => (
+  <header css={headerLayout(true)}>
+    <h1 css={gameTitle}>{title}</h1>
+  </header>
+);
+
+// 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
+export const RoomSettingHeader = ({ title }: HeaderProps) => {
+  const { isOpen, show, close } = useModal();
+  const { handleExit } = useExit();
 
   return (
-    <header css={headerLayout}>
-      <span css={roundText}>
-        {balanceContent && `${balanceContent.currentRound}/${balanceContent.totalRound}`}
-      </span>
-      <span css={gameTitle}>{title}</span>
-      <div css={roundText}></div>
+    <header css={headerLayout()}>
+      <button onClick={handleExit} css={buttonWrapper}>
+        <img src={ExitIcon} alt="방 설정" css={iconImage} />
+      </button>
+      <h1 css={gameTitle}>{title}</h1>
+      <button onClick={show} css={buttonWrapper}>
+        <img src={SettingIcon} alt="방 설정" css={iconImage} />
+      </button>
+      {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
+    </header>
+  );
+};
+
+// 4. 좌측 상단 라운드, 가운데 제목 차지하는 헤더 (API 호출 O) : 게임 화면, 라운드 통계 화면
+export const RoundHeader = () => {
+  const { roomId } = useParams();
+  const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
+
+  const { balanceContent } = useBalanceContentQuery(Number(roomId));
+
+  const title = isRoundResultPage ? '투표 결과' : '밸런스 게임';
+
+  if (!balanceContent) return null;
+
+  return (
+    <header css={headerLayout()}>
+      <span css={roundText}>{`${balanceContent?.currentRound}/${balanceContent?.totalRound}`}</span>
+      <h1 css={gameTitle}>{title}</h1>
+      <span css={roundText}></span>
+    </header>
+  );
+};
+
+// 5. 좌측 상단 뒤로가기, 가운데 제목 차지하는 헤더 (API 호출 X) : 라운드 투표 현황
+export const BackHeader = ({ title }: HeaderProps) => {
+  const navigate = useNavigate();
+
+  const goToBack = () => {
+    navigate(-1);
+  };
+  return (
+    <header css={headerLayout()}>
+      <button onClick={goToBack} css={buttonWrapper}>
+        <img src={ArrowLeft} alt="뒤로 가기" />
+      </button>
+      <h1 css={gameTitle}>{title}</h1>
+      <span css={roundText}></span>
     </header>
   );
 };

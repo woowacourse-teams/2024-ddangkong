@@ -6,7 +6,7 @@ import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.balance.roomvote.AlreadyVotedException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +31,7 @@ public class RoomBalanceVoteService {
 
     private void validDuplicatedVote(Member member, BalanceOption balanceOption) {
         if (roomVoteRepository.existsByMemberAndBalanceOption(member, balanceOption)) {
-            throw new BadRequestException("이미 투표했습니다. nickname: %s, option name: %s"
-                    .formatted(member.getNickname(), balanceOption.getName()));
+            throw new AlreadyVotedException(member.getNickname(), balanceOption.getName());
         }
     }
 

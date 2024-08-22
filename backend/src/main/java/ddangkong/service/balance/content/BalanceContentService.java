@@ -3,8 +3,8 @@ package ddangkong.service.balance.content;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.balance.content.NotEnoughBalanceContentException;
+import ddangkong.exception.balance.content.NotFoundBalanceContentException;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +20,14 @@ public class BalanceContentService {
     @Transactional(readOnly = true)
     public BalanceContent getBalanceContent(Long contentId) {
         return balanceContentRepository.findById(contentId)
-                .orElseThrow(() -> new BadRequestException("존재하지 않는 컨텐츠입니다."));
+                .orElseThrow(NotFoundBalanceContentException::new);
     }
 
     @Transactional(readOnly = true)
     public List<BalanceContent> pickBalanceContents(Category category, int pickCount) {
         List<BalanceContent> contents = balanceContentRepository.findByCategory(category);
         if (contents.size() < pickCount) {
-            throw new InternalServerException("질문 수가 부족합니다. category: %s ".formatted(category));
+            throw new NotEnoughBalanceContentException(category);
         }
 
         Collections.shuffle(contents);

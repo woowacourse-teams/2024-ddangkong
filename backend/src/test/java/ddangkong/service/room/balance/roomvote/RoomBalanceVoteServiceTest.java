@@ -19,7 +19,7 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.balance.roomvote.AlreadyVotedException;
 import ddangkong.facade.BaseServiceTest;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,7 +92,7 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteService.createVote(prin, balanceOptions, optionA.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(AlreadyVotedException.class)
                     .hasMessageContaining("이미 투표했습니다. nickname: %s, option name: %s"
                             .formatted(prin.getNickname(), optionA.getName()));
         }
@@ -104,7 +104,7 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomBalanceVoteService.createVote(prin, balanceOptions, optionA.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(AlreadyVotedException.class)
                     .hasMessageContaining("이미 투표했습니다. nickname: %s, option name: %s"
                             .formatted(prin.getNickname(), optionB.getName()));
         }
