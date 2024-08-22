@@ -4,9 +4,9 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
-import ddangkong.facade.room.dto.RoomResetResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
@@ -91,9 +91,9 @@ public class RoomFacade {
     }
 
     @Transactional(readOnly = true)
-    public RoomResetResponse checkResetRoom(Long roomId) {
+    public InitialRoomResponse isInitialRoom(Long roomId) {
         Room room = roomService.getRoom(roomId);
         Member master = memberService.getMaster(room);
-        return new RoomResetResponse(room.isResetRoom(), master);
+        return new InitialRoomResponse(room.isInitialRoom(), master);
     }
 }

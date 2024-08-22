@@ -12,10 +12,10 @@ import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.member.Member;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
-import ddangkong.facade.room.dto.RoomResetResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
@@ -256,17 +256,17 @@ class RoomControllerTest extends BaseControllerTest {
             방을_초기화한다();
 
             // when
-            RoomResetResponse actual = RestAssured.given().log().all()
+            InitialRoomResponse actual = RestAssured.given().log().all()
                     .pathParam("roomId", room.getId())
-                    .when().get("/api/balances/rooms/{roomId}/reset")
+                    .when().get("/api/balances/rooms/{roomId}/initial")
                     .then().log().all()
                     .statusCode(HttpStatus.OK.value())
                     .extract()
-                    .as(RoomResetResponse.class);
+                    .as(InitialRoomResponse.class);
 
             // then
             assertAll(
-                    () -> assertThat(actual.isReset()).isTrue(),
+                    () -> assertThat(actual.isInitial()).isTrue(),
                     () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
             );
         }

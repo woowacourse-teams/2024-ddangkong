@@ -118,7 +118,7 @@ public class Room {
         this.status = RoomStatus.READY;
     }
 
-    public boolean isResetRoom() {
+    public boolean isInitialRoom() {
         return status.isGameReady() && currentRound == START_ROUND;
     }
 

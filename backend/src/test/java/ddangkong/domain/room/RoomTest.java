@@ -279,7 +279,7 @@ class RoomTest {
             Room room = new Room("uuid", currentRound, status, ROOM_SETTING);
 
             // when
-            boolean isResetRoom = room.isResetRoom();
+            boolean isResetRoom = room.isInitialRoom();
 
             // then
             assertThat(isResetRoom).isTrue();
@@ -292,7 +292,7 @@ class RoomTest {
             Room room = new Room("uuid", 1, status, ROOM_SETTING);
 
             // when
-            boolean isResetRoom = room.isResetRoom();
+            boolean isResetRoom = room.isInitialRoom();
 
             // then
             assertThat(isResetRoom).isFalse();
@@ -305,7 +305,7 @@ class RoomTest {
             Room room = new Room("uuid", currentRound, RoomStatus.READY, ROOM_SETTING);
 
             // when
-            boolean isResetRoom = room.isResetRoom();
+            boolean isResetRoom = room.isInitialRoom();
 
             // then
             assertThat(isResetRoom).isFalse();

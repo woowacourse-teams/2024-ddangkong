@@ -2,10 +2,10 @@ package ddangkong.controller.room;
 
 import ddangkong.aop.logging.Polling;
 import ddangkong.facade.room.RoomFacade;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
-import ddangkong.facade.room.dto.RoomResetResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import jakarta.validation.Valid;
@@ -82,8 +82,8 @@ public class RoomController {
     }
 
     @Polling
-    @GetMapping("/balances/rooms/{roomId}/reset")
-    public RoomResetResponse checkResetRoom(@PathVariable @Positive Long roomId) {
-        return roomFacade.checkResetRoom(roomId);
+    @GetMapping("/balances/rooms/{roomId}/initial")
+    public InitialRoomResponse isInitialRoom(@PathVariable @Positive Long roomId) {
+        return roomFacade.isInitialRoom(roomId);
     }
 }

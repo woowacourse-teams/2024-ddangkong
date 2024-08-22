@@ -20,9 +20,9 @@ import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
-import ddangkong.facade.room.dto.RoomResetResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
@@ -441,11 +441,11 @@ class RoomFacadeTest extends BaseServiceTest {
             Member master = memberRepository.save(PRIN.master(room));
 
             // when
-            RoomResetResponse actual = roomFacade.checkResetRoom(room.getId());
+            InitialRoomResponse actual = roomFacade.isInitialRoom(room.getId());
 
             // then
             assertAll(
-                    () -> assertThat(actual.isReset()).isFalse(),
+                    () -> assertThat(actual.isInitial()).isFalse(),
                     () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
             );
         }
