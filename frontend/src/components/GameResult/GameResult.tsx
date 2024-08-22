@@ -23,7 +23,7 @@ const GameResult = () => {
 
         {isLoading && <Spinner message="매칭 결과를 불러오는 중입니다..." />}
 
-        {!isLoading && existMatching && (
+        {existMatching && (
           <ol css={rankListContainer}>
             {matchedMembers &&
               matchedMembers.map((memberMatchingInfo) => (
@@ -35,7 +35,7 @@ const GameResult = () => {
           </ol>
         )}
 
-        {!isLoading && !existMatching && (
+        {!existMatching && (
           <div css={noMatchingLayout}>
             <img src={SadDdangKong} alt="서운한 땅콩" css={noMatchingImg} />
             <span css={noMatchingText}>
