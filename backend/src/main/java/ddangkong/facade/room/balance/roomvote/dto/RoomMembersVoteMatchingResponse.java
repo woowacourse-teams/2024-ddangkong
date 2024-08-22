@@ -29,8 +29,8 @@ public record RoomMembersVoteMatchingResponse(
         long previousMatchingPercent = Integer.MAX_VALUE;
 
         List<RoomMemberVoteMatchingResponse> matchedMembers = new ArrayList<>();
-        for (int rank = 1; rank <= matchedMembersPercents.size(); rank++) {
-            Entry<Member, Long> memberMatchingPercent = matchedMembersPercents.get(rank - 1);
+        for (int index = 1; index <= matchedMembersPercents.size(); index++) {
+            Entry<Member, Long> memberMatchingPercent = matchedMembersPercents.get(index - 1);
             Member member = memberMatchingPercent.getKey();
             long matchingPercent = memberMatchingPercent.getValue();
 
@@ -38,13 +38,14 @@ public record RoomMembersVoteMatchingResponse(
                 existMatching = true;
             }
 
+            int rank = previousRank;
             if (matchingPercent < previousMatchingPercent) {
-                matchedMembers.add(new RoomMemberVoteMatchingResponse(rank, member, matchingPercent));
-                previousMatchingPercent = matchingPercent;
+                rank = index;
                 previousRank = rank;
-            } else if (matchingPercent == previousMatchingPercent) {
-                matchedMembers.add(new RoomMemberVoteMatchingResponse(previousRank, member, matchingPercent));
+                previousMatchingPercent = matchingPercent;
             }
+
+            matchedMembers.add(new RoomMemberVoteMatchingResponse(rank, member, matchingPercent));
         }
 
         return new RoomMembersVoteMatchingResponse(matchedMembers, existMatching);
