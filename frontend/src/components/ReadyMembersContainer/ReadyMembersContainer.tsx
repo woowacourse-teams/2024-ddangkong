@@ -9,11 +9,13 @@ import {
   memberStatus,
   membersContainer,
   inviteButton,
+  profileImage,
 } from './ReadyMembersContainer.styled';
 import InviteModal from '../common/InviteModal/InviteModal';
 
 import crownIcon from '@/assets/images/crownIcon.png';
 import plusIcon from '@/assets/images/plusIcon.png';
+import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
 import { RoomMembers } from '@/types/room';
 
 interface ReadyMembersContainerProps extends RoomMembers {}
@@ -48,7 +50,9 @@ const ReadyMembersContainer = ({ members }: ReadyMembersContainerProps) => {
           </li>
           {members.map((member) => (
             <li css={memberItem} key={member.memberId}>
-              <div css={profileBox}></div>
+              <div css={profileBox}>
+                <img src={SillyDdangkong} alt="사용자 프로필" css={profileImage} />
+              </div>
               <div css={memberStatus}>
                 <span>{member.nickname}</span>
                 {member.isMaster && <img src={crownIcon} alt="왕관 아이콘" />}
