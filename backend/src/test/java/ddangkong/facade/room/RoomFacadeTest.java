@@ -24,6 +24,7 @@ import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import java.util.List;
@@ -438,5 +439,60 @@ class RoomFacadeTest extends BaseServiceTest {
             );
         }
     }
-}
 
+    @Nested
+    class 방에_참여_가능_여부 {
+
+        @Test
+        void 준비중인_방에_참여할_수_있다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.READY, new RoomSetting(3, 10_000, Category.IF)
+                    ));
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isJoinable()).isTrue();
+        }
+
+        @Test
+        void 진행중인_방에_참여할_수_없다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.PROGRESS, new RoomSetting(3, 10_000, Category.IF))
+            );
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isJoinable()).isFalse();
+        }
+
+        @Test
+        void 종료된_방에_참여할_수_없다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.FINISH, new RoomSetting(3, 10_000, Category.IF))
+            );
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isJoinable()).isFalse();
+        }
+
+        @Test
+        void 존재하지_않는_방에_참여_가능_여부를_조회하면_예외가_발생한다() {
+            // when & then
+            assertThatThrownBy(() -> roomFacade.getRoomStatus("NotExist"))
+                    .isExactlyInstanceOf(NotFoundRoomException.class);
+        }
+    }
+}

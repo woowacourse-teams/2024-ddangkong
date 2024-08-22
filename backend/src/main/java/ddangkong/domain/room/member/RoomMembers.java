@@ -2,6 +2,7 @@ package ddangkong.domain.room.member;
 
 import ddangkong.exception.room.member.InvalidMasterCountException;
 import ddangkong.exception.room.member.NotExistMasterException;
+import ddangkong.exception.room.member.NotExistMemberInRoomException;
 import ddangkong.exception.room.member.NotRoomMemberException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,8 +15,15 @@ public class RoomMembers {
     private final List<Member> members;
 
     public RoomMembers(List<Member> members) {
+        validateEmpty(members);
         validateMasterCount(members);
         this.members = new ArrayList<>(members);
+    }
+
+    private void validateEmpty(List<Member> members) {
+        if (members.isEmpty()) {
+            throw new NotExistMemberInRoomException();
+        }
     }
 
     private void validateMasterCount(List<Member> members) {
