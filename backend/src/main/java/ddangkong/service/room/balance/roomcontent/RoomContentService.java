@@ -4,8 +4,8 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
-import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.room.balance.roomcontent.NotFoundCurrentRoundRoomContentException;
+import ddangkong.exception.room.balance.roomcontent.NotFoundRoomContentException;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,15 +60,13 @@ public class RoomContentService {
     @Transactional(readOnly = true)
     public RoomContent getCurrentRoundRoomContent(Room room) {
         return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())
-                .orElseThrow(() -> new InternalServerException(
-                        "해당 방의 현재 라운드의 컨텐츠가 존재하지 않습니다. currentRound: %d"
-                                .formatted(room.getCurrentRound())));
+                .orElseThrow(() -> new NotFoundCurrentRoundRoomContentException(room.getCurrentRound()));
     }
 
     @Transactional(readOnly = true)
     public boolean isOverVoteDeadline(Room room, BalanceContent balanceContent) {
         RoomContent roomContent = roomContentRepository.findByRoomAndBalanceContent(room, balanceContent)
-                .orElseThrow(() -> new BadRequestException("방에 존재하지 않는 컨텐츠입니다."));
+                .orElseThrow(NotFoundRoomContentException::new);
         LocalDateTime now = LocalDateTime.now(clock);
         return roomContent.isOverVoteDeadline(now, room.getCurrentRound());
     }

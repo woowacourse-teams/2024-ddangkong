@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -26,6 +27,8 @@ import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.room.RoomFacade;
+import ddangkong.facade.room.dto.RoomStatusResponse;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -197,7 +200,31 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             )
                     ));
         }
+    }
 
+    @Nested
+    class 방_나가기 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members/{memberId}";
+
+        @Test
+        void 방에서_나간다() throws Exception {
+            // given
+            Long roomId = 1L;
+            Long memberId = 1L;
+
+            //when & then
+            mockMvc.perform(delete(ENDPOINT, roomId, memberId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/leave",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID"),
+                                    parameterWithName("memberId").description("멤버 ID")
+                            )
+                    ));
+        }
     }
 
     @Nested
@@ -277,23 +304,71 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     }
 
     @Nested
-    class 방_초기화 {
+    class 방_게임_참여_가능_여부 {
+        private static final String ENDPOINT = "/api/balances/rooms/{uuid}/status";
 
-        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/reset";
+        @Test
+        void 방에서_게임이_참여_가능_여부를_조회한다() throws Exception {
+            // given
+            RoomStatusResponse response = new RoomStatusResponse(true);
+            when(roomFacade.getRoomStatus(anyString())).thenReturn(response);
+
+            // when & then
+            mockMvc.perform(get(ENDPOINT, "488fd79f92a34131bf2a628bd58c5d2c"))
+                    .andExpect(status().isOk())
+                    .andDo(document("room/status",
+                            pathParameters(
+                                    parameterWithName("uuid").description("방의 UUID")
+                            ),
+                            responseFields(
+                                    fieldWithPath("isJoinable").description("방에 참가 가능 여부")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    class 방_초기화 {
 
         @Test
         void 방을_초기화한다() throws Exception {
             // given
+            String endpoint = "/api/balances/rooms/{roomId}/reset";
             doNothing().when(roomFacade).resetRoom(anyLong());
 
             // when & then
-            mockMvc.perform(patch(ENDPOINT, 1L))
+            mockMvc.perform(patch(endpoint, 1L))
                     .andExpect(status().isNoContent())
                     .andDo(document("room/reset",
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID")
                             )
                     ));
+        }
+
+        @Test
+        void 방이_초기화되었는지_확인한다() throws Exception {
+            // given
+            String endpoint = "/api/balances/rooms/{roomId}/initial";
+            MasterResponse prin = new MasterResponse(1L, "프콩");
+            InitialRoomResponse response = new InitialRoomResponse(true, prin);
+            when(roomFacade.isInitialRoom(anyLong())).thenReturn(response);
+
+            // when & then
+            mockMvc.perform(get(endpoint, 1L))
+                    .andExpect(status().isOk())
+                    .andDo(document("room/initial",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            ),
+                            responseFields(
+                                    fieldWithPath("isInitial").description("방 초기화 여부"),
+                                    fieldWithPath("master").type(OBJECT).description("방장 정보"),
+                                    fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("master.nickname").type(STRING).description("닉네임")
+                            )
+                    ));
+
         }
     }
 }

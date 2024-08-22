@@ -18,15 +18,22 @@ import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
-import ddangkong.exception.BadRequestException;
+import ddangkong.domain.support.EntityTestUtils;
+import ddangkong.exception.room.NotFinishedRoomException;
+import ddangkong.exception.room.NotFoundRoomException;
 import ddangkong.facade.BaseServiceTest;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -86,7 +93,7 @@ class RoomFacadeTest extends BaseServiceTest {
 
             // when & then
             assertThatThrownBy(() -> roomFacade.joinRoom(nickname, nonExistUuid))
-                    .isExactlyInstanceOf(BadRequestException.class);
+                    .isExactlyInstanceOf(NotFoundRoomException.class);
         }
 
         @Test
@@ -114,6 +121,83 @@ class RoomFacadeTest extends BaseServiceTest {
             Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
             long memberCountInRoom = memberRepository.countByRoom(foundRoom);
             assertThat(memberCountInRoom).isEqualTo(12);
+        }
+    }
+
+    @Nested
+    class 방_나가기 {
+
+        @Test
+        void 해당_멤버의_투표를_옮긴_후에_요청한_멤버를_삭제한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            memberRepository.save(EDEN.master(room));
+            Member commonMember = memberRepository.save(KEOCHAN.common(room));
+
+            BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
+            RoomBalanceVote roomBalanceVote = getRoomBalanceVote(commonMember, balanceContent);
+            long countOfTotalVotes = totalBalanceVoteRepository.count();
+
+            // when
+            roomFacade.leaveRoom(room.getId(), commonMember.getId());
+
+            // then
+            Optional<Member> leavedMember = memberRepository.findById(commonMember.getId());
+            Optional<RoomBalanceVote> deletedRoomBalanceVote =
+                    roomBalanceVoteRepository.findById(roomBalanceVote.getId());
+            long afterCountOfBalanceVotes = totalBalanceVoteRepository.count();
+            assertAll(
+                    () -> assertThat(leavedMember).isEmpty(),
+                    () -> assertThat(deletedRoomBalanceVote).isEmpty(),
+                    () -> assertThat(afterCountOfBalanceVotes).isEqualTo(countOfTotalVotes + 1)
+            );
+        }
+
+        private RoomBalanceVote getRoomBalanceVote(Member member, BalanceContent balanceContent) {
+            BalanceOption balanceOption = balanceOptionRepository.findAllByBalanceContent(balanceContent).get(0);
+            RoomBalanceVote roomBalanceVote = new RoomBalanceVote(member, balanceOption);
+            return roomBalanceVoteRepository.save(roomBalanceVote);
+        }
+
+        @Test
+        void 방에서_마지막_멤버가_나가면_방을_삭제한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            Member member = memberRepository.save(EDEN.master(room));
+
+            BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
+            RoomContent roomContent = getSavedRoomContent(room, balanceContent);
+
+            // when
+            roomFacade.leaveRoom(room.getId(), member.getId());
+
+            // then
+            Optional<RoomContent> deletedRoomContent = roomContentRepository.findById(roomContent.getId());
+            Optional<Room> deletedRoom = roomRepository.findById(room.getId());
+            assertAll(
+                    () -> assertThat(deletedRoomContent).isEmpty(),
+                    () -> assertThat(deletedRoom).isEmpty()
+            );
+        }
+
+        private RoomContent getSavedRoomContent(Room room, BalanceContent content) {
+            RoomContent roomContent = RoomContent.newRoomContent(room, content, 1);
+            return roomContentRepository.save(roomContent);
+        }
+
+        @Test
+        void 방의_마스터가_나가면_다른_일반_멤버를_마스터로_승급한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            Member master = memberRepository.save(EDEN.master(room));
+            Member commonMember = memberRepository.save(KEOCHAN.common(room));
+
+            // when
+            roomFacade.leaveRoom(room.getId(), master.getId());
+
+            // then
+            Member foundCommonMember = memberRepository.findById(commonMember.getId()).get();
+            assertThat(foundCommonMember.isMaster()).isTrue();
         }
     }
 
@@ -342,23 +426,21 @@ class RoomFacadeTest extends BaseServiceTest {
     @Nested
     class 방_초기화 {
 
-        private static final int TOTAL_ROUND = 5;
-        private static final int TIME_LIMIT = 5000;
         private static final RoomStatus STATUS = RoomStatus.FINISH;
-        private static final Category CATEGORY = Category.IF;
+
+        private static final RoomSetting ROOM_SETTING = new RoomSetting(5, 5000, Category.IF);
 
         private BalanceContent content;
 
         @BeforeEach
         void setUp() {
-            content = balanceContentRepository.save(new BalanceContent(CATEGORY, "A vs B"));
+            content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
         }
 
         @Test
         void 방을_초기_상태로_초기화한다() {
             // given
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = roomRepository.save(new Room("uuid", 5, STATUS, roomSetting));
+            Room room = roomRepository.save(new Room("uuid", 5, STATUS, ROOM_SETTING));
             saveRoomContents(room);
 
             // when
@@ -378,29 +460,24 @@ class RoomFacadeTest extends BaseServiceTest {
         void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
             // given
             int invalidCurrentRound = 4;
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = roomRepository.save(
-                    new Room("uuid", invalidCurrentRound, STATUS, roomSetting));
+            Room room = roomRepository.save(new Room("uuid", invalidCurrentRound, STATUS, ROOM_SETTING));
             saveRoomContents(room);
 
             // when & then
             assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
+                    .isExactlyInstanceOf(NotFinishedRoomException.class);
         }
 
         @ParameterizedTest
         @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
         void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
             // given
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = roomRepository.save(new Room("uuid", 5, status, roomSetting));
+            Room room = roomRepository.save(new Room("uuid", 5, status, ROOM_SETTING));
             saveRoomContents(room);
 
             // when & then
             assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
+                    .isExactlyInstanceOf(NotFinishedRoomException.class);
         }
 
         private void saveRoomContents(Room room) {
@@ -412,10 +489,9 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 방을_초기화하면_방_투표를_삭제하고_전체_투표에_저장한다() {
             // given
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
             BalanceOption optionA = balanceOptionRepository.save(new BalanceOption("A", content));
             BalanceOption optionB = balanceOptionRepository.save(new BalanceOption("B", content));
-            Room room = roomRepository.save(new Room("uuid", 5, STATUS, roomSetting));
+            Room room = roomRepository.save(new Room("uuid", 5, STATUS, ROOM_SETTING));
             Member prin = memberRepository.save(PRIN.master(room));
             Member eden = memberRepository.save(EDEN.common(room));
             Member keochan = memberRepository.save(KEOCHAN.common(room));
@@ -438,6 +514,145 @@ class RoomFacadeTest extends BaseServiceTest {
                     () -> assertThat(optionBTotalVoteCount).isEqualTo(1)
             );
         }
+
+        @Test
+        void 초기화된_방인지_확인한다() {
+            // given
+            Room room = roomRepository.save(new Room("uuid", 5, RoomStatus.READY, ROOM_SETTING));
+            Member master = memberRepository.save(PRIN.master(room));
+
+            // when
+            InitialRoomResponse actual = roomFacade.isInitialRoom(room.getId());
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.isInitial()).isFalse(),
+                    () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
+            );
+        }
+    }
+
+    @Nested
+    class 변경_시간이_특정_시각_이전_방_삭제 {
+
+        @Test
+        void 변경이_특정_시각_이전에_일어난_모든_방을_지운다() {
+            // given
+            LocalDateTime standardModified = LocalDateTime.of(2024, 7, 18, 19, 52, 0);
+            long countOfExpectedRestRoom = 5;
+
+            // when
+            roomFacade.deleteRoomBefore(standardModified);
+
+            // then
+            long countOfRoom = roomRepository.count();
+            assertThat(countOfRoom).isEqualTo(countOfExpectedRestRoom);
+        }
+
+        @Test
+        @Disabled
+            // TODO @LastModifiedDate 비활성화 후 테스트
+        void 해당_방과_연관된_모든_정보를_삭제할_수_있다() {
+            // given
+            LocalDateTime standardModified = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
+            Room room = getSavedRoom(standardModified.minusSeconds(1));
+            Member master = memberRepository.save(EDEN.master(room));
+            Member common = memberRepository.save(KEOCHAN.common(room));
+
+            BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
+            RoomContent roomContent = getSavedRoomContent(room, balanceContent);
+            RoomBalanceVote roomVote = getSavedRoomBalanceVote(master, balanceContent);
+            long countOfTotalVotes = totalBalanceVoteRepository.count();
+
+            // when
+            roomFacade.deleteRoomBefore(standardModified);
+
+            // then
+            Optional<Room> deletedRoom = roomRepository.findById(room.getId());
+            Optional<Member> deletedMember = memberRepository.findById(common.getId());
+            Optional<RoomContent> deletedRoomContent = roomContentRepository.findById(roomContent.getId());
+            Optional<RoomBalanceVote> deletedRoomVote = roomBalanceVoteRepository.findById(roomVote.getId());
+            long afterCountOfTotalVotes = totalBalanceVoteRepository.count();
+            assertAll(
+                    () -> assertThat(deletedRoom).isEmpty(),
+                    () -> assertThat(deletedMember).isEmpty(),
+                    () -> assertThat(deletedRoomContent).isEmpty(),
+                    () -> assertThat(deletedRoomVote).isEmpty(),
+                    () -> assertThat(afterCountOfTotalVotes).isEqualTo(countOfTotalVotes + 1)
+            );
+        }
+
+        private Room getSavedRoom(LocalDateTime lastModifiedAt) {
+            Room room = Room.createNewRoom();
+            EntityTestUtils.setLastModifiedAt(room, lastModifiedAt);
+            return roomRepository.save(room);
+        }
+
+        private RoomBalanceVote getSavedRoomBalanceVote(Member member, BalanceContent balanceContent) {
+            BalanceOption balanceOption = balanceOptionRepository.findAllByBalanceContent(balanceContent).get(0);
+            RoomBalanceVote roomBalanceVote = new RoomBalanceVote(member, balanceOption);
+            return roomBalanceVoteRepository.save(roomBalanceVote);
+        }
+
+        private RoomContent getSavedRoomContent(Room room, BalanceContent content) {
+            RoomContent roomContent = RoomContent.newRoomContent(room, content, 1);
+            return roomContentRepository.save(roomContent);
+        }
+    }
+
+    @Nested
+    class 방에_참여_가능_여부 {
+
+        @Test
+        void 준비중인_방에_참여할_수_있다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.READY, new RoomSetting(3, 10_000, Category.IF)
+                    ));
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isJoinable()).isTrue();
+        }
+
+        @Test
+        void 진행중인_방에_참여할_수_없다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.PROGRESS, new RoomSetting(3, 10_000, Category.IF))
+            );
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isJoinable()).isFalse();
+        }
+
+        @Test
+        void 종료된_방에_참여할_수_없다() {
+            // given
+            Room room = roomRepository.save(
+                    new Room("uuid", 5, RoomStatus.FINISH, new RoomSetting(3, 10_000, Category.IF))
+            );
+            memberRepository.save(TACAN.master(room));
+
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+
+            // then
+            assertThat(actual.isJoinable()).isFalse();
+        }
+
+        @Test
+        void 존재하지_않는_방에_참여_가능_여부를_조회하면_예외가_발생한다() {
+            // when & then
+            assertThatThrownBy(() -> roomFacade.getRoomStatus("NotExist"))
+                    .isExactlyInstanceOf(NotFoundRoomException.class);
+        }
     }
 }
-

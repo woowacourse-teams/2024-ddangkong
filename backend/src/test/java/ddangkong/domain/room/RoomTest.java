@@ -5,7 +5,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.balance.content.Category;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.InvalidRoundGapException;
+import ddangkong.exception.room.NotFinishedRoomException;
+import ddangkong.exception.room.NotProgressedRoomException;
+import ddangkong.exception.room.NotReadyRoomException;
+import ddangkong.exception.room.RoundGreaterThanCurrentRoundException;
+import ddangkong.exception.room.RoundLessThanStartRoundException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,8 +43,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(room::startGame)
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("이미 게임이 시작했습니다.");
+                    .isExactlyInstanceOf(NotReadyRoomException.class);
         }
     }
 
@@ -95,8 +99,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(room::moveToNextRound)
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("게임이 진행 중이 아닙니다.");
+                    .isExactlyInstanceOf(NotProgressedRoomException.class);
         }
     }
 
@@ -158,7 +161,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(() -> room.isRoundFinished(invalidRound))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(RoundLessThanStartRoundException.class)
                     .hasMessageContaining("startRound보다 크거나 같아야 합니다. startRound : 1, round : 0");
         }
 
@@ -172,7 +175,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(() -> room.isRoundFinished(invalidRound))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(RoundGreaterThanCurrentRoundException.class)
                     .hasMessageContaining("currentRound보다 작거나 같아야 합니다. currentRound : 1, round : 2");
         }
 
@@ -186,7 +189,7 @@ class RoomTest {
 
             // when & then
             assertThatThrownBy(() -> room.isRoundFinished(invalidRound))
-                    .isExactlyInstanceOf(BadRequestException.class)
+                    .isExactlyInstanceOf(InvalidRoundGapException.class)
                     .hasMessageContaining("currentRound과 round의 차이는 1이하여야 합니다. currentRound : 4, round : 2");
         }
 
@@ -227,17 +230,15 @@ class RoomTest {
 
     @Nested
     class 방_초기화 {
-        private static final int TOTAL_ROUND = 5;
-        private static final int TIME_LIMIT = 10_000;
-        private static final Category CATEGORY = Category.IF;
+
+        private static final RoomSetting ROOM_SETTING = new RoomSetting(5, 10_000, Category.IF);
 
         @Test
         void 방을_초기_상태로_초기화한다() {
             // given
             int currentRound = 5;
             RoomStatus status = RoomStatus.FINISH;
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = new Room("uuid", currentRound, status, roomSetting);
+            Room room = new Room("uuid", currentRound, status, ROOM_SETTING);
 
             // when
             room.reset();
@@ -253,26 +254,62 @@ class RoomTest {
         void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
             // given
             int invalidCurrentRound = 4;
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = new Room("uuid", invalidCurrentRound, RoomStatus.FINISH, roomSetting);
+            Room room = new Room("uuid", invalidCurrentRound, RoomStatus.FINISH, ROOM_SETTING);
 
             // when & then
             assertThatThrownBy(room::reset)
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
+                    .isExactlyInstanceOf(NotFinishedRoomException.class);
         }
 
         @ParameterizedTest
         @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
         void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
             // given
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = new Room("uuid", 5, status, roomSetting);
+            Room room = new Room("uuid", 5, status, ROOM_SETTING);
 
             // when & then
             assertThatThrownBy(room::reset)
-                    .isExactlyInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("방이 종료되지 않았습니다");
+                    .isExactlyInstanceOf(NotFinishedRoomException.class);
+        }
+
+        @Test
+        void 방_상태가_READY이고_현재_라운드가_시작_라운드와_같을_경우_초기화된_방이다() {
+            // given
+            int currentRound = 1;
+            RoomStatus status = RoomStatus.READY;
+            Room room = new Room("uuid", currentRound, status, ROOM_SETTING);
+
+            // when
+            boolean isResetRoom = room.isInitialRoom();
+
+            // then
+            assertThat(isResetRoom).isTrue();
+        }
+
+        @ParameterizedTest
+        @EnumSource(mode = Mode.EXCLUDE, names = {"READY"})
+        void 방_상태가_READY가_아닐_경우_초기화된_방이_아니다(RoomStatus status) {
+            // given
+            Room room = new Room("uuid", 1, status, ROOM_SETTING);
+
+            // when
+            boolean isResetRoom = room.isInitialRoom();
+
+            // then
+            assertThat(isResetRoom).isFalse();
+        }
+
+        @Test
+        void 현재_라운드가_시작_라운드와_다를_경우_초기화된_방이_아니다() {
+            // given
+            int currentRound = 2;
+            Room room = new Room("uuid", currentRound, RoomStatus.READY, ROOM_SETTING);
+
+            // when
+            boolean isResetRoom = room.isInitialRoom();
+
+            // then
+            assertThat(isResetRoom).isFalse();
         }
     }
 }

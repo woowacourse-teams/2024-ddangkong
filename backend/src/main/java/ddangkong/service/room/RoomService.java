@@ -3,7 +3,9 @@ package ddangkong.service.room;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.RoomSetting;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.NotFoundRoomException;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +24,18 @@ public class RoomService {
     @Transactional(readOnly = true)
     public Room getRoom(Long roomId) {
         return roomRepository.findById(roomId)
-                .orElseThrow(() -> new BadRequestException("존재하지 않는 방입니다."));
+                .orElseThrow(NotFoundRoomException::new);
     }
 
     @Transactional(readOnly = true)
     public Room getRoomWithLock(String uuid) {
         return roomRepository.findByUuidWithLock(uuid)
-                .orElseThrow(() -> new BadRequestException("존재하지 않는 방입니다."));
+                .orElseThrow(NotFoundRoomException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Room> findRoomsBefore(LocalDateTime modifiedAt) {
+        return roomRepository.findAllByLastModifiedAtBefore(modifiedAt);
     }
 
     @Transactional
@@ -56,5 +63,10 @@ public class RoomService {
         Room room = getRoom(roomId);
         room.reset();
         return room;
+    }
+
+    @Transactional
+    public void delete(Room room) {
+        roomRepository.delete(room);
     }
 }

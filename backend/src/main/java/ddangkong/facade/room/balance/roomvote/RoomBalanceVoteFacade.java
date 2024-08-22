@@ -7,7 +7,9 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
-import ddangkong.exception.BadRequestException;
+import ddangkong.exception.room.balance.roomvote.CanNotCheckMatchingPercentException;
+import ddangkong.exception.room.balance.roomvote.VoteFinishedException;
+import ddangkong.exception.room.balance.roomvote.VoteNotFinishedException;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.context.VoteContext;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
@@ -56,7 +58,7 @@ public class RoomBalanceVoteFacade {
     public RoomBalanceVoteResponse createVote(RoomBalanceVoteRequest request, Long roomId, Long contentId) {
         VoteContext voteContext = getVoteContext(roomId, contentId);
         if (voteContext.isVoteFinished()) {
-            throw new BadRequestException("이미 투표가 종료되었습니다.");
+            throw new VoteFinishedException();
         }
         Member member = voteContext.getMember(request.memberId());
         RoomBalanceVote roomBalanceVote = roomBalanceVoteService.createVote(member, voteContext.getBalanceOptions(),
@@ -68,7 +70,7 @@ public class RoomBalanceVoteFacade {
     public RoomBalanceVoteResultResponse getAllVoteResult(Long roomId, Long contentId) {
         VoteContext voteContext = getVoteContext(roomId, contentId);
         if (voteContext.isVoteNotFinished()) {
-            throw new BadRequestException("투표가 끝나지 않아 투표 결과를 조회할 수 없습니다.");
+            throw new VoteNotFinishedException();
         }
         ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(voteContext.getRoomMembers(),
                 voteContext.getBalanceOptions());
@@ -130,7 +132,7 @@ public class RoomBalanceVoteFacade {
     public RoomMembersVoteMatchingResponse getRoomMembersVoteMatching(Long roomId, Long memberId) {
         Room room = roomService.getRoom(roomId);
         if (!room.isAllRoundFinished()) {
-            throw new BadRequestException("종료되지 않은 게임의 매칭도는 확인할 수 없습니다.");
+            throw new CanNotCheckMatchingPercentException();
         }
 
         Member member = memberService.getRoomMember(memberId, room);

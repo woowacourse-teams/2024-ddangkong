@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 
 import {
-  dividerLine,
+  horizontalDivider,
   optionParticipantsContainerLayout,
 } from './OptionParticipantsContainer.styled';
 import OptionParticipants from '../OptionParticipants/OptionParticipants';
@@ -13,8 +13,7 @@ import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 
 const OptionParticipantsContainer = () => {
   const { roomId } = useParams();
-
-  const { balanceContent } = useBalanceContentQuery();
+  const { balanceContent } = useBalanceContentQuery(Number(roomId));
   const { groupRoundResult } = useRoundVoteResultQuery({
     roomId: Number(roomId),
     contentId: balanceContent?.contentId,
@@ -35,11 +34,17 @@ const OptionParticipantsContainer = () => {
           members={groupRoundResult.firstOption.members}
           memberCount={groupRoundResult.firstOption.memberCount}
         />
-        <div css={dividerLine}></div>
+        <div css={horizontalDivider}></div>
         <OptionParticipants
           optionName={groupRoundResult.secondOption.name}
           members={groupRoundResult.secondOption.members}
           memberCount={groupRoundResult.secondOption.memberCount}
+        />
+        <div css={horizontalDivider}></div>
+        <OptionParticipants
+          optionName={'투표에 참여하지 않으셨어요'}
+          members={groupRoundResult.giveUp.members}
+          memberCount={groupRoundResult.giveUp.memberCount}
         />
       </section>
     </>

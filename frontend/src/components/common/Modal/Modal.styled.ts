@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 import { ModalProps } from './Modal';
 
-import { borderRadius, Theme } from '@/styles/Theme';
+import { Theme } from '@/styles/Theme';
 
 export const modalBackdropLayout = css`
   display: flex;
@@ -26,9 +26,9 @@ export const modalContentWrapper = ({ position }: Pick<ModalProps, 'position'>) 
   min-height: 1.2rem;
   transform: translateX(-50%);
   margin: 0;
-  padding: 2.4rem 3.2rem;
+  padding: 2.4rem;
   border: none;
-  border-radius: ${borderRadius.radius10};
+  border-radius: ${Theme.borderRadius.radius10};
 
   background-color: white;
   box-sizing: border-box;

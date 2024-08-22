@@ -1,6 +1,6 @@
 package ddangkong.util;
 
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.util.PercentageCalculatorException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -12,10 +12,10 @@ public class PercentageCalculator {
 
     public static int calculate(long count, long totalCount) {
         if (count < 0) {
-            throw new InternalServerException("count는 0이상이어야 합니다. count: %d".formatted(count));
+            throw new PercentageCalculatorException("count는 0이상이어야 합니다. count: %d".formatted(count));
         }
         if (totalCount < 0) {
-            throw new InternalServerException("totalCount는 0이상이어야 합니다. totalCount: %d".formatted(totalCount));
+            throw new PercentageCalculatorException("totalCount는 0이상이어야 합니다. totalCount: %d".formatted(totalCount));
         }
 
         if (totalCount == 0) {

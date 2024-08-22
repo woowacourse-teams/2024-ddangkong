@@ -33,10 +33,9 @@ interface TabContentContainerProps {
 }
 
 const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => {
-  const { roomId } = useParams();
   const navigate = useNavigate();
-
-  const { balanceContent } = useBalanceContentQuery();
+  const { roomId } = useParams();
+  const { balanceContent } = useBalanceContentQuery(Number(roomId));
 
   const { groupRoundResult, totalResult } = useRoundVoteResultQuery({
     roomId: Number(roomId),

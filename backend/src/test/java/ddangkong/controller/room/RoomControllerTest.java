@@ -1,5 +1,6 @@
 package ddangkong.controller.room;
 
+import static ddangkong.support.fixture.MemberFixture.PRIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -10,15 +11,17 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
+import ddangkong.domain.room.member.Member;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.Map;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -67,7 +70,7 @@ class RoomControllerTest extends BaseControllerTest {
 
         @Test
         void 게임_방_정보_조회() {
-            //when
+            // when
             RoomInfoResponse actual = RestAssured.given()
                     .pathParam("roomId", 1L)
                     .when().get("/api/balances/rooms/{roomId}")
@@ -75,13 +78,52 @@ class RoomControllerTest extends BaseControllerTest {
                     .statusCode(200)
                     .extract().as(RoomInfoResponse.class);
 
-            //then
+            // then
             assertAll(
-                    () -> Assertions.assertThat(actual.members()).hasSize(5),
-                    () -> Assertions.assertThat(actual.isGameStart()).isTrue(),
-                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(10_000),
-                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
+                    () -> assertThat(actual.members()).hasSize(5),
+                    () -> assertThat(actual.isGameStart()).isTrue(),
+                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(10_000),
+                    () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
             );
+        }
+    }
+
+    @Nested
+    class 방_참여_가능_여부_조회 {
+        @Test
+        void 대기중인_방_참여_가능_여부_조회() {
+            // when & then
+            RoomStatusResponse actual = RestAssured.given()
+                    .pathParam("uuid", "uuid4")
+                    .when().get("/api/balances/rooms/{uuid}/status")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomStatusResponse.class);
+            assertThat(actual.isJoinable()).isTrue();
+        }
+
+        @Test
+        void 게임_진행중인_방_참여_가능_여부_조회() {
+            // when & then
+            RoomStatusResponse actual = RestAssured.given()
+                    .pathParam("uuid", "uuid1")
+                    .when().get("/api/balances/rooms/{uuid}/status")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomStatusResponse.class);
+            assertThat(actual.isJoinable()).isFalse();
+        }
+
+        @Test
+        void 게임_종료된_방_참여_가능_여부_조회() {
+            // when & then
+            RoomStatusResponse actual = RestAssured.given()
+                    .pathParam("uuid", "uuid5")
+                    .when().get("/api/balances/rooms/{uuid}/status")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomStatusResponse.class);
+            assertThat(actual.isJoinable()).isFalse();
         }
     }
 
@@ -145,6 +187,60 @@ class RoomControllerTest extends BaseControllerTest {
                     .extract().as(RoomJoinResponse.class);
 
             assertThat(actual.member().isMaster()).isFalse();
+        }
+    }
+
+    @Nested
+    class 방_나가기 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members/{memberId}";
+
+        @Test
+        void 방에_나갈_수_있다() {
+            // given
+            Long roomId = 1L;
+            Long memberId = 1L;
+
+            // when & then
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .pathParam("roomId", roomId)
+                    .pathParam("memberId", memberId)
+                    .when().delete(ENDPOINT)
+                    .then().log().all()
+                    .statusCode(204);
+        }
+
+        @Test
+        void 방_식별자가_0이하인_경우_예외를_발생한다() {
+            // given
+            Long roomId = 0L;
+            Long memberId = 1L;
+
+            // when & then
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .pathParam("roomId", roomId)
+                    .pathParam("memberId", memberId)
+                    .when().delete(ENDPOINT)
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @Test
+        void 멤버_식별자가_0이하인_경우_예외를_발생한다() {
+            // given
+            Long roomId = 0L;
+            Long memberId = 1L;
+
+            // when & then
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .pathParam("roomId", roomId)
+                    .pathParam("memberId", memberId)
+                    .when().delete(ENDPOINT)
+                    .then().log().all()
+                    .statusCode(400);
         }
     }
 
@@ -224,12 +320,14 @@ class RoomControllerTest extends BaseControllerTest {
     class 방_초기화 {
 
         private Room room;
+        private Member master;
 
         @BeforeEach
         void setUp() {
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             RoomSetting roomSetting = new RoomSetting(3, 10_000, Category.IF);
             room = roomRepository.save(new Room("roomResetSetUpUUID", 3, RoomStatus.FINISH, roomSetting));
+            master = memberRepository.save(PRIN.master(room));
             roomContentRepository.save(new RoomContent(room, content, 1, null));
             roomContentRepository.save(new RoomContent(room, content, 2, null));
             roomContentRepository.save(new RoomContent(room, content, 3, null));
@@ -243,6 +341,27 @@ class RoomControllerTest extends BaseControllerTest {
                     .when().patch("/api/balances/rooms/{roomId}/reset")
                     .then().log().all()
                     .statusCode(HttpStatus.NO_CONTENT.value());
+        }
+
+        @Test
+        void 방이_초기화되었는지_확인한다() {
+            // given
+            방을_초기화한다();
+
+            // when
+            InitialRoomResponse actual = RestAssured.given().log().all()
+                    .pathParam("roomId", room.getId())
+                    .when().get("/api/balances/rooms/{roomId}/initial")
+                    .then().log().all()
+                    .statusCode(HttpStatus.OK.value())
+                    .extract()
+                    .as(InitialRoomResponse.class);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.isInitial()).isTrue(),
+                    () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
+            );
         }
     }
 }

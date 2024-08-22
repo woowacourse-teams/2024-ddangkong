@@ -15,6 +15,8 @@ public interface RoomBalanceVoteRepository extends JpaRepository<RoomBalanceVote
 
     List<RoomBalanceVote> findByMemberRoom(Room room);
 
+    List<RoomBalanceVote> findByMember(Member member);
+
     boolean existsByMemberAndBalanceOption(Member member, BalanceOption option);
 
     @Query("""

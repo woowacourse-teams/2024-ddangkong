@@ -3,7 +3,7 @@ package ddangkong.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.util.PercentageCalculatorException;
 import org.junit.jupiter.api.Test;
 
 class PercentageCalculatorTest {
@@ -42,7 +42,7 @@ class PercentageCalculatorTest {
 
         // when & then
         assertThatThrownBy(() -> PercentageCalculator.calculate(count, totalCount))
-                .isExactlyInstanceOf(InternalServerException.class)
+                .isExactlyInstanceOf(PercentageCalculatorException.class)
                 .hasMessageContaining("totalCount는 0이상이어야 합니다. totalCount: -1");
     }
 
@@ -54,7 +54,7 @@ class PercentageCalculatorTest {
 
         // when & then
         assertThatThrownBy(() -> PercentageCalculator.calculate(count, totalCount))
-                .isExactlyInstanceOf(InternalServerException.class)
+                .isExactlyInstanceOf(PercentageCalculatorException.class)
                 .hasMessageContaining("count는 0이상이어야 합니다. count: -1");
     }
 

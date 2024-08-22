@@ -13,10 +13,10 @@ public enum Category {
     ;
 
     private static final List<Category> CATEGORIES = Arrays.stream(Category.values()).toList();
-    private final String name;
+    private final String value;
 
-    Category(String name) {
-        this.name = name;
+    Category(String value) {
+        this.value = value;
     }
 
     public static List<Category> getCategories() {

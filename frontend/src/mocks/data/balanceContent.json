@@ -2,7 +2,7 @@
   "contentId": 1,
   "category": "연애",
   "question": "당신의 결혼 상대는?",
-  "timeLimit": 15,
+  "timeLimit": 10000,
   "totalRound": 5,
   "currentRound": 1,
   "firstOption": {
