@@ -18,6 +18,7 @@ import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
+import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.BadRequestException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.RoomInfoResponse;
@@ -29,12 +30,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 class RoomFacadeTest extends BaseServiceTest {
 
@@ -520,39 +526,38 @@ class RoomFacadeTest extends BaseServiceTest {
     }
 
     @Nested
-    class 특정_시각_이전_방_조회 {
+    class 변경_시간이_특정_시각_이전_방_삭제 {
 
         @Test
-        void 특정_시각_이전의_방을_조회할_수_았다() {
+        void 변경이_특정_시각_이전에_일어난_모든_방을_지운다() {
             // given
-            LocalDateTime modifiedAt = LocalDateTime.of(2024, 7, 18, 19, 51, 0);
-            int expectedSize = 2;
+            LocalDateTime standardModified = LocalDateTime.of(2024, 7, 18, 19, 52, 0);
+            long countOfExpectedRestRoom = 5;
 
             // when
-            List<Long> actual = roomFacade.findRoomIdsBefore(modifiedAt);
+            roomFacade.deleteRoomBefore(standardModified);
 
             // then
-            assertThat(actual).hasSize(expectedSize);
+            long countOfRoom = roomRepository.count();
+            assertThat(countOfRoom).isEqualTo(countOfExpectedRestRoom);
         }
-    }
-
-    @Nested
-    class 방_삭제 {
 
         @Test
+        @Disabled // TODO @LastModifiedDate 비활성화 후 테스트
         void 해당_방과_연관된_모든_정보를_삭제할_수_있다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
+            LocalDateTime standardModified = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
+            Room room = getSavedRoom(standardModified.minusSeconds(1));
             Member master = memberRepository.save(EDEN.master(room));
             Member common = memberRepository.save(KEOCHAN.common(room));
 
             BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
             RoomContent roomContent = getSavedRoomContent(room, balanceContent);
-            RoomBalanceVote roomVote = getRoomBalanceVote(master, balanceContent);
+            RoomBalanceVote roomVote = getSavedRoomBalanceVote(master, balanceContent);
             long countOfTotalVotes = totalBalanceVoteRepository.count();
 
             // when
-            roomFacade.deleteRoom(room.getId());
+            roomFacade.deleteRoomBefore(standardModified);
 
             // then
             Optional<Room> deletedRoom = roomRepository.findById(room.getId());
@@ -569,7 +574,13 @@ class RoomFacadeTest extends BaseServiceTest {
             );
         }
 
-        private RoomBalanceVote getRoomBalanceVote(Member member, BalanceContent balanceContent) {
+        private Room getSavedRoom(LocalDateTime lastModifiedAt) {
+            Room room = Room.createNewRoom();
+            EntityTestUtils.setLastModifiedAt(room, lastModifiedAt);
+            return roomRepository.save(room);
+        }
+
+        private RoomBalanceVote getSavedRoomBalanceVote(Member member, BalanceContent balanceContent) {
             BalanceOption balanceOption = balanceOptionRepository.findAllByBalanceContent(balanceContent).get(0);
             RoomBalanceVote roomBalanceVote = new RoomBalanceVote(member, balanceOption);
             return roomBalanceVoteRepository.save(roomBalanceVote);

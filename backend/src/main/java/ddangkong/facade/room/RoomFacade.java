@@ -125,4 +125,19 @@ public class RoomFacade {
         memberService.deleteMember(room);
         roomService.delete(room);
     }
+
+    @Transactional
+    public void deleteRoomBefore(LocalDateTime modifiedAt) {
+        roomService.findRoomsBefore(modifiedAt)
+                .stream()
+                .forEach(this::delete);
+    }
+
+    private void delete(Room room) {
+        roomBalanceVoteMigrator.migrateToTotalVote(room);
+        roomContentService.deleteRoomContents(room);
+        memberService.deleteMember(room);
+        roomService.delete(room);
+    }
+
 }
