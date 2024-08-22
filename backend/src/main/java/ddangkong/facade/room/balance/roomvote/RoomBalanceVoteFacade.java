@@ -160,7 +160,7 @@ public class RoomBalanceVoteFacade {
             }
 
             long matchingCount = membersAndMatchingCount.getOrDefault(roomMember, 0L);
-            long matchingPercent = PercentageCalculator.calculatePercent(matchingCount, room.getTotalRound());
+            long matchingPercent = PercentageCalculator.calculate(matchingCount, room.getTotalRound());
             membersVoteMatchingPercent.put(roomMember, matchingPercent);
         }
         return RoomMembersVoteMatchingResponse.create(membersVoteMatchingPercent);

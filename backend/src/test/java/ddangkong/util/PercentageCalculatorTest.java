@@ -15,7 +15,7 @@ class PercentageCalculatorTest {
         long totalCount = 4L;
 
         // when
-        int percent = PercentageCalculator.calculatePercent(count, totalCount);
+        int percent = PercentageCalculator.calculate(count, totalCount);
 
         // then
         assertThat(percent).isEqualTo(75);
@@ -28,7 +28,7 @@ class PercentageCalculatorTest {
         long totalCount = 0L;
 
         // when
-        int percent = PercentageCalculator.calculatePercent(count, totalCount);
+        int percent = PercentageCalculator.calculate(count, totalCount);
 
         // then
         assertThat(percent).isEqualTo(0);
@@ -41,7 +41,7 @@ class PercentageCalculatorTest {
         long totalCount = -1L;
 
         // when & then
-        assertThatThrownBy(() -> PercentageCalculator.calculatePercent(count, totalCount))
+        assertThatThrownBy(() -> PercentageCalculator.calculate(count, totalCount))
                 .isExactlyInstanceOf(InternalServerException.class)
                 .hasMessageContaining("totalCount는 0이상이어야 합니다. totalCount: -1");
     }
@@ -53,7 +53,7 @@ class PercentageCalculatorTest {
         long totalCount = 4L;
 
         // when & then
-        assertThatThrownBy(() -> PercentageCalculator.calculatePercent(count, totalCount))
+        assertThatThrownBy(() -> PercentageCalculator.calculate(count, totalCount))
                 .isExactlyInstanceOf(InternalServerException.class)
                 .hasMessageContaining("count는 0이상이어야 합니다. count: -1");
     }
