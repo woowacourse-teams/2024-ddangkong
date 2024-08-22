@@ -46,7 +46,7 @@ describe('RoomSettingModal 방 설정 모달 테스트', () => {
     await clickButton('적용');
 
     await waitFor(() => {
-      expect(result.current.roomSetting?.category).toBe(CATEGORY);
+      expect(result.current.roomSetting?.category.label).toBe(CATEGORY);
     });
   });
 
