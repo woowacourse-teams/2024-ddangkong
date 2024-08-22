@@ -21,34 +21,34 @@ class RoomBalanceVoteMigratorTest extends BaseServiceTest {
     @Autowired
     private RoomBalanceVoteMigrator roomBalanceVoteMigrator;
 
+    private BalanceOption optionA;
+
+    private BalanceOption optionB;
+
+    private Room room;
+
+    private Member prin;
+
+    private Member keochan;
+
+    private Member maru;
+
+    private Member pome;
+
+    @BeforeEach
+    void setUp() {
+        BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
+        optionA = balanceOptionRepository.save(new BalanceOption("A", content));
+        optionB = balanceOptionRepository.save(new BalanceOption("B", content));
+        room = roomRepository.save(Room.createNewRoom());
+        prin = memberRepository.save(MemberFixture.PRIN.master(room));
+        keochan = memberRepository.save(MemberFixture.KEOCHAN.common(room));
+        maru = memberRepository.save(MemberFixture.MARU.common(room));
+        pome = memberRepository.save(MemberFixture.POME.common(room));
+    }
+
     @Nested
     class 방_투표_마이그레이션 {
-
-        private BalanceOption optionA;
-
-        private BalanceOption optionB;
-
-        private Room room;
-
-        private Member prin;
-
-        private Member keochan;
-
-        private Member maru;
-
-        private Member pome;
-
-        @BeforeEach
-        void setUp() {
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
-            optionA = balanceOptionRepository.save(new BalanceOption("A", content));
-            optionB = balanceOptionRepository.save(new BalanceOption("B", content));
-            room = roomRepository.save(Room.createNewRoom());
-            prin = memberRepository.save(MemberFixture.PRIN.master(room));
-            keochan = memberRepository.save(MemberFixture.KEOCHAN.common(room));
-            maru = memberRepository.save(MemberFixture.MARU.common(room));
-            pome = memberRepository.save(MemberFixture.POME.common(room));
-        }
 
         @Test
         void 방_투표_삭제_후_전체_투표를_저장한다() {
@@ -66,6 +66,25 @@ class RoomBalanceVoteMigratorTest extends BaseServiceTest {
                     () -> assertThat(roomBalanceVoteRepository.findByMemberRoom(room)).isEmpty(),
                     () -> assertThat(totalBalanceVoteRepository.countByBalanceOption(optionA)).isEqualTo(2),
                     () -> assertThat(totalBalanceVoteRepository.countByBalanceOption(optionB)).isEqualTo(2)
+            );
+        }
+    }
+
+    @Nested
+    class 멤버_투표_마이그레이션 {
+
+        @Test
+        void 멤버_투표_삭제_후_전체_투표를_저장한다() {
+            // given
+            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
+
+            // when
+            roomBalanceVoteMigrator.migrateToTotalVote(prin);
+
+            // then
+            assertAll(
+                    () -> assertThat(roomBalanceVoteRepository.findByMember(prin)).isEmpty(),
+                    () -> assertThat(totalBalanceVoteRepository.countByBalanceOption(optionA)).isEqualTo(1)
             );
         }
     }

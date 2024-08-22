@@ -1,6 +1,7 @@
 package ddangkong.domain.room.member;
 
 import ddangkong.domain.room.Room;
+import ddangkong.exception.room.member.AlreadyMasterException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -45,6 +46,21 @@ public class Member {
 
     public static Member createCommon(String nickname, Room room) {
         return new Member(nickname, room, false);
+    }
+
+    public void promoteToMaster() {
+        if (isMaster) {
+            throw new AlreadyMasterException(id);
+        }
+        isMaster = true;
+    }
+
+    public boolean isSameId(Long id) {
+        return Objects.equals(this.id, id);
+    }
+
+    public boolean isCommon() {
+        return !isMaster;
     }
 
     @Override

@@ -73,6 +73,23 @@ public class MemberService {
                 .orElseThrow(NotRoomMemberException::new);
     }
 
+    @Transactional
+    public void promoteOtherMember(RoomMembers members) {
+        Member commonMember = members.getAnyCommonMember();
+        commonMember.promoteToMaster();
+    }
+
+    @Transactional
+    public void delete(Member member) {
+        memberRepository.delete(member);
+    }
+
+    @Transactional
+    public void deleteMember(Room room) {
+        RoomMembers members = findRoomMembers(room);
+        memberRepository.deleteAllInBatch(members.getMembers());
+    }
+
     @Transactional(readOnly = true)
     public Member getMaster(Room room) {
         return findRoomMembers(room).getMaster();

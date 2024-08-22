@@ -50,6 +50,24 @@ include::{snippets}/room/join/response-fields.adoc[]
 
 '''
 
+=== 방 나가기
+
+==== curl
+
+include::{snippets}/room/leave/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/leave/http-request.adoc[]
+
+include::{snippets}/room/leave/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/leave/http-response.adoc[]
+
+'''
+
 === 방 설정 변경
 
 ==== curl

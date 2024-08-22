@@ -14,6 +14,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +56,13 @@ public class RoomController {
     @PostMapping("/balances/rooms/{uuid}/members")
     public RoomJoinResponse joinRoom(@PathVariable String uuid, @Valid @RequestBody RoomJoinRequest request) {
         return roomFacade.joinRoom(request.nickname(), uuid);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/balances/rooms/{roomId}/members/{memberId}")
+    public void leaveRoom(@PathVariable @Positive Long roomId,
+                          @PathVariable @Positive Long memberId) {
+        roomFacade.leaveRoom(roomId, memberId);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

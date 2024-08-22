@@ -1,5 +1,6 @@
 package ddangkong.domain.room;
 
+import ddangkong.domain.BaseEntity;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.room.InvalidRoundGapException;
 import ddangkong.exception.room.NotFinishedRoomException;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Room {
+public class Room extends BaseEntity {
 
     private static final int START_ROUND = 1;
     private static final int ALLOWED_ROUND_GAP = 1;

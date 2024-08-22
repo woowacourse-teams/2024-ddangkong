@@ -1,6 +1,7 @@
 package ddangkong.domain.room.member;
 
 import ddangkong.exception.room.member.InvalidMasterCountException;
+import ddangkong.exception.room.member.NotExistCommonMemberException;
 import ddangkong.exception.room.member.NotExistMasterException;
 import ddangkong.exception.room.member.NotExistMemberInRoomException;
 import ddangkong.exception.room.member.NotRoomMemberException;
@@ -48,11 +49,22 @@ public class RoomMembers {
                 .orElseThrow(NotExistMasterException::new);
     }
 
+    public Member getAnyCommonMember() {
+        return members.stream()
+                .filter(Member::isCommon)
+                .findAny()
+                .orElseThrow(() -> new NotExistCommonMemberException());
+    }
+
     public Member getMember(Long memberId) {
         return members.stream()
-                .filter(member -> member.getId().equals(memberId))
+                .filter(member -> member.isSameId(memberId))
                 .findFirst()
                 .orElseThrow(NotRoomMemberException::new);
+    }
+
+    public boolean isExistOnlyOneMember() {
+        return members.size() == 1;
     }
 
     public int size() {
