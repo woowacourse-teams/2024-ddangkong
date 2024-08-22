@@ -6,9 +6,11 @@ import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -79,6 +81,11 @@ public class RoomController {
     @PatchMapping("/balances/rooms/{roomId}/reset")
     public void resetRoom(@PathVariable @Positive Long roomId) {
         roomFacade.resetRoom(roomId);
+    }
+
+    @GetMapping("/balances/rooms/{uuid}/status")
+    public RoomStatusResponse getRoomStatus(@NotBlank @PathVariable String uuid) {
+        return roomFacade.getRoomStatus(uuid);
     }
 
     @Polling

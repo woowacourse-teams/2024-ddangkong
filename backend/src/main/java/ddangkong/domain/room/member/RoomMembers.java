@@ -1,7 +1,9 @@
 package ddangkong.domain.room.member;
 
-import ddangkong.exception.BadRequestException;
-import ddangkong.exception.InternalServerException;
+import ddangkong.exception.room.member.InvalidMasterCountException;
+import ddangkong.exception.room.member.NotExistMasterException;
+import ddangkong.exception.room.member.NotExistMemberInRoomException;
+import ddangkong.exception.room.member.NotRoomMemberException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,8 +15,15 @@ public class RoomMembers {
     private final List<Member> members;
 
     public RoomMembers(List<Member> members) {
+        validateEmpty(members);
         validateMasterCount(members);
         this.members = new ArrayList<>(members);
+    }
+
+    private void validateEmpty(List<Member> members) {
+        if (members.isEmpty()) {
+            throw new NotExistMemberInRoomException();
+        }
     }
 
     private void validateMasterCount(List<Member> members) {
@@ -23,8 +32,8 @@ public class RoomMembers {
                 .count();
 
         if (masterCount != ALLOWED_MASTER_COUNT) {
-            throw new InternalServerException("방장이 %d명이 아닙니다. 현재 방장 수: %d, roomId: %d"
-                    .formatted(ALLOWED_MASTER_COUNT, masterCount, members.get(0).getRoom().getId()));
+            throw new InvalidMasterCountException(ALLOWED_MASTER_COUNT, masterCount,
+                    members.get(0).getRoom().getId());
         }
     }
 
@@ -36,15 +45,14 @@ public class RoomMembers {
         return members.stream()
                 .filter(Member::isMaster)
                 .findFirst()
-                .orElseThrow(() -> new InternalServerException("방장이 존재하지 않습니다. roomId: %d"
-                        .formatted(members.get(0).getRoom().getId())));
+                .orElseThrow(NotExistMasterException::new);
     }
 
     public Member getMember(Long memberId) {
         return members.stream()
                 .filter(member -> member.getId().equals(memberId))
                 .findFirst()
-                .orElseThrow(() -> new BadRequestException("멤버가 존재하지 않습니다."));
+                .orElseThrow(NotRoomMemberException::new);
     }
 
     public int size() {

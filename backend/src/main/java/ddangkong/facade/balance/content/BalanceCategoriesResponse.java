@@ -4,12 +4,12 @@ import ddangkong.domain.balance.content.Category;
 import java.util.List;
 
 public record BalanceCategoriesResponse(
-        List<String> categories
+        List<BalanceCategoryResponse> categories
 ) {
     public static BalanceCategoriesResponse create(List<Category> categories) {
-        List<String> categoryNames = categories.stream()
-                .map(Category::getName)
+        List<BalanceCategoryResponse> categoryResponses = categories.stream()
+                .map(BalanceCategoryResponse::create)
                 .toList();
-        return new BalanceCategoriesResponse(categoryNames);
+        return new BalanceCategoriesResponse(categoryResponses);
     }
 }

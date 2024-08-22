@@ -16,12 +16,12 @@ import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.Map;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -70,7 +70,7 @@ class RoomControllerTest extends BaseControllerTest {
 
         @Test
         void 게임_방_정보_조회() {
-            //when
+            // when
             RoomInfoResponse actual = RestAssured.given()
                     .pathParam("roomId", 1L)
                     .when().get("/api/balances/rooms/{roomId}")
@@ -78,13 +78,52 @@ class RoomControllerTest extends BaseControllerTest {
                     .statusCode(200)
                     .extract().as(RoomInfoResponse.class);
 
-            //then
+            // then
             assertAll(
-                    () -> Assertions.assertThat(actual.members()).hasSize(5),
-                    () -> Assertions.assertThat(actual.isGameStart()).isTrue(),
-                    () -> Assertions.assertThat(actual.roomSetting().timeLimit()).isEqualTo(10_000),
-                    () -> Assertions.assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
+                    () -> assertThat(actual.members()).hasSize(5),
+                    () -> assertThat(actual.isGameStart()).isTrue(),
+                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(10_000),
+                    () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(5)
             );
+        }
+    }
+
+    @Nested
+    class 방_참여_가능_여부_조회 {
+        @Test
+        void 대기중인_방_참여_가능_여부_조회() {
+            // when & then
+            RoomStatusResponse actual = RestAssured.given()
+                    .pathParam("uuid", "uuid4")
+                    .when().get("/api/balances/rooms/{uuid}/status")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomStatusResponse.class);
+            assertThat(actual.isJoinable()).isTrue();
+        }
+
+        @Test
+        void 게임_진행중인_방_참여_가능_여부_조회() {
+            // when & then
+            RoomStatusResponse actual = RestAssured.given()
+                    .pathParam("uuid", "uuid1")
+                    .when().get("/api/balances/rooms/{uuid}/status")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomStatusResponse.class);
+            assertThat(actual.isJoinable()).isFalse();
+        }
+
+        @Test
+        void 게임_종료된_방_참여_가능_여부_조회() {
+            // when & then
+            RoomStatusResponse actual = RestAssured.given()
+                    .pathParam("uuid", "uuid5")
+                    .when().get("/api/balances/rooms/{uuid}/status")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomStatusResponse.class);
+            assertThat(actual.isJoinable()).isFalse();
         }
     }
 

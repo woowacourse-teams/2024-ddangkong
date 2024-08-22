@@ -6,6 +6,7 @@ import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
@@ -88,6 +89,12 @@ public class RoomFacade {
         Room room = roomService.reset(roomId);
         roomContentService.deleteRoomContents(room);
         roomBalanceVoteMigrator.migrateToTotalVote(room);
+    }
+
+    @Transactional(readOnly = true)
+    public RoomStatusResponse getRoomStatus(String uuid) {
+        Room room = roomService.getRoomWithLock(uuid);
+        return new RoomStatusResponse(room.isGameReady());
     }
 
     @Transactional(readOnly = true)

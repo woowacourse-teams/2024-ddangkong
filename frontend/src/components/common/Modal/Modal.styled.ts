@@ -26,7 +26,7 @@ export const modalContentWrapper = ({ position }: Pick<ModalProps, 'position'>) 
   min-height: 1.2rem;
   transform: translateX(-50%);
   margin: 0;
-  padding: 2.4rem 3.2rem;
+  padding: 2.4rem;
   border: none;
   border-radius: ${Theme.borderRadius.radius10};
 
