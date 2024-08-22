@@ -1,8 +1,15 @@
 import { useRecoilValue } from 'recoil';
 
-import { profile, nicknameBox, nicknameInputWrapper, nicknameInput } from './NicknamePage.styled';
+import {
+  nicknameBox,
+  nicknameInputWrapper,
+  nicknameInput,
+  profileWrapper,
+  profileImg,
+} from './NicknamePage.styled';
 import { useMakeOrEnterRoom } from './useMakeOrEnterRoom';
 
+import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
@@ -17,7 +24,9 @@ const NicknamePage = () => {
 
   return (
     <Content>
-      <div css={profile}></div>
+      <div css={profileWrapper}>
+        <img src={SillyDdangkong} alt="사용자 프로필" css={profileImg} />
+      </div>
       <div css={nicknameBox}>닉네임</div>
       <div css={nicknameInputWrapper}>
         <input

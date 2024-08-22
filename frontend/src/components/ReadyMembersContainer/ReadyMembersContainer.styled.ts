@@ -73,6 +73,10 @@ export const profileBox = css`
   background-color: white;
 `;
 
+export const profileImage = css`
+  width: 60%;
+`;
+
 export const memberStatus = css`
   display: flex;
   flex: 1;
