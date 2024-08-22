@@ -9,7 +9,7 @@ import {
 } from './RoomSettingModal.styled';
 import Modal from '../Modal/Modal';
 
-import { ONE_MINUTE } from '@/constants/time';
+import { ONE_SECOND } from '@/constants/time';
 
 const TOTAL_ROUND_LIST = [5, 7, 10];
 const TIMER_PER_ROUND_LIST = [5000, 10000, 15000];
@@ -39,7 +39,7 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
       <Modal.Content>
         <div css={roomSettingContainer}>
           <RoomSettingContainer title="카테고리">
-            <CategoryDropdown category={category} handleClickOption={handleClickOption} />
+            <CategoryDropdown category={category?.label} handleClickOption={handleClickOption} />
           </RoomSettingContainer>
           <RoomSettingContainer title="총 라운드">
             {TOTAL_ROUND_LIST.map((round) => (
@@ -58,7 +58,7 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
                   onClick={handleClickTimeLimit}
                   value={timeLimit}
                 >
-                  {timeLimit / ONE_MINUTE}초
+                  {timeLimit / ONE_SECOND}초
                 </button>
               </li>
             ))}

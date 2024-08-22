@@ -7,13 +7,12 @@ import useCategoryListQuery from '../hooks/useCategoryListQuery';
 import { Category } from '@/types/room';
 
 interface CategoryDropdownProps<T> {
-  category?: T;
+  category?: string;
   handleClickOption: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const CategoryDropdown = ({ category, handleClickOption }: CategoryDropdownProps<Category>) => {
   const { categoryList, isLoading } = useCategoryListQuery();
-
   if (isLoading) return <div css={emptyLayout}></div>;
   if (!categoryList || !category) return <div>카테고리가 없습니다.</div>;
 

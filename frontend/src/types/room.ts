@@ -4,6 +4,12 @@ interface Member {
   isMaster: boolean;
 }
 
+export interface RoomSettingApply {
+  category: CategoryValue;
+  totalRound: number;
+  timeLimit: number;
+}
+
 export interface RoomSetting {
   category: Category;
   totalRound: number;
@@ -26,4 +32,10 @@ export interface CreateOrEnterRoomResponse {
   member: Member;
 }
 
-export type Category = '음식' | '연애' | 'MBTI' | '만약에';
+export type CategoryLabel = '음식' | '연애' | 'MBTI' | '만약에';
+export type CategoryValue = 'FOOD' | 'ROMANCE' | 'MBTI' | 'IF';
+
+export interface Category {
+  value: CategoryValue;
+  label: CategoryLabel;
+}
