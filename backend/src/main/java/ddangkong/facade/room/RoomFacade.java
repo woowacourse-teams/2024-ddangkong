@@ -4,7 +4,9 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
+import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
@@ -14,6 +16,7 @@ import ddangkong.service.room.RoomService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.balance.roomvote.RoomBalanceVoteMigrator;
 import ddangkong.service.room.member.MemberService;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,6 +48,24 @@ public class RoomFacade {
         Room room = roomService.getRoomWithLock(uuid);
         Member member = memberService.saveCommonMember(nickname, room);
         return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
+    }
+
+    @Transactional
+    public void leaveRoom(Long roomId, Long memberId) {
+        Room room = roomService.getRoom(roomId);
+        RoomMembers roomMembers = memberService.findRoomMembers(room);
+        Member member = roomMembers.getMember(memberId);
+
+        roomBalanceVoteMigrator.migrateToTotalVote(member);
+        memberService.delete(member);
+        if (roomMembers.isExistOnlyOneMember()) {
+            roomContentService.deleteRoomContents(room);
+            roomService.delete(room);
+            return;
+        }
+        if (member.isMaster()) {
+            memberService.promoteOtherMember(roomMembers);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -87,5 +108,50 @@ public class RoomFacade {
         Room room = roomService.reset(roomId);
         roomContentService.deleteRoomContents(room);
         roomBalanceVoteMigrator.migrateToTotalVote(room);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> findRoomIdsBefore(LocalDateTime modifiedAt) {
+        return roomService.findRoomsBefore(modifiedAt)
+                .stream()
+                .map(Room::getId)
+                .toList();
+    }
+
+    @Transactional
+    public void deleteRoom(Long roomId) {
+        Room room = roomService.getRoom(roomId);
+
+        roomBalanceVoteMigrator.migrateToTotalVote(room);
+        roomContentService.deleteRoomContents(room);
+        memberService.deleteMember(room);
+        roomService.delete(room);
+    }
+
+    @Transactional
+    public void deleteRoomBefore(LocalDateTime modifiedAt) {
+        roomService.findRoomsBefore(modifiedAt)
+                .stream()
+                .forEach(this::delete);
+    }
+
+    private void delete(Room room) {
+        roomBalanceVoteMigrator.migrateToTotalVote(room);
+        roomContentService.deleteRoomContents(room);
+        memberService.deleteMember(room);
+        roomService.delete(room);
+    }
+
+    @Transactional(readOnly = true)
+    public RoomStatusResponse getRoomStatus(String uuid) {
+        Room room = roomService.getRoomWithLock(uuid);
+        return new RoomStatusResponse(room.isGameReady());
+    }
+
+    @Transactional(readOnly = true)
+    public InitialRoomResponse isInitialRoom(Long roomId) {
+        Room room = roomService.getRoom(roomId);
+        Member master = memberService.getMaster(room);
+        return new InitialRoomResponse(room.isInitialRoom(), master);
     }
 }

@@ -50,6 +50,24 @@ include::{snippets}/room/join/response-fields.adoc[]
 
 '''
 
+=== 방 나가기
+
+==== curl
+
+include::{snippets}/room/leave/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/leave/http-request.adoc[]
+
+include::{snippets}/room/leave/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/leave/http-response.adoc[]
+
+'''
+
 === 방 설정 변경
 
 ==== curl
@@ -152,6 +170,30 @@ include::{snippets}/room/roundFinished/response-fields.adoc[]
 
 '''
 
+'''
+
+=== 게임 참여 가능 여부
+
+==== curl
+
+include::{snippets}/room/status/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/status/http-request.adoc[]
+
+include::{snippets}/room/status/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/status/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/status/response-fields.adoc[]
+
+'''
+
 === 방 초기화
 
 ==== curl
@@ -167,3 +209,25 @@ include::{snippets}/room/reset/path-parameters.adoc[]
 ==== response
 
 include::{snippets}/room/reset/http-response.adoc[]
+
+=== 방 초기화 여부 (Polling)
+
+==== curl
+
+include::{snippets}/room/initial/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/initial/http-request.adoc[]
+
+include::{snippets}/room/initial/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/initial/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/initial/response-fields.adoc[]
+
+'''

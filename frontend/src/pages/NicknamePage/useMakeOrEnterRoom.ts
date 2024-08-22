@@ -3,12 +3,12 @@ import { useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
+import createRandomNickname from './createRandomNickname';
+
 import { enterRoom, createRoom } from '@/apis/room';
 import { ROUTES } from '@/constants/routes';
 import { memberInfoState, roomUuidState } from '@/recoil/atom';
 import { CreateOrEnterRoomResponse } from '@/types/room';
-import { createRandomNickname } from '@/utils/nickname';
-
 export const useMakeOrEnterRoom = (showModal: () => void) => {
   const randomNickname = createRandomNickname();
   const nicknameInputRef = useRef<HTMLInputElement>(null);

@@ -5,6 +5,7 @@ import ddangkong.facade.room.balance.roomvote.RoomBalanceVoteFacade;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
+import ddangkong.facade.room.balance.roomvote.dto.RoomMembersVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -46,5 +47,11 @@ public class RoomBalanceVoteController {
     public VoteFinishedResponse getVoteFinished(@PathVariable @Positive Long roomId,
                                                 @PathVariable @Positive Long contentId) {
         return roomBalanceVoteFacade.getVoteFinished(roomId, contentId);
+    }
+
+    @GetMapping("/balances/rooms/{roomId}/members/{memberId}/matching")
+    public RoomMembersVoteMatchingResponse getMemberVoteMatching(@PathVariable @Positive Long roomId,
+                                                                 @PathVariable @Positive Long memberId) {
+        return roomBalanceVoteFacade.getRoomMembersVoteMatching(roomId, memberId);
     }
 }

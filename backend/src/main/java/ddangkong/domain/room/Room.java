@@ -1,5 +1,6 @@
 package ddangkong.domain.room;
 
+import ddangkong.domain.BaseEntity;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.exception.room.InvalidRoundGapException;
 import ddangkong.exception.room.NotFinishedRoomException;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Room {
+public class Room extends BaseEntity {
 
     private static final int START_ROUND = 1;
     private static final int ALLOWED_ROUND_GAP = 1;
@@ -84,6 +85,10 @@ public class Room {
         return status.isGameProgress();
     }
 
+    public boolean isGameReady() {
+        return status.isGameReady();
+    }
+
     public boolean isRoundFinished(int round) {
         validateRound(round);
         return currentRound != round;
@@ -115,6 +120,10 @@ public class Room {
         }
         this.currentRound = START_ROUND;
         this.status = RoomStatus.READY;
+    }
+
+    public boolean isInitialRoom() {
+        return status.isGameReady() && currentRound == START_ROUND;
     }
 
     public boolean isFull(long memberCountInRoom) {

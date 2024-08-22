@@ -1,3 +1,8 @@
+export interface GroupMemberInfo {
+  members: string[];
+  memberCount: number;
+}
+
 export interface RoundVoteResult {
   group: Group;
   total: Total;
@@ -6,6 +11,7 @@ export interface RoundVoteResult {
 export interface Group {
   firstOption: GroupOption;
   secondOption: GroupOption;
+  giveUp: GroupMemberInfo;
 }
 
 export interface Total {
@@ -13,10 +19,7 @@ export interface Total {
   secondOption: TotalOption;
 }
 
-export interface GroupOption extends TotalOption {
-  members: string[];
-  memberCount: number;
-}
+export interface GroupOption extends TotalOption, GroupMemberInfo {}
 
 export interface TotalOption {
   optionId: number;

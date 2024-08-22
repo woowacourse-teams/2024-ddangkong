@@ -1,4 +1,6 @@
-export const createRandomNickname = () => {
+import randomPicker from '@/utils/randomPicker';
+
+const createRandomNickname = () => {
   const adjectives = [
     '춤추는',
     '노래하는',
@@ -70,8 +72,10 @@ export const createRandomNickname = () => {
     '독수리',
   ];
 
-  const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-  const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+  const randomAdjective = randomPicker(adjectives);
+  const randomNoun = randomPicker(nouns);
 
   return `${randomAdjective} ${randomNoun}`;
 };
+
+export default createRandomNickname;

@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.room.member.InvalidMasterCountException;
+import ddangkong.exception.room.member.NotExistCommonMemberException;
 import ddangkong.exception.room.member.NotRoomMemberException;
 import ddangkong.support.fixture.MemberFixture;
 import java.util.List;
@@ -98,6 +99,49 @@ class RoomMembersTest {
 
             // then
             assertThat(master.getNickname()).isEqualTo(prin.getNickname());
+        }
+    }
+
+    @Nested
+    class 임의의_일반_멤버_조회 {
+
+        private Room room;
+
+        @BeforeEach
+        void setUp() {
+            room = Room.createNewRoom();
+        }
+
+        @Test
+        void 임의의_일반_멤버를_조회할_수_있다() {
+            // given
+            Member prin = MemberFixture.PRIN.master(room);
+            EntityTestUtils.setId(prin, 1L);
+            Member eden = MemberFixture.EDEN.common(room);
+            EntityTestUtils.setId(eden, 2L);
+            Member takan = MemberFixture.TACAN.common(room);
+            EntityTestUtils.setId(eden, 3L);
+            List<Member> members = List.of(prin, eden, takan);
+            RoomMembers roomMembers = new RoomMembers(members);
+
+            // when
+            Member commonMember = roomMembers.getAnyCommonMember();
+
+            // then
+            assertThat(commonMember.getNickname()).isIn(eden.getNickname(), takan.getNickname());
+        }
+
+        @Test
+        void 일반_멤버가_없다면_예외를_발생시킨다() {
+            // given
+            Member prin = MemberFixture.PRIN.master(room);
+            EntityTestUtils.setId(prin, 1L);
+            List<Member> members = List.of(prin);
+            RoomMembers roomMembers = new RoomMembers(members);
+
+            // when & then
+            assertThatThrownBy(() -> roomMembers.getAnyCommonMember())
+                    .isExactlyInstanceOf(NotExistCommonMemberException.class);
         }
     }
 

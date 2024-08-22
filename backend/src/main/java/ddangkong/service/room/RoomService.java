@@ -4,6 +4,8 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.exception.room.NotFoundRoomException;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,11 @@ public class RoomService {
                 .orElseThrow(NotFoundRoomException::new);
     }
 
+    @Transactional(readOnly = true)
+    public List<Room> findRoomsBefore(LocalDateTime modifiedAt) {
+        return roomRepository.findAllByLastModifiedAtBefore(modifiedAt);
+    }
+
     @Transactional
     public Room startGame(Long roomId) {
         Room room = getRoom(roomId);
@@ -56,5 +63,10 @@ public class RoomService {
         Room room = getRoom(roomId);
         room.reset();
         return room;
+    }
+
+    @Transactional
+    public void delete(Room room) {
+        roomRepository.delete(room);
     }
 }

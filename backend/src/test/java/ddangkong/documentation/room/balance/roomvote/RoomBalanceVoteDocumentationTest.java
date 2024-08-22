@@ -28,8 +28,11 @@ import ddangkong.facade.room.balance.roomvote.dto.OptionRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
+import ddangkong.facade.room.balance.roomvote.dto.RoomMemberVoteMatchingResponse;
+import ddangkong.facade.room.balance.roomvote.dto.RoomMembersVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
 import ddangkong.facade.room.member.dto.MasterResponse;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -181,6 +184,46 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             fieldWithPath("master").type(OBJECT).description("방장 정보"),
                                             fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
                                             fieldWithPath("master.nickname").type(STRING).description("닉네임")
+                                    )
+                            )
+                    );
+        }
+    }
+
+    @Nested
+    class 투표_매칭도_조회 {
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members/{memberId}/matching";
+
+        @Test
+        void 종료된_방에서_특정_멤버에_대한_다른_멤버들의_투표_매칭도를_조회한다() throws Exception {
+            // given
+            boolean existMatching = true;
+            List<RoomMemberVoteMatchingResponse> roomMemberVoteMatchingResponse = new ArrayList<>();
+            roomMemberVoteMatchingResponse.add(new RoomMemberVoteMatchingResponse(1, 2, "프콩", 100));
+            roomMemberVoteMatchingResponse.add(new RoomMemberVoteMatchingResponse(1, 3, "타콩", 100));
+            roomMemberVoteMatchingResponse.add(new RoomMemberVoteMatchingResponse(3, 4, "타콩", 30));
+
+            RoomMembersVoteMatchingResponse response = new RoomMembersVoteMatchingResponse(
+                    roomMemberVoteMatchingResponse,
+                    existMatching);
+            when(roomBalanceVoteFacade.getRoomMembersVoteMatching(anyLong(), anyLong())).thenReturn(response);
+
+            // when
+            mockMvc.perform(get(ENDPOINT, 1L, 1L))
+                    .andExpect(status().isOk())
+                    .andDo(document("roomBalanceVote/memberMatching",
+                                    pathParameters(
+                                            parameterWithName("roomId").description("방 ID"),
+                                            parameterWithName("memberId").description("멤버 ID")
+                                    ),
+                                    responseFields(
+                                            fieldWithPath("matchedMembers").type(ARRAY).description("요청한 멤버와의 매칭 정보"),
+                                            fieldWithPath("matchedMembers[].rank").type(NUMBER).description("매칭 순위"),
+                                            fieldWithPath("matchedMembers[].memberId").type(NUMBER).description("멤버 ID"),
+                                            fieldWithPath("matchedMembers[].nickname").type(STRING).description("닉네임"),
+                                            fieldWithPath("matchedMembers[].matchingPercent").type(NUMBER)
+                                                    .description("요청한 멤버와의 매칭도(%)"),
+                                            fieldWithPath("existMatching").type(BOOLEAN).description("매칭 맴버 여부")
                                     )
                             )
                     );

@@ -15,6 +15,7 @@ public enum ServerErrorCode {
 
     // Member
     INVALID_MASTER_COUNT("방장이 %d명이 아닙니다. 현재 방장 수: %d, roomId: %d"),
+    NOT_EXIST_MEMBER_IN_ROOM("방에 멤버가 존재하지 않습니다."),
 
     // RoomContent
     NOT_FOUND_CURRENT_ROUND_ROOM_CONTENT("해당 방의 현재 라운드의 컨텐츠가 존재하지 않습니다. currentRound: %d"),

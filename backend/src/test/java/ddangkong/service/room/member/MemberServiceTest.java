@@ -1,23 +1,29 @@
 package ddangkong.service.room.member;
 
 import static ddangkong.support.fixture.MemberFixture.EDEN;
+import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
 import static ddangkong.support.fixture.MemberFixture.PRIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.member.Member;
+import ddangkong.domain.room.member.RoomMembers;
+import ddangkong.exception.BadRequestException;
 import ddangkong.exception.room.NotReadyRoomException;
 import ddangkong.exception.room.member.AlreadyExistMasterException;
 import ddangkong.exception.room.member.ExceedMaxMemberCountException;
 import ddangkong.exception.room.member.InvalidMasterCreationException;
+import ddangkong.exception.room.member.NotExistCommonMemberException;
 import ddangkong.exception.room.member.NotExistMasterException;
 import ddangkong.exception.room.member.NotRoomMemberException;
 import ddangkong.facade.BaseServiceTest;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,6 +163,60 @@ class MemberServiceTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> memberService.getRoomMember(prin.getId(), otherRoom))
                     .isExactlyInstanceOf(NotRoomMemberException.class);
+        }
+    }
+
+    @Nested
+    class 방장_넘겨주기 {
+
+        private static final Room ROOM = Room.createNewRoom();
+        private static final Member MASTER = Member.createMaster("master", ROOM);
+        private static final Member COMMON1 = Member.createCommon("common1", ROOM);
+        private static final Member COMMON2 = Member.createCommon("common2", ROOM);
+
+        @Test
+        void 임의의_일반_멤버에게_방장_권한을_준다() {
+            // given
+            List<Member> members = List.of(MASTER, COMMON1, COMMON2);
+            RoomMembers roomMembers = new RoomMembers(members);
+
+            // when
+            memberService.promoteOtherMember(roomMembers);
+
+            // then
+            assertTrue((COMMON1.isMaster() && COMMON2.isCommon()) || (COMMON1.isCommon() && COMMON2.isMaster()));
+        }
+
+        @Test
+        void 해당_방에_일반_멤버가_없다면_예외를_던진다() {
+            // given
+            List<Member> members = List.of(MASTER);
+            RoomMembers roomMembers = new RoomMembers(members);
+
+            // when & then
+            assertThatThrownBy(() -> memberService.promoteOtherMember(roomMembers))
+                    .isInstanceOf(NotExistCommonMemberException.class);
+        }
+    }
+
+    @Nested
+    class 방의_멤버_삭제 {
+
+        @Test
+        void 해당_방에_있는_멤버를_모두_삭제한다() {
+            // given
+            Room room = roomRepository.save(Room.createNewRoom());
+            Member master = memberRepository.save(PRIN.master(room));
+            Member common = memberRepository.save(KEOCHAN.common(room));
+
+            // when
+            memberService.deleteMember(room);
+
+            // then
+            assertAll(
+                    () -> assertThat(memberRepository.findById(master.getId())).isEmpty(),
+                    () -> assertThat(memberRepository.findById(common.getId())).isEmpty()
+            );
         }
     }
 }

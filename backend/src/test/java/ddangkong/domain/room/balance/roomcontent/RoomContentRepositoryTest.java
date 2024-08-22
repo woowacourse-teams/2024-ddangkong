@@ -44,6 +44,7 @@ class RoomContentRepositoryTest extends BaseRepositoryTest {
 
             // then
             assertThat(actual.getId()).isEqualTo(1L);
+
         }
     }
 }
