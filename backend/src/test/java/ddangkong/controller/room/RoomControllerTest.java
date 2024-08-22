@@ -190,6 +190,8 @@ class RoomControllerTest extends BaseControllerTest {
     @Nested
     class 방_나가기 {
 
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members/{memberId}";
+
         @Test
         void 방에_나갈_수_있다() {
             // given
@@ -201,7 +203,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .contentType(ContentType.JSON)
                     .pathParam("roomId", roomId)
                     .pathParam("memberId", memberId)
-                    .when().delete("/api/balances/rooms/{roomId}/members/{memberId}")
+                    .when().delete(ENDPOINT)
                     .then().log().all()
                     .statusCode(204);
         }
@@ -217,7 +219,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .contentType(ContentType.JSON)
                     .pathParam("roomId", roomId)
                     .pathParam("memberId", memberId)
-                    .when().delete("/api/balances/rooms/{roomId}/members/{memberId}")
+                    .when().delete(ENDPOINT)
                     .then().log().all()
                     .statusCode(400);
         }
@@ -233,7 +235,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .contentType(ContentType.JSON)
                     .pathParam("roomId", roomId)
                     .pathParam("memberId", memberId)
-                    .when().delete("/api/balances/rooms/{roomId}/members/{memberId}")
+                    .when().delete(ENDPOINT)
                     .then().log().all()
                     .statusCode(400);
         }
