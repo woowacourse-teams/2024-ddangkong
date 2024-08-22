@@ -25,7 +25,7 @@ public record OptionRoomBalanceVoteResponse(
                 balanceOption.getName(),
                 members,
                 members.size(),
-                PercentageCalculator.calculatePercent(optionVotes.size(), contentVoteCount)
+                PercentageCalculator.calculate(optionVotes.size(), contentVoteCount)
         );
     }
 }

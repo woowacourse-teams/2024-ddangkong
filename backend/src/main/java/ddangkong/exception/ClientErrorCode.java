@@ -45,6 +45,7 @@ public enum ClientErrorCode {
     ALREADY_VOTED("이미 투표했습니다. nickname: %s, option name: %s"),
     VOTE_FINISHED("투표가 종료되었습니다."),
     VOTE_NOT_FINISHED("아직 투표가 종료되지 않았습니다."),
+    CAN_NOT_CHECK_MATCHING_PERCENT("종료되지 않은 방의 투표 매칭도는 확인할 수 없습니다."),
 
     // Common
     FIELD_ERROR("입력이 잘못되었습니다."),

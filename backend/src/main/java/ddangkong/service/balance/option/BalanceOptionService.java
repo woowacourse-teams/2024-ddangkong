@@ -4,6 +4,7 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptionRepository;
 import ddangkong.domain.balance.option.BalanceOptions;
+import ddangkong.domain.room.member.Member;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,9 @@ public class BalanceOptionService {
     public BalanceOptions getBalanceOptions(BalanceContent balanceContent) {
         List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(balanceContent);
         return new BalanceOptions(balanceOptions);
+    }
+
+    public List<BalanceOption> findMemberRoomBalanceVoteOptions(Member member) {
+        return balanceOptionRepository.findMemberRoomBalanceVoteOptions(member);
     }
 }

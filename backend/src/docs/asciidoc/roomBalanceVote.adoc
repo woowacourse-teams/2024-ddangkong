@@ -67,3 +67,25 @@ include::{snippets}/roomBalanceVote/voteFinished/http-response.adoc[]
 response fields
 
 include::{snippets}/roomBalanceVote/voteFinished/response-fields.adoc[]
+
+'''
+
+=== 매칭도 조회
+
+==== curl
+
+include::{snippets}/roomBalanceVote/memberMatching/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/roomBalanceVote/memberMatching/http-request.adoc[]
+
+include::{snippets}/roomBalanceVote/memberMatching/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/roomBalanceVote/memberMatching/http-response.adoc[]
+
+response fields
+
+include::{snippets}/roomBalanceVote/memberMatching/response-fields.adoc[]

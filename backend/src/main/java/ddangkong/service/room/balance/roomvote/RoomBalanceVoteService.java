@@ -2,6 +2,7 @@ package ddangkong.service.room.balance.roomvote;
 
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptions;
+import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
@@ -49,5 +50,12 @@ public class RoomBalanceVoteService {
     @Transactional(readOnly = true)
     public List<RoomBalanceVote> getVotesInRoom(RoomMembers roomMembers, BalanceOption balanceOption) {
         return roomVoteRepository.findByMemberInAndBalanceOption(roomMembers.getMembers(), balanceOption);
+    }
+
+    public List<RoomBalanceVote> findRoomVotesByBalanceOptionsWithoutMember(List<BalanceOption> memberRoomVoteOptions,
+                                                                            Room room,
+                                                                            Member member) {
+        return roomVoteRepository.findRoomBalanceVotesByBalanceOptionsAndRoomWithoutMember(memberRoomVoteOptions, room,
+                member);
     }
 }

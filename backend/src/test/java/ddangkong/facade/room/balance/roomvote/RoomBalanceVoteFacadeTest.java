@@ -12,10 +12,13 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.RoomSetting;
+import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.room.balance.roomcontent.MismatchRoundException;
+import ddangkong.exception.room.balance.roomvote.CanNotCheckMatchingPercentException;
 import ddangkong.exception.room.balance.roomvote.VoteFinishedException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
@@ -26,9 +29,11 @@ import ddangkong.facade.room.balance.roomvote.dto.OptionRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
+import ddangkong.facade.room.balance.roomvote.dto.RoomMembersVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
 import ddangkong.support.annotation.FixedClock;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -248,6 +253,130 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             assertThatThrownBy(() -> roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId()))
                     .isExactlyInstanceOf(MismatchRoundException.class)
                     .hasMessageContaining("컨텐츠의 라운드가 일치하지 않습니다. 방 컨텐츠의 라운드 : 2, 방 라운드 : 1");
+        }
+    }
+
+    @Nested
+    class 투표_매칭도_조회 {
+
+        private Member member1;
+        private Member member2;
+        private Member member3;
+        private Room room;
+        private List<RoomContent> roomContents;
+
+        @BeforeEach
+        void init() {
+            roomContents = new ArrayList<>();
+            room = roomRepository.save(new Room(
+                    "투표_매칭도_조회",
+                    3,
+                    RoomStatus.FINISH,
+                    new RoomSetting(3, 5000, Category.IF)));
+
+            BalanceContent balanceContent1 = balanceContentRepository.save(new BalanceContent(Category.IF, "if1"));
+            balanceOptionRepository.save(new BalanceOption("option1", balanceContent1));
+            balanceOptionRepository.save(new BalanceOption("option2", balanceContent1));
+            BalanceContent balanceContent2 = balanceContentRepository.save(new BalanceContent(Category.IF, "if2"));
+            balanceOptionRepository.save(new BalanceOption("option1", balanceContent2));
+            balanceOptionRepository.save(new BalanceOption("option2", balanceContent2));
+            BalanceContent balanceContent3 = balanceContentRepository.save(new BalanceContent(Category.IF, "if3"));
+            balanceOptionRepository.save(new BalanceOption("option1", balanceContent3));
+            balanceOptionRepository.save(new BalanceOption("option2", balanceContent3));
+
+            roomContents.add(roomContentRepository.save(RoomContent.newRoomContent(room, balanceContent1, 1)));
+            roomContents.add(roomContentRepository.save(RoomContent.newRoomContent(room, balanceContent2, 2)));
+            roomContents.add(roomContentRepository.save(RoomContent.newRoomContent(room, balanceContent3, 3)));
+
+            member1 = memberRepository.save(Member.createMaster("M1", room));
+            member2 = memberRepository.save(Member.createCommon("M2", room));
+            member3 = memberRepository.save(Member.createCommon("M3", room));
+        }
+
+        @Test
+        void 종료된_방에서_특정_멤버에_대한_다른_멤버들의_투표_매칭도를_조회한다() {
+            // given
+            for (RoomContent roomContent : roomContents) {
+                List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(
+                        roomContent.getBalanceContent());
+                roomBalanceVoteRepository.save(new RoomBalanceVote(member1, balanceOptions.get(0)));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(member2, balanceOptions.get(0)));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(member3, balanceOptions.get(1)));
+            }
+
+            // when
+            RoomMembersVoteMatchingResponse actual = roomBalanceVoteFacade.getRoomMembersVoteMatching(
+                    room.getId(), member1.getId());
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.existMatching()).isTrue(),
+                    () -> assertThat(actual.matchedMembers()).hasSize(2),
+                    () -> assertThat(actual.matchedMembers().get(0).memberId()).isEqualTo(member2.getId()),
+                    () -> assertThat(actual.matchedMembers().get(0).rank()).isEqualTo(1),
+                    () -> assertThat(actual.matchedMembers().get(0).matchingPercent()).isEqualTo(100),
+                    () -> assertThat(actual.matchedMembers().get(1).memberId()).isEqualTo(member3.getId()),
+                    () -> assertThat(actual.matchedMembers().get(1).matchingPercent()).isEqualTo(0),
+                    () -> assertThat(actual.matchedMembers().get(1).rank()).isEqualTo(2)
+            );
+        }
+
+        @Test
+        void 게임이_종료되지_않은_방은_매칭도_조회가_불가능하다() {
+            Room notFinishedRoom = roomRepository.save(Room.createNewRoom());
+            Member member = memberRepository.save(Member.createCommon("new", room));
+
+            assertThatThrownBy(() ->
+                    roomBalanceVoteFacade.getRoomMembersVoteMatching(notFinishedRoom.getId(), member.getId()))
+                    .isExactlyInstanceOf(CanNotCheckMatchingPercentException.class);
+        }
+
+        @Test
+        void 매칭된_사람이_없으면_매칭_여부가_false이다() {
+            // given
+            for (RoomContent roomContent : roomContents) {
+                List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(
+                        roomContent.getBalanceContent());
+                roomBalanceVoteRepository.save(new RoomBalanceVote(member1, balanceOptions.get(0)));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(member2, balanceOptions.get(0)));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(member3, balanceOptions.get(1)));
+            }
+
+            // when
+            RoomMembersVoteMatchingResponse actual = roomBalanceVoteFacade.getRoomMembersVoteMatching(
+                    room.getId(), member3.getId());
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.existMatching()).isFalse(),
+                    () -> assertThat(actual.matchedMembers()).hasSize(2)
+            );
+        }
+
+        @Test
+        void 매칭_퍼센트가_같은_사람들은_랭킹이_동일하다() {
+            // given
+            for (RoomContent roomContent : roomContents) {
+                List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(
+                        roomContent.getBalanceContent());
+                roomBalanceVoteRepository.save(new RoomBalanceVote(member1, balanceOptions.get(0)));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(member2, balanceOptions.get(0)));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(member3, balanceOptions.get(0)));
+            }
+
+            // when
+            RoomMembersVoteMatchingResponse actual = roomBalanceVoteFacade.getRoomMembersVoteMatching(
+                    room.getId(), member1.getId());
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.existMatching()).isTrue(),
+                    () -> assertThat(actual.matchedMembers()).hasSize(2),
+                    () -> assertThat(actual.matchedMembers().get(0).rank()).isEqualTo(1),
+                    () -> assertThat(actual.matchedMembers().get(0).matchingPercent()).isEqualTo(100),
+                    () -> assertThat(actual.matchedMembers().get(1).rank()).isEqualTo(1),
+                    () -> assertThat(actual.matchedMembers().get(1).matchingPercent()).isEqualTo(100)
+            );
         }
     }
 }
