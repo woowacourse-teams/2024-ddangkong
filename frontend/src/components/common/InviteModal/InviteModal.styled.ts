@@ -15,6 +15,19 @@ export const inviteModalUl = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 2rem;
+`;
+
+export const qrcodeWrapper = css`
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 20rem;
+  border-radius: ${Theme.borderRadius.radius10};
+
+  background-color: white;
 `;
 
 export const inviteModalLi = css`
