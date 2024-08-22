@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw';
 import CATEGORY_LIST from '../data/categoryList.json';
 import CREATE_ROOM_RESPONSE from '../data/createRoomResponse.json';
 import ENTER_ROOM_RESPONSE from '../data/enterRoomResponse.json';
-import MASTER_AND_RESET from '../data/masterAndReset.json';
+import MASTER_AND_INITIAL from '../data/masterAndInitial.json';
 import ROOM_INFO from '../data/roomInfo.json';
 
 import { MOCK_API_URL } from '@/constants/url';
@@ -18,12 +18,12 @@ const startGameHandler = async () => {
 };
 
 const resetRoomHandler = () => {
-  MASTER_AND_RESET.isReset = true;
+  MASTER_AND_INITIAL.isInitial = true;
   return HttpResponse.json(undefined, { status: 204 });
 };
 
-const checkResetRoomHandler = () => {
-  return HttpResponse.json(MASTER_AND_RESET);
+const isRoomInitialHandler = () => {
+  return HttpResponse.json(MASTER_AND_INITIAL);
 };
 
 const isRoomActivateHandler = () => {
@@ -59,7 +59,7 @@ export const roomHandler = [
   http.post(MOCK_API_URL.room, createRoomHandler),
   http.post(MOCK_API_URL.enterRoom, enterRoomHandler),
   http.patch(MOCK_API_URL.startGame, startGameHandler),
-  http.get(MOCK_API_URL.resetRoom, checkResetRoomHandler),
+  http.get(MOCK_API_URL.isRoomInitial, isRoomInitialHandler),
   http.patch(MOCK_API_URL.resetRoom, resetRoomHandler),
   http.patch(MOCK_API_URL.isRoomActivate, isRoomActivateHandler),
   http.get(MOCK_API_URL.categoryList, getCategoryListHandler),

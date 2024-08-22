@@ -19,7 +19,7 @@ export const API_URL = {
     `${BASE_URL}/api/balances/rooms/${roomId}/contents/${contentId}/vote-finished`,
   resetRoom: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/reset`,
   isRoomActivate: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/activate`,
-  isRoomReset: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/reset`,
+  isRoomInitial: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/initial`,
   applyRoomSetting: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}`,
   deleteRoom: (roomId: number, memberId: number) =>
     `${BASE_URL}/api/balances/rooms/${roomId}/members/${memberId}`,
@@ -41,7 +41,7 @@ export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
   roundVoteIsFinished: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-finished`,
   resetRoom: `${BASE_URL}/api/balances/rooms/:roomId/reset`,
   isRoomActivate: `${BASE_URL}/api/balances/rooms/:roomId/activate`,
-  isRoomReset: `${BASE_URL}/api/balances/rooms/:roomId/reset`,
+  isRoomInitial: `${BASE_URL}/api/balances/rooms/:roomId/initial`,
   categoryList: `${BASE_URL}/api/balances/categories`,
   applyRoomSetting: `${BASE_URL}/api/balances/rooms/:roomId`,
   deleteRoom: `${BASE_URL}/api/balances/rooms/:roomId/members/:memberId`,

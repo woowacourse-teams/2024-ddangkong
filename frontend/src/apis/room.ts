@@ -94,9 +94,9 @@ export const getCategoryList = async (): Promise<CategoryResponse> => {
 };
 
 // 방 초기화 여부 확인
-export const checkRoomReset = async (roomId: number) => {
+export const isRoomInitial = async (roomId: number) => {
   const res = await fetcher.get({
-    url: API_URL.isRoomReset(roomId),
+    url: API_URL.isRoomInitial(roomId),
   });
 
   const data = await res.json();
