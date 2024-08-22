@@ -38,7 +38,7 @@ const GameResult = () => {
           </ol>
         )}
 
-        {!existMatching && (
+        {!isLoading && !existMatching && (
           <div css={noMatchingLayout}>
             <img src={SadDdangKong} alt="서운한 땅콩" css={noMatchingImg} />
             <span css={noMatchingText}>
