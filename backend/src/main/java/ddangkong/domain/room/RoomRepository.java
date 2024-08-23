@@ -20,6 +20,4 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<Room> findByUuidWithLock(String uuid);
 
     List<Room> findAllByLastModifiedAtBefore(LocalDateTime lastModifiedAt);
-
-    Optional<Room> findByUuid(String uuid);
 }
