@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -8,9 +9,14 @@ import {
   nicknameInput,
   profileWrapper,
   profileImg,
+  noVoteTextContainer,
+  noVoteText,
+  angryImage,
 } from './NicknamePage.styled';
 import { useMakeOrEnterRoom } from './useMakeOrEnterRoom';
 
+import { isJoinableRoom } from '@/apis/room';
+import AngryDdangkong from '@/assets/images/angryDdangkong.png';
 import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
 import Button from '@/components/common/Button/Button';
@@ -26,11 +32,24 @@ const NicknamePage = () => {
   const { roomUuid } = useParams();
   const [, setRoomUuidState] = useRecoilState(roomUuidState);
 
+  const { data } = useQuery({
+    queryKey: ['isJoinable', roomUuid],
+    queryFn: async () => isJoinableRoom(roomUuid || ''),
+  });
+
   useEffect(() => {
     if (roomUuid) {
       setRoomUuidState(roomUuid);
     }
-  }, []);
+  }, [roomUuid, setRoomUuidState]);
+
+  if (roomUuid && !data?.isJoinable)
+    return (
+      <div css={noVoteTextContainer}>
+        <img src={AngryDdangkong} alt="화난 땅콩" css={angryImage} />
+        <span css={noVoteText}>잘못된 링크에 접속했어요 :{`)`}</span>
+      </div>
+    );
 
   return (
     <Content>
