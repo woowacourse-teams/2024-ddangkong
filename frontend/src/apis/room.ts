@@ -1,13 +1,8 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import {
-  RoomInfo,
-  CreateOrEnterRoomResponse,
-  Category,
-  RoomSetting,
-  RoomSettingApply,
-} from '@/types/room';
+import { RoomInfo, CreateOrEnterRoomResponse, Category, RoomSettingApply } from '@/types/room';
+
 
 interface CategoryResponse {
   categories: Category[];
@@ -130,4 +125,15 @@ export const exitRoom = async (roomId: number, memberId: number) => {
   await fetcher.delete({
     url: API_URL.deleteRoom(roomId, memberId),
   });
+};
+
+// 방 참여여부 확인
+export const isJoinableRoom = async (roomUuid: string): Promise<{ isJoinable: boolean }> => {
+  const res = await fetcher.get({
+    url: API_URL.isJoinableRoom(roomUuid),
+  });
+
+  const data = await res.json();
+
+  return data;
 };
