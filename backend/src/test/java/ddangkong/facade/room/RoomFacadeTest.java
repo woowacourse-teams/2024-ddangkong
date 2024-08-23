@@ -647,5 +647,14 @@ class RoomFacadeTest extends BaseServiceTest {
             // then
             assertThat(actual.isJoinable()).isFalse();
         }
+
+        @Test
+        void 존재하지_않는_방에_참여할_수_없다() {
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus("NotExistUuid");
+
+            // then
+            assertThat(actual.isJoinable()).isFalse();
+        }
     }
 }
