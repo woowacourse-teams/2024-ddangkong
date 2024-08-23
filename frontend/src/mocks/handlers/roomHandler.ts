@@ -54,6 +54,10 @@ const enterRoomHandler = () => {
   return HttpResponse.json(ENTER_ROOM_RESPONSE, { status: 201 });
 };
 
+const isJoinableRoomHandler = () => {
+  return HttpResponse.json({ isJoinable: false }, { status: 200 });
+};
+
 export const roomHandler = [
   http.get(MOCK_API_URL.getRoomInfo, getRoomInfoHandler),
   http.post(MOCK_API_URL.room, createRoomHandler),
@@ -65,4 +69,5 @@ export const roomHandler = [
   http.get(MOCK_API_URL.categoryList, getCategoryListHandler),
   http.patch(MOCK_API_URL.applyRoomSetting, applyRoomSettingHandler),
   http.delete(MOCK_API_URL.deleteRoom, deleteRoomHandler),
+  http.get(MOCK_API_URL.isJoinableRoom, isJoinableRoomHandler),
 ];
