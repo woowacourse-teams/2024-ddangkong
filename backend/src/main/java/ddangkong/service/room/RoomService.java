@@ -6,6 +6,7 @@ import ddangkong.domain.room.RoomSetting;
 import ddangkong.exception.room.NotFoundRoomException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,11 @@ public class RoomService {
     public Room getRoomWithLock(String uuid) {
         return roomRepository.findByUuidWithLock(uuid)
                 .orElseThrow(NotFoundRoomException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Room> getRoom(String uuid) {
+        return roomRepository.findByUuid(uuid);
     }
 
     @Transactional(readOnly = true)
