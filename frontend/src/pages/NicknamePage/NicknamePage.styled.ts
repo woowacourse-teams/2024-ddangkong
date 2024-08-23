@@ -44,7 +44,6 @@ export const nicknameInput = css`
   background-color: ${Theme.color.gray200};
   outline: none;
 `;
-
 export const noVoteTextContainer = css`
   display: flex;
   flex-direction: column;

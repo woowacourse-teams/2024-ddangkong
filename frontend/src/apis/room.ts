@@ -3,6 +3,7 @@ import fetcher from './fetcher';
 import { API_URL } from '@/constants/url';
 import { RoomInfo, CreateOrEnterRoomResponse, Category, RoomSettingApply } from '@/types/room';
 
+
 interface CategoryResponse {
   categories: Category[];
 }

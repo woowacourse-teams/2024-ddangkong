@@ -6,9 +6,9 @@ import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
-import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import ddangkong.service.balance.content.BalanceContentService;
@@ -18,6 +18,7 @@ import ddangkong.service.room.balance.roomvote.RoomBalanceVoteMigrator;
 import ddangkong.service.room.member.MemberService;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -144,7 +145,11 @@ public class RoomFacade {
 
     @Transactional(readOnly = true)
     public RoomStatusResponse getRoomStatus(String uuid) {
-        Room room = roomService.getRoomWithLock(uuid);
+        Optional<Room> roomOptional = roomService.getRoom(uuid);
+        if (roomOptional.isEmpty()) {
+            return new RoomStatusResponse(false);
+        }
+        Room room = roomOptional.get();
         return new RoomStatusResponse(room.isGameReady());
     }
 

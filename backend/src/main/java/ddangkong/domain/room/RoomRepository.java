@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.QueryHints;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
+    Optional<Room> findByUuid(String uuid);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints(@QueryHint(name = "jakarta.persistence.lock.timeout", value = "5000"))
     @Query("SELECT r FROM Room r WHERE r.uuid = :uuid")

@@ -649,10 +649,12 @@ class RoomFacadeTest extends BaseServiceTest {
         }
 
         @Test
-        void 존재하지_않는_방에_참여_가능_여부를_조회하면_예외가_발생한다() {
-            // when & then
-            assertThatThrownBy(() -> roomFacade.getRoomStatus("NotExist"))
-                    .isExactlyInstanceOf(NotFoundRoomException.class);
+        void 존재하지_않는_방에_참여할_수_없다() {
+            // when
+            RoomStatusResponse actual = roomFacade.getRoomStatus("NotExistUuid");
+
+            // then
+            assertThat(actual.isJoinable()).isFalse();
         }
     }
 }
