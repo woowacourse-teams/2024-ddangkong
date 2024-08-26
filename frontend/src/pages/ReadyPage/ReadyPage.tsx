@@ -10,15 +10,15 @@ import Spinner from '@/components/common/Spinner/Spinner';
 import ReadyMembersContainer from '@/components/ReadyMembersContainer/ReadyMembersContainer';
 
 const ReadyPage = () => {
-  const { members, roomSetting, isLoading, isError } = useGetRoomInfo();
+  const { members, roomSetting, master, isLoading, isError } = useGetRoomInfo();
   const { memberInfo, handleGameStart, setMemberInfo } = useGameStart();
-  const masterId = members?.filter((member) => member.isMaster)[0].memberId;
 
   useEffect(() => {
-    if (!memberInfo.isMaster && masterId === memberInfo.memberId) {
+    if (!memberInfo.isMaster && master?.memberId === memberInfo.memberId) {
       setMemberInfo({ ...memberInfo, isMaster: true });
+      alert(`${master?.nickname}님이 방장이 되었습니다.`);
     }
-  }, [masterId]);
+  }, [master?.memberId]);
 
   if (isLoading) return <Spinner imageSize={12} />;
   return (
@@ -27,8 +27,8 @@ const ReadyPage = () => {
       {isError && <div>에러 발생</div>}
       {members && <ReadyMembersContainer members={members} />}
       <Button
-        text={masterId === memberInfo.memberId ? '시작' : '방장이 시작해주세요'}
-        disabled={masterId !== memberInfo.memberId}
+        text={master?.memberId === memberInfo.memberId ? '시작' : '방장이 시작해주세요'}
+        disabled={master?.memberId !== memberInfo.memberId}
         onClick={handleGameStart}
         bottom
       />
