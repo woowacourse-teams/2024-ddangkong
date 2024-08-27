@@ -18,10 +18,15 @@ export const profileImg = css`
   width: 60%;
 `;
 
-export const nicknameBox = css`
+export const nicknameContainer = css`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
   width: 26.8rem;
   margin: 2rem 0;
+`;
 
+export const nicknameTitle = css`
   font-weight: 600;
   font-size: 1.6rem;
 `;

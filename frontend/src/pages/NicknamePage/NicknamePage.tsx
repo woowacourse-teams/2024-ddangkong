@@ -1,18 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
+import NicknameInput from './NicknameInput/NicknameInput';
 import {
-  nicknameBox,
-  nicknameInputWrapper,
-  nicknameInput,
   profileWrapper,
   profileImg,
   noVoteTextContainer,
   noVoteText,
   angryImage,
-  nicknameLengthText,
+  nicknameTitle,
+  nicknameContainer,
 } from './NicknamePage.styled';
 import { useMakeOrEnterRoom } from './useMakeOrEnterRoom';
 
@@ -27,13 +26,11 @@ import { memberInfoState, roomUuidState } from '@/recoil/atom';
 
 const NicknamePage = () => {
   const { isOpen, show, close } = useModal();
-  const { randomNickname, nicknameInputRef, handleMakeOrEnterRoom, isLoading } =
-    useMakeOrEnterRoom(show);
+  const { handleMakeOrEnterRoom, isLoading } = useMakeOrEnterRoom(show);
   const { isMaster } = useRecoilValue(memberInfoState);
   const { roomUuid } = useParams();
   const [, setRoomUuidState] = useRecoilState(roomUuidState);
 
-  const [nickname, setNickname] = useState('');
   const { data } = useQuery({
     queryKey: ['isJoinable', roomUuid],
     queryFn: async () => isJoinableRoom(roomUuid || ''),
@@ -58,18 +55,9 @@ const NicknamePage = () => {
       <div css={profileWrapper}>
         <img src={SillyDdangkong} alt="사용자 프로필" css={profileImg} />
       </div>
-      <div css={nicknameBox}>닉네임</div>
-      <div css={nicknameInputWrapper}>
-        <input
-          css={nicknameInput}
-          type="text"
-          placeholder={randomNickname}
-          ref={nicknameInputRef}
-          maxLength={12}
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-        />
-        <span css={nicknameLengthText}>{nickname.length}/12</span>
+      <div css={nicknameContainer}>
+        <span css={nicknameTitle}>닉네임</span>
+        <NicknameInput />
       </div>
       <Button
         onClick={handleMakeOrEnterRoom}
