@@ -3,9 +3,13 @@ import { useGameStart } from './hooks/useGameStart';
 import Button from '@/components/common/Button/Button';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 
-const StartButton = () => {
+interface StartButtonProps {
+  show: () => void;
+}
+
+const StartButton = ({ show }: StartButtonProps) => {
   const { master } = useGetRoomInfo();
-  const { memberInfo, handleGameStart } = useGameStart();
+  const { memberInfo, handleGameStart } = useGameStart(show);
 
   return (
     <Button
