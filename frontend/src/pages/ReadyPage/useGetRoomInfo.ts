@@ -24,5 +24,11 @@ export const useGetRoomInfo = () => {
     }
   }, [data?.isGameStart, roomId, navigate]);
 
-  return { members: data?.members, roomSetting: data?.roomSetting, isLoading, isError };
+  return {
+    members: data?.members,
+    roomSetting: data?.roomSetting,
+    master: data?.master,
+    isLoading,
+    isError,
+  };
 };
