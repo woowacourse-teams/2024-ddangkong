@@ -1,6 +1,5 @@
-
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -13,6 +12,7 @@ import {
   noVoteTextContainer,
   noVoteText,
   angryImage,
+  nicknameLengthText,
 } from './NicknamePage.styled';
 import { useMakeOrEnterRoom } from './useMakeOrEnterRoom';
 
@@ -33,6 +33,7 @@ const NicknamePage = () => {
   const { roomUuid } = useParams();
   const [, setRoomUuidState] = useRecoilState(roomUuidState);
 
+  const [nickname, setNickname] = useState('');
   const { data } = useQuery({
     queryKey: ['isJoinable', roomUuid],
     queryFn: async () => isJoinableRoom(roomUuid || ''),
@@ -64,18 +65,22 @@ const NicknamePage = () => {
           type="text"
           placeholder={randomNickname}
           ref={nicknameInputRef}
+          maxLength={12}
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
         />
+        <span css={nicknameLengthText}>{nickname.length}/12</span>
       </div>
       <Button
         onClick={handleMakeOrEnterRoom}
         disabled={isLoading}
-        text={isLoading ? '로딩 중.....' : '확인'}
+        text={isLoading ? '접속 중...' : '확인'}
         bottom
       />
       <AlertModal
         isOpen={isOpen}
         onClose={close}
-        message={isMaster ? '방 생성에 실패했습니다' : '방 참가에 실패했습니다'}
+        message={isMaster ? '방 생성에 실패했습니다.' : '방이 존재하지 않습니다.'}
         title={isMaster ? '방 생성 실패' : '방 참가 실패'}
       />
     </Content>
