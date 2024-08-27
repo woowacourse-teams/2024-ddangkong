@@ -2,7 +2,11 @@ import { ChangeEvent, useState } from 'react';
 
 const NICKNAME_MAX_LENGTH = 12;
 
-const useNicknameInput = () => {
+interface UseNicknameInputProps {
+  handleMakeOrEnterRoom: () => void;
+}
+
+const useNicknameInput = ({ handleMakeOrEnterRoom }: UseNicknameInputProps) => {
   const [nickname, setNickname] = useState('');
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -12,7 +16,13 @@ const useNicknameInput = () => {
     setNickname(e.target.value);
   };
 
-  return { nickname, handleChangeInput };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleMakeOrEnterRoom();
+    }
+  };
+
+  return { nickname, handleChangeInput, handleKeyDown };
 };
 
 export default useNicknameInput;

@@ -9,14 +9,10 @@ interface NicknameInputProps {
 }
 
 const NicknameInput = ({ handleMakeOrEnterRoom }: NicknameInputProps) => {
-  const { nickname, handleChangeInput } = useNicknameInput();
+  const { nickname, handleChangeInput, handleKeyDown } = useNicknameInput({
+    handleMakeOrEnterRoom,
+  });
   const randomNickname = createRandomNickname();
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      handleMakeOrEnterRoom();
-    }
-  };
 
   return (
     <div css={nicknameInputContainer}>
