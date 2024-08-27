@@ -5,12 +5,18 @@ import Modal from '../Modal/Modal';
 
 interface AlertModalProps {
   isOpen: boolean;
-  onClose: () => void;
   message: string;
+  onClose: () => void;
+  onConfirm?: () => void;
   title?: string;
 }
 
-const AlertModal = ({ isOpen, onClose, message, title }: AlertModalProps) => {
+const AlertModal = ({ isOpen, onClose, onConfirm, message, title }: AlertModalProps) => {
+  const handleClick = () => {
+    onConfirm && onConfirm();
+    onClose();
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <Modal.Header position="center">
@@ -26,7 +32,9 @@ const AlertModal = ({ isOpen, onClose, message, title }: AlertModalProps) => {
         ))}
       </Modal.Content>
       <Modal.Footer buttonPosition="center">
-        <Modal.TextButton onClick={onClose}>닫기</Modal.TextButton>
+        <Modal.TextButton onClick={handleClick} buttonWidth="60%">
+          확인
+        </Modal.TextButton>
       </Modal.Footer>
     </Modal>
   );
