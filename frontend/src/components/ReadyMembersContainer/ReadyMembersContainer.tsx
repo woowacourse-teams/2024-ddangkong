@@ -33,10 +33,6 @@ const ReadyMembersContainer = () => {
     }
   }, [master?.memberId]);
 
-  if (!members) {
-    return <div>데이터가 없습니다.</div>;
-  }
-
   return (
     <div css={readyMembersContainerLayout}>
       <p css={totalNumber}>총 인원 {members.length}명</p>
