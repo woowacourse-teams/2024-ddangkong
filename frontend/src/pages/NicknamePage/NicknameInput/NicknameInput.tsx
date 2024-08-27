@@ -4,9 +4,19 @@ import createRandomNickname from '../createRandomNickname';
 
 const NICKNAME_MAX_LENGTH = 12;
 
-const NicknameInput = () => {
+interface NicknameInputProps {
+  handleMakeOrEnterRoom: () => void;
+}
+
+const NicknameInput = ({ handleMakeOrEnterRoom }: NicknameInputProps) => {
   const { nickname, handleChangeInput } = useNicknameInput();
   const randomNickname = createRandomNickname();
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleMakeOrEnterRoom();
+    }
+  };
 
   return (
     <div css={nicknameInputContainer}>
@@ -16,6 +26,7 @@ const NicknameInput = () => {
         maxLength={NICKNAME_MAX_LENGTH}
         value={nickname}
         onChange={handleChangeInput}
+        onKeyDown={handleKeyDown}
       />
       <span css={nicknameLengthText}>
         {nickname.length}/{NICKNAME_MAX_LENGTH}

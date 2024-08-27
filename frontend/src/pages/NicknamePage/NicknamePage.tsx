@@ -57,7 +57,7 @@ const NicknamePage = () => {
       </div>
       <div css={nicknameContainer}>
         <span css={nicknameTitle}>닉네임</span>
-        <NicknameInput />
+        <NicknameInput handleMakeOrEnterRoom={handleMakeOrEnterRoom} />
       </div>
       <Button
         onClick={handleMakeOrEnterRoom}
