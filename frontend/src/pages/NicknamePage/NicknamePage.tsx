@@ -31,7 +31,7 @@ const NicknamePage = () => {
   const { roomUuid } = useParams();
   const setRoomUuidState = useSetRecoilState(roomUuidState);
 
-  const { data } = useQuery({
+  const { data, isLoading: isJoinableLoading } = useQuery({
     queryKey: ['isJoinable', roomUuid],
     queryFn: async () => isJoinableRoom(roomUuid || ''),
     enabled: !!roomUuid,
@@ -43,7 +43,7 @@ const NicknamePage = () => {
     }
   }, [roomUuid, setRoomUuidState]);
 
-  if (roomUuid && !data?.isJoinable)
+  if (!isJoinableLoading && roomUuid && !data?.isJoinable)
     return (
       <div css={noVoteTextContainer}>
         <img src={AngryDdangkong} alt="화난 땅콩" css={angryImage} />
