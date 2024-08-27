@@ -68,7 +68,7 @@ const NicknamePage = () => {
       <AlertModal
         isOpen={isOpen}
         onClose={close}
-        message={isMaster ? '방 생성에 실패했습니다.' : '방이 존재하지 않습니다.'}
+        message={isMaster ? '방 생성에 실패했습니다.' : '해당 방에 참여할 수 없습니다.'}
         title={isMaster ? '방 생성 실패' : '방 참가 실패'}
       />
     </Content>
