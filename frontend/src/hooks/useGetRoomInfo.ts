@@ -13,8 +13,13 @@ export const useGetRoomInfo = () => {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
-    queryFn: ({ queryKey: [, roomId] }) => getRoomInfo(Number(roomId)),
-    refetchInterval: ONE_SECOND,
+    queryFn: () => getRoomInfo(Number(roomId)),
+    refetchInterval: (query) => {
+      if (query.state.error && query.state.fetchFailureCount >= 3) {
+        return false;
+      }
+      return ONE_SECOND;
+    },
     gcTime: 0,
   });
 
