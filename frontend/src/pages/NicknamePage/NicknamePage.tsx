@@ -13,7 +13,7 @@ import {
   nicknameTitle,
   nicknameContainer,
 } from './NicknamePage.styled';
-import { useMakeOrEnterRoom } from './useMakeOrEnterRoom';
+import useMakeOrEnterRoom from './useMakeOrEnterRoom';
 
 import { isJoinableRoom } from '@/apis/room';
 import AngryDdangkong from '@/assets/images/angryDdangkong.png';
@@ -26,7 +26,7 @@ import { memberInfoState, roomUuidState } from '@/recoil/atom';
 
 const NicknamePage = () => {
   const { isOpen, show, close } = useModal();
-  const { handleMakeOrEnterRoom, isLoading } = useMakeOrEnterRoom(show);
+  const { nicknameInputRef, handleMakeOrEnterRoom, isLoading } = useMakeOrEnterRoom(show);
   const { isMaster } = useRecoilValue(memberInfoState);
   const { roomUuid } = useParams();
   const setRoomUuidState = useSetRecoilState(roomUuidState);
@@ -58,7 +58,10 @@ const NicknamePage = () => {
       </div>
       <div css={nicknameContainer}>
         <span css={nicknameTitle}>닉네임</span>
-        <NicknameInput handleMakeOrEnterRoom={handleMakeOrEnterRoom} />
+        <NicknameInput
+          nicknameInputRef={nicknameInputRef}
+          handleMakeOrEnterRoom={handleMakeOrEnterRoom}
+        />
       </div>
       <Button
         onClick={handleMakeOrEnterRoom}

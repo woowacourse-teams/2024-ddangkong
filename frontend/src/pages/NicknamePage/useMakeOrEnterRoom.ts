@@ -3,14 +3,12 @@ import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-import createRandomNickname from './createRandomNickname';
-
 import { enterRoom, createRoom } from '@/apis/room';
 import { ROUTES } from '@/constants/routes';
 import { memberInfoState, roomUuidState } from '@/recoil/atom';
 import { CreateOrEnterRoomResponse } from '@/types/room';
-export const useMakeOrEnterRoom = (showModal: () => void) => {
-  const randomNickname = createRandomNickname();
+
+const useMakeOrEnterRoom = (showModal: () => void) => {
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const [{ isMaster }, setMemberInfo] = useRecoilState(memberInfoState);
@@ -50,7 +48,7 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
   });
 
   const handleMakeOrEnterRoom = () => {
-    const nickname = nicknameInputRef.current?.value || randomNickname;
+    const nickname = nicknameInputRef.current?.value || nicknameInputRef.current?.placeholder || '';
     if (isMaster) {
       createRoomMutation.mutate(nickname);
     } else {
@@ -59,9 +57,10 @@ export const useMakeOrEnterRoom = (showModal: () => void) => {
   };
 
   return {
-    randomNickname,
     nicknameInputRef,
     handleMakeOrEnterRoom,
     isLoading: isMaster ? createRoomMutation.isPending : enterRoomMutation.isPending,
   };
 };
+
+export default useMakeOrEnterRoom;

@@ -1,3 +1,5 @@
+import { RefObject } from 'react';
+
 import useNicknameInput from './hooks/useNicknameInput';
 import { nicknameInput, nicknameInputContainer, nicknameLengthText } from './NicknameInput.styled';
 import createRandomNickname from '../createRandomNickname';
@@ -5,10 +7,11 @@ import createRandomNickname from '../createRandomNickname';
 const NICKNAME_MAX_LENGTH = 12;
 
 interface NicknameInputProps {
+  nicknameInputRef: RefObject<HTMLInputElement>;
   handleMakeOrEnterRoom: () => void;
 }
 
-const NicknameInput = ({ handleMakeOrEnterRoom }: NicknameInputProps) => {
+const NicknameInput = ({ nicknameInputRef, handleMakeOrEnterRoom }: NicknameInputProps) => {
   const { nickname, handleChangeInput, handleKeyDown } = useNicknameInput({
     handleMakeOrEnterRoom,
   });
@@ -17,6 +20,7 @@ const NicknameInput = ({ handleMakeOrEnterRoom }: NicknameInputProps) => {
   return (
     <div css={nicknameInputContainer}>
       <input
+        ref={nicknameInputRef}
         css={nicknameInput}
         placeholder={randomNickname}
         maxLength={NICKNAME_MAX_LENGTH}
