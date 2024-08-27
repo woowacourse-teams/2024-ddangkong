@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import NicknameInput from './NicknameInput/NicknameInput';
 import {
@@ -29,11 +29,12 @@ const NicknamePage = () => {
   const { handleMakeOrEnterRoom, isLoading } = useMakeOrEnterRoom(show);
   const { isMaster } = useRecoilValue(memberInfoState);
   const { roomUuid } = useParams();
-  const [, setRoomUuidState] = useRecoilState(roomUuidState);
+  const setRoomUuidState = useSetRecoilState(roomUuidState);
 
   const { data } = useQuery({
     queryKey: ['isJoinable', roomUuid],
     queryFn: async () => isJoinableRoom(roomUuid || ''),
+    enabled: !!roomUuid,
   });
 
   useEffect(() => {
