@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { Layout } from './layout';
 
-import ErrorPage from '@/pages/ErrorPage/ErrorPage';
+import RouterErrorFallback from '@/components/common/ErrorFallback/RouterErrorFallback/RouterErrorFallback';
 import GamePage from '@/pages/GamePage/GamePage';
 import GameResultPage from '@/pages/GameResultPage/GameResultPage';
 import MainPage from '@/pages/MainPage/MainPage';
@@ -15,7 +15,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <MainPage />,
-    errorElement: <ErrorPage />,
+    errorElement: <RouterErrorFallback />,
   },
   {
     path: '/',
@@ -46,6 +46,6 @@ export const router = createBrowserRouter([
         element: <GameResultPage />,
       },
     ],
-    errorElement: <ErrorPage />,
+    errorElement: <RouterErrorFallback />,
   },
 ]);
