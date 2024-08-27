@@ -34,7 +34,7 @@ const ReadyMembersContainer = () => {
   }, [master?.memberId]);
 
   return (
-    <div css={readyMembersContainerLayout}>
+    <section css={readyMembersContainerLayout}>
       <p css={totalNumber}>총 인원 {members.length}명</p>
       <section css={membersContainer}>
         <ul css={memberList}>
@@ -60,7 +60,7 @@ const ReadyMembersContainer = () => {
         </ul>
       </section>
       <InviteModal isOpen={isOpen} onClose={close} />
-    </div>
+    </section>
   );
 };
 

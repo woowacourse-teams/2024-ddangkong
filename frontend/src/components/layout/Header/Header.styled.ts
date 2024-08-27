@@ -4,7 +4,7 @@ export const headerLayout = (isCenter?: boolean) => css`
   display: flex;
   justify-content: ${isCenter ? 'center' : 'space-between'};
   align-items: center;
-  height: 8rem;
+  height: 15vh;
   padding: 0 2.4rem;
 `;
 

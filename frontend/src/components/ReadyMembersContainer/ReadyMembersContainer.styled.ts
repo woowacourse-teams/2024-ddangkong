@@ -35,7 +35,7 @@ export const totalNumber = css`
   padding-left: 2rem;
 
   font-weight: 900;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
 `;
 
 export const memberList = css`
