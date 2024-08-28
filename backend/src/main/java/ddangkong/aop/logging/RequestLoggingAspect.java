@@ -4,10 +4,8 @@ import static java.util.stream.Collectors.joining;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Parameter;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
@@ -17,8 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Aspect
 @Component
-@Slf4j
-public class RequestLoggingAspect {
+abstract class RequestLoggingAspect {
 
     @Pointcut("execution(* ddangkong.controller..*Controller.*(..))")
     public void allController() {
@@ -32,23 +29,12 @@ public class RequestLoggingAspect {
     public void allControllerWithoutPolling() {
     }
 
-    @Before("allController()")
-    public void logController(JoinPoint joinPoint) {
-        HttpServletRequest request = getHttpServletRequest();
-        String uri = request.getRequestURI();
-        String httpMethod = request.getMethod();
-        String queryParameters = getQueryParameters(request);
-        String body = getBody(joinPoint);
-
-        log.info("Request Logging: {} {} body - {} parameters - {}", httpMethod, uri, body, queryParameters);
-    }
-
-    private HttpServletRequest getHttpServletRequest() {
+    protected HttpServletRequest getHttpServletRequest() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         return requestAttributes.getRequest();
     }
 
-    private String getQueryParameters(HttpServletRequest request) {
+    protected String getQueryParameters(HttpServletRequest request) {
         String queryParameters = request.getParameterMap()
                 .entrySet()
                 .stream()
@@ -61,7 +47,7 @@ public class RequestLoggingAspect {
         return queryParameters;
     }
 
-    private String getBody(JoinPoint joinPoint) {
+    protected String getBody(JoinPoint joinPoint) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Parameter[] parameters = methodSignature.getMethod().getParameters();
         Object[] args = joinPoint.getArgs();
