@@ -28,10 +28,10 @@ const ReadyMembersContainer = () => {
 
   // 원래 방장이 아니다 + 방장의 memberId와 내 memberId가 같다 -> 방장으로 변경
   useEffect(() => {
-    if (!memberInfo.isMaster && master?.memberId === memberInfo.memberId) {
+    if (!memberInfo.isMaster && master.memberId === memberInfo.memberId) {
       setMemberInfo({ ...memberInfo, isMaster: true });
     }
-  }, [master?.memberId]);
+  }, [master.memberId]);
 
   return (
     <section css={readyMembersContainerLayout}>

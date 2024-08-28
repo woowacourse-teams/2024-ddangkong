@@ -8,7 +8,7 @@ const CategoryContainer = () => {
   return (
     <section css={categoryContainerLayout}>
       <span css={subtitle}>카테고리</span>
-      <h1 css={title}>{roomSetting?.category.label}</h1>
+      <h1 css={title}>{roomSetting.category.label}</h1>
     </section>
   );
 };
