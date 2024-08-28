@@ -76,11 +76,11 @@ export const RoundHeader = () => {
 
   const title = isRoundResultPage ? '투표 결과' : '밸런스 게임';
 
-  if (!balanceContent) return null;
-
   return (
     <header css={headerLayout()}>
-      <span css={roundText}>{`${balanceContent?.currentRound}/${balanceContent?.totalRound}`}</span>
+      <span css={roundText}>
+        {balanceContent ? `${balanceContent?.currentRound}/${balanceContent?.totalRound}` : '0/0'}
+      </span>
       <h1 css={gameTitle}>{title}</h1>
       <span css={roundText}></span>
     </header>
@@ -94,6 +94,7 @@ export const BackHeader = ({ title }: HeaderProps) => {
   const goToBack = () => {
     navigate(-1);
   };
+
   return (
     <header css={headerLayout()}>
       <button onClick={goToBack} css={buttonWrapper}>
