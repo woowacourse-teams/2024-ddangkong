@@ -6,6 +6,7 @@ import { PropsWithChildren } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
+import ToastProvider from '@/providers/ToastProvider/ToastProvider';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
 
@@ -24,7 +25,7 @@ const wrapper = ({ children }: PropsWithChildren) => {
         <ThemeProvider theme={Theme}>
           <MemoryRouter initialEntries={['/']}>
             <Global styles={GlobalStyle} />
-            {children}
+            <ToastProvider>{children}</ToastProvider>
           </MemoryRouter>
         </ThemeProvider>
       </RecoilRoot>
