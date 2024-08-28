@@ -18,6 +18,10 @@ export const router = createBrowserRouter([
     errorElement: <RouterErrorFallback />,
   },
   {
+    path: ':roomId/game',
+    element: <GamePage />,
+  },
+  {
     path: '/',
     element: <Layout />,
     children: [
@@ -28,10 +32,6 @@ export const router = createBrowserRouter([
       {
         path: ':roomId/ready',
         element: <ReadyPage />,
-      },
-      {
-        path: ':roomId/game',
-        element: <GamePage />,
       },
       {
         path: ':roomId/round/result',

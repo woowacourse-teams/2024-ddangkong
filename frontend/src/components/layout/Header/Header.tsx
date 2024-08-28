@@ -20,17 +20,15 @@ interface HeaderProps {
 }
 
 const Header = () => {
-  const { isNicknamePage, isReadyPage, isRoundResultStatusPage, isFinalResultPage } =
-    useRoutePath();
+  const { isNicknamePage, isReadyPage, isRoundResultStatusPage } = useRoutePath();
 
   useBlockRefresh();
 
   if (isNicknamePage) return <TitleHeader title="닉네임 설정" />;
   if (isReadyPage) return <RoomSettingHeader title="밸런스 게임" />;
   if (isRoundResultStatusPage) return <BackHeader title="투표 현황" />;
-  if (isFinalResultPage) return <EmptyHeader />;
 
-  return <RoundHeader />;
+  return <EmptyHeader />;
 };
 
 // 1. 공간만 차지하는 빈 헤더 : 최종 게임 결과 화면
