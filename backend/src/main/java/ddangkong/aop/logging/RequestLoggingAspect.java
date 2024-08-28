@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.joining;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Parameter;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -15,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Aspect
 @Component
+@Slf4j
 abstract class RequestLoggingAspect {
 
     @Pointcut("execution(* ddangkong.controller..*Controller.*(..))")
@@ -27,6 +29,16 @@ abstract class RequestLoggingAspect {
 
     @Pointcut("allController() && !polling()")
     public void allControllerWithoutPolling() {
+    }
+
+    protected void logRequest(JoinPoint joinPoint) {
+        HttpServletRequest request = getHttpServletRequest();
+        String uri = request.getRequestURI();
+        String httpMethod = request.getMethod();
+        String queryParameters = getQueryParameters(request);
+        String body = getBody(joinPoint);
+
+        log.info("Request Logging: {} {} body - {} parameters - {}", httpMethod, uri, body, queryParameters);
     }
 
     protected HttpServletRequest getHttpServletRequest() {
