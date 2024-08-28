@@ -13,8 +13,10 @@ export const toastLayout = (isVisible: boolean) => css`
 
   color: white;
   font-size: 1.2rem;
+  text-align: center;
 
   animation: ${isVisible ? fadeIn : fadeOut} 0.5s ease forwards;
+  word-break: keep-all;
   transform: translateX(-50%);
   box-shadow: 0 0.2rem 0.4rem rgb(0 0 0 / 20%);
   transition: opacity 0.3s ease-in-out;
