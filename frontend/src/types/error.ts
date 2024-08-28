@@ -31,13 +31,13 @@ export type ErrorCode =
   | 'METHOD_NOT_SUPPORTED'
   | 'INTERNAL_SERVER_ERROR';
 
-export interface UrlParameterError {
+export interface UrlParameterError extends ResponseError {
   errorCode: 'URL_PARAMETER_ERROR';
   message: string;
   violationErrors: FieldErrorInfo[];
 }
 
-export interface FieldError {
+export interface FieldError extends ResponseError {
   errorCode: 'FIELD_ERROR';
   message: string;
   fieldErrors: FieldErrorInfo[];
