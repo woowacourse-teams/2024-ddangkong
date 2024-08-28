@@ -1,4 +1,4 @@
-import { captureException } from '@sentry/react';
+import { CustomError, NetworkError } from '@/utils/error';
 
 interface RequestProps {
   url: string;
@@ -11,18 +11,26 @@ type FetchProps = Omit<RequestProps, 'method'>;
 
 const fetcher = {
   async request({ url, method, body, headers }: RequestProps) {
-    const response = await fetch(url, {
-      method,
-      body: body && JSON.stringify(body),
-      headers: headers && headers,
-    });
+    try {
+      const response = await fetch(url, {
+        method,
+        body: body && JSON.stringify(body),
+        headers: headers && headers,
+      });
 
-    if (!response.ok) {
-      captureException('fetch API ERROR');
-      throw new Error('fetch fail error');
+      if (!response.ok) {
+        const apiError = await response.json();
+        throw new CustomError({ ...apiError, status: response.status });
+      }
+
+      return response;
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+
+      throw new NetworkError('네트워크가 불안정해요!');
     }
-
-    return response;
   },
 
   get({ url, headers }: FetchProps) {
