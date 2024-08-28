@@ -14,8 +14,8 @@ const TopicContainer = () => {
 
   return (
     <section css={topicContainerLayout}>
-      <span css={categoryText}>{isGamePage && balanceContent?.category}</span>
-      <span css={topicText}>{balanceContent?.question}</span>
+      <span css={categoryText}>{isGamePage && balanceContent.category}</span>
+      <span css={topicText}>{balanceContent.question}</span>
     </section>
   );
 };
