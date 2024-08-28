@@ -1,13 +1,24 @@
+import { captureException, withScope } from '@sentry/react';
+
 import Button from '../../Button/Button';
 import { errorFallbackLayout, errorImage, errorText } from '../ErrorFallback.styled';
 
 import ErrorDdangkong from '@/assets/images/errorDdangkong.png';
 
 interface RootErrorFallbackProps {
+  error: unknown;
   resetError: () => void;
 }
 
-const RootErrorFallback = ({ resetError }: RootErrorFallbackProps) => {
+const RootErrorFallback = ({ error, resetError }: RootErrorFallbackProps) => {
+  if (error instanceof Error) {
+    withScope((scope) => {
+      scope.setLevel('fatal');
+      scope.setTag('client', 'serviceError');
+      captureException(new Error(error.message));
+    });
+  }
+
   return (
     <section css={errorFallbackLayout}>
       <img src={ErrorDdangkong} alt="에러나서 슬픈 땅콩" css={errorImage} />

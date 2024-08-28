@@ -10,7 +10,9 @@ const RootErrorBoundary = ({ children }: PropsWithChildren) => {
   return (
     <ErrorBoundary
       onReset={reset}
-      fallback={({ resetError }) => <RootErrorFallback resetError={resetError} />}
+      fallback={({ error, resetError }) => (
+        <RootErrorFallback error={error} resetError={resetError} />
+      )}
     >
       {children}
     </ErrorBoundary>
