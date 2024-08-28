@@ -1,3 +1,4 @@
+import { ERROR_MESSAGE } from '@/constants/message';
 import { ErrorCode } from '@/types/error';
 
 interface CustomErrorParams {
@@ -10,19 +11,15 @@ export class CustomError extends Error {
   errorCode: string;
   status: number;
 
-  constructor({ errorCode, message, status }: CustomErrorParams) {
+  constructor({ errorCode, status }: CustomErrorParams) {
     super();
     this.errorCode = errorCode;
-    this.message = message;
+    this.message = ERROR_MESSAGE[errorCode];
     this.status = status;
   }
 }
 
 export class NetworkError extends Error {
   status = 555;
-
-  constructor(message: string) {
-    super();
-    this.message = message;
-  }
+  message = '네트워크가 불안정해요. 다시 시도해주세요!';
 }

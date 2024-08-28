@@ -29,7 +29,7 @@ const fetcher = {
         throw error;
       }
 
-      throw new NetworkError('네트워크가 불안정해요!');
+      throw new NetworkError();
     }
   },
 
