@@ -1,7 +1,13 @@
 import { captureException, withScope } from '@sentry/react';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '../../Button/Button';
-import { errorFallbackLayout, errorImage, errorText } from '../ErrorFallback.styled';
+import {
+  errorFallbackLayout,
+  errorImage,
+  errorText,
+  fallbackButtonContainer,
+} from '../ErrorFallback.styled';
 
 import ErrorDdangkong from '@/assets/images/errorDdangkong.png';
 
@@ -11,6 +17,12 @@ interface RootErrorFallbackProps {
 }
 
 const RootErrorFallback = ({ error, resetError }: RootErrorFallbackProps) => {
+  const navigate = useNavigate();
+
+  const goToHome = () => {
+    navigate('/');
+  };
+
   if (error instanceof Error) {
     withScope((scope) => {
       scope.setLevel('fatal');
@@ -26,7 +38,10 @@ const RootErrorFallback = ({ error, resetError }: RootErrorFallbackProps) => {
         서비스에 장애가 발생했습니다.
         <br /> 다음에 다시 이용해주세요!
       </h2>
-      <Button onClick={resetError} text="다시 시도" size="medium" radius="medium" />
+      <div css={fallbackButtonContainer}>
+        <Button onClick={resetError} text="다시 시도" size="medium" radius="medium" />
+        <Button onClick={goToHome} text="홈으로" size="medium" radius="medium" />
+      </div>
     </section>
   );
 };

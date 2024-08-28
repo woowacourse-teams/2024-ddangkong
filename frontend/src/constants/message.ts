@@ -49,5 +49,5 @@ export const ERROR_MESSAGE: Record<ErrorCode, string> = {
   METHOD_NOT_SUPPORTED: '허용되지 않은 메서드입니다.',
 
   // 서버 에러
-  INTERNAL_SERVER_ERROR: '서버 에러가 발생했어요!',
+  INTERNAL_SERVER_ERROR: '서버에 오류가 발생했어요. 다시 시도해 주세요!',
 };

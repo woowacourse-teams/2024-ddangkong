@@ -8,7 +8,7 @@ import ErrorDdangkong from '@/assets/images/errorDdangkong.png';
 const RouterErrorFallback = () => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const goToHome = () => {
     navigate('/');
   };
 
@@ -19,7 +19,7 @@ const RouterErrorFallback = () => {
         페이지 전환 시 에러가 발생하였습니다.
         <br /> 다시 접속해주세요!
       </h2>
-      <Button onClick={handleClick} text="메인으로 가기" size="medium" radius="medium" />
+      <Button onClick={goToHome} text="메인으로 가기" size="medium" radius="medium" />
     </section>
   );
 };

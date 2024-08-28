@@ -21,3 +21,9 @@ export const errorText = css`
   text-align: center;
   word-break: keep-all;
 `;
+
+export const fallbackButtonContainer = css`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+`;

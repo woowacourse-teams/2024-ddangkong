@@ -20,7 +20,9 @@ const AsyncErrorBoundary = ({
   return (
     <ErrorBoundary
       onReset={reset}
-      fallback={({ resetError }) => <AsyncErrorFallback resetError={resetError} />}
+      fallback={({ error, resetError }) => (
+        <AsyncErrorFallback error={error} resetError={resetError} />
+      )}
       onError={(error) => {
         if (error instanceof CustomError) {
           withScope((scope) => {
