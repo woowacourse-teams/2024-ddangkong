@@ -1,6 +1,7 @@
 <div align="center">
-<img src="https://github.com/user-attachments/assets/f47b6023-fc55-4072-92b4-0551135a95d0" width="100" height="150" />
-<h4>심심풀이 땅콩처럼 가벼운 주제로 친구들과 즐기는 단체 대화주제 제공 서비스 🥜</h4>
+  <h3><a href="https://ddangkong.kr/">땅콩 바로가기</a></h3>
+ <img src="https://github.com/user-attachments/assets/f47b6023-fc55-4072-92b4-0551135a95d0" width="100" height="150" />
+ <h4>심심풀이 땅콩처럼 가벼운 주제로 친구들과 즐기는 단체 대화주제 제공 서비스 🥜</h4>
 </div>
 
 # 서비스 소개
@@ -24,15 +25,15 @@
 
 # 주요 기능 소개
 
-1. 다양한 대화 주제 제공
+### 1. 다양한 대화 주제 제공
 
 ![대화주제_제공](https://github.com/user-attachments/assets/cfe966ea-698f-42b6-94f5-628d4e15e0e3)
 
-2. `실시간 데이터 통신` 을 통해 시끄러운 오프라인 공간에서도 `멀티 플레이` 로 재밌게 즐길 수 있음
+### 2. `실시간 데이터 통신` 을 통해 시끄러운 오프라인 공간에서도 `멀티 플레이` 로 재밌게 즐길 수 있음
 
 ![멀티플레이](https://github.com/user-attachments/assets/046422a7-a389-4469-b8f0-cb72339946e9)
 
-3. 게임 내에서 나와 같은 선택을 한 사람과의 `매칭도 순위` 를 통해 공감대 형성
+### 3. 게임 내에서 나와 같은 선택을 한 사람과의 `매칭도 순위` 를 통해 공감대 형성
 
 ![매칭도](https://github.com/user-attachments/assets/019f0779-df57-444b-842a-37fe6d970e07)
 
@@ -42,9 +43,17 @@
 
 # 팀원 소개
 
-| <img src="https://avatars.githubusercontent.com/u/63959171?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/74897720?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/84304802?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/44027393?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/78288539?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/101033262?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/111696934?v=4" width="100" height="100"/> |
-| :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
-|                            [마루](https://github.com/rbgksqkr)                             |                             [썬데이](https://github.com/useon)                             |                             [이든](https://github.com/PgmJun)                              |                           [커찬](https://github.com/leegwichan)                            |                            [타칸](https://github.com/jhon3242)                             |                             [프린](https://github.com/GIVEN53)                              |                            [포메](https://github.com/novice0840)                            |
+### 프론트엔드
+
+| <img src="https://avatars.githubusercontent.com/u/63959171?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/74897720?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/111696934?v=4" width="100" height="100"/> |
+| :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
+|                            [마루](https://github.com/rbgksqkr)                             |                             [썬데이](https://github.com/useon)                             |                            [포메](https://github.com/novice0840)                            |
+
+### 백엔드
+
+| <img src="https://avatars.githubusercontent.com/u/84304802?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/44027393?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/78288539?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/101033262?v=4" width="100" height="100"/> |
+| :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
+|                             [이든](https://github.com/PgmJun)                              |                           [커찬](https://github.com/leegwichan)                            |                            [타칸](https://github.com/jhon3242)                             |                             [프린](https://github.com/GIVEN53)                              |
 
 # 그라운드 룰
 
