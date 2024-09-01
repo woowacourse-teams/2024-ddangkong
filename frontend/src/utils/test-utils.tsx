@@ -6,6 +6,9 @@ import { PropsWithChildren } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
+import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
+import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
+import Spinner from '@/components/common/Spinner/Spinner';
 import ToastProvider from '@/providers/ToastProvider/ToastProvider';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
@@ -24,8 +27,12 @@ const wrapper = ({ children }: PropsWithChildren) => {
       <RecoilRoot>
         <ThemeProvider theme={Theme}>
           <MemoryRouter initialEntries={['/']}>
-            <Global styles={GlobalStyle} />
-            <ToastProvider>{children}</ToastProvider>
+            <RootErrorBoundary>
+              <AsyncErrorBoundary pendingFallback={<Spinner />}>
+                <Global styles={GlobalStyle} />
+                <ToastProvider>{children}</ToastProvider>
+              </AsyncErrorBoundary>
+            </RootErrorBoundary>
           </MemoryRouter>
         </ThemeProvider>
       </RecoilRoot>
