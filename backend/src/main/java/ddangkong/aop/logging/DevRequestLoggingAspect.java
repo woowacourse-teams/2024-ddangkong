@@ -13,6 +13,6 @@ import org.springframework.stereotype.Component;
 public class DevRequestLoggingAspect extends RequestLoggingAspect {
     @Before("allController()")
     public void logController(JoinPoint joinPoint) {
-        logRequest(joinPoint);
+        super.logController(joinPoint);
     }
 }

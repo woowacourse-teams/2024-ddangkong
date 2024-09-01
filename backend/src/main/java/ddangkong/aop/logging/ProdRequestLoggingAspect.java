@@ -13,6 +13,6 @@ import org.springframework.stereotype.Component;
 public class ProdRequestLoggingAspect extends RequestLoggingAspect {
     @Before("allControllerWithoutPolling()")
     public void logController(JoinPoint joinPoint) {
-        logRequest(joinPoint);
+        super.logController(joinPoint);
     }
 }

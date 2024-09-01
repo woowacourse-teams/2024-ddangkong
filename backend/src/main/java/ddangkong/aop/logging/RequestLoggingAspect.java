@@ -6,14 +6,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-@Aspect
 @Slf4j
 abstract class RequestLoggingAspect {
 
@@ -29,7 +27,11 @@ abstract class RequestLoggingAspect {
     public void allControllerWithoutPolling() {
     }
 
-    protected void logRequest(JoinPoint joinPoint) {
+    protected void logController(JoinPoint joinPoint) {
+        logRequest(joinPoint);
+    }
+
+    private void logRequest(JoinPoint joinPoint) {
         HttpServletRequest request = getHttpServletRequest();
         String uri = request.getRequestURI();
         String httpMethod = request.getMethod();
