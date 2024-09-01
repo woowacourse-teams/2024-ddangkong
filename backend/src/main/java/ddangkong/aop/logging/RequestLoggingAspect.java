@@ -41,12 +41,12 @@ abstract class RequestLoggingAspect {
         log.info("Request Logging: {} {} body - {} parameters - {}", httpMethod, uri, body, queryParameters);
     }
 
-    protected HttpServletRequest getHttpServletRequest() {
+    private HttpServletRequest getHttpServletRequest() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         return requestAttributes.getRequest();
     }
 
-    protected String getQueryParameters(HttpServletRequest request) {
+    private String getQueryParameters(HttpServletRequest request) {
         String queryParameters = request.getParameterMap()
                 .entrySet()
                 .stream()
@@ -59,7 +59,7 @@ abstract class RequestLoggingAspect {
         return queryParameters;
     }
 
-    protected String getBody(JoinPoint joinPoint) {
+    private String getBody(JoinPoint joinPoint) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Parameter[] parameters = methodSignature.getMethod().getParameters();
         Object[] args = joinPoint.getArgs();
