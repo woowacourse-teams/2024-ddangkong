@@ -8,7 +8,7 @@ import {
 const GameSkeleton = () => {
   return (
     <div css={skeletonLayout}>
-      <div css={skeletonCategory} />
+      <div css={skeletonCategory} data-testid="skeletonCategory" />
       <span css={skeletonText} />
       <div css={skeletonOptionContainer} />
     </div>
