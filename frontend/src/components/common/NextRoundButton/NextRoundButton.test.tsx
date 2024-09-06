@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { RecoilRoot } from 'recoil';
+import { userEvent } from '@testing-library/user-event';
+import type { MutableSnapshot } from 'recoil';
 
 import NextRoundButton from './NextRoundButton';
 
@@ -10,15 +10,11 @@ import { customRender } from '@/test-utils';
 
 describe('NextRoundButton 컴포넌트 테스트', () => {
   const renderWithRecoilState = (isMaster: boolean) => {
-    customRender(
-      <RecoilRoot
-        initializeState={(snap) => {
-          snap.set(memberInfoState, { memberId: 1, nickname: 'Test User', isMaster });
-        }}
-      >
-        <NextRoundButton showModal={jest.fn()} />
-      </RecoilRoot>,
-    );
+    const initializeState = (snap: MutableSnapshot) => {
+      snap.set(memberInfoState, { memberId: 1, nickname: 'Test User', isMaster });
+    };
+
+    customRender(<NextRoundButton showModal={jest.fn()} />, { initializeState });
   };
 
   it('방장은 활성화 되어 있는 "다음" 버튼이 화면에 보인다.', async () => {
@@ -39,15 +35,11 @@ describe('NextRoundButton 컴포넌트 테스트', () => {
 
   it('방장이 "다음" 버튼을 클릭하면 안내 모달을 여는 함수가 호출된다.', async () => {
     const handleModalOpen = jest.fn();
-    customRender(
-      <RecoilRoot
-        initializeState={(snap) => {
-          snap.set(memberInfoState, { memberId: 1, nickname: 'Test User', isMaster: true });
-        }}
-      >
-        <NextRoundButton showModal={handleModalOpen} />
-      </RecoilRoot>,
-    );
+    const initializeState = (snap: MutableSnapshot) => {
+      snap.set(memberInfoState, { memberId: 1, nickname: 'Test User', isMaster: true });
+    };
+
+    customRender(<NextRoundButton showModal={handleModalOpen} />, { initializeState });
 
     const button = await screen.findByRole('button', { name: '다음' });
 

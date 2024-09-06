@@ -14,10 +14,10 @@ import {
 } from './InviteModal.styled';
 import useClipBoard from './useClipBoard';
 import Modal from '../Modal/Modal';
-import Toast from '../Toast/Toast';
 
 import CopyIcon from '@/assets/images/copyIcon.png';
 import { INVITE_URL } from '@/constants/url';
+import useToast from '@/hooks/useToast';
 import { roomUuidState } from '@/recoil/atom';
 
 interface InviteModalProps {
@@ -29,10 +29,12 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
   const roomUuid = useRecoilValue(roomUuidState);
   const inviteUrl = INVITE_URL(roomUuid);
 
-  const { isCopied, copyToClipboard } = useClipBoard();
+  const { copyToClipboard } = useClipBoard();
+  const { show } = useToast();
 
   const handleCopy = () => {
     copyToClipboard(inviteUrl);
+    show('링크가 복사되었습니다!');
   };
 
   return (
@@ -63,7 +65,6 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
           닫기
         </Modal.TextButton>
       </Modal.Footer>
-      {isCopied && <Toast message="링크가 복사되었습니다!" duration={2000} />}
     </Modal>
   );
 };

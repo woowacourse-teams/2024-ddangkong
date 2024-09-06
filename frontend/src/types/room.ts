@@ -20,6 +20,7 @@ export interface RoomInfo {
   isGameStart: boolean;
   roomSetting: RoomSetting;
   members: Member[];
+  master: Omit<Member, 'isMaster'>;
 }
 
 export interface RoomMembers {

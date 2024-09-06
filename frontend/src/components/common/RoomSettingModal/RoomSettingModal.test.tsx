@@ -4,8 +4,8 @@ import { userEvent } from '@testing-library/user-event';
 import RoomSettingModal from './RoomSettingModal';
 
 import { ONE_SECOND } from '@/constants/time';
+import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import ROOM_INFO from '@/mocks/data/roomInfo.json';
-import { useGetRoomInfo } from '@/pages/ReadyPage/useGetRoomInfo';
 import { customRender, wrapper } from '@/utils/test-utils';
 
 describe('RoomSettingModal 방 설정 모달 테스트', () => {
@@ -26,7 +26,7 @@ describe('RoomSettingModal 방 설정 모달 테스트', () => {
     });
   });
 
-  it.skip('방의 카테고리를 변경한 후 적용 버튼을 클릭하면 카테고리 설정이 변경된다.', async () => {
+  it('방의 카테고리를 변경한 후 적용 버튼을 클릭하면 카테고리 설정이 변경된다.', async () => {
     const user = userEvent.setup();
     const CATEGORY = '연애';
     const clickButton = async (name: string) => {

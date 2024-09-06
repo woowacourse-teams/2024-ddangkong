@@ -20,17 +20,15 @@ interface HeaderProps {
 }
 
 const Header = () => {
-  const { isNicknamePage, isReadyPage, isRoundResultStatusPage, isFinalResultPage } =
-    useRoutePath();
+  const { isNicknamePage, isReadyPage, isRoundResultStatusPage } = useRoutePath();
 
   useBlockRefresh();
 
   if (isNicknamePage) return <TitleHeader title="닉네임 설정" />;
   if (isReadyPage) return <RoomSettingHeader title="밸런스 게임" />;
   if (isRoundResultStatusPage) return <BackHeader title="투표 현황" />;
-  if (isFinalResultPage) return <EmptyHeader />;
 
-  return <RoundHeader />;
+  return <EmptyHeader />;
 };
 
 // 1. 공간만 차지하는 빈 헤더 : 최종 게임 결과 화면
@@ -76,11 +74,11 @@ export const RoundHeader = () => {
 
   const title = isRoundResultPage ? '투표 결과' : '밸런스 게임';
 
-  if (!balanceContent) return null;
-
   return (
     <header css={headerLayout()}>
-      <span css={roundText}>{`${balanceContent?.currentRound}/${balanceContent?.totalRound}`}</span>
+      <span css={roundText}>
+        {balanceContent ? `${balanceContent?.currentRound}/${balanceContent?.totalRound}` : '0/0'}
+      </span>
       <h1 css={gameTitle}>{title}</h1>
       <span css={roundText}></span>
     </header>
@@ -94,6 +92,7 @@ export const BackHeader = ({ title }: HeaderProps) => {
   const goToBack = () => {
     navigate(-1);
   };
+
   return (
     <header css={headerLayout()}>
       <button onClick={goToBack} css={buttonWrapper}>
