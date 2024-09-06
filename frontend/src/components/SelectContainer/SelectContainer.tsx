@@ -36,6 +36,7 @@ const SelectContainer = () => {
         />
       </section>
       <SelectButton
+        contentId={balanceContent.contentId}
         selectedId={selectedOption.id}
         completeSelection={completeSelection}
         showModal={show}
