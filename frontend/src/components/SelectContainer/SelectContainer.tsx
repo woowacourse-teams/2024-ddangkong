@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 
-import { useRoundIsFinished, useSelectOption } from './SelectContainer.hook';
+import useRoundIsFinished from './hooks/useRoundIsFinished';
+import useSelectOption from './hooks/useSelectOption';
 import { selectContainerLayout, selectSection } from './SelectContainer.styled';
 import AlertModal from '../common/AlertModal/AlertModal';
 import SelectButton from '../common/SelectButton/SelectButton';
@@ -16,7 +17,7 @@ const SelectContainer = () => {
   const { isOpen, show, close } = useModal();
 
   useRoundIsFinished({
-    contentId: balanceContent?.contentId,
+    contentId: balanceContent.contentId,
     isFetching,
   });
 
