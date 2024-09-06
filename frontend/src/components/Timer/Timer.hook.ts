@@ -15,15 +15,17 @@ const useRoundTimer = (roomId: number) => {
 
   const [leftRoundTime, setLeftRoundTime] = useState(convertMsecToSecond(timeLimit));
   const [barWidthPercent, setBarWidthPercent] = useState(INITIAL_WIDTH);
+
+  const isVoteTimeout = leftRoundTime <= 0;
   const isAlmostFinished = leftRoundTime <= ALMOST_FINISH_SECOND;
 
   const timeout = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    if (leftRoundTime <= 0) {
+    if (isVoteTimeout) {
       clearInterval(timeout.current);
     }
-  }, [leftRoundTime]);
+  }, [isVoteTimeout]);
 
   useEffect(() => {
     const DECREASE_RATE = INITIAL_WIDTH / convertMsecToSecond(timeLimit);
@@ -37,7 +39,7 @@ const useRoundTimer = (roomId: number) => {
     return () => {
       clearInterval(timeout.current);
     };
-  }, [balanceContent, timeLimit]);
+  }, [timeLimit]);
 
   return { leftRoundTime, barWidthPercent, isAlmostFinished };
 };
