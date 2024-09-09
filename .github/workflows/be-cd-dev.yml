@@ -10,94 +10,43 @@ on:
 
 jobs:
   build:
-    timeout-minutes: 3
-    runs-on: ubuntu-latest
-    env:
-      DOCKER_REPOSITORY_NAME: ddangkong/ddangkong-api-dev
+    timeout-minutes: 2
+    runs-on: [ self-hosted, linux, ARM64, dev ] # Self hosted runner 사용
 
     defaults:
       run:
         working-directory: ./backend
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setting application-dev.yml
-        run: |
-          echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
-
-      - name: Setting SSL/TLS Key
-        run: |
-          mkdir -p ./src/main/resources/ssl
-          echo "${{ secrets.SSL_KEY_BASE64 }}" | base64 -d > ./src/main/resources/ssl/keystore.p12
-
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Build with Gradle
+      - name: bootJar with Gradle
         run: ./gradlew bootJar -PcreateRestDocs
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
+      - name: Upload artifact file
+        uses: actions/upload-artifact@v4
         with:
-          username: ${{ secrets.DOCKER_GMAIL }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-
-      - name: Build Docker image
-        run: |
-          docker compose -f deploy/docker-compose-dev.yml build 
-          docker tag deploy-ddangkong-api-dev:latest $DOCKER_REPOSITORY_NAME:latest
-
-      - name: Push Docker image
-        run: docker push $DOCKER_REPOSITORY_NAME:latest
+          name: app-artifact
+          path: build/libs/*.jar
 
   deploy:
     needs: build
     timeout-minutes: 2
-    runs-on: [ self-hosted, linux, ARM64, dev ] # Self hosted runner 사용
-    env:
-      DOCKER_REPOSITORY_NAME: ddangkong/ddangkong-api-dev
-      CONTAINER_NAME: ddangkong-api-dev
+    runs-on: [ self-hosted, linux, ARM64, dev ]
 
     steps:
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
+      - name: Execute script on EC2 to deploy
+        run: sudo sh ~/deploy-script-dev.sh
+
+      - name: Download artifact file
+        uses: actions/download-artifact@v4
         with:
-          username: ${{ secrets.DOCKER_GMAIL }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+          name: app-artifact
+          path: ~/app
 
-      - name: Stop and Remove previous Docker container
-        run: |
-          CONTAINER_ID=$(sudo docker ps -aqf name=$CONTAINER_NAME)
-          if [ -n "${CONTAINER_ID}" ]; then
-            sudo docker rm -f ${CONTAINER_ID}
-            echo "Container ${CONTAINER_ID} is stopped and removed."
-          else
-            echo "No previous container found with name. Skipping removal."
-          fi
-
-      - name: Remove previous Docker image
-        run: |    
-          IMAGE_ID=$(sudo docker images --filter=reference=ddangkong/ddangkong-api-dev --format "{{.ID}}")
-          if [ -n "${IMAGE_ID}" ]; then
-            sudo docker rmi ${IMAGE_ID}
-            echo "Image ${IMAGE_ID} is removed."
-          else
-            echo "No previous image found with repository name. Skipping removal."
-          fi
-
-      - name: Pull docker image
-        run: sudo docker pull $DOCKER_REPOSITORY_NAME:latest
-
-      - name: Run new Docker container
-        run: |
-          docker run -d -p 443:8080 --name $CONTAINER_NAME \
-          -v /home/ubuntu/app-logs:/logs \
-          $DOCKER_REPOSITORY_NAME:latest
+      - name: Execute deploy script on EC2
+        run: sudo sh ~/deploy-script-dev.sh
