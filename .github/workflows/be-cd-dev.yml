@@ -27,11 +27,14 @@ jobs:
       - name: bootJar with Gradle
         run: ./gradlew bootJar -PcreateRestDocs
 
+      - name: Change artifact file name
+        run: mv build/libs/*.jar build/libs/app.jar
+
       - name: Upload artifact file
         uses: actions/upload-artifact@v4
         with:
           name: app-artifact
-          path: build/libs/*.jar
+          path: build/libs/app.jar
 
   deploy:
     needs: build
