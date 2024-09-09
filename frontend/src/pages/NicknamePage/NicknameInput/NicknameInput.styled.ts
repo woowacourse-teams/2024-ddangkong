@@ -8,7 +8,7 @@ export const nicknameInputContainer = css`
   width: 100%;
   height: 4.8rem;
   padding: 0 1rem;
-  border-radius: 1rem;
+  border-radius: ${Theme.borderRadius.radius10};
 
   background-color: ${Theme.color.gray200};
 `;
