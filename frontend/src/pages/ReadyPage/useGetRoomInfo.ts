@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getRoomInfo } from '@/apis/room';
+import { POLLING_DELAY } from '@/constants/config';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { ROUTES } from '@/constants/routes';
-import { ONE_SECOND } from '@/constants/time';
 
 export const useGetRoomInfo = () => {
   const { roomId } = useParams();
@@ -14,7 +14,7 @@ export const useGetRoomInfo = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
     queryFn: ({ queryKey: [, roomId] }) => getRoomInfo(Number(roomId)),
-    refetchInterval: ONE_SECOND,
+    refetchInterval: POLLING_DELAY,
     gcTime: 0,
   });
 
