@@ -49,4 +49,4 @@ jobs:
           path: ~/app
 
       - name: Execute deploy script on EC2
-        run: sudo sh ~/deploy-script-dev.sh
+        run: sudo sh ~/scripts/deploy-script-dev.sh
