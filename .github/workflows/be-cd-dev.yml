@@ -48,7 +48,7 @@ jobs:
           name: app-artifact
           path: ~/app
 
-      - name: Deploy artifact file
+      - name: Setting Env with artifact file name
         run: |
           cd /home/ubuntu/app || { echo "Build directory not found"; exit 1; }
           JAR_FILE=$(ls *.jar | head -n 1)
@@ -57,7 +57,9 @@ jobs:
             echo "No JAR file found"
             exit 1
           fi
-          
+
+      - name: Kill previous application
+        run: |          
           PID=$(lsof -t -i:8080)
 
           if [ -n "$PID" ]; then
@@ -68,4 +70,5 @@ jobs:
             echo "No process is running on port 8080"
           fi
 
-          nohup java -Dspring.profiles.active=dev -Duser.timezone=Asia/Seoul -Dserver.port=8080 -jar "$JAR_FILE" &
+      - name: Run latest application
+        run: nohup java -Dspring.profiles.active=dev -Duser.timezone=Asia/Seoul -Dserver.port=8080 -jar "$JAR_FILE" &
