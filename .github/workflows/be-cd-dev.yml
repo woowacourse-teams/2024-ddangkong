@@ -39,14 +39,30 @@ jobs:
     runs-on: [ self-hosted, linux, ARM64, dev ]
 
     steps:
-      - name: Execute script on EC2 to deploy
-        run: sudo sh ~/deploy-script-dev.sh
-
       - name: Download artifact file
         uses: actions/download-artifact@v4
         with:
           name: app-artifact
           path: ~/app
 
-      - name: Execute deploy script on EC2
-        run: sudo sh ~/scripts/deploy-script-dev.sh
+      - name: Deploy artifact file
+        run: |
+          cd ~/app || { echo "Build directory not found"; exit 1; }
+          JAR_FILE=$(ls *.jar | head -n 1)
+  
+          if [ -z "$JAR_FILE" ]; then
+            echo "No JAR file found"
+            exit 1
+          fi
+          
+          PID=$(lsof -t -i:8080)
+
+          if [ -n "$PID" ]; then
+            echo "Killing process $PID running on port 8080"
+            kill -9 $PID
+            echo "Process $PID has been killed"
+          else
+            echo "No process is running on port 8080"
+          fi
+
+          nohup java -Dspring.profiles.active=dev -Duser.timezone=Asia/Seoul -Dserver.port=8080 -jar "$JAR_FILE" &
