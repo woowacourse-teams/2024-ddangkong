@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { fetchRoundVoteIsFinished } from '@/apis/balanceContent';
+import { POLLING_DELAY } from '@/constants/config';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { ROUTES } from '@/constants/routes';
-import { POLLING_DELAY } from '@/constants/time';
 
 interface UseRoundIsFinishedQueryProps {
   contentId?: number;
