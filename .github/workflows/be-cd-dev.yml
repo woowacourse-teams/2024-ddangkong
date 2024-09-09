@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-artifact
-          path: build/libs/app.jar
+          path: ./backend/build/libs/app.jar
 
   deploy:
     needs: build
@@ -52,7 +52,7 @@ jobs:
         run: |
           cd ~/app || { echo "Build directory not found"; exit 1; }
           JAR_FILE=$(ls *.jar | head -n 1)
-  
+          
           if [ -z "$JAR_FILE" ]; then
             echo "No JAR file found"
             exit 1
