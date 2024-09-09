@@ -50,7 +50,7 @@ jobs:
 
       - name: Deploy artifact file
         run: |
-          cd ~/app || { echo "Build directory not found"; exit 1; }
+          cd /home/ubuntu/app || { echo "Build directory not found"; exit 1; }
           JAR_FILE=$(ls *.jar | head -n 1)
           
           if [ -z "$JAR_FILE" ]; then
