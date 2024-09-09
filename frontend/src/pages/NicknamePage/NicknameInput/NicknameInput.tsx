@@ -4,7 +4,7 @@ import useNicknameInput from './hooks/useNicknameInput';
 import { nicknameInput, nicknameInputContainer, nicknameLengthText } from './NicknameInput.styled';
 import createRandomNickname from '../createRandomNickname';
 
-const NICKNAME_MAX_LENGTH = 12;
+import { NICKNAME_MAX_LENGTH } from '@/constants/config';
 
 interface NicknameInputProps {
   nicknameInputRef: RefObject<HTMLInputElement>;

@@ -4,7 +4,7 @@ import BALANCE_CONTENT from '../data/balanceContent.json';
 import MY_GAME_STATUS from '../data/myGameStatus.json';
 import ROUND_VOTE_IS_FINISHED from '../data/roundVoteIsFinished.json';
 
-import { ONE_SECOND } from '@/constants/time';
+import { POLLING_DELAY } from '@/constants/config';
 import { MOCK_API_URL } from '@/constants/url';
 import { BalanceContent } from '@/types/balanceContent';
 
@@ -15,10 +15,10 @@ const fetchBalanceContentHandler = () => {
 const fetchIsFinishedHandler = () => {
   setTimeout(() => {
     ROUND_VOTE_IS_FINISHED.isFinished = true;
-  }, 10 * ONE_SECOND);
+  }, 10 * POLLING_DELAY);
   setTimeout(() => {
     ROUND_VOTE_IS_FINISHED.isFinished = false;
-  }, 12 * ONE_SECOND);
+  }, 12 * POLLING_DELAY);
 
   return HttpResponse.json(ROUND_VOTE_IS_FINISHED);
 };

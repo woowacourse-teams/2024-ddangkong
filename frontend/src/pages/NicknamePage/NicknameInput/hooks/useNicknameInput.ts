@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 
-const NICKNAME_MAX_LENGTH = 12;
+import { NICKNAME_MAX_LENGTH } from '@/constants/config';
 
 interface UseNicknameInputProps {
   handleMakeOrEnterRoom: () => void;
