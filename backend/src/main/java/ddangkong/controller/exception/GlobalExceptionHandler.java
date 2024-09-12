@@ -5,8 +5,10 @@ import ddangkong.exception.ClientErrorCode;
 import ddangkong.exception.InternalServerException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -51,6 +53,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleClientAbortException(ClientAbortException e) {
+        log.warn(e.getMessage());
+
+        return new ErrorResponse(ClientErrorCode.ALREADY_DISCONNECTED);
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNoResourceFoundException(NoResourceFoundException e) {
         log.warn(e.getMessage());
@@ -58,12 +68,12 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(ClientErrorCode.NO_RESOURCE_FOUND);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class, HttpMediaTypeNotSupportedException.class})
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorResponse handleMethodNotAllowedException(HttpRequestMethodNotSupportedException e) {
+    public ErrorResponse handleNotSupportedRequestException(Exception e) {
         log.warn(e.getMessage());
 
-        return new ErrorResponse(ClientErrorCode.METHOD_NOT_SUPPORTED);
+        return new ErrorResponse(ClientErrorCode.NOT_SUPPORTED_REQUEST);
     }
 
     @ExceptionHandler
