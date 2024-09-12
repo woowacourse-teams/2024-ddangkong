@@ -8,7 +8,7 @@
     "build-dev": "webpack --config webpack.config.dev.js",
     "build-prod": "webpack --config webpack.config.prod.js",
     "test": "jest",
-    "test:multiWorker": "jest --maxWorkers=4",
+    "test:multiWorker": "jest",
     "test:watch": "jest --watch",
     "lint": "npx eslint --ext .ts,.tsx .",
     "lint:styled": "stylelint ./src/**/*.styled.ts --fix",
