@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getRoomInfo } from '@/apis/room';
+import { POLLING_DELAY } from '@/constants/config';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { ROUTES } from '@/constants/routes';
-import { ONE_SECOND } from '@/constants/time';
 
 export const useGetRoomInfo = () => {
   const { roomId } = useParams();
@@ -18,8 +18,9 @@ export const useGetRoomInfo = () => {
       if (query.state.error && query.state.fetchFailureCount >= 3) {
         return false;
       }
-      return ONE_SECOND;
+      return POLLING_DELAY;
     },
+
     gcTime: 0,
   });
 

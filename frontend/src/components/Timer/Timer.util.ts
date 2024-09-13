@@ -1,4 +1,4 @@
-import { ONE_SECOND } from '@/constants/time';
+import { POLLING_DELAY } from '@/constants/config';
 
 export const formatLeftRoundTime = (leftRoundTime: number) => {
   const minutes = Math.floor(leftRoundTime / 60);
@@ -11,6 +11,6 @@ export const formatLeftRoundTime = (leftRoundTime: number) => {
 };
 
 export const convertMsecToSecond = (msec: number) => {
-  const UNIT_MSEC = ONE_SECOND;
+  const UNIT_MSEC = POLLING_DELAY;
   return msec / UNIT_MSEC;
 };
