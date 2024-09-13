@@ -4,7 +4,7 @@ import { fn } from '@storybook/test';
 import InviteModal from './InviteModal';
 
 const meta = {
-  title: 'InviteModal',
+  title: 'modal/InviteModal',
   component: InviteModal,
   argTypes: {
     isOpen: {

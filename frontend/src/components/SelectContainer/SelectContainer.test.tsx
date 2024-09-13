@@ -15,7 +15,7 @@ describe('SelectContainer', () => {
     const user = userEvent.setup();
     server.use(
       http.post(MOCK_API_URL.vote, () => {
-        return new HttpResponse(null, { status: 400 });
+        return new HttpResponse(JSON.stringify({ errorCode: '', message: '' }), { status: 400 });
       }),
     );
 

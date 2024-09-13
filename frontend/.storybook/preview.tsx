@@ -8,6 +8,7 @@ import GlobalStyle from '../src/styles/GlobalStyle';
 import { Theme } from '../src/styles/Theme';
 import { initialize, mswLoader } from 'msw-storybook-addon';
 import { handlers } from '../src/mocks/handlers';
+import ToastProvider from '../src/providers/ToastProvider/ToastProvider';
 
 initialize({
   serviceWorker: {

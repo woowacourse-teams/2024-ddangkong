@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -11,10 +11,16 @@ export const useGetRoomInfo = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
-    queryFn: ({ queryKey: [, roomId] }) => getRoomInfo(Number(roomId)),
-    refetchInterval: POLLING_DELAY,
+    queryFn: () => getRoomInfo(Number(roomId)),
+    refetchInterval: (query) => {
+      if (query.state.error && query.state.fetchFailureCount >= 3) {
+        return false;
+      }
+      return POLLING_DELAY;
+    },
+
     gcTime: 0,
   });
 
@@ -28,7 +34,5 @@ export const useGetRoomInfo = () => {
     members: data?.members,
     roomSetting: data?.roomSetting,
     master: data?.master,
-    isLoading,
-    isError,
   };
 };

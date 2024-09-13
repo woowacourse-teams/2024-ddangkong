@@ -7,14 +7,15 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const INITIAL_WIDTH = 100;
 const DEFAULT_TIME_LIMIT_MSEC = 10000;
+const ALMOST_FINISH_SECOND = 5;
 
 const useRoundTimer = (roomId: number) => {
   const { balanceContent } = useBalanceContentQuery(roomId);
-  const timeLimit = balanceContent?.timeLimit || DEFAULT_TIME_LIMIT_MSEC;
+  const timeLimit = balanceContent.timeLimit || DEFAULT_TIME_LIMIT_MSEC;
 
   const [leftRoundTime, setLeftRoundTime] = useState(convertMsecToSecond(timeLimit));
   const [barWidthPercent, setBarWidthPercent] = useState(INITIAL_WIDTH);
-  const isAlmostFinished = leftRoundTime <= 5;
+  const isAlmostFinished = leftRoundTime <= ALMOST_FINISH_SECOND;
 
   const timeout = useRef<NodeJS.Timeout>();
 
@@ -25,8 +26,6 @@ const useRoundTimer = (roomId: number) => {
   }, [leftRoundTime]);
 
   useEffect(() => {
-    if (!balanceContent) return;
-
     const DECREASE_RATE = INITIAL_WIDTH / convertMsecToSecond(timeLimit);
     setLeftRoundTime(convertMsecToSecond(timeLimit));
 

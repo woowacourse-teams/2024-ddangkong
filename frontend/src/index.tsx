@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom/client';
 import { RecoilRoot } from 'recoil';
 
 import App from './App';
+import ToastProvider from './providers/ToastProvider/ToastProvider';
 import GlobalStyle from './styles/GlobalStyle';
 import { Theme } from './styles/Theme';
 
@@ -33,7 +34,9 @@ enableMocking().then(() => {
       <RecoilRoot>
         <ThemeProvider theme={Theme}>
           <Global styles={GlobalStyle} />
-          <App />
+          <ToastProvider>
+            <App />
+          </ToastProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </ThemeProvider>
       </RecoilRoot>

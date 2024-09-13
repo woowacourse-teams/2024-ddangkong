@@ -4,7 +4,7 @@ import { fn } from '@storybook/test';
 import InfoModal from './InfoModal';
 
 const meta = {
-  title: 'InfoModal',
+  title: 'modal/InfoModal',
   component: InfoModal,
   argTypes: {
     isOpen: {
