@@ -10,12 +10,28 @@ import { server } from '@/mocks/server';
 import { customRender } from '@/utils/test-utils';
 
 describe('TopicContainer', () => {
+  const LOADING_DELAY = 300;
+
+  it('게임 컨텐츠를 불러올 때 300ms 이상 delay가 걸릴 경우 로딩 UI를 보여준다.', async () => {
+    server.use(
+      http.get(MOCK_API_URL.balanceContent, async () => {
+        await delay(LOADING_DELAY);
+      }),
+    );
+    const LOADING_TEXT = '로딩중';
+
+    customRender(<TopicContainer />, { pendingFallback: <GameSkeleton /> });
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(LOADING_TEXT)).toBeInTheDocument();
+    });
+  });
   it('게임 컨텐츠를 불러오지 못할 경우, 에러 폴백 UI를 통해 에러 메세지를 사용자에게 보여준다.', async () => {
     // eslint-disable-next-line no-console
     console.error = jest.fn();
     server.use(
       http.get(MOCK_API_URL.balanceContent, async () => {
-        await delay(500);
+        await delay(LOADING_DELAY);
         return HttpResponse.json(
           {
             errorCode: 'NOT_FOUND_BALANCE_CONTENT',
@@ -27,10 +43,6 @@ describe('TopicContainer', () => {
     );
 
     customRender(<TopicContainer />, { pendingFallback: <GameSkeleton /> });
-
-    await waitFor(() => {
-      expect(screen.getByTestId('skeletonCategory')).toBeInTheDocument();
-    });
 
     await waitFor(() => {
       const errorMessage = screen.getByText(ERROR_MESSAGE.NOT_FOUND_BALANCE_CONTENT);
