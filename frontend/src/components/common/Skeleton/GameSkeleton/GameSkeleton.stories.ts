@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import GameSkeleton from './GameSkeleton';
 
 const meta = {
-  title: 'GameSkeleton',
+  title: 'skeleton/GameSkeleton',
   component: GameSkeleton,
 } satisfies Meta<typeof GameSkeleton>;
 

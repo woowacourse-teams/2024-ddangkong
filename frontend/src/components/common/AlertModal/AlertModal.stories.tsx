@@ -6,7 +6,7 @@ import AlertModal from './AlertModal';
 import Button from '../Button/Button';
 
 const meta = {
-  title: 'AlertModal',
+  title: 'modal/AlertModal',
   component: AlertModal,
   args: {
     onClose: fn(),
