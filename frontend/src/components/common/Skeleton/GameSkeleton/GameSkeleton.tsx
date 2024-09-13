@@ -8,8 +8,8 @@ import {
 const GameSkeleton = () => {
   return (
     <div css={skeletonLayout}>
-      <div css={skeletonCategory} data-testid="skeletonCategory" />
-      <span css={skeletonText} />
+      <div css={skeletonCategory} />
+      <span css={skeletonText} aria-label="로딩중" />
       <div css={skeletonOptionContainer} />
     </div>
   );
