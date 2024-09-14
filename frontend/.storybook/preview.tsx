@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Preview } from '@storybook/react';
+import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 import { Global, ThemeProvider } from '@emotion/react';
@@ -33,14 +34,14 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={Theme}>
-          <MemoryRouter initialEntries={['/']}>
-            <Global styles={GlobalStyle} />
-            <ToastProvider>
+        <RecoilRoot>
+          <ThemeProvider theme={Theme}>
+            <MemoryRouter initialEntries={['/']}>
+              <Global styles={GlobalStyle} />
               <Story />
-            </ToastProvider>
-          </MemoryRouter>
-        </ThemeProvider>
+            </MemoryRouter>
+          </ThemeProvider>
+        </RecoilRoot>
       </QueryClientProvider>
     ),
   ],

@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
 import { fetchRoundVoteIsFinished } from '@/apis/balanceContent';
+import { POLLING_DELAY } from '@/constants/config';
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import { POLLING_DELAY } from '@/constants/time';
 
 interface UseRoundIsFinishedQueryProps {
   enabled: boolean;

@@ -37,9 +37,9 @@ const getCategoryListHandler = () => {
 const applyRoomSettingHandler = async ({ request }: { request: Request }) => {
   const body = await request.json();
 
-  const selectedCategory = CATEGORY_LIST.categories.filter(
+  const selectedCategory = CATEGORY_LIST.categories.find(
     (category) => category.value === body.category,
-  )[0];
+  );
 
   ROOM_INFO.roomSetting = { ...body, category: selectedCategory };
 

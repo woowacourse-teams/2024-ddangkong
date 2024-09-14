@@ -14,14 +14,6 @@ import ToastProvider from '@/providers/ToastProvider/ToastProvider';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-    },
-  },
-});
-
 const wrapper = ({
   children,
   initializeState,
@@ -30,6 +22,14 @@ const wrapper = ({
   initializeState?: (mutableSnapshot: MutableSnapshot) => void;
   pendingFallback?: React.ReactNode;
 }>) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
   return (
     <QueryClientProvider client={queryClient}>
       <RecoilRoot initializeState={initializeState}>

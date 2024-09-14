@@ -77,7 +77,7 @@ export const RoundHeader = () => {
   return (
     <header css={headerLayout()}>
       <span css={roundText}>
-        {balanceContent ? `${balanceContent?.currentRound}/${balanceContent?.totalRound}` : '0/0'}
+        {balanceContent.currentRound}/{balanceContent.totalRound}
       </span>
       <h1 css={gameTitle}>{title}</h1>
       <span css={roundText}></span>
