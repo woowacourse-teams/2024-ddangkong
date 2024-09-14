@@ -92,7 +92,7 @@ public class MemberService {
 
     @Transactional
     public void deleteMembers(List<Member> migratedRoomMembers) {
-        memberRepository.deleteAllInBatch(migratedRoomMembers);
+        memberRepository.deleteAll(migratedRoomMembers);
     }
 
     @Transactional(readOnly = true)

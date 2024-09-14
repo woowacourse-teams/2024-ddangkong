@@ -54,7 +54,7 @@ public class RoomContentService {
 
     @Transactional
     public void deleteRoomContents(List<RoomContent> roomContents) {
-        roomContentRepository.deleteAllInBatch(roomContents);
+        roomContentRepository.deleteAll(roomContents);
     }
 
     @Transactional(readOnly = true)

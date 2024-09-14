@@ -41,7 +41,7 @@ public class RoomBalanceVoteMigrator {
 
     @Transactional
     public void deleteRoomVotes(List<RoomBalanceVote> roomBalanceVotes) {
-        roomBalanceVoteRepository.deleteAllInBatch(roomBalanceVotes);
+        roomBalanceVoteRepository.deleteAll(roomBalanceVotes);
     }
 
     private List<RoomBalanceVote> deleteMemberVotes(Member member) {
