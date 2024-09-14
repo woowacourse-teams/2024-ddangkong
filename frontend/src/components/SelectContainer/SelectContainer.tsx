@@ -2,9 +2,9 @@ import { useParams } from 'react-router-dom';
 
 import useSelectOption from './hooks/useSelectOption';
 import { selectContainerLayout, selectSection } from './SelectContainer.styled';
+import Timer from './Timer/Timer';
 import AlertModal from '../common/AlertModal/AlertModal';
 import SelectButton from '../common/SelectButton/SelectButton';
-import Timer from '../Timer/Timer';
 
 import SelectOption from '@/components/SelectOption/SelectOption';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
