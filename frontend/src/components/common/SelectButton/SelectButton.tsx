@@ -18,7 +18,7 @@ const SelectButton = ({
   const {
     data,
     isPending,
-    mutate: completeSelectionMutate,
+    mutate: vote,
   } = useCompleteSelectionMutation({
     selectedId,
     contentId,
@@ -32,7 +32,7 @@ const SelectButton = ({
         bottom
         disabled={data || !selectedId || isPending}
         text={data || isPending ? '선택 완료' : '선택'}
-        onClick={completeSelectionMutate}
+        onClick={vote}
       />
     </div>
   );
