@@ -1,26 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
-import { fetchRoundVoteIsFinished } from '@/apis/balanceContent';
+import { fetchVoteIsFinished } from '@/apis/balanceContent';
 import { POLLING_DELAY } from '@/constants/config';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 
-interface UseRoundIsFinishedQueryProps {
+interface UseVoteIsFinishedQueryProps {
   enabled: boolean;
   contentId?: number;
 }
 
-const useRoundIsFinishedQuery = ({ contentId, enabled }: UseRoundIsFinishedQueryProps) => {
+const useVoteIsFinishedQuery = ({ contentId, enabled }: UseVoteIsFinishedQueryProps) => {
   const { roomId } = useParams();
 
-  const roundIsFinishedQuery = useQuery({
+  const voteIsFinishedQuery = useQuery({
     queryKey: [QUERY_KEYS.roundIsFinished, Number(roomId), contentId],
     queryFn: async () => {
       if (typeof contentId === 'undefined') {
         throw new Error('contentId 가 존재하지 않습니다.');
       }
 
-      return await fetchRoundVoteIsFinished({ roomId: Number(roomId), contentId });
+      return await fetchVoteIsFinished({ roomId: Number(roomId), contentId });
     },
     enabled,
     refetchInterval: POLLING_DELAY,
@@ -28,7 +28,7 @@ const useRoundIsFinishedQuery = ({ contentId, enabled }: UseRoundIsFinishedQuery
     gcTime: 0,
   });
 
-  return { ...roundIsFinishedQuery, isFinished: roundIsFinishedQuery.data?.isFinished };
+  return { ...voteIsFinishedQuery, isFinished: voteIsFinishedQuery.data?.isFinished };
 };
 
-export default useRoundIsFinishedQuery;
+export default useVoteIsFinishedQuery;

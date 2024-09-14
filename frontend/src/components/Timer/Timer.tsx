@@ -10,7 +10,7 @@ import {
   timerWrapper,
 } from './Timer.styled';
 import { formatLeftRoundTime } from './Timer.util';
-import useRoundIsFinished from '../SelectContainer/hooks/useRoundIsFinished';
+import useVoteIsFinished from '../SelectContainer/hooks/useVoteIsFinished';
 
 import DdangkongTimer from '@/assets/images/ddangkongTimer.png';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
@@ -31,7 +31,7 @@ const Timer = ({ selectedId, completeSelection, showModal }: TimerProps) => {
     showModal,
   });
 
-  useRoundIsFinished({
+  useVoteIsFinished({
     contentId: balanceContent.contentId,
     isFetching,
   });
