@@ -5,6 +5,7 @@ import useSelectOption from './hooks/useSelectOption';
 import { selectContainerLayout, selectSection } from './SelectContainer.styled';
 import AlertModal from '../common/AlertModal/AlertModal';
 import SelectButton from '../common/SelectButton/SelectButton';
+import Timer from '../Timer/Timer';
 
 import SelectOption from '@/components/SelectOption/SelectOption';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
@@ -23,6 +24,11 @@ const SelectContainer = () => {
 
   return (
     <div css={selectContainerLayout}>
+      <Timer
+        selectedId={selectedOption.id}
+        completeSelection={completeSelection}
+        showModal={show}
+      />
       <section css={selectSection}>
         <SelectOption
           option={balanceContent.firstOption}

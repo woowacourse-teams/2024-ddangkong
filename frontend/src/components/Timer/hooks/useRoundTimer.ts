@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { convertMsecToSecond } from '../Timer.util';
 
+import useCompleteSelectionMutation from '@/components/common/SelectButton/SelectButton.hook';
 import { POLLING_DELAY } from '@/constants/config';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
@@ -9,7 +10,19 @@ const INITIAL_WIDTH = 100;
 const DEFAULT_TIME_LIMIT_MSEC = 10000;
 const ALMOST_FINISH_SECOND = 5;
 
-const useRoundTimer = (roomId: number) => {
+interface UseRoundTimerProps {
+  roomId: number;
+  selectedId: number;
+  completeSelection: () => void;
+  showModal: () => void;
+}
+
+const useRoundTimer = ({
+  roomId,
+  selectedId,
+  completeSelection,
+  showModal,
+}: UseRoundTimerProps) => {
   const { balanceContent } = useBalanceContentQuery(roomId);
   const timeLimit = balanceContent.timeLimit || DEFAULT_TIME_LIMIT_MSEC;
 
@@ -21,8 +34,16 @@ const useRoundTimer = (roomId: number) => {
 
   const timeout = useRef<NodeJS.Timeout>();
 
+  const { mutate } = useCompleteSelectionMutation({
+    selectedId,
+    contentId: balanceContent.contentId,
+    completeSelection,
+    showModal,
+  });
+
   useEffect(() => {
     if (isVoteTimeout) {
+      mutate();
       clearInterval(timeout.current);
     }
   }, [isVoteTimeout]);

@@ -13,9 +13,20 @@ import { formatLeftRoundTime } from './Timer.util';
 
 import DdangkongTimer from '@/assets/images/ddangkongTimer.png';
 
-const Timer = () => {
+interface TimerProps {
+  selectedId: number;
+  completeSelection: () => void;
+  showModal: () => void;
+}
+
+const Timer = ({ selectedId, completeSelection, showModal }: TimerProps) => {
   const { roomId } = useParams();
-  const { barWidthPercent, leftRoundTime, isAlmostFinished } = useRoundTimer(Number(roomId));
+  const { barWidthPercent, leftRoundTime, isAlmostFinished } = useRoundTimer({
+    roomId: Number(roomId),
+    selectedId,
+    completeSelection,
+    showModal,
+  });
 
   return (
     <section css={timerLayout}>
