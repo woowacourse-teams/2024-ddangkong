@@ -10,8 +10,10 @@ import {
   timerWrapper,
 } from './Timer.styled';
 import { formatLeftRoundTime } from './Timer.util';
+import useRoundIsFinished from '../SelectContainer/hooks/useRoundIsFinished';
 
 import DdangkongTimer from '@/assets/images/ddangkongTimer.png';
+import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 interface TimerProps {
   selectedId: number;
@@ -21,11 +23,17 @@ interface TimerProps {
 
 const Timer = ({ selectedId, completeSelection, showModal }: TimerProps) => {
   const { roomId } = useParams();
+  const { balanceContent, isFetching } = useBalanceContentQuery(Number(roomId));
   const { barWidthPercent, leftRoundTime, isAlmostFinished } = useVoteTimer({
     roomId: Number(roomId),
     selectedId,
     completeSelection,
     showModal,
+  });
+
+  useRoundIsFinished({
+    contentId: balanceContent.contentId,
+    isFetching,
   });
 
   return (
