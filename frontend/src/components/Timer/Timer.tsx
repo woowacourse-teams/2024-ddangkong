@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import useRoundTimer from './Timer.hook';
+import useRoundTimer from './hooks/useRoundTimer';
 import {
   timerIcon,
   timerIconShake,

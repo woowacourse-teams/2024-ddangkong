@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { convertMsecToSecond } from './Timer.util';
+import { convertMsecToSecond } from '../Timer.util';
 
 import { POLLING_DELAY } from '@/constants/config';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
