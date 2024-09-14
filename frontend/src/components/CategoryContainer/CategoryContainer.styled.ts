@@ -8,6 +8,7 @@ export const categoryContainerLayout = css`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   height: 10rem;
   padding: 1.6rem 0 2.4rem;
   border-radius: ${getBorderRadius('medium')};
