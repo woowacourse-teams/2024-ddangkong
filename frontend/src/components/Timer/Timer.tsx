@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import useRoundTimer from './hooks/useRoundTimer';
+import useVoteTimer from './hooks/useVoteTimer';
 import {
   timerIcon,
   timerIconShake,
@@ -21,7 +21,7 @@ interface TimerProps {
 
 const Timer = ({ selectedId, completeSelection, showModal }: TimerProps) => {
   const { roomId } = useParams();
-  const { barWidthPercent, leftRoundTime, isAlmostFinished } = useRoundTimer({
+  const { barWidthPercent, leftRoundTime, isAlmostFinished } = useVoteTimer({
     roomId: Number(roomId),
     selectedId,
     completeSelection,

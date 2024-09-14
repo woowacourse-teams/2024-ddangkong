@@ -5,19 +5,14 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const DEFAULT_TIME_LIMIT_MSEC = 10000;
 
-interface UseRoundTimerProps {
+interface UseVoteTimerProps {
   roomId: number;
   selectedId: number;
   completeSelection: () => void;
   showModal: () => void;
 }
 
-const useRoundTimer = ({
-  roomId,
-  selectedId,
-  completeSelection,
-  showModal,
-}: UseRoundTimerProps) => {
+const useVoteTimer = ({ roomId, selectedId, completeSelection, showModal }: UseVoteTimerProps) => {
   const { balanceContent } = useBalanceContentQuery(roomId);
   const timeLimit = balanceContent.timeLimit || DEFAULT_TIME_LIMIT_MSEC;
 
@@ -37,4 +32,4 @@ const useRoundTimer = ({
   return { leftRoundTime, barWidthPercent, isAlmostFinished };
 };
 
-export default useRoundTimer;
+export default useVoteTimer;
