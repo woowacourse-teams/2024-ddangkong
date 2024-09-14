@@ -20,7 +20,7 @@ public class RoomScheduler {
     public void deleteDelayedRooms() {
         LocalDateTime modifiedStandard = LocalDateTime.now().minusHours(DELAYED_HOURS);
         log.info("변경이 {} 이전에 일어난 방을 마이그레이션 후 삭제 시작합니다", modifiedStandard);
-        roomFacade.migrateExpiredRoom(modifiedStandard);
+        roomFacade.migrateExpiredRooms(modifiedStandard);
         log.info("변경이 {} 이전에 일어난 방을 마이그레이션 후 삭제 완료하였습니다", modifiedStandard);
     }
 }

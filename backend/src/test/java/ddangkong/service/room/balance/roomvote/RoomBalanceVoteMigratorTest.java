@@ -51,7 +51,7 @@ class RoomBalanceVoteMigratorTest extends BaseServiceTest {
     class 방_투표_마이그레이션 {
 
         @Test
-        void 방_투표_삭제_후_전체_투표를_저장한다() {
+        void 방_투표_정보를_전체_투표_정보로_마이그레이션한다() {
             // given
             roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
             roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionA));
@@ -63,7 +63,6 @@ class RoomBalanceVoteMigratorTest extends BaseServiceTest {
 
             // then
             assertAll(
-                    () -> assertThat(roomBalanceVoteRepository.findByMemberRoom(room)).isEmpty(),
                     () -> assertThat(totalBalanceVoteRepository.countByBalanceOption(optionA)).isEqualTo(2),
                     () -> assertThat(totalBalanceVoteRepository.countByBalanceOption(optionB)).isEqualTo(2)
             );

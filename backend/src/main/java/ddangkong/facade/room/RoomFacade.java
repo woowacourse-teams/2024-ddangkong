@@ -111,7 +111,8 @@ public class RoomFacade {
     public void resetRoom(Long roomId) {
         Room room = roomService.reset(roomId);
         roomContentService.deleteRoomContents(room);
-        roomBalanceVoteMigrator.migrateToTotalVote(room);
+        List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteMigrator.migrateToTotalVote(room);
+        roomBalanceVoteMigrator.deleteRoomVotes(roomBalanceVotes);
     }
 
     @Transactional(readOnly = true)
@@ -133,7 +134,7 @@ public class RoomFacade {
     }
 
     @Transactional
-    public void migrateExpiredRoom(LocalDateTime modifiedAt) {
+    public void migrateExpiredRooms(LocalDateTime modifiedAt) {
         List<RoomBalanceVote> migratedRoomBalanceVotes = new ArrayList<>();
         List<RoomContent> migratedRoomContents = new ArrayList<>();
         List<Member> migratedRoomMembers = new ArrayList<>();

@@ -542,7 +542,7 @@ class RoomFacadeTest extends BaseServiceTest {
             long countOfExpectedRestRoom = 5;
 
             // when
-            roomFacade.migrateExpiredRoom(standardModified);
+            roomFacade.migrateExpiredRooms(standardModified);
 
             // then
             long countOfRoom = roomRepository.count();
@@ -565,7 +565,7 @@ class RoomFacadeTest extends BaseServiceTest {
             long countOfTotalVotes = totalBalanceVoteRepository.count();
 
             // when
-            roomFacade.migrateExpiredRoom(standardModified);
+            roomFacade.migrateExpiredRooms(standardModified);
 
             // then
             Optional<Room> deletedRoom = roomRepository.findById(room.getId());
