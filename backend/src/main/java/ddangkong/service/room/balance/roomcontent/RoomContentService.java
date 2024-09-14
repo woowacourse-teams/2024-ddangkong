@@ -52,6 +52,16 @@ public class RoomContentService {
         roomContentRepository.deleteAllInBatch(roomContents);
     }
 
+    @Transactional
+    public void deleteRoomContents(List<RoomContent> roomContents) {
+        roomContentRepository.deleteAllInBatch(roomContents);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RoomContent> findRoomContents(Room room) {
+        return roomContentRepository.findAllByRoom(room);
+    }
+
     @Transactional(readOnly = true)
     public RoomContent getCurrentRoundRoomContent(Room room) {
         return roomContentRepository.findByRoomAndRound(room, room.getCurrentRound())

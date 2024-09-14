@@ -75,4 +75,9 @@ public class RoomService {
     public void delete(Room room) {
         roomRepository.delete(room);
     }
+
+    @Transactional
+    public void deleteRooms(List<Room> migratedRooms) {
+        roomRepository.deleteAll(migratedRooms);
+    }
 }

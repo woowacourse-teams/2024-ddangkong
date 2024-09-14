@@ -90,6 +90,11 @@ public class MemberService {
         memberRepository.deleteAllInBatch(members.getMembers());
     }
 
+    @Transactional
+    public void deleteMembers(List<Member> migratedRoomMembers) {
+        memberRepository.deleteAllInBatch(migratedRoomMembers);
+    }
+
     @Transactional(readOnly = true)
     public Member getMaster(Room room) {
         return findRoomMembers(room).getMaster();

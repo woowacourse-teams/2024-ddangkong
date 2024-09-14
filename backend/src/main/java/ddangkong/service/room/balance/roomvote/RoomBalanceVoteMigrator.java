@@ -22,11 +22,13 @@ public class RoomBalanceVoteMigrator {
     private final RoomBalanceVoteRepository roomBalanceVoteRepository;
 
     @Transactional
-    public void migrateToTotalVote(Room room) {
-        List<RoomBalanceVote> deletedRoomVotes = deleteRoomVotes(room);
-        saveTotalVotes(deletedRoomVotes);
+    public List<RoomBalanceVote> migrateToTotalVote(Room room) {
+        List<RoomBalanceVote> migratedRoomBalanceVotes = roomBalanceVoteRepository.findByMemberRoom(room);
+        saveTotalVotes(migratedRoomBalanceVotes);
         log.info("방 밸런스 게임 투표를 전체 밸런스 게임 투표로 마이그레이션 완료했습니다. roomId: {}, vote 개수: {}",
-                room.getId(), deletedRoomVotes.size());
+                room.getId(), migratedRoomBalanceVotes.size());
+
+        return migratedRoomBalanceVotes;
     }
 
     @Transactional
@@ -37,10 +39,9 @@ public class RoomBalanceVoteMigrator {
                 member.getId(), deletedRoomVotes.size());
     }
 
-    private List<RoomBalanceVote> deleteRoomVotes(Room room) {
-        List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteRepository.findByMemberRoom(room);
+    @Transactional
+    public void deleteRoomVotes(List<RoomBalanceVote> roomBalanceVotes) {
         roomBalanceVoteRepository.deleteAllInBatch(roomBalanceVotes);
-        return roomBalanceVotes;
     }
 
     private List<RoomBalanceVote> deleteMemberVotes(Member member) {
