@@ -115,24 +115,6 @@ public class RoomFacade {
         roomBalanceVoteMigrator.deleteRoomVotes(roomBalanceVotes);
     }
 
-    @Transactional(readOnly = true)
-    public List<Long> findRoomIdsBefore(LocalDateTime modifiedAt) {
-        return roomService.findRoomsBefore(modifiedAt)
-                .stream()
-                .map(Room::getId)
-                .toList();
-    }
-
-    @Transactional
-    public void deleteRoom(Long roomId) {
-        Room room = roomService.getRoom(roomId);
-
-        List<RoomBalanceVote> migratedRoomBalanceVotes = roomBalanceVoteMigrator.migrateToTotalVote(room);
-        roomContentService.deleteRoomContents(room);
-        memberService.deleteMember(room);
-        roomService.delete(room);
-    }
-
     @Transactional
     public void migrateExpiredRooms(LocalDateTime modifiedAt) {
         List<RoomBalanceVote> migratedRoomBalanceVotes = new ArrayList<>();
