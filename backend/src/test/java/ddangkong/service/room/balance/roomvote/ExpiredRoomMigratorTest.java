@@ -16,10 +16,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class RoomBalanceVoteMigratorTest extends BaseServiceTest {
+class ExpiredRoomMigratorTest extends BaseServiceTest {
 
     @Autowired
-    private RoomBalanceVoteMigrator roomBalanceVoteMigrator;
+    private ExpiredRoomMigrator expiredRoomMigrator;
 
     private BalanceOption optionA;
 
@@ -59,7 +59,7 @@ class RoomBalanceVoteMigratorTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(pome, optionB));
 
             // when
-            roomBalanceVoteMigrator.migrateToTotalVote(room);
+            expiredRoomMigrator.migrateRoomVoteToTotalVote(room);
 
             // then
             assertAll(
@@ -78,7 +78,7 @@ class RoomBalanceVoteMigratorTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
 
             // when
-            roomBalanceVoteMigrator.migrateToTotalVote(prin);
+            expiredRoomMigrator.migrateRoomVoteToTotalVote(prin);
 
             // then
             assertAll(

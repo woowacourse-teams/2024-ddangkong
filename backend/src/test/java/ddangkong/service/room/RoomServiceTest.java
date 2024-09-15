@@ -7,9 +7,11 @@ import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.facade.BaseServiceTest;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 class RoomServiceTest extends BaseServiceTest {
 
@@ -41,5 +43,18 @@ class RoomServiceTest extends BaseServiceTest {
                     () -> assertThat(foundRoom.getCategory()).isEqualTo(category)
             );
         }
+    }
+
+    @Test
+    @Transactional
+    void deleteAll_테스트() {
+        Room a1 = roomRepository.save(Room.createNewRoom());
+        Room a2 = roomRepository.save(Room.createNewRoom());
+
+        roomRepository.deleteAll(List.of(a1, a2));
+
+        Room b1 = roomRepository.save(Room.createNewRoom());
+        Room b2 = roomRepository.save(Room.createNewRoom());
+        roomRepository.deleteAll(List.of(b1, b2));
     }
 }

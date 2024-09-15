@@ -2,7 +2,6 @@ package ddangkong.facade.room;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
-import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
@@ -16,10 +15,9 @@ import ddangkong.facade.room.member.dto.MemberResponse;
 import ddangkong.service.balance.content.BalanceContentService;
 import ddangkong.service.room.RoomService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
-import ddangkong.service.room.balance.roomvote.RoomBalanceVoteMigrator;
+import ddangkong.service.room.balance.roomvote.ExpiredRoomMigrator;
 import ddangkong.service.room.member.MemberService;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +36,7 @@ public class RoomFacade {
 
     private final BalanceContentService balanceContentService;
 
-    private final RoomBalanceVoteMigrator roomBalanceVoteMigrator;
+    private final ExpiredRoomMigrator expiredRoomMigrator;
 
     @Transactional
     public RoomJoinResponse createRoom(String nickname) {
@@ -60,7 +58,7 @@ public class RoomFacade {
         RoomMembers roomMembers = memberService.findRoomMembers(room);
         Member member = roomMembers.getMember(memberId);
 
-        roomBalanceVoteMigrator.migrateToTotalVote(member);
+        expiredRoomMigrator.migrateRoomVoteToTotalVote(member);
         memberService.delete(member);
         if (roomMembers.isExistOnlyOneMember()) {
             roomContentService.deleteRoomContents(room);
@@ -111,34 +109,14 @@ public class RoomFacade {
     public void resetRoom(Long roomId) {
         Room room = roomService.reset(roomId);
         roomContentService.deleteRoomContents(room);
-        List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteMigrator.migrateToTotalVote(room);
-        roomBalanceVoteMigrator.deleteRoomVotes(roomBalanceVotes);
+        List<RoomBalanceVote> roomBalanceVotes = expiredRoomMigrator.migrateRoomVoteToTotalVote(room);
+        expiredRoomMigrator.deleteRoomVotes(roomBalanceVotes);
     }
 
     @Transactional
     public void migrateExpiredRooms(LocalDateTime modifiedAt) {
-        List<RoomBalanceVote> migratedRoomBalanceVotes = new ArrayList<>();
-        List<RoomContent> migratedRoomContents = new ArrayList<>();
-        List<Member> migratedRoomMembers = new ArrayList<>();
-        List<Room> migratedRooms = new ArrayList<>();
-
-        for (Room expiredRoom : roomService.findRoomsBefore(modifiedAt)) {
-            migratedRooms.add(expiredRoom);
-            migrate(expiredRoom, migratedRoomBalanceVotes, migratedRoomContents, migratedRoomMembers);
-        }
-        roomBalanceVoteMigrator.deleteRoomVotes(migratedRoomBalanceVotes);
-        roomContentService.deleteRoomContents(migratedRoomContents);
-        memberService.deleteMembers(migratedRoomMembers);
-        roomService.deleteRooms(migratedRooms);
-    }
-
-    private void migrate(Room room,
-                         List<RoomBalanceVote> migratedRoomBalanceVotes,
-                         List<RoomContent> migratedRoomContents,
-                         List<Member> migratedRoomMembers) {
-        migratedRoomBalanceVotes.addAll(roomBalanceVoteMigrator.migrateToTotalVote(room));
-        migratedRoomContents.addAll(roomContentService.findRoomContents(room));
-        migratedRoomMembers.addAll(memberService.findRoomMembers(room).getMembers());
+        List<Room> expiredRooms = roomService.findRoomsBefore(modifiedAt);
+        expiredRoomMigrator.migrateExpiredRooms(expiredRooms);
     }
 
     @Transactional(readOnly = true)

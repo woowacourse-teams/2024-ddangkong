@@ -29,6 +29,8 @@ import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -40,11 +42,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 class RoomFacadeTest extends BaseServiceTest {
 
     @Autowired
     private RoomFacade roomFacade;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Nested
     class 방_생성 {
@@ -536,17 +542,22 @@ class RoomFacadeTest extends BaseServiceTest {
     class 변경_시간이_특정_시각_이전_방_삭제 {
 
         @Test
+        @Transactional
         void 변경이_특정_시각_이전에_일어난_모든_방을_지운다() {
+            long start = System.currentTimeMillis();
             // given
             LocalDateTime standardModified = LocalDateTime.of(2024, 7, 18, 19, 52, 0);
             long countOfExpectedRestRoom = 5;
 
             // when
             roomFacade.migrateExpiredRooms(standardModified);
+            long end = System.currentTimeMillis();
+            System.out.println("time used: %d".formatted(end - start));
 
             // then
             long countOfRoom = roomRepository.count();
             assertThat(countOfRoom).isEqualTo(countOfExpectedRestRoom);
+            entityManager.flush();
         }
 
         @Test
