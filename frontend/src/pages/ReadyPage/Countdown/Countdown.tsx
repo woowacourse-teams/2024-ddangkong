@@ -37,7 +37,7 @@ const Countdown = ({ goToGame }: CountdownProps) => {
       <span css={countdown}>{count}</span>
       <div css={peanutWrapper}>
         {Array.from({ length: countMapper[count] }, (_, i) => i + 1).map((idx) => (
-          <img key={idx} src={SpinDdangkong} css={peanut} alt={`${idx}번째 카운트다운 땅콩`} />
+          <img key={idx} src={SpinDdangkong} css={peanut(idx)} alt={`${idx}번째 카운트다운 땅콩`} />
         ))}
       </div>
     </div>

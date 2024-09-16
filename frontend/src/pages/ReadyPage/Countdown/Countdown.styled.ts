@@ -95,9 +95,7 @@ export const dimmed = css`
 `;
 
 export const countdown = css`
-  font-weight: bold;
-  font-size: 5.2rem;
-
+  ${Theme.typography.countdown};
   animation:
     ${countdownAnimation} 1s ease-in-out infinite,
     ${glowAnimation} 1s infinite;
@@ -105,11 +103,15 @@ export const countdown = css`
 
 export const peanutWrapper = css`
   display: flex;
-  gap: 1.6rem;
+  justify-content: center;
+  align-items: center;
+  gap: 2.4rem;
+  height: 10.8rem;
 `;
 
-export const peanut = css`
-  width: 5.2rem;
+export const peanut = (idx: number) => css`
+  width: ${2.4 * idx}rem;
+  height: ${3.6 * idx}rem;
 
   animation: ${peanutAnimation} 1s ease-in-out infinite;
 `;
