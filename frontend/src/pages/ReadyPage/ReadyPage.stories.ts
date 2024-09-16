@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import ReadyPage from './ReadyPage';
 
 const meta = {
-  title: 'readyPage',
+  title: 'page/ReadyPage',
   component: ReadyPage,
 } satisfies Meta<typeof ReadyPage>;
 
