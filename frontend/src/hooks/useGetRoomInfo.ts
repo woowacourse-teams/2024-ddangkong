@@ -1,5 +1,4 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { getRoomInfo } from '@/apis/room';
@@ -8,10 +7,6 @@ import { QUERY_KEYS } from '@/constants/queryKeys';
 
 export const useGetRoomInfo = () => {
   const { roomId } = useParams();
-  const [isCountdownStart, setIsCountdownStart] = useState(false);
-  const startCountdown = () => {
-    setIsCountdownStart(true);
-  };
 
   const { data } = useSuspenseQuery({
     queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
@@ -30,7 +25,5 @@ export const useGetRoomInfo = () => {
     members: data?.members,
     roomSetting: data?.roomSetting,
     master: data?.master,
-    isCountdownStart,
-    startCountdown,
   };
 };
