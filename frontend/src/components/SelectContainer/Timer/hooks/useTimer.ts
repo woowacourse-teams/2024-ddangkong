@@ -27,9 +27,10 @@ const useTimer = ({ timeLimit, isSelectedOption, vote }: UseTimerProps) => {
       if (isSelectedOption) {
         vote();
       }
+
       clearInterval(timeout.current);
     }
-  }, [isVoteTimeout]);
+  }, [isVoteTimeout, isSelectedOption, vote]);
 
   useEffect(() => {
     const DECREASE_RATE = INITIAL_WIDTH / convertMsecToSecond(timeLimit);
