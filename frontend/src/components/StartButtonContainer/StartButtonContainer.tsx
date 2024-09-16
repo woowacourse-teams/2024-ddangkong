@@ -1,9 +1,9 @@
+import Countdown from './Countdown/Countdown';
 import useCountdown from './hooks/useCountdown';
 import StartButton from './StartButton/StartButton';
 import AlertModal from '../common/AlertModal/AlertModal';
 
 import useModal from '@/hooks/useModal';
-import Countdown from '@/pages/ReadyPage/Countdown/Countdown';
 
 const StartButtonContainer = () => {
   const { isOpen, show, close } = useModal();
