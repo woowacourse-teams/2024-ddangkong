@@ -18,10 +18,11 @@ const Countdown = ({ goToGame }: CountdownProps) => {
   const [count, setCount] = useState(3);
   const timeout = useRef<NodeJS.Timeout>();
 
-  if (count <= 0) {
-    clearInterval(timeout.current);
-    goToGame();
-  }
+  useEffect(() => {
+    if (count <= 0) {
+      goToGame();
+    }
+  }, [count]);
 
   useEffect(() => {
     timeout.current = setInterval(() => {

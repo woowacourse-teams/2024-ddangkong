@@ -5,11 +5,12 @@ import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 
 interface StartButtonProps {
   show: () => void;
+  startCountdown: () => void;
 }
 
-const StartButton = ({ show }: StartButtonProps) => {
+const StartButton = ({ show, startCountdown }: StartButtonProps) => {
   const { master } = useGetRoomInfo();
-  const { memberInfo, handleGameStart } = useGameStart(show);
+  const { memberInfo, handleGameStart } = useGameStart({ showModal: show, startCountdown });
 
   return (
     <Button

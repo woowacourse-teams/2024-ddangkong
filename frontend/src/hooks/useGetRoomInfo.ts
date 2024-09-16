@@ -1,15 +1,17 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { getRoomInfo } from '@/apis/room';
 import { POLLING_DELAY } from '@/constants/config';
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import { ROUTES } from '@/constants/routes';
 
 export const useGetRoomInfo = () => {
   const { roomId } = useParams();
-  const navigate = useNavigate();
+  const [isCountdownStart, setIsCountdownStart] = useState(false);
+  const startCountdown = () => {
+    setIsCountdownStart(true);
+  };
 
   const { data } = useSuspenseQuery({
     queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
@@ -24,15 +26,11 @@ export const useGetRoomInfo = () => {
     gcTime: 0,
   });
 
-  useEffect(() => {
-    if (data?.isGameStart) {
-      navigate(ROUTES.game(Number(roomId)));
-    }
-  }, [data?.isGameStart, roomId, navigate]);
-
   return {
     members: data?.members,
     roomSetting: data?.roomSetting,
     master: data?.master,
+    isCountdownStart,
+    startCountdown,
   };
 };

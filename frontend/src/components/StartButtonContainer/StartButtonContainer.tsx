@@ -1,14 +1,27 @@
+import { useNavigate, useParams } from 'react-router-dom';
+
 import StartButton from './StartButton/StartButton';
 import AlertModal from '../common/AlertModal/AlertModal';
 
+import { ROUTES } from '@/constants/routes';
+import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useModal from '@/hooks/useModal';
+import Countdown from '@/pages/ReadyPage/Countdown/Countdown';
 
 const StartButtonContainer = () => {
+  const navigate = useNavigate();
+  const { roomId } = useParams();
   const { isOpen, show, close } = useModal();
+  const { isCountdownStart, startCountdown } = useGetRoomInfo();
+
+  const goToGame = () => {
+    navigate(ROUTES.game(Number(roomId)));
+  };
 
   return (
     <>
-      <StartButton show={show} />
+      <StartButton show={show} startCountdown={startCountdown} />
+      {isCountdownStart && <Countdown goToGame={goToGame} />}
       <AlertModal
         isOpen={isOpen}
         onClose={close}
