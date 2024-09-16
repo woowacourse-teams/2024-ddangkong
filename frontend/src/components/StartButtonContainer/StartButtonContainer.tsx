@@ -20,8 +20,8 @@ const StartButtonContainer = () => {
 
   return (
     <>
-      <StartButton show={show} startCountdown={startCountdown} />
       {isCountdownStart && <Countdown goToGame={goToGame} />}
+      <StartButton show={show} startCountdown={startCountdown} />
       <AlertModal
         isOpen={isOpen}
         onClose={close}
