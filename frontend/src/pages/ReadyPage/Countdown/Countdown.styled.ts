@@ -4,17 +4,35 @@ import { Theme } from '@/styles/Theme';
 
 // 텍스트 글로우 애니메이션
 const glowAnimation = keyframes`
-  0% {
-    text-shadow: 0 0 10px ${Theme.color.peanut200}, 0 0 20px ${Theme.color.peanut300}, 0 0 30px ${Theme.color.peanut300}, 0 0 40px ${Theme.color.peanut300}, 0 0 50px ${Theme.color.peanut400}, 0 0 60px ${Theme.color.peanut400}, 0 0 70px ${Theme.color.peanut500};
+0% {
+    text-shadow: 0 0 5px ${Theme.color.peanut200}, 
+                 0 0 15px ${Theme.color.peanut300}, 
+                 0 0 25px ${Theme.color.peanut300}, 
+                 0 0 35px ${Theme.color.peanut300}, 
+                 0 0 45px ${Theme.color.peanut400}, 
+                 0 0 55px ${Theme.color.peanut400}, 
+                 0 0 65px ${Theme.color.peanut500};
   }
   30% {
-    text-shadow: 0 0 20px ${Theme.color.peanut200}, 0 0 30px ${Theme.color.peanut300}, 0 0 40px ${Theme.color.peanut300}, 0 0 50px ${Theme.color.peanut300}, 0 0 60px ${Theme.color.peanut400}, 0 0 70px ${Theme.color.peanut400}, 0 0 80px ${Theme.color.peanut500};
+    text-shadow: 0 0 10px ${Theme.color.peanut200}, 
+                 0 0 20px ${Theme.color.peanut300}, 
+                 0 0 30px ${Theme.color.peanut300}, 
+                 0 0 40px ${Theme.color.peanut300}, 
+                 0 0 50px ${Theme.color.peanut400}, 
+                 0 0 60px ${Theme.color.peanut400}, 
+                 0 0 70px ${Theme.color.peanut500};
   }
   70% {
-    text-shadow: 0 0 20px ${Theme.color.peanut200}, 0 0 30px ${Theme.color.peanut300}, 0 0 40px ${Theme.color.peanut300}, 0 0 50px ${Theme.color.peanut300}, 0 0 60px ${Theme.color.peanut400}, 0 0 70px ${Theme.color.peanut400}, 0 0 80px ${Theme.color.peanut500};
+    text-shadow: 0 0 10px ${Theme.color.peanut200}, 
+                 0 0 20px ${Theme.color.peanut300}, 
+                 0 0 60px ${Theme.color.peanut400}, 
+                 0 0 70px ${Theme.color.peanut500};
   }
   100% {
-    text-shadow: 0 0 10px ${Theme.color.peanut200}, 0 0 20px ${Theme.color.peanut300}, 0 0 30px ${Theme.color.peanut300}, 0 0 40px ${Theme.color.peanut300}, 0 0 50px ${Theme.color.peanut400}, 0 0 60px ${Theme.color.peanut400}, 0 0 70px ${Theme.color.peanut500};
+    text-shadow: 0 0 10px ${Theme.color.peanut200}, 
+                 0 0 20px ${Theme.color.peanut300},  
+                 0 0 60px ${Theme.color.peanut400}, 
+                 0 0 70px ${Theme.color.peanut500};
   }
 `;
 
@@ -32,7 +50,7 @@ export const countdownAnimation = keyframes`
     opacity: 1;
   }
   100% {
-    transform: scale(1);
+    transform: scale(0);
     opacity: 0;
   }
 `;
