@@ -7,7 +7,7 @@ const meta = {
   component: Countdown,
   tags: ['!autodocs'],
   args: {
-    startGame: () => {},
+    goToGame: () => {},
   },
 } satisfies Meta<typeof Countdown>;
 

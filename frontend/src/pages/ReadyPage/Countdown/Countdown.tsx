@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { countdownLayout, countdown, peanut, peanutWrapper } from './Countdown.styled';
+import { countdownLayout, countdown, peanut, peanutWrapper, dimmed } from './Countdown.styled';
 
 import SpinDdangkong from '@/assets/images/spinDdangkong.png';
 
@@ -11,16 +11,16 @@ const countMapper: Record<number, number> = {
 };
 
 interface CountdownProps {
-  startGame: () => void;
+  goToGame: () => void;
 }
 
-const Countdown = ({ startGame }: CountdownProps) => {
+const Countdown = ({ goToGame }: CountdownProps) => {
   const [count, setCount] = useState(3);
   const timeout = useRef<NodeJS.Timeout>();
 
   if (count <= 0) {
     clearInterval(timeout.current);
-    startGame();
+    goToGame();
   }
 
   useEffect(() => {
@@ -33,6 +33,7 @@ const Countdown = ({ startGame }: CountdownProps) => {
 
   return (
     <div css={countdownLayout}>
+      <div css={dimmed} />
       <span css={countdown}>{count}</span>
       <div css={peanutWrapper}>
         {Array.from({ length: countMapper[count] }, (_, i) => i + 1).map((idx) => (

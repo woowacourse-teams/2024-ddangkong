@@ -63,10 +63,17 @@ export const countdownLayout = css`
   justify-content: center;
   align-items: center;
   gap: 2.4rem;
-  height: 100vh;
+  inset: 0;
 
   color: ${Theme.color.peanut500};
-  inset: 0;
+`;
+
+export const dimmed = css`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+
+  background-color: rgb(0 0 0 / 50%);
 `;
 
 export const countdown = css`
