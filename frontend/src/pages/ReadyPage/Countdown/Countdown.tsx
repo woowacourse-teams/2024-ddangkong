@@ -20,6 +20,7 @@ const Countdown = ({ goToGame }: CountdownProps) => {
 
   useEffect(() => {
     if (count <= 0) {
+      clearInterval(timeout.current);
       goToGame();
     }
   }, [count]);
@@ -35,7 +36,7 @@ const Countdown = ({ goToGame }: CountdownProps) => {
   return (
     <div css={countdownLayout}>
       <div css={dimmed} />
-      <span css={countdown}>{count}</span>
+      {count > 0 && <span css={countdown}>{count}</span>}
       <div css={peanutWrapper}>
         {Array.from({ length: countMapper[count] }, (_, i) => i + 1).map((idx) => (
           <img key={idx} src={SpinDdangkong} css={peanut(idx)} alt={`${idx}번째 카운트다운 땅콩`} />
