@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { convertMsecToSecond } from '../Timer.util';
+import { calculateWidthDecreasePercent, convertMsecToSecond } from '../Timer.util';
 
 import { POLLING_DELAY } from '@/constants/config';
 
@@ -33,12 +33,13 @@ const useTimer = ({ timeLimit, isSelectedOption, vote }: UseTimerProps) => {
   }, [isVoteTimeout, isSelectedOption, vote]);
 
   useEffect(() => {
-    const DECREASE_RATE = INITIAL_WIDTH / convertMsecToSecond(timeLimit);
-    setLeftRoundTime(convertMsecToSecond(timeLimit));
+    const timeLimitPerSecond = convertMsecToSecond(timeLimit);
+    const DECREASE_PERCENT = calculateWidthDecreasePercent(INITIAL_WIDTH, timeLimitPerSecond);
+    setLeftRoundTime(timeLimitPerSecond);
 
     timeout.current = setInterval(() => {
       setLeftRoundTime((prev) => prev - 1);
-      setBarWidthPercent((prevWidth) => (prevWidth > 0 ? prevWidth - DECREASE_RATE : 0));
+      setBarWidthPercent((prevWidth) => (prevWidth > 0 ? prevWidth - DECREASE_PERCENT : 0));
     }, POLLING_DELAY);
 
     return () => {

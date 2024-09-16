@@ -14,3 +14,7 @@ export const convertMsecToSecond = (msec: number) => {
   const UNIT_MSEC = POLLING_DELAY;
   return msec / UNIT_MSEC;
 };
+
+export const calculateWidthDecreasePercent = (width: number, timeLimit: number) => {
+  return width / timeLimit;
+};
