@@ -36,7 +36,11 @@ const Countdown = ({ goToGame }: CountdownProps) => {
   return (
     <div css={countdownLayout}>
       <div css={dimmed} />
-      {count > 0 && <span css={countdown}>{count}</span>}
+      {count > 0 && (
+        <span css={countdown} aria-label={`게임 시작 ${count}초 전`}>
+          {count}
+        </span>
+      )}
       <div css={peanutWrapper}>
         {Array.from({ length: countMapper[count] }, (_, i) => i + 1).map((idx) => (
           <img key={idx} src={SpinDdangkong} css={peanut(idx)} alt={`${idx}번째 카운트다운 땅콩`} />
