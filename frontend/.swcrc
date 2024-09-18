@@ -4,14 +4,11 @@
       "syntax": "typescript",
       "tsx": true
     },
-    "target": "es2015",
+    "target": "esnext",
     "transform": {
       "react": {
         "runtime": "automatic"
       }
     }
-  },
-  "module": {
-    "type": "commonjs"
   }
 }

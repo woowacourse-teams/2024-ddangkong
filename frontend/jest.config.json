@@ -14,6 +14,5 @@
   },
   "setupFiles": ["./jest.polyfills.js"],
   "setupFilesAfterEnv": ["<rootDir>/jest.setup.ts"],
-  "clearMocks": true,
-  "extensionsToTreatAsEsm": [".ts", ".tsx"]
+  "clearMocks": true
 }
