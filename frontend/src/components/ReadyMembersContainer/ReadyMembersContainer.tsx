@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 
 import {
   readyMembersContainerLayout,
@@ -16,32 +17,29 @@ import InviteModal from '../common/InviteModal/InviteModal';
 import crownIcon from '@/assets/images/crownIcon.png';
 import plusIcon from '@/assets/images/plusIcon.png';
 import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
-import { RoomMembers } from '@/types/room';
+import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
+import useModal from '@/hooks/useModal';
+import { memberInfoState } from '@/recoil/atom';
 
-interface ReadyMembersContainerProps extends RoomMembers {}
+const ReadyMembersContainer = () => {
+  const { members, master } = useGetRoomInfo();
+  const { isOpen, show, close } = useModal();
+  const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
 
-const ReadyMembersContainer = ({ members }: ReadyMembersContainerProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleInviteButton = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
-
-  if (!members) {
-    return <div>데이터가 없습니다.</div>;
-  }
+  // 원래 방장이 아니다 + 방장의 memberId와 내 memberId가 같다 -> 방장으로 변경
+  useEffect(() => {
+    if (!memberInfo.isMaster && master.memberId === memberInfo.memberId) {
+      setMemberInfo({ ...memberInfo, isMaster: true });
+    }
+  }, [master.memberId]);
 
   return (
-    <div css={readyMembersContainerLayout}>
+    <section css={readyMembersContainerLayout}>
       <p css={totalNumber}>총 인원 {members.length}명</p>
       <section css={membersContainer}>
         <ul css={memberList}>
           <li>
-            <button css={inviteButton} onClick={handleInviteButton}>
+            <button css={inviteButton} onClick={show}>
               <div css={profileBox}>
                 <img src={plusIcon} alt="추가 아이콘" />
               </div>
@@ -61,8 +59,8 @@ const ReadyMembersContainer = ({ members }: ReadyMembersContainerProps) => {
           ))}
         </ul>
       </section>
-      <InviteModal isOpen={isModalOpen} onClose={handleModalClose} />
-    </div>
+      <InviteModal isOpen={isOpen} onClose={close} />
+    </section>
   );
 };
 

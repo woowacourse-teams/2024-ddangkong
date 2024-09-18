@@ -6,7 +6,7 @@ import RoomSettingModal from './RoomSettingModal';
 import Button from '../Button/Button';
 
 const meta = {
-  title: 'RoomSettingModal',
+  title: 'modal/RoomSettingModal',
   component: RoomSettingModal,
   argTypes: {
     isOpen: {

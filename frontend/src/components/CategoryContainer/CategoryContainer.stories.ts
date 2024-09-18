@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import CategoryContainer from './CategoryContainer';
 
 const meta = {
+  title: 'CategoryContainer',
   component: CategoryContainer,
 } satisfies Meta<typeof CategoryContainer>;
 

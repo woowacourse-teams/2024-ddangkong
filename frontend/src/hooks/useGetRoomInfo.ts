@@ -1,20 +1,26 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getRoomInfo } from '@/apis/room';
+import { POLLING_DELAY } from '@/constants/config';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { ROUTES } from '@/constants/routes';
-import { ONE_SECOND } from '@/constants/time';
 
 export const useGetRoomInfo = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [QUERY_KEYS.roomMembers, Number(roomId)],
-    queryFn: ({ queryKey: [, roomId] }) => getRoomInfo(Number(roomId)),
-    refetchInterval: ONE_SECOND,
+    queryFn: () => getRoomInfo(Number(roomId)),
+    refetchInterval: (query) => {
+      if (query.state.error && query.state.fetchFailureCount >= 3) {
+        return false;
+      }
+      return POLLING_DELAY;
+    },
+
     gcTime: 0,
   });
 
@@ -24,5 +30,9 @@ export const useGetRoomInfo = () => {
     }
   }, [data?.isGameStart, roomId, navigate]);
 
-  return { members: data?.members, roomSetting: data?.roomSetting, isLoading, isError };
+  return {
+    members: data?.members,
+    roomSetting: data?.roomSetting,
+    master: data?.master,
+  };
 };

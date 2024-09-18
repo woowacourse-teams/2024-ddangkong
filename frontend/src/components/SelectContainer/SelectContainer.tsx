@@ -11,7 +11,7 @@ import useModal from '@/hooks/useModal';
 
 const SelectContainer = () => {
   const { roomId } = useParams();
-  const { balanceContent, isLoading, isFetching } = useBalanceContentQuery(Number(roomId));
+  const { balanceContent, isFetching } = useBalanceContentQuery(Number(roomId));
   const { selectedOption, handleClickOption, completeSelection } = useSelectOption();
   const { isOpen, show, close } = useModal();
 
@@ -19,10 +19,6 @@ const SelectContainer = () => {
     contentId: balanceContent?.contentId,
     isFetching,
   });
-
-  if (isLoading) return <div>Loading...</div>;
-
-  if (!balanceContent) return <div>데이터가 없습니다.</div>;
 
   return (
     <div css={selectContainerLayout}>

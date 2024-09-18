@@ -5,26 +5,42 @@ import type { RenderOptions } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
+import type { MutableSnapshot } from 'recoil';
 
+import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
+import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
+import Spinner from '@/components/common/Spinner/Spinner';
+import ToastProvider from '@/providers/ToastProvider/ToastProvider';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
+const wrapper = ({
+  children,
+  initializeState,
+  pendingFallback = <Spinner />,
+}: PropsWithChildren<{
+  initializeState?: (mutableSnapshot: MutableSnapshot) => void;
+  pendingFallback?: React.ReactNode;
+}>) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
     },
-  },
-});
+  });
 
-const wrapper = ({ children }: PropsWithChildren) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <RecoilRoot>
+      <RecoilRoot initializeState={initializeState}>
         <ThemeProvider theme={Theme}>
           <MemoryRouter initialEntries={['/']}>
-            <Global styles={GlobalStyle} />
-            {children}
+            <RootErrorBoundary>
+              <AsyncErrorBoundary pendingFallback={pendingFallback}>
+                <Global styles={GlobalStyle} />
+                <ToastProvider>{children}</ToastProvider>
+              </AsyncErrorBoundary>
+            </RootErrorBoundary>
           </MemoryRouter>
         </ThemeProvider>
       </RecoilRoot>
@@ -32,7 +48,18 @@ const wrapper = ({ children }: PropsWithChildren) => {
   );
 };
 
-const customRender = (ui: React.ReactNode, options?: RenderOptions) =>
-  render(ui, { wrapper, ...options });
+interface CustomRenderOptions extends RenderOptions {
+  initializeState?: (mutableSnapshot: MutableSnapshot) => void;
+  pendingFallback?: React.ReactNode;
+}
+
+const customRender = (ui: React.ReactNode, options: CustomRenderOptions = {}) => {
+  const { initializeState, pendingFallback, ...restOptions } = options;
+
+  return render(ui, {
+    wrapper: ({ children }) => wrapper({ children, initializeState, pendingFallback }),
+    ...restOptions,
+  });
+};
 
 export { wrapper, customRender };
