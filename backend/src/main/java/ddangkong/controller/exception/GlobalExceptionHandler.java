@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.warn(e.getMessage());
 
-        return new ErrorResponse(ClientErrorCode.NOT_SUPPORTED_REQUEST);
+        return new ErrorResponse(ClientErrorCode.METHOD_NOT_SUPPORTED);
     }
 
     @ExceptionHandler
@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         log.warn(e.getMessage());
 
-        return new ErrorResponse(ClientErrorCode.NOT_SUPPORTED_REQUEST);
+        return new ErrorResponse(ClientErrorCode.MEDIA_TYPE_NOT_SUPPORTED);
     }
 
     @ExceptionHandler
