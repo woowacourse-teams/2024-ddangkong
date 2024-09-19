@@ -13,6 +13,7 @@ export const categoryContainerLayout = css`
   border-radius: ${getBorderRadius('medium')};
 
   background-color: ${Theme.color.peanut400};
+  cursor: pointer;
 `;
 
 export const title = css`
