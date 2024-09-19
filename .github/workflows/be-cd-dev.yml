@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     timeout-minutes: 2
-    runs-on: [ self-hosted, linux, ARM64, dev ] # Self hosted runner 사용
+    runs-on: ubuntu-latest
 
     defaults:
       run:
