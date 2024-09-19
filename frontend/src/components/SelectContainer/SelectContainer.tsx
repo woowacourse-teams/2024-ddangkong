@@ -20,6 +20,7 @@ const SelectContainer = () => {
     <div css={selectContainerLayout}>
       <Timer
         selectedId={selectedOption.id}
+        isVoted={selectedOption.isCompleted}
         completeSelection={completeSelection}
         showModal={show}
       />
