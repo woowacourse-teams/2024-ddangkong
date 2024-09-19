@@ -18,6 +18,13 @@ jobs:
         working-directory: ./backend
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setting application-dev.yml
+        run: |
+          echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -48,27 +55,8 @@ jobs:
           name: app-artifact
           path: ~/app
 
-      - name: Setting Env with artifact file name
-        run: |
-          cd /home/ubuntu/app || { echo "Build directory not found"; exit 1; }
-          JAR_FILE=$(ls *.jar | head -n 1)
-          
-          if [ -z "$JAR_FILE" ]; then
-            echo "No JAR file found"
-            exit 1
-          fi
+      - name: Replace application to latest
+        run: sudo sh ~/scripts/replace-new-version.sh
 
-      - name: Kill previous application
-        run: |          
-          PID=$(lsof -t -i:8080)
-
-          if [ -n "$PID" ]; then
-            echo "Killing process $PID running on port 8080"
-            kill -9 $PID
-            echo "Process $PID has been killed"
-          else
-            echo "No process is running on port 8080"
-          fi
-
-      - name: Run latest application
-        run: nohup java -Dspring.profiles.active=dev -Duser.timezone=Asia/Seoul -Dserver.port=8080 -jar "$JAR_FILE" &
+      - name: Health check latest application
+        run: sudo sh ~/scripts/health-check.sh
