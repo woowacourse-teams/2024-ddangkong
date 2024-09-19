@@ -544,15 +544,12 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         @Transactional
         void 변경이_특정_시각_이전에_일어난_모든_방을_지운다() {
-            long start = System.currentTimeMillis();
             // given
             LocalDateTime standardModified = LocalDateTime.of(2024, 7, 18, 19, 52, 0);
             long countOfExpectedRestRoom = 5;
 
             // when
             roomFacade.migrateExpiredRooms(standardModified);
-            long end = System.currentTimeMillis();
-            System.out.println("time used: %d".formatted(end - start));
 
             // then
             long countOfRoom = roomRepository.count();
