@@ -15,7 +15,6 @@ import {
 import InviteModal from '../common/InviteModal/InviteModal';
 
 import crownIcon from '@/assets/images/crownIcon.png';
-import plusIcon from '@/assets/images/plusIcon.png';
 import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useModal from '@/hooks/useModal';
@@ -35,17 +34,14 @@ const ReadyMembersContainer = () => {
 
   return (
     <section css={readyMembersContainerLayout}>
-      <p css={totalNumber}>총 인원 {members.length}명</p>
+      <div css={totalNumber}>
+        <div>총 인원 {members.length}명</div>
+        <button css={inviteButton} onClick={show}>
+          초대하기
+        </button>
+      </div>
       <section css={membersContainer}>
         <ul css={memberList}>
-          <li>
-            <button css={inviteButton} onClick={show}>
-              <div css={profileBox}>
-                <img src={plusIcon} alt="추가 아이콘" />
-              </div>
-              <div>초대하기</div>
-            </button>
-          </li>
           {members.map((member) => (
             <li css={memberItem} key={member.memberId}>
               <div css={profileBox}>
