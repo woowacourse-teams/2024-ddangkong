@@ -15,6 +15,6 @@ export const convertMsecToSecond = (msec: number) => {
   return msec / UNIT_MSEC;
 };
 
-export const calculateWidthDecreasePercent = (width: number, timeLimit: number) => {
-  return width / timeLimit;
+export const calculateUnitRatio = (total: number, divisor: number) => {
+  return total / divisor;
 };

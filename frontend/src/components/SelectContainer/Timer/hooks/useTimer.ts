@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { calculateWidthDecreasePercent, convertMsecToSecond } from '../Timer.util';
+import { calculateUnitRatio, convertMsecToSecond } from '../Timer.util';
 
 import { POLLING_DELAY } from '@/constants/config';
 
@@ -34,7 +34,7 @@ const useTimer = ({ timeLimit, isSelectedOption, vote }: UseTimerProps) => {
 
   useEffect(() => {
     const timeLimitPerSecond = convertMsecToSecond(timeLimit);
-    const DECREASE_PERCENT = calculateWidthDecreasePercent(INITIAL_WIDTH, timeLimitPerSecond);
+    const DECREASE_PERCENT = calculateUnitRatio(INITIAL_WIDTH, timeLimitPerSecond);
     setLeftRoundTime(timeLimitPerSecond);
 
     timeout.current = setInterval(() => {
