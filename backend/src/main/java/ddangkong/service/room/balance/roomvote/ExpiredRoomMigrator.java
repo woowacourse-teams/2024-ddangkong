@@ -37,18 +37,16 @@ public class ExpiredRoomMigrator {
         List<RoomBalanceVote> migratedRoomBalanceVotes = new ArrayList<>();
         List<RoomContent> migratedRoomContents = new ArrayList<>();
         List<Member> migratedRoomMembers = new ArrayList<>();
-        List<Room> migratedRooms = new ArrayList<>();
 
         for (Room expiredRoom : expiredRooms) {
             migrate(expiredRoom, migratedRoomBalanceVotes, migratedRoomContents, migratedRoomMembers);
-            migratedRooms.add(expiredRoom);
         }
         roomBalanceVoteRepository.deleteAllInBatch(migratedRoomBalanceVotes);
         roomContentRepository.deleteAllInBatch(migratedRoomContents);
         memberRepository.deleteAllInBatch(migratedRoomMembers);
-        roomRepository.deleteAllInBatch(migratedRooms);
+        roomRepository.deleteAllInBatch(expiredRooms);
 
-        List<Long> migratedRoomIds = migratedRooms.stream()
+        List<Long> migratedRoomIds = expiredRooms.stream()
                 .map(Room::getId)
                 .toList();
         log.info("방 밸런스 게임 투표를 전체 밸런스 게임 투표로 마이그레이션 완료했습니다. roomId: {}, vote 개수: {}",
