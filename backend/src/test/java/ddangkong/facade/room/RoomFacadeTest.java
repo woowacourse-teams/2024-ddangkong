@@ -29,8 +29,6 @@ import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -48,9 +46,6 @@ class RoomFacadeTest extends BaseServiceTest {
 
     @Autowired
     private RoomFacade roomFacade;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Nested
     class 방_생성 {
@@ -554,7 +549,6 @@ class RoomFacadeTest extends BaseServiceTest {
             // then
             long countOfRoom = roomRepository.count();
             assertThat(countOfRoom).isEqualTo(countOfExpectedRestRoom);
-            entityManager.flush();
         }
 
         @Test
