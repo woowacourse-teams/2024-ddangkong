@@ -68,9 +68,17 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(ClientErrorCode.NO_RESOURCE_FOUND);
     }
 
-    @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class, HttpMediaTypeNotSupportedException.class})
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorResponse handleNotSupportedRequestException(Exception e) {
+    public ErrorResponse handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        log.warn(e.getMessage());
+
+        return new ErrorResponse(ClientErrorCode.NOT_SUPPORTED_REQUEST);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    public ErrorResponse handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         log.warn(e.getMessage());
 
         return new ErrorResponse(ClientErrorCode.NOT_SUPPORTED_REQUEST);
