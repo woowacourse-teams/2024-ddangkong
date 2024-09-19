@@ -17,16 +17,18 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 interface TimerProps {
   selectedId: number;
+  isVoted: boolean;
   completeSelection: () => void;
   showModal: () => void;
 }
 
-const Timer = ({ selectedId, completeSelection, showModal }: TimerProps) => {
+const Timer = ({ selectedId, isVoted, completeSelection, showModal }: TimerProps) => {
   const { roomId } = useParams();
   const { balanceContent, isFetching } = useBalanceContentQuery(Number(roomId));
   const { barWidthPercent, leftRoundTime, isAlmostFinished } = useVoteTimer({
     roomId: Number(roomId),
     selectedId,
+    isVoted,
     completeSelection,
     showModal,
   });

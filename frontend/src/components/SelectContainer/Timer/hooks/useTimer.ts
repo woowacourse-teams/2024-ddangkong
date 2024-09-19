@@ -10,10 +10,11 @@ const ALMOST_FINISH_SECOND = 5;
 interface UseTimerProps {
   timeLimit: number;
   isSelectedOption: boolean;
+  isVoted: boolean;
   vote: () => void;
 }
 
-const useTimer = ({ timeLimit, isSelectedOption, vote }: UseTimerProps) => {
+const useTimer = ({ timeLimit, isSelectedOption, isVoted, vote }: UseTimerProps) => {
   const [leftRoundTime, setLeftRoundTime] = useState(convertMsecToSecond(timeLimit));
   const [barWidthPercent, setBarWidthPercent] = useState(INITIAL_WIDTH);
 
@@ -24,13 +25,13 @@ const useTimer = ({ timeLimit, isSelectedOption, vote }: UseTimerProps) => {
 
   useEffect(() => {
     if (isVoteTimeout) {
-      if (isSelectedOption) {
+      if (isSelectedOption && !isVoted) {
         vote();
       }
 
       clearInterval(timeout.current);
     }
-  }, [isVoteTimeout, isSelectedOption, vote]);
+  }, [isVoteTimeout, isSelectedOption, isVoted, vote]);
 
   useEffect(() => {
     const timeLimitPerSecond = convertMsecToSecond(timeLimit);
