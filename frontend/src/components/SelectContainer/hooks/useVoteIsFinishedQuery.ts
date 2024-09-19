@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
 import { fetchVoteIsFinished } from '@/apis/balanceContent';
-import { POLLING_DELAY } from '@/constants/config';
+import { POLLING_DELAY, POLLING_ERROR_FAILURE_COUNT } from '@/constants/config';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 
 interface UseVoteIsFinishedQueryProps {
@@ -23,7 +23,12 @@ const useVoteIsFinishedQuery = ({ contentId, enabled }: UseVoteIsFinishedQueryPr
       return await fetchVoteIsFinished({ roomId: Number(roomId), contentId });
     },
     enabled,
-    refetchInterval: POLLING_DELAY,
+    refetchInterval: (query) => {
+      if (query.state.error && query.state.fetchFailureCount >= POLLING_ERROR_FAILURE_COUNT) {
+        return false;
+      }
+      return POLLING_DELAY;
+    },
     refetchIntervalInBackground: true,
     gcTime: 0,
   });
