@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import useRoundTimer from './Timer.hook';
+import useVoteTimer from './hooks/useVoteTimer';
 import {
   timerIcon,
   timerIconShake,
@@ -10,12 +10,33 @@ import {
   timerWrapper,
 } from './Timer.styled';
 import { formatLeftRoundTime } from './Timer.util';
+import useVoteIsFinished from '../hooks/useVoteIsFinished';
 
 import DdangkongTimer from '@/assets/images/ddangkongTimer.png';
+import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
-const Timer = () => {
+interface TimerProps {
+  selectedId: number;
+  isVoted: boolean;
+  completeSelection: () => void;
+  showModal: () => void;
+}
+
+const Timer = ({ selectedId, isVoted, completeSelection, showModal }: TimerProps) => {
   const { roomId } = useParams();
-  const { barWidthPercent, leftRoundTime, isAlmostFinished } = useRoundTimer(Number(roomId));
+  const { balanceContent, isFetching } = useBalanceContentQuery(Number(roomId));
+  const { barWidthPercent, leftRoundTime, isAlmostFinished } = useVoteTimer({
+    roomId: Number(roomId),
+    selectedId,
+    isVoted,
+    completeSelection,
+    showModal,
+  });
+
+  useVoteIsFinished({
+    contentId: balanceContent.contentId,
+    isFetching,
+  });
 
   return (
     <section css={timerLayout}>

@@ -7,6 +7,7 @@ export const readyMembersContainerLayout = css`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  width: 100%;
 `;
 
 export const membersContainer = css`

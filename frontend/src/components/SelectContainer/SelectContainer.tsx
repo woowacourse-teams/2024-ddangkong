@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom';
 
-import { useRoundIsFinished, useSelectOption } from './SelectContainer.hook';
+import useSelectOption from './hooks/useSelectOption';
 import { selectContainerLayout, selectSection } from './SelectContainer.styled';
+import Timer from './Timer/Timer';
 import AlertModal from '../common/AlertModal/AlertModal';
 import SelectButton from '../common/SelectButton/SelectButton';
 
@@ -11,17 +12,18 @@ import useModal from '@/hooks/useModal';
 
 const SelectContainer = () => {
   const { roomId } = useParams();
-  const { balanceContent, isFetching } = useBalanceContentQuery(Number(roomId));
+  const { balanceContent } = useBalanceContentQuery(Number(roomId));
   const { selectedOption, handleClickOption, completeSelection } = useSelectOption();
   const { isOpen, show, close } = useModal();
 
-  useRoundIsFinished({
-    contentId: balanceContent?.contentId,
-    isFetching,
-  });
-
   return (
     <div css={selectContainerLayout}>
+      <Timer
+        selectedId={selectedOption.id}
+        isVoted={selectedOption.isCompleted}
+        completeSelection={completeSelection}
+        showModal={show}
+      />
       <section css={selectSection}>
         <SelectOption
           option={balanceContent.firstOption}
@@ -36,6 +38,7 @@ const SelectContainer = () => {
         />
       </section>
       <SelectButton
+        contentId={balanceContent.contentId}
         selectedId={selectedOption.id}
         completeSelection={completeSelection}
         showModal={show}

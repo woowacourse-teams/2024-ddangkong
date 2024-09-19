@@ -5,6 +5,6 @@ export const contentLayout = css`
   flex-direction: column;
   align-items: center;
   gap: 1.6rem;
-  height: inherit;
+  height: 85vh;
   padding: 0 2.4rem;
 `;
