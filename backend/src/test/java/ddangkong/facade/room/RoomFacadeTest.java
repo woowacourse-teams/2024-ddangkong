@@ -40,7 +40,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 class RoomFacadeTest extends BaseServiceTest {
 
@@ -537,7 +536,6 @@ class RoomFacadeTest extends BaseServiceTest {
     class 변경_시간이_특정_시각_이전_방_삭제 {
 
         @Test
-        @Transactional
         void 변경이_특정_시각_이전에_일어난_모든_방을_지운다() {
             // given
             LocalDateTime standardModified = LocalDateTime.of(2024, 7, 18, 19, 52, 0);
