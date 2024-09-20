@@ -12,6 +12,7 @@ import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBounda
 import Spinner from '@/components/common/Spinner/Spinner';
 import ModalProvider from '@/providers/ModalProvider/ModalProvider';
 import ToastProvider from '@/providers/ToastProvider/ToastProvider';
+import { memberInfoState } from '@/recoil/atom';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
 
@@ -65,4 +66,12 @@ const customRender = (ui: React.ReactNode, options: CustomRenderOptions = {}) =>
   });
 };
 
-export { wrapper, customRender };
+const customRenderWithIsMaster = (Component: React.ReactNode, isMaster: boolean) => {
+  const initializeState = (snap: MutableSnapshot) => {
+    snap.set(memberInfoState, { memberId: 1, nickname: 'Test User', isMaster });
+  };
+
+  customRender(Component, { initializeState });
+};
+
+export { wrapper, customRender, customRenderWithIsMaster };
