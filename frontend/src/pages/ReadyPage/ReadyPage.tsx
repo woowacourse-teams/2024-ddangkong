@@ -3,7 +3,7 @@ import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoun
 import ReadySkeleton from '@/components/common/Skeleton/ReadySkeleton/ReadySkeleton';
 import Content from '@/components/layout/Content/Content';
 import ReadyMembersContainer from '@/components/ReadyMembersContainer/ReadyMembersContainer';
-import StartButtonContainer from '@/components/StartButtonContainer/StartButtonContainer';
+import StartButton from '@/components/StartButton/StartButton';
 
 const ReadyPage = () => {
   return (
@@ -11,7 +11,7 @@ const ReadyPage = () => {
       <Content>
         <CategoryContainer />
         <ReadyMembersContainer />
-        <StartButtonContainer />
+        <StartButton />
       </Content>
     </AsyncErrorBoundary>
   );
