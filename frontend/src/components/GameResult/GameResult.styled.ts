@@ -11,8 +11,19 @@ export const gameResultLayout = css`
   width: 100%;
 `;
 
+export const gameResultHeader = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+`;
+
 export const gameResultTitle = css`
   ${Theme.typography.slogan};
+`;
+
+export const gameResultCaption = css`
+  ${Theme.typography.caption};
 `;
 
 export const rankListContainer = css`
