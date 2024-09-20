@@ -10,6 +10,7 @@ import type { MutableSnapshot } from 'recoil';
 import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
 import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
 import Spinner from '@/components/common/Spinner/Spinner';
+import ModalProvider from '@/providers/ModalProvider/ModalProvider';
 import ToastProvider from '@/providers/ToastProvider/ToastProvider';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
@@ -38,7 +39,9 @@ const wrapper = ({
             <RootErrorBoundary>
               <AsyncErrorBoundary pendingFallback={pendingFallback}>
                 <Global styles={GlobalStyle} />
-                <ToastProvider>{children}</ToastProvider>
+                <ModalProvider>
+                  <ToastProvider>{children}</ToastProvider>
+                </ModalProvider>
               </AsyncErrorBoundary>
             </RootErrorBoundary>
           </MemoryRouter>
