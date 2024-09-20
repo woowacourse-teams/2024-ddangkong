@@ -9,11 +9,13 @@ const CategoryContainer = () => {
   const { isOpen, show, close } = useModal();
 
   return (
-    <button css={categoryContainerLayout} onClick={show}>
-      <span css={subtitle}>카테고리</span>
-      <h1 css={title}>{roomSetting.category.label}</h1>
-      {/* {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />} */}
-    </button>
+    <>
+      <button css={categoryContainerLayout} onClick={show}>
+        <span css={subtitle}>카테고리</span>
+        <h1 css={title}>{roomSetting.category.label}</h1>
+      </button>{' '}
+      {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
+    </>
   );
 };
 
