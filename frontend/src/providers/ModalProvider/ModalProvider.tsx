@@ -29,6 +29,7 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
     isOpen: false,
     title: '',
     message: '',
+    onConfirm: () => {},
   });
 
   const show = (Component: React.FC<ModalState> | null, props?: ModalProps) => {
@@ -36,6 +37,7 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
       Component,
       title: props?.title,
       message: props?.message,
+      onConfirm: props?.onConfirm,
       isOpen: true,
     });
   };
