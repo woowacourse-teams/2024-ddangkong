@@ -35,11 +35,11 @@ enableMocking().then(() => {
       <RecoilRoot>
         <ThemeProvider theme={Theme}>
           <Global styles={GlobalStyle} />
-          <ModalProvider>
-            <ToastProvider>
+          <ToastProvider>
+            <ModalProvider>
               <App />
-            </ToastProvider>
-          </ModalProvider>
+            </ModalProvider>
+          </ToastProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </ThemeProvider>
       </RecoilRoot>

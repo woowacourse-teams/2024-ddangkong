@@ -40,9 +40,9 @@ const wrapper = ({
             <RootErrorBoundary>
               <AsyncErrorBoundary pendingFallback={pendingFallback}>
                 <Global styles={GlobalStyle} />
-                <ModalProvider>
-                  <ToastProvider>{children}</ToastProvider>
-                </ModalProvider>
+                <ToastProvider>
+                  <ModalProvider>{children}</ModalProvider>
+                </ToastProvider>
               </AsyncErrorBoundary>
             </RootErrorBoundary>
           </MemoryRouter>
