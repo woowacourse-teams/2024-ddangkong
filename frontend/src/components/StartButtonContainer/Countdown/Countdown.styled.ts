@@ -101,7 +101,7 @@ export const countdown = css`
     ${glowAnimation} 1s infinite;
 `;
 
-export const peanutWrapper = css`
+export const imageContainer = css`
   display: flex;
   justify-content: center;
   align-items: center;

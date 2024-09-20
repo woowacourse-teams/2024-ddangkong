@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { countdownLayout, countdown, peanut, peanutWrapper, dimmed } from './Countdown.styled';
+import { countdownLayout, countdown, peanut, imageContainer, dimmed } from './Countdown.styled';
 
 import SpinDdangkong from '@/assets/images/spinDdangkong.png';
 
-const countMapper: Record<number, number> = {
+const START_COUNTDOWN = 3;
+
+// countdown 에 따른 이미지 개수 mapper
+const imageCountMapper: Record<number, number> = {
   3: 1,
   2: 2,
   1: 3,
@@ -15,7 +18,7 @@ interface CountdownProps {
 }
 
 const Countdown = ({ goToGame }: CountdownProps) => {
-  const [count, setCount] = useState(3);
+  const [count, setCount] = useState(START_COUNTDOWN);
   const timeout = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -41,8 +44,8 @@ const Countdown = ({ goToGame }: CountdownProps) => {
           {count}
         </span>
       )}
-      <div css={peanutWrapper}>
-        {Array.from({ length: countMapper[count] }, (_, i) => i + 1).map((idx) => (
+      <div css={imageContainer}>
+        {Array.from({ length: imageCountMapper[count] }, (_, i) => i + 1).map((idx) => (
           <img key={idx} src={SpinDdangkong} css={peanut(idx)} alt={`${idx}번째 카운트다운 땅콩`} />
         ))}
       </div>
