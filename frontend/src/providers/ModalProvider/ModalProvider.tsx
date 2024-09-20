@@ -1,22 +1,23 @@
 import { createContext, PropsWithChildren, useMemo, useState } from 'react';
 
-interface ModalContent {
-  title: string;
-  message: string;
+interface ModalProps {
+  title?: string;
+  message?: string;
+  onConfirm?: () => void;
 }
 
-interface ModalState extends ModalContent {
+interface ModalState extends ModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface Modal extends ModalContent {
+interface Modal extends ModalProps {
   Component: React.FC<ModalState> | null;
   isOpen: boolean;
 }
 
 interface ModalDispatchContextProps {
-  show: (Component: React.FC<ModalState> | null, { title, message }: ModalContent) => void;
+  show: (Component: React.FC<ModalState> | null, props?: ModalProps) => void;
   close: () => void;
 }
 
@@ -30,11 +31,11 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
     message: '',
   });
 
-  const show = (Component: React.FC<ModalState> | null, { title, message }: ModalContent) => {
+  const show = (Component: React.FC<ModalState> | null, props?: ModalProps) => {
     setModal({
       Component,
-      title,
-      message,
+      title: props?.title,
+      message: props?.message,
       isOpen: true,
     });
   };
