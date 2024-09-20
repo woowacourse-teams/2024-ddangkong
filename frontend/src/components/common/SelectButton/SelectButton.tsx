@@ -6,15 +6,9 @@ interface SelectButtonProps {
   contentId: number;
   selectedId: number;
   completeSelection: () => void;
-  showModal: () => void;
 }
 
-const SelectButton = ({
-  contentId,
-  selectedId,
-  completeSelection,
-  showModal,
-}: SelectButtonProps) => {
+const SelectButton = ({ contentId, selectedId, completeSelection }: SelectButtonProps) => {
   const {
     data,
     isPending,
@@ -23,7 +17,6 @@ const SelectButton = ({
     selectedId,
     contentId,
     completeSelection,
-    showModal,
   });
 
   return (

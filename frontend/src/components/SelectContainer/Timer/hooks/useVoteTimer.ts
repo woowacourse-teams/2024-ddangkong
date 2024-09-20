@@ -10,16 +10,9 @@ interface UseVoteTimerProps {
   selectedId: number;
   isVoted: boolean;
   completeSelection: () => void;
-  showModal: () => void;
 }
 
-const useVoteTimer = ({
-  roomId,
-  selectedId,
-  isVoted,
-  completeSelection,
-  showModal,
-}: UseVoteTimerProps) => {
+const useVoteTimer = ({ roomId, selectedId, isVoted, completeSelection }: UseVoteTimerProps) => {
   const { balanceContent } = useBalanceContentQuery(roomId);
   const timeLimit = balanceContent.timeLimit || DEFAULT_TIME_LIMIT_MSEC;
 
@@ -27,7 +20,6 @@ const useVoteTimer = ({
     selectedId,
     contentId: balanceContent.contentId,
     completeSelection,
-    showModal,
   });
 
   const { leftRoundTime, barWidthPercent, isAlmostFinished } = useTimer({
