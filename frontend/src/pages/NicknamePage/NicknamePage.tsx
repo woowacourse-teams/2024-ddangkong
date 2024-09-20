@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -30,6 +30,7 @@ const NicknamePage = () => {
   const { isMaster } = useRecoilValue(memberInfoState);
   const { roomUuid } = useParams();
   const setRoomUuidState = useSetRecoilState(roomUuidState);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const { data, isLoading: isJoinableLoading } = useQuery({
     queryKey: ['isJoinable', roomUuid],
@@ -42,6 +43,15 @@ const NicknamePage = () => {
       setRoomUuidState(roomUuid);
     }
   }, [roomUuid, setRoomUuidState]);
+
+  useEffect(() => {
+    const initialHeight = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      const currentHeight = window.innerHeight;
+      setKeyboardHeight(200 + initialHeight - currentHeight);
+    });
+  }, []);
 
   if (!isJoinableLoading && roomUuid && !data?.isJoinable)
     return (
@@ -68,6 +78,7 @@ const NicknamePage = () => {
         disabled={isLoading}
         text={isLoading ? '접속 중...' : '확인'}
         bottom
+        style={{ marginBottom: `${keyboardHeight}px` }}
       />
       <AlertModal
         isOpen={isOpen}

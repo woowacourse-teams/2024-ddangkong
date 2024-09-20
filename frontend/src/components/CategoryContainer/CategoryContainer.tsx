@@ -13,7 +13,7 @@ const CategoryContainer = () => {
       <button css={categoryContainerLayout} onClick={show}>
         <span css={subtitle}>카테고리</span>
         <h1 css={title}>{roomSetting.category.label}</h1>
-      </button>{' '}
+      </button>
       {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
     </>
   );
