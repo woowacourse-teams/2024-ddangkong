@@ -1,18 +1,38 @@
-import { categoryContainerLayout, title, subtitle } from './CategoryContainer.styled';
+import { useRecoilValue } from 'recoil';
+
+import {
+  categoryContainerLayout,
+  title,
+  subtitle,
+  roomSettingLabel,
+  roomSettingBox,
+} from './CategoryContainer.styled';
 import RoomSettingModal from '../common/RoomSettingModal/RoomSettingModal';
 
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useModal from '@/hooks/useModal';
+import { memberInfoState } from '@/recoil/atom';
 
 const CategoryContainer = () => {
   const { roomSetting } = useGetRoomInfo();
   const { isOpen, show, close } = useModal();
+  const { isMaster } = useRecoilValue(memberInfoState);
 
   return (
     <>
-      <button css={categoryContainerLayout} onClick={show}>
-        <span css={subtitle}>카테고리</span>
-        <h1 css={title}>{roomSetting.category.label}</h1>
+      <button css={categoryContainerLayout} onClick={isMaster ? show : () => {}}>
+        <div css={roomSettingBox}>
+          <span css={roomSettingLabel}>라운드</span>
+          <h1 css={subtitle}>{roomSetting.totalRound}</h1>
+        </div>
+        <div css={roomSettingBox}>
+          <span css={roomSettingLabel}>카테고리</span>
+          <h1 css={title}>{roomSetting.category.label}</h1>
+        </div>
+        <div css={roomSettingBox}>
+          <span css={roomSettingLabel}>타이머</span>
+          <h1 css={subtitle}>{roomSetting.timeLimit}</h1>
+        </div>
       </button>
       {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
     </>

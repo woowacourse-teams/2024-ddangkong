@@ -5,8 +5,7 @@ import getBorderRadius from '@/styles/utils/getBorderRadius';
 
 export const categoryContainerLayout = css`
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   height: 10rem;
   padding: 1.6rem 0 2.4rem;
@@ -16,11 +15,22 @@ export const categoryContainerLayout = css`
   cursor: pointer;
 `;
 
+export const roomSettingBox = css`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
 export const title = css`
   font-weight: 800;
   font-size: 2.8rem;
 `;
 
 export const subtitle = css`
+  font-weight: 800;
+  font-size: 2rem;
+`;
+
+export const roomSettingLabel = css`
   font-weight: 600;
 `;
