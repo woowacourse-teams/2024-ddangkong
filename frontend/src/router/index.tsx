@@ -1,15 +1,21 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import { Layout } from './layout';
+import {
+  GamePage,
+  GameResultPage,
+  MainPage,
+  NicknamePage,
+  ReadyPage,
+  RoundResultPage,
+  VoteStatusPage,
+} from './lazyPages';
 
+import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
+import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
 import RouterErrorFallback from '@/components/common/ErrorFallback/RouterErrorFallback/RouterErrorFallback';
-import GamePage from '@/pages/GamePage/GamePage';
-import GameResultPage from '@/pages/GameResultPage/GameResultPage';
-import MainPage from '@/pages/MainPage/MainPage';
-import NicknamePage from '@/pages/NicknamePage/NicknamePage';
-import ReadyPage from '@/pages/ReadyPage/ReadyPage';
-import RoundResultPage from '@/pages/RoundResultPage/RoundResultPage';
-import VoteStatusPage from '@/pages/VoteStatusPage/VoteStatusPage';
+import GameSkeleton from '@/components/common/Skeleton/GameSkeleton/GameSkeleton';
+import ReadySkeleton from '@/components/common/Skeleton/ReadySkeleton/ReadySkeleton';
 
 export const router = createBrowserRouter([
   {
@@ -19,7 +25,13 @@ export const router = createBrowserRouter([
   },
   {
     path: ':roomId/game',
-    element: <GamePage />,
+    element: (
+      <RootErrorBoundary>
+        <AsyncErrorBoundary pendingFallback={<GameSkeleton />}>
+          <GamePage />
+        </AsyncErrorBoundary>
+      </RootErrorBoundary>
+    ),
   },
   {
     path: '/',
@@ -27,23 +39,43 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'nickname/:roomUuid?',
-        element: <NicknamePage />,
+        element: (
+          <AsyncErrorBoundary>
+            <NicknamePage />,
+          </AsyncErrorBoundary>
+        ),
       },
       {
         path: ':roomId/ready',
-        element: <ReadyPage />,
+        element: (
+          <AsyncErrorBoundary pendingFallback={<ReadySkeleton />}>
+            <ReadyPage />
+          </AsyncErrorBoundary>
+        ),
       },
       {
         path: ':roomId/round/result',
-        element: <RoundResultPage />,
+        element: (
+          <AsyncErrorBoundary>
+            <RoundResultPage />
+          </AsyncErrorBoundary>
+        ),
       },
       {
         path: ':roomId/round/result/status',
-        element: <VoteStatusPage />,
+        element: (
+          <AsyncErrorBoundary>
+            <VoteStatusPage />
+          </AsyncErrorBoundary>
+        ),
       },
       {
         path: ':roomId/game/result',
-        element: <GameResultPage />,
+        element: (
+          <AsyncErrorBoundary>
+            <GameResultPage />
+          </AsyncErrorBoundary>
+        ),
       },
     ],
     errorElement: <RouterErrorFallback />,
