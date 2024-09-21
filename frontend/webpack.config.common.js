@@ -44,8 +44,9 @@ module.exports = {
   },
   plugins: [
     new HTMLWebpackPlugin({
-      template: './index.html', // 읽을 파일명
-      filename: './index.html', // output으로 출력할 파일명
+      template: path.join(__dirname, './public/index.html'),
+      hash: true,
+      favicon: path.join(__dirname, './public/favicon.ico'),
     }),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(process.env),
