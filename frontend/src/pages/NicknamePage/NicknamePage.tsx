@@ -49,7 +49,11 @@ const NicknamePage = () => {
 
     window.addEventListener('resize', () => {
       const currentHeight = window.innerHeight;
-      setKeyboardHeight(200 + initialHeight - currentHeight);
+      if (currentHeight < initialHeight) {
+        setKeyboardHeight(30);
+      } else {
+        setKeyboardHeight(0);
+      }
     });
   }, []);
 
@@ -78,7 +82,7 @@ const NicknamePage = () => {
         disabled={isLoading}
         text={isLoading ? '접속 중...' : '확인'}
         bottom
-        style={{ marginBottom: `${keyboardHeight}px` }}
+        style={{ marginBottom: `${keyboardHeight}rem` }}
       />
       <AlertModal
         isOpen={isOpen}
