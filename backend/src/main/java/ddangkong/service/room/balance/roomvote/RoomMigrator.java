@@ -72,9 +72,10 @@ public class RoomMigrator {
     }
 
     @Transactional
-    public void migrateRoomVoteToTotalVote(Member member) {
+    public void migrateMemberVotes(Member member) {
         List<RoomBalanceVote> deletedRoomVotes = deleteMemberVotes(member);
         saveTotalVotesByRoomVotes(deletedRoomVotes);
+
         log.info("멤버의 밸런스 게임 투표를 전체 밸런스 게임 투표로 마이그레이션 완료했습니다. memberId: {}, vote 개수: {}",
                 member.getId(), deletedRoomVotes.size());
     }

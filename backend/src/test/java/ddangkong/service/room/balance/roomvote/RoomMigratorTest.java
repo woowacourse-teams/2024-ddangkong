@@ -92,7 +92,7 @@ class RoomMigratorTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
 
             // when
-            roomMigrator.migrateRoomVoteToTotalVote(prin);
+            roomMigrator.migrateMemberVotes(prin);
 
             // then
             assertAll(

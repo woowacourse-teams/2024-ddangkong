@@ -60,7 +60,7 @@ public class RoomFacade {
         RoomMembers roomMembers = memberService.findRoomMembers(room);
         Member member = roomMembers.getMember(memberId);
 
-        roomMigrator.migrateRoomVoteToTotalVote(member);
+        roomMigrator.migrateMemberVotes(member);
         memberService.delete(member);
         if (roomMembers.isExistOnlyOneMember()) {
             roomContentService.deleteRoomContents(room);
