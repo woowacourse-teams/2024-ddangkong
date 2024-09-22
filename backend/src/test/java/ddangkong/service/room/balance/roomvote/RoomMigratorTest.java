@@ -1,7 +1,6 @@
 package ddangkong.service.room.balance.roomvote;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.balance.content.BalanceContent;
@@ -13,7 +12,6 @@ import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
-import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.support.fixture.MemberFixture;
 import java.util.List;
@@ -95,23 +93,13 @@ class RoomMigratorTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(pome, optionB));
 
             // when
-            roomMigrator.migrateFinishedRoom(finishedRoom);
+            roomMigrator.migrateRoom(finishedRoom);
 
             // then
             assertAll(
                     () -> assertThat(totalBalanceVoteRepository.countByBalanceOption(optionA)).isEqualTo(2),
                     () -> assertThat(totalBalanceVoteRepository.countByBalanceOption(optionB)).isEqualTo(2)
             );
-        }
-
-        @Test
-        void 방이_종료되지_않았다면_마이그레이션에_실패한다() {
-            // given
-            Room room = roomRepository.save(Room.createNewRoom());
-
-            //when & then
-            assertThatThrownBy(() -> roomMigrator.migrateFinishedRoom(room))
-                    .isExactlyInstanceOf(NotFinishedRoomException.class);
         }
     }
 

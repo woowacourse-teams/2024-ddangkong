@@ -10,7 +10,6 @@ import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.MemberRepository;
-import ddangkong.exception.room.NotFinishedRoomException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -87,15 +86,11 @@ public class RoomMigrator {
     }
 
     @Transactional
-    public List<RoomBalanceVote> migrateFinishedRoom(Room finishedRoom) {
-        if (!finishedRoom.isGameFinish()) {
-            throw new NotFinishedRoomException();
-        }
-
-        List<RoomBalanceVote> targetRoomVotes = roomBalanceVoteRepository.findByMemberRoom(finishedRoom);
+    public List<RoomBalanceVote> migrateRoom(Room room) {
+        List<RoomBalanceVote> targetRoomVotes = roomBalanceVoteRepository.findByMemberRoom(room);
         saveTotalVotesByRoomVotes(targetRoomVotes);
         roomBalanceVoteRepository.deleteAllInBatch(targetRoomVotes);
-        log.info("종료된 방 밸런스 게임 투표를 전체 밸런스 게임 투표로 마이그레이션 완료했습니다. roomId: {}", finishedRoom);
+        log.info("방 밸런스 게임 투표를 전체 밸런스 게임 투표로 마이그레이션 완료했습니다. roomId: {}", room);
 
         return targetRoomVotes;
     }
