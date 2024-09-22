@@ -70,14 +70,6 @@ public class ExpiredRoomMigrator {
         return migratedRoomIds;
     }
 
-    private void saveTotalVotes(List<RoomBalanceVote> targetRoomBalanceVotes) {
-        List<TotalBalanceVote> totalBalanceVotes = targetRoomBalanceVotes.stream()
-                .map(RoomBalanceVote::getBalanceOption)
-                .map(TotalBalanceVote::new)
-                .toList();
-        totalBalanceVoteRepository.saveAll(totalBalanceVotes);
-    }
-
     @Transactional
     public void migrateRoomVoteToTotalVote(Member member) {
         List<RoomBalanceVote> deletedRoomVotes = deleteMemberVotes(member);
@@ -90,5 +82,23 @@ public class ExpiredRoomMigrator {
         List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteRepository.findByMember(member);
         roomBalanceVoteRepository.deleteAllInBatch(roomBalanceVotes);
         return roomBalanceVotes;
+    }
+
+    @Transactional
+    public List<RoomBalanceVote> migrateFinishedRoom(Room finishedRoom) {
+        List<RoomBalanceVote> targetRoomVotes = roomBalanceVoteRepository.findByMemberRoom(finishedRoom);
+        saveTotalVotes(targetRoomVotes);
+        roomBalanceVoteRepository.deleteAllInBatch(targetRoomVotes);
+        log.info("종료된 방 밸런스 게임 투표를 전체 밸런스 게임 투표로 마이그레이션 완료했습니다. roomId: {}", finishedRoom);
+
+        return targetRoomVotes;
+    }
+
+    private void saveTotalVotes(List<RoomBalanceVote> targetRoomBalanceVotes) {
+        List<TotalBalanceVote> totalBalanceVotes = targetRoomBalanceVotes.stream()
+                .map(RoomBalanceVote::getBalanceOption)
+                .map(TotalBalanceVote::new)
+                .toList();
+        totalBalanceVoteRepository.saveAll(totalBalanceVotes);
     }
 }

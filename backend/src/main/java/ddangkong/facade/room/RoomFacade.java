@@ -2,7 +2,6 @@ package ddangkong.facade.room;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
-import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.facade.room.dto.InitialRoomResponse;
@@ -112,8 +111,7 @@ public class RoomFacade {
     public void resetRoom(Long roomId) {
         Room room = roomService.reset(roomId);
         roomContentService.deleteRoomContents(room);
-        List<RoomBalanceVote> roomBalanceVotes = expiredRoomMigrator.migrateRoomVoteToTotalVote(room);
-        roomBalanceVoteService.deleteRoomVotes(roomBalanceVotes);
+        expiredRoomMigrator.migrateFinishedRoom(room);
     }
 
     @Transactional
