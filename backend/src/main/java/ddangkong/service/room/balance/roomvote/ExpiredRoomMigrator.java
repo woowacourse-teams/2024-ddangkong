@@ -34,32 +34,32 @@ public class ExpiredRoomMigrator {
 
     @Transactional
     public void migrateExpiredRooms(List<Room> expiredRooms) {
-        List<RoomBalanceVote> migratedRoomBalanceVotes = new ArrayList<>();
-        List<RoomContent> migratedRoomContents = new ArrayList<>();
-        List<Member> migratedRoomMembers = new ArrayList<>();
+        List<RoomBalanceVote> targetRoomBalanceVotes = new ArrayList<>();
+        List<RoomContent> targetRoomContents = new ArrayList<>();
+        List<Member> targetRoomMembers = new ArrayList<>();
 
         for (Room expiredRoom : expiredRooms) {
-            migrate(expiredRoom, migratedRoomBalanceVotes, migratedRoomContents, migratedRoomMembers);
+            migrate(expiredRoom, targetRoomBalanceVotes, targetRoomContents, targetRoomMembers);
         }
-        roomBalanceVoteRepository.deleteAllInBatch(migratedRoomBalanceVotes);
-        roomContentRepository.deleteAllInBatch(migratedRoomContents);
-        memberRepository.deleteAllInBatch(migratedRoomMembers);
+        roomBalanceVoteRepository.deleteAllInBatch(targetRoomBalanceVotes);
+        roomContentRepository.deleteAllInBatch(targetRoomContents);
+        memberRepository.deleteAllInBatch(targetRoomMembers);
         roomRepository.deleteAllInBatch(expiredRooms);
 
         List<Long> migratedRoomIds = expiredRooms.stream()
                 .map(Room::getId)
                 .toList();
         log.info("방 밸런스 게임 투표를 전체 밸런스 게임 투표로 마이그레이션 완료했습니다. roomId: {}, vote 개수: {}",
-                migratedRoomIds, migratedRoomBalanceVotes.size());
+                migratedRoomIds, targetRoomBalanceVotes.size());
     }
 
     private void migrate(Room room,
-                         List<RoomBalanceVote> migratedRoomBalanceVotes,
-                         List<RoomContent> migratedRoomContents,
-                         List<Member> migratedRoomMembers) {
-        migratedRoomBalanceVotes.addAll(migrateRoomVoteToTotalVote(room));
-        migratedRoomContents.addAll(roomContentRepository.findAllByRoom(room));
-        migratedRoomMembers.addAll(memberRepository.findAllByRoom(room));
+                         List<RoomBalanceVote> targetRoomBalanceVotes,
+                         List<RoomContent> targetRoomContents,
+                         List<Member> targetRoomMembers) {
+        targetRoomBalanceVotes.addAll(migrateRoomVoteToTotalVote(room));
+        targetRoomContents.addAll(roomContentRepository.findAllByRoom(room));
+        targetRoomMembers.addAll(memberRepository.findAllByRoom(room));
     }
 
     @Transactional
@@ -68,14 +68,6 @@ public class ExpiredRoomMigrator {
         saveTotalVotes(migratedRoomBalanceVotes);
 
         return migratedRoomBalanceVotes;
-    }
-
-    @Transactional
-    public void migrateRoomVoteToTotalVote(Member member) {
-        List<RoomBalanceVote> deletedRoomVotes = deleteMemberVotes(member);
-        saveTotalVotes(deletedRoomVotes);
-        log.info("멤버의 밸런스 게임 투표를 전체 밸런스 게임 투표로 마이그레이션 완료했습니다. memberId: {}, vote 개수: {}",
-                member.getId(), deletedRoomVotes.size());
     }
 
     private void saveTotalVotes(List<RoomBalanceVote> deletedRoomVotes) {
@@ -87,8 +79,11 @@ public class ExpiredRoomMigrator {
     }
 
     @Transactional
-    public void deleteRoomVotes(List<RoomBalanceVote> roomBalanceVotes) {
-        roomBalanceVoteRepository.deleteAllInBatch(roomBalanceVotes);
+    public void migrateRoomVoteToTotalVote(Member member) {
+        List<RoomBalanceVote> deletedRoomVotes = deleteMemberVotes(member);
+        saveTotalVotes(deletedRoomVotes);
+        log.info("멤버의 밸런스 게임 투표를 전체 밸런스 게임 투표로 마이그레이션 완료했습니다. memberId: {}, vote 개수: {}",
+                member.getId(), deletedRoomVotes.size());
     }
 
     private List<RoomBalanceVote> deleteMemberVotes(Member member) {

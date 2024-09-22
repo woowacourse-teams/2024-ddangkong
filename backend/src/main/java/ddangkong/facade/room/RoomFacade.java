@@ -16,6 +16,7 @@ import ddangkong.service.balance.content.BalanceContentService;
 import ddangkong.service.room.RoomService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.balance.roomvote.ExpiredRoomMigrator;
+import ddangkong.service.room.balance.roomvote.RoomBalanceVoteService;
 import ddangkong.service.room.member.MemberService;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,6 +36,8 @@ public class RoomFacade {
     private final RoomContentService roomContentService;
 
     private final BalanceContentService balanceContentService;
+
+    private final RoomBalanceVoteService roomBalanceVoteService;
 
     private final ExpiredRoomMigrator expiredRoomMigrator;
 
@@ -110,7 +113,7 @@ public class RoomFacade {
         Room room = roomService.reset(roomId);
         roomContentService.deleteRoomContents(room);
         List<RoomBalanceVote> roomBalanceVotes = expiredRoomMigrator.migrateRoomVoteToTotalVote(room);
-        expiredRoomMigrator.deleteRoomVotes(roomBalanceVotes);
+        roomBalanceVoteService.deleteRoomVotes(roomBalanceVotes);
     }
 
     @Transactional
