@@ -53,7 +53,7 @@ class RoomMigratorTest extends BaseServiceTest {
     }
 
     @Nested
-    class 만료된_방_정보_마이그레이션 {
+    class 여러개의_방_정보_마이그레이션 {
 
         @Test
         void 입력받은_방에_대한_컨텐츠_멤버_방_정보를_삭제하고_방투표를_전체투표로_마이그레이션한다() {
@@ -64,7 +64,7 @@ class RoomMigratorTest extends BaseServiceTest {
             roomBalanceVoteRepository.save(new RoomBalanceVote(maru, optionA));
 
             // when
-            roomMigrator.migrateExpiredRooms(List.of(finishedRoom));
+            roomMigrator.migrateRooms(List.of(finishedRoom));
 
             // then
             Optional<Room> migratedRoom = roomRepository.findById(finishedRoom.getId());
@@ -82,7 +82,7 @@ class RoomMigratorTest extends BaseServiceTest {
     }
 
     @Nested
-    class 종료된_방_투표_마이그레이션 {
+    class 방_투표_마이그레이션 {
 
         @Test
         void 방_투표_정보를_전체_투표_정보로_마이그레이션한다() {

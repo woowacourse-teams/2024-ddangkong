@@ -121,7 +121,7 @@ public class RoomFacade {
     @Transactional
     public void migrateExpiredRooms(LocalDateTime modifiedAt) {
         List<Room> expiredRooms = roomService.findRoomsBefore(modifiedAt);
-        roomMigrator.migrateExpiredRooms(expiredRooms);
+        roomMigrator.migrateRooms(expiredRooms);
     }
 
     @Transactional(readOnly = true)
