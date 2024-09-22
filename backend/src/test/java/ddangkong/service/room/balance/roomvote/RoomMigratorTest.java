@@ -10,11 +10,14 @@ import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
+import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.support.fixture.MemberFixture;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -49,6 +52,35 @@ class RoomMigratorTest extends BaseServiceTest {
         keochan = memberRepository.save(MemberFixture.KEOCHAN.common(finishedRoom));
         maru = memberRepository.save(MemberFixture.MARU.common(finishedRoom));
         pome = memberRepository.save(MemberFixture.POME.common(finishedRoom));
+    }
+
+    @Nested
+    class 만료된_방_정보_마이그레이션 {
+
+        @Test
+        void 입력받은_방에_대한_컨텐츠_멤버_방_정보를_삭제하고_방투표를_전체투표로_마이그레이션한다() {
+            // given
+            BalanceContent balanceContent = balanceContentRepository.save(new BalanceContent(Category.IF, "컨텐츠"));
+            RoomContent roomContent = RoomContent.newRoomContent(finishedRoom, balanceContent, 1);
+            roomContentRepository.save(roomContent);
+            roomBalanceVoteRepository.save(new RoomBalanceVote(maru, optionA));
+
+            // when
+            roomMigrator.migrateExpiredRooms(List.of(finishedRoom));
+
+            // then
+            Optional<Room> migratedRoom = roomRepository.findById(finishedRoom.getId());
+            List<RoomContent> migratedRoomContents = roomContentRepository.findAllByRoom(finishedRoom);
+            List<Member> migratedMembers = memberRepository.findAllByRoom(finishedRoom);
+            List<RoomBalanceVote> migratedRoomVotes = roomBalanceVoteRepository.findByMember(maru);
+            long migratedTotalVotes = totalBalanceVoteRepository.countByBalanceOption(optionA);
+
+            assertThat(migratedRoom).isEmpty();
+            assertThat(migratedRoomContents).hasSize(0);
+            assertThat(migratedMembers).hasSize(0);
+            assertThat(migratedRoomVotes).hasSize(0);
+            assertThat(migratedTotalVotes).isEqualTo(1);
+        }
     }
 
     @Nested
