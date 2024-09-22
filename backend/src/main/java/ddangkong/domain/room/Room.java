@@ -89,6 +89,10 @@ public class Room extends BaseEntity {
         return status.isGameReady();
     }
 
+    public boolean isGameFinish() {
+        return status.isGameFinish();
+    }
+
     public boolean isRoundFinished(int round) {
         validateRound(round);
         return currentRound != round;

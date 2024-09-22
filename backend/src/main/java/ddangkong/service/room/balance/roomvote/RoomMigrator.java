@@ -10,6 +10,7 @@ import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.MemberRepository;
+import ddangkong.exception.room.NotFinishedRoomException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -86,6 +87,10 @@ public class RoomMigrator {
 
     @Transactional
     public List<RoomBalanceVote> migrateFinishedRoom(Room finishedRoom) {
+        if (!finishedRoom.isGameFinish()) {
+            throw new NotFinishedRoomException();
+        }
+
         List<RoomBalanceVote> targetRoomVotes = roomBalanceVoteRepository.findByMemberRoom(finishedRoom);
         saveTotalVotes(targetRoomVotes);
         roomBalanceVoteRepository.deleteAllInBatch(targetRoomVotes);
