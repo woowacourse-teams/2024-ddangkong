@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ExpiredRoomMigrator {
+public class RoomMigrator {
 
     private final TotalBalanceVoteRepository totalBalanceVoteRepository;
 

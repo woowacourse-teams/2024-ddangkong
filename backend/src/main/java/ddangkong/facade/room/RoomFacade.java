@@ -14,8 +14,8 @@ import ddangkong.facade.room.member.dto.MemberResponse;
 import ddangkong.service.balance.content.BalanceContentService;
 import ddangkong.service.room.RoomService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
-import ddangkong.service.room.balance.roomvote.ExpiredRoomMigrator;
 import ddangkong.service.room.balance.roomvote.RoomBalanceVoteService;
+import ddangkong.service.room.balance.roomvote.RoomMigrator;
 import ddangkong.service.room.member.MemberService;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,7 +38,7 @@ public class RoomFacade {
 
     private final RoomBalanceVoteService roomBalanceVoteService;
 
-    private final ExpiredRoomMigrator expiredRoomMigrator;
+    private final RoomMigrator roomMigrator;
 
     @Transactional
     public RoomJoinResponse createRoom(String nickname) {
@@ -60,7 +60,7 @@ public class RoomFacade {
         RoomMembers roomMembers = memberService.findRoomMembers(room);
         Member member = roomMembers.getMember(memberId);
 
-        expiredRoomMigrator.migrateRoomVoteToTotalVote(member);
+        roomMigrator.migrateRoomVoteToTotalVote(member);
         memberService.delete(member);
         if (roomMembers.isExistOnlyOneMember()) {
             roomContentService.deleteRoomContents(room);
@@ -111,13 +111,13 @@ public class RoomFacade {
     public void resetRoom(Long roomId) {
         Room room = roomService.reset(roomId);
         roomContentService.deleteRoomContents(room);
-        expiredRoomMigrator.migrateFinishedRoom(room);
+        roomMigrator.migrateFinishedRoom(room);
     }
 
     @Transactional
     public void migrateExpiredRooms(LocalDateTime modifiedAt) {
         List<Room> expiredRooms = roomService.findRoomsBefore(modifiedAt);
-        expiredRoomMigrator.migrateExpiredRooms(expiredRooms);
+        roomMigrator.migrateExpiredRooms(expiredRooms);
     }
 
     @Transactional(readOnly = true)
