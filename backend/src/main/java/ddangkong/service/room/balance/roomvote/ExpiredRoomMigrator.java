@@ -37,10 +37,28 @@ public class ExpiredRoomMigrator {
         List<RoomBalanceVote> targetRoomBalanceVotes = new ArrayList<>();
         List<RoomContent> targetRoomContents = new ArrayList<>();
         List<Member> targetRoomMembers = new ArrayList<>();
+        initTargets(expiredRooms, targetRoomBalanceVotes, targetRoomContents, targetRoomMembers);
 
+        List<Long> migratedRoomIds = migrate(expiredRooms, targetRoomBalanceVotes, targetRoomContents,
+                targetRoomMembers);
+        log.info("방 밸런스 게임 투표를 전체 밸런스 게임 투표로 마이그레이션 완료했습니다. roomId: {}, vote 개수: {}",
+                migratedRoomIds, targetRoomBalanceVotes.size());
+    }
+
+    private void initTargets(List<Room> expiredRooms, List<RoomBalanceVote> targetRoomBalanceVotes,
+                             List<RoomContent> targetRoomContents, List<Member> targetRoomMembers) {
         for (Room expiredRoom : expiredRooms) {
-            migrate(expiredRoom, targetRoomBalanceVotes, targetRoomContents, targetRoomMembers);
+            targetRoomBalanceVotes.addAll(roomBalanceVoteRepository.findByMemberRoom(expiredRoom));
+            targetRoomContents.addAll(roomContentRepository.findAllByRoom(expiredRoom));
+            targetRoomMembers.addAll(memberRepository.findAllByRoom(expiredRoom));
         }
+    }
+
+    private List<Long> migrate(List<Room> expiredRooms,
+                               List<RoomBalanceVote> targetRoomBalanceVotes,
+                               List<RoomContent> targetRoomContents,
+                               List<Member> targetRoomMembers) {
+        saveTotalVotes(targetRoomBalanceVotes);
         roomBalanceVoteRepository.deleteAllInBatch(targetRoomBalanceVotes);
         roomContentRepository.deleteAllInBatch(targetRoomContents);
         memberRepository.deleteAllInBatch(targetRoomMembers);
@@ -49,29 +67,11 @@ public class ExpiredRoomMigrator {
         List<Long> migratedRoomIds = expiredRooms.stream()
                 .map(Room::getId)
                 .toList();
-        log.info("방 밸런스 게임 투표를 전체 밸런스 게임 투표로 마이그레이션 완료했습니다. roomId: {}, vote 개수: {}",
-                migratedRoomIds, targetRoomBalanceVotes.size());
+        return migratedRoomIds;
     }
 
-    private void migrate(Room room,
-                         List<RoomBalanceVote> targetRoomBalanceVotes,
-                         List<RoomContent> targetRoomContents,
-                         List<Member> targetRoomMembers) {
-        targetRoomBalanceVotes.addAll(migrateRoomVoteToTotalVote(room));
-        targetRoomContents.addAll(roomContentRepository.findAllByRoom(room));
-        targetRoomMembers.addAll(memberRepository.findAllByRoom(room));
-    }
-
-    @Transactional
-    public List<RoomBalanceVote> migrateRoomVoteToTotalVote(Room room) {
-        List<RoomBalanceVote> migratedRoomBalanceVotes = roomBalanceVoteRepository.findByMemberRoom(room);
-        saveTotalVotes(migratedRoomBalanceVotes);
-
-        return migratedRoomBalanceVotes;
-    }
-
-    private void saveTotalVotes(List<RoomBalanceVote> deletedRoomVotes) {
-        List<TotalBalanceVote> totalBalanceVotes = deletedRoomVotes.stream()
+    private void saveTotalVotes(List<RoomBalanceVote> targetRoomBalanceVotes) {
+        List<TotalBalanceVote> totalBalanceVotes = targetRoomBalanceVotes.stream()
                 .map(RoomBalanceVote::getBalanceOption)
                 .map(TotalBalanceVote::new)
                 .toList();
