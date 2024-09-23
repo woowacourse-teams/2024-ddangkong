@@ -1,0 +1,44 @@
+name: BE CD for Prod
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches: [ "main" ]
+    paths:
+      - backend/**
+
+jobs:
+  deploy:
+    timeout-minutes: 3
+    runs-on: [ self-hosted, linux, ARM64, prod-a ]
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setting prod-secret.yml
+        run: |
+          echo "${{ secrets.PROD_SECRET_YML }}" > ./src/main/resources/prod-secret.yml
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew bootJar
+
+      - name: Stop existing Java Application
+        run: ps -ef | grep 'java -jar' | awk '{print $2}' | xargs sudo kill -15 || true
+
+      - name: Start Java Application
+        run: sudo nohup java -jar -Dspring.profiles.active=prod ./build/libs/ddangkong-0.0.1-SNAPSHOT.jar &
