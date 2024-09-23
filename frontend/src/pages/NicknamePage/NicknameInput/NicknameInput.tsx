@@ -9,9 +9,16 @@ import { NICKNAME_MAX_LENGTH } from '@/constants/config';
 interface NicknameInputProps {
   nicknameInputRef: RefObject<HTMLInputElement>;
   handleMakeOrEnterRoom: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
-const NicknameInput = ({ nicknameInputRef, handleMakeOrEnterRoom }: NicknameInputProps) => {
+const NicknameInput = ({
+  nicknameInputRef,
+  handleMakeOrEnterRoom,
+  onFocus,
+  onBlur,
+}: NicknameInputProps) => {
   const { nickname, handleChangeInput, handleKeyDown } = useNicknameInput({
     handleMakeOrEnterRoom,
   });
@@ -27,6 +34,8 @@ const NicknameInput = ({ nicknameInputRef, handleMakeOrEnterRoom }: NicknameInpu
         value={nickname}
         onChange={handleChangeInput}
         onKeyDown={handleKeyDown}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
       <span css={nicknameLengthText}>
         {nickname.length}/{NICKNAME_MAX_LENGTH}

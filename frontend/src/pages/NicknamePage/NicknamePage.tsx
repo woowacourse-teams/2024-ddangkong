@@ -30,7 +30,15 @@ const NicknamePage = () => {
   const { isMaster } = useRecoilValue(memberInfoState);
   const { roomUuid } = useParams();
   const setRoomUuidState = useSetRecoilState(roomUuidState);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [isInputFocus, setIsInputFocus] = useState(false);
+
+  const focusInput = () => {
+    setIsInputFocus(true);
+  };
+
+  const blurInput = () => {
+    setIsInputFocus(false);
+  };
 
   const { data, isLoading: isJoinableLoading } = useQuery({
     queryKey: ['isJoinable', roomUuid],
@@ -42,20 +50,11 @@ const NicknamePage = () => {
     if (roomUuid) {
       setRoomUuidState(roomUuid);
     }
-  }, [roomUuid, setRoomUuidState]);
 
-  useEffect(() => {
-    const initialHeight = window.innerHeight;
-
-    window.addEventListener('resize', () => {
-      const currentHeight = window.innerHeight;
-      if (currentHeight < initialHeight) {
-        setKeyboardHeight(30);
-      } else {
-        setKeyboardHeight(0);
-      }
-    });
-  }, []);
+    if (nicknameInputRef.current) {
+      nicknameInputRef.current.focus();
+    }
+  }, [roomUuid, setRoomUuidState, nicknameInputRef]);
 
   if (!isJoinableLoading && roomUuid && !data?.isJoinable)
     return (
@@ -75,15 +74,20 @@ const NicknamePage = () => {
         <NicknameInput
           nicknameInputRef={nicknameInputRef}
           handleMakeOrEnterRoom={handleMakeOrEnterRoom}
+          onBlur={blurInput}
+          onFocus={focusInput}
+        />
+        <Button
+          onClick={handleMakeOrEnterRoom}
+          disabled={isLoading}
+          text={isLoading ? '접속 중...' : '확인'}
+          bottom={!isInputFocus}
+          radius={isInputFocus ? 'small' : undefined}
+          size={isInputFocus ? 'small' : undefined}
+          style={{ width: '100%' }}
         />
       </div>
-      <Button
-        onClick={handleMakeOrEnterRoom}
-        disabled={isLoading}
-        text={isLoading ? '접속 중...' : '확인'}
-        bottom
-        style={{ marginBottom: `${keyboardHeight}rem` }}
-      />
+
       <AlertModal
         isOpen={isOpen}
         onClose={close}
