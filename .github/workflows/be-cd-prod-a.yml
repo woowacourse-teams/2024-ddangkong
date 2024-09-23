@@ -1,4 +1,4 @@
-name: BE CD for Prod
+name: BE CD for Prod-A
 
 on:
   workflow_dispatch:
