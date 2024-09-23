@@ -31,3 +31,9 @@ logging:
   discord:
     webhook-url: ${secret.discord.webhook-url}
   location: ${secret.application.log.location}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health"
