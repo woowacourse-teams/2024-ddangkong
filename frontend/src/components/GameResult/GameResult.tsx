@@ -1,13 +1,10 @@
 import { useMatchingResultQuery } from './GameResult.hook';
 import {
-  gameResultTitle,
   gameResultLayout,
   rankListContainer,
   noMatchingLayout,
   noMatchingImg,
   noMatchingText,
-  gameResultHeader,
-  gameResultCaption,
 } from './GameResult.styled';
 import AlertModal from '../common/AlertModal/AlertModal';
 import FinalButton from '../common/FinalButton/FinalButton';
@@ -24,10 +21,6 @@ const GameResult = () => {
   return (
     <>
       <div css={gameResultLayout}>
-        <header css={gameResultHeader}>
-          <h1 css={gameResultTitle}>매칭 결과</h1>
-          <h2 css={gameResultCaption}>매칭도를 통해 당신과 가장 잘 맞는 사람을 알아보세요😊</h2>
-        </header>
         {isLoading && <Spinner message="매칭 결과를 불러오는 중입니다..." />}
 
         {existMatching && (

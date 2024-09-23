@@ -1,7 +1,16 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
-import { buttonWrapper, gameTitle, headerLayout, roundText, iconImage } from './Header.styled';
+import {
+  buttonWrapper,
+  gameTitle,
+  headerLayout,
+  roundText,
+  iconImage,
+  matchingResultTitle,
+  matchingResultCaption,
+  MatchingResultHeaderContainer,
+} from './Header.styled';
 import { useBlockRefresh } from './hooks/useBlockRefresh';
 import { useExit } from './hooks/useExit';
 import useRoutePath from './hooks/useRoutePath';
@@ -20,19 +29,26 @@ interface HeaderProps {
 }
 
 const Header = () => {
-  const { isNicknamePage, isReadyPage, isRoundResultStatusPage } = useRoutePath();
+  const { isNicknamePage, isReadyPage, isRoundResultStatusPage, isMatchingResultPage } =
+    useRoutePath();
 
   useBlockRefresh();
 
   if (isNicknamePage) return <TitleHeader title="닉네임 설정" />;
   if (isReadyPage) return <RoomSettingHeader title="밸런스 게임" />;
   if (isRoundResultStatusPage) return <BackHeader title="투표 현황" />;
-
-  return <EmptyHeader />;
+  if (isMatchingResultPage) return <MatchingResultHeader title="매칭 결과" />;
 };
 
-// 1. 공간만 차지하는 빈 헤더 : 최종 게임 결과 화면
-export const EmptyHeader = () => <header css={headerLayout()}></header>;
+// 1. 가운데 제목과 설명이 있는 헤더 : 최종 게임 결과 화면
+export const MatchingResultHeader = ({ title }: HeaderProps) => (
+  <header css={headerLayout(true)}>
+    <div css={MatchingResultHeaderContainer}>
+      <h1 css={matchingResultTitle}>{title}</h1>
+      <h2 css={matchingResultCaption}>매칭도를 통해 당신과 가장 잘 맞는 사람을 알아보세요😊</h2>
+    </div>
+  </header>
+);
 
 // 2. 가운데 제목만 차지하는 헤더 : 닉네임 설정 화면
 export const TitleHeader = ({ title }: HeaderProps) => (
