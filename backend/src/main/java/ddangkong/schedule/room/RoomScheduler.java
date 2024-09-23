@@ -19,8 +19,8 @@ public class RoomScheduler {
     @Scheduled(cron = "0 0/20 * * * *")
     public void deleteDelayedRooms() {
         LocalDateTime modifiedStandard = LocalDateTime.now().minusHours(DELAYED_HOURS);
-        log.info("변경이 {} 이전에 일어난 방을 삭제 시작합니다", modifiedStandard);
-        roomFacade.deleteRoomBefore(modifiedStandard);
-        log.info("변경이 {} 이전에 일어난 방을 삭제 완료했습니다", modifiedStandard);
+        log.info("변경이 {} 이전에 일어난 방을 마이그레이션 후 삭제 시작합니다", modifiedStandard);
+        roomFacade.migrateExpiredRooms(modifiedStandard);
+        log.info("변경이 {} 이전에 일어난 방을 마이그레이션 후 삭제 완료하였습니다", modifiedStandard);
     }
 }
