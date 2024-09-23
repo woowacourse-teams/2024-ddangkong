@@ -53,6 +53,8 @@ public enum ClientErrorCode {
     METHOD_ARGUMENT_TYPE_MISMATCH("입력한 값의 타입이 잘못되었습니다."),
     NO_RESOURCE_FOUND("요청한 리소스를 찾을 수 없습니다."),
     METHOD_NOT_SUPPORTED("허용되지 않은 메서드입니다."),
+    MEDIA_TYPE_NOT_SUPPORTED("허용되지 않은 미디어 타입입니다."),
+    ALREADY_DISCONNECTED("이미 클라이언트에서 요청이 종료되었습니다."),
     INTERNAL_SERVER_ERROR("서버 오류가 발생했습니다. 관리자에게 문의하세요."),
     ;
 
