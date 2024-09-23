@@ -5,21 +5,11 @@ import { Theme } from '@/styles/Theme';
 export const gameResultLayout = css`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 4.8rem;
   width: 100%;
-`;
-
-export const gameResultHeader = css`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.2rem;
-`;
-
-export const gameResultTitle = css`
-  ${Theme.typography.slogan};
+  height: calc(100vh - 15vh - 7.2rem);
+  overflow-y: scroll;
 `;
 
 export const gameResultCaption = css`
