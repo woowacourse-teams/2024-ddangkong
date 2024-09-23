@@ -36,16 +36,16 @@ const wrapper = ({
     <QueryClientProvider client={queryClient}>
       <RecoilRoot initializeState={initializeState}>
         <ThemeProvider theme={Theme}>
-          <MemoryRouter initialEntries={['/']}>
-            <RootErrorBoundary>
-              <AsyncErrorBoundary pendingFallback={pendingFallback}>
-                <Global styles={GlobalStyle} />
-                <ToastProvider>
+          <Global styles={GlobalStyle} />
+          <ToastProvider>
+            <MemoryRouter initialEntries={['/']}>
+              <RootErrorBoundary>
+                <AsyncErrorBoundary pendingFallback={pendingFallback}>
                   <ModalProvider>{children}</ModalProvider>
-                </ToastProvider>
-              </AsyncErrorBoundary>
-            </RootErrorBoundary>
-          </MemoryRouter>
+                </AsyncErrorBoundary>
+              </RootErrorBoundary>
+            </MemoryRouter>
+          </ToastProvider>
         </ThemeProvider>
       </RecoilRoot>
     </QueryClientProvider>
