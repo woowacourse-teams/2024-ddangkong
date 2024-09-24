@@ -32,7 +32,6 @@ const shake = keyframes`
 export const timerLayout = css`
   display: flex;
   position: relative;
-  flex-basis: 5%;
   align-items: center;
   width: 100%;
   height: 3.2rem;

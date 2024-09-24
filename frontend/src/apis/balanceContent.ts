@@ -19,7 +19,7 @@ interface myGameStatusParams {
   currentRound: number;
 }
 
-interface RoundVoteIsFinished {
+interface VoteIsFinished {
   isFinished: boolean;
 }
 
@@ -113,12 +113,12 @@ export const fetchMatchingResult = async ({
 };
 
 // 현재 라운드가 끝났는지 여부 확인하기
-export const fetchRoundVoteIsFinished = async ({
+export const fetchVoteIsFinished = async ({
   contentId,
   roomId,
-}: ContentResultParams): Promise<RoundVoteIsFinished> => {
+}: ContentResultParams): Promise<VoteIsFinished> => {
   const res = await fetcher.get({
-    url: API_URL.roundVoteIsFinished(roomId, contentId),
+    url: API_URL.voteIsFinished(roomId, contentId),
   });
 
   const data = await res.json();

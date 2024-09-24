@@ -38,7 +38,9 @@ const preview: Preview = {
           <ThemeProvider theme={Theme}>
             <MemoryRouter initialEntries={['/']}>
               <Global styles={GlobalStyle} />
-              <Story />
+              <ToastProvider>
+                <Story />
+              </ToastProvider>
             </MemoryRouter>
           </ThemeProvider>
         </RecoilRoot>

@@ -6,7 +6,6 @@ const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   staticDirs: ['../public'],
   addons: [
-    '@storybook/addon-webpack5-compiler-swc',
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@chromatic-com/storybook',
@@ -23,19 +22,10 @@ const config: StorybookConfig = {
   docs: {
     autodocs: true,
   },
-  swc: () => ({
-    jsc: {
-      transform: {
-        react: {
-          runtime: 'automatic',
-        },
-      },
-    },
-  }),
   webpackFinal: async (config: Configuration) => {
     const { resolve, module } = config;
 
-    // storybook 에 emotion 관련 babel 설정 추가
+    // storybook에 emotion 관련 babel 설정 추가
     module?.rules?.push({
       test: /\.(ts|tsx)$/,
       exclude: /node_modules/,
@@ -59,4 +49,5 @@ const config: StorybookConfig = {
     return config;
   },
 };
+
 export default config;
