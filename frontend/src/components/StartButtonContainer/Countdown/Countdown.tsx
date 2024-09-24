@@ -45,9 +45,15 @@ const Countdown = ({ goToGame }: CountdownProps) => {
         </span>
       )}
       <div css={imageContainer}>
-        {Array.from({ length: imageCountMapper[count] }, (_, i) => i + 1).map((idx) => (
-          <img key={idx} src={SpinDdangkong} css={peanut(idx)} alt={`${idx}번째 카운트다운 땅콩`} />
-        ))}
+        {imageCountMapper[count] &&
+          Array.from({ length: imageCountMapper[count] }, (_, idx) => (
+            <img
+              key={idx + 1}
+              src={SpinDdangkong}
+              css={peanut(idx + 1)}
+              alt={`${idx + 1}번째 카운트다운 땅콩`}
+            />
+          ))}
       </div>
     </div>
   );
