@@ -7,7 +7,8 @@ import {
   noMatchingText,
   floatingButton,
 } from './GameResult.styled';
-import useScrollTracking from './hooks/useScrollTracking';
+import useScrollControl from './hooks/useScrollControl';
+import useScrollState from './hooks/useScrollState';
 import AlertModal from '../common/AlertModal/AlertModal';
 import FinalButton from '../common/FinalButton/FinalButton';
 import Spinner from '../common/Spinner/Spinner';
@@ -21,8 +22,8 @@ import useModal from '@/hooks/useModal';
 const GameResult = () => {
   const { isOpen, show, close } = useModal();
   const { matchedMembers, existMatching, isLoading } = useMatchingResultQuery();
-  const { resultContainerRef, isAtTop, isAtBottom, scrollToTop, scrollToBottom } =
-    useScrollTracking(matchedMembers);
+  const { resultContainerRef, isAtTop, isAtBottom } = useScrollState();
+  const { scrollToTop, scrollToBottom } = useScrollControl(resultContainerRef);
 
   return (
     <>
