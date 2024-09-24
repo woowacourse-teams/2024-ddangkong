@@ -21,6 +21,7 @@ import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
+import { useKeyboardUp } from '@/hooks/useKeyboardUp';
 import useModal from '@/hooks/useModal';
 import { memberInfoState, roomUuidState } from '@/recoil/atom';
 
@@ -30,15 +31,7 @@ const NicknamePage = () => {
   const { isMaster } = useRecoilValue(memberInfoState);
   const { roomUuid } = useParams();
   const setRoomUuidState = useSetRecoilState(roomUuidState);
-  const [isInputFocus, setIsInputFocus] = useState(false);
-
-  const focusInput = () => {
-    setIsInputFocus(true);
-  };
-
-  const blurInput = () => {
-    setIsInputFocus(false);
-  };
+  const { isKeyboardUp } = useKeyboardUp();
 
   const { data, isLoading: isJoinableLoading } = useQuery({
     queryKey: ['isJoinable', roomUuid],
@@ -74,16 +67,14 @@ const NicknamePage = () => {
         <NicknameInput
           nicknameInputRef={nicknameInputRef}
           handleMakeOrEnterRoom={handleMakeOrEnterRoom}
-          onBlur={blurInput}
-          onFocus={focusInput}
         />
         <Button
           onClick={handleMakeOrEnterRoom}
           disabled={isLoading}
           text={isLoading ? '접속 중...' : '확인'}
-          bottom={!isInputFocus}
-          radius={isInputFocus ? 'small' : undefined}
-          size={isInputFocus ? 'small' : undefined}
+          bottom={!isKeyboardUp}
+          radius={isKeyboardUp ? 'small' : undefined}
+          size={isKeyboardUp ? 'small' : undefined}
           style={{ width: '100%' }}
         />
       </div>
