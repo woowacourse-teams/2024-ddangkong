@@ -1,7 +1,5 @@
 import { css } from '@emotion/react';
 
-import { Theme } from '@/styles/Theme';
-
 export const gameResultLayout = css`
   display: flex;
   flex-direction: column;
@@ -10,10 +8,13 @@ export const gameResultLayout = css`
   width: 100%;
   height: calc(100vh - 15vh - 7.2rem);
   overflow-y: scroll;
-`;
 
-export const gameResultCaption = css`
-  ${Theme.typography.caption};
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 `;
 
 export const rankListContainer = css`
@@ -41,4 +42,28 @@ export const noMatchingText = css`
   line-height: 3rem;
   text-align: center;
   white-space: pre-line;
+`;
+
+export const floatingButton = (direction: 'up' | 'down') => css`
+  display: flex;
+  position: fixed;
+  ${direction === 'down' ? 'bottom: 10%' : 'top: 15%'};
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  width: 4rem;
+  height: 4rem;
+  border: none;
+  border-radius: 50%;
+
+  background-color: #f7d7b4db;
+  cursor: pointer;
+  box-shadow: 0 0.2rem 1rem rgb(0 0 0 / 20%);
+  opacity: 0.9;
+
+  font-size: 2.4rem;
+
+  img {
+    width: 1.4rem;
+  }
 `;
