@@ -20,7 +20,11 @@ const CategoryContainer = () => {
 
   return (
     <>
-      <button css={categoryContainerLayout} onClick={isMaster ? show : () => {}}>
+      <button
+        aria-label="카테고리 설정 버튼"
+        css={categoryContainerLayout}
+        onClick={isMaster ? show : () => {}}
+      >
         <div css={roomSettingBox}>
           <span css={roomSettingLabel}>라운드</span>
           <h1 css={subtitle}>{roomSetting.totalRound}</h1>
