@@ -40,7 +40,7 @@ const Countdown = ({ goToGame }: CountdownProps) => {
     <div css={countdownLayout}>
       <div css={dimmed} />
       {count > 0 && (
-        <span css={countdown} aria-label={`게임 시작 ${count}초 전`}>
+        <span css={countdown} aria-label={`게임 시작 ${count}초 전`} aria-live="polite">
           {count}
         </span>
       )}
