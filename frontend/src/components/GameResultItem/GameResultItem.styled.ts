@@ -39,6 +39,7 @@ export const rankPercent = css`
 `;
 
 export const nickname = css`
+  white-space: nowrap;
   min-width: 5.6rem;
 `;
 
