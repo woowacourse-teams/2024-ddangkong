@@ -9,9 +9,9 @@ spring:
       url: jdbc:mysql://${secret.datasource.master.host}:${secret.datasource.master.port}/${secret.datasource.database}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
     slave1:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: ${secret.datasource.slaves.slave1.username}
-      password: ${secret.datasource.slaves.slave1.password}
-      url: jdbc:mysql://${secret.datasource.slaves.slave1.host}:${secret.datasource.slaves.slave1.port}/${secret.datasource.database}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+      username: ${secret.datasource.slave1.username}
+      password: ${secret.datasource.slave1.password}
+      url: jdbc:mysql://${secret.datasource.slave1.host}:${secret.datasource.slave1.port}/${secret.datasource.database}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
 
   sql:
     init:
