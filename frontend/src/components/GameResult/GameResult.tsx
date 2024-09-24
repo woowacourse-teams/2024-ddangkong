@@ -1,5 +1,3 @@
-import { useState, useEffect, useRef } from 'react';
-
 import { useMatchingResultQuery } from './GameResult.hook';
 import {
   gameResultLayout,
@@ -9,6 +7,7 @@ import {
   noMatchingText,
   floatingButton,
 } from './GameResult.styled';
+import useScrollTracking from './hooks/useScrollTracking';
 import AlertModal from '../common/AlertModal/AlertModal';
 import FinalButton from '../common/FinalButton/FinalButton';
 import Spinner from '../common/Spinner/Spinner';
@@ -22,64 +21,8 @@ import useModal from '@/hooks/useModal';
 const GameResult = () => {
   const { isOpen, show, close } = useModal();
   const { matchedMembers, existMatching, isLoading } = useMatchingResultQuery();
-
-  const [isAtTop, setIsAtTop] = useState(true);
-  const [isAtBottom, setIsAtBottom] = useState(false);
-  const resultContainerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const container = resultContainerRef.current;
-    if (!container) return;
-
-    setTimeout(() => {
-      const { scrollHeight, clientHeight } = container;
-
-      if (scrollHeight > clientHeight) {
-        setIsAtBottom(false);
-      } else {
-        setIsAtBottom(true);
-      }
-    }, 100);
-  }, [matchedMembers]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const container = resultContainerRef.current;
-      if (!container) return;
-
-      const { scrollTop, scrollHeight, clientHeight } = container;
-      setIsAtTop(scrollTop === 0);
-
-      setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 1);
-    };
-
-    const container = resultContainerRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll);
-      handleScroll();
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
-
-  const scrollToTop = () => {
-    if (resultContainerRef.current) {
-      resultContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const scrollToBottom = () => {
-    if (resultContainerRef.current) {
-      resultContainerRef.current.scrollTo({
-        top: resultContainerRef.current.scrollHeight,
-        behavior: 'smooth',
-      });
-    }
-  };
+  const { resultContainerRef, isAtTop, isAtBottom, scrollToTop, scrollToBottom } =
+    useScrollTracking(matchedMembers);
 
   return (
     <>
