@@ -77,13 +77,14 @@ export const peanutAnimation = keyframes`
 export const countdownLayout = css`
   display: flex;
   position: fixed;
+  z-index: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2.4rem;
-  inset: 0;
 
   color: ${Theme.color.peanut500};
+  inset: 0;
 `;
 
 export const dimmed = css`
