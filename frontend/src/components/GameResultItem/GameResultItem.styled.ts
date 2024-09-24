@@ -17,6 +17,9 @@ export const rankInfoContainer = css`
 `;
 
 export const rankNumber = css`
+  display: flex;
+  justify-content: center;
+  width: 2.4rem;
   ${Theme.typography.headline1}
 `;
 
