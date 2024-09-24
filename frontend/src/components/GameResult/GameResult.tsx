@@ -51,12 +51,12 @@ const GameResult = () => {
           </div>
         )}
 
-        {!isAtTop && (
+        {existMatching && !isAtTop && (
           <button onClick={scrollToTop} css={floatingButton('up')}>
             <img src={ArrowUp} alt="" />
           </button>
         )}
-        {!isAtBottom && (
+        {existMatching && !isAtBottom && (
           <button onClick={scrollToBottom} css={floatingButton('down')}>
             <img src={ArrowDown} alt="" />
           </button>
