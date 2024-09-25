@@ -24,11 +24,6 @@ import AngryDdangkong from '@/assets/images/angryDdangkong.png';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useMyGameStatus from '@/hooks/useMyGameStatus';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
-import { Group, Total } from '@/types/roundVoteResult';
-
-const isGroup = (value: Group | Total): value is Group => {
-  return 'memberCount' in value.firstOption;
-};
 
 interface TabContentContainerProps {
   isGroupTabActive: boolean;
@@ -44,12 +39,7 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
 
   useMyGameStatus({ roomId: Number(roomId) });
 
-  const {
-    animatedFirstPercent,
-    animatedSecondPercent,
-    animatedTotalFirstPercent,
-    animatedTotalSecondPercent,
-  } = useTotalCountAnimation(groupRoundResult, totalResult);
+  const { animatedFirstPercent, animatedSecondPercent } = useTotalCountAnimation(groupRoundResult);
 
   if (!groupRoundResult) return;
 
@@ -71,19 +61,15 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
             </div>
             <div css={barWrapperStyle}>
               <span css={firstBar(groupRoundResult.firstOption.percent, isBigFirstOption)}>
-                {isGroup(groupRoundResult) ? animatedFirstPercent : animatedTotalFirstPercent}%
+                {animatedFirstPercent}%
               </span>
               <span css={secondBar(groupRoundResult.secondOption.percent, isBigFirstOption)}>
-                {isGroup(groupRoundResult) ? animatedSecondPercent : animatedTotalSecondPercent}%
+                {animatedSecondPercent}%
               </span>
             </div>
             <div css={resultTextStyle(isGroupTabActive)}>
-              {isGroup(groupRoundResult) && (
-                <span>{groupRoundResult.firstOption.memberCount}명</span>
-              )}
-              {isGroup(groupRoundResult) && (
-                <span>{groupRoundResult.secondOption.memberCount}명</span>
-              )}
+              <span>{groupRoundResult.firstOption.memberCount}명</span>
+              <span>{groupRoundResult.secondOption.memberCount}명</span>
             </div>
           </div>
           {totalResult && dominantVoteData && (
