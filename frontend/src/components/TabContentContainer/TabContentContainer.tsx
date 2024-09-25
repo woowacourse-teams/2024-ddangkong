@@ -26,10 +26,10 @@ import useMyGameStatus from '@/hooks/useMyGameStatus';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 
 interface TabContentContainerProps {
-  isGroupTabActive: boolean;
+  isVoteStatisticsTabActive: boolean;
 }
 
-const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => {
+const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerProps) => {
   const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
   const { groupRoundResult, totalResult } = useRoundVoteResultQuery({
@@ -52,7 +52,7 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
   return (
     <div css={contentWrapperStyle}>
       <TopicContainer />
-      {isVote && isGroupTabActive && (
+      {isVote && isVoteStatisticsTabActive && (
         <>
           <div css={roundVoteResultContainer}>
             <div css={categoryContainer}>
@@ -67,7 +67,7 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
                 {animatedSecondPercent}%
               </span>
             </div>
-            <div css={resultTextStyle(isGroupTabActive)}>
+            <div css={resultTextStyle(isVoteStatisticsTabActive)}>
               <span>{groupRoundResult.firstOption.memberCount}명</span>
               <span>{groupRoundResult.secondOption.memberCount}명</span>
             </div>
@@ -93,7 +93,7 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
           )}
         </>
       )}
-      {isVote && !isGroupTabActive && <OptionParticipantsContainer />}
+      {isVote && !isVoteStatisticsTabActive && <OptionParticipantsContainer />}
       {!isVote && (
         <div css={noVoteTextContainer}>
           <img src={AngryDdangkong} alt="화난 땅콩" css={angryImage} />
