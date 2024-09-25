@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ROUTES } from '@/constants/routes';
 
-const useCountdown = () => {
+interface UseCountdownProps {
+  isGameStart: boolean;
+}
+
+const useCountdown = ({ isGameStart }: UseCountdownProps) => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const [isCountdownStart, setIsCountdownStart] = useState(false);
@@ -16,7 +20,13 @@ const useCountdown = () => {
     navigate(ROUTES.game(Number(roomId)));
   };
 
-  return { isCountdownStart, startCountdown, goToGame };
+  useEffect(() => {
+    if (isGameStart) {
+      startCountdown();
+    }
+  }, [isGameStart]);
+
+  return { isCountdownStart, goToGame };
 };
 
 export default useCountdown;
