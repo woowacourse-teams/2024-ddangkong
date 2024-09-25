@@ -1,6 +1,6 @@
 import { tabButtonStyle } from './RoundResultTab.styled';
 
-type TabTitle = 'voteResult' | 'voteStatus';
+type TabTitle = 'voteStatistics' | 'voteStatus';
 
 interface RoundResultTabProps {
   tab: TabTitle;
@@ -9,7 +9,7 @@ interface RoundResultTabProps {
 }
 
 const TAB_TITLE = {
-  voteResult: '투표 결과',
+  voteStatistics: '투표 통계',
   voteStatus: '투표 현황',
 } as const;
 
