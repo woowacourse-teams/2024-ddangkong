@@ -6,7 +6,8 @@ export const nicknameItemLayout = css`
   gap: 0.6rem;
 `;
 
-export const nicknameText = css`
+export const nicknameText = (isUser: boolean) => css`
+  font-weight: ${isUser ? 'bold' : 400};
   font-size: 1.2rem;
 `;
 
