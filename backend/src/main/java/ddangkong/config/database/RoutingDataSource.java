@@ -21,8 +21,8 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
             log.info("Routing to Replica DB server");
             return routingReplicas.get();
         } else {
-            log.info("Routing to Master DB server");
-            return "master";
+            log.info("Routing to Source DB server");
+            return "source";
         }
     }
 }

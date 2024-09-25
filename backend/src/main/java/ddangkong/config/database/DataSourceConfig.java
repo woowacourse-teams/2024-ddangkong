@@ -17,30 +17,31 @@ import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 public class DataSourceConfig {
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.master")
-    public DataSource masterDataSource() {
+    @ConfigurationProperties(prefix = "spring.datasource.source")
+    public DataSource sourceDataSource() {
         return DataSourceBuilder.create()
                 .build();
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.slave1")
-    public DataSource slave1DataSource() {
+    @ConfigurationProperties(prefix = "spring.datasource.replica1")
+    public DataSource replica1DataSource() {
         return DataSourceBuilder.create()
                 .build();
     }
+
 
     @Bean
     public DataSource routingDataSource(
-            DataSource masterDataSource,
-            DataSource slave1DataSource
+            DataSource sourceDataSource,
+            DataSource replica1DataSource
     ) {
         Map<Object, Object> dataSources = new HashMap<>();
-        dataSources.put("master", masterDataSource);
-        dataSources.put("slave1", slave1DataSource);
+        dataSources.put("source", sourceDataSource);
+        dataSources.put("replica1", replica1DataSource);
 
-        RoutingDataSource routingDataSource = new RoutingDataSource(List.of("slave1"));
-        routingDataSource.setDefaultTargetDataSource(dataSources.get("master"));
+        RoutingDataSource routingDataSource = new RoutingDataSource(List.of("replica1"));
+        routingDataSource.setDefaultTargetDataSource(dataSources.get("source"));
         routingDataSource.setTargetDataSources(dataSources);
 
         return routingDataSource;
@@ -49,6 +50,6 @@ public class DataSourceConfig {
     @Primary
     @Bean
     public DataSource dataSource() {
-        return new LazyConnectionDataSourceProxy(routingDataSource(masterDataSource(), slave1DataSource()));
+        return new LazyConnectionDataSourceProxy(routingDataSource(sourceDataSource(), replica1DataSource()));
     }
 }
