@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import type { MutableSnapshot } from 'recoil';
 
@@ -20,6 +20,8 @@ describe('StartButtonContainer 테스트', () => {
     const button = await screen.findByRole('button', { name: '시작' });
     await user.click(button);
 
-    expect(screen.getByLabelText(COUNTDOWN_LABEL_TEXT)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByLabelText(COUNTDOWN_LABEL_TEXT)).toBeInTheDocument();
+    });
   });
 });
