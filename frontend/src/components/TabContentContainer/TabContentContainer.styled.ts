@@ -13,11 +13,6 @@ export const contentWrapperStyle = css`
   border-radius: 0.8rem;
 `;
 
-export const groupResultInfoText = css`
-  font-weight: bold;
-  font-size: 1.4rem;
-`;
-
 export const roundVoteResultContainer = css`
   display: flex;
   flex-direction: column;
@@ -103,18 +98,6 @@ export const resultTextStyle = (isActiveGroupTab: boolean) => css`
 
   font-weight: bold;
   font-size: 1.2rem;
-`;
-
-export const currentVoteButtonWrapper = (isGroupTabActive: boolean) => css`
-  display: flex;
-  visibility: ${isGroupTabActive ? 'visible' : 'hidden'};
-  justify-content: flex-end;
-  align-items: center;
-`;
-
-export const buttonStyle = css`
-  color: black;
-  font-weight: bold;
 `;
 
 export const totalResultInfoContainer = css`
