@@ -11,7 +11,7 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
     private final RoutingReplicas<String> routingReplicas;
 
     public RoutingDataSource(List<String> routingReplicas) {
-        this.routingReplicas = new RoutingReplicas(routingReplicas);
+        this.routingReplicas = new RoutingReplicas<>(routingReplicas);
     }
 
     @Override
