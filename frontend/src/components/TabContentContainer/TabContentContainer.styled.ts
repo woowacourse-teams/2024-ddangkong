@@ -5,8 +5,9 @@ import { Theme } from '@/styles/Theme';
 export const contentWrapperStyle = css`
   display: flex;
   flex-direction: column;
-  gap: 5.5rem;
+  gap: 15%;
   height: 50vh;
+  overflow-y: scroll;
   padding: 2.4rem;
   border: 0.3rem solid ${Theme.color.peanut400};
   border-radius: 0.8rem;

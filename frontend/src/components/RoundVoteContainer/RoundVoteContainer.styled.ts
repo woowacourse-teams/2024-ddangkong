@@ -5,12 +5,12 @@ export const tabLayout = css`
   flex-basis: 45%;
   flex-direction: column;
   width: 100%;
-  margin-top: 3rem;
+  margin-top: 15%;
   transition: all 1s;
 `;
 
 export const tabWrapper = css`
   display: flex;
-  width: 40%;
+  width: 50%;
   margin-left: 2.4rem;
 `;
