@@ -25,5 +25,6 @@ export const useGetRoomInfo = () => {
     members: data?.members,
     roomSetting: data?.roomSetting,
     master: data?.master,
+    isGameStart: data?.isGameStart,
   };
 };

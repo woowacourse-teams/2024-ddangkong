@@ -11,10 +11,9 @@ const isServerError = (status: number) => status >= 500 && status !== 555;
 
 interface UseGameStartProps {
   showModal: () => void;
-  startCountdown: () => void;
 }
 
-export const useGameStart = ({ showModal, startCountdown }: UseGameStartProps) => {
+export const useGameStart = ({ showModal }: UseGameStartProps) => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
   const { roomId } = useParams();
   const { show } = useToast();
@@ -36,7 +35,6 @@ export const useGameStart = ({ showModal, startCountdown }: UseGameStartProps) =
   const handleGameStart = () => {
     if (memberInfo.isMaster) {
       startGameMutation.mutate();
-      startCountdown();
     }
   };
 

@@ -4,11 +4,10 @@ import Button from '@/components/common/Button/Button';
 
 interface StartButtonProps {
   show: () => void;
-  startCountdown: () => void;
 }
 
-const StartButton = ({ show, startCountdown }: StartButtonProps) => {
-  const { memberInfo, handleGameStart } = useGameStart({ showModal: show, startCountdown });
+const StartButton = ({ show }: StartButtonProps) => {
+  const { memberInfo, handleGameStart } = useGameStart({ showModal: show });
 
   return (
     <Button
