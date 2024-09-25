@@ -58,7 +58,7 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
     <div css={contentWrapperStyle}>
       {isVote && isGroupTabActive && (
         <>
-          <div css={alertText(isGroupTabActive)}>다른 사람들은 이렇게 생각했어요 🥜</div>
+          <div css={alertText}>이 방에서 함께한 사람들은 이렇게 선택했어요 🎉</div>
           <div css={roundVoteResultContainer}>
             <div css={categoryContainer}>
               <span>{groupRoundResult.firstOption.name}</span>
@@ -82,7 +82,7 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
             </div>
           </div>
           <div css={currentVoteButtonWrapper(isGroupTabActive)}>
-            <span>📢이 문항에 답한 전체 땅콩 유저 중 ~%는 ~를 선택했어요 !</span>
+            <span>📢이 문항에 답한 전체 땅콩 유저 중 ~%는 ~를 선택했어요</span>
           </div>
         </>
       )}

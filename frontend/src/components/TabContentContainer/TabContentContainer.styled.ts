@@ -5,17 +5,15 @@ import { Theme } from '@/styles/Theme';
 export const contentWrapperStyle = css`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 3.2rem;
-  height: 100%;
+  gap: 5.5rem;
+  height: 50vh;
   padding: 2.4rem;
   border: 0.3rem solid ${Theme.color.peanut400};
   border-radius: 0.8rem;
 `;
 
-export const alertText = (isGroupTabActive: boolean) => css`
+export const alertText = () => css`
   display: flex;
-  visibility: ${isGroupTabActive ? 'hidden' : 'visible'};
   justify-content: center;
   align-items: center;
 

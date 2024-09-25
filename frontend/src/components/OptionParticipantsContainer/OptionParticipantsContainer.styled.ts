@@ -7,6 +7,7 @@ export const optionParticipantsContainerLayout = css`
   flex-direction: column;
   width: 100%;
   row-gap: 1.2rem;
+  overflow-y: scroll;
 `;
 
 export const horizontalDivider = css`

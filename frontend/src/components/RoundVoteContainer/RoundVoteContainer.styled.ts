@@ -5,7 +5,7 @@ export const tabLayout = css`
   flex-basis: 45%;
   flex-direction: column;
   width: 100%;
-
+  margin-top: 3rem;
   transition: all 1s;
 `;
 

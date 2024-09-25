@@ -27,7 +27,6 @@ const OptionParticipantsContainer = () => {
 
   return (
     <>
-      <TopicContainer />
       <section css={optionParticipantsContainerLayout}>
         <OptionParticipants
           optionName={groupRoundResult.firstOption.name}
