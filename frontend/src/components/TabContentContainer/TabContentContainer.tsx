@@ -8,7 +8,6 @@ import {
   contentWrapperStyle,
   emphasizeText,
   firstBar,
-  groupResultInfoText,
   noVoteText,
   noVoteTextContainer,
   resultTextStyle,
@@ -19,6 +18,7 @@ import {
 } from './TabContentContainer.styled';
 import OptionParticipantsContainer from '../OptionParticipantsContainer/OptionParticipantsContainer';
 import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hook';
+import TopicContainer from '../TopicContainer/TopicContainer';
 
 import AngryDdangkong from '@/assets/images/angryDdangkong.png';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
@@ -51,9 +51,9 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
 
   return (
     <div css={contentWrapperStyle}>
+      <TopicContainer />
       {isVote && isGroupTabActive && (
         <>
-          <div css={groupResultInfoText}>이 방에서 함께한 사람들은 이렇게 선택했어요 🎉</div>
           <div css={roundVoteResultContainer}>
             <div css={categoryContainer}>
               <span>{groupRoundResult.firstOption.name}</span>
@@ -76,12 +76,12 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
             <div css={totalResultInfoContainer}>
               {dominantVoteData.isEven ? (
                 <span css={totalResultInfoText}>
-                  📢이 문항에 답한 전체 땅콩 유저들 사이에서 선택이 팽팽하게 갈렸어요! 😲
+                  🥜 땅콩 유저들 사이에서 선택이 팽팽하게 갈렸어요! 😲
                 </span>
               ) : (
                 <>
                   <span css={totalResultInfoText}>
-                    📢이 문항에 답한 전체 땅콩 유저 중{' '}
+                    🥜 땅콩 유저 중{' '}
                     <span css={emphasizeText}>{dominantVoteData.dominantPercent}%</span>는
                   </span>
                   <span css={totalResultInfoText}>

@@ -7,7 +7,6 @@ import NextRoundButton from '@/components/common/NextRoundButton/NextRoundButton
 import useMoveNextRoundMutation from '@/components/common/NextRoundButton/NextRoundButton.hook';
 import Content from '@/components/layout/Content/Content';
 import RoundVoteContainer from '@/components/RoundVoteContainer/RoundVoteContainer';
-import TopicContainer from '@/components/TopicContainer/TopicContainer';
 import useModal from '@/hooks/useModal';
 
 const RoundResultPage = () => {
@@ -18,7 +17,6 @@ const RoundResultPage = () => {
 
   return (
     <Content>
-      <TopicContainer />
       <RoundVoteContainer />
       <NextRoundButton showModal={show} />
       <InfoModal
