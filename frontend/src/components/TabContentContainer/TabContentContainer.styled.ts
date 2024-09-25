@@ -12,15 +12,9 @@ export const contentWrapperStyle = css`
   border-radius: 0.8rem;
 `;
 
-export const alertText = () => css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-
-  ${Theme.typography.body2}
+export const groupResultInfoText = css`
   font-weight: bold;
+  font-size: 1.4rem;
 `;
 
 export const roundVoteResultContainer = css`
@@ -119,5 +113,20 @@ export const currentVoteButtonWrapper = (isGroupTabActive: boolean) => css`
 
 export const buttonStyle = css`
   color: black;
+  font-weight: bold;
+`;
+
+export const totalResultInfoContainer = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const totalResultInfoText = css`
+  font-size: 1.4rem;
+  line-height: 2rem;
+`;
+
+export const emphasizeText = css`
   font-weight: bold;
 `;

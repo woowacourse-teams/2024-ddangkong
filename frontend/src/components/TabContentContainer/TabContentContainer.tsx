@@ -1,18 +1,21 @@
 import { useParams } from 'react-router-dom';
 
+import getDominantVote from './getDominantVote';
 import {
-  alertText,
   angryImage,
   barWrapperStyle,
   categoryContainer,
   contentWrapperStyle,
-  currentVoteButtonWrapper,
+  emphasizeText,
   firstBar,
+  groupResultInfoText,
   noVoteText,
   noVoteTextContainer,
   resultTextStyle,
   roundVoteResultContainer,
   secondBar,
+  totalResultInfoContainer,
+  totalResultInfoText,
 } from './TabContentContainer.styled';
 import OptionParticipantsContainer from '../OptionParticipantsContainer/OptionParticipantsContainer';
 import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hook';
@@ -54,11 +57,13 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
   const isVote =
     groupRoundResult.firstOption.percent !== 0 || groupRoundResult.secondOption.percent !== 0;
 
+  const dominantVoteData = totalResult ? getDominantVote(totalResult) : null;
+
   return (
     <div css={contentWrapperStyle}>
       {isVote && isGroupTabActive && (
         <>
-          <div css={alertText}>이 방에서 함께한 사람들은 이렇게 선택했어요 🎉</div>
+          <div css={groupResultInfoText}>이 방에서 함께한 사람들은 이렇게 선택했어요 🎉</div>
           <div css={roundVoteResultContainer}>
             <div css={categoryContainer}>
               <span>{groupRoundResult.firstOption.name}</span>
@@ -81,9 +86,25 @@ const TabContentContainer = ({ isGroupTabActive }: TabContentContainerProps) => 
               )}
             </div>
           </div>
-          <div css={currentVoteButtonWrapper(isGroupTabActive)}>
-            <span>📢이 문항에 답한 전체 땅콩 유저 중 ~%는 ~를 선택했어요</span>
-          </div>
+          {totalResult && dominantVoteData && (
+            <div css={totalResultInfoContainer}>
+              {dominantVoteData.isEven ? (
+                <span css={totalResultInfoText}>
+                  📢이 문항에 답한 전체 땅콩 유저들 사이에서 선택이 팽팽하게 갈렸어요! 😲
+                </span>
+              ) : (
+                <>
+                  <span css={totalResultInfoText}>
+                    📢이 문항에 답한 전체 땅콩 유저 중{' '}
+                    <span css={emphasizeText}>{dominantVoteData.dominantPercent}%</span>는
+                  </span>
+                  <span css={totalResultInfoText}>
+                    <span css={emphasizeText}>{dominantVoteData.dominantName}</span>를 선택했어요 !
+                  </span>
+                </>
+              )}
+            </div>
+          )}
         </>
       )}
       {isVote && !isGroupTabActive && <OptionParticipantsContainer />}
