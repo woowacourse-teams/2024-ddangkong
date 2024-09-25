@@ -5,18 +5,18 @@ import RoundResultTab from '../RoundResultTab/RoundResultTab';
 import TabContentContainer from '../TabContentContainer/TabContentContainer';
 
 const RoundVoteContainer = () => {
-  const [activeTab, setActiveTab] = useState<'group' | 'total'>('group');
-  const isGroupTabActive = activeTab === 'group';
+  const [activeTab, setActiveTab] = useState<'voteResult' | 'voteStatus'>('voteResult');
+  const isGroupTabActive = activeTab === 'voteResult';
 
-  const handleClickTab = (clickedTab: 'group' | 'total') => {
+  const handleClickTab = (clickedTab: 'voteResult' | 'voteStatus') => {
     setActiveTab(clickedTab);
   };
 
   return (
     <div css={tabLayout}>
       <nav css={tabWrapper}>
-        <RoundResultTab tab="group" activeTab={activeTab} handleClickTab={handleClickTab} />
-        <RoundResultTab tab="total" activeTab={activeTab} handleClickTab={handleClickTab} />
+        <RoundResultTab tab="voteResult" activeTab={activeTab} handleClickTab={handleClickTab} />
+        <RoundResultTab tab="voteStatus" activeTab={activeTab} handleClickTab={handleClickTab} />
       </nav>
       <TabContentContainer isGroupTabActive={isGroupTabActive} />
     </div>
