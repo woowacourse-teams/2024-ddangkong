@@ -13,7 +13,6 @@ describe('RoundVoteContainer 컴포넌트 테스트', () => {
     const button = await screen.findByRole('button', { name: '투표 현황' });
     await user.click(button);
 
-    screen.debug();
     await waitFor(
       () => {
         // 첫 번째 선택지와 투표자 확인
