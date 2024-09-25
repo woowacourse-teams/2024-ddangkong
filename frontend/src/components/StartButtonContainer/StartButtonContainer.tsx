@@ -1,3 +1,5 @@
+import Countdown from './Countdown/Countdown';
+import useCountdown from './hooks/useCountdown';
 import StartButton from './StartButton/StartButton';
 import AlertModal from '../common/AlertModal/AlertModal';
 
@@ -5,10 +7,12 @@ import useModal from '@/hooks/useModal';
 
 const StartButtonContainer = () => {
   const { isOpen, show, close } = useModal();
+  const { isCountdownStart, startCountdown, goToGame } = useCountdown();
 
   return (
     <>
-      <StartButton show={show} />
+      {isCountdownStart && <Countdown goToGame={goToGame} />}
+      <StartButton show={show} startCountdown={startCountdown} />
       <AlertModal
         isOpen={isOpen}
         onClose={close}

@@ -9,7 +9,12 @@ import { CustomError, NetworkError } from '@/utils/error';
 
 const isServerError = (status: number) => status >= 500 && status !== 555;
 
-export const useGameStart = (showModal: () => void) => {
+interface UseGameStartProps {
+  showModal: () => void;
+  startCountdown: () => void;
+}
+
+export const useGameStart = ({ showModal, startCountdown }: UseGameStartProps) => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
   const { roomId } = useParams();
   const { show } = useToast();
@@ -31,6 +36,7 @@ export const useGameStart = (showModal: () => void) => {
   const handleGameStart = () => {
     if (memberInfo.isMaster) {
       startGameMutation.mutate();
+      startCountdown();
     }
   };
 
