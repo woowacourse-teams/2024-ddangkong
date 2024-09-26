@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 
+// height: 전체 화면 - 헤더 높이 - 버튼 높이
 export const gameResultLayout = css`
   display: flex;
   flex-direction: column;
