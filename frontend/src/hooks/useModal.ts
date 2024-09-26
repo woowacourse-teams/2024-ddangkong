@@ -1,16 +1,13 @@
-import { useState } from 'react';
+import { useContext } from 'react';
+
+import { ModalDispatchContext } from '@/providers/ModalProvider/ModalProvider';
 
 const useModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useContext(ModalDispatchContext);
 
-  const show = () => {
-    setIsOpen(true);
-  };
-
-  const close = () => {
-    setIsOpen(false);
-  };
-
-  return { isOpen, show, close };
+  if (dispatch === null) {
+    throw new Error('ModalDispatchContext가 존재하지 않습니다.');
+  }
+  return dispatch;
 };
 export default useModal;
