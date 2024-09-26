@@ -42,28 +42,35 @@ export const timerLayout = css`
   box-sizing: border-box;
 `;
 
-export const timerInnerLayout = (width: number) => css`
+export const timerInnerLayout = (scale: number) => css`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${width}%;
+
+  width: 100%;
   height: 60%;
   border-radius: ${Theme.borderRadius.radius30};
 
   background-color: ${Theme.color.peanut500};
-  transition: width 1s linear;
+
+  transform: scaleX(${scale});
+  transform-origin: left;
+
+  transition: transform 1s linear;
 `;
 
 export const timerWrapper = (width: number) => css`
   display: flex;
   position: absolute;
-  right: ${100 - width}%;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  gap: 2rem;
+  align-items: flex-end;
+
+  width: 100%;
   height: 4rem;
-  transition: all 1s linear;
+
+  transform: translateX(-${(1 - width) * 100}%);
+  transition: transform 1s linear;
 `;
 
 export const timerIcon = css`
