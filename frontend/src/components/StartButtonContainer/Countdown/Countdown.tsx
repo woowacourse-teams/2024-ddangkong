@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { countdownLayout, countdown, peanut, imageContainer, dimmed } from './Countdown.styled';
 
-import SpinDdangkong from '@/assets/images/spinDdangkong.png';
+import SpinDdangkong from '@/assets/images/spinDdangkong.webp';
 
 const START_COUNTDOWN = 3;
 

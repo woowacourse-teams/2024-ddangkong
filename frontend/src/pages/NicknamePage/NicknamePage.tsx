@@ -16,7 +16,7 @@ import {
 import useMakeOrEnterRoom from './useMakeOrEnterRoom';
 
 import { isJoinableRoom } from '@/apis/room';
-import AngryDdangkong from '@/assets/images/angryDdangkong.png';
+import AngryDdangkong from '@/assets/images/angryDdangkong.webp';
 import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';

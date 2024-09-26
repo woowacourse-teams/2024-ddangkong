@@ -20,7 +20,7 @@ import OptionParticipantsContainer from '../OptionParticipantsContainer/OptionPa
 import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hook';
 import TopicContainer from '../TopicContainer/TopicContainer';
 
-import AngryDdangkong from '@/assets/images/angryDdangkong.png';
+import AngryDdangkong from '@/assets/images/angryDdangkong.webp';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useMyGameStatus from '@/hooks/useMyGameStatus';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
