@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { Layout } from './layout';
+import HeaderLayout from './HeaderLayout';
+import MainLayout from './MainLayout';
 
 import RouterErrorFallback from '@/components/common/ErrorFallback/RouterErrorFallback/RouterErrorFallback';
 import GamePage from '@/pages/GamePage/GamePage';
@@ -13,34 +14,39 @@ import RoundResultPage from '@/pages/RoundResultPage/RoundResultPage';
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainPage />,
+    element: <MainLayout />,
     errorElement: <RouterErrorFallback />,
-  },
-  {
-    path: ':roomId/game',
-    element: <GamePage />,
-  },
-  {
-    path: '/',
-    element: <Layout />,
     children: [
       {
-        path: 'nickname/:roomUuid?',
-        element: <NicknamePage />,
+        path: '/',
+        element: <MainPage />,
       },
       {
-        path: ':roomId/ready',
-        element: <ReadyPage />,
+        path: ':roomId/game',
+        element: <GamePage />,
       },
       {
-        path: ':roomId/round/result',
-        element: <RoundResultPage />,
-      },
-      {
-        path: ':roomId/game/result',
-        element: <GameResultPage />,
+        path: '/',
+        element: <HeaderLayout />,
+        children: [
+          {
+            path: 'nickname/:roomUuid?',
+            element: <NicknamePage />,
+          },
+          {
+            path: ':roomId/ready',
+            element: <ReadyPage />,
+          },
+          {
+            path: ':roomId/round/result',
+            element: <RoundResultPage />,
+          },
+          {
+            path: ':roomId/game/result',
+            element: <GameResultPage />,
+          },
+        ],
       },
     ],
-    errorElement: <RouterErrorFallback />,
   },
 ]);

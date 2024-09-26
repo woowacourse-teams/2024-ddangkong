@@ -1,29 +1,30 @@
 import { useMatchingResultQuery } from './GameResult.hook';
 import {
-  gameResultTitle,
   gameResultLayout,
   rankListContainer,
   noMatchingLayout,
   noMatchingImg,
   noMatchingText,
+  floatingButton,
 } from './GameResult.styled';
-import AlertModal from '../common/AlertModal/AlertModal';
+import useScrollControl from './hooks/useScrollControl';
+import useScrollState from './hooks/useScrollState';
 import FinalButton from '../common/FinalButton/FinalButton';
 import Spinner from '../common/Spinner/Spinner';
 import GameResultItem from '../GameResultItem/GameResultItem';
 
+import ArrowDown from '@/assets/images/arrowDown.svg';
+import ArrowUp from '@/assets/images/arrowUp.svg';
 import SadDdangKong from '@/assets/images/sadDdangkong.png';
-import useModal from '@/hooks/useModal';
 
 const GameResult = () => {
-  const { isOpen, show, close } = useModal();
   const { matchedMembers, existMatching, isLoading } = useMatchingResultQuery();
+  const { resultContainerRef, isAtTop, isAtBottom } = useScrollState();
+  const { scrollToTop, scrollToBottom } = useScrollControl(resultContainerRef);
 
   return (
     <>
-      <div css={gameResultLayout}>
-        <h1 css={gameResultTitle}>게임 결과</h1>
-
+      <div css={gameResultLayout} ref={resultContainerRef}>
         {isLoading && <Spinner message="매칭 결과를 불러오는 중입니다..." />}
 
         {existMatching && (
@@ -46,14 +47,19 @@ const GameResult = () => {
             </span>
           </div>
         )}
+
+        {existMatching && !isAtTop && (
+          <button onClick={scrollToTop} css={floatingButton('up')}>
+            <img src={ArrowUp} alt="" />
+          </button>
+        )}
+        {existMatching && !isAtBottom && (
+          <button onClick={scrollToBottom} css={floatingButton('down')}>
+            <img src={ArrowDown} alt="" />
+          </button>
+        )}
       </div>
-      <FinalButton showModal={show} />
-      <AlertModal
-        isOpen={isOpen}
-        onClose={close}
-        title="방 초기화 에러"
-        message="방을 초기화하는데 실패했어요. 다시 시도해주세요"
-      />
+      <FinalButton />
     </>
   );
 };

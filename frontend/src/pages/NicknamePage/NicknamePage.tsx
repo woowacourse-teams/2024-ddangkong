@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 import NicknameInput from './NicknameInput/NicknameInput';
 import {
@@ -18,18 +18,17 @@ import useMakeOrEnterRoom from './useMakeOrEnterRoom';
 import { isJoinableRoom } from '@/apis/room';
 import AngryDdangkong from '@/assets/images/angryDdangkong.png';
 import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
-import AlertModal from '@/components/common/AlertModal/AlertModal';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
+import useKeyboardUp from '@/hooks/useKeyboardUp';
 import useModal from '@/hooks/useModal';
-import { memberInfoState, roomUuidState } from '@/recoil/atom';
+import { roomUuidState } from '@/recoil/atom';
 
 const NicknamePage = () => {
-  const { isOpen, show, close } = useModal();
-  const { nicknameInputRef, handleMakeOrEnterRoom, isLoading } = useMakeOrEnterRoom(show);
-  const { isMaster } = useRecoilValue(memberInfoState);
+  const { nicknameInputRef, handleMakeOrEnterRoom, isLoading } = useMakeOrEnterRoom();
   const { roomUuid } = useParams();
   const setRoomUuidState = useSetRecoilState(roomUuidState);
+  const { isKeyboardUp } = useKeyboardUp();
 
   const { data, isLoading: isJoinableLoading } = useQuery({
     queryKey: ['isJoinable', roomUuid],
@@ -41,7 +40,11 @@ const NicknamePage = () => {
     if (roomUuid) {
       setRoomUuidState(roomUuid);
     }
-  }, [roomUuid, setRoomUuidState]);
+
+    if (nicknameInputRef.current) {
+      nicknameInputRef.current.focus();
+    }
+  }, [roomUuid, setRoomUuidState, nicknameInputRef]);
 
   if (!isJoinableLoading && roomUuid && !data?.isJoinable)
     return (
@@ -62,19 +65,16 @@ const NicknamePage = () => {
           nicknameInputRef={nicknameInputRef}
           handleMakeOrEnterRoom={handleMakeOrEnterRoom}
         />
+        <Button
+          onClick={handleMakeOrEnterRoom}
+          disabled={isLoading}
+          text={isLoading ? '접속 중...' : '확인'}
+          bottom={!isKeyboardUp}
+          radius={isKeyboardUp ? 'small' : undefined}
+          size={isKeyboardUp ? 'small' : undefined}
+          style={{ width: '100%' }}
+        />
       </div>
-      <Button
-        onClick={handleMakeOrEnterRoom}
-        disabled={isLoading}
-        text={isLoading ? '접속 중...' : '확인'}
-        bottom
-      />
-      <AlertModal
-        isOpen={isOpen}
-        onClose={close}
-        message={isMaster ? '방 생성에 실패했습니다.' : '해당 방에 참여할 수 없습니다.'}
-        title={isMaster ? '방 생성 실패' : '방 참가 실패'}
-      />
     </Content>
   );
 };
