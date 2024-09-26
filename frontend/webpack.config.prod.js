@@ -1,7 +1,6 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.config.common.js');
 const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = merge(common, {
   mode: 'production',
@@ -19,7 +18,6 @@ module.exports = merge(common, {
         filesToDeleteAfterUpload: '**/*.js.map',
       },
     }),
-    new BundleAnalyzerPlugin(),
   ],
   module: {
     rules: [
