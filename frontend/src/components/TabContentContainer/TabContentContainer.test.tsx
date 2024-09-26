@@ -11,7 +11,7 @@ import { server } from '@/mocks/server';
 import { customRender, wrapper } from '@/test-utils';
 describe('TabContentContainer 컴포넌트 테스트', () => {
   it('라운드 결과 그룹원들이 선택한 퍼센트를 카운팅 애니메이션으로 보여준다.', async () => {
-    customRender(<TabContentContainer isGroupTabActive={true} />);
+    customRender(<TabContentContainer isVoteStatisticsTabActive={true} />);
 
     await waitFor(
       () => {
@@ -43,7 +43,7 @@ describe('TabContentContainer 컴포넌트 테스트', () => {
       }),
     );
 
-    customRender(<TabContentContainer isGroupTabActive={true} />);
+    customRender(<TabContentContainer isVoteStatisticsTabActive={true} />);
 
     await waitFor(() => {
       expect(screen.getByText('아무도 투표하지 않으셨네요 :)')).toBeInTheDocument();

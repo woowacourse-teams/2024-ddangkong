@@ -9,14 +9,14 @@ const useRoutePath = () => {
   const currentPath = {
     isNicknamePage: location.pathname.startsWith(ROUTES.nickname),
     isReadyPage: location.pathname === ROUTES.ready(Number(roomId)),
+    isRoundResultPage: location.pathname === ROUTES.roundResult(Number(roomId)),
     isMatchingResultPage: location.pathname === ROUTES.gameResult(Number(roomId)),
-    isRoundResultStatusPage: location.pathname === ROUTES.roundResultStatus(Number(roomId)),
   };
 
   return {
     isNicknamePage: currentPath.isNicknamePage,
     isReadyPage: currentPath.isReadyPage,
-    isRoundResultStatusPage: currentPath.isRoundResultStatusPage,
+    isRoundResultPage: currentPath.isRoundResultPage,
     isMatchingResultPage: currentPath.isMatchingResultPage,
   };
 };

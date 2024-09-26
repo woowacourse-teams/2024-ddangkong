@@ -1,6 +1,6 @@
 import { tabButtonStyle } from './RoundResultTab.styled';
 
-type TabTitle = 'group' | 'total';
+type TabTitle = 'voteStatistics' | 'voteStatus';
 
 interface RoundResultTabProps {
   tab: TabTitle;
@@ -9,8 +9,8 @@ interface RoundResultTabProps {
 }
 
 const TAB_TITLE = {
-  group: '방',
-  total: '전체',
+  voteStatistics: '투표 통계',
+  voteStatus: '투표 현황',
 } as const;
 
 const RoundResultTab = ({ tab, activeTab, handleClickTab }: RoundResultTabProps) => {
