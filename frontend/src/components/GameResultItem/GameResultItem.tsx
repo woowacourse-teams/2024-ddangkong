@@ -8,7 +8,7 @@ import {
   rankPercent,
 } from './GameResultItem.styled';
 
-import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
+import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import useCountAnimation from '@/hooks/useCountAnimation';
 import { MemberMatchingInfo } from '@/types/balanceContent';
 

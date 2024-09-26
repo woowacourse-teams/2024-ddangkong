@@ -16,8 +16,8 @@ import { useExit } from './hooks/useExit';
 import useRoutePath from './hooks/useRoutePath';
 
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
-import ExitIcon from '@/assets/images/exitIcon.png';
-import SettingIcon from '@/assets/images/settingsIcon.svg';
+import ExitIcon from '@/assets/images/exitIcon.webp';
+import SettingIcon from '@/assets/images/settingsIcon.webp';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';

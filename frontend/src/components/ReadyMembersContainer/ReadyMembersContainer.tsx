@@ -14,8 +14,8 @@ import {
 } from './ReadyMembersContainer.styled';
 import InviteModal from '../common/InviteModal/InviteModal';
 
-import crownIcon from '@/assets/images/crownIcon.png';
-import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
+import crownIcon from '@/assets/images/crownIcon.webp';
+import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useModal from '@/hooks/useModal';
 import { memberInfoState } from '@/recoil/atom';
