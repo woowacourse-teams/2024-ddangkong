@@ -22,12 +22,12 @@ export const roomSettingBox = css`
   gap: 1rem;
 `;
 
-export const title = css`
+export const bigTitle = css`
   font-weight: 800;
   font-size: 2.8rem;
 `;
 
-export const subtitle = css`
+export const smallTitle = css`
   font-weight: 800;
   font-size: 2rem;
 `;

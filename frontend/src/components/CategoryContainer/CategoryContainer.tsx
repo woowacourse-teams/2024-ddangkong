@@ -2,8 +2,8 @@ import { useRecoilValue } from 'recoil';
 
 import {
   categoryContainerLayout,
-  title,
-  subtitle,
+  bigTitle,
+  smallTitle,
   roomSettingLabel,
   roomSettingBox,
 } from './CategoryContainer.styled';
@@ -21,21 +21,21 @@ const CategoryContainer = () => {
   return (
     <>
       <button
-        aria-label="카테고리 설정 버튼"
+        aria-label="카테고리 설정"
         css={categoryContainerLayout}
         onClick={isMaster ? show : () => {}}
       >
         <div css={roomSettingBox}>
           <span css={roomSettingLabel}>라운드</span>
-          <h1 css={subtitle}>{roomSetting.totalRound}</h1>
+          <h2 css={smallTitle}>{roomSetting.totalRound}</h2>
         </div>
         <div css={roomSettingBox}>
           <span css={roomSettingLabel}>카테고리</span>
-          <h1 css={title}>{roomSetting.category.label}</h1>
+          <h2 css={bigTitle}>{roomSetting.category.label}</h2>
         </div>
         <div css={roomSettingBox}>
           <span css={roomSettingLabel}>타이머</span>
-          <h1 css={subtitle}>{roomSetting.timeLimit}</h1>
+          <h2 css={smallTitle}>{roomSetting.timeLimit / 1000}초</h2>
         </div>
       </button>
       {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}

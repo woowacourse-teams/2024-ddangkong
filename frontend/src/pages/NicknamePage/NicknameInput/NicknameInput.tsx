@@ -1,4 +1,4 @@
-import { RefObject, memo } from 'react';
+import { RefObject } from 'react';
 
 import useNicknameInput from './hooks/useNicknameInput';
 import { nicknameInput, nicknameInputContainer, nicknameLengthText } from './NicknameInput.styled';
