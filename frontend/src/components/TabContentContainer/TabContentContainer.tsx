@@ -45,7 +45,8 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
 
   const isBigFirstOption = groupRoundResult.firstOption.percent >= 50;
   const isVote =
-    groupRoundResult.firstOption.percent !== 0 || groupRoundResult.secondOption.percent !== 0;
+    groupRoundResult.firstOption.memberCount !== 0 ||
+    groupRoundResult.secondOption.memberCount !== 0;
 
   const dominantVoteData = totalResult ? getDominantVote(totalResult) : null;
 
