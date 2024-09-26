@@ -15,15 +15,19 @@ import { memberInfoState } from '@/recoil/atom';
 
 const CategoryContainer = () => {
   const { roomSetting } = useGetRoomInfo();
-  const { isOpen, show, close } = useModal();
   const { isMaster } = useRecoilValue(memberInfoState);
+  const { show } = useModal();
+
+  const handleClickCategory = () => {
+    show(RoomSettingModal);
+  };
 
   return (
     <>
       <button
         aria-label="카테고리 설정"
         css={categoryContainerLayout}
-        onClick={isMaster ? show : () => {}}
+        onClick={isMaster ? handleClickCategory : () => {}}
       >
         <div css={roomSettingBox}>
           <span css={roomSettingLabel}>라운드</span>
@@ -38,7 +42,6 @@ const CategoryContainer = () => {
           <h2 css={smallTitle}>{roomSetting.timeLimit / 1000}초</h2>
         </div>
       </button>
-      {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
     </>
   );
 };

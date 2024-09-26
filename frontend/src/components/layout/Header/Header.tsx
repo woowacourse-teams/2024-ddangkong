@@ -9,7 +9,6 @@ import useRoutePath from './hooks/useRoutePath';
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
 import ExitIcon from '@/assets/images/exitIcon.png';
 import SettingIcon from '@/assets/images/settingsIcon.svg';
-import AlertModal from '@/components/common/AlertModal/AlertModal';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
@@ -44,32 +43,27 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 
 // 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
-  const { isOpen, show, close } = useModal();
-  const { isOpen: isExitOpen, show: exitShow, close: exitClose } = useModal();
+  const { show } = useModal();
   const { handleExit } = useExit();
   const { isMaster } = useRecoilValue(memberInfoState);
 
+  const handleClickRoomSetting = () => {
+    show(RoomSettingModal);
+  };
+
   return (
     <header css={headerLayout()}>
-      <button onClick={exitShow} css={buttonWrapper}>
-        <img src={ExitIcon} alt="방 설정" css={iconImage} />
+      <button onClick={handleExit} css={buttonWrapper}>
+        <img src={ExitIcon} alt="방 나가기" css={iconImage} />
       </button>
       <h1 css={gameTitle}>{title}</h1>
       {isMaster ? (
-        <button onClick={show} css={buttonWrapper}>
+        <button onClick={handleClickRoomSetting} css={buttonWrapper}>
           <img src={SettingIcon} alt="방 설정" css={iconImage} />
         </button>
       ) : (
         <span css={roundText}></span>
       )}
-      <AlertModal
-        isOpen={isExitOpen}
-        onClose={exitClose}
-        onConfirm={handleExit}
-        title="방 나가기"
-        message="방을 정말로 나가시겠습니까?"
-      />
-      {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
     </header>
   );
 };

@@ -5,9 +5,9 @@ import Modal from '../Modal/Modal';
 
 interface AlertModalProps {
   isOpen: boolean;
-  message: string;
   onClose: () => void;
   onConfirm?: () => void;
+  message?: string;
   title?: string;
 }
 
@@ -24,12 +24,13 @@ const AlertModal = ({ isOpen, onClose, onConfirm, message, title }: AlertModalPr
         <Modal.IconButton onClick={onClose} />
       </Modal.Header>
       <Modal.Content css={messageContainer}>
-        {message.split('\n').map((text) => (
-          <Fragment key={text}>
-            <span css={alertText}>{text}</span>
-            <br />
-          </Fragment>
-        ))}
+        {message &&
+          message.split('\n').map((text) => (
+            <Fragment key={text}>
+              <span css={alertText}>{text}</span>
+              <br />
+            </Fragment>
+          ))}
       </Modal.Content>
       <Modal.Footer buttonPosition="center">
         <Modal.TextButton onClick={handleClick} buttonWidth="60%">
