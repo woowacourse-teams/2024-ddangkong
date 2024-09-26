@@ -20,15 +20,13 @@ interface HeaderProps {
 }
 
 const Header = () => {
-  const { isNicknamePage, isReadyPage, isRoundResultPage, isRoundResultStatusPage } =
-    useRoutePath();
+  const { isNicknamePage, isReadyPage, isRoundResultPage } = useRoutePath();
 
   useBlockRefresh();
 
   if (isNicknamePage) return <TitleHeader title="닉네임 설정" />;
   if (isReadyPage) return <RoomSettingHeader title="밸런스 게임" />;
   if (isRoundResultPage) return <RoundHeader />;
-  if (isRoundResultStatusPage) return <BackHeader title="투표 현황" />;
 
   return <EmptyHeader />;
 };

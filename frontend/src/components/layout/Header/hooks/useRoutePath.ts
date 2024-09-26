@@ -11,14 +11,12 @@ const useRoutePath = () => {
     isReadyPage: location.pathname === ROUTES.ready(Number(roomId)),
     isRoundResultPage: location.pathname === ROUTES.roundResult(Number(roomId)),
     isFinalResultPage: location.pathname === ROUTES.gameResult(Number(roomId)),
-    isRoundResultStatusPage: location.pathname === ROUTES.roundResultStatus(Number(roomId)),
   };
 
   return {
     isNicknamePage: currentPath.isNicknamePage,
     isReadyPage: currentPath.isReadyPage,
     isRoundResultPage: currentPath.isRoundResultPage,
-    isRoundResultStatusPage: currentPath.isRoundResultStatusPage,
     isFinalResultPage: currentPath.isFinalResultPage,
   };
 };
