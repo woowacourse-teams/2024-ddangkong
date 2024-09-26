@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 
-import getDominantVote from './getDominantVote';
 import {
   angryImage,
   barWrapperStyle,
@@ -16,6 +15,7 @@ import {
   totalResultInfoContainer,
   totalResultInfoText,
 } from './TabContentContainer.styled';
+import getDominantVote from './TabContentContainer.util';
 import OptionParticipantsContainer from '../OptionParticipantsContainer/OptionParticipantsContainer';
 import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hook';
 import TopicContainer from '../TopicContainer/TopicContainer';
