@@ -6,8 +6,7 @@ const useScrollState = (initialDelay = 100) => {
   const resultContainerRef = useRef<HTMLDivElement | null>(null);
 
   const handleScroll = () => {
-    const container = resultContainerRef.current;
-    if (!container) return;
+    const container = resultContainerRef.current as HTMLDivElement;
 
     const { scrollTop, scrollHeight, clientHeight } = container;
     setIsAtTop(scrollTop === 0);
@@ -15,8 +14,7 @@ const useScrollState = (initialDelay = 100) => {
   };
 
   useEffect(() => {
-    const container = resultContainerRef.current;
-    if (!container) return;
+    const container = resultContainerRef.current as HTMLDivElement;
 
     const checkInitialScrollState = () => {
       const { scrollHeight, clientHeight } = container;
@@ -31,8 +29,7 @@ const useScrollState = (initialDelay = 100) => {
   }, [initialDelay]);
 
   useEffect(() => {
-    const container = resultContainerRef.current;
-    if (!container) return;
+    const container = resultContainerRef.current as HTMLDivElement;
 
     container.addEventListener('scroll', handleScroll);
     handleScroll();
