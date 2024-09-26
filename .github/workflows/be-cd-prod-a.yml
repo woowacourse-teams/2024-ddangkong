@@ -1,4 +1,4 @@
-name: BE CD for Prod
+name: BE CD for Prod-A
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ on:
 jobs:
   deploy:
     timeout-minutes: 3
-    runs-on: [ self-hosted, linux, ARM64, prod ]
+    runs-on: [ self-hosted, linux, ARM64, prod-a ]
 
     defaults:
       run:

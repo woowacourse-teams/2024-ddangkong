@@ -65,13 +65,6 @@ public class RoomService {
     }
 
     @Transactional
-    public Room reset(Long roomId) {
-        Room room = getRoom(roomId);
-        room.reset();
-        return room;
-    }
-
-    @Transactional
     public void delete(Room room) {
         roomRepository.delete(room);
     }

@@ -9,7 +9,6 @@ on:
 
 jobs:
   build-and-test:
-    timeout-minutes: 4
     runs-on: ubuntu-latest
 
     defaults:
