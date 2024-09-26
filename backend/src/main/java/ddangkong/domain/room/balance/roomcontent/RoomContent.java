@@ -24,6 +24,9 @@ import lombok.NoArgsConstructor;
 public class RoomContent {
 
     private static final int DELAY_MSEC = 2_000; // TODO SEC로 변경
+    private static final int GAME_START_WAITING_MSEC = 3_000; // TODO SEC로 변경
+    private static final int FIRST_ROUND = 1;
+    private static final int MSEC = 1_000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,7 +61,11 @@ public class RoomContent {
             throw new VoteDeadlineConfiguredException();
         }
 
-        int afterSec = (timeLimit + DELAY_MSEC) / 1_000;
+        int afterSec = (timeLimit + DELAY_MSEC) / MSEC;
+        if (round == FIRST_ROUND) {
+            afterSec += GAME_START_WAITING_MSEC / MSEC;
+        }
+
         voteDeadline = now.plusSeconds(afterSec);
     }
 
