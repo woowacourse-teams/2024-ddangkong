@@ -4,17 +4,18 @@
   "description": "ddangkong-frontend repository",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --config webpack.config.dev.js",
-    "start:open": "webpack serve --config webpack.config.dev.js --host 0.0.0.0",
-    "build-dev": "webpack --config webpack.config.dev.js",
-    "build-prod": "webpack --config webpack.config.prod.js",
+    "dev": "webpack serve --config webpack.config.dev.js",
+    "dev:open": "webpack serve --config webpack.config.dev.js --host 0.0.0.0",
+    "prod": "webpack serve --config webpack.config.prod.js",
+    "build:dev": "webpack --config webpack.config.dev.js",
+    "build:prod": "webpack --config webpack.config.prod.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "npx eslint --ext .ts,.tsx .",
     "lint:styled": "stylelint ./src/**/*.styled.ts --fix",
     "prepare": "cd .. && husky frontend/.husky",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build:storybook": "storybook build"
   },
   "keywords": [],
   "author": "",
@@ -92,6 +93,7 @@
     "typescript": "^5.5.3",
     "undici": "^6.19.2",
     "webpack": "^5.92.1",
+    "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4",
     "webpack-merge": "^6.0.1"

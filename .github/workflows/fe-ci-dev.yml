@@ -39,7 +39,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Build
-        run: npm run build-dev
+        run: npm run build:dev
         working-directory: ./frontend
 
       - name: Test

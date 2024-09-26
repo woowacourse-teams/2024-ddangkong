@@ -9,7 +9,7 @@ import {
 } from './MainPage.styled';
 import { useCreateRoom } from './useCreateRoom';
 
-import Ddangkong from '@/assets/images/ddangkong.png';
+import Ddangkong from '@/assets/images/ddangkong.webp';
 import Button from '@/components/common/Button/Button';
 
 const MainPage = () => {
@@ -18,7 +18,7 @@ const MainPage = () => {
   return (
     <div css={mainPageLayout}>
       <div css={logoWrapper}>
-        <img css={logoIcon} src={Ddangkong} alt="로고 아이콘" />
+        <img css={logoIcon} src={Ddangkong} alt="땅콩 로고" />
       </div>
       <div css={titleContainer}>
         <h1 css={title}>땅콩</h1>
