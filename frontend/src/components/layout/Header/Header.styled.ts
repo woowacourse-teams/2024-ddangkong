@@ -57,5 +57,6 @@ export const matchingResultTitle = css`
 `;
 
 export const matchingResultCaption = css`
-  ${Theme.typography.caption};
+  font-weight: bold;
+  font-size: 1.2rem;
 `;
