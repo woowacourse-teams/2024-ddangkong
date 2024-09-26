@@ -1,20 +1,17 @@
+import Countdown from './Countdown/Countdown';
 import StartButton from './StartButton/StartButton';
-import AlertModal from '../common/AlertModal/AlertModal';
+import useCountdown from '../hooks/useCountdown';
 
-import useModal from '@/hooks/useModal';
+import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 
 const StartButtonContainer = () => {
-  const { isOpen, show, close } = useModal();
+  const { isGameStart } = useGetRoomInfo();
+  const { isCountdownStart, goToGame } = useCountdown({ isGameStart });
 
   return (
     <>
-      <StartButton show={show} />
-      <AlertModal
-        isOpen={isOpen}
-        onClose={close}
-        title="게임 시작 에러"
-        message="게임을 시작할 수 없습니다."
-      />
+      {isCountdownStart && <Countdown goToGame={goToGame} />}
+      <StartButton />
     </>
   );
 };

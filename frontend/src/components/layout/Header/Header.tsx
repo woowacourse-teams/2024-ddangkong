@@ -59,24 +59,27 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 
 // 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
-  const { isOpen, show, close } = useModal();
+  const { show } = useModal();
   const { handleExit } = useExit();
-  const memberInfo = useRecoilValue(memberInfoState);
+  const { isMaster } = useRecoilValue(memberInfoState);
+
+  const handleClickRoomSetting = () => {
+    show(RoomSettingModal);
+  };
 
   return (
     <header css={headerLayout()}>
       <button onClick={handleExit} css={buttonWrapper}>
-        <img src={ExitIcon} alt="방 설정" css={iconImage} />
+        <img src={ExitIcon} alt="방 나가기" css={iconImage} />
       </button>
       <h1 css={gameTitle}>{title}</h1>
-      {memberInfo.isMaster ? (
-        <button onClick={show} css={buttonWrapper}>
+      {isMaster ? (
+        <button onClick={handleClickRoomSetting} css={buttonWrapper}>
           <img src={SettingIcon} alt="방 설정" css={iconImage} />
         </button>
       ) : (
         <span css={roundText}></span>
       )}
-      {isOpen && <RoomSettingModal isOpen={isOpen} onClose={close} />}
     </header>
   );
 };

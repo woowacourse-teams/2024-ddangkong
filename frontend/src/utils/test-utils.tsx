@@ -10,7 +10,9 @@ import type { MutableSnapshot } from 'recoil';
 import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
 import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
 import Spinner from '@/components/common/Spinner/Spinner';
+import ModalProvider from '@/providers/ModalProvider/ModalProvider';
 import ToastProvider from '@/providers/ToastProvider/ToastProvider';
+import { memberInfoState } from '@/recoil/atom';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
 
@@ -34,14 +36,16 @@ const wrapper = ({
     <QueryClientProvider client={queryClient}>
       <RecoilRoot initializeState={initializeState}>
         <ThemeProvider theme={Theme}>
-          <MemoryRouter initialEntries={['/']}>
-            <RootErrorBoundary>
-              <AsyncErrorBoundary pendingFallback={pendingFallback}>
-                <Global styles={GlobalStyle} />
-                <ToastProvider>{children}</ToastProvider>
-              </AsyncErrorBoundary>
-            </RootErrorBoundary>
-          </MemoryRouter>
+          <Global styles={GlobalStyle} />
+          <ToastProvider>
+            <MemoryRouter initialEntries={['/']}>
+              <RootErrorBoundary>
+                <AsyncErrorBoundary pendingFallback={pendingFallback}>
+                  <ModalProvider>{children}</ModalProvider>
+                </AsyncErrorBoundary>
+              </RootErrorBoundary>
+            </MemoryRouter>
+          </ToastProvider>
         </ThemeProvider>
       </RecoilRoot>
     </QueryClientProvider>
@@ -62,4 +66,12 @@ const customRender = (ui: React.ReactNode, options: CustomRenderOptions = {}) =>
   });
 };
 
-export { wrapper, customRender };
+const customRenderWithIsMaster = (Component: React.ReactNode, isMaster: boolean) => {
+  const initializeState = (snap: MutableSnapshot) => {
+    snap.set(memberInfoState, { memberId: 1, nickname: 'Test User', isMaster });
+  };
+
+  customRender(Component, { initializeState });
+};
+
+export { wrapper, customRender, customRenderWithIsMaster };

@@ -3,10 +3,11 @@ import * as Sentry from '@sentry/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import ReactDOM from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
-import App from './App';
 import ToastProvider from './providers/ToastProvider/ToastProvider';
+import { router } from './router';
 import GlobalStyle from './styles/GlobalStyle';
 import { Theme } from './styles/Theme';
 
@@ -35,7 +36,7 @@ enableMocking().then(() => {
         <ThemeProvider theme={Theme}>
           <Global styles={GlobalStyle} />
           <ToastProvider>
-            <App />
+            <RouterProvider router={router} />
           </ToastProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </ThemeProvider>

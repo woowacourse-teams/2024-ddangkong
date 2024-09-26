@@ -9,7 +9,6 @@ import {
 } from './GameResult.styled';
 import useScrollControl from './hooks/useScrollControl';
 import useScrollState from './hooks/useScrollState';
-import AlertModal from '../common/AlertModal/AlertModal';
 import FinalButton from '../common/FinalButton/FinalButton';
 import Spinner from '../common/Spinner/Spinner';
 import GameResultItem from '../GameResultItem/GameResultItem';
@@ -17,10 +16,8 @@ import GameResultItem from '../GameResultItem/GameResultItem';
 import ArrowDown from '@/assets/images/arrowDown.svg';
 import ArrowUp from '@/assets/images/arrowUp.svg';
 import SadDdangKong from '@/assets/images/sadDdangkong.png';
-import useModal from '@/hooks/useModal';
 
 const GameResult = () => {
-  const { isOpen, show, close } = useModal();
   const { matchedMembers, existMatching, isLoading } = useMatchingResultQuery();
   const { resultContainerRef, isAtTop, isAtBottom } = useScrollState();
   const { scrollToTop, scrollToBottom } = useScrollControl(resultContainerRef);
@@ -62,13 +59,7 @@ const GameResult = () => {
           </button>
         )}
       </div>
-      <FinalButton showModal={show} />
-      <AlertModal
-        isOpen={isOpen}
-        onClose={close}
-        title="방 초기화 에러"
-        message="방을 초기화하는데 실패했어요. 다시 시도해주세요"
-      />
+      <FinalButton />
     </>
   );
 };

@@ -58,4 +58,9 @@ public class RoomBalanceVoteService {
         return roomVoteRepository.findRoomBalanceVotesByBalanceOptionsAndRoomWithoutMember(memberRoomVoteOptions, room,
                 member);
     }
+
+    @Transactional
+    public void deleteRoomVotes(List<RoomBalanceVote> roomBalanceVotes) {
+        roomVoteRepository.deleteAllInBatch(roomBalanceVotes);
+    }
 }
