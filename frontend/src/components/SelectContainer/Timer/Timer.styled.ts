@@ -59,7 +59,8 @@ export const timerInnerLayout = (scale: number) => css`
   transition: transform 1s linear;
 `;
 
-export const timerWrapper = (width: number) => css`
+// 화면을 벗어나는 문제로 인해 100이 아닌 98로 계산
+export const timerWrapper = (scale: number) => css`
   display: flex;
   position: absolute;
   flex-direction: column;
@@ -69,7 +70,7 @@ export const timerWrapper = (width: number) => css`
   width: 100%;
   height: 4rem;
 
-  transform: translateX(-${(1 - width) * 100}%);
+  transform: translateX(-${(1 - scale) * 98}%);
   transition: transform 1s linear;
 `;
 
