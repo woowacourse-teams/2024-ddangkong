@@ -12,7 +12,7 @@ import {
 import { formatLeftRoundTime } from './Timer.util';
 import useVoteIsFinished from '../hooks/useVoteIsFinished';
 
-import DdangkongTimer from '@/assets/images/ddangkongTimer.png';
+import DdangkongTimer from '@/assets/images/ddangkongTimer.webp';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 interface TimerProps {
