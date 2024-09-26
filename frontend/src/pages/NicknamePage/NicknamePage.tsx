@@ -21,7 +21,7 @@ import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
-import { useKeyboardUp } from '@/hooks/useKeyboardUp';
+import useKeyboardUp from '@/hooks/useKeyboardUp';
 import useModal from '@/hooks/useModal';
 import { memberInfoState, roomUuidState } from '@/recoil/atom';
 

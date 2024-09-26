@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const useKeyboardUp = () => {
+const useKeyboardUp = () => {
   const [isKeyboardUp, setIsKeyboardUp] = useState(false);
 
   useEffect(() => {
@@ -16,8 +16,9 @@ export const useKeyboardUp = () => {
     };
     window.addEventListener('resize', handleResize);
     return () => {
-      window.addEventListener('remove', handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
   return { isKeyboardUp };
 };
+export default useKeyboardUp;
