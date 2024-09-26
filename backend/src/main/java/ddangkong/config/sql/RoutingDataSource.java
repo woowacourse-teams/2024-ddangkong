@@ -1,24 +1,18 @@
-package ddangkong.config.database;
+package ddangkong.config.sql;
 
-import java.util.List;
+import ddangkong.config.sql.type.DataSourceType;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 public class RoutingDataSource extends AbstractRoutingDataSource {
 
-    private final RoutingReplicas<String> routingReplicas;
-
-    public RoutingDataSource(List<String> routingReplicas) {
-        this.routingReplicas = new RoutingReplicas<>(routingReplicas);
-    }
-
     @Override
     protected Object determineCurrentLookupKey() {
         boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
         if (isReadOnly) {
-            return routingReplicas.get();
+            return DataSourceType.REPLICA;
         } else {
-            return "source";
+            return DataSourceType.SOURCE;
         }
     }
 }
