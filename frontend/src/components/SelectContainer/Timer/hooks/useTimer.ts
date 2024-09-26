@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { calculateUnitRatio, convertMsecToSecond } from '../Timer.util';
+import { calculateUnitRate, convertMsecToSecond } from '../Timer.util';
 
 import { POLLING_DELAY } from '@/constants/config';
 
-const INITIAL_WIDTH = 100;
+const INITIAL_BAR_SCALE = 1;
 const ALMOST_FINISH_SECOND = 5;
 
 interface UseTimerProps {
@@ -16,7 +16,7 @@ interface UseTimerProps {
 
 const useTimer = ({ timeLimit, isSelectedOption, isVoted, vote }: UseTimerProps) => {
   const [leftRoundTime, setLeftRoundTime] = useState(convertMsecToSecond(timeLimit));
-  const [barWidthPercent, setBarWidthPercent] = useState(INITIAL_WIDTH);
+  const [barScaleRate, setBarScaleRate] = useState(INITIAL_BAR_SCALE);
 
   const isVoteTimeout = leftRoundTime <= 0;
   const isAlmostFinished = leftRoundTime <= ALMOST_FINISH_SECOND;
@@ -35,12 +35,12 @@ const useTimer = ({ timeLimit, isSelectedOption, isVoted, vote }: UseTimerProps)
 
   useEffect(() => {
     const timeLimitPerSecond = convertMsecToSecond(timeLimit);
-    const DECREASE_PERCENT = calculateUnitRatio(INITIAL_WIDTH, timeLimitPerSecond);
+    const decreaseRate = calculateUnitRate(INITIAL_BAR_SCALE, timeLimitPerSecond);
     setLeftRoundTime(timeLimitPerSecond);
 
     timeout.current = setInterval(() => {
       setLeftRoundTime((prev) => prev - 1);
-      setBarWidthPercent((prevWidth) => (prevWidth > 0 ? prevWidth - DECREASE_PERCENT : 0));
+      setBarScaleRate((prevRate) => (prevRate > 0 ? prevRate - decreaseRate : 0));
     }, POLLING_DELAY);
 
     return () => {
@@ -48,7 +48,7 @@ const useTimer = ({ timeLimit, isSelectedOption, isVoted, vote }: UseTimerProps)
     };
   }, [timeLimit]);
 
-  return { leftRoundTime, barWidthPercent, isAlmostFinished };
+  return { leftRoundTime, barScaleRate, isAlmostFinished };
 };
 
 export default useTimer;
