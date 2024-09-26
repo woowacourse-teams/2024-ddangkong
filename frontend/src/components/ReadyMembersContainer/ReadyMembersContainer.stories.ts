@@ -5,6 +5,7 @@ import ReadyMembersContainer from './ReadyMembersContainer';
 import roomInfo from '@/mocks/data/roomInfo.json';
 
 const meta = {
+  title: 'ReadyMembersContainer',
   component: ReadyMembersContainer,
 } satisfies Meta<typeof ReadyMembersContainer>;
 

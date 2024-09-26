@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { isRoomInitial } from '@/apis/room';
+import { POLLING_DELAY, POLLING_ERROR_FAILURE_COUNT } from '@/constants/config';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { ROUTES } from '@/constants/routes';
-import { ONE_SECOND } from '@/constants/time';
 
 export const useIsRoomInitial = () => {
   const { roomId } = useParams();
@@ -13,7 +13,13 @@ export const useIsRoomInitial = () => {
   const { data } = useQuery({
     queryKey: [QUERY_KEYS.isRoomInitial, Number(roomId)],
     queryFn: async () => await isRoomInitial(Number(roomId)),
-    refetchInterval: ONE_SECOND,
+    refetchInterval: (query) => {
+      if (query.state.error && query.state.fetchFailureCount >= POLLING_ERROR_FAILURE_COUNT) {
+        return false;
+      }
+      return POLLING_DELAY;
+    },
+    refetchIntervalInBackground: true,
     gcTime: 0,
   });
 

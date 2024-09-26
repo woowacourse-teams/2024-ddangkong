@@ -7,13 +7,9 @@ import { bottomButtonLayout } from '../Button/Button.styled';
 import { useResetRoomMutation } from '@/components/GameResult/GameResult.hook';
 import { memberInfoState } from '@/recoil/atom';
 
-interface FinalButtonProps {
-  showModal: () => void;
-}
-
-const FinalButton = ({ showModal }: FinalButtonProps) => {
+const FinalButton = () => {
   const { roomId } = useParams();
-  const { mutate: resetRoom } = useResetRoomMutation(Number(roomId), showModal);
+  const { mutate: resetRoom } = useResetRoomMutation(Number(roomId));
   const memberInfo = useRecoilValue(memberInfoState);
 
   return (

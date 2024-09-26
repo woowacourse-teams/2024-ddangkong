@@ -6,7 +6,7 @@ import Modal from './Modal';
 import CloseIcon from '@/assets/images/closeIcon.png';
 
 const meta = {
-  title: 'Modal',
+  title: 'modal/Modal',
   component: Modal,
   argTypes: {
     isOpen: {

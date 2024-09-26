@@ -5,7 +5,7 @@ import useCategoryDropdown from './useCategoryDropdown';
 import useTimerPerRound from './useTimerPerRound';
 import useTotalRound from './useTotalRound';
 
-import { useGetRoomInfo } from '@/pages/ReadyPage/useGetRoomInfo';
+import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 
 interface UseRoomSettingProps {
   onClose: () => void;

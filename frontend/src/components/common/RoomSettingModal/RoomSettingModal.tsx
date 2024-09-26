@@ -9,7 +9,7 @@ import {
 } from './RoomSettingModal.styled';
 import Modal from '../Modal/Modal';
 
-import { ONE_SECOND } from '@/constants/time';
+import { POLLING_DELAY } from '@/constants/config';
 
 const TOTAL_ROUND_LIST = [5, 7, 10];
 const TIMER_PER_ROUND_LIST = [5000, 10000, 15000];
@@ -58,7 +58,7 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
                   onClick={handleClickTimeLimit}
                   value={timeLimit}
                 >
-                  {timeLimit / ONE_SECOND}초
+                  {timeLimit / POLLING_DELAY}초
                 </button>
               </li>
             ))}

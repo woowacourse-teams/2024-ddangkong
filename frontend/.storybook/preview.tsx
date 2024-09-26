@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Preview } from '@storybook/react';
+import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 import { Global, ThemeProvider } from '@emotion/react';
@@ -7,6 +8,8 @@ import GlobalStyle from '../src/styles/GlobalStyle';
 import { Theme } from '../src/styles/Theme';
 import { initialize, mswLoader } from 'msw-storybook-addon';
 import { handlers } from '../src/mocks/handlers';
+import ToastProvider from '../src/providers/ToastProvider/ToastProvider';
+import ModalProvider from '../src/providers/ModalProvider/ModalProvider';
 
 initialize({
   serviceWorker: {
@@ -32,12 +35,18 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={Theme}>
-          <MemoryRouter initialEntries={['/']}>
-            <Global styles={GlobalStyle} />
-            <Story />
-          </MemoryRouter>
-        </ThemeProvider>
+        <RecoilRoot>
+          <ThemeProvider theme={Theme}>
+            <MemoryRouter initialEntries={['/']}>
+              <Global styles={GlobalStyle} />
+              <ToastProvider>
+                <ModalProvider>
+                  <Story />
+                </ModalProvider>
+              </ToastProvider>
+            </MemoryRouter>
+          </ThemeProvider>
+        </RecoilRoot>
       </QueryClientProvider>
     ),
   ],

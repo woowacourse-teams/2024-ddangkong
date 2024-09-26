@@ -8,7 +8,6 @@ export const profileWrapper = css`
   align-items: center;
   width: 8rem;
   height: 8rem;
-  margin-top: 4rem;
   border-radius: 50%;
 
   background-color: ${Theme.color.gray300};
@@ -18,10 +17,15 @@ export const profileImg = css`
   width: 60%;
 `;
 
-export const nicknameBox = css`
+export const nicknameContainer = css`
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
   width: 26.8rem;
   margin: 2rem 0;
+`;
 
+export const nicknameTitle = css`
   font-weight: 600;
   font-size: 1.6rem;
 `;
@@ -44,6 +48,11 @@ export const nicknameInput = css`
   background-color: ${Theme.color.gray200};
   outline: none;
 `;
+
+export const nicknameLengthText = css`
+  color: ${Theme.color.gray500};
+`;
+
 export const noVoteTextContainer = css`
   display: flex;
   flex-direction: column;

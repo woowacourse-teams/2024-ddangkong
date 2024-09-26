@@ -3,9 +3,9 @@ import { userEvent } from '@testing-library/user-event';
 
 import RoomSettingModal from './RoomSettingModal';
 
-import { ONE_SECOND } from '@/constants/time';
+import { POLLING_DELAY } from '@/constants/config';
+import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import ROOM_INFO from '@/mocks/data/roomInfo.json';
-import { useGetRoomInfo } from '@/pages/ReadyPage/useGetRoomInfo';
 import { customRender, wrapper } from '@/utils/test-utils';
 
 describe('RoomSettingModal 방 설정 모달 테스트', () => {
@@ -26,7 +26,7 @@ describe('RoomSettingModal 방 설정 모달 테스트', () => {
     });
   });
 
-  it.skip('방의 카테고리를 변경한 후 적용 버튼을 클릭하면 카테고리 설정이 변경된다.', async () => {
+  it('방의 카테고리를 변경한 후 적용 버튼을 클릭하면 카테고리 설정이 변경된다.', async () => {
     const user = userEvent.setup();
     const CATEGORY = '연애';
     const clickButton = async (name: string) => {
@@ -88,7 +88,7 @@ describe('RoomSettingModal 방 설정 모달 테스트', () => {
       expect(result.current.roomSetting).toEqual(ROOM_INFO.roomSetting);
     });
 
-    await clickButton(`${TIME_LIMIT / ONE_SECOND}초`);
+    await clickButton(`${TIME_LIMIT / POLLING_DELAY}초`);
     await clickButton('적용');
 
     await waitFor(() => {

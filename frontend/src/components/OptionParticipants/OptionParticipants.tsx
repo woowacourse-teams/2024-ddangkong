@@ -19,7 +19,7 @@ const OptionParticipants = ({ optionName, memberCount, members }: OptionParticip
       </p>
       <ul css={participantsListWrapper}>
         {members.map((member, index) => (
-          <NicknameItem member={member} key={index} />
+          <NicknameItem nickName={member} key={index} />
         ))}
       </ul>
     </div>

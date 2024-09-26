@@ -1,0 +1,14 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": true
+    },
+    "target": "esnext",
+    "transform": {
+      "react": {
+        "runtime": "automatic"
+      }
+    }
+  }
+}

@@ -4,6 +4,7 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
+import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -14,7 +15,7 @@ import ddangkong.facade.room.member.dto.MemberResponse;
 import ddangkong.service.balance.content.BalanceContentService;
 import ddangkong.service.room.RoomService;
 import ddangkong.service.room.balance.roomcontent.RoomContentService;
-import ddangkong.service.room.balance.roomvote.RoomBalanceVoteMigrator;
+import ddangkong.service.room.balance.roomvote.RoomMigrator;
 import ddangkong.service.room.member.MemberService;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,7 +36,7 @@ public class RoomFacade {
 
     private final BalanceContentService balanceContentService;
 
-    private final RoomBalanceVoteMigrator roomBalanceVoteMigrator;
+    private final RoomMigrator roomMigrator;
 
     @Transactional
     public RoomJoinResponse createRoom(String nickname) {
@@ -57,7 +58,7 @@ public class RoomFacade {
         RoomMembers roomMembers = memberService.findRoomMembers(room);
         Member member = roomMembers.getMember(memberId);
 
-        roomBalanceVoteMigrator.migrateToTotalVote(member);
+        roomMigrator.migrateMemberVotes(member);
         memberService.delete(member);
         if (roomMembers.isExistOnlyOneMember()) {
             roomContentService.deleteRoomContents(room);
@@ -106,41 +107,21 @@ public class RoomFacade {
 
     @Transactional
     public void resetRoom(Long roomId) {
-        Room room = roomService.reset(roomId);
-        roomContentService.deleteRoomContents(room);
-        roomBalanceVoteMigrator.migrateToTotalVote(room);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Long> findRoomIdsBefore(LocalDateTime modifiedAt) {
-        return roomService.findRoomsBefore(modifiedAt)
-                .stream()
-                .map(Room::getId)
-                .toList();
-    }
-
-    @Transactional
-    public void deleteRoom(Long roomId) {
         Room room = roomService.getRoom(roomId);
 
-        roomBalanceVoteMigrator.migrateToTotalVote(room);
+        if (!room.isGameFinish()) {
+            throw new NotFinishedRoomException();
+        }
+
+        room.reset();
         roomContentService.deleteRoomContents(room);
-        memberService.deleteMember(room);
-        roomService.delete(room);
+        roomMigrator.migrateRoom(room);
     }
 
     @Transactional
-    public void deleteRoomBefore(LocalDateTime modifiedAt) {
-        roomService.findRoomsBefore(modifiedAt)
-                .stream()
-                .forEach(this::delete);
-    }
-
-    private void delete(Room room) {
-        roomBalanceVoteMigrator.migrateToTotalVote(room);
-        roomContentService.deleteRoomContents(room);
-        memberService.deleteMember(room);
-        roomService.delete(room);
+    public void migrateExpiredRooms(LocalDateTime modifiedAt) {
+        List<Room> expiredRooms = roomService.findRoomsBefore(modifiedAt);
+        roomMigrator.migrateRooms(expiredRooms);
     }
 
     @Transactional(readOnly = true)

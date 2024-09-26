@@ -11,14 +11,14 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const 그룹_탭: Story = {
+export const 투표_통계: Story = {
   args: {
-    isGroupTabActive: true,
+    isVoteStatisticsTabActive: true,
   },
 };
 
-export const 전체_탭: Story = {
+export const 투표_현황: Story = {
   args: {
-    isGroupTabActive: false,
+    isVoteStatisticsTabActive: false,
   },
 };

@@ -5,7 +5,6 @@ import {
   optionParticipantsContainerLayout,
 } from './OptionParticipantsContainer.styled';
 import OptionParticipants from '../OptionParticipants/OptionParticipants';
-import TopicContainer from '../TopicContainer/TopicContainer';
 
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useMyGameStatus from '@/hooks/useMyGameStatus';
@@ -27,7 +26,6 @@ const OptionParticipantsContainer = () => {
 
   return (
     <>
-      <TopicContainer />
       <section css={optionParticipantsContainerLayout}>
         <OptionParticipants
           optionName={groupRoundResult.firstOption.name}
