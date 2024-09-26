@@ -15,7 +15,7 @@ import GameResultItem from '../GameResultItem/GameResultItem';
 
 import ArrowDown from '@/assets/images/arrowDown.svg';
 import ArrowUp from '@/assets/images/arrowUp.svg';
-import SadDdangKong from '@/assets/images/sadDdangkong.png';
+import SadDdangKong from '@/assets/images/sadDdangkong.webp';
 
 const GameResult = () => {
   const { matchedMembers, existMatching, isLoading } = useMatchingResultQuery();
