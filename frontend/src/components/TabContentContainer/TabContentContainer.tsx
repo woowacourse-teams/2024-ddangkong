@@ -74,7 +74,7 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
           </div>
           {totalResult && dominantVoteData && (
             <div css={totalResultInfoContainer}>
-              {dominantVoteData.isEven ? (
+              {dominantVoteData.isEqual ? (
                 <span css={totalResultInfoText}>
                   🥜 땅콩 유저들 사이에서 선택이 팽팽하게 갈렸어요! 😲
                 </span>
