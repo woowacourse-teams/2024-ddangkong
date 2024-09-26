@@ -45,7 +45,7 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
   const { handleExit } = useExit();
-  const memberInfo = useRecoilValue(memberInfoState);
+  const { isMaster } = useRecoilValue(memberInfoState);
 
   const handleClickRoomSetting = () => {
     show(RoomSettingModal);
@@ -57,7 +57,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
         <img src={ExitIcon} alt="방 나가기" css={iconImage} />
       </button>
       <h1 css={gameTitle}>{title}</h1>
-      {memberInfo.isMaster ? (
+      {isMaster ? (
         <button onClick={handleClickRoomSetting} css={buttonWrapper}>
           <img src={SettingIcon} alt="방 설정" css={iconImage} />
         </button>

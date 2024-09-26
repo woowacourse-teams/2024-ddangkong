@@ -30,7 +30,6 @@ const Modal = ({ children, isOpen, onClose, position = 'center', ...restProps }:
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   useModalEscClose(isOpen, onClose);
-  useDisableBackgroundScroll(isOpen);
 
   const handleOutsideClick = (event: React.MouseEvent | React.KeyboardEvent) => {
     if (isOpen && modalRef.current && !modalRef.current.contains(event.target as Node)) {

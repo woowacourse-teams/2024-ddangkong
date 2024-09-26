@@ -33,10 +33,13 @@ export const membersContainer = css`
 `;
 
 export const totalNumber = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding-left: 2rem;
 
   font-weight: 900;
-  font-size: 1.6rem;
+  font-size: 2rem;
 `;
 
 export const memberList = css`
@@ -46,15 +49,13 @@ export const memberList = css`
 `;
 
 export const inviteButton = css`
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  width: 100%;
+  width: 12rem;
+  height: 4rem;
   border-radius: ${getBorderRadius('medium')};
 
   background-color: ${Theme.color.peanut400};
 
-  font-size: 1rem;
+  font-weight: 700;
 `;
 
 export const memberItem = css`
