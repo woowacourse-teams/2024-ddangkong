@@ -6,9 +6,9 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 public class RoutingDataSource extends AbstractRoutingDataSource {
 
-    private final RoutingReplicas<String> routingReplicas;
+    private final RoutingReplicas<DataSourceType> routingReplicas;
 
-    public RoutingDataSource(List<String> routingReplicas) {
+    public RoutingDataSource(List<DataSourceType> routingReplicas) {
         this.routingReplicas = new RoutingReplicas<>(routingReplicas);
     }
 
@@ -18,7 +18,7 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
         if (isReadOnly) {
             return routingReplicas.get();
         } else {
-            return "source";
+            return DataSourceType.SOURCE;
         }
     }
 }

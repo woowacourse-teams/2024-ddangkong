@@ -36,11 +36,11 @@ public class DataSourceConfig {
             DataSource replica1DataSource
     ) {
         Map<Object, Object> dataSources = new HashMap<>();
-        dataSources.put("source", sourceDataSource);
-        dataSources.put("replica1", replica1DataSource);
+        dataSources.put(DataSourceType.SOURCE, sourceDataSource);
+        dataSources.put(DataSourceType.REPLICA_1, replica1DataSource);
 
-        RoutingDataSource routingDataSource = new RoutingDataSource(List.of("replica1"));
-        routingDataSource.setDefaultTargetDataSource(dataSources.get("source"));
+        RoutingDataSource routingDataSource = new RoutingDataSource(List.of(DataSourceType.REPLICA_1));
+        routingDataSource.setDefaultTargetDataSource(dataSources.get(DataSourceType.SOURCE));
         routingDataSource.setTargetDataSources(dataSources);
 
         return routingDataSource;
