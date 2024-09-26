@@ -39,8 +39,10 @@ abstract class ControllerLoggingAspect {
 
     protected void logControllerResponse(JoinPoint joinPoint, Object responseBody) {
         HttpServletRequest request = getHttpServletRequest();
+        String uri = request.getRequestURI();
+        String httpMethod = request.getMethod();
 
-        log.info("Response Logging: SUCCESS {} Body: {}", request.getRequestURI(), responseBody);
+        log.info("Response Logging: SUCCESS {} {} Body: {}", httpMethod, uri, responseBody);
     }
 
     private HttpServletRequest getHttpServletRequest() {
