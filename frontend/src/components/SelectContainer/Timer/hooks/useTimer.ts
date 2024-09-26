@@ -4,7 +4,7 @@ import { calculateUnitRatio, convertMsecToSecond } from '../Timer.util';
 
 import { POLLING_DELAY } from '@/constants/config';
 
-const INITIAL_WIDTH = 100;
+const INITIAL_WIDTH_SCALE = 1;
 const ALMOST_FINISH_SECOND = 5;
 
 interface UseTimerProps {
@@ -16,7 +16,7 @@ interface UseTimerProps {
 
 const useTimer = ({ timeLimit, isSelectedOption, isVoted, vote }: UseTimerProps) => {
   const [leftRoundTime, setLeftRoundTime] = useState(convertMsecToSecond(timeLimit));
-  const [barWidthPercent, setBarWidthPercent] = useState(INITIAL_WIDTH);
+  const [barWidthPercent, setBarWidthPercent] = useState(INITIAL_WIDTH_SCALE);
 
   const isVoteTimeout = leftRoundTime <= 0;
   const isAlmostFinished = leftRoundTime <= ALMOST_FINISH_SECOND;
@@ -35,7 +35,7 @@ const useTimer = ({ timeLimit, isSelectedOption, isVoted, vote }: UseTimerProps)
 
   useEffect(() => {
     const timeLimitPerSecond = convertMsecToSecond(timeLimit);
-    const DECREASE_PERCENT = calculateUnitRatio(INITIAL_WIDTH, timeLimitPerSecond);
+    const DECREASE_PERCENT = calculateUnitRatio(INITIAL_WIDTH_SCALE, timeLimitPerSecond);
     setLeftRoundTime(timeLimitPerSecond);
 
     timeout.current = setInterval(() => {
