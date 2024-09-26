@@ -18,10 +18,8 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
     protected Object determineCurrentLookupKey() {
         boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
         if (isReadOnly) {
-            log.info("Routing to Replica DB server");
             return routingReplicas.get();
         } else {
-            log.info("Routing to Source DB server");
             return "source";
         }
     }
