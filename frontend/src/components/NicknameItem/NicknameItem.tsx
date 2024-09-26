@@ -2,7 +2,7 @@ import { useRecoilValue } from 'recoil';
 
 import { nicknameItemLayout, nicknameText, profileImage } from './NicknameItem.styled';
 
-import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
+import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import { memberInfoState } from '@/recoil/atom';
 interface NicknameItemProp {
   nickName: string;
