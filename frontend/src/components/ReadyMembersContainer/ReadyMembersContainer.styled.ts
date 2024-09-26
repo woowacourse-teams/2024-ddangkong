@@ -54,6 +54,8 @@ export const inviteButton = css`
   border-radius: ${getBorderRadius('medium')};
 
   background-color: ${Theme.color.peanut400};
+
+  font-weight: 700;
 `;
 
 export const memberItem = css`
