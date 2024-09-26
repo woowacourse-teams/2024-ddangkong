@@ -1,4 +1,4 @@
-package ddangkong.config.database;
+package ddangkong.config.sql.type;
 
 public enum DataSourceType {
     SOURCE,

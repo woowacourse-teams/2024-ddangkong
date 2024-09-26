@@ -1,5 +1,6 @@
-package ddangkong.config.database;
+package ddangkong.config.sql;
 
+import ddangkong.config.sql.type.DataSourceType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -1,5 +1,6 @@
-package ddangkong.config.database;
+package ddangkong.config.sql;
 
+import ddangkong.config.sql.type.DataSourceType;
 import java.util.List;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.transaction.support.TransactionSynchronizationManager;

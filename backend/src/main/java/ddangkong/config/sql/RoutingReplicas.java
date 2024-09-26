@@ -1,4 +1,4 @@
-package ddangkong.config.database;
+package ddangkong.config.sql;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
