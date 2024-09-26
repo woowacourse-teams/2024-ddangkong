@@ -1,5 +1,7 @@
 import { css } from '@emotion/react';
 
+import { Theme } from '@/styles/Theme';
+
 export const headerLayout = (isCenter?: boolean) => css`
   display: flex;
   justify-content: ${isCenter ? 'center' : 'space-between'};
@@ -41,4 +43,20 @@ export const iconImage = css`
   align-items: center;
   width: 2.4rem;
   height: 2.4rem;
+`;
+
+export const MatchingResultHeaderContainer = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+`;
+
+export const matchingResultTitle = css`
+  ${Theme.typography.slogan};
+`;
+
+export const matchingResultCaption = css`
+  font-weight: bold;
+  font-size: 1.2rem;
 `;

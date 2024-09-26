@@ -19,6 +19,10 @@ const borderRadius = {
 } as const;
 
 const typography = {
+  countdown: {
+    fontSize: '5.2rem',
+    fontWeight: 'bold',
+  },
   slogan: {
     fontSize: '2.8rem',
     fontWeight: 'bold',

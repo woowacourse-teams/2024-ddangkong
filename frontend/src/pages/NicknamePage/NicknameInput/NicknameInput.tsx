@@ -10,12 +10,12 @@ interface NicknameInputProps {
   nicknameInputRef: RefObject<HTMLInputElement>;
   handleMakeOrEnterRoom: () => void;
 }
+const randomNickname = createRandomNickname();
 
 const NicknameInput = ({ nicknameInputRef, handleMakeOrEnterRoom }: NicknameInputProps) => {
   const { nickname, handleChangeInput, handleKeyDown } = useNicknameInput({
     handleMakeOrEnterRoom,
   });
-  const randomNickname = createRandomNickname();
 
   return (
     <div css={nicknameInputContainer}>

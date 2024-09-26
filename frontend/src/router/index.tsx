@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { Layout } from './layout';
+import HeaderLayout from './HeaderLayout';
 import {
   GamePage,
   GameResultPage,
@@ -8,11 +8,10 @@ import {
   NicknamePage,
   ReadyPage,
   RoundResultPage,
-  VoteStatusPage,
 } from './lazyPages';
+import MainLayout from './MainLayout';
 
 import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
-import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
 import RouterErrorFallback from '@/components/common/ErrorFallback/RouterErrorFallback/RouterErrorFallback';
 import GameSkeleton from '@/components/common/Skeleton/GameSkeleton/GameSkeleton';
 import ReadySkeleton from '@/components/common/Skeleton/ReadySkeleton/ReadySkeleton';
@@ -20,64 +19,63 @@ import ReadySkeleton from '@/components/common/Skeleton/ReadySkeleton/ReadySkele
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainPage />,
+    element: <MainLayout />,
     errorElement: <RouterErrorFallback />,
-  },
-  {
-    path: ':roomId/game',
-    element: (
-      <RootErrorBoundary>
-        <AsyncErrorBoundary pendingFallback={<GameSkeleton />}>
-          <GamePage />
-        </AsyncErrorBoundary>
-      </RootErrorBoundary>
-    ),
-  },
-  {
-    path: '/',
-    element: <Layout />,
     children: [
       {
-        path: 'nickname/:roomUuid?',
-        element: (
-          <AsyncErrorBoundary>
-            <NicknamePage />,
-          </AsyncErrorBoundary>
-        ),
+        path: '/',
+        element: <MainPage />,
       },
       {
-        path: ':roomId/ready',
-        element: (
-          <AsyncErrorBoundary pendingFallback={<ReadySkeleton />}>
-            <ReadyPage />
-          </AsyncErrorBoundary>
-        ),
+        path: ':roomId/game',
+        element: <GamePage />,
       },
       {
-        path: ':roomId/round/result',
-        element: (
-          <AsyncErrorBoundary>
-            <RoundResultPage />
-          </AsyncErrorBoundary>
-        ),
-      },
-      {
-        path: ':roomId/round/result/status',
-        element: (
-          <AsyncErrorBoundary>
-            <VoteStatusPage />
-          </AsyncErrorBoundary>
-        ),
-      },
-      {
-        path: ':roomId/game/result',
-        element: (
-          <AsyncErrorBoundary>
-            <GameResultPage />
-          </AsyncErrorBoundary>
-        ),
+        path: '/',
+        element: <HeaderLayout />,
+        children: [
+          {
+            path: ':roomId/game',
+            element: (
+              <AsyncErrorBoundary pendingFallback={<GameSkeleton />}>
+                <GamePage />
+              </AsyncErrorBoundary>
+            ),
+          },
+          {
+            path: 'nickname/:roomUuid?',
+            element: (
+              <AsyncErrorBoundary>
+                <NicknamePage />,
+              </AsyncErrorBoundary>
+            ),
+          },
+          {
+            path: ':roomId/ready',
+            element: (
+              <AsyncErrorBoundary pendingFallback={<ReadySkeleton />}>
+                <ReadyPage />
+              </AsyncErrorBoundary>
+            ),
+          },
+          {
+            path: ':roomId/round/result',
+            element: (
+              <AsyncErrorBoundary>
+                <RoundResultPage />
+              </AsyncErrorBoundary>
+            ),
+          },
+          {
+            path: ':roomId/game/result',
+            element: (
+              <AsyncErrorBoundary>
+                <GameResultPage />
+              </AsyncErrorBoundary>
+            ),
+          },
+        ],
       },
     ],
-    errorElement: <RouterErrorFallback />,
   },
 ]);

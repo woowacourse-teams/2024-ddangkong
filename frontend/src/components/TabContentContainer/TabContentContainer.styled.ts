@@ -5,24 +5,12 @@ import { Theme } from '@/styles/Theme';
 export const contentWrapperStyle = css`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 3.2rem;
-  height: 100%;
+  gap: 15%;
+  height: 50vh;
+  overflow-y: scroll;
   padding: 2.4rem;
   border: 0.3rem solid ${Theme.color.peanut400};
   border-radius: 0.8rem;
-`;
-
-export const alertText = (isGroupTabActive: boolean) => css`
-  display: flex;
-  visibility: ${isGroupTabActive ? 'hidden' : 'visible'};
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-
-  ${Theme.typography.body2}
-  font-weight: bold;
 `;
 
 export const roundVoteResultContainer = css`
@@ -112,14 +100,17 @@ export const resultTextStyle = (isActiveGroupTab: boolean) => css`
   font-size: 1.2rem;
 `;
 
-export const currentVoteButtonWrapper = (isGroupTabActive: boolean) => css`
+export const totalResultInfoContainer = css`
   display: flex;
-  visibility: ${isGroupTabActive ? 'visible' : 'hidden'};
-  justify-content: flex-end;
+  flex-direction: column;
   align-items: center;
 `;
 
-export const buttonStyle = css`
-  color: black;
+export const totalResultInfoText = css`
+  font-size: 1.4rem;
+  line-height: 2rem;
+`;
+
+export const emphasizeText = css`
   font-weight: bold;
 `;

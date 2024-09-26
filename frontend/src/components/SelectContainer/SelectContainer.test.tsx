@@ -4,6 +4,7 @@ import { http, HttpResponse } from 'msw';
 
 import SelectContainer from './SelectContainer';
 
+import { ERROR_MESSAGE } from '@/constants/message';
 import { MOCK_API_URL } from '@/constants/url';
 import BALANCE_CONTENT from '@/mocks/data/balanceContent.json';
 import { server } from '@/mocks/server';
@@ -15,7 +16,10 @@ describe('SelectContainer', () => {
     const user = userEvent.setup();
     server.use(
       http.post(MOCK_API_URL.vote, () => {
-        return new HttpResponse(JSON.stringify({ errorCode: '', message: '' }), { status: 400 });
+        return new HttpResponse(
+          JSON.stringify({ errorCode: 'ALREADY_VOTED', message: ERROR_MESSAGE.ALREADY_VOTED }),
+          { status: 400 },
+        );
       }),
     );
 

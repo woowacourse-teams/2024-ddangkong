@@ -8,7 +8,6 @@ export const profileWrapper = css`
   align-items: center;
   width: 8rem;
   height: 8rem;
-  margin-top: 4rem;
   border-radius: 50%;
 
   background-color: ${Theme.color.gray300};
@@ -21,7 +20,7 @@ export const profileImg = css`
 export const nicknameContainer = css`
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 1.2rem;
   width: 26.8rem;
   margin: 2rem 0;
 `;

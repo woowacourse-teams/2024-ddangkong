@@ -19,10 +19,9 @@ interface TimerProps {
   selectedId: number;
   isVoted: boolean;
   completeSelection: () => void;
-  showModal: () => void;
 }
 
-const Timer = ({ selectedId, isVoted, completeSelection, showModal }: TimerProps) => {
+const Timer = ({ selectedId, isVoted, completeSelection }: TimerProps) => {
   const { roomId } = useParams();
   const { balanceContent, isFetching } = useBalanceContentQuery(Number(roomId));
   const { barWidthPercent, leftRoundTime, isAlmostFinished } = useVoteTimer({
@@ -30,7 +29,6 @@ const Timer = ({ selectedId, isVoted, completeSelection, showModal }: TimerProps
     selectedId,
     isVoted,
     completeSelection,
-    showModal,
   });
 
   useVoteIsFinished({

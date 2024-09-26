@@ -5,16 +5,17 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve --config webpack.config.dev.js",
-    "start": "webpack serve --config webpack.config.prod.js",
-    "build-dev": "webpack --config webpack.config.dev.js",
-    "build-prod": "webpack --config webpack.config.prod.js",
+    "dev:open": "webpack serve --config webpack.config.dev.js --host 0.0.0.0",
+    "prod": "webpack serve --config webpack.config.prod.js",
+    "build:dev": "webpack --config webpack.config.dev.js",
+    "build:prod": "webpack --config webpack.config.prod.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "npx eslint --ext .ts,.tsx .",
     "lint:styled": "stylelint ./src/**/*.styled.ts --fix",
     "prepare": "cd .. && husky frontend/.husky",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build:storybook": "storybook build"
   },
   "keywords": [],
   "author": "",

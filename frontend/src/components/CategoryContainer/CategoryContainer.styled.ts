@@ -5,8 +5,7 @@ import getBorderRadius from '@/styles/utils/getBorderRadius';
 
 export const categoryContainerLayout = css`
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   width: 100%;
   height: 10rem;
@@ -14,13 +13,25 @@ export const categoryContainerLayout = css`
   border-radius: ${getBorderRadius('medium')};
 
   background-color: ${Theme.color.peanut400};
+  cursor: pointer;
 `;
 
-export const title = css`
+export const roomSettingBox = css`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+export const bigTitle = css`
   font-weight: 800;
   font-size: 2.8rem;
 `;
 
-export const subtitle = css`
+export const smallTitle = css`
+  font-weight: 800;
+  font-size: 2rem;
+`;
+
+export const roomSettingLabel = css`
   font-weight: 600;
 `;
