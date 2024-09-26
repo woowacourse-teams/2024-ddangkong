@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-@Profile({"dev", "local"})
-public class DevRequestLoggingAspect extends RequestLoggingAspect {
-    @Before("allController()")
-    public void logController(JoinPoint joinPoint) {
-        super.logController(joinPoint);
+@Profile("prod")
+public class ProdControllerLoggingAspect extends ControllerLoggingAspect {
+    @Before("allControllerWithoutPolling()")
+    public void logControllerRequest(JoinPoint joinPoint) {
+        super.logControllerRequest(joinPoint);
     }
 }
