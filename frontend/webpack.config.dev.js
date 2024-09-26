@@ -1,7 +1,6 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.config.common.js');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = merge(common, {
   mode: 'development',
@@ -20,5 +19,5 @@ module.exports = merge(common, {
       },
     ],
   },
-  plugins: [new ForkTsCheckerWebpackPlugin(), new BundleAnalyzerPlugin()],
+  plugins: [new ForkTsCheckerWebpackPlugin()],
 });
