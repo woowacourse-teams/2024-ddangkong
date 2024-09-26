@@ -2,12 +2,8 @@ import { useGameStart } from './hooks/useGameStart';
 
 import Button from '@/components/common/Button/Button';
 
-interface StartButtonProps {
-  show: () => void;
-}
-
-const StartButton = ({ show }: StartButtonProps) => {
-  const { memberInfo, handleGameStart } = useGameStart({ showModal: show });
+const StartButton = () => {
+  const { memberInfo, handleGameStart } = useGameStart();
 
   return (
     <Button

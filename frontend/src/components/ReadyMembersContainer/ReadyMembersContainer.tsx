@@ -23,8 +23,12 @@ import { memberInfoState } from '@/recoil/atom';
 
 const ReadyMembersContainer = () => {
   const { members, master } = useGetRoomInfo();
-  const { isOpen, show, close } = useModal();
+  const { show } = useModal();
   const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
+
+  const handleClickInvite = () => {
+    show(InviteModal);
+  };
 
   // 원래 방장이 아니다 + 방장의 memberId와 내 memberId가 같다 -> 방장으로 변경
   useEffect(() => {
@@ -39,7 +43,7 @@ const ReadyMembersContainer = () => {
       <section css={membersContainer}>
         <ul css={memberList}>
           <li>
-            <button css={inviteButton} onClick={show}>
+            <button css={inviteButton} onClick={handleClickInvite}>
               <div css={profileBox}>
                 <img src={plusIcon} alt="추가 아이콘" />
               </div>
@@ -59,7 +63,6 @@ const ReadyMembersContainer = () => {
           ))}
         </ul>
       </section>
-      <InviteModal isOpen={isOpen} onClose={close} />
     </section>
   );
 };
