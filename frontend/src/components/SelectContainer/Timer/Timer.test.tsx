@@ -30,8 +30,6 @@ describe('Timer 테스트', () => {
         useTimer({ timeLimit, isSelectedOption, isVoted, vote: voteMock }),
       );
 
-      // act : 인자로 받은 함수를 실행시켜서 가상의 DOM(jsdom)에 적용하는 역할
-      // 상태 변경과 그로 인한 DOM 업데이트가 모두 완료된 후에 테스트가 실행되도록 보장
       act(() => {
         jest.advanceTimersByTime(timeLimit);
       });

@@ -15,6 +15,6 @@ export const convertMsecToSecond = (msec: number) => {
   return msec / UNIT_MSEC;
 };
 
-export const calculateUnitRatio = (total: number, divisor: number) => {
+export const calculateUnitRate = (total: number, divisor: number) => {
   return parseFloat((total / divisor).toFixed(1));
 };
