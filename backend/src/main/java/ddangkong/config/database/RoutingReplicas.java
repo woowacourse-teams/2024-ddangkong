@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RoutingReplicas<T> {
 
     private final List<T> replicas;
-    private final AtomicInteger index; //TODO: 성능 이슈 VS 동시성 이슈 비용 고려하기
+    private final AtomicInteger index;
 
     public RoutingReplicas(List<T> replicas) {
         this.replicas = replicas;
