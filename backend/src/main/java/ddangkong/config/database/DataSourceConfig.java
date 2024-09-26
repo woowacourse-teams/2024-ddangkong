@@ -30,7 +30,6 @@ public class DataSourceConfig {
                 .build();
     }
 
-
     @Bean
     public DataSource routingDataSource(
             DataSource sourceDataSource,
