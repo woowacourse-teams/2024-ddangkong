@@ -1,6 +1,6 @@
 import { nicknameItemLayout, nicknameText, profileImage } from './NicknameItem.styled';
 
-import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
+import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 
 interface NicknameItemProp {
   member: string;
