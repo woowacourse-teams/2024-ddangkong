@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile("prod")
 public class ProdControllerLoggingAspect extends ControllerLoggingAspect {
+
     @Before("allControllerWithoutPolling()")
     public void logControllerRequest(JoinPoint joinPoint) {
         super.logControllerRequest(joinPoint);

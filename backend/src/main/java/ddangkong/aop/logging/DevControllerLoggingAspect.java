@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile({"dev", "local"})
 public class DevControllerLoggingAspect extends ControllerLoggingAspect {
+
     @Before("allController()")
     public void logControllerRequest(JoinPoint joinPoint) {
         super.logControllerRequest(joinPoint);
