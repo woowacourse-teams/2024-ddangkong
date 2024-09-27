@@ -9,7 +9,7 @@ import {
   fallbackButtonContainer,
 } from '../ErrorFallback.styled';
 
-import ErrorDdangkong from '@/assets/images/errorDdangkong.png';
+import ErrorDdangkong from '@/assets/images/errorDdangkong.webp';
 
 interface RootErrorFallbackProps {
   error: unknown;

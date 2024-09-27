@@ -8,7 +8,7 @@ dotenv.config();
 module.exports = {
   entry: './src/index.tsx',
   output: {
-    filename: 'bundle.js',
+    filename: '[name].[contenthash].js',
     path: path.resolve(__dirname + '/dist'),
     publicPath: '/',
     clean: true,
@@ -30,7 +30,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jpe?g|gif|svg)$/i,
+        test: /\.(png|jpe?g|gif|svg|webp)$/i,
         use: [
           {
             loader: 'file-loader',
@@ -44,8 +44,9 @@ module.exports = {
   },
   plugins: [
     new HTMLWebpackPlugin({
-      template: './index.html', // 읽을 파일명
-      filename: './index.html', // output으로 출력할 파일명
+      template: path.join(__dirname, './public/index.html'),
+      hash: true,
+      favicon: path.join(__dirname, './public/favicon.ico'),
     }),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(process.env),

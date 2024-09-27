@@ -13,7 +13,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Slf4j
-abstract class RequestLoggingAspect {
+abstract class ControllerLoggingAspect {
 
     @Pointcut("execution(* ddangkong.controller..*Controller.*(..))")
     public void allController() {
@@ -27,11 +27,7 @@ abstract class RequestLoggingAspect {
     public void allControllerWithoutPolling() {
     }
 
-    protected void logController(JoinPoint joinPoint) {
-        logRequest(joinPoint);
-    }
-
-    private void logRequest(JoinPoint joinPoint) {
+    protected void logControllerRequest(JoinPoint joinPoint) {
         HttpServletRequest request = getHttpServletRequest();
         String uri = request.getRequestURI();
         String httpMethod = request.getMethod();
@@ -39,6 +35,14 @@ abstract class RequestLoggingAspect {
         String body = getBody(joinPoint);
 
         log.info("Request Logging: {} {} body - {} parameters - {}", httpMethod, uri, body, queryParameters);
+    }
+
+    protected void logControllerResponse(JoinPoint joinPoint, Object responseBody) {
+        HttpServletRequest request = getHttpServletRequest();
+        String uri = request.getRequestURI();
+        String httpMethod = request.getMethod();
+
+        log.info("Response Logging: SUCCESS {} {} Body: {}", httpMethod, uri, responseBody);
     }
 
     private HttpServletRequest getHttpServletRequest() {

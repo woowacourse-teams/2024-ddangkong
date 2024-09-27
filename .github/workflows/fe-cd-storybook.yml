@@ -46,7 +46,7 @@ jobs:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
 
       - name: build storybook
-        run: npm run build-storybook
+        run: npm run build:storybook
 
       - name: upload storybook
         uses: peaceiris/actions-gh-pages@v3

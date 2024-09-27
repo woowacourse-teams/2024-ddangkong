@@ -16,12 +16,11 @@ import {
 import useMakeOrEnterRoom from './useMakeOrEnterRoom';
 
 import { isJoinableRoom } from '@/apis/room';
-import AngryDdangkong from '@/assets/images/angryDdangkong.png';
-import SillyDdangkong from '@/assets/images/sillyDdangkong.png';
+import AngryDdangkong from '@/assets/images/angryDdangkong.webp';
+import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
 import useKeyboardUp from '@/hooks/useKeyboardUp';
-import useModal from '@/hooks/useModal';
 import { roomUuidState } from '@/recoil/atom';
 
 const NicknamePage = () => {

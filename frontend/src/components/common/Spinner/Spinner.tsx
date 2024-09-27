@@ -1,6 +1,6 @@
 import { spinnerWrapper, rotatingImage, spinnerText } from './Spinner.styled';
 
-import SpinDdangKong from '@/assets/images/spinDdangkong.png';
+import SpinDdangKong from '@/assets/images/spinDdangkong.webp';
 
 interface SpinnerProps {
   message?: string;

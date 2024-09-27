@@ -2,6 +2,7 @@ package ddangkong.domain.room.balance.roomcontent;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
@@ -25,7 +26,7 @@ class RoomContentTest {
         @Test
         void 투표_마감_시간을_설정한다() {
             // given
-            int currentRound = 1;
+            int currentRound = 2;
             int timeLimit = 10_000;
             RoomSetting roomSetting = new RoomSetting(5, timeLimit, Category.IF);
 
@@ -62,7 +63,7 @@ class RoomContentTest {
 
         private static final Room ROOM = Room.createNewRoom();
         private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.IF, "치킨 vs 피자");
-        private static final int ROUND = 1;
+        private static final int ROUND = 2;
 
         @Test
         void 투표_마감_시간보다_이전_시간이면_투표가_마감되지_않은_것이다() {
@@ -98,6 +99,33 @@ class RoomContentTest {
             // when & then
             assertThatThrownBy(() -> roomContent.isOverVoteDeadline(now, invalidRound))
                     .isExactlyInstanceOf(MismatchRoundException.class);
+        }
+    }
+
+    @Nested
+    class 게임_대기_시간_포함_투표_마감_시간_지남_여부 {
+
+        private static final Room ROOM = Room.createNewRoom();
+        private static final BalanceContent BALANCE_CONTENT = new BalanceContent(Category.IF, "치킨 vs 피자");
+        private static final int START_ROUND = 1;
+
+        @Test
+        void 첫_라운드는_투표_마감_시간에는_게임_대기_시간을_추가된다() {
+            // given
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:03");
+            RoomContent roomContent = RoomContent.newRoomContent(ROOM, BALANCE_CONTENT, START_ROUND);
+            int timeLimit = 3;
+            LocalDateTime inTime = LocalDateTime.parse("2024-08-03T20:00:08");
+            LocalDateTime overTime = LocalDateTime.parse("2024-08-03T20:00:09");
+
+            // when
+            roomContent.updateVoteDeadline(voteDeadline, timeLimit);
+
+            // then
+            assertAll(
+                    () -> assertThat(roomContent.isOverVoteDeadline(inTime, START_ROUND)).isFalse(),
+                    () -> assertThat(roomContent.isOverVoteDeadline(overTime, START_ROUND)).isTrue()
+            );
         }
     }
 }

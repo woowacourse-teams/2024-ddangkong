@@ -7,11 +7,11 @@ spring:
       username: ${secret.datasource.source.username}
       password: ${secret.datasource.source.password}
       jdbc-url: jdbc:mysql://${secret.datasource.source.host}:${secret.datasource.source.port}/${secret.datasource.database}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
-    replica1:
+    replica:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: ${secret.datasource.replica1.username}
-      password: ${secret.datasource.replica1.password}
-      jdbc-url: jdbc:mysql://${secret.datasource.replica1.host}:${secret.datasource.replica1.port}/${secret.datasource.database}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+      username: ${secret.datasource.replica.username}
+      password: ${secret.datasource.replica.password}
+      jdbc-url: jdbc:mysql://${secret.datasource.replica.host}:${secret.datasource.replica.port}/${secret.datasource.database}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
 
   sql:
     init:

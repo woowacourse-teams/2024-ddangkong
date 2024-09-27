@@ -38,7 +38,8 @@ export const nicknameContainer = (percent: number) => css`
 `;
 
 export const rankPercent = css`
-  ${Theme.typography.headline3}
+  width: 1.6rem;
+  ${Theme.typography.headline3};
 `;
 
 export const nickname = css`

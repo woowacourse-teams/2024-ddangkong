@@ -12,7 +12,7 @@ import {
 import { formatLeftRoundTime } from './Timer.util';
 import useVoteIsFinished from '../hooks/useVoteIsFinished';
 
-import DdangkongTimer from '@/assets/images/ddangkongTimer.png';
+import DdangkongTimer from '@/assets/images/ddangkongTimer.webp';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 interface TimerProps {
@@ -24,7 +24,7 @@ interface TimerProps {
 const Timer = ({ selectedId, isVoted, completeSelection }: TimerProps) => {
   const { roomId } = useParams();
   const { balanceContent, isFetching } = useBalanceContentQuery(Number(roomId));
-  const { barWidthPercent, leftRoundTime, isAlmostFinished } = useVoteTimer({
+  const { leftRoundTime, barScaleRate, isAlmostFinished } = useVoteTimer({
     roomId: Number(roomId),
     selectedId,
     isVoted,
@@ -38,8 +38,8 @@ const Timer = ({ selectedId, isVoted, completeSelection }: TimerProps) => {
 
   return (
     <section css={timerLayout}>
-      <div css={timerInnerLayout(barWidthPercent)}></div>
-      <div css={timerWrapper(barWidthPercent)}>
+      <div css={timerInnerLayout(barScaleRate)}></div>
+      <div css={timerWrapper(barScaleRate)}>
         <img
           css={[timerIcon, isAlmostFinished && timerIconShake]}
           src={DdangkongTimer}

@@ -7,7 +7,7 @@ export const contentWrapperStyle = css`
   flex-direction: column;
   gap: 15%;
   height: 50vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 2.4rem;
   border: 0.3rem solid ${Theme.color.peanut400};
   border-radius: 0.8rem;
