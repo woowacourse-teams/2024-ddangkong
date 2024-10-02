@@ -11,6 +11,7 @@ import ddangkong.exception.room.balance.roomvote.AlreadyVotedException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,16 +24,11 @@ public class RoomBalanceVoteService {
 
     @Transactional
     public RoomBalanceVote createVote(Member member, BalanceOptions balanceOptions, Long votedOptionId) {
-        for (BalanceOption option : balanceOptions.getOptions()) {
-            validDuplicatedVote(member, option);
-        }
         BalanceOption votedOption = balanceOptions.getOptionById(votedOptionId);
-        return roomVoteRepository.save(new RoomBalanceVote(member, votedOption));
-    }
-
-    private void validDuplicatedVote(Member member, BalanceOption balanceOption) {
-        if (roomVoteRepository.existsByMemberAndBalanceOption(member, balanceOption)) {
-            throw new AlreadyVotedException(member.getNickname(), balanceOption.getName());
+        try {
+            return roomVoteRepository.save(new RoomBalanceVote(member, votedOption));
+        } catch (DataIntegrityViolationException e) {
+            throw new AlreadyVotedException(member.getNickname(), votedOption.getName());
         }
     }
 
