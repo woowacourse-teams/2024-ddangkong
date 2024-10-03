@@ -28,5 +28,6 @@ cors:
 
 logging:
   config: classpath:logback-dev.xml
+  location : ${secret.application.log.location}
   discord:
     webhook-url: ${secret.discord.webhook-url}
