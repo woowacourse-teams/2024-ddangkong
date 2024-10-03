@@ -1,0 +1,32 @@
+spring:
+  config:
+    import: dev-secret.yml
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${secret.datasource.url}:${secret.datasource.port}/${secret.datasource.database}?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&autoReconnect=true&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+    username: ${secret.datasource.username}
+    password: ${secret.datasource.password}
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/data-dev.sql
+
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 1000
+
+cors:
+  origin: ${secret.cors.origin}
+
+logging:
+  config: classpath:logback-dev.xml
+  discord:
+    webhook-url: ${secret.discord.webhook-url}
