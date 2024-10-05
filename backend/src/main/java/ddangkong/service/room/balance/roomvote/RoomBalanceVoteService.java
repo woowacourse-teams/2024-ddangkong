@@ -32,6 +32,7 @@ public class RoomBalanceVoteService {
             throw new AlreadyVotedException(member.getNickname(), votedOption.getName());
         }
     }
+
     private void validDuplicatedVotes(Member member, BalanceOptions balanceOptions) {
         balanceOptions.getOptions()
                 .forEach(balanceOption -> validDuplicatedVote(member, balanceOption));

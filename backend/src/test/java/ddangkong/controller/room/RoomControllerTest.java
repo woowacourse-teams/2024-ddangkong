@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.controller.BaseControllerTest;
+import ddangkong.controller.exception.ErrorResponse;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
@@ -12,12 +13,13 @@ import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.member.Member;
+import ddangkong.exception.ClientErrorCode;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
-import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -25,6 +27,8 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.HttpStatus;
 
 class RoomControllerTest extends BaseControllerTest {
@@ -362,6 +366,59 @@ class RoomControllerTest extends BaseControllerTest {
                     () -> assertThat(actual.isInitial()).isTrue(),
                     () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
             );
+        }
+    }
+
+    @Nested
+    class 닉네임_검증 {
+
+        @Test
+        void 닉네임의_길이가_최대_길이_보다_길면_예외가_발생한다() {
+            // given
+            RoomJoinRequest request = new RoomJoinRequest("1234567890123");
+
+            // when
+            ErrorResponse errorResponse = RestAssured.given().log().all()
+                    .body(request)
+                    .contentType(ContentType.JSON)
+                    .when().post("/api/balances/rooms")
+                    .then().log().all()
+                    .extract().as(ErrorResponse.class);
+
+            // then
+            assertThat(errorResponse.errorCode()).isEqualTo(ClientErrorCode.FIELD_ERROR.name());
+        }
+
+        @Test
+        void 닉네임의_길이가_최소_길이_보다_작으면_예외가_발생한다() {
+            // given
+            RoomJoinRequest request = new RoomJoinRequest("1");
+
+            // when
+            ErrorResponse errorResponse = RestAssured.given().log().all()
+                    .body(request)
+                    .contentType(ContentType.JSON)
+                    .when().post("/api/balances/rooms")
+                    .then().log().all()
+                    .extract().as(ErrorResponse.class);
+
+            // then
+            assertThat(errorResponse.errorCode()).isEqualTo(ClientErrorCode.FIELD_ERROR.name());
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"12", "123", "1234567890", "123456789012"})
+        void 닉네임의_길이가_기준_범위_안이면_예외가_발생하지_않는다(String name) {
+            // given
+            RoomJoinRequest request = new RoomJoinRequest(name);
+
+            // when & then
+            RestAssured.given().log().all()
+                    .body(request)
+                    .contentType(ContentType.JSON)
+                    .when().post("/api/balances/rooms")
+                    .then().log().all()
+                    .statusCode(HttpStatus.CREATED.value());
         }
     }
 }
