@@ -24,11 +24,22 @@ public class RoomBalanceVoteService {
 
     @Transactional
     public RoomBalanceVote createVote(Member member, BalanceOptions balanceOptions, Long votedOptionId) {
+        validDuplicatedVotes(member, balanceOptions);
         BalanceOption votedOption = balanceOptions.getOptionById(votedOptionId);
         try {
             return roomVoteRepository.save(new RoomBalanceVote(member, votedOption));
         } catch (DataIntegrityViolationException e) {
             throw new AlreadyVotedException(member.getNickname(), votedOption.getName());
+        }
+    }
+    private void validDuplicatedVotes(Member member, BalanceOptions balanceOptions) {
+        balanceOptions.getOptions()
+                .forEach(balanceOption -> validDuplicatedVote(member, balanceOption));
+    }
+
+    private void validDuplicatedVote(Member member, BalanceOption balanceOption) {
+        if (roomVoteRepository.existsByMemberAndBalanceOption(member, balanceOption)) {
+            throw new AlreadyVotedException(member.getNickname(), balanceOption.getName());
         }
     }
 
