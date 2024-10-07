@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 public record RoomJoinRequest(
         @NotBlank
-        @Size(min = 2, max = 12)
+        @Size(max = 255)
         String nickname
 ) {
 }

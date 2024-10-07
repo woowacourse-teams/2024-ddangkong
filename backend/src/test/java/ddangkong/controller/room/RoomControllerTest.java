@@ -316,23 +316,4 @@ class RoomControllerTest extends BaseControllerTest {
             );
         }
     }
-
-    @Nested
-    class 닉네임_검증 {
-
-        @ParameterizedTest
-        @ValueSource(strings = {"12", "123", "1234567890", "123456789012"})
-        void 닉네임의_길이가_기준_범위_안이면_예외가_발생하지_않는다(String name) {
-            // given
-            RoomJoinRequest request = new RoomJoinRequest(name);
-
-            // when & then
-            RestAssured.given().log().all()
-                    .body(request)
-                    .contentType(ContentType.JSON)
-                    .when().post("/api/balances/rooms")
-                    .then().log().all()
-                    .statusCode(HttpStatus.CREATED.value());
-        }
-    }
 }
