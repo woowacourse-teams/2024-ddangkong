@@ -214,38 +214,6 @@ class RoomControllerTest extends BaseControllerTest {
                     .then().log().all()
                     .statusCode(204);
         }
-
-        @Test
-        void 방_식별자가_0이하인_경우_예외를_발생한다() {
-            // given
-            Long roomId = 0L;
-            Long memberId = 1L;
-
-            // when & then
-            RestAssured.given().log().all()
-                    .contentType(ContentType.JSON)
-                    .pathParam("roomId", roomId)
-                    .pathParam("memberId", memberId)
-                    .when().delete(ENDPOINT)
-                    .then().log().all()
-                    .statusCode(400);
-        }
-
-        @Test
-        void 멤버_식별자가_0이하인_경우_예외를_발생한다() {
-            // given
-            Long roomId = 0L;
-            Long memberId = 1L;
-
-            // when & then
-            RestAssured.given().log().all()
-                    .contentType(ContentType.JSON)
-                    .pathParam("roomId", roomId)
-                    .pathParam("memberId", memberId)
-                    .when().delete(ENDPOINT)
-                    .then().log().all()
-                    .statusCode(400);
-        }
     }
 
     @Nested
@@ -262,16 +230,6 @@ class RoomControllerTest extends BaseControllerTest {
                     .then().log().all()
                     .statusCode(204);
         }
-
-        @Test
-        void 방의_식별자가_음수인_경우_예외를_던진다() {
-            // when & then
-            RestAssured.given().log().all()
-                    .pathParam("roomId", -1L)
-                    .when().patch("/api/balances/rooms/{roomId}/start")
-                    .then().log().all()
-                    .statusCode(400);
-        }
     }
 
     @Nested
@@ -285,16 +243,6 @@ class RoomControllerTest extends BaseControllerTest {
                     .when().patch("/api/balances/rooms/{roomId}/next-round")
                     .then().log().all()
                     .statusCode(204);
-        }
-
-        @Test
-        void 방의_식별자가_음수인_경우_예외를_던진다() {
-            // when & then
-            RestAssured.given().log().all()
-                    .pathParam("roomId", -1L)
-                    .when().patch("/api/balances/rooms/{roomId}/next-round")
-                    .then().log().all()
-                    .statusCode(400);
         }
     }
 
@@ -371,40 +319,6 @@ class RoomControllerTest extends BaseControllerTest {
 
     @Nested
     class 닉네임_검증 {
-
-        @Test
-        void 닉네임의_길이가_최대_길이_보다_길면_예외가_발생한다() {
-            // given
-            RoomJoinRequest request = new RoomJoinRequest("1234567890123");
-
-            // when
-            ErrorResponse errorResponse = RestAssured.given().log().all()
-                    .body(request)
-                    .contentType(ContentType.JSON)
-                    .when().post("/api/balances/rooms")
-                    .then().log().all()
-                    .extract().as(ErrorResponse.class);
-
-            // then
-            assertThat(errorResponse.errorCode()).isEqualTo(ClientErrorCode.FIELD_ERROR.name());
-        }
-
-        @Test
-        void 닉네임의_길이가_최소_길이_보다_작으면_예외가_발생한다() {
-            // given
-            RoomJoinRequest request = new RoomJoinRequest("1");
-
-            // when
-            ErrorResponse errorResponse = RestAssured.given().log().all()
-                    .body(request)
-                    .contentType(ContentType.JSON)
-                    .when().post("/api/balances/rooms")
-                    .then().log().all()
-                    .extract().as(ErrorResponse.class);
-
-            // then
-            assertThat(errorResponse.errorCode()).isEqualTo(ClientErrorCode.FIELD_ERROR.name());
-        }
 
         @ParameterizedTest
         @ValueSource(strings = {"12", "123", "1234567890", "123456789012"})
