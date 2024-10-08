@@ -10,12 +10,13 @@ interface A11yOnlyProps<T extends ElementType = 'span'> {
 const A11yOnly = <T extends ElementType = 'span'>({
   as,
   role = 'text',
+  children,
   ...props
 }: PropsWithChildren<A11yOnlyProps<T>>) => {
   const Component = as || 'span';
   return (
     <Component css={a11yOnlyLayout} role={role} {...props}>
-      {props.children}
+      {children}
     </Component>
   );
 };
