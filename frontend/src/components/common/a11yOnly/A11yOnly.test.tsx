@@ -15,9 +15,7 @@ describe('A11yOnly 컴포넌트 테스트', () => {
   test('aria-label 속성이 적용된 텍스트가 스크린 리더로 읽히는지 확인한다.', () => {
     render(<AllyOnly aria-label={SCREEN_READER_TEXT}>안녕하세요.</AllyOnly>);
 
-    const screenReaderElement = screen.getByLabelText(
-      '화면에 표시되지 않고 스크린 리더로 읽을 수 있습니다.',
-    );
+    const screenReaderElement = screen.getByLabelText(SCREEN_READER_TEXT);
 
     expect(screenReaderElement).toBeInTheDocument();
   });
