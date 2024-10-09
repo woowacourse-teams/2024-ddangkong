@@ -12,10 +12,10 @@ import {
   inviteButton,
   profileImage,
 } from './ReadyMembersContainer.styled';
-import InviteModal from '../common/InviteModal/InviteModal';
 
 import crownIcon from '@/assets/images/crownIcon.webp';
 import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
+import InviteModal from '@/components/common/InviteModal/InviteModal';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useModal from '@/hooks/useModal';
 import { memberInfoState } from '@/recoil/atom';
@@ -34,7 +34,7 @@ const ReadyMembersContainer = () => {
     if (!memberInfo.isMaster && master.memberId === memberInfo.memberId) {
       setMemberInfo({ ...memberInfo, isMaster: true });
     }
-  }, [master.memberId]);
+  }, [master.memberId, memberInfo, setMemberInfo]);
 
   return (
     <section css={readyMembersContainerLayout}>
