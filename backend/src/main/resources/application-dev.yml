@@ -8,11 +8,6 @@ spring:
     username: ${secret.datasource.username}
     password: ${secret.datasource.password}
 
-  sql:
-    init:
-      mode: always
-      schema-locations: classpath:sql/data-dev.sql
-
   jpa:
     defer-datasource-initialization: true
     hibernate:
