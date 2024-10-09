@@ -21,9 +21,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setting application-dev.yml
+      - name: Setting dev-secret.yml
         run: |
-          echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
+          echo "${{ secrets.DEV_SECRET_YML }}" > ./src/main/resources/dev-secret.yml
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
