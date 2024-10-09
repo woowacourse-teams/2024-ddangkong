@@ -39,7 +39,7 @@ const ReadyMembersContainer = () => {
   return (
     <section css={readyMembersContainerLayout}>
       <div css={totalNumber}>
-        <div>총 인원 {members.length}명</div>
+        <div aria-live="polite">총 인원 {members.length}명</div>
         <button css={inviteButton} onClick={handleClickInvite}>
           초대하기
         </button>
