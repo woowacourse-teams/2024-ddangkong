@@ -14,7 +14,7 @@ import {
 } from './ReadyMembersContainer.styled';
 
 import crownIcon from '@/assets/images/crownIcon.webp';
-import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
+import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
 import InviteModal from '@/components/common/InviteModal/InviteModal';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useModal from '@/hooks/useModal';
@@ -49,7 +49,7 @@ const ReadyMembersContainer = () => {
           {members.map((member) => (
             <li css={memberItem} key={member.memberId}>
               <div css={profileBox}>
-                <img src={SillyDdangkong} alt="사용자 프로필" css={profileImage} />
+                <img src={SillyDdangkongMedium} alt="사용자 프로필" css={profileImage} />
               </div>
               <div css={memberStatus}>
                 <span>{member.nickname}</span>

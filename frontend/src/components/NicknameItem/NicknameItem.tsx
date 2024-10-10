@@ -2,7 +2,7 @@ import { useRecoilValue } from 'recoil';
 
 import { nicknameItemLayout, nicknameText, profileImage } from './NicknameItem.styled';
 
-import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
+import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
 import { memberInfoState } from '@/recoil/atom';
 interface NicknameItemProp {
   nickName: string;
@@ -14,7 +14,7 @@ const NicknameItem = ({ nickName }: NicknameItemProp) => {
 
   return (
     <li css={nicknameItemLayout}>
-      <img src={SillyDdangkong} alt="사용자 프로필" css={profileImage} />
+      <img src={SillyDdangkongMedium} alt="사용자 프로필" css={profileImage} />
       <span css={nicknameText(isMyNickname)}>{nickName}</span>
     </li>
   );

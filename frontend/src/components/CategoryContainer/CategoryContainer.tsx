@@ -27,9 +27,11 @@ const CategoryContainer = () => {
     <>
       <A11yOnly
         aria-label={`
+      방 정보
       라운드 ${roomSetting.totalRound} 
       카테고리 ${roomSetting.category.label} 
       타이머 ${roomSetting.timeLimit / 1000}초`}
+        aria-live="polite"
       />
       <button
         aria-label="카테고리 설정"
