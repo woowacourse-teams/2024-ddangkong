@@ -18,6 +18,7 @@ import useRoutePath from './hooks/useRoutePath';
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
 import ExitIcon from '@/assets/images/exitIcon.webp';
 import SettingIcon from '@/assets/images/settingsIcon.webp';
+import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
@@ -94,11 +95,17 @@ export const RoundHeader = () => {
 
   return (
     <header css={headerLayout()}>
-      <span css={roundText}>
+      <span css={roundText} aria-hidden={true}>
         {balanceContent.currentRound}/{balanceContent.totalRound}
       </span>
-      <h1 css={gameTitle}>{title}</h1>
-      <span css={roundText}></span>
+      <h1 css={gameTitle} aria-hidden={true}>
+        {title}
+      </h1>
+      <span css={roundText} aria-hidden={true}></span>
+
+      <A11yOnly>
+        {balanceContent.totalRound}라운드.중.{balanceContent.currentRound}라운드.{title}페이지
+      </A11yOnly>
     </header>
   );
 };
