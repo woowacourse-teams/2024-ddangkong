@@ -95,6 +95,10 @@ export const RoundHeader = () => {
 
   return (
     <header css={headerLayout()}>
+      <A11yOnly>
+        {balanceContent.totalRound}라운드.중.{balanceContent.currentRound}라운드.{title}페이지
+      </A11yOnly>
+
       <span css={roundText} aria-hidden={true}>
         {balanceContent.currentRound}/{balanceContent.totalRound}
       </span>
@@ -102,10 +106,6 @@ export const RoundHeader = () => {
         {title}
       </h1>
       <span css={roundText} aria-hidden={true}></span>
-
-      <A11yOnly>
-        {balanceContent.totalRound}라운드.중.{balanceContent.currentRound}라운드.{title}페이지
-      </A11yOnly>
     </header>
   );
 };

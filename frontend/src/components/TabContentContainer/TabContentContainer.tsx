@@ -86,6 +86,10 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
                 <span css={totalResultInfoText}>📢 전체 유저 사이에서는 의견이 반반이에요 😲</span>
               ) : (
                 <>
+                  <A11yOnly>
+                    📢 전체 유저 중 {dominantVoteData.dominantPercent}%는.
+                    {dominantVoteData.dominantName}를 선택했어요
+                  </A11yOnly>
                   <span css={totalResultInfoText} aria-hidden={true}>
                     📢 전체 유저 중{' '}
                     <span css={emphasizeText}>{dominantVoteData.dominantPercent}%</span>는
@@ -93,10 +97,6 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
                   <span css={totalResultInfoText} aria-hidden={true}>
                     <span css={emphasizeText}>{dominantVoteData.dominantName}</span>를 선택했어요 !
                   </span>
-                  <A11yOnly>
-                    📢 전체 유저 중 {dominantVoteData.dominantPercent}%는.
-                    {dominantVoteData.dominantName}를 선택했어요
-                  </A11yOnly>
                 </>
               )}
             </div>
