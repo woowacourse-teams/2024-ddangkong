@@ -15,7 +15,12 @@ const TAB_TITLE = {
 
 const RoundResultTab = ({ tab, activeTab, handleClickTab }: RoundResultTabProps) => {
   return (
-    <button css={tabButtonStyle(activeTab === tab)} onClick={() => handleClickTab(tab)}>
+    <button
+      css={tabButtonStyle(activeTab === tab)}
+      onClick={() => handleClickTab(tab)}
+      role="tab"
+      aria-current={activeTab === tab}
+    >
       {TAB_TITLE[tab]}
     </button>
   );
