@@ -16,6 +16,7 @@ import {
   totalResultInfoText,
 } from './TabContentContainer.styled';
 import getDominantVote from './TabContentContainer.util';
+import A11yOnly from '../common/a11yOnly/A11yOnly';
 import OptionParticipantsContainer from '../OptionParticipantsContainer/OptionParticipantsContainer';
 import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hook';
 import TopicContainer from '../TopicContainer/TopicContainer';
@@ -55,7 +56,13 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
       <TopicContainer />
       {isVote && isVoteStatisticsTabActive && (
         <>
-          <div css={roundVoteResultContainer}>
+          <A11yOnly>
+            {groupRoundResult.firstOption.name}.{groupRoundResult.firstOption.percent}%.
+            {groupRoundResult.firstOption.memberCount}명 선택. {groupRoundResult.secondOption.name}.
+            {groupRoundResult.secondOption.percent}%.{groupRoundResult.secondOption.memberCount}명
+            선택
+          </A11yOnly>
+          <div css={roundVoteResultContainer} aria-hidden={true}>
             <div css={categoryContainer}>
               <span>{groupRoundResult.firstOption.name}</span>
               <span>{groupRoundResult.secondOption.name}</span>
@@ -76,18 +83,20 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
           {totalResult && dominantVoteData && (
             <div css={totalResultInfoContainer}>
               {dominantVoteData.isEqual ? (
-                <span css={totalResultInfoText}>
-                  🥜 땅콩 유저들 사이에서 선택이 팽팽하게 갈렸어요! 😲
-                </span>
+                <span css={totalResultInfoText}>📢 전체 유저 사이에서는 의견이 반반이에요 😲</span>
               ) : (
                 <>
-                  <span css={totalResultInfoText}>
-                    🥜 땅콩 유저 중{' '}
+                  <span css={totalResultInfoText} aria-hidden={true}>
+                    📢 전체 유저 중{' '}
                     <span css={emphasizeText}>{dominantVoteData.dominantPercent}%</span>는
                   </span>
-                  <span css={totalResultInfoText}>
+                  <span css={totalResultInfoText} aria-hidden={true}>
                     <span css={emphasizeText}>{dominantVoteData.dominantName}</span>를 선택했어요 !
                   </span>
+                  <A11yOnly>
+                    📢 전체 유저 중 {dominantVoteData.dominantPercent}%는.
+                    {dominantVoteData.dominantName}를 선택했어요
+                  </A11yOnly>
                 </>
               )}
             </div>
