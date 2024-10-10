@@ -22,14 +22,14 @@ const useVoteTimer = ({ roomId, selectedId, isVoted, completeSelection }: UseVot
     completeSelection,
   });
 
-  const { leftRoundTime, barScaleRate, isAlmostFinished } = useTimer({
+  const { leftRoundTime, isAlmostFinished } = useTimer({
     timeLimit,
     isSelectedOption: Boolean(selectedId),
     isVoted,
     vote,
   });
 
-  return { leftRoundTime, barScaleRate, isAlmostFinished };
+  return { leftRoundTime, isAlmostFinished, timeLimit };
 };
 
 export default useVoteTimer;

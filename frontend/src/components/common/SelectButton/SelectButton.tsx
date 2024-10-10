@@ -26,6 +26,7 @@ const SelectButton = ({ contentId, selectedId, completeSelection }: SelectButton
         disabled={data || !selectedId || isPending}
         text={data || isPending ? '선택 완료' : '선택'}
         onClick={vote}
+        aria-pressed
       />
     </div>
   );

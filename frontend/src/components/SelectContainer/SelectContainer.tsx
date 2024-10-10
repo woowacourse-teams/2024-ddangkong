@@ -26,7 +26,7 @@ const SelectContainer = () => {
           selectedOption={selectedOption}
           handleClickOption={handleClickOption}
         />
-        <span>VS</span>
+        <span aria-hidden>VS</span>
         <SelectOption
           option={balanceContent.secondOption}
           selectedOption={selectedOption}

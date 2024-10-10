@@ -14,7 +14,3 @@ export const convertMsecToSecond = (msec: number) => {
   const UNIT_MSEC = POLLING_DELAY;
   return msec / UNIT_MSEC;
 };
-
-export const calculateUnitRate = (total: number, divisor: number) => {
-  return parseFloat((total / divisor).toFixed(1));
-};

@@ -27,10 +27,6 @@ export const router = createBrowserRouter([
         element: <MainPage />,
       },
       {
-        path: ':roomId/game',
-        element: <GamePage />,
-      },
-      {
         path: '/',
         element: <HeaderLayout />,
         children: [

@@ -1,6 +1,7 @@
 import { useLocation, useParams } from 'react-router-dom';
 
 import { categoryText, topicContainerLayout, topicText } from './TopicContainer.styled';
+import A11yOnly from '../common/a11yOnly/A11yOnly';
 
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
@@ -12,10 +13,17 @@ const TopicContainer = () => {
 
   const isGamePage = location.pathname === ROUTES.game(Number(roomId));
 
+  const screenReaderQuestion = `질문. ${balanceContent.question}. 1번.${balanceContent.firstOption.name}. 2번.${balanceContent.secondOption.name}.`;
+
   return (
     <section css={topicContainerLayout}>
-      <span css={categoryText}>{isGamePage && balanceContent.category}</span>
-      <span css={topicText}>{balanceContent.question}</span>
+      <A11yOnly>{isGamePage && screenReaderQuestion}</A11yOnly>
+      <span css={categoryText} aria-hidden>
+        {isGamePage && balanceContent.category}
+      </span>
+      <span css={topicText} aria-hidden>
+        {balanceContent.question}
+      </span>
     </section>
   );
 };
