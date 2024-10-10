@@ -1,14 +1,17 @@
 package ddangkong.domain.room.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.room.Room;
 import ddangkong.domain.support.EntityTestUtils;
-import ddangkong.exception.BadRequestException;
 import ddangkong.exception.room.member.AlreadyMasterException;
+import ddangkong.exception.room.member.InvalidNicknameException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class MemberTest {
 
@@ -61,6 +64,25 @@ class MemberTest {
             boolean actual = master.isCommon();
 
             assertThat(actual).isFalse();
+        }
+    }
+    
+    @Nested
+    class 닉네임_검증 {
+
+        @ParameterizedTest
+        @ValueSource(strings = {"01", "012345678912"})
+        void 닉네임_길이가_유효한_경우_예외가_발생하지_않는다(String name) {
+            // when & then
+            assertThatNoException().isThrownBy(() -> Member.createMaster(name, ROOM));
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"0", "", "0123456789123"})
+        void 닉네임_길이가_유효하지_않는_경우_예외를_발생시킨다(String name) {
+            // when & then
+            assertThatThrownBy(() -> Member.createMaster(name, ROOM))
+                    .isExactlyInstanceOf(InvalidNicknameException.class);
         }
     }
 }

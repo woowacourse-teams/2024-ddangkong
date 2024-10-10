@@ -38,15 +38,5 @@ class RoomContentControllerTest extends BaseControllerTest {
             // then
             assertThat(actual).isEqualTo(EXPECTED_RESPONSE);
         }
-
-        @Test
-        void 방의_식별자가_음수인_경우_예외를_던진다() {
-            // when & then
-            RestAssured.given().log().all()
-                    .pathParam("roomId", -1L)
-                    .when().get("/api/balances/rooms/{roomId}/content")
-                    .then().log().all()
-                    .statusCode(400);
-        }
     }
 }

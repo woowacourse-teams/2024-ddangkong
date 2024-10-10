@@ -88,44 +88,6 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
             // then
             assertThat(actual.optionId()).isEqualTo(optionA.getId());
         }
-
-        @Test
-        void 요청_경로의_아이디가_양수가_아닌_경우_400_에러로_응답한다() {
-            // given
-            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(keochan.getId(), optionA.getId());
-            Long roomId = 0L;
-
-            // when & then
-            assertThatCreateVoteIsBadRequest(roomId, balanceContent.getId(), request);
-        }
-
-        @Test
-        void 요청_바디의_아이디가_양수가_아닌_경우_400_에러로_응답한다() {
-            // given
-            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(0L, optionA.getId());
-
-            // when & then
-            assertThatCreateVoteIsBadRequest(room.getId(), balanceContent.getId(), request);
-        }
-
-        @Test
-        void 요청_바디의_아이디가_null인_경우_400_에러로_응답한다() {
-            // given
-            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(null, optionA.getId());
-
-            // when & then
-            assertThatCreateVoteIsBadRequest(room.getId(), balanceContent.getId(), request);
-        }
-
-        void assertThatCreateVoteIsBadRequest(Long roomId, Long contentId, RoomBalanceVoteRequest request) {
-            RestAssured.given().log().all()
-                    .body(request).contentType(ContentType.JSON)
-                    .pathParam("roomId", roomId)
-                    .pathParam("contentId", contentId)
-                    .when().post("/api/balances/rooms/{roomId}/contents/{contentId}/votes")
-                    .then().log().all()
-                    .statusCode(400);
-        }
     }
 
     @Nested

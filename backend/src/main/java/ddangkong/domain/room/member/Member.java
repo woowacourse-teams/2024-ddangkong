@@ -2,6 +2,7 @@ package ddangkong.domain.room.member;
 
 import ddangkong.domain.room.Room;
 import ddangkong.exception.room.member.AlreadyMasterException;
+import ddangkong.exception.room.member.InvalidNicknameException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,6 +21,9 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Member {
 
+    private static final int NICKNAME_MIN_LENGTH = 2;
+    private static final int NICKNAME_MAX_LENGTH = 12;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,9 +39,16 @@ public class Member {
     private boolean isMaster;
 
     private Member(String nickname, Room room, boolean isMaster) {
+        validateNickname(nickname);
         this.nickname = nickname;
         this.room = room;
         this.isMaster = isMaster;
+    }
+
+    private void validateNickname(String nickname) {
+        if (nickname.length() < NICKNAME_MIN_LENGTH || nickname.length() > NICKNAME_MAX_LENGTH) {
+            throw new InvalidNicknameException(NICKNAME_MIN_LENGTH, NICKNAME_MAX_LENGTH);
+        }
     }
 
     public static Member createMaster(String nickname, Room room) {
