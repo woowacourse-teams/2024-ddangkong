@@ -27,6 +27,8 @@ const NicknameInput = ({ nicknameInputRef, handleMakeOrEnterRoom }: NicknameInpu
         value={nickname}
         onChange={handleChangeInput}
         onKeyDown={handleKeyDown}
+        aria-live="polite"
+        aria-label="닉네임 입력"
       />
       <span css={nicknameLengthText}>
         {nickname.length}/{NICKNAME_MAX_LENGTH}
