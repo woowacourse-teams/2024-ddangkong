@@ -1,12 +1,12 @@
 import { useRecoilValue } from 'recoil';
 
 import {
-  categoryContainerLayout,
+  RoomSettingLayout,
   bigTitle,
   smallTitle,
   roomSettingLabel,
   roomSettingBox,
-} from './CategoryContainer.styled';
+} from './RoomSetting.styled';
 
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
@@ -14,7 +14,7 @@ import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useModal from '@/hooks/useModal';
 import { memberInfoState } from '@/recoil/atom';
 
-const CategoryContainer = () => {
+const RoomSetting = () => {
   const { roomSetting } = useGetRoomInfo();
   const { isMaster } = useRecoilValue(memberInfoState);
   const { show } = useModal();
@@ -35,7 +35,7 @@ const CategoryContainer = () => {
       />
       <button
         aria-label="카테고리 설정"
-        css={categoryContainerLayout}
+        css={RoomSettingLayout}
         onClick={isMaster ? handleClickCategory : () => {}}
       >
         <div css={roomSettingBox}>
@@ -55,4 +55,4 @@ const CategoryContainer = () => {
   );
 };
 
-export default CategoryContainer;
+export default RoomSetting;
