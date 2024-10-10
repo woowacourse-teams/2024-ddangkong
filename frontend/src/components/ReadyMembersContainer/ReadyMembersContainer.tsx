@@ -12,10 +12,10 @@ import {
   inviteButton,
   profileImage,
 } from './ReadyMembersContainer.styled';
-import InviteModal from '../common/InviteModal/InviteModal';
 
 import crownIcon from '@/assets/images/crownIcon.webp';
-import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
+import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
+import InviteModal from '@/components/common/InviteModal/InviteModal';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useModal from '@/hooks/useModal';
 import { memberInfoState } from '@/recoil/atom';
@@ -34,12 +34,12 @@ const ReadyMembersContainer = () => {
     if (!memberInfo.isMaster && master.memberId === memberInfo.memberId) {
       setMemberInfo({ ...memberInfo, isMaster: true });
     }
-  }, [master.memberId]);
+  }, [master.memberId, memberInfo, setMemberInfo]);
 
   return (
     <section css={readyMembersContainerLayout}>
       <div css={totalNumber}>
-        <div>총 인원 {members.length}명</div>
+        <div aria-live="polite">총 인원 {members.length}명</div>
         <button css={inviteButton} onClick={handleClickInvite}>
           초대하기
         </button>
@@ -49,7 +49,7 @@ const ReadyMembersContainer = () => {
           {members.map((member) => (
             <li css={memberItem} key={member.memberId}>
               <div css={profileBox}>
-                <img src={SillyDdangkong} alt="사용자 프로필" css={profileImage} />
+                <img src={SillyDdangkongMedium} alt="사용자 프로필" css={profileImage} />
               </div>
               <div css={memberStatus}>
                 <span>{member.nickname}</span>

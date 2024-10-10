@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import {
   angryImage,
   barWrapperStyle,
-  categoryContainer,
+  RoomSetting,
   contentWrapperStyle,
   emphasizeText,
   firstBar,
@@ -56,7 +56,7 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
       {isVote && isVoteStatisticsTabActive && (
         <>
           <div css={roundVoteResultContainer}>
-            <div css={categoryContainer}>
+            <div css={RoomSetting}>
               <span>{groupRoundResult.firstOption.name}</span>
               <span>{groupRoundResult.secondOption.name}</span>
             </div>

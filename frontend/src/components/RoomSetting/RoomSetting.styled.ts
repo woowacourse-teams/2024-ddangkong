@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { Theme } from '@/styles/Theme';
 import getBorderRadius from '@/styles/utils/getBorderRadius';
 
-export const categoryContainerLayout = css`
+export const RoomSettingLayout = css`
   display: flex;
   justify-content: space-evenly;
   align-items: center;

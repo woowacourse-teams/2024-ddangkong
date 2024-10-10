@@ -19,7 +19,7 @@ export const roundVoteResultContainer = css`
   gap: 1rem;
 `;
 
-export const categoryContainer = css`
+export const RoomSetting = css`
   display: flex;
   justify-content: space-between;
   gap: 0.8rem;
