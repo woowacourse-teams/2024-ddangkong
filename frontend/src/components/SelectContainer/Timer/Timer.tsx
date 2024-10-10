@@ -13,6 +13,8 @@ import { convertMsecToSecond, formatLeftRoundTime } from './Timer.util';
 import useVoteIsFinished from '../hooks/useVoteIsFinished';
 
 import DdangkongTimer from '@/assets/images/ddangkongTimer.webp';
+import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
+import { ALMOST_FINISH_SECOND } from '@/constants/config';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 interface TimerProps {
@@ -41,7 +43,12 @@ const Timer = ({ selectedId, isVoted, completeSelection }: TimerProps) => {
       <div css={timerInnerLayout(convertMsecToSecond(timeLimit))}></div>
       <div css={timerWrapper(convertMsecToSecond(timeLimit))}>
         <img css={[timerIcon, isAlmostFinished && timerIconShake]} src={DdangkongTimer} alt="" />
-        <span css={timerText(isAlmostFinished)}>{formatLeftRoundTime(leftRoundTime)}</span>
+        <A11yOnly aria-live={leftRoundTime <= ALMOST_FINISH_SECOND && 'polite'}>
+          {leftRoundTime}초
+        </A11yOnly>
+        <span css={timerText(isAlmostFinished)} aria-hidden>
+          {formatLeftRoundTime(leftRoundTime)}
+        </span>
       </div>
     </section>
   );

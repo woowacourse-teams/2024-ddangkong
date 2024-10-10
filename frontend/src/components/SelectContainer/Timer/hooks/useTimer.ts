@@ -2,9 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { convertMsecToSecond } from '../Timer.util';
 
-import { POLLING_DELAY } from '@/constants/config';
-
-const ALMOST_FINISH_SECOND = 5;
+import { ALMOST_FINISH_SECOND, POLLING_DELAY } from '@/constants/config';
 
 interface UseTimerProps {
   timeLimit: number;
