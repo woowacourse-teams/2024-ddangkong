@@ -18,6 +18,7 @@ import useRoutePath from './hooks/useRoutePath';
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
 import ExitIcon from '@/assets/images/exitIcon.webp';
 import SettingIcon from '@/assets/images/settingsIcon.webp';
+import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
@@ -91,14 +92,18 @@ export const RoundHeader = () => {
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
 
   const title = isRoundResultPage ? '투표 결과' : '밸런스 게임';
+  const screenReaderHeader = `${balanceContent.totalRound}라운드.중.${balanceContent.currentRound}라운드.${title}페이지`;
 
   return (
     <header css={headerLayout()}>
-      <span css={roundText}>
+      <A11yOnly>{screenReaderHeader}</A11yOnly>
+      <span css={roundText} aria-hidden>
         {balanceContent.currentRound}/{balanceContent.totalRound}
       </span>
-      <h1 css={gameTitle}>{title}</h1>
-      <span css={roundText}></span>
+      <h1 css={gameTitle} aria-hidden>
+        {title}
+      </h1>
+      <span css={roundText} aria-hidden></span>
     </header>
   );
 };
