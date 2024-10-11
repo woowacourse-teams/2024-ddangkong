@@ -10,25 +10,20 @@ describe('RoundVoteContainer 컴포넌트 테스트', () => {
     const user = userEvent.setup();
     customRender(<RoundVoteContainer />);
 
-    const button = await screen.findByRole('button', { name: '투표 현황' });
+    const button = await screen.findByRole('tab', { name: '투표 현황' });
     await user.click(button);
 
     await waitFor(() => {
-      // 첫 번째 선택지와 투표자 확인
-      expect(screen.getByText((content) => content.includes('100억 빚 송강'))).toBeInTheDocument();
-      expect(screen.getByText((content) => content.includes('d'))).toBeInTheDocument();
-      // 두 번째 선택지와 투표자 확인
-      expect(
-        screen.getByText((content) => content.includes('100억 부자 송강호')),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText((content) => content.includes('일이삼사오육칠팔구십일이')),
-      ).toBeInTheDocument();
-      // 기권자 확인
-      expect(
-        screen.getByText((content) => content.includes('투표에 참여하지 않으셨어요')),
-      ).toBeInTheDocument();
-      expect(screen.getByText((content) => content.includes('ㅁ'))).toBeInTheDocument();
+      // 첫 번째 선택지의 투표자 확인
+      expect(screen.getByText('d')).toBeInTheDocument();
+
+      // 두 번째 선택지의 투표자들 확인
+      expect(screen.getByText('일이삼사오육칠팔구십일이')).toBeInTheDocument();
+      expect(screen.getByText('가나다라마바사아자차카타')).toBeInTheDocument();
+      expect(screen.getByText('abc')).toBeInTheDocument();
+      expect(screen.getByText('땅콩땅콩땅콩땅콩땅콩땅콩')).toBeInTheDocument();
+      expect(screen.getByText('123456789012')).toBeInTheDocument();
+      expect(screen.getByText('안녕하세요안녕하세요안녕')).toBeInTheDocument();
     });
   });
 });
