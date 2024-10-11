@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.controller.BaseControllerTest;
+import ddangkong.controller.exception.ErrorResponse;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
@@ -12,12 +13,13 @@ import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.member.Member;
+import ddangkong.exception.ClientErrorCode;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
-import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -25,6 +27,8 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.HttpStatus;
 
 class RoomControllerTest extends BaseControllerTest {
@@ -210,38 +214,6 @@ class RoomControllerTest extends BaseControllerTest {
                     .then().log().all()
                     .statusCode(204);
         }
-
-        @Test
-        void 방_식별자가_0이하인_경우_예외를_발생한다() {
-            // given
-            Long roomId = 0L;
-            Long memberId = 1L;
-
-            // when & then
-            RestAssured.given().log().all()
-                    .contentType(ContentType.JSON)
-                    .pathParam("roomId", roomId)
-                    .pathParam("memberId", memberId)
-                    .when().delete(ENDPOINT)
-                    .then().log().all()
-                    .statusCode(400);
-        }
-
-        @Test
-        void 멤버_식별자가_0이하인_경우_예외를_발생한다() {
-            // given
-            Long roomId = 0L;
-            Long memberId = 1L;
-
-            // when & then
-            RestAssured.given().log().all()
-                    .contentType(ContentType.JSON)
-                    .pathParam("roomId", roomId)
-                    .pathParam("memberId", memberId)
-                    .when().delete(ENDPOINT)
-                    .then().log().all()
-                    .statusCode(400);
-        }
     }
 
     @Nested
@@ -258,16 +230,6 @@ class RoomControllerTest extends BaseControllerTest {
                     .then().log().all()
                     .statusCode(204);
         }
-
-        @Test
-        void 방의_식별자가_음수인_경우_예외를_던진다() {
-            // when & then
-            RestAssured.given().log().all()
-                    .pathParam("roomId", -1L)
-                    .when().patch("/api/balances/rooms/{roomId}/start")
-                    .then().log().all()
-                    .statusCode(400);
-        }
     }
 
     @Nested
@@ -281,16 +243,6 @@ class RoomControllerTest extends BaseControllerTest {
                     .when().patch("/api/balances/rooms/{roomId}/next-round")
                     .then().log().all()
                     .statusCode(204);
-        }
-
-        @Test
-        void 방의_식별자가_음수인_경우_예외를_던진다() {
-            // when & then
-            RestAssured.given().log().all()
-                    .pathParam("roomId", -1L)
-                    .when().patch("/api/balances/rooms/{roomId}/next-round")
-                    .then().log().all()
-                    .statusCode(400);
         }
     }
 
