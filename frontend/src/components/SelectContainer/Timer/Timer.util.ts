@@ -16,8 +16,5 @@ export const convertMsecToSecond = (msec: number) => {
 };
 
 export const isAlertTimer = (leftRoundTime: number, timeLimit: number) => {
-  return (
-    leftRoundTime === Math.floor(convertMsecToSecond(timeLimit) / 2) ||
-    leftRoundTime === ALMOST_FINISH_SECOND
-  );
+  return leftRoundTime === Math.floor(timeLimit / 2) || leftRoundTime === ALMOST_FINISH_SECOND;
 };

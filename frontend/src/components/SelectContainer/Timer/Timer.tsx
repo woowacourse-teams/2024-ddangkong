@@ -39,8 +39,8 @@ const Timer = ({ selectedId, isVoted, completeSelection }: TimerProps) => {
 
   return (
     <section css={timerLayout}>
-      <div css={timerInnerLayout(convertMsecToSecond(timeLimit))}></div>
-      <div css={timerWrapper(convertMsecToSecond(timeLimit))}>
+      <div css={timerInnerLayout(timeLimit)}></div>
+      <div css={timerWrapper(timeLimit)}>
         <img css={[timerIcon, isAlmostFinished && timerIconShake]} src={DdangkongTimer} alt="" />
         <A11yOnly aria-live={isAlertTimer(leftRoundTime, timeLimit) && 'polite'}>
           {leftRoundTime}초 남았습니다.

@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { convertMsecToSecond } from '../Timer.util';
-
 import { ALMOST_FINISH_SECOND, POLLING_DELAY } from '@/constants/config';
 
 interface UseTimerProps {
@@ -12,7 +10,7 @@ interface UseTimerProps {
 }
 
 const useTimer = ({ timeLimit, isSelectedOption, isVoted, vote }: UseTimerProps) => {
-  const [leftRoundTime, setLeftRoundTime] = useState(convertMsecToSecond(timeLimit));
+  const [leftRoundTime, setLeftRoundTime] = useState(timeLimit);
 
   const isVoteTimeout = leftRoundTime <= 0;
   const isAlmostFinished = leftRoundTime <= ALMOST_FINISH_SECOND;
