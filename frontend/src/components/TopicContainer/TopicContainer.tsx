@@ -13,7 +13,7 @@ const TopicContainer = () => {
 
   const isGamePage = location.pathname === ROUTES.game(Number(roomId));
 
-  const screenReaderQuestion = `질문. ${balanceContent.question}. 1번.${balanceContent.firstOption.name}. 2번.${balanceContent.secondOption.name}.`;
+  const screenReaderQuestion = `질문. ${balanceContent.question}.`;
 
   return (
     <section css={topicContainerLayout}>
