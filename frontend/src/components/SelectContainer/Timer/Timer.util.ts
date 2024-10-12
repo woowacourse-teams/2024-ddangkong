@@ -1,4 +1,4 @@
-import { POLLING_DELAY } from '@/constants/config';
+import { ALMOST_FINISH_SECOND, POLLING_DELAY } from '@/constants/config';
 
 export const formatLeftRoundTime = (leftRoundTime: number) => {
   const minutes = Math.floor(leftRoundTime / 60);
@@ -13,4 +13,11 @@ export const formatLeftRoundTime = (leftRoundTime: number) => {
 export const convertMsecToSecond = (msec: number) => {
   const UNIT_MSEC = POLLING_DELAY;
   return msec / UNIT_MSEC;
+};
+
+export const isAlertTimer = (leftRoundTime: number, timeLimit: number) => {
+  return (
+    leftRoundTime === Math.floor(convertMsecToSecond(timeLimit) / 2) ||
+    leftRoundTime === ALMOST_FINISH_SECOND
+  );
 };
