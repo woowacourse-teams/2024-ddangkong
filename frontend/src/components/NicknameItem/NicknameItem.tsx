@@ -14,7 +14,7 @@ const NicknameItem = ({ nickName }: NicknameItemProp) => {
 
   return (
     <li css={nicknameItemLayout}>
-      <img src={SillyDdangkong} alt="사용자 프로필" css={profileImage} />
+      <img src={SillyDdangkong} alt="" css={profileImage} />
       <span css={nicknameText(isMyNickname)}>{nickName}</span>
     </li>
   );
