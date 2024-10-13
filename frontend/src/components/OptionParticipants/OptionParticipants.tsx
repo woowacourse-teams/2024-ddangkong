@@ -18,7 +18,7 @@ const OptionParticipants = ({ optionName, memberCount, members }: OptionParticip
       <A11yOnly>
         {optionName}.{memberCount}명
       </A11yOnly>
-      <p css={optionInfo} aria-hidden={true}>
+      <p css={optionInfo} aria-hidden>
         {optionName}: {memberCount}
       </p>
       <ul css={participantsListWrapper}>

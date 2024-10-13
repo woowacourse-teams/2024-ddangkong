@@ -62,7 +62,7 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
             {groupRoundResult.secondOption.percent}%.{groupRoundResult.secondOption.memberCount}명
             선택
           </A11yOnly>
-          <div css={roundVoteResultContainer} aria-hidden={true}>
+          <div css={roundVoteResultContainer} aria-hidden>
             <div css={categoryContainer}>
               <span>{groupRoundResult.firstOption.name}</span>
               <span>{groupRoundResult.secondOption.name}</span>
@@ -90,11 +90,11 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
                     📢 전체 유저 중 {dominantVoteData.dominantPercent}%는.
                     {dominantVoteData.dominantName}를 선택했어요
                   </A11yOnly>
-                  <span css={totalResultInfoText} aria-hidden={true}>
+                  <span css={totalResultInfoText} aria-hidden>
                     📢 전체 유저 중{' '}
                     <span css={emphasizeText}>{dominantVoteData.dominantPercent}%</span>는
                   </span>
-                  <span css={totalResultInfoText} aria-hidden={true}>
+                  <span css={totalResultInfoText} aria-hidden>
                     <span css={emphasizeText}>{dominantVoteData.dominantName}</span>를 선택했어요 !
                   </span>
                 </>

@@ -99,13 +99,13 @@ export const RoundHeader = () => {
         {balanceContent.totalRound}라운드.중.{balanceContent.currentRound}라운드.{title}페이지
       </A11yOnly>
 
-      <span css={roundText} aria-hidden={true}>
+      <span css={roundText} aria-hidden>
         {balanceContent.currentRound}/{balanceContent.totalRound}
       </span>
-      <h1 css={gameTitle} aria-hidden={true}>
+      <h1 css={gameTitle} aria-hidden>
         {title}
       </h1>
-      <span css={roundText} aria-hidden={true}></span>
+      <span css={roundText} aria-hidden></span>
     </header>
   );
 };
