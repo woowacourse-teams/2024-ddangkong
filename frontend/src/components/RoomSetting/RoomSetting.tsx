@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
 
 import {
-  RoomSettingLayout,
+  roomSettingLayout,
   bigTitle,
   smallTitle,
   roomSettingLabel,
@@ -35,7 +35,7 @@ const RoomSetting = () => {
       />
       <button
         aria-label="방 설정"
-        css={RoomSettingLayout}
+        css={roomSettingLayout}
         onClick={isMaster ? handleClickCategory : () => {}}
       >
         <div css={roomSettingBox}>
