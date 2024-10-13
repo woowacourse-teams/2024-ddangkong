@@ -12,13 +12,14 @@ import {
   MatchingResultHeaderContainer,
 } from './Header.styled';
 import { useBlockRefresh } from './hooks/useBlockRefresh';
+import { useExit } from './hooks/useExit';
 import useRoutePath from './hooks/useRoutePath';
 
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
 import ExitIcon from '@/assets/images/exitIcon.svg';
 import SettingIcon from '@/assets/images/settingIcon.svg';
+import AlertModal from '@/components/common/AlertModal/AlertModal';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
-import ExitModal from '@/components/ExitModal/ExitModal';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useModal from '@/hooks/useModal';
@@ -60,19 +61,19 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
   const { isMaster } = useRecoilValue(memberInfoState);
+  const { handleExit } = useExit();
 
   const handleClickRoomSetting = () => {
     show(RoomSettingModal);
   };
 
   const handleClickExit = () => {
-    show(ExitModal);
+    show(AlertModal, { message: '정말로 나가시겠습니까?', onConfirm: handleExit });
   };
 
   return (
     <header css={headerLayout()}>
       <button onClick={handleClickExit} css={buttonWrapper}>
-        {/* <ExitIcon /> */}
         <img src={ExitIcon} alt="방 나가기" css={iconImage} />
       </button>
       <h1 css={gameTitle}>{title}</h1>
