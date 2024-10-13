@@ -51,16 +51,18 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
 
   const dominantVoteData = totalResult ? getDominantVote(totalResult) : null;
 
+  const screenReaderFirstOption = `${groupRoundResult.firstOption.name},${groupRoundResult.firstOption.percent}%,${groupRoundResult.firstOption.memberCount}명 선택,`;
+  const screenReaderSecondOption = `${groupRoundResult.secondOption.name},${groupRoundResult.secondOption.percent}%,${groupRoundResult.secondOption.memberCount}명 선택`;
+  const screenReaderDominantVote = `📢 전체 유저 중 ${dominantVoteData?.dominantPercent}%는, ${dominantVoteData?.dominantName}를 선택했어요`;
+
   return (
     <div css={contentWrapperStyle}>
       <TopicContainer />
       {isVote && isVoteStatisticsTabActive && (
         <>
           <A11yOnly>
-            {groupRoundResult.firstOption.name}.{groupRoundResult.firstOption.percent}%.
-            {groupRoundResult.firstOption.memberCount}명 선택. {groupRoundResult.secondOption.name}.
-            {groupRoundResult.secondOption.percent}%.{groupRoundResult.secondOption.memberCount}명
-            선택
+            {screenReaderFirstOption}
+            {screenReaderSecondOption}
           </A11yOnly>
           <div css={roundVoteResultContainer} aria-hidden>
             <div css={categoryContainer}>
@@ -86,10 +88,7 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
                 <span css={totalResultInfoText}>📢 전체 유저 사이에서는 의견이 반반이에요 😲</span>
               ) : (
                 <>
-                  <A11yOnly>
-                    📢 전체 유저 중 {dominantVoteData.dominantPercent}%는.
-                    {dominantVoteData.dominantName}를 선택했어요
-                  </A11yOnly>
+                  <A11yOnly>{screenReaderDominantVote}</A11yOnly>
                   <span css={totalResultInfoText} aria-hidden>
                     📢 전체 유저 중{' '}
                     <span css={emphasizeText}>{dominantVoteData.dominantPercent}%</span>는
