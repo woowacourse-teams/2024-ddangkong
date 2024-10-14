@@ -6,9 +6,10 @@ import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
-import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -33,11 +34,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoomController {
 
     private final RoomFacade roomFacade;
+    private final EncryptCookie encryptCookie;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms")
-    public RoomJoinResponse createRoom(@Valid @RequestBody RoomJoinRequest request) {
-        return roomFacade.createRoom(request.nickname());
+    public RoomJoinResponse createRoom(@Valid @RequestBody RoomJoinRequest request, HttpServletResponse response) {
+        RoomJoinResponse roomJoinResponse = roomFacade.createRoom(request.nickname());
+        encryptCookie.setCookie(response, roomJoinResponse.member().memberId());
+        return roomJoinResponse;
     }
 
     @Polling
@@ -55,8 +59,12 @@ public class RoomController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms/{uuid}/members")
-    public RoomJoinResponse joinRoom(@PathVariable String uuid, @Valid @RequestBody RoomJoinRequest request) {
-        return roomFacade.joinRoom(request.nickname(), uuid);
+    public RoomJoinResponse joinRoom(@PathVariable String uuid,
+                                     @Valid @RequestBody RoomJoinRequest request,
+                                     HttpServletResponse response) {
+        RoomJoinResponse roomJoinResponse = roomFacade.joinRoom(request.nickname(), uuid);
+        encryptCookie.setCookie(response, roomJoinResponse.member().memberId());
+        return roomJoinResponse;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

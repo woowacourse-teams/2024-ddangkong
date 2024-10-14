@@ -31,7 +31,7 @@ class EncryptionUtilsTest extends BaseControllerTest {
         void 값을_디코딩_할_수_있다() {
             // given
             String value = "ThisIsMySecretKe";
-            String encoded = "mqXljgWvHwTlzXgLgvbR1r9Z2fBvKGFjeGKnvagGPMk";
+            String encoded = "GoyXxFK7Tzpwbe9IW9cfegUBh6DN5amHLLqwkatz5VM=";
 
             // when
             String encrypt = encryptionUtils.decrypt(encoded);

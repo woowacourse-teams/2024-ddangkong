@@ -57,6 +57,7 @@ public enum ClientErrorCode {
     MEDIA_TYPE_NOT_SUPPORTED("허용되지 않은 미디어 타입입니다."),
     ALREADY_DISCONNECTED("이미 클라이언트에서 요청이 종료되었습니다."),
     INTERNAL_SERVER_ERROR("서버 오류가 발생했습니다. 관리자에게 문의하세요."),
+    COOKIE_NOT_FOUND("일치하는 쿠키가 없습니다."),
     ;
 
     private final String message;
