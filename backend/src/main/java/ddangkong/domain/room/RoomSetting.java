@@ -22,7 +22,7 @@ public class RoomSetting {
     private static final int DEFAULT_TOTAL_ROUND = 5;
     private static final int MIN_TOTAL_ROUND = 3;
     private static final int MAX_TOTAL_ROUND = 10;
-    private static final List<Integer> ALLOWED_TIME_LIMIT = List.of(5_000, 10_000, 15_000);
+    private static final List<Integer> ALLOWED_TIME_LIMIT = List.of(5_000, 10_000, 15_000, 30_000);
     private static final int DEFAULT_TIME_LIMIT_MSEC = 10_000;
 
     @Column(nullable = false)
