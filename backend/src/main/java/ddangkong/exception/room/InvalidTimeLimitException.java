@@ -9,8 +9,7 @@ public class InvalidTimeLimitException extends BadRequestException {
 
     public InvalidTimeLimitException(List<Integer> allowedTimeLimits, int requestedTimeLimit) {
         super(INVALID_TIME_LIMIT.getMessage()
-                .formatted(allowedTimeLimits.get(0), allowedTimeLimits.get(1), allowedTimeLimits.get(2),
-                        requestedTimeLimit));
+                .formatted(allowedTimeLimits.toString(), requestedTimeLimit));
     }
 
     @Override
