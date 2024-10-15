@@ -50,6 +50,30 @@ include::{snippets}/room/join/response-fields.adoc[]
 
 '''
 
+=== 방 재참여
+
+==== curl
+
+include::{snippets}/room/rejoin/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/rejoin/http-request.adoc[]
+
+request fields
+
+include::{snippets}/room/rejoin/request-fields.adoc[]
+
+==== response
+
+include::{snippets}/room/rejoin/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/join/response-fields.adoc[]
+
+'''
+
 === 방 나가기
 
 ==== curl
