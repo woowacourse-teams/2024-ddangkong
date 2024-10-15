@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class EncryptionUtils {
 
-    @Value("${aes.algorithm}")
+    @Value("${encrypt.algorithm}")
     private String algorithm;
-    @Value("${aes.secret-key}")
+    @Value("${encrypt.secret-key}")
     private String secretKeyString;
     private SecretKey secretKey;
 
