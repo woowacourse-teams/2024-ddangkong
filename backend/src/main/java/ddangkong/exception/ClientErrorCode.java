@@ -36,6 +36,7 @@ public enum ClientErrorCode {
     EXCEED_MAX_MEMBER_COUNT("방의 최대 인원을 초과했습니다. 현재 멤버 수: %d"),
     NOT_ROOM_MEMBER("방에 존재하지 않는 멤버입니다."),
     INVALID_NICKNAME("닉네임은 최소 %d글자, 최대 %d글자여야 합니다."),
+    INVALID_MEMBER_ID("해당 ID에 일치하는 멤버가 없습니다."),
 
     // RoomContent
     NOT_FOUND_ROOM_CONTENT("방에 존재하지 않는 컨텐츠입니다."),

@@ -347,5 +347,28 @@ class RoomControllerTest extends BaseControllerTest {
             // then
             assertThat(cookie).isNotBlank();
         }
+
+        @Test
+        void 쿠키를_통해_방에_재참여_할_수_있다() {
+            // given
+            RoomJoinRequest body = new RoomJoinRequest("참가자");
+            String cookie = RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .body(body)
+                    .when().post("/api/balances/rooms")
+                    .getCookie("test_cookie");
+
+            // when
+            RoomJoinResponse roomJoinResponse = RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .cookie("test_cookie", cookie)
+                    .when().get("/api/balances/rooms/rejoin")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomJoinResponse.class);
+
+            // then
+            assertThat(body.nickname()).isEqualTo(roomJoinResponse.member().nickname());
+        }
     }
 }

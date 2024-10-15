@@ -21,6 +21,7 @@ import ddangkong.domain.room.member.Member;
 import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.exception.room.NotFoundRoomException;
+import ddangkong.exception.room.member.InvalidMemberIdException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
@@ -121,6 +122,39 @@ class RoomFacadeTest extends BaseServiceTest {
             Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
             long memberCountInRoom = memberRepository.countByRoom(foundRoom);
             assertThat(memberCountInRoom).isEqualTo(12);
+        }
+    }
+
+    @Nested
+    class 방_재참여 {
+
+        @Test
+        void 이전_방에_재참여한다() {
+            // given
+            String nickname = "나는참가자";
+            String uuid = "uuid4";
+            MemberResponse expectedMemberResponse = new MemberResponse(14L, nickname, false);
+            roomFacade.joinRoom(nickname, uuid);
+
+            // when
+            RoomJoinResponse actual = roomFacade.rejoinRoom("14");
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.roomId()).isEqualTo(4L),
+                    () -> assertThat(actual.roomUuid()).isEqualTo(uuid),
+                    () -> assertThat(actual.member()).isEqualTo(expectedMemberResponse)
+            );
+        }
+
+        @Test
+        void 존재하지_않는_아이디로_방에_재참여할_수_없다() {
+            // given
+            String notExistMemberId = "0";
+
+            // when & then
+            assertThatThrownBy(() -> roomFacade.rejoinRoom(notExistMemberId))
+                    .isExactlyInstanceOf(InvalidMemberIdException.class);
         }
     }
 

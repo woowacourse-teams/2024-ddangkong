@@ -26,10 +26,11 @@ public class EncryptCookie {
     }
 
     public String getCookieValue(HttpServletRequest request) {
-        return Arrays.stream(request.getCookies())
+        String value = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals(key))
                 .findAny()
                 .orElseThrow(CookieNotFoundException::new)
                 .getValue();
+        return encryptionUtils.decrypt(value);
     }
 }

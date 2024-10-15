@@ -9,6 +9,7 @@ import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -42,6 +43,11 @@ public class RoomController {
         RoomJoinResponse roomJoinResponse = roomFacade.createRoom(request.nickname());
         encryptCookie.setCookie(response, roomJoinResponse.member().memberId());
         return roomJoinResponse;
+    }
+
+    @GetMapping("/balances/rooms/rejoin")
+    public RoomJoinResponse rejoinRoom(HttpServletRequest request) {
+        return roomFacade.rejoinRoom(encryptCookie.getCookieValue(request));
     }
 
     @Polling
