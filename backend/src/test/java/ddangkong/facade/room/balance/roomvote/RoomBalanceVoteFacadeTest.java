@@ -272,7 +272,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
                     "투표_매칭도_조회",
                     3,
                     RoomStatus.FINISH,
-                    new RoomSetting(3, 5000, Category.IF)));
+                    new RoomSetting(3, 15_000, Category.IF)));
 
             BalanceContent balanceContent1 = balanceContentRepository.save(new BalanceContent(Category.IF, "if1"));
             balanceOptionRepository.save(new BalanceOption("option1", balanceContent1));
