@@ -18,6 +18,11 @@ const RoomSetting = () => {
   const { roomSetting } = useGetRoomInfo();
   const { isMaster } = useRecoilValue(memberInfoState);
   const { show } = useModal();
+  const screenReader = `
+        방 정보.
+        카테고리 ${roomSetting.category.label}. 
+        라운드 ${roomSetting.totalRound}. 
+        타이머 ${roomSetting.timeLimit / 1000}초.`;
 
   const handleClickCategory = () => {
     show(RoomSettingModal);
@@ -25,17 +30,11 @@ const RoomSetting = () => {
 
   return (
     <>
-      <A11yOnly
-        aria-label={`
-      방 정보.
-      카테고리 ${roomSetting.category.label}. 
-      라운드 ${roomSetting.totalRound}. 
-      타이머 ${roomSetting.timeLimit / 1000}초.`}
-        aria-live="polite"
-      />
+      <A11yOnly aria-live="polite">{screenReader}</A11yOnly>
       <button
         aria-label="방 설정"
         css={roomSettingLayout}
+        aria-hidden={isMaster}
         onClick={isMaster ? handleClickCategory : () => {}}
       >
         <div css={roomSettingBox}>
