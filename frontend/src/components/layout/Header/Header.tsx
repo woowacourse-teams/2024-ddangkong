@@ -20,6 +20,7 @@ import ExitIcon from '@/assets/images/exitIcon.webp';
 import SettingIcon from '@/assets/images/settingsIcon.webp';
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
+import { convertMsecToSecond } from '@/components/SelectContainer/Timer/Timer.util';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useModal from '@/hooks/useModal';
@@ -102,6 +103,27 @@ export const RoundHeader = () => {
       </span>
       <h1 css={gameTitle} aria-hidden>
         {title}
+      </h1>
+      <span css={roundText} aria-hidden></span>
+    </header>
+  );
+};
+
+export const GameHeader = () => {
+  const { roomId } = useParams();
+  const { balanceContent } = useBalanceContentQuery(Number(roomId));
+
+  const { totalRound, currentRound, timeLimit } = balanceContent;
+  const screenReaderHeader = `${totalRound}라운드.중.${currentRound}라운드. 밸런스 게임 페이지. 제한 시간 ${convertMsecToSecond(timeLimit)}초.`;
+
+  return (
+    <header css={headerLayout()}>
+      <A11yOnly>{screenReaderHeader}</A11yOnly>
+      <span css={roundText} aria-hidden>
+        {currentRound}/{totalRound}
+      </span>
+      <h1 css={gameTitle} aria-hidden>
+        밸런스 게임
       </h1>
       <span css={roundText} aria-hidden></span>
     </header>
