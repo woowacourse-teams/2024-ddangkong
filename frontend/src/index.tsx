@@ -26,7 +26,7 @@ const enableMocking = async () => {
 
   const { worker } = await import('./mocks/browser');
 
-  return await worker.start();
+  // return await worker.start();
 };
 
 enableMocking().then(() => {
@@ -38,7 +38,7 @@ enableMocking().then(() => {
           <ToastProvider>
             <RouterProvider router={router} />
           </ToastProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
+          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         </ThemeProvider>
       </RecoilRoot>
     </QueryClientProvider>,

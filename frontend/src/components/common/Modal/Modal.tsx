@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import React, { ButtonHTMLAttributes, HTMLAttributes, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -16,6 +17,7 @@ import {
 } from './Modal.styled';
 
 import CloseIcon from '@/assets/images/closeIcon.png';
+import useFocus from '@/hooks/useFocus';
 
 export interface ModalProps
   extends React.PropsWithChildren<{
@@ -27,7 +29,7 @@ export interface ModalProps
 
 const Modal = ({ children, isOpen, onClose, position = 'center', ...restProps }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
-
+  const focusRef = useFocus<HTMLDivElement>();
   useModalEscClose(isOpen, onClose);
 
   const handleOutsideClick = (event: React.MouseEvent | React.KeyboardEvent) => {
@@ -41,7 +43,13 @@ const Modal = ({ children, isOpen, onClose, position = 'center', ...restProps }:
   const modalContent = (
     /* eslint jsx-a11y/no-static-element-interactions: "off" */
     // 모달을 제외한 영역을 클릭시 모달이 꺼지도록 설정하기 위해 설정함
-    <div css={modalBackdropLayout} onClick={handleOutsideClick} onKeyDown={handleOutsideClick}>
+    <div
+      tabIndex={0}
+      ref={focusRef}
+      css={modalBackdropLayout}
+      onClick={handleOutsideClick}
+      onKeyDown={handleOutsideClick}
+    >
       <div css={modalContentWrapper({ position })} ref={modalRef} {...restProps}>
         {children}
       </div>
