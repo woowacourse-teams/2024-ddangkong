@@ -16,7 +16,7 @@ cors:
 cookie:
   key: "test_cookie"
 
-aes:
+encrypt:
   secret-key: "1234567890123456"
   algorithm: "AES"
 
