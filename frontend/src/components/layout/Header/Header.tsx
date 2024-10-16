@@ -16,9 +16,10 @@ import { useExit } from './hooks/useExit';
 import useRoutePath from './hooks/useRoutePath';
 
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
-import ExitIcon from '@/assets/images/exitIcon.webp';
-import SettingIcon from '@/assets/images/settingsIcon.webp';
+import ExitIcon from '@/assets/images/exitIcon.svg';
+import SettingIcon from '@/assets/images/settingIcon.svg';
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
+import AlertModal from '@/components/common/AlertModal/AlertModal';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { convertMsecToSecond } from '@/components/SelectContainer/Timer/Timer.util';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
@@ -60,16 +61,20 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 // 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
-  const { handleExit } = useExit();
   const { isMaster } = useRecoilValue(memberInfoState);
+  const { handleExit } = useExit();
 
   const handleClickRoomSetting = () => {
     show(RoomSettingModal);
   };
 
+  const handleClickExit = () => {
+    show(AlertModal, { message: '정말로 나가시겠습니까?', onConfirm: handleExit });
+  };
+
   return (
     <header css={headerLayout()}>
-      <button onClick={handleExit} css={buttonWrapper}>
+      <button onClick={handleClickExit} css={buttonWrapper}>
         <img src={ExitIcon} alt="방 나가기" css={iconImage} />
       </button>
       <h1 css={gameTitle}>{title}</h1>
