@@ -68,9 +68,11 @@ public class RoomController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms/{uuid}/members")
     public RoomJoinResponse joinRoom(@PathVariable String uuid,
-                                     @Valid @RequestBody RoomJoinRequest request) {
+                                     @Valid @RequestBody RoomJoinRequest request,
+                                     HttpServletResponse response) {
         RoomJoinResponse roomJoinResponse = roomFacade.joinRoom(request.nickname(), uuid);
-        cookieEncryptor.getEncodedCookie(roomJoinResponse.member().memberId());
+        Cookie encodedCookie = cookieEncryptor.getEncodedCookie(roomJoinResponse.member().memberId());
+        response.addCookie(encodedCookie);
         return roomJoinResponse;
     }
 

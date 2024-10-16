@@ -5,6 +5,9 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
+import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -87,6 +90,9 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
+                            ),
+                            responseCookies(
+                                    cookieWithName("test_cookie").description("방 재참여시 사용되는 쿠키")
                             )
                     ));
         }
@@ -203,6 +209,9 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
+                            ),
+                            responseCookies(
+                                    cookieWithName("test_cookie").description("방 재참여시 사용되는 쿠키")
                             )
                     ));
         }
@@ -231,6 +240,9 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                     )
                     .andExpect(status().isOk())
                     .andDo(document("room/rejoin",
+                            requestCookies(
+                                    cookieWithName("test_cookie").description("사용자 인증에 필요한 쿠키")
+                            ),
                             requestFields(
                                     fieldWithPath("nickname").description("닉네임")
                             ),
