@@ -17,7 +17,7 @@ const TopicContainer = () => {
 
   return (
     <section css={topicContainerLayout}>
-      <A11yOnly>{isGamePage && screenReaderQuestion}</A11yOnly>
+      <A11yOnly>{screenReaderQuestion}</A11yOnly>
       <span css={categoryText} aria-hidden>
         {isGamePage && balanceContent.category}
       </span>
