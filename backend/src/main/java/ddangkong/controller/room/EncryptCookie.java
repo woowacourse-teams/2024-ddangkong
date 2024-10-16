@@ -1,10 +1,7 @@
 package ddangkong.controller.room;
 
-import ddangkong.exception.room.CookieNotFoundException;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -25,12 +22,7 @@ public class EncryptCookie {
         response.addCookie(cookie);
     }
 
-    public String getCookieValue(HttpServletRequest request) {
-        String value = Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(key))
-                .findAny()
-                .orElseThrow(CookieNotFoundException::new)
-                .getValue();
-        return encryptionUtils.decrypt(value);
+    public String getDecodedCookieValue(String cookieValue) {
+        return encryptionUtils.decrypt(cookieValue);
     }
 }

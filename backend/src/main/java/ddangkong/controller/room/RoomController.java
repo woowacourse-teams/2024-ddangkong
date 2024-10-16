@@ -9,7 +9,6 @@ import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -17,6 +16,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -46,8 +46,8 @@ public class RoomController {
     }
 
     @GetMapping("/balances/rooms/rejoin")
-    public RoomJoinResponse rejoinRoom(HttpServletRequest request) {
-        return roomFacade.rejoinRoom(encryptCookie.getCookieValue(request));
+    public RoomJoinResponse rejoinRoom(@CookieValue(name = "${cookie.key}") String cookieValue) {
+        return roomFacade.rejoinRoom(encryptCookie.getDecodedCookieValue(cookieValue));
     }
 
     @Polling
