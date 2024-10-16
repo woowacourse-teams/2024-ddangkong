@@ -15,6 +15,7 @@ export const convertMsecToSecond = (msec: number) => {
   return msec / UNIT_MSEC;
 };
 
+// Timer가 스크린 리더에 읽혀야하는 시점에 aria-live="polite" 설정하도록 boolean 값 반환 (제한 시간 절반 & 5초 남았을 때)
 export const isAlertTimer = (leftRoundTime: number, timeLimit: number) => {
   return leftRoundTime === Math.floor(timeLimit / 2) || leftRoundTime === ALMOST_FINISH_SECOND;
 };
