@@ -4,6 +4,7 @@ import useNicknameInput from './hooks/useNicknameInput';
 import { nicknameInput, nicknameInputContainer, nicknameLengthText } from './NicknameInput.styled';
 import createRandomNickname from '../createRandomNickname';
 
+import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import { NICKNAME_MAX_LENGTH } from '@/constants/config';
 
 interface NicknameInputProps {
@@ -19,6 +20,10 @@ const NicknameInput = ({ nicknameInputRef, handleMakeOrEnterRoom }: NicknameInpu
 
   return (
     <div css={nicknameInputContainer}>
+      <A11yOnly
+        aria-label={`${NICKNAME_MAX_LENGTH === nickname.length ? '최대 길이에 도달했습니다' : ''}`}
+        aria-live="polite"
+      />
       <input
         ref={nicknameInputRef}
         css={nicknameInput}

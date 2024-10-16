@@ -27,7 +27,7 @@ const GameResultItem = ({ memberMatchingInfo }: GameResultItemProps) => {
       <div css={rankInfoContainer}>
         <span css={rankNumber}>{memberMatchingInfo.rank}</span>
         <div css={nicknameContainer(animatedRankPercent)}>
-          <img src={SillyDdangkongMedium} alt="사용자 프로필" css={profileImage} />
+          <img src={SillyDdangkongMedium} alt="" css={profileImage} />
           <span css={nickname}>{memberMatchingInfo.nickname}</span>
         </div>
       </div>

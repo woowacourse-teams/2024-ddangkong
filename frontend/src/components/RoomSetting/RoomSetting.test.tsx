@@ -15,7 +15,7 @@ describe('RoomSetting 컴포넌트 테스트', () => {
     };
     const user = userEvent.setup();
     customRender(<RoomSetting />, { initializeState });
-    const settingButton = await screen.findByRole('button', { name: '카테고리 설정' });
+    const settingButton = await screen.findByRole('button', { name: '방 설정' });
 
     // When
     await user.click(settingButton);
@@ -34,7 +34,7 @@ describe('RoomSetting 컴포넌트 테스트', () => {
     };
     const user = userEvent.setup();
     customRender(<RoomSetting />, { initializeState });
-    const optionButton = await screen.findByRole('button', { name: '카테고리 설정' });
+    const optionButton = await screen.findByRole('button', { name: '방 설정' });
 
     // When
     await user.click(optionButton);

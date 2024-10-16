@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
 
 import {
-  RoomSettingLayout,
+  roomSettingLayout,
   bigTitle,
   smallTitle,
   roomSettingLabel,
@@ -27,15 +27,15 @@ const RoomSetting = () => {
     <>
       <A11yOnly
         aria-label={`
-      방 정보
-      카테고리 ${roomSetting.category.label} 
-      라운드 ${roomSetting.totalRound} 
-      타이머 ${roomSetting.timeLimit / 1000}초`}
+      방 정보.
+      카테고리 ${roomSetting.category.label}. 
+      라운드 ${roomSetting.totalRound}. 
+      타이머 ${roomSetting.timeLimit / 1000}초.`}
         aria-live="polite"
       />
       <button
-        aria-label="카테고리 설정"
-        css={RoomSettingLayout}
+        aria-label="방 설정"
+        css={roomSettingLayout}
         onClick={isMaster ? handleClickCategory : () => {}}
       >
         <div css={roomSettingBox}>
