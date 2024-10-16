@@ -1,7 +1,6 @@
 import React, { ButtonHTMLAttributes, HTMLAttributes, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
-import useDisableBackgroundScroll from './hooks/useDisableBackgroundScroll';
 import useModalEscClose from './hooks/useModalEscClose';
 import {
   modalBackdropLayout,
