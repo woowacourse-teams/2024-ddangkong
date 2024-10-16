@@ -1,7 +1,6 @@
 package ddangkong.controller.room;
 
 import ddangkong.exception.room.CipherException;
-import jakarta.annotation.PostConstruct;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -12,19 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class EncryptionUtils {
 
-    @Value("${encrypt.algorithm}")
-    private String algorithm;
-    @Value("${encrypt.secret-key}")
-    private String secretKeyString;
-    private SecretKey secretKey;
+    private final String algorithm;
 
-    @PostConstruct
-    private void init() {
+    private final SecretKey secretKey;
+
+    public EncryptionUtils(@Value("${encrypt.algorithm}") String algorithm,
+                           @Value("${encrypt.secret-key}") String secretKeyString) {
+        this.algorithm = algorithm;
         byte[] secretKeyBytes = secretKeyString.getBytes();
         secretKey = new SecretKeySpec(secretKeyBytes, 0, secretKeyBytes.length, algorithm);
     }
 
-    public String encrypt(String plainText) { // TODO functional interface
+    public String encrypt(String plainText) {
         try {
             Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
