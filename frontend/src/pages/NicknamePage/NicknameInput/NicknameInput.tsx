@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 
 import useNicknameInput from './hooks/useNicknameInput';
 import { nicknameInput, nicknameInputContainer, nicknameLengthText } from './NicknameInput.styled';
@@ -18,11 +18,16 @@ const NicknameInput = ({ nicknameInputRef, handleMakeOrEnterRoom }: NicknameInpu
     handleMakeOrEnterRoom,
   });
 
+  const [statusMessage, setStatusMessage] = useState('');
+
+  useEffect(() => {
+    if (NICKNAME_MAX_LENGTH == nickname.length) setStatusMessage('최대 길이에 도달했습니다');
+    else setStatusMessage('');
+  }, [nickname]);
+
   return (
     <div css={nicknameInputContainer}>
-      <A11yOnly aria-live="polite">
-        {`${NICKNAME_MAX_LENGTH === nickname.length ? '최대 길이에 도달했습니다' : ''}`}
-      </A11yOnly>
+      {statusMessage && <A11yOnly role="alert">{statusMessage}</A11yOnly>}
       <input
         ref={nicknameInputRef}
         css={nicknameInput}
