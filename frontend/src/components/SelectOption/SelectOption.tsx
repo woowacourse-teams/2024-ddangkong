@@ -18,9 +18,10 @@ const SelectOption = ({ option, selectedOption, handleClickOption }: SelectOptio
 
   return (
     <button
-      css={SelectOptionLayout(Boolean(selectedId === option.optionId), isCompleted)}
+      css={SelectOptionLayout(selectedId === option.optionId, isCompleted)}
       onClick={() => handleClickOption(option.optionId)}
       disabled={isCompleted}
+      aria-pressed={selectedId === option.optionId}
     >
       {option.name}
     </button>

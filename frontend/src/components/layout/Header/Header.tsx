@@ -20,7 +20,7 @@ import ExitIcon from '@/assets/images/exitIcon.webp';
 import SettingIcon from '@/assets/images/settingsIcon.webp';
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
-import { ROUTES } from '@/constants/routes';
+import { convertMsecToSecond } from '@/components/SelectContainer/Timer/Timer.util';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useModal from '@/hooks/useModal';
 import { memberInfoState } from '@/recoil/atom';
@@ -84,7 +84,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   );
 };
 
-// 4. 좌측 상단 라운드, 가운데 제목 차지하는 헤더 (API 호출 O) : 게임 화면, 라운드 통계 화면
+// 4. 좌측 상단 라운드, 가운데 제목 차지하는 헤더 (API 호출 O) : 라운드 통계 화면
 export const RoundResultHeader = () => {
   const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
@@ -98,6 +98,28 @@ export const RoundResultHeader = () => {
       </span>
       <h1 css={gameTitle} aria-hidden>
         투표 결과
+      </h1>
+      <span css={roundText} aria-hidden></span>
+    </header>
+  );
+};
+
+// 게임 화면
+export const GameHeader = () => {
+  const { roomId } = useParams();
+  const { balanceContent } = useBalanceContentQuery(Number(roomId));
+
+  const { totalRound, currentRound, timeLimit } = balanceContent;
+  const screenReaderHeader = `${totalRound}라운드.중.${currentRound}라운드. 밸런스 게임 페이지. 제한 시간 ${convertMsecToSecond(timeLimit)}초.`;
+
+  return (
+    <header css={headerLayout()}>
+      <A11yOnly>{screenReaderHeader}</A11yOnly>
+      <span css={roundText} aria-hidden>
+        {currentRound}/{totalRound}
+      </span>
+      <h1 css={gameTitle} aria-hidden>
+        밸런스 게임
       </h1>
       <span css={roundText} aria-hidden></span>
     </header>

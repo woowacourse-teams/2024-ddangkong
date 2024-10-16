@@ -20,7 +20,8 @@ describe('Timer 테스트', () => {
   describe('Timer 훅 테스트', () => {
     jest.useFakeTimers();
     const voteMock = jest.fn();
-    const timeLimit = 10000;
+    const timeLimit = 10;
+    const timeLimitMs = timeLimit * 1000;
 
     it('타이머가 종료되었을 때 선택 완료를 누르지 않아도 선택된 옵션이 있으면 투표한다.', () => {
       const isSelectedOption = true;
@@ -31,7 +32,7 @@ describe('Timer 테스트', () => {
       );
 
       act(() => {
-        jest.advanceTimersByTime(timeLimit);
+        jest.advanceTimersByTime(timeLimitMs);
       });
 
       expect(result.current.leftRoundTime).toBe(0);
@@ -46,7 +47,7 @@ describe('Timer 테스트', () => {
       );
 
       act(() => {
-        jest.advanceTimersByTime(timeLimit);
+        jest.advanceTimersByTime(timeLimitMs);
       });
 
       expect(result.current.leftRoundTime).toBe(0);
@@ -61,7 +62,7 @@ describe('Timer 테스트', () => {
       );
 
       act(() => {
-        jest.advanceTimersByTime(timeLimit);
+        jest.advanceTimersByTime(timeLimitMs);
       });
 
       expect(result.current.leftRoundTime).toBe(0);
