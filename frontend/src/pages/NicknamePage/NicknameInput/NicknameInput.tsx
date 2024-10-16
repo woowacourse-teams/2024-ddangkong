@@ -20,10 +20,9 @@ const NicknameInput = ({ nicknameInputRef, handleMakeOrEnterRoom }: NicknameInpu
 
   return (
     <div css={nicknameInputContainer}>
-      <A11yOnly
-        aria-label={`${NICKNAME_MAX_LENGTH === nickname.length ? '최대 길이에 도달했습니다' : ''}`}
-        aria-live="polite"
-      />
+      <A11yOnly aria-live="polite">
+        {`${NICKNAME_MAX_LENGTH === nickname.length ? '최대 길이에 도달했습니다' : ''}`}
+      </A11yOnly>
       <input
         ref={nicknameInputRef}
         css={nicknameInput}
@@ -32,8 +31,6 @@ const NicknameInput = ({ nicknameInputRef, handleMakeOrEnterRoom }: NicknameInpu
         value={nickname}
         onChange={handleChangeInput}
         onKeyDown={handleKeyDown}
-        aria-live="polite"
-        aria-label="닉네임 입력"
       />
       <span css={nicknameLengthText}>
         {nickname.length}/{NICKNAME_MAX_LENGTH}
