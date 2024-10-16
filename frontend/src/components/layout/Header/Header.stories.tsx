@@ -1,6 +1,6 @@
 import { StoryObj, Meta } from '@storybook/react';
 
-import Header, { BackHeader, RoomSettingHeader, RoundHeader, TitleHeader } from './Header';
+import Header, { BackHeader, RoomSettingHeader, RoundResultHeader, TitleHeader } from './Header';
 
 const meta = {
   title: 'Header',
@@ -20,7 +20,7 @@ export const 방_설정_헤더: Story = {
 };
 
 export const 라운드_헤더: Story = {
-  render: () => <RoundHeader />,
+  render: () => <RoundResultHeader />,
 };
 
 export const 투표_현황_헤더: Story = {
