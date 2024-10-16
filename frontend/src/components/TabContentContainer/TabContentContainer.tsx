@@ -16,6 +16,7 @@ import {
   totalResultInfoText,
 } from './TabContentContainer.styled';
 import getDominantVote from './TabContentContainer.util';
+import A11yOnly from '../common/a11yOnly/A11yOnly';
 import OptionParticipantsContainer from '../OptionParticipantsContainer/OptionParticipantsContainer';
 import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hook';
 import TopicContainer from '../TopicContainer/TopicContainer';
@@ -50,12 +51,20 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
 
   const dominantVoteData = totalResult ? getDominantVote(totalResult) : null;
 
+  const screenReaderFirstOption = `${groupRoundResult.firstOption.name} ${groupRoundResult.firstOption.percent}%. ${groupRoundResult.firstOption.memberCount}명 선택.`;
+  const screenReaderSecondOption = `${groupRoundResult.secondOption.name} ${groupRoundResult.secondOption.percent}%. ${groupRoundResult.secondOption.memberCount}명 선택`;
+  const screenReaderDominantVote = `📢 전체 유저 중 ${dominantVoteData?.dominantPercent}%는. ${dominantVoteData?.dominantName}를 선택했어요`;
+
   return (
     <div css={contentWrapperStyle}>
       <TopicContainer />
       {isVote && isVoteStatisticsTabActive && (
         <>
-          <div css={roundVoteResultContainer}>
+          <A11yOnly>
+            {screenReaderFirstOption}
+            {screenReaderSecondOption}
+          </A11yOnly>
+          <div css={roundVoteResultContainer} aria-hidden>
             <div css={categoryContainer}>
               <span>{groupRoundResult.firstOption.name}</span>
               <span>{groupRoundResult.secondOption.name}</span>
@@ -76,16 +85,15 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
           {totalResult && dominantVoteData && (
             <div css={totalResultInfoContainer}>
               {dominantVoteData.isEqual ? (
-                <span css={totalResultInfoText}>
-                  🥜 땅콩 유저들 사이에서 선택이 팽팽하게 갈렸어요! 😲
-                </span>
+                <span css={totalResultInfoText}>📢 전체 유저 사이에서는 의견이 반반이에요 😲</span>
               ) : (
                 <>
-                  <span css={totalResultInfoText}>
-                    🥜 땅콩 유저 중{' '}
+                  <A11yOnly>{screenReaderDominantVote}</A11yOnly>
+                  <span css={totalResultInfoText} aria-hidden>
+                    📢 전체 유저 중{' '}
                     <span css={emphasizeText}>{dominantVoteData.dominantPercent}%</span>는
                   </span>
-                  <span css={totalResultInfoText}>
+                  <span css={totalResultInfoText} aria-hidden>
                     <span css={emphasizeText}>{dominantVoteData.dominantName}</span>를 선택했어요 !
                   </span>
                 </>
