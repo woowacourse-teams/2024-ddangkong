@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
@@ -21,6 +22,7 @@ import SettingIcon from '@/assets/images/settingsIcon.webp';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useFocus from '@/hooks/useFocus';
 import useModal from '@/hooks/useModal';
 import { memberInfoState } from '@/recoil/atom';
 
@@ -61,13 +63,13 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
   const { handleExit } = useExit();
   const { isMaster } = useRecoilValue(memberInfoState);
-
   const handleClickRoomSetting = () => {
     show(RoomSettingModal);
   };
+  const focusRef = useFocus<HTMLElement>();
 
   return (
-    <header css={headerLayout()}>
+    <header css={headerLayout()} tabIndex={0} ref={focusRef}>
       <button onClick={handleExit} css={buttonWrapper}>
         <img src={ExitIcon} alt="방 나가기" css={iconImage} />
       </button>
@@ -87,13 +89,12 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
 export const RoundHeader = () => {
   const { roomId } = useParams();
   const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
-
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
-
   const title = isRoundResultPage ? '투표 결과' : '밸런스 게임';
+  const focusRef = useFocus<HTMLElement>();
 
   return (
-    <header css={headerLayout()}>
+    <header css={headerLayout()} tabIndex={0} ref={focusRef}>
       <span css={roundText}>
         {balanceContent.currentRound}/{balanceContent.totalRound}
       </span>
@@ -106,13 +107,13 @@ export const RoundHeader = () => {
 // 5. 좌측 상단 뒤로가기, 가운데 제목 차지하는 헤더 (API 호출 X) : 라운드 투표 현황
 export const BackHeader = ({ title }: HeaderProps) => {
   const navigate = useNavigate();
-
+  const focusRef = useFocus<HTMLElement>();
   const goToBack = () => {
     navigate(-1);
   };
 
   return (
-    <header css={headerLayout()}>
+    <header css={headerLayout()} tabIndex={0} ref={focusRef}>
       <button onClick={goToBack} css={buttonWrapper}>
         <img src={ArrowLeft} alt="뒤로 가기" />
       </button>
