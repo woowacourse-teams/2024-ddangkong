@@ -51,9 +51,9 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
 
   const dominantVoteData = totalResult ? getDominantVote(totalResult) : null;
 
-  const screenReaderFirstOption = `${groupRoundResult.firstOption.name},${groupRoundResult.firstOption.percent}%,${groupRoundResult.firstOption.memberCount}명 선택,`;
-  const screenReaderSecondOption = `${groupRoundResult.secondOption.name},${groupRoundResult.secondOption.percent}%,${groupRoundResult.secondOption.memberCount}명 선택`;
-  const screenReaderDominantVote = `📢 전체 유저 중 ${dominantVoteData?.dominantPercent}%는, ${dominantVoteData?.dominantName}를 선택했어요`;
+  const screenReaderFirstOption = `${groupRoundResult.firstOption.name} ${groupRoundResult.firstOption.percent}%. ${groupRoundResult.firstOption.memberCount}명 선택.`;
+  const screenReaderSecondOption = `${groupRoundResult.secondOption.name} ${groupRoundResult.secondOption.percent}%. ${groupRoundResult.secondOption.memberCount}명 선택`;
+  const screenReaderDominantVote = `📢 전체 유저 중 ${dominantVoteData?.dominantPercent}%는. ${dominantVoteData?.dominantName}를 선택했어요`;
 
   return (
     <div css={contentWrapperStyle}>
