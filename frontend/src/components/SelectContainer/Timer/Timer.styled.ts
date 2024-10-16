@@ -29,6 +29,24 @@ const shake = keyframes`
     }
 `;
 
+const progress = keyframes`
+  0% {
+      transform: scaleX(1);
+  }
+  100% {
+      transform: scaleX(0);
+    }
+`;
+
+const timerTransition = keyframes`
+  0% {
+      transform: translateX(0);
+  }
+  100%{
+      transform: translateX(-95%);
+  }
+`;
+
 export const timerLayout = css`
   display: flex;
   position: relative;
@@ -42,7 +60,7 @@ export const timerLayout = css`
   box-sizing: border-box;
 `;
 
-export const timerInnerLayout = (scale: number) => css`
+export const timerInnerLayout = (timeLimit: number) => css`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -53,14 +71,12 @@ export const timerInnerLayout = (scale: number) => css`
 
   background-color: ${Theme.color.peanut500};
 
-  transform: scaleX(${scale});
   transform-origin: left;
 
-  transition: transform 1s linear;
+  animation: ${progress} ${timeLimit + 1}s linear;
 `;
 
-// 화면을 벗어나는 문제로 인해 100이 아닌 98로 계산
-export const timerWrapper = (scale: number) => css`
+export const timerWrapper = (timeLimit: number) => css`
   display: flex;
   position: absolute;
   flex-direction: column;
@@ -70,8 +86,7 @@ export const timerWrapper = (scale: number) => css`
   width: 100%;
   height: 4rem;
 
-  transform: translateX(-${(1 - scale) * 98}%);
-  transition: transform 1s linear;
+  animation: ${timerTransition} ${timeLimit + 1}s linear;
 `;
 
 export const timerIcon = css`

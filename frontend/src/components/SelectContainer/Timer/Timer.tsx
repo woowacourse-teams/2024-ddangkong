@@ -9,10 +9,11 @@ import {
   timerText,
   timerWrapper,
 } from './Timer.styled';
-import { formatLeftRoundTime } from './Timer.util';
+import { convertMsecToSecond, formatLeftRoundTime, isAlertTimer } from './Timer.util';
 import useVoteIsFinished from '../hooks/useVoteIsFinished';
 
 import DdangkongTimer from '@/assets/images/ddangkongTimer.webp';
+import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 interface TimerProps {
@@ -24,7 +25,7 @@ interface TimerProps {
 const Timer = ({ selectedId, isVoted, completeSelection }: TimerProps) => {
   const { roomId } = useParams();
   const { balanceContent, isFetching } = useBalanceContentQuery(Number(roomId));
-  const { leftRoundTime, barScaleRate, isAlmostFinished } = useVoteTimer({
+  const { leftRoundTime, isAlmostFinished, timeLimit } = useVoteTimer({
     roomId: Number(roomId),
     selectedId,
     isVoted,
@@ -38,14 +39,15 @@ const Timer = ({ selectedId, isVoted, completeSelection }: TimerProps) => {
 
   return (
     <section css={timerLayout}>
-      <div css={timerInnerLayout(barScaleRate)}></div>
-      <div css={timerWrapper(barScaleRate)}>
-        <img
-          css={[timerIcon, isAlmostFinished && timerIconShake]}
-          src={DdangkongTimer}
-          alt="타이머"
-        />
-        <span css={timerText(isAlmostFinished)}>{formatLeftRoundTime(leftRoundTime)}</span>
+      <div css={timerInnerLayout(timeLimit)}></div>
+      <div css={timerWrapper(timeLimit)}>
+        <img css={[timerIcon, isAlmostFinished && timerIconShake]} src={DdangkongTimer} alt="" />
+        <A11yOnly aria-live={isAlertTimer(leftRoundTime, timeLimit) && 'polite'}>
+          {leftRoundTime}초 남았습니다.
+        </A11yOnly>
+        <span css={timerText(isAlmostFinished)} aria-hidden>
+          {formatLeftRoundTime(leftRoundTime)}
+        </span>
       </div>
     </section>
   );

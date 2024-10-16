@@ -1,5 +1,4 @@
 import { captureException, withScope } from '@sentry/react';
-import { useNavigate } from 'react-router-dom';
 
 import Button from '../../Button/Button';
 import {
@@ -17,10 +16,8 @@ interface RootErrorFallbackProps {
 }
 
 const RootErrorFallback = ({ error, resetError }: RootErrorFallbackProps) => {
-  const navigate = useNavigate();
-
   const goToHome = () => {
-    navigate('/');
+    window.location.href = '/';
   };
 
   if (error instanceof Error) {

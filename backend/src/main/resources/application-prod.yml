@@ -39,10 +39,15 @@ logging:
   location: ${secret.application.log.location}
 
 management:
-  endpoint:
-    health:
-      show-details: always
+  server:
+    port: ${secret.actuator.port}
+
   endpoints:
+    enabled-by-default: false
     web:
       exposure:
-        include: "health"
+        include: ${secret.actuator.web.include}
+      base-path: ${secret.actuator.web.base-url}
+    jmx:
+      exposure:
+        exclude: ${secret.actuator.jmx.exclude}
