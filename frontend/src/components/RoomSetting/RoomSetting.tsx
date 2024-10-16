@@ -18,7 +18,7 @@ const RoomSetting = () => {
   const { roomSetting } = useGetRoomInfo();
   const { isMaster } = useRecoilValue(memberInfoState);
   const { show } = useModal();
-  const screenReader = `
+  const screenReaderRoomSetting = `
         방 정보.
         카테고리 ${roomSetting.category.label}. 
         라운드 ${roomSetting.totalRound}. 
@@ -30,7 +30,7 @@ const RoomSetting = () => {
 
   return (
     <>
-      <A11yOnly aria-live="polite">{screenReader}</A11yOnly>
+      <A11yOnly aria-live="polite">{screenReaderRoomSetting}</A11yOnly>
       <button
         aria-label="방 설정"
         css={roomSettingLayout}

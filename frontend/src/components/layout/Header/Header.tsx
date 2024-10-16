@@ -18,9 +18,9 @@ import useRoutePath from './hooks/useRoutePath';
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
 import ExitIcon from '@/assets/images/exitIcon.svg';
 import SettingIcon from '@/assets/images/settingIcon.svg';
+import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
-import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useModal from '@/hooks/useModal';
 import { memberInfoState } from '@/recoil/atom';
@@ -36,7 +36,7 @@ const Header = () => {
 
   if (isNicknamePage) return <TitleHeader title="닉네임 설정" />;
   if (isReadyPage) return <RoomSettingHeader title="밸런스 게임" />;
-  if (isRoundResultPage) return <RoundHeader />;
+  if (isRoundResultPage) return <RoundResultHeader />;
   if (isMatchingResultPage) return <MatchingResultHeader title="매칭 결과" />;
 };
 
@@ -89,21 +89,21 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
 };
 
 // 4. 좌측 상단 라운드, 가운데 제목 차지하는 헤더 (API 호출 O) : 게임 화면, 라운드 통계 화면
-export const RoundHeader = () => {
+export const RoundResultHeader = () => {
   const { roomId } = useParams();
-  const isRoundResultPage = location.pathname === ROUTES.roundResult(Number(roomId));
-
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
-
-  const title = isRoundResultPage ? '투표 결과' : '밸런스 게임';
+  const screenReaderRoundResult = `${balanceContent.totalRound}라운드 중. ${balanceContent.currentRound}라운드. 투표 결과 페이지`;
 
   return (
     <header css={headerLayout()}>
-      <span css={roundText}>
+      <A11yOnly>{screenReaderRoundResult}</A11yOnly>
+      <span css={roundText} aria-hidden>
         {balanceContent.currentRound}/{balanceContent.totalRound}
       </span>
-      <h1 css={gameTitle}>{title}</h1>
-      <span css={roundText}></span>
+      <h1 css={gameTitle} aria-hidden>
+        투표 결과
+      </h1>
+      <span css={roundText} aria-hidden></span>
     </header>
   );
 };

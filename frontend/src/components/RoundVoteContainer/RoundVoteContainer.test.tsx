@@ -3,6 +3,8 @@ import { userEvent } from '@testing-library/user-event';
 
 import RoundVoteContainer from './RoundVoteContainer';
 
+import ROUND_VOTE_RESULT from '@/mocks/data/roundVoteResult.json';
+
 import { customRender } from '@/test-utils';
 
 describe('RoundVoteContainer 컴포넌트 테스트', () => {
@@ -10,25 +12,27 @@ describe('RoundVoteContainer 컴포넌트 테스트', () => {
     const user = userEvent.setup();
     customRender(<RoundVoteContainer />);
 
-    const button = await screen.findByRole('button', { name: '투표 현황' });
+    const button = await screen.findByRole('tab', { name: '투표 현황' });
     await user.click(button);
 
     await waitFor(() => {
-      // 첫 번째 선택지와 투표자 확인
-      expect(screen.getByText((content) => content.includes('100억 빚 송강'))).toBeInTheDocument();
-      expect(screen.getByText((content) => content.includes('d'))).toBeInTheDocument();
-      // 두 번째 선택지와 투표자 확인
-      expect(
-        screen.getByText((content) => content.includes('100억 부자 송강호')),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText((content) => content.includes('일이삼사오육칠팔구십일이')),
-      ).toBeInTheDocument();
-      // 기권자 확인
-      expect(
-        screen.getByText((content) => content.includes('투표에 참여하지 않으셨어요')),
-      ).toBeInTheDocument();
-      expect(screen.getByText((content) => content.includes('ㅁ'))).toBeInTheDocument();
+      // 첫 번째 선택지의 투표 멤버 확인
+      const firstOptionMembers = ROUND_VOTE_RESULT.group.firstOption.members;
+      firstOptionMembers.forEach((member) => {
+        expect(screen.getByText(member)).toBeInTheDocument();
+      });
+
+      // 두 번째 선택지의 투표 멤버 확인
+      const secondOptionMembers = ROUND_VOTE_RESULT.group.secondOption.members;
+      secondOptionMembers.forEach((member) => {
+        expect(screen.getByText(member)).toBeInTheDocument();
+      });
+
+      // 투표를 하지 않은 멤버 확인
+      const giveUpMembers = ROUND_VOTE_RESULT.group.giveUp.members;
+      giveUpMembers.forEach((member) => {
+        expect(screen.getByText(member)).toBeInTheDocument();
+      });
     });
   });
 });
