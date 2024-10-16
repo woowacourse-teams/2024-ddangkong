@@ -9,6 +9,7 @@ import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -35,19 +36,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoomController {
 
     private final RoomFacade roomFacade;
-    private final EncryptCookie encryptCookie;
+    private final CookieEncryptor cookieEncryptor;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms")
     public RoomJoinResponse createRoom(@Valid @RequestBody RoomJoinRequest request, HttpServletResponse response) {
         RoomJoinResponse roomJoinResponse = roomFacade.createRoom(request.nickname());
-        encryptCookie.setCookie(response, roomJoinResponse.member().memberId());
+        Cookie encodedCookie = cookieEncryptor.getEncodedCookie(roomJoinResponse.member().memberId());
+        response.addCookie(encodedCookie);
         return roomJoinResponse;
     }
 
     @GetMapping("/balances/rooms/rejoin")
     public RoomJoinResponse rejoinRoom(@CookieValue(name = "${cookie.key}") String cookieValue) {
-        return roomFacade.rejoinRoom(encryptCookie.getDecodedCookieValue(cookieValue));
+        return roomFacade.rejoinRoom(cookieEncryptor.getDecodedCookieValue(cookieValue));
     }
 
     @Polling
@@ -66,10 +68,9 @@ public class RoomController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms/{uuid}/members")
     public RoomJoinResponse joinRoom(@PathVariable String uuid,
-                                     @Valid @RequestBody RoomJoinRequest request,
-                                     HttpServletResponse response) {
+                                     @Valid @RequestBody RoomJoinRequest request) {
         RoomJoinResponse roomJoinResponse = roomFacade.joinRoom(request.nickname(), uuid);
-        encryptCookie.setCookie(response, roomJoinResponse.member().memberId());
+        cookieEncryptor.getEncodedCookie(roomJoinResponse.member().memberId());
         return roomJoinResponse;
     }
 

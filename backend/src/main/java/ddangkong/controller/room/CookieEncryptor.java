@@ -1,25 +1,24 @@
 package ddangkong.controller.room;
 
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EncryptCookie {
+public class CookieEncryptor {
 
     private final EncryptionUtils encryptionUtils;
-    @Value("${cookie.key}")
-    private String key;
 
-    public EncryptCookie(EncryptionUtils encryptionUtils) {
+    private final String key;
+
+    public CookieEncryptor(EncryptionUtils encryptionUtils, @Value("${cookie.key}") String key) {
         this.encryptionUtils = encryptionUtils;
+        this.key = key;
     }
 
-    public void setCookie(HttpServletResponse response, Object value) {
+    public Cookie getEncodedCookie(Object value) {
         String encrypt = encryptionUtils.encrypt(String.valueOf(value));
-        Cookie cookie = new Cookie(key, encrypt);
-        response.addCookie(cookie);
+        return new Cookie(key, encrypt);
     }
 
     public String getDecodedCookieValue(String cookieValue) {
