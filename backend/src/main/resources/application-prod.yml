@@ -51,3 +51,9 @@ management:
     jmx:
       exposure:
         exclude: ${secret.actuator.jmx.exclude}
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      enabled: true
+      show-components: never
