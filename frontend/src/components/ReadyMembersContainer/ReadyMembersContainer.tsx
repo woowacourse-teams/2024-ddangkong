@@ -49,7 +49,11 @@ const ReadyMembersContainer = () => {
       <section css={membersContainer}>
         <ul css={memberList}>
           {members.map((member) => (
-            <li aria-label={`${member.nickname}`} css={memberItem} key={member.memberId}>
+            <li
+              aria-label={`${member.isMaster ? '방장' : ''} ${member.nickname}`}
+              css={memberItem}
+              key={member.memberId}
+            >
               <div css={profileBox}>
                 <img src={SillyDdangkongMedium} alt="" css={profileImage} />
               </div>
