@@ -50,12 +50,12 @@ const GameResult = () => {
 
         {existMatching && !isAtTop && (
           <button onClick={scrollToTop} css={floatingButton('up')}>
-            <img src={ArrowUp} alt="" />
+            <img src={ArrowUp} alt="가장 높은 순위로 이동" />
           </button>
         )}
         {existMatching && !isAtBottom && (
           <button onClick={scrollToBottom} css={floatingButton('down')}>
-            <img src={ArrowDown} alt="" />
+            <img src={ArrowDown} alt="가장 낮은 순위로 이동" />
           </button>
         )}
       </div>
