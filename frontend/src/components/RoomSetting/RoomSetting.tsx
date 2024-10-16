@@ -34,7 +34,6 @@ const RoomSetting = () => {
       <button
         aria-label="방 설정"
         css={roomSettingLayout}
-        aria-hidden={isMaster}
         onClick={isMaster ? handleClickCategory : () => {}}
       >
         <div css={roomSettingBox}>
