@@ -8,7 +8,7 @@ import {
   rankPercent,
 } from './GameResultItem.styled';
 
-import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
+import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
 import useCountAnimation from '@/hooks/useCountAnimation';
 import { MemberMatchingInfo } from '@/types/balanceContent';
 
@@ -27,7 +27,7 @@ const GameResultItem = ({ memberMatchingInfo }: GameResultItemProps) => {
       <div css={rankInfoContainer}>
         <span css={rankNumber}>{memberMatchingInfo.rank}</span>
         <div css={nicknameContainer(animatedRankPercent)}>
-          <img src={SillyDdangkong} alt="사용자 프로필" css={profileImage} />
+          <img src={SillyDdangkongMedium} alt="" css={profileImage} />
           <span css={nickname}>{memberMatchingInfo.nickname}</span>
         </div>
       </div>
