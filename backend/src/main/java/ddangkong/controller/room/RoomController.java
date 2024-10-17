@@ -42,8 +42,7 @@ public class RoomController {
     @PostMapping("/balances/rooms")
     public RoomJoinResponse createRoom(@Valid @RequestBody RoomJoinRequest request, HttpServletResponse response) {
         RoomJoinResponse roomJoinResponse = roomFacade.createRoom(request.nickname());
-        Cookie encodedCookie = cookieEncryptor.getEncodedCookie(roomJoinResponse.member().memberId());
-        response.addCookie(encodedCookie);
+        setEncryptCookie(response, roomJoinResponse.member().memberId());
         return roomJoinResponse;
     }
 
@@ -71,8 +70,7 @@ public class RoomController {
                                      @Valid @RequestBody RoomJoinRequest request,
                                      HttpServletResponse response) {
         RoomJoinResponse roomJoinResponse = roomFacade.joinRoom(request.nickname(), uuid);
-        Cookie encodedCookie = cookieEncryptor.getEncodedCookie(roomJoinResponse.member().memberId());
-        response.addCookie(encodedCookie);
+        setEncryptCookie(response, roomJoinResponse.member().memberId());
         return roomJoinResponse;
     }
 
@@ -117,5 +115,10 @@ public class RoomController {
     @GetMapping("/balances/rooms/{roomId}/initial")
     public InitialRoomResponse isInitialRoom(@PathVariable @Positive Long roomId) {
         return roomFacade.isInitialRoom(roomId);
+    }
+
+    private void setEncryptCookie(HttpServletResponse response, Object cookieValue) {
+        Cookie encodedCookie = cookieEncryptor.getEncodedCookie(cookieValue);
+        response.addCookie(encodedCookie);
     }
 }
