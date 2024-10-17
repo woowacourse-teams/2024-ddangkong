@@ -32,6 +32,13 @@ server:
 cors:
   origin: ${secret.cors.origin}
 
+cookie:
+  key: ${secret.cookie.key}
+
+encrypt:
+  secret-key: ${secret.encrypt.secret-key}
+  algorithm: ${secret.encrypt.algorithm}
+
 logging:
   config: classpath:logback-prod.xml
   discord:

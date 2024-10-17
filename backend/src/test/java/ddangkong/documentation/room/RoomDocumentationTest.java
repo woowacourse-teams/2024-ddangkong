@@ -5,6 +5,9 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
+import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -23,29 +26,34 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ddangkong.controller.room.RejoinCookieEncryptor;
+import ddangkong.controller.room.EncryptionUtils;
 import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.balance.content.BalanceCategoryResponse;
 import ddangkong.facade.room.RoomFacade;
-import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomSettingResponse;
+import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MasterResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
+import jakarta.servlet.http.Cookie;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 
-@WebMvcTest(RoomController.class)
+@WebMvcTest(value = RoomController.class)
+@Import(value = {RejoinCookieEncryptor.class, EncryptionUtils.class})
 class RoomDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
@@ -82,6 +90,9 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
+                            ),
+                            responseCookies(
+                                    cookieWithName("test_cookie").description("방 재참여시 사용되는 쿠키")
                             )
                     ));
         }
@@ -188,6 +199,49 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                     .andDo(document("room/join",
                             pathParameters(
                                     parameterWithName("uuid").description("참여하는 방 UUID")
+                            ),
+                            requestFields(
+                                    fieldWithPath("nickname").description("닉네임")
+                            ),
+                            responseFields(
+                                    fieldWithPath("roomId").type(NUMBER).description("참여한 방 ID"),
+                                    fieldWithPath("roomUuid").type(STRING).description("참여한 방 UUID"),
+                                    fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
+                                    fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
+                            ),
+                            responseCookies(
+                                    cookieWithName("test_cookie").description("방 재참여시 사용되는 쿠키")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    class 방_재참여 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/rejoin";
+
+        @Test
+        void 방에_재참여하여_유저_정보를_조회한다() throws Exception {
+            // given
+            RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
+                    new MemberResponse(2L, "타콩", false));
+            when(roomFacade.rejoinRoom(anyLong())).thenReturn(response);
+
+            RoomJoinRequest request = new RoomJoinRequest("타콩");
+            String content = objectMapper.writeValueAsString(request);
+
+            //when & then
+            mockMvc.perform(get(ENDPOINT)
+                            .content(content)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .cookie(new Cookie("test_cookie", "oNnHwjSR1G4E5L8Mute61w=="))
+                    )
+                    .andExpect(status().isOk())
+                    .andDo(document("room/rejoin",
+                            requestCookies(
+                                    cookieWithName("test_cookie").description("사용자 인증에 필요한 쿠키")
                             ),
                             requestFields(
                                     fieldWithPath("nickname").description("닉네임")

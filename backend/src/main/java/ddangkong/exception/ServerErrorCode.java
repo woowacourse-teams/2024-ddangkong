@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ServerErrorCode {
 
+    // Encryption
+    CIPHER_EXCEPTION("Cipher 사용 중 문제가 발생하였습니다."),
+
     // BalanceContent
     NOT_ENOUGH_BALANCE_CONTENT("질문 수가 부족합니다. category: %s"),
 

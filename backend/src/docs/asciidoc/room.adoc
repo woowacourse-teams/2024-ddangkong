@@ -22,6 +22,10 @@ response fields
 
 include::{snippets}/room/create/response-fields.adoc[]
 
+response cookies
+
+include::{snippets}/room/create/response-cookies.adoc[]
+
 '''
 
 === 방 참여
@@ -43,6 +47,38 @@ include::{snippets}/room/join/request-fields.adoc[]
 ==== response
 
 include::{snippets}/room/join/http-response.adoc[]
+
+response fields
+
+include::{snippets}/room/join/response-fields.adoc[]
+
+response cookies
+
+include::{snippets}/room/join/response-cookies.adoc[]
+
+'''
+
+=== 방 재참여
+
+==== curl
+
+include::{snippets}/room/rejoin/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/rejoin/http-request.adoc[]
+
+request fields
+
+include::{snippets}/room/rejoin/request-fields.adoc[]
+
+request cookies
+
+include::{snippets}/room/rejoin/request-cookies.adoc[]
+
+==== response
+
+include::{snippets}/room/rejoin/http-response.adoc[]
 
 response fields
 
