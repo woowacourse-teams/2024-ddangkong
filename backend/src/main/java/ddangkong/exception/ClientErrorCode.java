@@ -24,7 +24,7 @@ public enum ClientErrorCode {
 
     // RoomSetting
     // todo s로 변경
-    INVALID_TIME_LIMIT("시간 제한은 %dms / %dms / %dms 만 가능합니다. requested timeLimit: %d"),
+    INVALID_TIME_LIMIT("시간 제한은 %s 만 가능합니다. requested timeLimit: %d"),
     INVALID_RANGE_TOTAL_ROUND("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"),
 
     // Member

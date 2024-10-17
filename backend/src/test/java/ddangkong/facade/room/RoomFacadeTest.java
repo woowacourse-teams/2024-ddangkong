@@ -428,7 +428,7 @@ class RoomFacadeTest extends BaseServiceTest {
 
         private static final RoomStatus STATUS = RoomStatus.FINISH;
 
-        private static final RoomSetting ROOM_SETTING = new RoomSetting(5, 5000, Category.IF);
+        private static final RoomSetting ROOM_SETTING = new RoomSetting(5, 15_000, Category.IF);
 
         private BalanceContent content;
 
