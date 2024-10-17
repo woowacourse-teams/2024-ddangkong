@@ -53,6 +53,7 @@ response fields
 include::{snippets}/room/join/response-fields.adoc[]
 
 response cookies
+
 include::{snippets}/room/join/response-cookies.adoc[]
 
 '''
