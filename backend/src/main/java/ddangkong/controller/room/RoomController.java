@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoomController {
 
     private final RoomFacade roomFacade;
-    private final CookieEncryptor cookieEncryptor;
+    private final RejoinCookieEncryptor rejoinCookieEncryptor;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms")
@@ -47,8 +47,8 @@ public class RoomController {
     }
 
     @GetMapping("/balances/rooms/rejoin")
-    public RoomJoinResponse rejoinRoom(@CookieValue(name = "${cookie.key}") String cookieValue) {
-        return roomFacade.rejoinRoom(cookieEncryptor.getDecodedCookieValue(cookieValue));
+    public RoomJoinResponse rejoinRoom(@CookieValue(name = "${cookie.rejoin-key}") String cookieValue) {
+        return roomFacade.rejoinRoom(rejoinCookieEncryptor.getDecodedCookieValue(cookieValue));
     }
 
     @Polling
@@ -118,7 +118,7 @@ public class RoomController {
     }
 
     private void setEncryptCookie(HttpServletResponse response, Object cookieValue) {
-        Cookie encodedCookie = cookieEncryptor.getEncodedCookie(cookieValue);
+        Cookie encodedCookie = rejoinCookieEncryptor.getEncodedCookie(cookieValue);
         response.addCookie(encodedCookie);
     }
 }

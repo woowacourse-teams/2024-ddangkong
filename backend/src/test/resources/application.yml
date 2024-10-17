@@ -14,7 +14,7 @@ cors:
   origin: "*"
 
 cookie:
-  key: "test_cookie"
+  rejoin-key: "test_cookie"
 
 encrypt:
   secret-key: "1234567890123456"

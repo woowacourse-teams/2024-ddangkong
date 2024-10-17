@@ -53,8 +53,8 @@ public class RoomFacade {
     }
 
     @Transactional(readOnly = true)
-    public RoomJoinResponse rejoinRoom(String memberId) {
-        Member member = memberService.getMemberById(Long.parseLong(memberId));
+    public RoomJoinResponse rejoinRoom(Long memberId) {
+        Member member = memberService.getMemberById(memberId);
         Room room = member.getRoom();
         return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }

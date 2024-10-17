@@ -26,7 +26,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ddangkong.controller.room.CookieEncryptor;
+import ddangkong.controller.room.RejoinCookieEncryptor;
 import ddangkong.controller.room.EncryptionUtils;
 import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
@@ -53,7 +53,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 
 @WebMvcTest(value = RoomController.class)
-@Import(value = {CookieEncryptor.class, EncryptionUtils.class})
+@Import(value = {RejoinCookieEncryptor.class, EncryptionUtils.class})
 class RoomDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
@@ -227,7 +227,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             // given
             RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
                     new MemberResponse(2L, "타콩", false));
-            when(roomFacade.rejoinRoom(anyString())).thenReturn(response);
+            when(roomFacade.rejoinRoom(anyLong())).thenReturn(response);
 
             RoomJoinRequest request = new RoomJoinRequest("타콩");
             String content = objectMapper.writeValueAsString(request);

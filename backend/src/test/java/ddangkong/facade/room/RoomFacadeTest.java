@@ -137,7 +137,7 @@ class RoomFacadeTest extends BaseServiceTest {
             roomFacade.joinRoom(nickname, uuid);
 
             // when
-            RoomJoinResponse actual = roomFacade.rejoinRoom("14");
+            RoomJoinResponse actual = roomFacade.rejoinRoom(14L);
 
             // then
             assertAll(
@@ -150,7 +150,7 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 존재하지_않는_아이디로_방에_재참여할_수_없다() {
             // given
-            String notExistMemberId = "0";
+            Long notExistMemberId = 0L;
 
             // when & then
             assertThatThrownBy(() -> roomFacade.rejoinRoom(notExistMemberId))
