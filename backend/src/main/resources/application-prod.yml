@@ -32,6 +32,13 @@ server:
 cors:
   origin: ${secret.cors.origin}
 
+cookie:
+  rejoin-key: ${secret.cookie.rejoin-key}
+
+encrypt:
+  secret-key: ${secret.encrypt.secret-key}
+  algorithm: ${secret.encrypt.algorithm}
+
 logging:
   config: classpath:logback-prod.xml
   discord:
@@ -39,10 +46,21 @@ logging:
   location: ${secret.application.log.location}
 
 management:
-  endpoint:
-    health:
-      show-details: always
+  server:
+    port: ${secret.actuator.port}
+
   endpoints:
+    enabled-by-default: false
     web:
       exposure:
-        include: "health"
+        include: ${secret.actuator.web.include}
+      base-path: ${secret.actuator.web.base-url}
+    jmx:
+      exposure:
+        exclude: ${secret.actuator.jmx.exclude}
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      enabled: true
+      show-components: never
