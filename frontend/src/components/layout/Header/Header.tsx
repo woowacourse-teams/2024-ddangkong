@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
@@ -23,6 +24,7 @@ import AlertModal from '@/components/common/AlertModal/AlertModal';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { convertMsecToSecond } from '@/components/SelectContainer/Timer/Timer.util';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useFocus from '@/hooks/useFocus';
 import useModal from '@/hooks/useModal';
 import { memberInfoState } from '@/recoil/atom';
 
@@ -67,6 +69,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const handleClickRoomSetting = () => {
     show(RoomSettingModal);
   };
+  const focusRef = useFocus<HTMLElement>();
 
   const handleClickExit = () => {
     show(AlertModal, { message: '정말로 나가시겠습니까?', onConfirm: handleExit });
@@ -134,13 +137,13 @@ export const GameHeader = () => {
 // 5. 좌측 상단 뒤로가기, 가운데 제목 차지하는 헤더 (API 호출 X) : 라운드 투표 현황
 export const BackHeader = ({ title }: HeaderProps) => {
   const navigate = useNavigate();
-
+  const focusRef = useFocus<HTMLElement>();
   const goToBack = () => {
     navigate(-1);
   };
 
   return (
-    <header css={headerLayout()}>
+    <header css={headerLayout()} tabIndex={0} ref={focusRef}>
       <button onClick={goToBack} css={buttonWrapper}>
         <img src={ArrowLeft} alt="뒤로 가기" />
       </button>
