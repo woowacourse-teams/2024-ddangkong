@@ -21,7 +21,7 @@ class RoomSettingTest {
 
         @ParameterizedTest
         @ValueSource(ints = {3, 10})
-        void 라운드는_3이상_10이하_여야한다(int validTotalRound) {
+        void 라운드는_특정_범위_내_있어야_한다(int validTotalRound) {
             // when & then
             assertThatCode(() -> new RoomSetting(validTotalRound, 15_000, Category.IF))
                     .doesNotThrowAnyException();
@@ -29,7 +29,7 @@ class RoomSettingTest {
 
         @ParameterizedTest
         @ValueSource(ints = {2, 11})
-        void 라운드는_3미만_10초과인_경우_예외를_던진다(int notValidTotalRound) {
+        void 라운드_수가_범위를_벗어나는_경우_예외를_던진다(int notValidTotalRound) {
             // when & then
             assertThatThrownBy(() -> new RoomSetting(notValidTotalRound, 15_000, Category.IF))
                     .isExactlyInstanceOf(InvalidRangeTotalRoundException.class)
@@ -61,7 +61,7 @@ class RoomSettingTest {
 
         @ParameterizedTest
         @ValueSource(ints = {3, 10})
-        void 라운드는_3이상_10이하_여야한다(int totalRound) {
+        void 라운드는_특정_범위_내_있어야_한다(int totalRound) {
             // given
             RoomSetting setting = new RoomSetting(5, 15_000, Category.IF);
 
@@ -74,7 +74,7 @@ class RoomSettingTest {
 
         @ParameterizedTest
         @ValueSource(ints = {2, 11})
-        void 라운드는_3미만_10초과인_경우_예외를_던진다(int notValidTotalRound) {
+        void 라운드_수가_범위를_벗어나는_경우_예외를_던진다(int notValidTotalRound) {
             // given
             RoomSetting setting = new RoomSetting(5, 15_000, Category.IF);
 
@@ -88,6 +88,7 @@ class RoomSettingTest {
 
     @Nested
     class 제한_시간_설정 {
+
         @ParameterizedTest
         @ValueSource(ints = {10_000, 15_000, 30_000, 60_000})
         void 시간_제한은_허용된_시간_중_하나_여야한다(int timeLimit) {
