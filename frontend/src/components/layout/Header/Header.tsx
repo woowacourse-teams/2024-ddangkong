@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
@@ -65,9 +66,10 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
   const { isMaster } = useRecoilValue(memberInfoState);
   const { handleExit } = useExit();
+  const closeRef = useRef(null);
 
   const handleClickRoomSetting = () => {
-    show(RoomSettingModal);
+    show(RoomSettingModal, { closeRef });
   };
 
   const handleClickExit = () => {
@@ -81,7 +83,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
       </button>
       <h1 css={gameTitle}>{title}</h1>
       {isMaster ? (
-        <button onClick={handleClickRoomSetting} css={buttonWrapper}>
+        <button ref={closeRef} onClick={handleClickRoomSetting} css={buttonWrapper}>
           <img src={SettingIcon} alt="방 설정" css={iconImage} />
         </button>
       ) : (
