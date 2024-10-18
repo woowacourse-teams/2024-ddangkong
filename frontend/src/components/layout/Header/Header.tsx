@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
@@ -23,6 +25,7 @@ import AlertModal from '@/components/common/AlertModal/AlertModal';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { convertMsecToSecond } from '@/components/SelectContainer/Timer/Timer.util';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useFocus from '@/hooks/useFocus';
 import useModal from '@/hooks/useModal';
 import { memberInfoState } from '@/recoil/atom';
 
@@ -63,9 +66,10 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
   const { isMaster } = useRecoilValue(memberInfoState);
   const { handleExit } = useExit();
+  const closeRef = useRef(null);
 
   const handleClickRoomSetting = () => {
-    show(RoomSettingModal);
+    show(RoomSettingModal, { closeRef });
   };
 
   const handleClickExit = () => {
@@ -79,7 +83,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
       </button>
       <h1 css={gameTitle}>{title}</h1>
       {isMaster ? (
-        <button onClick={handleClickRoomSetting} css={buttonWrapper}>
+        <button ref={closeRef} onClick={handleClickRoomSetting} css={buttonWrapper}>
           <img src={SettingIcon} alt="방 설정" css={iconImage} />
         </button>
       ) : (
@@ -134,13 +138,13 @@ export const GameHeader = () => {
 // 5. 좌측 상단 뒤로가기, 가운데 제목 차지하는 헤더 (API 호출 X) : 라운드 투표 현황
 export const BackHeader = ({ title }: HeaderProps) => {
   const navigate = useNavigate();
-
+  const focusRef = useFocus<HTMLElement>();
   const goToBack = () => {
     navigate(-1);
   };
 
   return (
-    <header css={headerLayout()}>
+    <header css={headerLayout()} tabIndex={0} ref={focusRef}>
       <button onClick={goToBack} css={buttonWrapper}>
         <img src={ArrowLeft} alt="뒤로 가기" />
       </button>

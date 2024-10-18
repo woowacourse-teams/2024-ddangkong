@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, RefObject } from 'react';
 
 import { alertModalTitle, alertText, messageContainer } from './AlertModal.styled';
 import Modal from '../Modal/Modal';
@@ -9,16 +9,17 @@ interface AlertModalProps {
   onConfirm?: () => void;
   message?: string;
   title?: string;
+  closeRef?: RefObject<HTMLElement>;
 }
 
-const AlertModal = ({ isOpen, onClose, onConfirm, message, title }: AlertModalProps) => {
+const AlertModal = ({ isOpen, onClose, onConfirm, message, title, closeRef }: AlertModalProps) => {
   const handleClick = () => {
     onConfirm && onConfirm();
     onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} closeRef={closeRef}>
       <Modal.Header position="center">
         <Modal.Title css={alertModalTitle}>{title || '알림'}</Modal.Title>
         <Modal.IconButton onClick={onClose} />
