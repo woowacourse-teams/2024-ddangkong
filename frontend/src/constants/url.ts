@@ -31,6 +31,8 @@ export const API_URL = {
 type API_URL_KEYS = keyof typeof API_URL;
 
 export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
+  rejoinRoom: `${BASE_URL}/api/balances/rooms/rejoin`,
+  getRoomInfo: `${BASE_URL}/api/balances/rooms/:roomId`,
   balanceContent: `${BASE_URL}/api/balances/rooms/:roomId/content`,
   vote: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/votes`,
   roundVoteResult: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-result`,
@@ -39,7 +41,6 @@ export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
   matchingResult: `${BASE_URL}/api/balances/rooms/:roomId/members/:memberId/matching`,
   room: `${BASE_URL}/api/balances/rooms`,
   enterRoom: `${BASE_URL}/api/balances/rooms/:roomUuid/members`,
-  getRoomInfo: `${BASE_URL}/api/balances/rooms/:roomId`,
   startGame: `${BASE_URL}/api/balances/rooms/:roomId/start`,
   voteIsFinished: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/vote-finished`,
   resetRoom: `${BASE_URL}/api/balances/rooms/:roomId/reset`,
@@ -49,7 +50,6 @@ export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
   applyRoomSetting: `${BASE_URL}/api/balances/rooms/:roomId`,
   deleteRoom: `${BASE_URL}/api/balances/rooms/:roomId/members/:memberId`,
   isJoinableRoom: `${BASE_URL}/api/balances/rooms/:roomUuid/status`,
-  rejoinRoom: `${BASE_URL}/api/balances/rooms/rejoin`,
 };
 
 export const INVITE_URL = (roomUuid: string) => {

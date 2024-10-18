@@ -24,6 +24,7 @@ import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingMo
 import { convertMsecToSecond } from '@/components/SelectContainer/Timer/Timer.util';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useModal from '@/hooks/useModal';
+import useRejoinRoom from '@/hooks/useRejoinRoom';
 import { memberInfoState } from '@/recoil/atom';
 
 interface HeaderProps {
@@ -61,7 +62,10 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 // 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
-  const { isMaster } = useRecoilValue(memberInfoState);
+  const {
+    member: { isMaster },
+  } = useRejoinRoom();
+
   const { handleExit } = useExit();
 
   const handleClickRoomSetting = () => {

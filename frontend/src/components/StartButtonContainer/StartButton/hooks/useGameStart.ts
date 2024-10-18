@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil';
 import { startGame } from '@/apis/room';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
 import useModal from '@/hooks/useModal';
+import useRejoinRoom from '@/hooks/useRejoinRoom';
 import useToast from '@/hooks/useToast';
 import { memberInfoState } from '@/recoil/atom';
 import { CustomError, NetworkError } from '@/utils/error';
@@ -12,7 +13,10 @@ import { CustomError, NetworkError } from '@/utils/error';
 const isServerError = (status: number) => status >= 500 && status !== 555;
 
 export const useGameStart = () => {
-  const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
+  // const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
+  const {
+    member: { isMaster },
+  } = useRejoinRoom();
   const { roomId } = useParams();
   const { show } = useToast();
   const { show: showModal } = useModal();
@@ -32,10 +36,10 @@ export const useGameStart = () => {
   });
 
   const handleGameStart = () => {
-    if (memberInfo.isMaster) {
+    if (isMaster) {
       startGameMutation.mutate();
     }
   };
 
-  return { memberInfo, handleGameStart, setMemberInfo };
+  return { isMaster, handleGameStart };
 };

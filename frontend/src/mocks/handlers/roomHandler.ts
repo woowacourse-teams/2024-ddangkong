@@ -78,6 +78,7 @@ const rejoinRoomHandler = () => {
 };
 
 export const roomHandler = [
+  http.get(MOCK_API_URL.rejoinRoom, rejoinRoomHandler),
   http.get(MOCK_API_URL.getRoomInfo, getRoomInfoHandler),
   http.post(MOCK_API_URL.room, createRoomHandler),
   http.post(MOCK_API_URL.enterRoom, enterRoomHandler),
@@ -89,5 +90,4 @@ export const roomHandler = [
   http.patch(MOCK_API_URL.applyRoomSetting, applyRoomSettingHandler),
   http.delete(MOCK_API_URL.deleteRoom, deleteRoomHandler),
   http.get(MOCK_API_URL.isJoinableRoom, isJoinableRoomHandler),
-  http.get(MOCK_API_URL.rejoinRoom, rejoinRoomHandler),
 ];
