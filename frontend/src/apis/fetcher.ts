@@ -16,6 +16,7 @@ const fetcher = {
         method,
         body: body && JSON.stringify(body),
         headers: headers && headers,
+        credentials: 'include',
       });
 
       if (!response.ok) {

@@ -1,19 +1,16 @@
 import { useMutation } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
 
 import { startGame } from '@/apis/room';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
 import useModal from '@/hooks/useModal';
 import useRejoinRoom from '@/hooks/useRejoinRoom';
 import useToast from '@/hooks/useToast';
-import { memberInfoState } from '@/recoil/atom';
 import { CustomError, NetworkError } from '@/utils/error';
 
 const isServerError = (status: number) => status >= 500 && status !== 555;
 
 export const useGameStart = () => {
-  // const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
   const {
     member: { isMaster },
   } = useRejoinRoom();
