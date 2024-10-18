@@ -136,3 +136,12 @@ export const isJoinableRoom = async (roomUuid: string): Promise<{ isJoinable: bo
 
   return data;
 };
+
+// 방 재접속 (새로고침 후 유저정보 가져올 때 사용)
+export const rejoinRoom = async () => {
+  const res = await fetcher.get({
+    url: API_URL.rejoin,
+  });
+  const data = await res.json();
+  return data;
+};

@@ -25,6 +25,7 @@ export const API_URL = {
   deleteRoom: (roomId: number, memberId: number) =>
     `${BASE_URL}/api/balances/rooms/${roomId}/members/${memberId}`,
   isJoinableRoom: (roomUuid: string) => `${BASE_URL}/api/balances/rooms/${roomUuid}/status`,
+  rejoin: `${BASE_URL}/api/balances/rooms/rejoin`,
 };
 
 type API_URL_KEYS = keyof typeof API_URL;
@@ -48,6 +49,7 @@ export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
   applyRoomSetting: `${BASE_URL}/api/balances/rooms/:roomId`,
   deleteRoom: `${BASE_URL}/api/balances/rooms/:roomId/members/:memberId`,
   isJoinableRoom: `${BASE_URL}/api/balances/rooms/:roomUuid/status`,
+  rejoin: `${BASE_URL}/api/balances/rooms/rejoin`,
 };
 
 export const INVITE_URL = (roomUuid: string) => {
