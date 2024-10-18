@@ -14,11 +14,11 @@ cors:
   origin: "*"
 
 cookie:
-  rejoin-key: "test_cookie"
+  rejoin-key: test_cookie
 
 encrypt:
-  secret-key: "1234567890123456"
-  algorithm: "AES"
+  secret-key: 1234567890123456
+  algorithm: AES
 
 logging:
   level:
