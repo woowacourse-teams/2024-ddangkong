@@ -1,13 +1,13 @@
 import {
-  nickname,
   nicknameContainer,
   profileImage,
-  rankInfoContainer,
   rankItem,
+  rankNicknameWrapper,
   rankNumber,
+  rankNumberContainer,
   rankPercent,
+  rankPercentWrapper,
 } from './GameResultItem.styled';
-import A11yOnly from '../common/a11yOnly/A11yOnly';
 
 import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import useCountAnimation from '@/hooks/useCountAnimation';
@@ -23,18 +23,20 @@ const GameResultItem = ({ memberMatchingInfo }: GameResultItemProps) => {
     target: matchingPercent,
     duration: 3000,
   });
-  const screenReaderRanking = `${rank}위. ${nickname} ${matchingPercent}%`;
 
   return (
     <li css={rankItem}>
-      <A11yOnly>{screenReaderRanking}</A11yOnly>
-      <div css={rankInfoContainer} aria-hidden>
-        <span css={rankNumber}>{rank}</span>
+      <div css={rankNicknameWrapper}>
+        <div css={rankNumberContainer}>
+          <span css={rankNumber}>{`${rank}위`}</span>
+        </div>
         <div css={nicknameContainer(animatedRankPercent)}>
           <img src={SillyDdangkong} alt="" css={profileImage} />
           <span css={nickname}>{nickname}</span>
         </div>
-        <span css={rankPercent}>{animatedRankPercent}%</span>
+      </div>
+      <div css={rankPercentWrapper}>
+        <span css={rankPercent}>{`${animatedRankPercent}%`}</span>
       </div>
     </li>
   );
