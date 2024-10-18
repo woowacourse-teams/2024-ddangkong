@@ -69,7 +69,6 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const handleClickRoomSetting = () => {
     show(RoomSettingModal);
   };
-  const focusRef = useFocus<HTMLElement>();
 
   const handleClickExit = () => {
     show(AlertModal, { message: '정말로 나가시겠습니까?', onConfirm: handleExit });

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
-import React, { ButtonHTMLAttributes, HTMLAttributes, useRef } from 'react';
+import React, { ButtonHTMLAttributes, HTMLAttributes, RefObject, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
 import useModalEscClose from './hooks/useModalEscClose';
@@ -25,9 +25,17 @@ export interface ModalProps
     onClose: () => void;
     position?: 'top' | 'bottom' | 'center';
     style?: React.CSSProperties;
+    closeRef?: RefObject<HTMLElement>;
   }> {}
 
-const Modal = ({ children, isOpen, onClose, position = 'center', ...restProps }: ModalProps) => {
+const Modal = ({
+  children,
+  isOpen,
+  onClose,
+  closeRef,
+  position = 'center',
+  ...restProps
+}: ModalProps) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const focusRef = useFocus<HTMLDivElement>();
   useModalEscClose(isOpen, onClose);
@@ -37,6 +45,14 @@ const Modal = ({ children, isOpen, onClose, position = 'center', ...restProps }:
       onClose();
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (closeRef?.current) {
+        closeRef.current.focus();
+      }
+    };
+  }, [closeRef?.current]);
 
   if (!isOpen) return null;
 
