@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
@@ -17,18 +18,20 @@ const NextRoundButton = () => {
   const { mutate: moveNextRound } = useMoveNextRoundMutation(Number(roomId));
   const memberInfo = useRecoilValue(memberInfoState);
   const { show } = useModal();
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   const randomRoundNextMessage = createRandomNextRoundMessage();
   const isLastRound = balanceContent?.currentRound === balanceContent?.totalRound;
 
   const showModal = () => {
-    show(AlertModal, { message: randomRoundNextMessage, onConfirm: moveNextRound });
+    show(AlertModal, { message: randomRoundNextMessage, onConfirm: moveNextRound, closeRef });
   };
 
   return (
     <div css={bottomButtonLayout}>
       {memberInfo.isMaster ? (
         <Button
+          ref={closeRef}
           style={{ width: '100%' }}
           text={isLastRound ? '결과 확인' : '다음'}
           onClick={isLastRound ? moveNextRound : showModal}
