@@ -62,6 +62,21 @@ const isJoinableRoomHandler = () => {
   return HttpResponse.json({ isJoinable: false }, { status: 200 });
 };
 
+const rejoinRoomHandler = () => {
+  return HttpResponse.json(
+    {
+      roomId: 142,
+      roomUuid: 'bc950f33f12f467da159a263a905bb40',
+      member: {
+        memberId: 217,
+        nickname: '땅콩',
+        isMaster: true,
+      },
+    },
+    { status: 200 },
+  );
+};
+
 export const roomHandler = [
   http.get(MOCK_API_URL.getRoomInfo, getRoomInfoHandler),
   http.post(MOCK_API_URL.room, createRoomHandler),
@@ -74,4 +89,5 @@ export const roomHandler = [
   http.patch(MOCK_API_URL.applyRoomSetting, applyRoomSettingHandler),
   http.delete(MOCK_API_URL.deleteRoom, deleteRoomHandler),
   http.get(MOCK_API_URL.isJoinableRoom, isJoinableRoomHandler),
+  http.get(MOCK_API_URL.rejoin, rejoinRoomHandler),
 ];
