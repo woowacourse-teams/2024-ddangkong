@@ -1,7 +1,13 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { RoomInfo, CreateOrEnterRoomResponse, Category, RoomSettingApply } from '@/types/room';
+import {
+  RoomInfo,
+  CreateOrEnterRoomResponse,
+  Category,
+  RoomSettingApply,
+  RoomAndMember,
+} from '@/types/room';
 
 interface CategoryResponse {
   categories: Category[];
@@ -138,13 +144,9 @@ export const isJoinableRoom = async (roomUuid: string): Promise<{ isJoinable: bo
 };
 
 // 방 재접속 (새로고침 후 유저정보 가져올 때 사용)
-export const rejoinRoom = async (): Promise<{
-  roomId: number;
-  roomUuid: string;
-  member: { memberId: number; nickname: string; isMaster: boolean };
-}> => {
+export const rejoinRoom = async (): Promise<RoomAndMember> => {
   const res = await fetcher.get({
-    url: API_URL.rejoin,
+    url: API_URL.rejoinRoom,
   });
   const data = await res.json();
   return data;

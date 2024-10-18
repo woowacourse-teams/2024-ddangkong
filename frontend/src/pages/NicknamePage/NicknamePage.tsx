@@ -21,6 +21,7 @@ import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
 import useKeyboardUp from '@/hooks/useKeyboardUp';
+import useRejoinRoom from '@/hooks/useRejoinRoom';
 import { roomUuidState } from '@/recoil/atom';
 
 const NicknamePage = () => {
@@ -34,6 +35,9 @@ const NicknamePage = () => {
     queryFn: async () => isJoinableRoom(roomUuid || ''),
     enabled: !!roomUuid,
   });
+
+  // const { member } = useRejoinRoom();
+  // console.log(member);
 
   useEffect(() => {
     if (roomUuid) {

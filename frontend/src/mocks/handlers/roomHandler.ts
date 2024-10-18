@@ -89,5 +89,5 @@ export const roomHandler = [
   http.patch(MOCK_API_URL.applyRoomSetting, applyRoomSettingHandler),
   http.delete(MOCK_API_URL.deleteRoom, deleteRoomHandler),
   http.get(MOCK_API_URL.isJoinableRoom, isJoinableRoomHandler),
-  http.get(MOCK_API_URL.rejoin, rejoinRoomHandler),
+  http.get(MOCK_API_URL.rejoinRoom, rejoinRoomHandler),
 ];
