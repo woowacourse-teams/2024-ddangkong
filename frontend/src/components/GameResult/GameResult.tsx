@@ -26,7 +26,11 @@ const GameResult = () => {
     <>
       <div css={gameResultLayout} ref={resultContainerRef}>
         {isLoading && <Spinner message="매칭 결과를 불러오는 중입니다..." />}
-
+        {existMatching && !isAtBottom && (
+          <button onClick={scrollToBottom} css={floatingButton('down')}>
+            <img src={ArrowDown} alt="가장 낮은 순위로 이동" />
+          </button>
+        )}
         {existMatching && (
           <ol css={rankListContainer}>
             {matchedMembers &&
@@ -38,7 +42,11 @@ const GameResult = () => {
               ))}
           </ol>
         )}
-
+        {existMatching && !isAtTop && (
+          <button onClick={scrollToTop} css={floatingButton('up')}>
+            <img src={ArrowUp} alt="가장 높은 순위로 이동" />
+          </button>
+        )}
         {!isLoading && !existMatching && (
           <div css={noMatchingLayout}>
             <img src={SadDdangKong} alt="서운한 땅콩" css={noMatchingImg} />
@@ -46,17 +54,6 @@ const GameResult = () => {
               {'이번에는 나와 같은 선택을 한 사람이 없지만,\n다음 게임을 기대해 볼까요?'}
             </span>
           </div>
-        )}
-
-        {existMatching && !isAtTop && (
-          <button onClick={scrollToTop} css={floatingButton('up')}>
-            <img src={ArrowUp} alt="가장 높은 순위로 이동" />
-          </button>
-        )}
-        {existMatching && !isAtBottom && (
-          <button onClick={scrollToBottom} css={floatingButton('down')}>
-            <img src={ArrowDown} alt="가장 낮은 순위로 이동" />
-          </button>
         )}
       </div>
       <FinalButton />
