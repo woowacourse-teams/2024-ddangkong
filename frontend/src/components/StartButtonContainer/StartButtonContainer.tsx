@@ -1,6 +1,6 @@
 import Countdown from './Countdown/Countdown';
+import useCountdown from './hooks/useCountdown';
 import StartButton from './StartButton/StartButton';
-import useCountdown from '../hooks/useCountdown';
 
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 

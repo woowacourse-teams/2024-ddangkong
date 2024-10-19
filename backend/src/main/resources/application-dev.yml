@@ -21,6 +21,13 @@ spring:
 cors:
   origin: ${secret.cors.origin}
 
+cookie:
+  rejoin-key: ${secret.cookie.rejoin-key}
+
+encrypt:
+  secret-key: ${secret.encrypt.secret-key}
+  algorithm: ${secret.encrypt.algorithm}
+
 logging:
   config: classpath:logback-dev.xml
   location : ${secret.application.log.location}

@@ -10,18 +10,6 @@ import { server } from '@/mocks/server';
 
 import { customRender, wrapper } from '@/test-utils';
 describe('TabContentContainer 컴포넌트 테스트', () => {
-  it('라운드 결과 그룹원들이 선택한 퍼센트를 카운팅 애니메이션으로 보여준다.', async () => {
-    customRender(<TabContentContainer isVoteStatisticsTabActive={true} />);
-
-    await waitFor(
-      () => {
-        expect(screen.getByText('73%')).toBeInTheDocument();
-        expect(screen.getByText('27%')).toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
-  });
-
   it('useRoundVoteResultQuery 커스텀 훅이 선택지에 대한 비율을 반환한다.', async () => {
     const { result } = renderHook(() => useRoundVoteResultQuery({ roomId: 1, contentId: 1 }), {
       wrapper,

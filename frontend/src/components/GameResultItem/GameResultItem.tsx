@@ -11,7 +11,7 @@ import {
   rankPercentWrapper,
 } from './GameResultItem.styled';
 
-import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
+import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
 import useCountAnimation from '@/hooks/useCountAnimation';
 import { MemberMatchingInfo } from '@/types/balanceContent';
 
