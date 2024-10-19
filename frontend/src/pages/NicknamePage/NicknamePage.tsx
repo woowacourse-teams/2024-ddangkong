@@ -10,7 +10,6 @@ import {
   noVoteTextContainer,
   noVoteText,
   angryImage,
-  nicknameTitle,
   nicknameContainer,
 } from './NicknamePage.styled';
 import useMakeOrEnterRoom from './useMakeOrEnterRoom';
@@ -59,7 +58,6 @@ const NicknamePage = () => {
         <img src={SillyDdangkong} alt="사용자 프로필" css={profileImg} />
       </div>
       <div css={nicknameContainer}>
-        <span css={nicknameTitle}>닉네임</span>
         <NicknameInput
           nicknameInputRef={nicknameInputRef}
           handleMakeOrEnterRoom={handleMakeOrEnterRoom}
