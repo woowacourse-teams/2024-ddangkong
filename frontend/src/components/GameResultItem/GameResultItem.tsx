@@ -34,7 +34,7 @@ const GameResultItem = forwardRef<HTMLLIElement, GameResultItemProps>(
             <span css={rankNumber}>{`${rank}위`}</span>
           </div>
           <div css={nicknameContainer(animatedRankPercent)}>
-            <img src={SillyDdangkong} alt="" css={profileImage} />
+            <img src={SillyDdangkongMedium} alt="" css={profileImage} />
             <span css={nickname}>{nickname}</span>
           </div>
         </div>
