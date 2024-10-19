@@ -78,7 +78,8 @@
           "text-align",
           "text-indent",
           "vertical-align",
-          "white-space"
+          "white-space",
+          "outline"
         ]
       },
       {
