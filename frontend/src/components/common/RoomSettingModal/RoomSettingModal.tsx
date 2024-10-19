@@ -12,7 +12,7 @@ import Modal from '../Modal/Modal';
 import { POLLING_DELAY } from '@/constants/config';
 
 const TOTAL_ROUND_LIST = [5, 7, 10];
-const TIMER_PER_ROUND_LIST = [5000, 10000, 15000];
+const TIMER_PER_ROUND_LIST = [10000, 15000, 30000, 60000];
 
 interface RoomSettingModalProps {
   isOpen: boolean;

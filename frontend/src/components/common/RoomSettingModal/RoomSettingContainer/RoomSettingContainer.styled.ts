@@ -21,5 +21,5 @@ export const roomSettingTitle = css`
 export const roomSettingButtonContainer = css`
   display: flex;
   justify-content: center;
-  gap: 1.6rem;
+  gap: 1rem;
 `;
