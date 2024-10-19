@@ -8,6 +8,10 @@ export const rankItem = css`
   align-items: center;
   width: 100%;
   ${Theme.typography.headline3};
+
+  :focus {
+    outline: none;
+  }
 `;
 
 export const rankNicknameWrapper = css`

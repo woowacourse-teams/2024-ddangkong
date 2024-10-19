@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import { useMatchingResultQuery } from './GameResult.hook';
 import {
   gameResultLayout,
@@ -20,30 +22,53 @@ import SadDdangKong from '@/assets/images/sadDdangkong.webp';
 const GameResult = () => {
   const { matchedMembers, existMatching, isLoading } = useMatchingResultQuery();
   const { resultContainerRef, isAtTop, isAtBottom } = useScrollState();
+  const firstRankLiRef = useRef<HTMLLIElement>(null);
+  const lastRankLiRef = useRef<HTMLLIElement>(null);
   const { scrollToTop, scrollToBottom } = useScrollControl(resultContainerRef);
+
+  const handleScrollToTop = () => {
+    scrollToTop();
+    requestAnimationFrame(() => {
+      firstRankLiRef.current?.focus();
+    });
+  };
+
+  const handleScrollToBottom = () => {
+    scrollToBottom();
+    requestAnimationFrame(() => {
+      lastRankLiRef.current?.focus();
+    });
+  };
 
   return (
     <>
       <div css={gameResultLayout} ref={resultContainerRef}>
         {isLoading && <Spinner message="매칭 결과를 불러오는 중입니다..." />}
         {existMatching && !isAtBottom && (
-          <button onClick={scrollToBottom} css={floatingButton('down')}>
+          <button onClick={handleScrollToBottom} css={floatingButton('down')}>
             <img src={ArrowDown} alt="가장 낮은 순위로 이동" />
           </button>
         )}
         {existMatching && (
           <ol css={rankListContainer}>
             {matchedMembers &&
-              matchedMembers.map((memberMatchingInfo) => (
+              matchedMembers.map((memberMatchingInfo, index) => (
                 <GameResultItem
                   key={memberMatchingInfo.rank}
                   memberMatchingInfo={memberMatchingInfo}
+                  ref={
+                    index === 0
+                      ? firstRankLiRef
+                      : index === matchedMembers.length - 1
+                        ? lastRankLiRef
+                        : null
+                  }
                 />
               ))}
           </ol>
         )}
         {existMatching && !isAtTop && (
-          <button onClick={scrollToTop} css={floatingButton('up')}>
+          <button onClick={handleScrollToTop} css={floatingButton('up')}>
             <img src={ArrowUp} alt="가장 높은 순위로 이동" />
           </button>
         )}
