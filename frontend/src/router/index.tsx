@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
             path: 'nickname/:roomUuid?',
             element: (
               <AsyncErrorBoundary>
-                <NicknamePage />,
+                <NicknamePage />
               </AsyncErrorBoundary>
             ),
           },
