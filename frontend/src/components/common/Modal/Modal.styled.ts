@@ -20,7 +20,7 @@ export const modalContentWrapper = ({ position }: Pick<ModalProps, 'position'>) 
   left: 50%;
   flex-direction: column;
   gap: 1.6rem;
-  width: 24rem;
+  width: 28rem;
   height: fit-content;
   max-height: 70vh;
   min-height: 1.2rem;

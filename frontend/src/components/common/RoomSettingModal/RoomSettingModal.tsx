@@ -50,7 +50,7 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
               </li>
             ))}
           </RoomSettingContainer>
-          <RoomSettingContainer title="라운드 당 타이머">
+          <RoomSettingContainer title="제한 시간">
             {TIMER_PER_ROUND_LIST.map((timeLimit) => (
               <li key={timeLimit}>
                 <button

@@ -22,7 +22,7 @@ const RoomSetting = () => {
         방 정보.
         카테고리 ${roomSetting.category.label}. 
         라운드 ${roomSetting.totalRound}. 
-        타이머 ${roomSetting.timeLimit / 1000}초.`;
+        제한시간 ${roomSetting.timeLimit / 1000}초.`;
 
   const handleClickCategory = () => {
     show(RoomSettingModal);
@@ -45,7 +45,7 @@ const RoomSetting = () => {
           <h2 css={bigTitle}>{roomSetting.category.label}</h2>
         </div>
         <div css={roomSettingBox}>
-          <span css={roomSettingLabel}>타이머</span>
+          <span css={roomSettingLabel}>제한 시간</span>
           <h2 css={smallTitle}>{roomSetting.timeLimit / 1000}초</h2>
         </div>
       </button>

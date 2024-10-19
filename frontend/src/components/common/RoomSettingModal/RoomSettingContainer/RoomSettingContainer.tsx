@@ -8,7 +8,7 @@ import {
 } from './RoomSettingContainer.styled';
 
 interface RoomSettingContainerProps {
-  title: '카테고리' | '총 라운드' | '라운드 당 타이머';
+  title: '카테고리' | '총 라운드' | '제한 시간';
 }
 
 const RoomSettingContainer = ({
