@@ -21,7 +21,11 @@ const RoomSettingContainer = ({
         <span css={roomSettingTitle}>{title}</span>
       </div>
       {title === '카테고리' && children}
-      {title !== '카테고리' && <ul css={roomSettingButtonContainer}>{children}</ul>}
+      {title !== '카테고리' && (
+        <ul css={roomSettingButtonContainer} role="radiogroup">
+          {children}
+        </ul>
+      )}
     </div>
   );
 };

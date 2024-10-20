@@ -44,7 +44,12 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
           <RoomSettingContainer title="총 라운드">
             {TOTAL_ROUND_LIST.map((round) => (
               <li key={round}>
-                <button css={roomSettingButton(totalRound === round)} onClick={handleClickRound}>
+                <button
+                  role="radio"
+                  onClick={handleClickRound}
+                  aria-checked={totalRound === round}
+                  css={roomSettingButton(totalRound === round)}
+                >
                   {round}
                 </button>
               </li>
@@ -54,9 +59,11 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
             {TIMER_PER_ROUND_LIST.map((timeLimit) => (
               <li key={timeLimit}>
                 <button
-                  css={roomSettingButton(timeLimitPerRound === timeLimit)}
+                  role="radio"
                   onClick={handleClickTimeLimit}
                   value={timeLimit}
+                  aria-checked={timeLimitPerRound === timeLimit}
+                  css={roomSettingButton(timeLimitPerRound === timeLimit)}
                 >
                   {timeLimit / POLLING_DELAY}초
                 </button>
