@@ -20,7 +20,8 @@ const RoomSettingContainer = ({
       <div css={roomSettingTitleWrapper}>
         <span css={roomSettingTitle}>{title}</span>
       </div>
-      <ul css={roomSettingButtonContainer}>{children}</ul>
+      {title === '카테고리' && children}
+      {title !== '카테고리' && <ul css={roomSettingButtonContainer}>{children}</ul>}
     </div>
   );
 };
