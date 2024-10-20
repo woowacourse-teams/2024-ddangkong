@@ -68,10 +68,6 @@ include::{snippets}/room/rejoin/curl-request.adoc[]
 
 include::{snippets}/room/rejoin/http-request.adoc[]
 
-request fields
-
-include::{snippets}/room/rejoin/request-fields.adoc[]
-
 request cookies
 
 include::{snippets}/room/rejoin/request-cookies.adoc[]

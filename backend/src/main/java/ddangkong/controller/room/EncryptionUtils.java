@@ -1,8 +1,11 @@
 package ddangkong.controller.room;
 
 import ddangkong.exception.room.CipherException;
+import ddangkong.exception.room.InvalidCookieException;
 import java.util.Base64;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +43,8 @@ public class EncryptionUtils {
             byte[] decodeBytes = Base64.getDecoder().decode(encrypted);
             byte[] decryptedBytes = cipher.doFinal(decodeBytes);
             return new String(decryptedBytes);
+        } catch (IllegalBlockSizeException | BadPaddingException | IllegalArgumentException e) {
+            throw new InvalidCookieException();
         } catch (Exception e) {
             throw new CipherException();
         }

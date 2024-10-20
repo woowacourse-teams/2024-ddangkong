@@ -229,22 +229,15 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                     new MemberResponse(2L, "타콩", false));
             when(roomFacade.rejoinRoom(anyLong())).thenReturn(response);
 
-            RoomJoinRequest request = new RoomJoinRequest("타콩");
-            String content = objectMapper.writeValueAsString(request);
-
             //when & then
             mockMvc.perform(get(ENDPOINT)
-                            .content(content)
                             .contentType(MediaType.APPLICATION_JSON)
                             .cookie(new Cookie("test_cookie", "oNnHwjSR1G4E5L8Mute61w=="))
                     )
                     .andExpect(status().isOk())
                     .andDo(document("room/rejoin",
                             requestCookies(
-                                    cookieWithName("test_cookie").description("사용자 인증에 필요한 쿠키")
-                            ),
-                            requestFields(
-                                    fieldWithPath("nickname").description("닉네임")
+                                    cookieWithName("test_cookie").description("사용자 인증에 필요한 쿠키(쿠키의 키 값은 UUID로 예측할 수 없는 값이 들어감)")
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("참여한 방 ID"),
