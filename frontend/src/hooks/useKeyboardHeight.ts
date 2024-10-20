@@ -6,6 +6,17 @@ const useKeyboardHeight = () => {
   const [bottomButtonHeight, setBottomButtonHeight] = useState(INITIAL_BOTTOM_BUTTON_HEIGHT);
 
   useEffect(() => {
+    const handleLockScroll = (e: TouchEvent) => {
+      e.preventDefault();
+    };
+
+    document.body.addEventListener('touchmove', handleLockScroll, { passive: false });
+    return () => {
+      document.body.removeEventListener('touchmove', handleLockScroll);
+    };
+  }, []);
+
+  useEffect(() => {
     const handleResizeScreen = () => {
       if (!visualViewport) return;
 
