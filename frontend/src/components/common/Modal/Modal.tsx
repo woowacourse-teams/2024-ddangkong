@@ -62,6 +62,7 @@ const Modal = ({
     <div
       tabIndex={0}
       ref={focusRef}
+      aria-modal={true}
       css={modalBackdropLayout}
       onClick={handleOutsideClick}
       onKeyDown={handleOutsideClick}
