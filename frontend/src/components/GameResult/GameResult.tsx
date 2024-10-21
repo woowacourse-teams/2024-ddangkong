@@ -28,16 +28,12 @@ const GameResult = () => {
 
   const handleScrollToTop = () => {
     scrollToTop();
-    requestAnimationFrame(() => {
-      firstRankLiRef.current?.focus();
-    });
+    firstRankLiRef.current?.focus();
   };
 
   const handleScrollToBottom = () => {
     scrollToBottom();
-    requestAnimationFrame(() => {
-      lastRankLiRef.current?.focus();
-    });
+    lastRankLiRef.current?.focus();
   };
 
   return (
