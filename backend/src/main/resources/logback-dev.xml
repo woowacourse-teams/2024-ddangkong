@@ -11,7 +11,8 @@
             <maxHistory>14</maxHistory> <!-- 14일간 보관 -->
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] %-5level %logger{36} [%X{traceId:-NoTraceID}] - %msg%n
+            </pattern>
         </encoder>
     </appender>
 
@@ -20,7 +21,8 @@
     <appender name="DISCORD" class="com.github.napstr.logback.DiscordAppender">
         <webhookUri>${DISCORD_WEBHOOK_URL}</webhookUri>
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] [%-5level] %logger{36} - %msg%n```%ex{full}```
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] [%-5level] %logger{36} [%X{traceId:-NoTraceID}] -
+                %msg%n```%ex{full}```
             </pattern>
         </layout>
         <username>dev-error-alert-bot</username>
