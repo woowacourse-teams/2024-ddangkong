@@ -1,3 +1,5 @@
+import { RefObject } from 'react';
+
 import CategoryDropdown from './CategoryDropdown/CategoryDropdown';
 import useRoomSetting from './hooks/useRoomSetting';
 import RoomSettingContainer from './RoomSettingContainer/RoomSettingContainer';
@@ -17,9 +19,10 @@ const TIMER_PER_ROUND_LIST = [5000, 10000, 15000];
 interface RoomSettingModalProps {
   isOpen: boolean;
   onClose: () => void;
+  returnFocusRef?: RefObject<HTMLElement>;
 }
 
-const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
+const RoomSettingModal = ({ isOpen, onClose, returnFocusRef }: RoomSettingModalProps) => {
   const {
     roomSetting,
     handleClickOption,
@@ -31,7 +34,12 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
   const { category, totalRound, timeLimitPerRound } = roomSetting;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} css={roomSettingModalLayout}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      returnFocusRef={returnFocusRef}
+      css={roomSettingModalLayout}
+    >
       <Modal.Header position="center">
         <Modal.Title css={roomSettingModalTitle}>방 설정</Modal.Title>
         <Modal.IconButton onClick={onClose} />

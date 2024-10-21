@@ -1,9 +1,10 @@
-import { createContext, PropsWithChildren, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, RefObject, useMemo, useState } from 'react';
 
 interface ModalProps {
   title?: string;
   message?: string;
   onConfirm?: () => void;
+  returnFocusRef?: RefObject<HTMLElement>;
 }
 
 interface ModalState extends ModalProps {
@@ -39,6 +40,7 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
       message: props?.message,
       onConfirm: props?.onConfirm,
       isOpen: true,
+      returnFocusRef: props?.returnFocusRef,
     });
   };
 

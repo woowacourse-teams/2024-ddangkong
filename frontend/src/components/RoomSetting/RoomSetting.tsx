@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import {
@@ -15,6 +16,7 @@ import useModal from '@/hooks/useModal';
 import { memberInfoState } from '@/recoil/atom';
 
 const RoomSetting = () => {
+  const returnFocusRef = useRef<HTMLButtonElement>(null);
   const { roomSetting } = useGetRoomInfo();
   const { isMaster } = useRecoilValue(memberInfoState);
   const { show } = useModal();
@@ -25,7 +27,7 @@ const RoomSetting = () => {
         타이머 ${roomSetting.timeLimit / 1000}초.`;
 
   const handleClickCategory = () => {
-    show(RoomSettingModal);
+    show(RoomSettingModal, { returnFocusRef });
   };
 
   return (
@@ -35,6 +37,7 @@ const RoomSetting = () => {
         aria-label="방 설정"
         css={roomSettingLayout}
         onClick={isMaster ? handleClickCategory : () => {}}
+        ref={returnFocusRef}
       >
         <div css={roomSettingBox}>
           <span css={roomSettingLabel}>라운드</span>
