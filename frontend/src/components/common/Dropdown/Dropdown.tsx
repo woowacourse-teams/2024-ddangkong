@@ -16,7 +16,7 @@ import ArrowUp from '@/assets/images/arrowUp.svg';
 interface DropdownProps<T> {
   text: string;
   optionList: T[];
-  handleClickOption: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  handleClickOption: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Dropdown = <T extends { value: string; label: string }>({
