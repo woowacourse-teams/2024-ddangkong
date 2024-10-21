@@ -45,10 +45,10 @@ const Dropdown = <T extends { value: string; label: string }>({
       }
     };
 
-    document.addEventListener('mousedown', handleOutsideClose);
+    document.addEventListener('click', handleOutsideClose);
 
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClose);
+      document.removeEventListener('click', handleOutsideClose);
     };
   }, [isOpen]);
 
@@ -66,7 +66,7 @@ const Dropdown = <T extends { value: string; label: string }>({
         <div css={emptyWrapper}></div>
         <span css={dropdownText}>{text || '선택해주세요'}</span>
         <div>
-          <img src={isOpen ? ArrowUp : ArrowDown} alt="" css={arrowImage} aria-hidden="true" />
+          <img src={isOpen ? ArrowUp : ArrowDown} alt="" css={arrowImage} />
         </div>
       </button>
 
