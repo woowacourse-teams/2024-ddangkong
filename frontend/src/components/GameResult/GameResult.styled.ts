@@ -7,7 +7,7 @@ export const gameResultLayout = css`
   align-items: center;
   gap: 4.8rem;
   width: 100%;
-  height: calc(100vh - 15vh - 7.2rem);
+  height: calc(100dvh - 15dvh - 7.2rem);
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
