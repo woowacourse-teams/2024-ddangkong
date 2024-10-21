@@ -16,64 +16,80 @@ import ArrowUp from '@/assets/images/arrowUp.svg';
 interface DropdownProps<T> {
   text: string;
   optionList: T[];
-  handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handleClickOption: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Dropdown = <T extends { value: string; label: string }>({
   text,
   optionList,
-  handleClick,
+  handleClickOption,
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+
   const handleToggleDropdown = () => {
     setIsOpen((prev) => !prev);
+    triggerRef.current?.focus();
+  };
+
+  const handleSelectOption = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    handleClickOption(e);
+    handleToggleDropdown();
   };
 
   useEffect(() => {
     const handleOutsideClose = (e: MouseEvent) => {
-      const isOutsideDropdown = isOpen && !dropdownRef.current?.contains(e.target as Element);
-
-      if (isOutsideDropdown) {
+      if (isOpen && dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
 
     document.addEventListener('click', handleOutsideClose);
 
-    return () => document.removeEventListener('click', handleOutsideClose);
+    return () => {
+      document.removeEventListener('click', handleOutsideClose);
+    };
   }, [isOpen]);
 
   return (
-    <div
-      css={dropdownLayout}
-      ref={dropdownRef}
-      onClick={handleToggleDropdown}
-      onKeyDown={handleToggleDropdown}
-      role="button"
-      tabIndex={0}
-    >
-      <div css={dropdownTextContainer}>
+    <div css={dropdownLayout} ref={dropdownRef}>
+      <button
+        ref={triggerRef}
+        onClick={handleToggleDropdown}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-controls="dropdown-listbox"
+        aria-label={`카테고리 선택 목록, 현재 선택: ${text || '선택해주세요'}`}
+        css={dropdownTextContainer}
+      >
         <div css={emptyWrapper}></div>
         <span css={dropdownText}>{text || '선택해주세요'}</span>
         <div>
-          <img src={isOpen ? ArrowDown : ArrowUp} alt="드랍다운 화살표" css={arrowImage} />
+          <img src={isOpen ? ArrowUp : ArrowDown} alt="" css={arrowImage} />
         </div>
-      </div>
-      <ul css={selectOptionList(isOpen, optionList.length)}>
-        {isOpen &&
-          optionList.map((option) => (
-            <li key={option.value}>
+      </button>
+
+      {isOpen && (
+        <ul
+          id="dropdown-listbox"
+          role="listbox"
+          aria-labelledby="dropdown-button"
+          css={selectOptionList(isOpen, optionList.length)}
+        >
+          {optionList.map((option) => (
+            <li key={option.value} role="option" aria-selected={text === option.label}>
               <button
                 css={optionButton(text === option.label)}
                 value={option.value}
-                onClick={handleClick}
+                onClick={handleSelectOption}
               >
                 {option.label}
               </button>
             </li>
           ))}
-      </ul>
+        </ul>
+      )}
     </div>
   );
 };

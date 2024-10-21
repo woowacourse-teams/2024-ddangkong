@@ -8,7 +8,7 @@ import {
 } from './RoomSettingContainer.styled';
 
 interface RoomSettingContainerProps {
-  title: '카테고리' | '총 라운드' | '라운드 당 타이머';
+  title: '카테고리' | '총 라운드' | '제한 시간';
 }
 
 const RoomSettingContainer = ({
@@ -20,7 +20,13 @@ const RoomSettingContainer = ({
       <div css={roomSettingTitleWrapper}>
         <span css={roomSettingTitle}>{title}</span>
       </div>
-      <ul css={roomSettingButtonContainer}>{children}</ul>
+      {title === '카테고리' ? (
+        children
+      ) : (
+        <ul css={roomSettingButtonContainer} role="radiogroup">
+          {children}
+        </ul>
+      )}
     </div>
   );
 };

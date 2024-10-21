@@ -139,6 +139,10 @@ const reset = css`
     background-color: inherit;
     outline: none;
     cursor: pointer;
+
+    :enabled {
+      color: black;
+    }
   }
 `;
 
