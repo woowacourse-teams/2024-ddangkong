@@ -36,6 +36,17 @@ const GameResult = () => {
     lastRankLiRef.current?.focus();
   };
 
+  const getRefForIndex = (
+    index: number,
+    length: number,
+    firstRef: React.RefObject<HTMLLIElement>,
+    lastRef: React.RefObject<HTMLLIElement>,
+  ): React.RefObject<HTMLLIElement> | null => {
+    if (index === 0) return firstRef;
+    if (index === length - 1) return lastRef;
+    return null;
+  };
+
   return (
     <>
       <div css={gameResultLayout} ref={resultContainerRef}>
@@ -52,13 +63,7 @@ const GameResult = () => {
                 <GameResultItem
                   key={memberMatchingInfo.rank}
                   memberMatchingInfo={memberMatchingInfo}
-                  ref={
-                    index === 0
-                      ? firstRankLiRef
-                      : index === matchedMembers.length - 1
-                        ? lastRankLiRef
-                        : null
-                  }
+                  ref={getRefForIndex(index, matchedMembers.length, firstRankLiRef, lastRankLiRef)}
                 />
               ))}
           </ol>
