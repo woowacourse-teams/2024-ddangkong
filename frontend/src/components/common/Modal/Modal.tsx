@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { ButtonHTMLAttributes, HTMLAttributes, RefObject, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -62,6 +63,7 @@ const Modal = ({
     <div
       tabIndex={0}
       ref={focusRef}
+      role="dialog"
       aria-modal={true}
       css={modalBackdropLayout}
       onClick={handleOutsideClick}
