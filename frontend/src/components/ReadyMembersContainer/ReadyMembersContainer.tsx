@@ -40,9 +40,8 @@ const ReadyMembersContainer = () => {
 
   return (
     <section css={readyMembersContainerLayout}>
-      <A11yOnly aria-live="polite">총 인원 {members.length}명</A11yOnly>
       <div css={totalNumber}>
-        <div aria-hidden>총 인원 {members.length}명</div>
+        <div role="status">{`총 인원 ${members.length}명`}</div>
         <button css={inviteButton} onClick={handleClickInvite} ref={returnFocusRef}>
           초대하기
         </button>
