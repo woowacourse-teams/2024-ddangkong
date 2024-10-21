@@ -45,14 +45,17 @@ const Header = () => {
 };
 
 // 1. 가운데 제목과 설명이 있는 헤더 : 최종 게임 결과 화면
-export const MatchingResultHeader = ({ title }: HeaderProps) => (
-  <header css={headerLayout(true)}>
-    <div css={MatchingResultHeaderContainer}>
-      <h1 css={matchingResultTitle}>{title}</h1>
-      <h2 css={matchingResultCaption}>매칭도를 통해 당신과 가장 잘 맞는 사람을 알아보세요😊</h2>
-    </div>
-  </header>
-);
+export const MatchingResultHeader = ({ title }: HeaderProps) => {
+  const focusRef = useFocus<HTMLElement>();
+  return (
+    <header css={headerLayout(true)} tabIndex={0} ref={focusRef}>
+      <div css={MatchingResultHeaderContainer}>
+        <h1 css={matchingResultTitle}>{title}</h1>
+        <h2 css={matchingResultCaption}>매칭도를 통해 당신과 가장 잘 맞는 사람을 알아보세요😊</h2>
+      </div>
+    </header>
+  );
+};
 
 // 2. 가운데 제목만 차지하는 헤더 : 닉네임 설정 화면
 export const TitleHeader = ({ title }: HeaderProps) => (
@@ -67,6 +70,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { isMaster } = useRecoilValue(memberInfoState);
   const { handleExit } = useExit();
   const closeRef = useRef(null);
+  const focusRef = useFocus<HTMLElement>();
 
   const handleClickRoomSetting = () => {
     show(RoomSettingModal, { closeRef });
@@ -77,7 +81,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   };
 
   return (
-    <header css={headerLayout()}>
+    <header css={headerLayout()} tabIndex={0} ref={focusRef}>
       <button onClick={handleClickExit} css={buttonWrapper}>
         <img src={ExitIcon} alt="방 나가기" css={iconImage} />
       </button>
@@ -98,9 +102,10 @@ export const RoundResultHeader = () => {
   const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
   const screenReaderRoundResult = `${balanceContent.totalRound}라운드 중. ${balanceContent.currentRound}라운드. 투표 결과 페이지`;
+  const focusRef = useFocus<HTMLElement>();
 
   return (
-    <header css={headerLayout()}>
+    <header css={headerLayout()} tabIndex={0} ref={focusRef}>
       <A11yOnly>{screenReaderRoundResult}</A11yOnly>
       <span css={roundText} aria-hidden>
         {balanceContent.currentRound}/{balanceContent.totalRound}
@@ -120,9 +125,10 @@ export const GameHeader = () => {
 
   const { totalRound, currentRound, timeLimit } = balanceContent;
   const screenReaderHeader = `${totalRound}라운드.중.${currentRound}라운드. 밸런스 게임 페이지. 제한 시간 ${convertMsecToSecond(timeLimit)}초.`;
+  const focusRef = useFocus<HTMLElement>();
 
   return (
-    <header css={headerLayout()}>
+    <header css={headerLayout()} tabIndex={0} ref={focusRef}>
       <A11yOnly>{screenReaderHeader}</A11yOnly>
       <span css={roundText} aria-hidden>
         {currentRound}/{totalRound}
