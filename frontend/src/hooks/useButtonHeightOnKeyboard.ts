@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 const INITIAL_BOTTOM_BUTTON_HEIGHT = 0;
 
-const useKeyboardHeight = () => {
+const useButtonHeightOnKeyboard = () => {
   const [bottomButtonHeight, setBottomButtonHeight] = useState(INITIAL_BOTTOM_BUTTON_HEIGHT);
 
   useEffect(() => {
@@ -33,4 +33,4 @@ const useKeyboardHeight = () => {
   return { bottomButtonHeight };
 };
 
-export default useKeyboardHeight;
+export default useButtonHeightOnKeyboard;

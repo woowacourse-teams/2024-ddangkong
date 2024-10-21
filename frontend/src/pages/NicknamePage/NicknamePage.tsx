@@ -19,14 +19,14 @@ import AngryDdangkong from '@/assets/images/angryDdangkong.webp';
 import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
-import useKeyboardHeight from '@/hooks/useKeyboardHeight';
+import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
 import { roomUuidState } from '@/recoil/atom';
 
 const NicknamePage = () => {
   const { nicknameInputRef, handleMakeOrEnterRoom, isLoading } = useMakeOrEnterRoom();
   const { roomUuid } = useParams();
   const setRoomUuidState = useSetRecoilState(roomUuidState);
-  const { bottomButtonHeight } = useKeyboardHeight();
+  const { bottomButtonHeight } = useButtonHeightOnKeyboard();
 
   const { data, isLoading: isJoinableLoading } = useQuery({
     queryKey: ['isJoinable', roomUuid],
@@ -66,7 +66,7 @@ const NicknamePage = () => {
           onClick={handleMakeOrEnterRoom}
           disabled={isLoading}
           text={isLoading ? '접속 중...' : '확인'}
-          style={{ width: '100%', bottom: bottomButtonHeight, transition: 'bottom 0.2s' }}
+          style={{ width: '100%', bottom: bottomButtonHeight }}
           bottom
         />
       </div>
