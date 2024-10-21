@@ -4,16 +4,19 @@ import static java.util.stream.Collectors.joining;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Parameter;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Slf4j
 abstract class ControllerLoggingAspect {
+    private static final String TRACE_ID_KEY = "traceId";
 
     @Pointcut("execution(* ddangkong.controller..*Controller.*(..))")
     public void allController() {
@@ -28,6 +31,7 @@ abstract class ControllerLoggingAspect {
     }
 
     protected void logControllerRequest(JoinPoint joinPoint) {
+        setTraceId();
         HttpServletRequest request = getHttpServletRequest();
         String uri = request.getRequestURI();
         String httpMethod = request.getMethod();
@@ -43,6 +47,7 @@ abstract class ControllerLoggingAspect {
         String httpMethod = request.getMethod();
 
         log.info("Response Logging: SUCCESS {} {} Body: {}", httpMethod, uri, responseBody);
+        removeTraceId();
     }
 
     private HttpServletRequest getHttpServletRequest() {
@@ -75,5 +80,14 @@ abstract class ControllerLoggingAspect {
             }
         }
         return null;
+    }
+
+    private void setTraceId() {
+        String traceId = UUID.randomUUID().toString();
+        MDC.put(TRACE_ID_KEY, traceId);
+    }
+
+    private void removeTraceId() {
+        MDC.remove(TRACE_ID_KEY);
     }
 }
