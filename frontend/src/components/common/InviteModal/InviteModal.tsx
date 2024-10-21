@@ -24,10 +24,10 @@ import { roomUuidState } from '@/recoil/atom';
 interface InviteModalProps {
   isOpen: boolean;
   onClose: () => void;
-  closeRef?: RefObject<HTMLElement>;
+  returnFocusRef?: RefObject<HTMLElement>;
 }
 
-const InviteModal = ({ isOpen, onClose, closeRef }: InviteModalProps) => {
+const InviteModal = ({ isOpen, onClose, returnFocusRef }: InviteModalProps) => {
   const roomUuid = useRecoilValue(roomUuidState);
   const inviteUrl = INVITE_URL(roomUuid);
 
@@ -40,7 +40,12 @@ const InviteModal = ({ isOpen, onClose, closeRef }: InviteModalProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} css={inviteModalLayout} closeRef={closeRef}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      css={inviteModalLayout}
+      returnFocusRef={returnFocusRef}
+    >
       <Modal.Header position="center">
         <Modal.Title css={inviteModalTitle}>초대하기</Modal.Title>
         <Modal.IconButton onClick={onClose} />

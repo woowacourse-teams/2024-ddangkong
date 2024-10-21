@@ -4,7 +4,7 @@ interface ModalProps {
   title?: string;
   message?: string;
   onConfirm?: () => void;
-  closeRef?: RefObject<HTMLElement>;
+  returnFocusRef?: RefObject<HTMLElement>;
 }
 
 interface ModalState extends ModalProps {
@@ -40,7 +40,7 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
       message: props?.message,
       onConfirm: props?.onConfirm,
       isOpen: true,
-      closeRef: props?.closeRef,
+      returnFocusRef: props?.returnFocusRef,
     });
   };
 

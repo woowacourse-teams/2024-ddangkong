@@ -69,11 +69,11 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
   const { isMaster } = useRecoilValue(memberInfoState);
   const { handleExit } = useExit();
-  const closeRef = useRef(null);
+  const returnFocusRef = useRef(null);
   const focusRef = useFocus<HTMLElement>();
 
   const handleClickRoomSetting = () => {
-    show(RoomSettingModal, { closeRef });
+    show(RoomSettingModal, { returnFocusRef });
   };
 
   const handleClickExit = () => {
@@ -87,7 +87,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
       </button>
       <h1 css={gameTitle}>{title}</h1>
       {isMaster ? (
-        <button ref={closeRef} onClick={handleClickRoomSetting} css={buttonWrapper}>
+        <button ref={returnFocusRef} onClick={handleClickRoomSetting} css={buttonWrapper}>
           <img src={SettingIcon} alt="방 설정" css={iconImage} />
         </button>
       ) : (

@@ -25,14 +25,14 @@ export interface ModalProps
     onClose: () => void;
     position?: 'top' | 'bottom' | 'center';
     style?: React.CSSProperties;
-    closeRef?: RefObject<HTMLElement>;
+    returnFocusRef?: RefObject<HTMLElement>;
   }> {}
 
 const Modal = ({
   children,
   isOpen,
   onClose,
-  closeRef,
+  returnFocusRef,
   position = 'center',
   ...restProps
 }: ModalProps) => {
@@ -48,11 +48,11 @@ const Modal = ({
 
   useEffect(() => {
     return () => {
-      if (closeRef?.current) {
-        closeRef.current.focus();
+      if (returnFocusRef?.current) {
+        returnFocusRef.current.focus();
       }
     };
-  }, [closeRef?.current]);
+  }, [returnFocusRef?.current]);
 
   if (!isOpen) return null;
 

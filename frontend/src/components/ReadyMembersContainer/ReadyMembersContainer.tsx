@@ -25,10 +25,10 @@ const ReadyMembersContainer = () => {
   const { members, master } = useGetRoomInfo();
   const { show } = useModal();
   const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
-  const closeRef = useRef<HTMLButtonElement>(null);
+  const returnFocusRef = useRef<HTMLButtonElement>(null);
 
   const handleClickInvite = () => {
-    show(InviteModal, { closeRef });
+    show(InviteModal, { returnFocusRef });
   };
 
   // 원래 방장이 아니다 + 방장의 memberId와 내 memberId가 같다 -> 방장으로 변경
@@ -43,7 +43,7 @@ const ReadyMembersContainer = () => {
       <A11yOnly aria-live="polite">총 인원 {members.length}명</A11yOnly>
       <div css={totalNumber}>
         <div aria-hidden>총 인원 {members.length}명</div>
-        <button css={inviteButton} onClick={handleClickInvite} ref={closeRef}>
+        <button css={inviteButton} onClick={handleClickInvite} ref={returnFocusRef}>
           초대하기
         </button>
       </div>

@@ -18,20 +18,20 @@ const NextRoundButton = () => {
   const { mutate: moveNextRound } = useMoveNextRoundMutation(Number(roomId));
   const memberInfo = useRecoilValue(memberInfoState);
   const { show } = useModal();
-  const closeRef = useRef<HTMLButtonElement>(null);
+  const returnFocusRef = useRef<HTMLButtonElement>(null);
 
   const randomRoundNextMessage = createRandomNextRoundMessage();
   const isLastRound = balanceContent?.currentRound === balanceContent?.totalRound;
 
   const showModal = () => {
-    show(AlertModal, { message: randomRoundNextMessage, onConfirm: moveNextRound, closeRef });
+    show(AlertModal, { message: randomRoundNextMessage, onConfirm: moveNextRound, returnFocusRef });
   };
 
   return (
     <div css={bottomButtonLayout}>
       {memberInfo.isMaster ? (
         <Button
-          ref={closeRef}
+          ref={returnFocusRef}
           style={{ width: '100%' }}
           text={isLastRound ? '결과 확인' : '다음'}
           onClick={isLastRound ? moveNextRound : showModal}

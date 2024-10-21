@@ -9,17 +9,24 @@ interface AlertModalProps {
   onConfirm?: () => void;
   message?: string;
   title?: string;
-  closeRef?: RefObject<HTMLElement>;
+  returnFocusRef?: RefObject<HTMLElement>;
 }
 
-const AlertModal = ({ isOpen, onClose, onConfirm, message, title, closeRef }: AlertModalProps) => {
+const AlertModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  message,
+  title,
+  returnFocusRef,
+}: AlertModalProps) => {
   const handleClick = () => {
     onConfirm && onConfirm();
     onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} closeRef={closeRef}>
+    <Modal isOpen={isOpen} onClose={onClose} returnFocusRef={returnFocusRef}>
       <Modal.Header position="center">
         <Modal.Title css={alertModalTitle}>{title || '알림'}</Modal.Title>
         <Modal.IconButton onClick={onClose} />
