@@ -31,6 +31,7 @@ const Timer = ({ selectedId, isVoted, completeSelection }: TimerProps) => {
     isVoted,
     completeSelection,
   });
+  const ScreenReaderLeftRoundTime = `${leftRoundTime}초 남았습니다.`;
 
   useVoteIsFinished({
     contentId: balanceContent.contentId,
@@ -42,8 +43,8 @@ const Timer = ({ selectedId, isVoted, completeSelection }: TimerProps) => {
       <div css={timerInnerLayout(timeLimit)}></div>
       <div css={timerWrapper(timeLimit)}>
         <img css={[timerIcon, isAlmostFinished && timerIconShake]} src={DdangkongTimer} alt="" />
-        <A11yOnly aria-live={isAlertTimer(leftRoundTime, timeLimit) && 'polite'}>
-          {leftRoundTime}초 남았습니다.
+        <A11yOnly role="alert" aria-live={isAlertTimer(leftRoundTime, timeLimit) && 'assertive'}>
+          {ScreenReaderLeftRoundTime}
         </A11yOnly>
         <span css={timerText(isAlmostFinished)} aria-hidden>
           {formatLeftRoundTime(leftRoundTime)}
