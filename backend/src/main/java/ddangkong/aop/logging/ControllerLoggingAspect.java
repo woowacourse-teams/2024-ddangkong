@@ -46,7 +46,7 @@ abstract class ControllerLoggingAspect {
         String uri = request.getRequestURI();
         String httpMethod = request.getMethod();
 
-        log.info("Response Logging: SUCCESS {} {} Body: {}", httpMethod, uri, responseBody);
+        log.info("Response Logging: {} {} Body: {}", httpMethod, uri, responseBody);
         removeTraceId();
     }
 
