@@ -9,6 +9,7 @@ import type { MutableSnapshot } from 'recoil';
 
 import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
 import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
+import QueryClientDefaultOptionProvider from '@/components/common/QueryClientDefaultOptionProvider/QueryClientDefaultOptionProvider';
 import Spinner from '@/components/common/Spinner/Spinner';
 import ModalProvider from '@/providers/ModalProvider/ModalProvider';
 import ToastProvider from '@/providers/ToastProvider/ToastProvider';
@@ -38,13 +39,15 @@ const wrapper = ({
         <ThemeProvider theme={Theme}>
           <Global styles={GlobalStyle} />
           <ToastProvider>
-            <MemoryRouter initialEntries={['/']}>
-              <RootErrorBoundary>
-                <AsyncErrorBoundary pendingFallback={pendingFallback}>
-                  <ModalProvider>{children}</ModalProvider>
-                </AsyncErrorBoundary>
-              </RootErrorBoundary>
-            </MemoryRouter>
+            <RootErrorBoundary>
+              <AsyncErrorBoundary pendingFallback={pendingFallback}>
+                <MemoryRouter initialEntries={['/']}>
+                  <ModalProvider>
+                    <QueryClientDefaultOptionProvider>{children}</QueryClientDefaultOptionProvider>
+                  </ModalProvider>
+                </MemoryRouter>
+              </AsyncErrorBoundary>
+            </RootErrorBoundary>
           </ToastProvider>
         </ThemeProvider>
       </RecoilRoot>
