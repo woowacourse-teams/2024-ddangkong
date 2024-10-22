@@ -41,10 +41,10 @@ jobs:
         run: ./gradlew bootJar
 
       - name: Move artifact file
-        run: mv build/libs/*.jar ${{ env.ARTIFACT_PATH }}/${{ env.JAR_NAME }}
+        run: mkdir -p ${{ env.ARTIFACT_PATH }} && mv build/libs/*.jar ${{ env.ARTIFACT_PATH }}/${{ env.JAR_NAME }}
       
-      - name: Copy scripts file
-        run: cp scripts/ ${{ env.ARTIFACT_PATH }}/
+      - name: Move scripts file
+        run: mv scripts/ ${{ env.ARTIFACT_PATH }}/
 
       - name: Upload artifact file
         uses: actions/upload-artifact@v4
