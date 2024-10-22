@@ -10,7 +10,7 @@ on:
 
 env:
   ARTIFACT_NAME: app-artifact
-  ARTIFACT_PATH: ./artifact
+  ARTIFACT_PATH: artifact
   JAR_NAME: app.jar
 
 jobs:
