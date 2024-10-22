@@ -58,7 +58,7 @@ jobs:
   debug:
     needs: health-check
     runs-on: ubuntu-latest
-    if: ${{ needs.health-check.result == failure() }}
+    if: ${{ needs.health-check.result == 'failure' }}
     steps:
       - name: Debug
         run: echo "Deploy failed" # 추후 수정
