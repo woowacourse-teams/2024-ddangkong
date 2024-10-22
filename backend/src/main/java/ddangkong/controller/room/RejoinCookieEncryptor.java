@@ -1,11 +1,13 @@
 package ddangkong.controller.room;
 
-import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RejoinCookieEncryptor {
+
+    private static final String SAME_SITE_OPTION = "None";
 
     private final EncryptionUtils encryptionUtils;
 
@@ -16,12 +18,13 @@ public class RejoinCookieEncryptor {
         this.rejoinKey = rejoinKey;
     }
 
-    public Cookie getEncodedCookie(Object value) {
+    public ResponseCookie getEncodedCookie(Object value) {
         String encrypt = encryptionUtils.encrypt(String.valueOf(value));
-        Cookie cookie = new Cookie(rejoinKey, encrypt);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        return cookie;
+        return ResponseCookie.from(rejoinKey, encrypt)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite(SAME_SITE_OPTION)
+                .build();
     }
 
     public Long getDecodedCookieValue(String cookieValue) {

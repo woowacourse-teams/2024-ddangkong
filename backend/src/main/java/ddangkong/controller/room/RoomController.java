@@ -9,13 +9,14 @@ import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -118,7 +119,7 @@ public class RoomController {
     }
 
     private void setEncryptCookie(HttpServletResponse response, Object cookieValue) {
-        Cookie encodedCookie = rejoinCookieEncryptor.getEncodedCookie(cookieValue);
-        response.addCookie(encodedCookie);
+        ResponseCookie encodedCookie = rejoinCookieEncryptor.getEncodedCookie(cookieValue);
+        response.addHeader(HttpHeaders.SET_COOKIE, encodedCookie.toString());
     }
 }
