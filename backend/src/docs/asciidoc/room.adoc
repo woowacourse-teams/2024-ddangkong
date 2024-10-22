@@ -58,27 +58,27 @@ include::{snippets}/room/join/response-cookies.adoc[]
 
 '''
 
-=== 방 재참여
+=== 사용자 정보 조회
 
 ==== curl
 
-include::{snippets}/room/rejoin/curl-request.adoc[]
+include::{snippets}/room/member/curl-request.adoc[]
 
 ==== request
 
-include::{snippets}/room/rejoin/http-request.adoc[]
+include::{snippets}/room/member/http-request.adoc[]
 
 request cookies
 
-include::{snippets}/room/rejoin/request-cookies.adoc[]
+include::{snippets}/room/member/request-cookies.adoc[]
 
 ==== response
 
-include::{snippets}/room/rejoin/http-response.adoc[]
+include::{snippets}/room/member/http-response.adoc[]
 
 response fields
 
-include::{snippets}/room/join/response-fields.adoc[]
+include::{snippets}/room/member/response-fields.adoc[]
 
 '''
 

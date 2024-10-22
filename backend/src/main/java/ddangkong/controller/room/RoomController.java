@@ -6,6 +6,7 @@ import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomMemberResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
@@ -47,9 +48,9 @@ public class RoomController {
         return roomJoinResponse;
     }
 
-    @GetMapping("/balances/rooms/rejoin")
-    public RoomJoinResponse rejoinRoom(@CookieValue(name = "${cookie.rejoin-key}") String cookieValue) {
-        return roomFacade.rejoinRoom(rejoinCookieEncryptor.getDecodedCookieValue(cookieValue));
+    @GetMapping("/balances/rooms/member")
+    public RoomMemberResponse getRoomMemberInfo(@CookieValue(name = "${cookie.rejoin-key}") String cookieValue) {
+        return roomFacade.getRoomMemberInfo(rejoinCookieEncryptor.getDecodedCookieValue(cookieValue));
     }
 
     @Polling
