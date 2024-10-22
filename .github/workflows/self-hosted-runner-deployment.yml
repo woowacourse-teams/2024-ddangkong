@@ -39,13 +39,16 @@ jobs:
             name: ${{ inputs.artifact_name }}
             path: ${{ env.default_path }}
 
+      - name: tmp
+        run: ls -al ${{ env.default_path }}
+
       - name: Get Green Port
         id: green-port
         run: |
           ${{ env.default_path }}/get_green_port.sh | awk '{print "port=$0"}' >> $GITHUB_OUTPUT
 
       - name: Start Java Application
-        run: sudo nohup java --Dspring.profiles.active=${{ inputs.profile }} --Dserver.port=${{ steps.green-port.outputs.port }} --Duser.timezone=Asia/Seoul -jar ${{ env.default_path }}/${{ inputs.jar_name }} &
+        run: sudo nohup java -Dspring.profiles.active=${{ inputs.profile }} -Dserver.port=${{ steps.green-port.outputs.port }} -Duser.timezone=Asia/Seoul -jar ${{ env.default_path }}/${{ inputs.jar_name }} &
   
   health-check:
     needs: deploy
