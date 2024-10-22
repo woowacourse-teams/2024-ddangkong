@@ -17,8 +17,8 @@ import Modal from '../Modal/Modal';
 
 import CopyIcon from '@/assets/images/copyIcon.png';
 import { INVITE_URL } from '@/constants/url';
+import useGetmember from '@/hooks/useGetmember';
 import useToast from '@/hooks/useToast';
-import { roomUuidState } from '@/recoil/atom';
 
 interface InviteModalProps {
   isOpen: boolean;
@@ -26,7 +26,7 @@ interface InviteModalProps {
 }
 
 const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
-  const roomUuid = useRecoilValue(roomUuidState);
+  const { roomUuid } = useGetmember();
   const inviteUrl = INVITE_URL(roomUuid);
 
   const { copyToClipboard } = useClipBoard();

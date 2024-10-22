@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
@@ -25,6 +26,7 @@ const ReadyMembersContainer = () => {
   const { members, master } = useGetRoomInfo();
   const { show } = useModal();
   const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
+  const queryClient = useQueryClient();
 
   const handleClickInvite = () => {
     show(InviteModal);
@@ -32,10 +34,11 @@ const ReadyMembersContainer = () => {
 
   // 원래 방장이 아니다 + 방장의 memberId와 내 memberId가 같다 -> 방장으로 변경
   useEffect(() => {
-    if (!memberInfo.isMaster && master.memberId === memberInfo.memberId) {
-      setMemberInfo({ ...memberInfo, isMaster: true });
-    }
-  }, [master.memberId, memberInfo, setMemberInfo]);
+    // if (!memberInfo.isMaster && master.memberId === memberInfo.memberId) {
+    //   setMemberInfo({ ...memberInfo, isMaster: true });
+    // }
+    queryClient.invalidateQueries({ queryKey: ['getMember'] });
+  }, [master.memberId]);
 
   return (
     <section css={readyMembersContainerLayout}>
