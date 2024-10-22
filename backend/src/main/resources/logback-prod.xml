@@ -6,7 +6,7 @@
     <appender name="DDANGKONG_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/ddangkong.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/ddangkong-%d{yyyy-MM-dd}.log</fileNamePattern> <!-- 매일 새로운 파일 생성 -->
+            <fileNamePattern>${LOG_PATH}/ddangkong-%d{yyyy-MM-dd}.log.gz</fileNamePattern> <!-- 매일 새로운 파일 생성 -->
             <maxHistory>365</maxHistory>
         </rollingPolicy>
         <encoder>
