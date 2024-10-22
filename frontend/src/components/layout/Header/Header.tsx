@@ -23,9 +23,8 @@ import AlertModal from '@/components/common/AlertModal/AlertModal';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
 import { convertMsecToSecond } from '@/components/SelectContainer/Timer/Timer.util';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useGetmember from '@/hooks/useGetmember';
 import useModal from '@/hooks/useModal';
-import useRejoinRoom from '@/hooks/useRejoinRoom';
-import { memberInfoState } from '@/recoil/atom';
 
 interface HeaderProps {
   title: string;
@@ -64,7 +63,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
   const {
     member: { isMaster },
-  } = useRejoinRoom();
+  } = useGetmember();
 
   const { handleExit } = useExit();
 

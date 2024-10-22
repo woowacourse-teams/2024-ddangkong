@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import { startGame } from '@/apis/room';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
+import useGetmember from '@/hooks/useGetmember';
 import useModal from '@/hooks/useModal';
-import useRejoinRoom from '@/hooks/useRejoinRoom';
 import useToast from '@/hooks/useToast';
 import { CustomError, NetworkError } from '@/utils/error';
 
@@ -13,7 +13,7 @@ const isServerError = (status: number) => status >= 500 && status !== 555;
 export const useGameStart = () => {
   const {
     member: { isMaster },
-  } = useRejoinRoom();
+  } = useGetmember();
   const { roomId } = useParams();
   const { show } = useToast();
   const { show: showModal } = useModal();

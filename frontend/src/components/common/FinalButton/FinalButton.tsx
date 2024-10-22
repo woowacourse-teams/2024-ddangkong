@@ -4,7 +4,7 @@ import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 
 import { useResetRoomMutation } from '@/components/GameResult/GameResult.hook';
-import useRejoinRoom from '@/hooks/useRejoinRoom';
+import useGetmember from '@/hooks/useGetmember';
 
 const FinalButton = () => {
   const { roomId } = useParams();
@@ -12,7 +12,7 @@ const FinalButton = () => {
   // const memberInfo = useRecoilValue(memberInfoState);
   const {
     member: { isMaster },
-  } = useRejoinRoom();
+  } = useGetmember();
 
   return (
     <div css={bottomButtonLayout}>

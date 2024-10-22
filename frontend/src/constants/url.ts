@@ -25,13 +25,13 @@ export const API_URL = {
   deleteRoom: (roomId: number, memberId: number) =>
     `${BASE_URL}/api/balances/rooms/${roomId}/members/${memberId}`,
   isJoinableRoom: (roomUuid: string) => `${BASE_URL}/api/balances/rooms/${roomUuid}/status`,
-  rejoinRoom: `${BASE_URL}/api/balances/rooms/rejoin`,
+  getMember: `${BASE_URL}/api/balances/rooms/member`,
 };
 
 type API_URL_KEYS = keyof typeof API_URL;
 
 export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
-  rejoinRoom: `${BASE_URL}/api/balances/rooms/rejoin`,
+  getMember: `${BASE_URL}/api/balances/rooms/rejoin`,
   getRoomInfo: `${BASE_URL}/api/balances/rooms/:roomId`,
   balanceContent: `${BASE_URL}/api/balances/rooms/:roomId/content`,
   vote: `${BASE_URL}/api/balances/rooms/:roomId/contents/:contentId/votes`,

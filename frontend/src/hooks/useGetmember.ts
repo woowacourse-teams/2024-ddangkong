@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { rejoinRoom } from '@/apis/room';
+import { getMember } from '@/apis/room';
 import { RoomAndMember } from '@/types/room';
 
-const useRejoinRoom = (): RoomAndMember => {
+const useGetmember = (): RoomAndMember => {
   const { data } = useQuery({
-    queryKey: ['rejoinRoom'],
-    queryFn: rejoinRoom,
+    queryKey: ['getMember'],
+    queryFn: getMember,
   });
 
   return {
@@ -20,4 +20,4 @@ const useRejoinRoom = (): RoomAndMember => {
   };
 };
 
-export default useRejoinRoom;
+export default useGetmember;

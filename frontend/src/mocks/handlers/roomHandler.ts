@@ -62,7 +62,7 @@ const isJoinableRoomHandler = () => {
   return HttpResponse.json({ isJoinable: false }, { status: 200 });
 };
 
-const rejoinRoomHandler = () => {
+const getMemberHandler = () => {
   return HttpResponse.json(
     {
       roomId: 142,
@@ -78,7 +78,7 @@ const rejoinRoomHandler = () => {
 };
 
 export const roomHandler = [
-  http.get(MOCK_API_URL.rejoinRoom, rejoinRoomHandler),
+  http.get(MOCK_API_URL.getMember, getMemberHandler),
   http.get(MOCK_API_URL.getRoomInfo, getRoomInfoHandler),
   http.post(MOCK_API_URL.room, createRoomHandler),
   http.post(MOCK_API_URL.enterRoom, enterRoomHandler),
