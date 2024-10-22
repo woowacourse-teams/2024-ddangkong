@@ -10,15 +10,14 @@ import { server } from '@/mocks/server';
 import { customRender } from '@/utils/test-utils';
 
 describe('TopicContainer', () => {
-  const LOADING_DELAY = 300;
-
   it('게임 컨텐츠를 불러올 때 300ms 이상 delay가 걸릴 경우 로딩 UI를 보여준다.', async () => {
+    const LOADING_DELAY = 300;
+    const LOADING_TEXT = '로딩중';
     server.use(
       http.get(MOCK_API_URL.balanceContent, async () => {
         await delay(LOADING_DELAY);
       }),
     );
-    const LOADING_TEXT = '로딩중';
 
     customRender(<TopicContainer />, { pendingFallback: <GameSkeleton /> });
 
@@ -31,7 +30,6 @@ describe('TopicContainer', () => {
     console.error = jest.fn();
     server.use(
       http.get(MOCK_API_URL.balanceContent, async () => {
-        await delay(LOADING_DELAY);
         return HttpResponse.json(
           {
             errorCode: 'NOT_FOUND_BALANCE_CONTENT',
