@@ -18,7 +18,10 @@ public class RejoinCookieEncryptor {
 
     public Cookie getEncodedCookie(Object value) {
         String encrypt = encryptionUtils.encrypt(String.valueOf(value));
-        return new Cookie(rejoinKey, encrypt);
+        Cookie cookie = new Cookie(rejoinKey, encrypt);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        return cookie;
     }
 
     public Long getDecodedCookieValue(String cookieValue) {
