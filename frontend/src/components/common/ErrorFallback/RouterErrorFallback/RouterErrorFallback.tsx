@@ -1,15 +1,11 @@
-import { useNavigate } from 'react-router-dom';
-
 import Button from '../../Button/Button';
 import { errorFallbackLayout, errorImage, errorText } from '../ErrorFallback.styled';
 
 import ErrorDdangkong from '@/assets/images/errorDdangkong.webp';
 
 const RouterErrorFallback = () => {
-  const navigate = useNavigate();
-
   const goToHome = () => {
-    navigate('/');
+    window.location.href = '/';
   };
 
   return (
