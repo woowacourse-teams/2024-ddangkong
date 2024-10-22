@@ -39,8 +39,11 @@ jobs:
             name: ${{ inputs.artifact_name }}
             path: ${{ env.default_path }}
 
-      - name: tmp
-        run: ls -al ${{ env.default_path }}
+      - name: chmod +x tmp
+        run: |
+          ls -al ${{ env.default_path }} \
+          chmod +x ${{ env.default_path }}/*.sh \
+          ls -al ${{ env.default_path }}
 
       - name: Get Green Port
         id: green-port
