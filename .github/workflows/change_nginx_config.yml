@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Change Nginx Config
         run: |
-          ./${{ env.default_path }}/change_nginx_config.sh ${{ inputs.green_port }}
+          ${{ env.default_path }}/change_nginx_config.sh ${{ inputs.green_port }}
           # actuator 포트 변경 보류
           # Nginx Config 변경
           # Nginx 재시작

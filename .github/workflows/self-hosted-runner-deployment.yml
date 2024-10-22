@@ -42,7 +42,7 @@ jobs:
       - name: Get Green Port
         id: green-port
         run: |
-          ./${{ env.default_path }}/get_green_port.sh | awk '{print "port=$0"}' >> $GITHUB_OUTPUT
+          ${{ env.default_path }}/get_green_port.sh | awk '{print "port=$0"}' >> $GITHUB_OUTPUT
 
       - name: Start Java Application
         run: sudo nohup java --Dspring.profiles.active=${{ inputs.profile }} --Dserver.port=${{ steps.green-port.outputs.port }} --Duser.timezone=Asia/Seoul -jar ${{ env.default_path }}/${{ inputs.jar_name }} &
@@ -53,12 +53,12 @@ jobs:
     steps:
       - name: Health Check
         run: |
-          ./${{ env.default_path }}/green_health_check.sh ${{ needs.deploy.outputs.port }}
+          ${{ env.default_path }}/green_health_check.sh ${{ needs.deploy.outputs.port }}
 
   debug:
     needs: health-check
     runs-on: ubuntu-latest
-    if: ${{ failure() }}
+    if: ${{ needs.health-check.result == failure() }}
     steps:
       - name: Debug
         run: echo "Deploy failed" # 추후 수정
