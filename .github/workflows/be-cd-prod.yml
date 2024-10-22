@@ -41,12 +41,12 @@ jobs:
 
       - name: Move artifact file
         run: mkdir -p ${{ env.ARTIFACT_NAME }} && mv build/libs/*.jar ${{ env.ARTIFACT_NAME }}/${{ env.JAR_NAME }}
-      
+
+      - name: tmp
+        run: ls -al scripts && chmod +x scripts/*.sh && ls -al scripts
+
       - name: Move scripts file
         run: mv scripts/* ${{ env.ARTIFACT_NAME }}/
-      
-      - name: tmp
-        run: ls -al scripts
 
       - name: Upload artifact file
         uses: actions/upload-artifact@v4
