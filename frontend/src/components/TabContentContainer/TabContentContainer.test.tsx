@@ -22,7 +22,7 @@ describe('TabContentContainer 컴포넌트 테스트', () => {
       }),
     );
 
-    customRender(<TabContentContainer isVoteStatisticsTabActive={true} roomId={1} contentId={1} />);
+    customRender(<TabContentContainer isVoteStatisticsTabActive={true} />);
 
     await waitFor(() => {
       expect(screen.getByText(NOT_VOTE_TEXT)).toBeInTheDocument();
