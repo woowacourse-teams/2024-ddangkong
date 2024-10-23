@@ -52,25 +52,9 @@ jobs:
       - name: Send notification to Discord # todo
         run: echo "테스트입니다"
 
-  # deploy-rollback-call:
-  #   needs: [ deploy-a, deploy-b ]
-  #   runs-on: [ prod-c, prod-d ] # todo a, b
-  #   if: ${{ needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure' }}
-  #   steps:
-      # - name: Rollback a
-      #   if: runner.name == 'prod-c'
-      #   uses: ./.github/actions/rollback/action.yml
-      #   with:
-      #     port: ${{ needs.deploy-a.outputs.green_port }}
-
-      # - name: Rollback b
-      #   if: ${{ needs.deploy-b.result == 'failure'}}
-      #   uses: ./.github/actions/rollback/action.yml
-      #   with:
-      #     port: ${{ needs.deploy-b.outputs.green_port }}
-  
   rollback-a:
     needs: [ deploy-rollback-notification ]
+    if: failure() && contains(needs.*.result, 'success')
     runs-on: prod-c
     steps:
       - name: Rollback a
@@ -79,7 +63,8 @@ jobs:
           port: ${{ needs.deploy-rollback-notification.outputs.green_port_a }}
 
   rollback-b:
-    needs: [ deploy-rollback-notification]
+    needs: [ deploy-rollback-notification ]
+    if: failure() && contains(needs.*.result, 'success')
     runs-on: prod-d
     steps:
       - name: Rollback b
