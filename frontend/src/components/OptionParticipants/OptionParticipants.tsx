@@ -13,11 +13,10 @@ export interface OptionParticipantsProps {
 }
 
 const OptionParticipants = ({ optionName, memberCount, members }: OptionParticipantsProps) => {
+  const screenReaderOptionParticipants = `${optionName}. ${memberCount}명`;
   return (
     <div css={optionParticipantsLayout}>
-      <A11yOnly>
-        {optionName}.{memberCount}명
-      </A11yOnly>
+      <A11yOnly>{screenReaderOptionParticipants}</A11yOnly>
       <p css={optionInfo} aria-hidden>
         {optionName}: {memberCount}
       </p>

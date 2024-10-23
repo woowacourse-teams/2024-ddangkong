@@ -26,6 +26,7 @@ const ReadyMembersContainer = () => {
   const { show } = useModal();
   const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
   const returnFocusRef = useRef<HTMLButtonElement>(null);
+  const memberCountMessage = `총 인원 ${members.length}명`;
 
   const handleClickInvite = () => {
     show(InviteModal, { returnFocusRef });
@@ -40,9 +41,8 @@ const ReadyMembersContainer = () => {
 
   return (
     <section css={readyMembersContainerLayout}>
-      <A11yOnly aria-live="polite">총 인원 {members.length}명</A11yOnly>
       <div css={totalNumber}>
-        <div aria-hidden>총 인원 {members.length}명</div>
+        <div role="status">{memberCountMessage}</div>
         <button css={inviteButton} onClick={handleClickInvite} ref={returnFocusRef}>
           초대하기
         </button>
