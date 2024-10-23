@@ -15,7 +15,7 @@ import { memberInfoState } from '@/recoil/atom';
 const NextRoundButton = () => {
   const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
-  const { mutate: moveNextRound } = useMoveNextRoundMutation(Number(roomId));
+  const { mutate: moveNextRound, isPending } = useMoveNextRoundMutation(Number(roomId));
   const memberInfo = useRecoilValue(memberInfoState);
   const { show } = useModal();
   const returnFocusRef = useRef<HTMLButtonElement>(null);
@@ -35,7 +35,7 @@ const NextRoundButton = () => {
           style={{ width: '100%' }}
           text={isLastRound ? '결과 확인' : '다음'}
           onClick={isLastRound ? moveNextRound : showModal}
-          disabled={!memberInfo.isMaster}
+          disabled={!memberInfo.isMaster || isPending}
         />
       ) : (
         <Button
