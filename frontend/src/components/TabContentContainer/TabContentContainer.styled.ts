@@ -6,7 +6,7 @@ export const tabContentContainerLayout = (isVoteStatisticsTabActive: boolean) =>
   display: flex;
   flex-direction: column;
   gap: 15%;
-  height: 50vh;
+  height: 55vh;
   overflow-y: ${isVoteStatisticsTabActive ? 'visible' : 'auto'};
   padding: 2.4rem;
   border: 0.3rem solid ${Theme.color.peanut400};
@@ -26,6 +26,11 @@ export const optionContainer = css`
 
   font-weight: bold;
   font-size: 1.4rem;
+  word-break: keep-all;
+`;
+
+export const secondOption = css`
+  text-align: right;
 `;
 
 export const barContainer = css`
@@ -109,6 +114,8 @@ export const totalResultInfoContainer = css`
 export const totalResultInfoText = css`
   font-size: 1.4rem;
   line-height: 2rem;
+  text-align: center;
+  word-break: keep-all;
 `;
 
 export const emphasizeText = css`

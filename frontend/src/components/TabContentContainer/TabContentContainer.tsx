@@ -14,6 +14,7 @@ import {
   secondBar,
   totalResultInfoContainer,
   totalResultInfoText,
+  secondOption,
 } from './TabContentContainer.styled';
 import getDominantVote from './TabContentContainer.util';
 import A11yOnly from '../common/a11yOnly/A11yOnly';
@@ -67,7 +68,7 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
           <div css={roundVoteResultContainer} aria-hidden>
             <div css={optionContainer}>
               <span>{groupRoundResult.firstOption.name}</span>
-              <span>{groupRoundResult.secondOption.name}</span>
+              <span css={secondOption}>{groupRoundResult.secondOption.name}</span>
             </div>
             <div css={barContainer}>
               <span css={firstBar(groupRoundResult.firstOption.percent, isBigFirstOption)}>
@@ -90,7 +91,7 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
                 <>
                   <A11yOnly>{screenReaderDominantVote}</A11yOnly>
                   <span css={totalResultInfoText} aria-hidden>
-                    📢 전체 유저 중{' '}
+                    📢 전체 유저 중&nbsp;
                     <span css={emphasizeText}>{dominantVoteData.dominantPercent}%</span>는
                   </span>
                   <span css={totalResultInfoText} aria-hidden>
