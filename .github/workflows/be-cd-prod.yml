@@ -43,18 +43,18 @@ jobs:
  
   deploy-rollback-call:
     needs: [ deploy-a, deploy-b ]
-    runs-on: [ prod ] # todo a, b / return prod-c, prod-d
+    runs-on: [ prod-c, prod-d ] # todo a, b
     if: failure()
     steps:
       - name: Rollback a
         if: ${{ needs.deploy-a.result == 'failure'}}
-        uses: ./.github/actions/server-rollback.yml
+        uses: ./.github/actions/rollback/action.yml
         with:
           port: ${{ needs.deploy-a.outputs.green_port }}
 
       - name: Rollback b
         if: ${{ needs.deploy-b.result == 'failure'}}
-        uses: ./.github/actions/server-rollback.yml
+        uses: ./.github/actions/rollback/action.yml
         with:
           port: ${{ needs.deploy-b.outputs.green_port }}
 
