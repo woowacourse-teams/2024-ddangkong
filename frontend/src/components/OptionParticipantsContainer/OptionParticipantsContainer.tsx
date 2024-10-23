@@ -1,29 +1,16 @@
-import { useParams } from 'react-router-dom';
-
 import {
   horizontalDivider,
   optionParticipantsContainerLayout,
 } from './OptionParticipantsContainer.styled';
 import OptionParticipants from '../OptionParticipants/OptionParticipants';
 
-import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
-import useMyGameStatus from '@/hooks/useMyGameStatus';
-import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
+import { Group } from '@/types/roundVoteResult';
 
-const OptionParticipantsContainer = () => {
-  const { roomId } = useParams();
-  const { balanceContent } = useBalanceContentQuery(Number(roomId));
-  const { groupRoundResult } = useRoundVoteResultQuery({
-    roomId: Number(roomId),
-    contentId: balanceContent?.contentId,
-  });
+interface OptionParticipantsContainerProps {
+  groupRoundResult: Group;
+}
 
-  useMyGameStatus({ roomId: Number(roomId) });
-
-  if (!groupRoundResult) {
-    return <div>데이터가 없습니다</div>;
-  }
-
+const OptionParticipantsContainer = ({ groupRoundResult }: OptionParticipantsContainerProps) => {
   return (
     <>
       <section css={optionParticipantsContainerLayout}>

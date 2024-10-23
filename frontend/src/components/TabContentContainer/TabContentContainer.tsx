@@ -102,7 +102,9 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
           )}
         </>
       )}
-      {isVote && !isVoteStatisticsTabActive && <OptionParticipantsContainer />}
+      {isVote && !isVoteStatisticsTabActive && (
+        <OptionParticipantsContainer groupRoundResult={groupRoundResult} />
+      )}
       {!isVote && (
         <div css={noVoteTextContainer}>
           <img src={AngryDdangkong} alt="화난 땅콩" css={angryImage} />
