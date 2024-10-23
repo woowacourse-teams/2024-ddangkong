@@ -23,7 +23,7 @@ health_check_process() {
 
 check_health() {
   # HEALTH_URL 생성
-  local health_url="http://localhost:$GREEN_PORT/actuator/health"
+  local health_url="http://localhost:$GREEN_PORT/act-ddangkong/health"
 
   # 헬스 체크 실시
   local response=$(curl -s --connect-timeout 5 -o /dev/null -w "%{http_code}" "$health_url")

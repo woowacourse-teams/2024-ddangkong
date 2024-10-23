@@ -11,6 +11,7 @@ on:
 env:
   ARTIFACT_NAME: app-artifact
   JAR_NAME: app.jar
+  APP_PATH: ~/app
 
 jobs:
   build:
@@ -51,60 +52,82 @@ jobs:
           name: ${{ env.ARTIFACT_NAME }}
           path: ./backend/${{ env.ARTIFACT_NAME }}
 
-  deploy-a:
-    needs: build
-    uses: ./.github/workflows/self-hosted-runner-deployment.yml
-    with:
-      self_hosted_runner: prod-c # 추후 변경 prod-a
-      artifact_name: ${{ needs.build.outputs.artifact_name }}
-      jar_name: ${{ needs.build.outputs.jar_name }}
-      profile: prod
+  deploy:
+    needs: [ build ]
+    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b 및 그룹
+    outputs:
+      blue_port: ${{ steps.blue_green_port.outputs.blue_port }}
+      green_port: ${{ steps.blue_green_port.outputs.green_port }}
 
-  deploy-b:
-    needs: build
-    uses: ./.github/workflows/self-hosted-runner-deployment.yml
-    with:
-      self_hosted_runner: prod-d # 추후 변경 prod-b
-      artifact_name: ${{ needs.build.outputs.artifact_name }}
-      jar_name: ${{ needs.build.outputs.jar_name }}
-      profile: prod
-
-  error-handling:
-    needs: [ deploy-a, deploy-b ]
-    runs-on: ubuntu-latest
-    if: ${{ failure() }}
     steps:
-      - name: Debug
-        run: echo "Deploy failed" # 추후 수정 + green 롤백 + 디스코드 알림
+      - name: Download artifact file
+        uses: actions/download-artifact@v4
+        with:
+            name: ${{ env.ARTIFACT_NAME }}
+            path: ${{ env.APP_PATH }}
 
-  change-nginx-config-a:
-    needs: [ deploy-a, error-handling]
-    uses: ./.github/workflows/change_nginx_config.yml
-    with:
-      self_hosted_runner: prod-c # 추후 변경 prod-a
-
-  change-nginx-config-b:
-    needs: [ deploy-b, error-handling]
-    uses: ./.github/workflows/change_nginx_config.yml
-    with:
-      self_hosted_runner: prod-d # 추후 변경 prod-b
-  
-  on-failure:
-    needs: [change-nginx-config-a, change-nginx-config-b]
-    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
-    if: ${{ needs.change-nginx-config-a == failure() || needs.change-nginx-config-b == failure() }}
-    steps:
-      - name: Rollback
+      - name: Get Blue Green Port
+        id: blue_green_port
         run: |
-          sudo kill -15 $(sudo lsof -t -i: $GREEN_PORT)
-          echo "Rollback completed"
+          chmod +x ${{ env.APP_PATH }}/*.sh && \
+          ${{ env.APP_PATH }}/get_blue_green_port.sh | awk '{print $0}' >> $GITHUB_OUTPUT
 
-  on-success:
-    needs: [change-nginx-config-a, change-nginx-config-b]
+      - name: Green Up
+        run: sudo nohup java -Dspring.profiles.active=prod -Dserver.port=${{ steps.blue_green_port.outputs.green_port }} -Duser.timezone=Asia/Seoul -jar ${{ env.APP_PATH }}/${{ env.JAR_NAME }} &
+
+      - name: Health Check
+        run: |
+          ${{ env.APP_PATH }}/green_health_check.sh ${{ steps.blue_green_port.outputs.green_port }}
+
+      # - name: Deploy green
+      #   uses: ./.github/actions/self-hosted-runner-deployment.yml
+      #   with:
+      #     artifact_name: ${{ needs.build.outputs.artifact_name }}
+      #     jar_name: ${{ needs.build.outputs.jar_name }}
+      #     profile: prod
+  
+  green-rollback:
+    needs: [ deploy ]
     runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
-    if: success()
+    if: ${{ needs.deploy.result == 'failure' }}
+    steps:
+      - name: Rollback # todo 디코 알림
+        run: | 
+          echo "Green deploy failed"
+          sudo lsof -i :${{ needs.deploy.outputs.green_port }} | awk 'NR!=1 {print $2}' | xargs kill -9
+          exit 1
+
+  nginx-config:
+    needs: [ deploy ]
+    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
+    if: ${{ needs.deploy.result == 'success' }}
+    steps:
+      - name: Change Nginx Config
+        run: |
+          ${{ env.APP_PATH }}/change_nginx_port_forwarding.sh ${{ needs.deploy.outputs.green_port }}
+      
+      - name: Rollback
+        if: ${{ failure() }}
+        run: |
+          echo "Nginx Config Change failed"
+          echo "Rollback Nginx Config and Green deployment"
+          ${{ env.APP_PATH }}/change_nginx_port_forwarding.sh ${{ needs.deploy.outputs.blue_port }}
+          sudo lsof -i :${{ needs.deploy.outputs.green_port }} | awk 'NR!=1 {print $2}' | xargs kill -9
+          exit 1
+  
+  blue-down:
+    needs: [ nginx-config ]
+    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
     steps:
       - name: Blue Down
         run: |
-          sudo kill -15 $(sudo lsof -t -i: $BLUE_PORT)
+          sudo kill -15 $(sudo lsof -t -i: ${{ needs.deploy.outputs.blue_port }})
           echo "Blue Down completed"
+
+  on-failure:
+    needs: [ blue-down ] # 알림
+    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
+    if: ${{ needs.blue-down.result == 'failure' }}
+    steps:
+      - name: Send Notification
+        run: echo "테스트입니다"
