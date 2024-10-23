@@ -1,5 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
 
 import {
   readyMembersContainerLayout,
@@ -19,23 +19,19 @@ import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
 import InviteModal from '@/components/common/InviteModal/InviteModal';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useModal from '@/hooks/useModal';
-import { memberInfoState } from '@/recoil/atom';
 
 const ReadyMembersContainer = () => {
   const { members, master } = useGetRoomInfo();
   const { show } = useModal();
-  const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
+  const queryClient = useQueryClient();
 
   const handleClickInvite = () => {
     show(InviteModal);
   };
 
-  // 원래 방장이 아니다 + 방장의 memberId와 내 memberId가 같다 -> 방장으로 변경
   useEffect(() => {
-    if (!memberInfo.isMaster && master.memberId === memberInfo.memberId) {
-      setMemberInfo({ ...memberInfo, isMaster: true });
-    }
-  }, [master.memberId, memberInfo, setMemberInfo]);
+    queryClient.invalidateQueries({ queryKey: ['getMember'] });
+  }, [master.memberId]);
 
   return (
     <section css={readyMembersContainerLayout}>
