@@ -1,5 +1,4 @@
 import QRCode from 'react-qr-code';
-import { useRecoilValue } from 'recoil';
 
 import {
   inviteModalLi,

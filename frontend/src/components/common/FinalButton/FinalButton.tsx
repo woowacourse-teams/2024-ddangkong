@@ -9,7 +9,6 @@ import useGetmember from '@/hooks/useGetmember';
 const FinalButton = () => {
   const { roomId } = useParams();
   const { mutate: resetRoom } = useResetRoomMutation(Number(roomId));
-  // const memberInfo = useRecoilValue(memberInfoState);
   const {
     member: { isMaster },
   } = useGetmember();

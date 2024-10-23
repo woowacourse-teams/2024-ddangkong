@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 
 import useMoveNextRoundMutation from './NextRoundButton.hook';
 import AlertModal from '../AlertModal/AlertModal';
@@ -7,15 +6,17 @@ import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useGetmember from '@/hooks/useGetmember';
 import useModal from '@/hooks/useModal';
 import createRandomNextRoundMessage from '@/pages/RoundResultPage/createRandomNextRoundMessage';
-import { memberInfoState } from '@/recoil/atom';
 
 const NextRoundButton = () => {
   const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
   const { mutate: moveNextRound } = useMoveNextRoundMutation(Number(roomId));
-  const memberInfo = useRecoilValue(memberInfoState);
+  const {
+    member: { isMaster },
+  } = useGetmember();
   const { show } = useModal();
 
   const randomRoundNextMessage = createRandomNextRoundMessage();
@@ -27,19 +28,19 @@ const NextRoundButton = () => {
 
   return (
     <div css={bottomButtonLayout}>
-      {memberInfo.isMaster ? (
+      {isMaster ? (
         <Button
           style={{ width: '100%' }}
           text={isLastRound ? '결과 확인' : '다음'}
           onClick={isLastRound ? moveNextRound : showModal}
-          disabled={!memberInfo.isMaster}
+          disabled={!isMaster}
         />
       ) : (
         <Button
           style={{ width: '100%' }}
           text={'방장이 진행해 주세요'}
           onClick={isLastRound ? moveNextRound : showModal}
-          disabled={!memberInfo.isMaster}
+          disabled={!isMaster}
         />
       )}
     </div>
