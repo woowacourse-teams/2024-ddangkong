@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import {
   angryImage,
   barContainer,
@@ -40,9 +42,14 @@ const TabContentContainer = ({
     contentId,
   });
 
-  useMyGameStatus({ roomId: Number(roomId) });
-
   const { animatedFirstPercent, animatedSecondPercent } = useTotalCountAnimation(groupRoundResult);
+
+  const [optionPercent, setOptionPercent] = useState({
+    first: 50,
+    second: 50,
+  });
+
+  useMyGameStatus({ roomId });
 
   const isBigFirstOption = groupRoundResult.firstOption.percent >= 50;
   const isVote =
@@ -54,6 +61,14 @@ const TabContentContainer = ({
   const screenReaderFirstOption = `${groupRoundResult.firstOption.name} ${groupRoundResult.firstOption.percent}%. ${groupRoundResult.firstOption.memberCount}명 선택.`;
   const screenReaderSecondOption = `${groupRoundResult.secondOption.name} ${groupRoundResult.secondOption.percent}%. ${groupRoundResult.secondOption.memberCount}명 선택`;
   const screenReaderDominantVote = `📢 전체 유저 중 ${dominantVoteData?.dominantPercent}%는. ${dominantVoteData?.dominantName}를 선택했어요`;
+
+  useEffect(() => {
+    setOptionPercent((prev) => ({
+      ...prev,
+      first: groupRoundResult.firstOption.percent,
+      second: groupRoundResult.secondOption.percent,
+    }));
+  }, [groupRoundResult]);
 
   return (
     <div css={tabContentContainerLayout(isVoteStatisticsTabActive)}>
@@ -70,10 +85,10 @@ const TabContentContainer = ({
               <span css={secondOption}>{groupRoundResult.secondOption.name}</span>
             </div>
             <div css={barContainer}>
-              <span css={firstBar(groupRoundResult.firstOption.percent, isBigFirstOption)}>
+              <span css={firstBar(optionPercent.first, isBigFirstOption)}>
                 {animatedFirstPercent}%
               </span>
-              <span css={secondBar(groupRoundResult.secondOption.percent, isBigFirstOption)}>
+              <span css={secondBar(optionPercent.second, isBigFirstOption)}>
                 {animatedSecondPercent}%
               </span>
             </div>
