@@ -66,3 +66,7 @@ jobs:
         with:
           name: ${{ inputs.artifact_name }}
           path: ./backend/${{ inputs.artifact_name }}
+    
+      - name: test
+        run: |
+          exit 1
