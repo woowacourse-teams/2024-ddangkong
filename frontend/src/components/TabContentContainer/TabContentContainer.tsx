@@ -12,7 +12,7 @@ import {
   totalResultInfoText,
   secondOptionName,
 } from './TabContentContainer.styled';
-import getDominantVote from './TabContentContainer.util';
+import { getDominantVoteData, isExistVoteMember } from './TabContentContainer.util';
 import A11yOnly from '../common/a11yOnly/A11yOnly';
 import OptionParticipantsContainer from '../OptionParticipantsContainer/OptionParticipantsContainer';
 import TopicContainer from '../TopicContainer/TopicContainer';
@@ -37,17 +37,16 @@ const TabContentContainer = ({
     contentId,
   });
 
+  useMyGameStatus({ roomId });
+
   const { firstOption, secondOption } = groupRoundResult;
 
-  const isVote = firstOption.memberCount !== 0 || secondOption.memberCount !== 0;
-
-  const dominantVoteData = totalResult ? getDominantVote(totalResult) : null;
+  const isVote = isExistVoteMember(firstOption.memberCount, secondOption.memberCount);
+  const dominantVoteData = getDominantVoteData(totalResult);
 
   const screenReaderFirstOption = `${firstOption.name} ${firstOption.percent}%. ${firstOption.memberCount}명 선택.`;
   const screenReaderSecondOption = `${secondOption.name} ${secondOption.percent}%. ${secondOption.memberCount}명 선택`;
   const screenReaderDominantVote = `📢 전체 유저 중 ${dominantVoteData?.dominantPercent}%는. ${dominantVoteData?.dominantName}를 선택했어요`;
-
-  useMyGameStatus({ roomId });
 
   return (
     <div css={tabContentContainerLayout(isVoteStatisticsTabActive)}>
