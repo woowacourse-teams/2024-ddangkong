@@ -2,6 +2,7 @@ import { Global, ThemeProvider } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
 import type { RenderOptions } from '@testing-library/react';
+import { http, HttpResponse } from 'msw';
 import { PropsWithChildren } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
@@ -11,9 +12,12 @@ import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoun
 import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
 import QueryClientDefaultOptionProvider from '@/components/common/QueryClientDefaultOptionProvider/QueryClientDefaultOptionProvider';
 import Spinner from '@/components/common/Spinner/Spinner';
+import { MOCK_API_URL } from '@/constants/url';
+import ROOM_AND_MASTER from '@/mocks/data/roomAndMaster.json';
+import ROOM_AND_NOT_MASTER from '@/mocks/data/roomAndNotMaster.json';
+import { server } from '@/mocks/server';
 import ModalProvider from '@/providers/ModalProvider/ModalProvider';
 import ToastProvider from '@/providers/ToastProvider/ToastProvider';
-// import { memberInfoState } from '@/recoil/atom';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
 
@@ -69,12 +73,22 @@ const customRender = (ui: React.ReactNode, options: CustomRenderOptions = {}) =>
   });
 };
 
-const customRenderWithIsMaster = (Component: React.ReactNode, isMaster: boolean) => {
-  const initializeState = (snap: MutableSnapshot) => {
-    // snap.set(memberInfoState, { memberId: 1, nickname: 'Test User', isMaster });
-  };
-
-  customRender(Component, { initializeState });
+const customRenderWithMaster = (Component: React.ReactNode) => {
+  server.use(
+    http.get(MOCK_API_URL.getMember, async () => {
+      return HttpResponse.json(ROOM_AND_MASTER, { status: 200 });
+    }),
+  );
+  customRender(Component);
 };
 
-export { wrapper, customRender, customRenderWithIsMaster };
+const customRenderWithNotMaster = (Component: React.ReactNode) => {
+  server.use(
+    http.get(MOCK_API_URL.getMember, async () => {
+      return HttpResponse.json(ROOM_AND_NOT_MASTER, { status: 200 });
+    }),
+  );
+  customRender(Component);
+};
+
+export { wrapper, customRender, customRenderWithMaster, customRenderWithNotMaster };
