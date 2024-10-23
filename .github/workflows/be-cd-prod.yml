@@ -41,31 +41,52 @@ jobs:
       profile: prod
       app_path: ~/app
  
-  deploy-rollback-call:
-    needs: [ deploy-a, deploy-b ]
-    runs-on: [ prod-c, prod-d ] # todo a, b
-    if: failure()
+  # deploy-rollback-call:
+  #   needs: [ deploy-a, deploy-b ]
+  #   runs-on: [ prod-c, prod-d ] # todo a, b
+  #   if: ${{ needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure' }}
+  #   steps:
+      # - name: Rollback a
+      #   if: runner.name == 'prod-c'
+      #   uses: ./.github/actions/rollback/action.yml
+      #   with:
+      #     port: ${{ needs.deploy-a.outputs.green_port }}
+
+      # - name: Rollback b
+      #   if: ${{ needs.deploy-b.result == 'failure'}}
+      #   uses: ./.github/actions/rollback/action.yml
+      #   with:
+      #     port: ${{ needs.deploy-b.outputs.green_port }}
+  
+  rollback-a:
+    needs: [ deploy-rollback-call, deploy-a ]
+    runs-on: prod-c
     steps:
       - name: Rollback a
-        if: ${{ needs.deploy-a.result == 'failure'}}
-        uses: ./.github/actions/rollback/action.yml
-        with:
-          port: ${{ needs.deploy-a.outputs.green_port }}
+        run: |
+          echo "Deploy failed. Rollback server port: ${{ needs.deploy-a.outputs.green_port }}"
+          sudo lsof -t -i :${{ needs.deploy-a.outputs.green_port }} | xargs kill -9
+          exit 1
 
+  rollback-b:
+    needs: [ deploy-rollback-call, deploy-b ]
+    runs-on: prod-d
+    steps:
       - name: Rollback b
-        if: ${{ needs.deploy-b.result == 'failure'}}
-        uses: ./.github/actions/rollback/action.yml
-        with:
-          port: ${{ needs.deploy-b.outputs.green_port }}
+        run: |
+          echo "Deploy failed. Rollback server port: ${{ needs.deploy-b.outputs.green_port }}"
+          sudo lsof -t -i :${{ needs.deploy-b.outputs.green_port }} | xargs kill -9
+          exit 1
 
-  rollback-notification:
-    needs: [ deploy-rollback-call ]
+  deploy-rollback-call:
+    needs: [ deploy-a, deploy-b ]
     runs-on: ubuntu-latest
+    if: ${{ needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure' }}
     steps:
       - name: Send notification to Discord # todo
         run: echo "테스트입니다"
 
-  nginx-config:
+  nginx-config: # 여기서 시작
     needs: [ deploy-a, deploy-b ]
     if: success()
     runs-on: [ prod ]
