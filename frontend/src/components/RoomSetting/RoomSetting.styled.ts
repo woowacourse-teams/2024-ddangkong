@@ -38,7 +38,7 @@ export const roomSettingKey = css`
 export const roomSettingKeyBox = css`
   display: flex;
   justify-content: space-between;
-  width: 40rem;
+  width: 50rem;
 
   font-weight: 600;
 `;
@@ -47,5 +47,5 @@ export const roomSettingValueBox = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 40rem;
+  width: 50rem;
 `;
