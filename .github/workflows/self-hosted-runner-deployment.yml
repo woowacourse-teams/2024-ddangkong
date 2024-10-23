@@ -36,7 +36,7 @@ jobs:
             path: ${{ env.default_path }}
 
       - name: tmp # todo ls 제거
-        run: ls -al scripts && chmod +x scripts/*.sh && ls -al scripts
+        run: ls -al ${{ env.default_path }} && chmod +x ${{ env.default_path }}/*.sh && ls -al ${{ env.default_path }}
 
       - name: Export port environment variable
         run: |
