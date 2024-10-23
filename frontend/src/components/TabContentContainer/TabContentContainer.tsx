@@ -1,32 +1,25 @@
-import { useEffect, useState } from 'react';
-
+import StatisticBar from './StatisticBar/StatisticBar';
 import {
   angryImage,
-  barContainer,
   optionContainer,
   tabContentContainerLayout,
   emphasizeText,
-  firstBar,
   noVoteText,
   noVoteTextContainer,
   resultTextStyle,
   roundVoteResultContainer,
-  secondBar,
   totalResultInfoContainer,
   totalResultInfoText,
-  secondOption,
+  secondOptionName,
 } from './TabContentContainer.styled';
 import getDominantVote from './TabContentContainer.util';
 import A11yOnly from '../common/a11yOnly/A11yOnly';
 import OptionParticipantsContainer from '../OptionParticipantsContainer/OptionParticipantsContainer';
-import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hook';
 import TopicContainer from '../TopicContainer/TopicContainer';
 
 import AngryDdangkong from '@/assets/images/angryDdangkong.webp';
 import useMyGameStatus from '@/hooks/useMyGameStatus';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
-
-const INITIAL_OPTION_PERCENT = 50;
 
 interface TabContentContainerProps {
   isVoteStatisticsTabActive: boolean;
@@ -44,33 +37,17 @@ const TabContentContainer = ({
     contentId,
   });
 
-  const { animatedFirstPercent, animatedSecondPercent } = useTotalCountAnimation(groupRoundResult);
+  const { firstOption, secondOption } = groupRoundResult;
 
-  const [optionPercent, setOptionPercent] = useState({
-    first: INITIAL_OPTION_PERCENT,
-    second: INITIAL_OPTION_PERCENT,
-  });
-
-  useMyGameStatus({ roomId });
-
-  const isBigFirstOption = groupRoundResult.firstOption.percent >= 50;
-  const isVote =
-    groupRoundResult.firstOption.memberCount !== 0 ||
-    groupRoundResult.secondOption.memberCount !== 0;
+  const isVote = firstOption.memberCount !== 0 || secondOption.memberCount !== 0;
 
   const dominantVoteData = totalResult ? getDominantVote(totalResult) : null;
 
-  const screenReaderFirstOption = `${groupRoundResult.firstOption.name} ${groupRoundResult.firstOption.percent}%. ${groupRoundResult.firstOption.memberCount}명 선택.`;
-  const screenReaderSecondOption = `${groupRoundResult.secondOption.name} ${groupRoundResult.secondOption.percent}%. ${groupRoundResult.secondOption.memberCount}명 선택`;
+  const screenReaderFirstOption = `${firstOption.name} ${firstOption.percent}%. ${firstOption.memberCount}명 선택.`;
+  const screenReaderSecondOption = `${secondOption.name} ${secondOption.percent}%. ${secondOption.memberCount}명 선택`;
   const screenReaderDominantVote = `📢 전체 유저 중 ${dominantVoteData?.dominantPercent}%는. ${dominantVoteData?.dominantName}를 선택했어요`;
 
-  useEffect(() => {
-    setOptionPercent((prev) => ({
-      ...prev,
-      first: groupRoundResult.firstOption.percent,
-      second: groupRoundResult.secondOption.percent,
-    }));
-  }, [groupRoundResult]);
+  useMyGameStatus({ roomId });
 
   return (
     <div css={tabContentContainerLayout(isVoteStatisticsTabActive)}>
@@ -83,20 +60,13 @@ const TabContentContainer = ({
           </A11yOnly>
           <div css={roundVoteResultContainer} aria-hidden>
             <div css={optionContainer}>
-              <span>{groupRoundResult.firstOption.name}</span>
-              <span css={secondOption}>{groupRoundResult.secondOption.name}</span>
+              <span>{firstOption.name}</span>
+              <span css={secondOptionName}>{secondOption.name}</span>
             </div>
-            <div css={barContainer}>
-              <span css={firstBar(optionPercent.first, isBigFirstOption)}>
-                {animatedFirstPercent}%
-              </span>
-              <span css={secondBar(optionPercent.second, isBigFirstOption)}>
-                {animatedSecondPercent}%
-              </span>
-            </div>
+            <StatisticBar groupRoundResult={groupRoundResult} />
             <div css={resultTextStyle(isVoteStatisticsTabActive)}>
-              <span>{groupRoundResult.firstOption.memberCount}명</span>
-              <span>{groupRoundResult.secondOption.memberCount}명</span>
+              <span>{firstOption.memberCount}명</span>
+              <span>{secondOption.memberCount}명</span>
             </div>
           </div>
           {totalResult && dominantVoteData && (
