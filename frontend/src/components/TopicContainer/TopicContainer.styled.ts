@@ -17,6 +17,7 @@ export const categoryText = css`
 export const topicText = (isGamePage: boolean) => css`
   font-weight: bold;
   font-size: 1.6rem;
+  line-height: 2rem;
 
   ${!isGamePage &&
   css`
