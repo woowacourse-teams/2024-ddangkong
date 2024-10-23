@@ -7,6 +7,7 @@ const useGetmember = (): RoomAndMember => {
   const { data } = useQuery({
     queryKey: ['getMember'],
     queryFn: getMember,
+    staleTime: 30000,
   });
 
   return {

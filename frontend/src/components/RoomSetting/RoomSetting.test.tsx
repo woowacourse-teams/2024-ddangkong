@@ -1,20 +1,18 @@
 import { screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import type { MutableSnapshot } from 'recoil';
+import { http, HttpResponse } from 'msw';
 
 import RoomSetting from './RoomSetting';
 
-import { memberInfoState } from '@/recoil/atom';
+import { MOCK_API_URL } from '@/constants/url';
+import { server } from '@/mocks/server';
 import { customRender } from '@/utils/test-utils';
 
 describe('RoomSetting 컴포넌트 테스트', () => {
   it('방장이 RoomSetting를 누르면 설정 modal이 뜬다', async () => {
     // Given
-    const initializeState = (snap: MutableSnapshot) => {
-      snap.set(memberInfoState, { memberId: 1, nickname: 'Test User', isMaster: true });
-    };
     const user = userEvent.setup();
-    customRender(<RoomSetting />, { initializeState });
+    customRender(<RoomSetting />);
     const settingButton = await screen.findByRole('button', { name: '방 설정' });
 
     // When
@@ -29,11 +27,20 @@ describe('RoomSetting 컴포넌트 테스트', () => {
 
   it('방장이 아닌 사람이 RoomSetting를 누르면 설정 modal이 뜨지 않는다', async () => {
     // Given
-    const initializeState = (snap: MutableSnapshot) => {
-      snap.set(memberInfoState, { memberId: 1, nickname: 'Test User', isMaster: false });
-    };
+    server.use(
+      http.get(MOCK_API_URL.getMember, async () => {
+        return HttpResponse.json(
+          {
+            member: {
+              isMaster: false,
+            },
+          },
+          { status: 400 },
+        );
+      }),
+    );
     const user = userEvent.setup();
-    customRender(<RoomSetting />, { initializeState });
+    customRender(<RoomSetting />);
     const optionButton = await screen.findByRole('button', { name: '방 설정' });
 
     // When
