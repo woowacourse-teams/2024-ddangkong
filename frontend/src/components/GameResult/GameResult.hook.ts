@@ -2,15 +2,11 @@ import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
-import AlertModal from '../common/AlertModal/AlertModal';
-
 import { fetchMatchingResult } from '@/apis/balanceContent';
 import { resetRoom } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import useModal from '@/hooks/useModal';
 import { memberInfoState } from '@/recoil/atom';
 import { MatchingResult, MemberMatchingInfo } from '@/types/balanceContent';
-import { CustomError } from '@/utils/error';
 
 type MatchingResultQueryResponse = UseQueryResult<MatchingResult, Error> & {
   matchedMembers?: MemberMatchingInfo[];
@@ -39,12 +35,7 @@ export const useMatchingResultQuery = (): MatchingResultQueryResponse => {
 };
 
 export const useResetRoomMutation = (roomId: number) => {
-  const { show: showModal } = useModal();
-
   return useMutation({
     mutationFn: async () => await resetRoom(roomId),
-    onError: (error: CustomError) => {
-      showModal(AlertModal, { title: '방 초기화 에러', message: error.message });
-    },
   });
 };

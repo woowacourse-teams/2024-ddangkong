@@ -17,7 +17,7 @@ export const ERROR_MESSAGE: Record<ErrorCode, string> = {
   NOT_EXIST_COMMON: '일반 멤버가 존재하지 않습니다.',
 
   // 방 설정 관련 에러 (roomSetting)
-  INVALID_TIME_LIMIT: '타이머는 5초, 10초, 15초로만 설정 가능합니다.',
+  INVALID_TIME_LIMIT: '타이머는 10초, 15초, 30초, 60초로만 설정 가능합니다.',
   INVALID_RANGE_TOTAL_ROUND: '총 라운드는 5, 7, 10 라운드로만 설정 가능합니다.',
   EMPTY_VOTE_DEADLINE: '라운드 종료 시간이 설정되지 않았습니다.',
 
@@ -50,4 +50,10 @@ export const ERROR_MESSAGE: Record<ErrorCode, string> = {
 
   // 서버 에러
   INTERNAL_SERVER_ERROR: '서버에 오류가 발생했어요. 다시 시도해 주세요!',
+
+  // 쿠키 관련 에러(권한)
+  NOT_FOUND_COOKIE:
+    '사용자 정보가 있어야 방에 참여할 수 있어요. 홈화면으로 이동하여 방을 새로 만들어주세요!',
+  INVALID_COOKIE:
+    '사용자 정보가 있어야 방에 참여할 수 있어요. 홈화면으로 이동하여 방을 새로 만들어주세요!',
 };
