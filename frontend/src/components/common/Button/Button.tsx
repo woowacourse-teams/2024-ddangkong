@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from 'react';
+import React, { ButtonHTMLAttributes, forwardRef } from 'react';
 
 import { buttonLayout } from './Button.styled';
 
@@ -13,26 +13,22 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   bottom?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({
-  text,
-  onClick,
-  disabled,
-  size,
-  radius,
-  fontSize,
-  bottom,
-  ...props
-}) => {
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      css={buttonLayout({ disabled, size, radius, fontSize, bottom })}
-      {...props}
-    >
-      {text}
-    </button>
-  );
-};
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ text, onClick, disabled, size, radius, fontSize, bottom, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        onClick={onClick}
+        disabled={disabled}
+        css={buttonLayout({ disabled, size, radius, fontSize, bottom })}
+        {...props}
+      >
+        {text}
+      </button>
+    );
+  },
+);
+
+Button.displayName = 'Button';
 
 export default Button;

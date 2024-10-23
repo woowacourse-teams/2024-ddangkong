@@ -5,6 +5,7 @@ import { Theme } from '@/styles/Theme';
 export const roomSettingTitleContainer = css`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
 `;
 

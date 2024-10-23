@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import {
   readyMembersContainerLayout,
@@ -24,9 +24,10 @@ const ReadyMembersContainer = () => {
   const { members, master } = useGetRoomInfo();
   const { show } = useModal();
   const queryClient = useQueryClient();
+  const returnFocusRef = useRef<HTMLButtonElement>(null);
 
   const handleClickInvite = () => {
-    show(InviteModal);
+    show(InviteModal, { returnFocusRef });
   };
 
   useEffect(() => {
@@ -38,7 +39,7 @@ const ReadyMembersContainer = () => {
       <A11yOnly aria-live="polite">총 인원 {members.length}명</A11yOnly>
       <div css={totalNumber}>
         <div aria-hidden>총 인원 {members.length}명</div>
-        <button css={inviteButton} onClick={handleClickInvite}>
+        <button css={inviteButton} onClick={handleClickInvite} ref={returnFocusRef}>
           초대하기
         </button>
       </div>

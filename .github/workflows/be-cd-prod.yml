@@ -1,0 +1,111 @@
+name: BE CD for Prod
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches: [ "main" ]
+    paths:
+      - backend/**
+
+env:
+  ARTIFACT_NAME: app-artifact
+  ARTIFACT_PATH: ./artifact
+  JAR_NAME: app.jar
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    outputs:
+      artifact_name: ${{ env.ARTIFACT_NAME }}
+      jar_name: ${{ env.JAR_NAME }}
+
+    steps:    
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setting prod-secret.yml
+        run: |
+          echo "${{ secrets.PROD_SECRET_YML }}" > ./src/main/resources/prod-secret.yml
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: BootJar with Gradle
+        run: ./gradlew bootJar
+
+      - name: Move artifact file
+        run: mv build/libs/*.jar ${{ env.ARTIFACT_PATH }}/${{ env.JAR_NAME }}
+      
+      - name: Copy scripts file
+        run: cp scripts/ ${{ env.ARTIFACT_PATH }}/
+
+      - name: Upload artifact file
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ARTIFACT_PATH }}
+
+  deploy-a:
+    needs: build
+    uses: ./.github/workflows/self-hosted-runner-deployment.yml
+    with:
+      self_hosted_runner: prod-c # 추후 변경 prod-a
+      artifact_name: ${{ needs.build.outputs.artifact_name }}
+      jar_name: ${{ needs.build.outputs.jar_name }}
+      profile: prod
+
+  deploy-b:
+    needs: build
+    uses: ./.github/workflows/self-hosted-runner-deployment.yml
+    with:
+      self_hosted_runner: prod-d # 추후 변경 prod-b
+      artifact_name: ${{ needs.build.outputs.artifact_name }}
+      jar_name: ${{ needs.build.outputs.jar_name }}
+      profile: prod
+
+  error-handling:
+    needs: [ deploy-a, deploy-b ]
+    runs-on: ubuntu-latest
+    if: ${{ failure() }}
+    steps:
+      - name: Debug
+        run: echo "Deploy failed" # 추후 수정 + green 롤백 + 디스코드 알림
+
+  change-nginx-config-a:
+    needs: [ deploy-a, error-handling]
+    uses: ./.github/workflows/change_nginx_config.yml
+    with:
+      self_hosted_runner: prod-c # 추후 변경 prod-a
+      green_port: ${{ needs.deploy-a.outputs.green_port }}
+  
+  change-nginx-config-b:
+    needs: [ deploy-b, error-handling]
+    uses: ./.github/workflows/change_nginx_config.yml
+    with:
+      self_hosted_runner: prod-d # 추후 변경 prod-b
+      green_port: ${{ needs.deploy-b.outputs.green_port }}
+  
+  on-failure:
+    needs: [change-nginx-config-a, change-nginx-config-b]
+    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
+    if: failure()
+    steps:
+      - name: Rollback
+        run: |
+          sudo kill -15 $(sudo lsof -t -i: ${{ needs.deploy-a.outputs.green_port }})
+  
+  on-success:
+    needs: [change-nginx-config-a, change-nginx-config-b]
+    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
+    if: success()
+    steps:
+      - name: Blue Down
+        run: |
+          sudo kill -15 $(sudo lsof -t -i: 8080) # todo blue port

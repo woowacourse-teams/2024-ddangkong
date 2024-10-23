@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import Button from '../../Button/Button';
 import {
   errorFallbackLayout,
@@ -17,10 +15,8 @@ interface AsyncErrorFallback {
 }
 
 const AsyncErrorFallback = ({ error, resetError }: AsyncErrorFallback) => {
-  const navigate = useNavigate();
-
   const goToHome = () => {
-    navigate('/');
+    window.location.href = '/';
   };
 
   return (

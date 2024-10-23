@@ -7,7 +7,7 @@ export const dropdownLayout = css`
   position: relative;
   align-items: center;
 
-  width: 12rem;
+  width: 16rem;
   height: 3.6rem;
   padding: 0.8rem;
   border: 1px solid black;

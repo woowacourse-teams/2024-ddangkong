@@ -10,7 +10,6 @@ import {
   noVoteTextContainer,
   noVoteText,
   angryImage,
-  nicknameTitle,
   nicknameContainer,
 } from './NicknamePage.styled';
 import useMakeOrEnterRoom from './useMakeOrEnterRoom';
@@ -20,15 +19,14 @@ import AngryDdangkong from '@/assets/images/angryDdangkong.webp';
 import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
-import useGetmember from '@/hooks/useGetmember';
-import useKeyboardUp from '@/hooks/useKeyboardUp';
+import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
 import { roomUuidState } from '@/recoil/atom';
 
 const NicknamePage = () => {
   const { nicknameInputRef, handleMakeOrEnterRoom, isLoading } = useMakeOrEnterRoom();
   const { roomUuid } = useParams();
   const setRoomUuidState = useSetRecoilState(roomUuidState);
-  const { isKeyboardUp } = useKeyboardUp();
+  const { bottomButtonHeight } = useButtonHeightOnKeyboard();
 
   const { data, isLoading: isJoinableLoading } = useQuery({
     queryKey: ['isJoinable', roomUuid],
@@ -60,7 +58,6 @@ const NicknamePage = () => {
         <img src={SillyDdangkong} alt="사용자 프로필" css={profileImg} />
       </div>
       <div css={nicknameContainer}>
-        <span css={nicknameTitle}>닉네임</span>
         <NicknameInput
           nicknameInputRef={nicknameInputRef}
           handleMakeOrEnterRoom={handleMakeOrEnterRoom}
@@ -69,10 +66,8 @@ const NicknamePage = () => {
           onClick={handleMakeOrEnterRoom}
           disabled={isLoading}
           text={isLoading ? '접속 중...' : '확인'}
-          bottom={!isKeyboardUp}
-          radius={isKeyboardUp ? 'small' : undefined}
-          size={isKeyboardUp ? 'small' : undefined}
-          style={{ width: '100%' }}
+          style={{ width: '100%', bottom: bottomButtonHeight }}
+          bottom
         />
       </div>
     </Content>

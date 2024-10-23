@@ -1,7 +1,8 @@
-import React, { ButtonHTMLAttributes, HTMLAttributes, useRef } from 'react';
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import React, { ButtonHTMLAttributes, HTMLAttributes, RefObject, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
-import useDisableBackgroundScroll from './hooks/useDisableBackgroundScroll';
 import useModalEscClose from './hooks/useModalEscClose';
 import {
   modalBackdropLayout,
@@ -17,6 +18,7 @@ import {
 } from './Modal.styled';
 
 import CloseIcon from '@/assets/images/closeIcon.png';
+import useFocus from '@/hooks/useFocus';
 
 export interface ModalProps
   extends React.PropsWithChildren<{
@@ -24,11 +26,19 @@ export interface ModalProps
     onClose: () => void;
     position?: 'top' | 'bottom' | 'center';
     style?: React.CSSProperties;
+    returnFocusRef?: RefObject<HTMLElement>;
   }> {}
 
-const Modal = ({ children, isOpen, onClose, position = 'center', ...restProps }: ModalProps) => {
+const Modal = ({
+  children,
+  isOpen,
+  onClose,
+  returnFocusRef,
+  position = 'center',
+  ...restProps
+}: ModalProps) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
-
+  const focusRef = useFocus<HTMLDivElement>();
   useModalEscClose(isOpen, onClose);
 
   const handleOutsideClick = (event: React.MouseEvent | React.KeyboardEvent) => {
@@ -37,12 +47,28 @@ const Modal = ({ children, isOpen, onClose, position = 'center', ...restProps }:
     }
   };
 
+  useEffect(() => {
+    return () => {
+      if (returnFocusRef?.current) {
+        returnFocusRef.current.focus();
+      }
+    };
+  }, [returnFocusRef?.current]);
+
   if (!isOpen) return null;
 
   const modalContent = (
     /* eslint jsx-a11y/no-static-element-interactions: "off" */
     // 모달을 제외한 영역을 클릭시 모달이 꺼지도록 설정하기 위해 설정함
-    <div css={modalBackdropLayout} onClick={handleOutsideClick} onKeyDown={handleOutsideClick}>
+    <div
+      tabIndex={0}
+      ref={focusRef}
+      role="dialog"
+      aria-modal={true}
+      css={modalBackdropLayout}
+      onClick={handleOutsideClick}
+      onKeyDown={handleOutsideClick}
+    >
       <div css={modalContentWrapper({ position })} ref={modalRef} {...restProps}>
         {children}
       </div>

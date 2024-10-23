@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import useMoveNextRoundMutation from './NextRoundButton.hook';
@@ -18,18 +19,20 @@ const NextRoundButton = () => {
     member: { isMaster },
   } = useGetmember();
   const { show } = useModal();
+  const returnFocusRef = useRef<HTMLButtonElement>(null);
 
   const randomRoundNextMessage = createRandomNextRoundMessage();
   const isLastRound = balanceContent?.currentRound === balanceContent?.totalRound;
 
   const showModal = () => {
-    show(AlertModal, { message: randomRoundNextMessage, onConfirm: moveNextRound });
+    show(AlertModal, { message: randomRoundNextMessage, onConfirm: moveNextRound, returnFocusRef });
   };
 
   return (
     <div css={bottomButtonLayout}>
       {isMaster ? (
         <Button
+          ref={returnFocusRef}
           style={{ width: '100%' }}
           text={isLastRound ? '결과 확인' : '다음'}
           onClick={isLastRound ? moveNextRound : showModal}

@@ -14,12 +14,12 @@ const meta = {
     optionList: {
       description: '드랍다운 내에 들어갈 옵션 배열을 넘겨줄 수 있습니다.',
     },
-    handleClick: {
+    handleClickOption: {
       description: '옵션을 선택했을 때 동작하는 이벤트 핸들러입니다.',
     },
   },
   args: {
-    handleClick: fn(),
+    handleClickOption: fn(),
   },
 } satisfies Meta<typeof Dropdown>;
 
@@ -52,7 +52,7 @@ export const 기본_드랍다운: Story = {
             label: '음식',
           },
         ]}
-        handleClick={(e) => setText(e.currentTarget.value)}
+        handleClickOption={(e) => setText(e.currentTarget.value)}
       />
     );
   },
