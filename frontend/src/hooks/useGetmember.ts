@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { getMember } from '@/apis/room';
+import { QUERY_KEYS } from '@/constants/queryKeys';
 import { RoomAndMember } from '@/types/room';
 
 const useGetmember = (): RoomAndMember => {
   const { data } = useQuery({
-    queryKey: ['getMember'],
+    queryKey: [QUERY_KEYS.getMember],
     queryFn: getMember,
     staleTime: 30000,
   });

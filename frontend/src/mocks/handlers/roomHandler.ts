@@ -4,6 +4,7 @@ import CATEGORY_LIST from '../data/categoryList.json';
 import CREATE_ROOM_RESPONSE from '../data/createRoomResponse.json';
 import ENTER_ROOM_RESPONSE from '../data/enterRoomResponse.json';
 import MASTER_AND_INITIAL from '../data/masterAndInitial.json';
+import ROOM_AND_MASTER from '../data/roomAndMaster.json';
 import ROOM_INFO from '../data/roomInfo.json';
 
 import { MOCK_API_URL } from '@/constants/url';
@@ -63,18 +64,7 @@ const isJoinableRoomHandler = () => {
 };
 
 const getMemberHandler = () => {
-  return HttpResponse.json(
-    {
-      roomId: 142,
-      roomUuid: 'bc950f33f12f467da159a263a905bb40',
-      member: {
-        memberId: 217,
-        nickname: '땅콩',
-        isMaster: true,
-      },
-    },
-    { status: 200 },
-  );
+  return HttpResponse.json(ROOM_AND_MASTER, { status: 200 });
 };
 
 export const roomHandler = [
