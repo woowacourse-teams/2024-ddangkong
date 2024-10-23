@@ -54,7 +54,7 @@ jobs:
 
   deploy:
     needs: [ build ]
-    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b 및 그룹
+    runs-on: [ prod ]
     outputs:
       blue_port: ${{ steps.blue_green_port.outputs.blue_port }}
       green_port: ${{ steps.blue_green_port.outputs.green_port }}
@@ -88,7 +88,7 @@ jobs:
   
   green-rollback:
     needs: [ deploy ]
-    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
+    runs-on: [ prod ]
     if: ${{ needs.deploy.result == 'failure' }}
     steps:
       - name: Rollback # todo 디코 알림
@@ -99,7 +99,7 @@ jobs:
 
   nginx-config:
     needs: [ deploy ]
-    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
+    runs-on: [ prod ]
     if: ${{ needs.deploy.result == 'success' }}
     steps:
       - name: Change Nginx Config
@@ -117,7 +117,7 @@ jobs:
   
   blue-down:
     needs: [ nginx-config ]
-    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
+    runs-on: [ prod ]
     steps:
       - name: Blue Down
         run: |
@@ -126,7 +126,7 @@ jobs:
 
   on-failure:
     needs: [ blue-down ] # 알림
-    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
+    runs-on: [ prod ]
     if: ${{ needs.blue-down.result == 'failure' }}
     steps:
       - name: Send Notification
