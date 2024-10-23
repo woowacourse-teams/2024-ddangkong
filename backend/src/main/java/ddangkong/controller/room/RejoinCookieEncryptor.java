@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class RejoinCookieEncryptor {
 
     private static final String SAME_SITE_OPTION = "None";
-    private static final String DEFAULT_PATH = "/balances/rooms";
+    private static final String DEFAULT_PATH = "/api/balances/rooms";
 
     private final EncryptionUtils encryptionUtils;
 
