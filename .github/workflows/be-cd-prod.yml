@@ -43,7 +43,7 @@ jobs:
 
   deploy-rollback-call:
     needs: [ deploy-a, deploy-b ]
-    if: failure() && ${{ needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure' }}
+    if: failure() && contains(needs.*.result, 'failure')
     runs-on: ubuntu-latest
     steps:
       - name: Send notification to Discord # todo
