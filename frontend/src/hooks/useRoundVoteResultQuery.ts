@@ -1,6 +1,4 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
-
-import INITIAL_VALUE from '../mocks/data/roundVoteResultInitialValue.json';
+import { useSuspenseQuery, UseSuspenseQueryResult } from '@tanstack/react-query';
 
 import { fetchRoundVoteResult } from '@/apis/balanceContent';
 import { QUERY_KEYS } from '@/constants/queryKeys';
@@ -11,16 +9,16 @@ interface UseRoundVoteResultQueryProps {
   contentId?: number;
 }
 
-type RoundVoteResultQueryResponse = UseQueryResult<RoundVoteResult, Error> & {
-  groupRoundResult?: Group;
-  totalResult?: Total;
+type RoundVoteResultQueryResponse = UseSuspenseQueryResult<RoundVoteResult, Error> & {
+  groupRoundResult: Group;
+  totalResult: Total;
 };
 
 const useRoundVoteResultQuery = ({
   roomId,
   contentId,
 }: UseRoundVoteResultQueryProps): RoundVoteResultQueryResponse => {
-  const roundVoteResultQuery = useQuery({
+  const roundVoteResultQuery = useSuspenseQuery({
     queryKey: [QUERY_KEYS.roundVoteResult, roomId, contentId],
     queryFn: async () => {
       if (typeof contentId === 'undefined') {
@@ -33,14 +31,12 @@ const useRoundVoteResultQuery = ({
 
       return await fetchRoundVoteResult({ roomId, contentId });
     },
-    placeholderData: INITIAL_VALUE,
-    enabled: !!contentId,
   });
 
   return {
     ...roundVoteResultQuery,
-    groupRoundResult: roundVoteResultQuery.data?.group,
-    totalResult: roundVoteResultQuery.data?.total,
+    groupRoundResult: roundVoteResultQuery.data.group,
+    totalResult: roundVoteResultQuery.data.total,
   };
 };
 

@@ -14,11 +14,15 @@ type Story = StoryObj<typeof meta>;
 export const 투표_통계: Story = {
   args: {
     isVoteStatisticsTabActive: true,
+    roomId: 1,
+    contentId: 1,
   },
 };
 
 export const 투표_현황: Story = {
   args: {
     isVoteStatisticsTabActive: false,
+    roomId: 1,
+    contentId: 1,
   },
 };

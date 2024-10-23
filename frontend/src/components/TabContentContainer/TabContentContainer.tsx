@@ -1,5 +1,3 @@
-import { useParams } from 'react-router-dom';
-
 import {
   angryImage,
   barContainer,
@@ -23,27 +21,28 @@ import useTotalCountAnimation from '../RoundVoteContainer/RoundVoteContainer.hoo
 import TopicContainer from '../TopicContainer/TopicContainer';
 
 import AngryDdangkong from '@/assets/images/angryDdangkong.webp';
-import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useMyGameStatus from '@/hooks/useMyGameStatus';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 
 interface TabContentContainerProps {
   isVoteStatisticsTabActive: boolean;
+  roomId: number;
+  contentId: number;
 }
 
-const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerProps) => {
-  const { roomId } = useParams();
-  const { balanceContent } = useBalanceContentQuery(Number(roomId));
+const TabContentContainer = ({
+  isVoteStatisticsTabActive,
+  roomId,
+  contentId,
+}: TabContentContainerProps) => {
   const { groupRoundResult, totalResult } = useRoundVoteResultQuery({
-    roomId: Number(roomId),
-    contentId: balanceContent?.contentId,
+    roomId,
+    contentId,
   });
 
   useMyGameStatus({ roomId: Number(roomId) });
 
   const { animatedFirstPercent, animatedSecondPercent } = useTotalCountAnimation(groupRoundResult);
-
-  if (!groupRoundResult) return;
 
   const isBigFirstOption = groupRoundResult.firstOption.percent >= 50;
   const isVote =

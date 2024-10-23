@@ -22,8 +22,9 @@ describe('TabContentContainer 컴포넌트 테스트', () => {
   });
 
   it('아무도 투표하지 않아 모두 기권인 경우, "아무도 투표하지 않으셨네요 :)" 텍스트를 보여준다.', async () => {
-    ROUND_VOTE_RESULT.group.firstOption.percent = 0;
-    ROUND_VOTE_RESULT.group.secondOption.percent = 0;
+    ROUND_VOTE_RESULT.group.firstOption.memberCount = 0;
+    ROUND_VOTE_RESULT.group.secondOption.memberCount = 0;
+    const NOT_VOTE_TEXT = '아무도 투표하지 않으셨네요 :)';
 
     server.use(
       http.get(MOCK_API_URL.roundVoteResult, () => {
@@ -31,10 +32,10 @@ describe('TabContentContainer 컴포넌트 테스트', () => {
       }),
     );
 
-    customRender(<TabContentContainer isVoteStatisticsTabActive={true} />);
+    customRender(<TabContentContainer isVoteStatisticsTabActive={true} roomId={1} contentId={1} />);
 
     await waitFor(() => {
-      expect(screen.getByText('아무도 투표하지 않으셨네요 :)')).toBeInTheDocument();
+      expect(screen.getByText(NOT_VOTE_TEXT)).toBeInTheDocument();
     });
   });
 });
