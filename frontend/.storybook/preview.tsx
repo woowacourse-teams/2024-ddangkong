@@ -10,6 +10,8 @@ import { initialize, mswLoader } from 'msw-storybook-addon';
 import { handlers } from '../src/mocks/handlers';
 import ToastProvider from '../src/providers/ToastProvider/ToastProvider';
 import ModalProvider from '../src/providers/ModalProvider/ModalProvider';
+import RootErrorBoundary from '../src/components/common/ErrorBoundary/RootErrorBoundary';
+import AsyncErrorBoundary from '../src/components/common/ErrorBoundary/AsyncErrorBoundary';
 
 initialize({
   serviceWorker: {
@@ -40,9 +42,13 @@ const preview: Preview = {
             <MemoryRouter initialEntries={['/']}>
               <Global styles={GlobalStyle} />
               <ToastProvider>
-                <ModalProvider>
-                  <Story />
-                </ModalProvider>
+                <RootErrorBoundary>
+                  <AsyncErrorBoundary>
+                    <ModalProvider>
+                      <Story />
+                    </ModalProvider>
+                  </AsyncErrorBoundary>
+                </RootErrorBoundary>
               </ToastProvider>
             </MemoryRouter>
           </ThemeProvider>
