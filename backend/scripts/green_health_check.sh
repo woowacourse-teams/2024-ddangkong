@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 GREEN_PORT=$1
 
 health_check_process() {

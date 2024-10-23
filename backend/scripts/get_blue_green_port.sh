@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 # 현재 BLUE 호스트 확인 (8080 or 8081)
 NGINX_CONFIG="/etc/nginx/sites-available/default"
 BLUE_PORT=$(sudo grep -oP '127\.0\.0\.1:\K(8080|8081)' "$NGINX_CONFIG")

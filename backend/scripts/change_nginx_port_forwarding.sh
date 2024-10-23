@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 NGINX_CONFIG="/etc/nginx/sites-available/default"
 PORT=$1
 

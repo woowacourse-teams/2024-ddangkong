@@ -48,12 +48,12 @@ jobs:
           chmod +x ${{ inputs.app_path }}/*.sh && \
           ${{ inputs.app_path }}/get_blue_green_port.sh >> $GITHUB_OUTPUT
 
-      - name: Start Java Application
-        run: sudo nohup java -Dspring.profiles.active=${{ inputs.profile }} -Dserver.port=${{ steps.blue_green_port.outputs.green_port }} -Duser.timezone=Asia/Seoul -jar ${{ inputs.app_path }}/${{ inputs.jar_name }} &
+      # - name: Start Java Application
+      #   run: sudo nohup java -Dspring.profiles.active=${{ inputs.profile }} -Dserver.port=${{ steps.blue_green_port.outputs.green_port }} -Duser.timezone=Asia/Seoul -jar ${{ inputs.app_path }}/${{ inputs.jar_name }} &
 
-      - name: Health Check
-        run: |
-          ${{ inputs.app_path }}/green_health_check.sh ${{ steps.blue_green_port.outputs.green_port }}
+      # - name: Health Check
+      #   run: |
+      #     ${{ inputs.app_path }}/green_health_check.sh ${{ steps.blue_green_port.outputs.green_port }}
       
       - name: test
         if: runner.name == 'ip-10-0-21-212'
