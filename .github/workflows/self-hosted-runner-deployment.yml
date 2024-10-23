@@ -23,6 +23,10 @@ on:
         description: 'app path'
         required: true
         type: string
+      continue_on_error:
+        description: 'continue on error'
+        required: false
+        type: boolean
     outputs:
       green_port:
         value: ${{ jobs.deploy.outputs.green_port }}
@@ -31,6 +35,7 @@ on:
 
 jobs:
   deploy:
+    continue-on-error: ${{ inputs.continue_on_error }}
     runs-on: ${{ inputs.self_hosted_runner }}
     outputs:
       green_port: ${{ steps.blue_green_port.outputs.green_port }}

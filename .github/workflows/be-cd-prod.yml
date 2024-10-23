@@ -30,6 +30,7 @@ jobs:
       jar_name: ${{ needs.build.outputs.jar_name }}
       profile: prod
       app_path: ~/app
+      continue_on_error: true
 
   deploy-b:
     needs: [ build ]
@@ -40,6 +41,7 @@ jobs:
       jar_name: ${{ needs.build.outputs.jar_name }}
       profile: prod
       app_path: ~/app
+      continue_on_error: true
  
   # deploy-rollback-call:
   #   needs: [ deploy-a, deploy-b ]
@@ -81,7 +83,7 @@ jobs:
   deploy-rollback-call:
     needs: [ deploy-a, deploy-b ]
     runs-on: ubuntu-latest
-    if: failure()
+    if: ${{ contains(needs.*.result, 'failure') }}
     steps:
       - name: Send notification to Discord # todo
         run: echo "테스트입니다"
