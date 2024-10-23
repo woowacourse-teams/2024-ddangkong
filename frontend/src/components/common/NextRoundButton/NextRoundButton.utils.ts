@@ -1,6 +1,11 @@
 import randomPicker from '@/utils/randomPicker';
 
-export const getNextRoundButtonText = (isMaster: boolean, isLastRound: boolean) => {
+export const getNextRoundButtonText = (
+  isMaster: boolean,
+  isLastRound: boolean,
+  isPending: boolean,
+) => {
+  if (isMaster && isPending) return '로딩중...';
   if (isMaster && isLastRound) return '결과 확인';
   if (isMaster && !isLastRound) return '다음';
   return '방장이 진행해 주세요';

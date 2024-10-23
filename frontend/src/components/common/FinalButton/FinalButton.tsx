@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
+import getFinalButtonText from './FinalButton.utils';
 import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 
@@ -16,7 +17,7 @@ const FinalButton = () => {
     <div css={bottomButtonLayout}>
       <Button
         style={{ width: '100%' }}
-        text={memberInfo.isMaster ? '확인' : '방장이 진행해 주세요'}
+        text={getFinalButtonText(memberInfo.isMaster, isPending)}
         onClick={resetRoom}
         disabled={!memberInfo.isMaster || isPending}
       />

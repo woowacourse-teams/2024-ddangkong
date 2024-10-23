@@ -33,7 +33,7 @@ const NextRoundButton = () => {
       <Button
         ref={returnFocusRef}
         style={{ width: '100%' }}
-        text={getNextRoundButtonText(memberInfo.isMaster, isLastRound)}
+        text={getNextRoundButtonText(memberInfo.isMaster, isLastRound, isPending)}
         onClick={isLastRound ? moveNextRound : showModal}
         disabled={!memberInfo.isMaster || isPending}
       />
