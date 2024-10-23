@@ -15,6 +15,10 @@ export const categoryText = css`
 `;
 
 export const topicText = css`
+  width: 85%;
+
   font-weight: bold;
   font-size: 1.6rem;
+  text-align: center;
+  word-break: keep-all;
 `;
