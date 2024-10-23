@@ -26,9 +26,6 @@ spring:
         jdbc:
           batch_size: 1000
 
-server:
-  port: ${secret.application.port}
-
 cors:
   origin: ${secret.cors.origin}
 
