@@ -1,23 +1,10 @@
-import StatisticBar from './StatisticBar/StatisticBar';
-import {
-  angryImage,
-  optionContainer,
-  tabContentContainerLayout,
-  emphasizeText,
-  noVoteText,
-  noVoteTextContainer,
-  resultTextStyle,
-  roundVoteResultContainer,
-  totalResultInfoContainer,
-  totalResultInfoText,
-  secondOptionName,
-} from './TabContentContainer.styled';
-import { getDominantVoteData, isExistVoteMember } from './TabContentContainer.util';
-import A11yOnly from '../common/a11yOnly/A11yOnly';
+import EmptyVoteContent from './EmptyVoteContent/EmptyVoteContent';
+import { tabContentContainerLayout } from './TabContentContainer.styled';
+import { isExistVoteMember } from './TabContentContainer.util';
+import VoteStatisticContent from './VoteStatisticContent/VoteStatisticContent';
 import OptionParticipantsContainer from '../OptionParticipantsContainer/OptionParticipantsContainer';
 import TopicContainer from '../TopicContainer/TopicContainer';
 
-import AngryDdangkong from '@/assets/images/angryDdangkong.webp';
 import useMyGameStatus from '@/hooks/useMyGameStatus';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 
@@ -39,64 +26,18 @@ const TabContentContainer = ({
 
   useMyGameStatus({ roomId });
 
-  const { firstOption, secondOption } = groupRoundResult;
-
-  const isVote = isExistVoteMember(firstOption.memberCount, secondOption.memberCount);
-  const dominantVoteData = getDominantVoteData(totalResult);
-
-  const screenReaderFirstOption = `${firstOption.name} ${firstOption.percent}%. ${firstOption.memberCount}명 선택.`;
-  const screenReaderSecondOption = `${secondOption.name} ${secondOption.percent}%. ${secondOption.memberCount}명 선택`;
-  const screenReaderDominantVote = `📢 전체 유저 중 ${dominantVoteData?.dominantPercent}%는. ${dominantVoteData?.dominantName}를 선택했어요`;
+  const isVote = isExistVoteMember(groupRoundResult);
 
   return (
     <div css={tabContentContainerLayout(isVoteStatisticsTabActive)}>
       <TopicContainer />
       {isVote && isVoteStatisticsTabActive && (
-        <>
-          <A11yOnly>
-            {screenReaderFirstOption}
-            {screenReaderSecondOption}
-          </A11yOnly>
-          <div css={roundVoteResultContainer} aria-hidden>
-            <div css={optionContainer}>
-              <span>{firstOption.name}</span>
-              <span css={secondOptionName}>{secondOption.name}</span>
-            </div>
-            <StatisticBar groupRoundResult={groupRoundResult} />
-            <div css={resultTextStyle(isVoteStatisticsTabActive)}>
-              <span>{firstOption.memberCount}명</span>
-              <span>{secondOption.memberCount}명</span>
-            </div>
-          </div>
-          {totalResult && dominantVoteData && (
-            <div css={totalResultInfoContainer}>
-              {dominantVoteData.isEqual ? (
-                <span css={totalResultInfoText}>📢 전체 유저 사이에서는 의견이 반반이에요 😲</span>
-              ) : (
-                <>
-                  <A11yOnly>{screenReaderDominantVote}</A11yOnly>
-                  <span css={totalResultInfoText} aria-hidden>
-                    📢 전체 유저 중&nbsp;
-                    <span css={emphasizeText}>{dominantVoteData.dominantPercent}%</span>는
-                  </span>
-                  <span css={totalResultInfoText} aria-hidden>
-                    <span css={emphasizeText}>{dominantVoteData.dominantName}</span>를 선택했어요 !
-                  </span>
-                </>
-              )}
-            </div>
-          )}
-        </>
+        <VoteStatisticContent groupRoundResult={groupRoundResult} totalResult={totalResult} />
       )}
       {isVote && !isVoteStatisticsTabActive && (
         <OptionParticipantsContainer groupRoundResult={groupRoundResult} />
       )}
-      {!isVote && (
-        <div css={noVoteTextContainer}>
-          <img src={AngryDdangkong} alt="화난 땅콩" css={angryImage} />
-          <span css={noVoteText}>아무도 투표하지 않으셨네요 :{`)`}</span>
-        </div>
-      )}
+      {!isVote && <EmptyVoteContent />}
     </div>
   );
 };

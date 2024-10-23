@@ -1,4 +1,4 @@
-import { Total } from '@/types/roundVoteResult';
+import { Group, Total } from '@/types/roundVoteResult';
 
 export const getDominantVoteData = (totalResult: Total) => {
   const { firstOption, secondOption } = totalResult;
@@ -13,9 +13,9 @@ export const getDominantVoteData = (totalResult: Total) => {
   };
 };
 
-export const isExistVoteMember = (
-  firstOptionMemberCount: number,
-  secondOptionMemberCount: number,
-) => {
-  return firstOptionMemberCount !== 0 || secondOptionMemberCount !== 0;
+export const isExistVoteMember = (groupRoundResult: Group) => {
+  return (
+    groupRoundResult.firstOption.memberCount !== 0 ||
+    groupRoundResult.secondOption.memberCount !== 0
+  );
 };
