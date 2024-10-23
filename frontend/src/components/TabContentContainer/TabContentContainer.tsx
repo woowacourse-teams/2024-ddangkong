@@ -2,9 +2,9 @@ import { useParams } from 'react-router-dom';
 
 import {
   angryImage,
-  barWrapperStyle,
+  barContainer,
   optionContainer,
-  contentWrapperStyle,
+  tabContentContainerLayout,
   emphasizeText,
   firstBar,
   noVoteText,
@@ -56,7 +56,7 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
   const screenReaderDominantVote = `📢 전체 유저 중 ${dominantVoteData?.dominantPercent}%는. ${dominantVoteData?.dominantName}를 선택했어요`;
 
   return (
-    <div css={contentWrapperStyle}>
+    <div css={tabContentContainerLayout(isVoteStatisticsTabActive)}>
       <TopicContainer />
       {isVote && isVoteStatisticsTabActive && (
         <>
@@ -69,7 +69,7 @@ const TabContentContainer = ({ isVoteStatisticsTabActive }: TabContentContainerP
               <span>{groupRoundResult.firstOption.name}</span>
               <span>{groupRoundResult.secondOption.name}</span>
             </div>
-            <div css={barWrapperStyle}>
+            <div css={barContainer}>
               <span css={firstBar(groupRoundResult.firstOption.percent, isBigFirstOption)}>
                 {animatedFirstPercent}%
               </span>
