@@ -15,92 +15,60 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
-    outputs:
-      artifact_name: ${{ env.ARTIFACT_NAME }}
-      jar_name: ${{ env.JAR_NAME }}
+    uses: ./.github/workflows/build.yml
+    with:
+      profile: prod
+    secrets:
+      secret_yml: ${{ secrets.PROD_SECRET_YML }}
 
-    steps:    
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setting prod-secret.yml
-        run: |
-          echo "${{ secrets.PROD_SECRET_YML }}" > ./src/main/resources/prod-secret.yml
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: BootJar with Gradle
-        run: ./gradlew bootJar
-
-      - name: Move artifact file
-        run: |
-          mkdir -p ${{ env.ARTIFACT_NAME }} && \
-          mv build/libs/*.jar ${{ env.ARTIFACT_NAME }}/${{ env.JAR_NAME }} && \
-          mv scripts/* ${{ env.ARTIFACT_NAME }}/
-
-      - name: Upload artifact file
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.ARTIFACT_NAME }}
-          path: ./backend/${{ env.ARTIFACT_NAME }}
-
-  deploy:
+  deploy-a:
     needs: [ build ]
-    runs-on: [ prod ]
-    outputs:
-      blue_port: ${{ steps.blue_green_port.outputs.blue_port }}
-      green_port: ${{ steps.blue_green_port.outputs.green_port }}
+    uses: ./.github/workflows/self-hosted-runner-deployment.yml
+    with:
+      self_hosted_runner: prod-c # todo a
+      artifact_name: ${{ needs.build.outputs.artifact_name }}
+      jar_name: ${{ needs.build.outputs.jar_name }}
+      profile: prod
+      app_path: ~/app
 
+  deploy-b:
+    needs: [ build ]
+    uses: ./.github/workflows/self-hosted-runner-deployment.yml
+    with:
+      self_hosted_runner: prod-d # todo b
+      artifact_name: ${{ needs.build.outputs.artifact_name }}
+      jar_name: ${{ needs.build.outputs.jar_name }}
+      profile: prod
+      app_path: ~/app
+ 
+  deploy-rollback-call:
+    needs: [ deploy-a, deploy-b ]
+    runs-on: [ prod ] # todo a, b / return prod-c, prod-d
+    if: failure()
     steps:
-      - name: Download artifact file
-        uses: actions/download-artifact@v4
+      - name: Rollback a
+        if: ${{ needs.deploy-a.result == 'failure'}}
+        uses: ./.github/actions/server-rollback.yml
         with:
-            name: ${{ env.ARTIFACT_NAME }}
-            path: ${{ env.APP_PATH }}
+          port: ${{ needs.deploy-a.outputs.green_port }}
 
-      - name: Get Blue Green Port
-        id: blue_green_port
-        run: |
-          chmod +x ${{ env.APP_PATH }}/*.sh && \
-          ${{ env.APP_PATH }}/get_blue_green_port.sh | awk '{print $0}' >> $GITHUB_OUTPUT
+      - name: Rollback b
+        if: ${{ needs.deploy-b.result == 'failure'}}
+        uses: ./.github/actions/server-rollback.yml
+        with:
+          port: ${{ needs.deploy-b.outputs.green_port }}
 
-      - name: Green Up
-        run: sudo nohup java -Dspring.profiles.active=prod -Dserver.port=${{ steps.blue_green_port.outputs.green_port }} -Duser.timezone=Asia/Seoul -jar ${{ env.APP_PATH }}/${{ env.JAR_NAME }} &
-
-      - name: Health Check
-        run: |
-          ${{ env.APP_PATH }}/green_health_check.sh ${{ steps.blue_green_port.outputs.green_port }}
-
-      # - name: Deploy green
-      #   uses: ./.github/actions/self-hosted-runner-deployment.yml
-      #   with:
-      #     artifact_name: ${{ needs.build.outputs.artifact_name }}
-      #     jar_name: ${{ needs.build.outputs.jar_name }}
-      #     profile: prod
-  
-  green-rollback:
-    needs: [ deploy ]
-    runs-on: [ prod ]
-    if: ${{ needs.deploy.result == 'failure' }}
+  rollback-notification:
+    needs: [ deploy-rollback-call ]
+    runs-on: ubuntu-latest
     steps:
-      - name: Rollback # todo 디코 알림
-        run: | 
-          echo "Green deploy failed"
-          sudo lsof -i :${{ needs.deploy.outputs.green_port }} | awk 'NR!=1 {print $2}' | xargs kill -9
-          exit 1
+      - name: Send notification to Discord # todo
+        run: echo "테스트입니다"
 
   nginx-config:
-    needs: [ deploy ]
+    needs: [ deploy-a, deploy-b ]
+    if: success()
     runs-on: [ prod ]
-    if: ${{ needs.deploy.result == 'success' }}
     steps:
       - name: Change Nginx Config
         run: |
@@ -114,7 +82,7 @@ jobs:
           ${{ env.APP_PATH }}/change_nginx_port_forwarding.sh ${{ needs.deploy.outputs.blue_port }}
           sudo lsof -i :${{ needs.deploy.outputs.green_port }} | awk 'NR!=1 {print $2}' | xargs kill -9
           exit 1
-  
+
   blue-down:
     needs: [ nginx-config ]
     runs-on: [ prod ]
