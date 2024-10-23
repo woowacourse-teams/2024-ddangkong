@@ -36,9 +36,6 @@ const NicknamePage = () => {
     enabled: !!roomUuid,
   });
 
-  // const { member } = useGetmember();
-  // console.log(member);
-
   useEffect(() => {
     if (roomUuid) {
       setRoomUuidState(roomUuid);

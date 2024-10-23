@@ -1,16 +1,15 @@
-import { useRecoilValue } from 'recoil';
-
 import { nicknameItemLayout, nicknameText, profileImage } from './NicknameItem.styled';
 
 import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
-import { memberInfoState } from '@/recoil/atom';
+import useGetmember from '@/hooks/useGetmember';
+
 interface NicknameItemProp {
   nickName: string;
 }
 
 const NicknameItem = ({ nickName }: NicknameItemProp) => {
-  const memberInfo = useRecoilValue(memberInfoState);
-  const isMyNickname = memberInfo.nickname === nickName;
+  const { member } = useGetmember();
+  const isMyNickname = member.nickname === nickName;
 
   return (
     <li css={nicknameItemLayout}>

@@ -1,5 +1,3 @@
-import { useRecoilValue } from 'recoil';
-
 import {
   roomSettingLayout,
   bigTitle,

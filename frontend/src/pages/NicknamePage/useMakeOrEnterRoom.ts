@@ -1,33 +1,28 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
 
 import { enterRoom, createRoom } from '@/apis/room';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
 import { ROUTES } from '@/constants/routes';
+import useGetmember from '@/hooks/useGetmember';
 import useModal from '@/hooks/useModal';
-import { memberInfoState, roomUuidState } from '@/recoil/atom';
 import { CreateOrEnterRoomResponse } from '@/types/room';
 import { CustomError } from '@/utils/error';
 
 const useMakeOrEnterRoom = () => {
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-  const [{ isMaster }, setMemberInfo] = useRecoilState(memberInfoState);
+  const {
+    member: { isMaster },
+  } = useGetmember();
 
-  const [, setRoomUuidState] = useRecoilState(roomUuidState);
   const { roomUuid } = useParams();
   const { show: showModal } = useModal();
 
   const createRoomMutation = useMutation<CreateOrEnterRoomResponse, CustomError, string>({
     mutationFn: createRoom,
     onSuccess: (data) => {
-      setMemberInfo((prev) => ({
-        ...prev,
-        memberId: data.member.memberId,
-      }));
-      setRoomUuidState(data.roomUuid || '');
       navigate(ROUTES.ready(Number(data.roomId)), { replace: true });
     },
     onError: (error) => {
@@ -42,8 +37,6 @@ const useMakeOrEnterRoom = () => {
   >({
     mutationFn: ({ nickname, roomUuid }) => enterRoom(roomUuid, nickname),
     onSuccess: (data) => {
-      setMemberInfo((prev) => ({ ...prev, memberId: data.member.memberId }));
-      setRoomUuidState(data.roomUuid || '');
       navigate(ROUTES.ready(Number(data.roomId)), { replace: true });
     },
     onError: (error: CustomError) => {

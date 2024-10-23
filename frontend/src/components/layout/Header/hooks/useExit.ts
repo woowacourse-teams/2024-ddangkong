@@ -1,13 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 
 import { exitRoom } from '@/apis/room';
-import { memberInfoState } from '@/recoil/atom';
+import useGetmember from '@/hooks/useGetmember';
 import { deleteAllCookies } from '@/utils/cookie';
 
 export const useExit = () => {
-  const { memberId } = useRecoilValue(memberInfoState);
+  const { member: memberId } = useGetmember();
   const navigate = useNavigate();
   const { roomId } = useParams();
 
