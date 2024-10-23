@@ -14,11 +14,15 @@ export const categoryText = css`
   font-size: 1.2rem;
 `;
 
-export const topicText = css`
-  width: 85%;
-
+export const topicText = (isGamePage: boolean) => css`
   font-weight: bold;
   font-size: 1.6rem;
-  text-align: center;
-  word-break: keep-all;
+
+  ${!isGamePage &&
+  css`
+    width: 85%;
+
+    text-align: center;
+    word-break: keep-all;
+  `}
 `;
