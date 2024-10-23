@@ -4,8 +4,9 @@ import {
   roomSettingLayout,
   bigTitle,
   smallTitle,
-  roomSettingLabel,
-  roomSettingBox,
+  roomSettingKeyBox,
+  roomSettingValueBox,
+  roomSettingKey,
 } from './RoomSetting.styled';
 
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
@@ -40,16 +41,14 @@ const RoomSetting = () => {
         onClick={isMaster ? handleClickCategory : () => {}}
         ref={returnFocusRef}
       >
-        <div css={roomSettingBox}>
-          <span css={roomSettingLabel}>라운드</span>
+        <div css={roomSettingKeyBox}>
+          <span css={roomSettingKey}>라운드</span>
+          <span css={roomSettingKey}>카테고리</span>
+          <span css={roomSettingKey}>제한 시간</span>
+        </div>
+        <div css={roomSettingValueBox}>
           <h2 css={smallTitle}>{roomSetting.totalRound}</h2>
-        </div>
-        <div css={roomSettingBox}>
-          <span css={roomSettingLabel}>카테고리</span>
           <h2 css={bigTitle}>{roomSetting.category.label}</h2>
-        </div>
-        <div css={roomSettingBox}>
-          <span css={roomSettingLabel}>제한 시간</span>
           <h2 css={smallTitle}>{roomSetting.timeLimit / 1000}초</h2>
         </div>
       </button>
