@@ -26,6 +26,8 @@ import AngryDdangkong from '@/assets/images/angryDdangkong.webp';
 import useMyGameStatus from '@/hooks/useMyGameStatus';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
 
+const INITIAL_OPTION_PERCENT = 50;
+
 interface TabContentContainerProps {
   isVoteStatisticsTabActive: boolean;
   roomId: number;
@@ -45,8 +47,8 @@ const TabContentContainer = ({
   const { animatedFirstPercent, animatedSecondPercent } = useTotalCountAnimation(groupRoundResult);
 
   const [optionPercent, setOptionPercent] = useState({
-    first: 50,
-    second: 50,
+    first: INITIAL_OPTION_PERCENT,
+    second: INITIAL_OPTION_PERCENT,
   });
 
   useMyGameStatus({ roomId });
