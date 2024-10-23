@@ -40,13 +40,10 @@ jobs:
         run: ./gradlew bootJar
 
       - name: Move artifact file
-        run: mkdir -p ${{ env.ARTIFACT_NAME }} && mv build/libs/*.jar ${{ env.ARTIFACT_NAME }}/${{ env.JAR_NAME }}
-
-      - name: tmp
-        run: ls -al scripts && chmod +x scripts/*.sh && ls -al scripts
-
-      - name: Move scripts file
-        run: mv scripts/* ${{ env.ARTIFACT_NAME }}/
+        run: |
+          mkdir -p ${{ env.ARTIFACT_NAME }} && \
+          mv build/libs/*.jar ${{ env.ARTIFACT_NAME }}/${{ env.JAR_NAME }} && \
+          mv scripts/* ${{ env.ARTIFACT_NAME }}/
 
       - name: Upload artifact file
         uses: actions/upload-artifact@v4
@@ -85,14 +82,12 @@ jobs:
     uses: ./.github/workflows/change_nginx_config.yml
     with:
       self_hosted_runner: prod-c # 추후 변경 prod-a
-      green_port: ${{ needs.deploy-a.outputs.green_port }}
-  
+
   change-nginx-config-b:
     needs: [ deploy-b, error-handling]
     uses: ./.github/workflows/change_nginx_config.yml
     with:
       self_hosted_runner: prod-d # 추후 변경 prod-b
-      green_port: ${{ needs.deploy-b.outputs.green_port }}
   
   on-failure:
     needs: [change-nginx-config-a, change-nginx-config-b]
@@ -101,13 +96,15 @@ jobs:
     steps:
       - name: Rollback
         run: |
-          sudo kill -15 $(sudo lsof -t -i: ${{ needs.deploy-a.outputs.green_port }})
+          sudo kill -15 $(sudo lsof -t -i: $GREEN_PORT)
+          echo "Rollback completed"
 
   on-success:
     needs: [change-nginx-config-a, change-nginx-config-b]
     runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
     if: success()
     steps:
-      - name: Blue Down # todo blue port
+      - name: Blue Down
         run: |
-          sudo kill -15 $(sudo lsof -t -i: 8080) 
+          sudo kill -15 $(sudo lsof -t -i: $BLUE_PORT)
+          echo "Blue Down completed"

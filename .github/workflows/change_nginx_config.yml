@@ -7,10 +7,6 @@ on:
         description: '배포할 self-hosted 러너 이름'
         required: true
         type: string
-      green_port:
-        description: '그린 포트'
-        required: true
-        type: string
 
 env:
   default_path: ~/app
@@ -21,7 +17,7 @@ jobs:
     steps:
       - name: Change Nginx Config
         run: |
-          ${{ env.default_path }}/change_nginx_config.sh ${{ inputs.green_port }}
+          ${{ env.default_path }}/change_nginx_config.sh $GREEN_PORT
           # actuator 포트 변경 보류
           # Nginx Config 변경
           # Nginx 재시작

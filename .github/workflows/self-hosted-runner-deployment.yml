@@ -19,10 +19,6 @@ on:
         description: '배포할 프로파일'
         required: true
         type: string
-    outputs:
-      green_port: 
-        description: '그린 포트'
-        value: ${{ jobs.deploy.outputs.port }}
         
 env:
   default_path: ~/app
@@ -39,13 +35,15 @@ jobs:
             name: ${{ inputs.artifact_name }}
             path: ${{ env.default_path }}
 
-      - name: Get Green Port
-        id: green-port
+      - name: tmp # todo ls 제거
+        run: ls -al scripts && chmod +x scripts/*.sh && ls -al scripts
+
+      - name: Export port environment variable
         run: |
-          ${{ env.default_path }}/get_green_port.sh | awk '{print "port=$0"}' >> $GITHUB_OUTPUT
+          ${{ env.default_path }}/export_port.sh
 
       - name: Start Java Application
-        run: sudo nohup java -Dspring.profiles.active=${{ inputs.profile }} -Dserver.port=${{ steps.green-port.outputs.port }} -Duser.timezone=Asia/Seoul -jar ${{ env.default_path }}/${{ inputs.jar_name }} &
+        run: sudo nohup java -Dspring.profiles.active=${{ inputs.profile }} -Dserver.port=$GREEN_PORT -Duser.timezone=Asia/Seoul -jar ${{ env.default_path }}/${{ inputs.jar_name }} &
   
   health-check:
     needs: deploy
@@ -53,7 +51,7 @@ jobs:
     steps:
       - name: Health Check
         run: |
-          ${{ env.default_path }}/green_health_check.sh ${{ needs.deploy.outputs.port }}
+          ${{ env.default_path }}/green_health_check.sh $GREEN_PORT
 
   debug:
     needs: health-check
