@@ -4,18 +4,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { enterRoom, createRoom } from '@/apis/room';
 import { ROUTES } from '@/constants/routes';
-import useGetmember from '@/hooks/useGetmember';
 import { CreateOrEnterRoomResponse } from '@/types/room';
 import { CustomError } from '@/utils/error';
 
 const useMakeOrEnterRoom = () => {
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-  const {
-    member: { isMaster },
-  } = useGetmember();
-
   const { roomUuid } = useParams();
+
+  // roomUuId가 없다 -> 초대링크를 받지 않은 master이다.
+  const isMaster = !roomUuid;
 
   const createRoomMutation = useMutation<CreateOrEnterRoomResponse, CustomError, string>({
     mutationFn: createRoom,
