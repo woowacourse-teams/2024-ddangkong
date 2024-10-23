@@ -41,10 +41,13 @@ jobs:
       profile: prod
       app_path: ~/app
 
-  deploy-rollback-call:
+  deploy-rollback-notification:
     needs: [ deploy-a, deploy-b ]
-    if: contains(needs.*.result, 'failure')
+    if: failure() && contains(needs.*.result, 'failure')
     runs-on: ubuntu-latest
+    outputs:
+      green_port_a: ${{ needs.deploy-a.outputs.green_port }}
+      green_port_b: ${{ needs.deploy-b.outputs.green_port }}
     steps:
       - name: Send notification to Discord # todo
         run: echo "테스트입니다"
@@ -67,26 +70,22 @@ jobs:
       #     port: ${{ needs.deploy-b.outputs.green_port }}
   
   rollback-a:
-    needs: [ deploy-rollback-call, deploy-a ]
+    needs: [ deploy-rollback-notification ]
     runs-on: prod-c
     steps:
       - name: Rollback a
-        run: |
-          echo "Deploy failed. Rollback server port: ${{ needs.deploy-a.outputs.green_port }}"
-          sudo lsof -t -i :${{ needs.deploy-a.outputs.green_port }} | xargs kill -9
-          exit 1
+        uses: ./.github/actions/rollback/action.yml
+        with:
+          port: ${{ needs.deploy-rollback-notification.outputs.green_port_a }}
 
   rollback-b:
-    needs: [ deploy-rollback-call, deploy-b ]
+    needs: [ deploy-rollback-notification]
     runs-on: prod-d
     steps:
       - name: Rollback b
-        run: |
-          echo "Deploy failed. Rollback server port: ${{ needs.deploy-b.outputs.green_port }}"
-          sudo lsof -t -i :${{ needs.deploy-b.outputs.green_port }} | xargs kill -9
-          exit 1
-
-
+        uses: ./.github/actions/rollback/action.yml
+        with:
+          port: ${{ needs.deploy-rollback-notification.outputs.green_port_b }}
 
   nginx-config: # 여기서 시작
     needs: [ deploy-a, deploy-b ]
