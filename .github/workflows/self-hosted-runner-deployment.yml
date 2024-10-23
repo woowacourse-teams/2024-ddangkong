@@ -26,8 +26,6 @@ env:
 jobs:
   deploy:
     runs-on: ${{ inputs.self_hosted_runner }}
-    outputs:
-      port: ${{ steps.green-port.outputs.port }}
     steps:
       - name: Download artifact file
         uses: actions/download-artifact@v4
@@ -35,15 +33,19 @@ jobs:
             name: ${{ inputs.artifact_name }}
             path: ${{ env.default_path }}
 
-      - name: tmp # todo ls 제거
-        run: ls -al ${{ env.default_path }} && chmod +x ${{ env.default_path }}/*.sh && ls -al ${{ env.default_path }}
-
-      - name: Export port environment variable
+      - name: Get Blue Green Port
+        id: blue_green_port
         run: |
-          ${{ env.default_path }}/export_port.sh
+          chmod +x ${{ env.default_path }}/*.sh && \
+          ${{ env.default_path }}/get_blue_green_port.sh | awk '{print $0}' >> $GITHUB_OUTPUT
+      
+      - name: test
+        run: | 
+          echo ${{ steps.blue_green_port.outputs.green_port }}
+          echo ${{ steps.blue_green_port.outputs.blue_port }}
 
       - name: Start Java Application
-        run: sudo nohup java -Dspring.profiles.active=${{ inputs.profile }} -Dserver.port=$GREEN_PORT -Duser.timezone=Asia/Seoul -jar ${{ env.default_path }}/${{ inputs.jar_name }} &
+        run: sudo nohup java -Dspring.profiles.active=${{ inputs.profile }} -Dserver.port=${{ steps.blue_green_port.outputs.green_port }} -Duser.timezone=Asia/Seoul -jar ${{ env.default_path }}/${{ inputs.jar_name }} &
   
   health-check:
     needs: deploy
