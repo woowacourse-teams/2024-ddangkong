@@ -55,26 +55,21 @@ jobs:
   rollback-a:
     needs: [ deploy-rollback-notification ]
     if: failure() && contains(needs.*.result, 'success')
-    runs-on: prod-c
-    steps:
-      - name: Rollback a
-        uses: ./.github/actions/rollback/action.yml
-        with:
-          port: ${{ needs.deploy-rollback-notification.outputs.green_port_a }}
+    uses: ./.github/workflows/server-rollback.yml
+    with:
+      self_hosted_runner: prod-c # todo a
+      port: ${{ needs.deploy-rollback-notification.outputs.green_port_a }}
 
   rollback-b:
     needs: [ deploy-rollback-notification ]
     if: failure() && contains(needs.*.result, 'success')
-    runs-on: prod-d
-    steps:
-      - name: Rollback b
-        uses: ./.github/actions/rollback/action.yml
-        with:
-          port: ${{ needs.deploy-rollback-notification.outputs.green_port_b }}
+    uses: ./.github/workflows/server-rollback.yml
+    with:
+      self_hosted_runner: prod-d # todo b
+      port: ${{ needs.deploy-rollback-notification.outputs.green_port_b }}
 
   nginx-config: # 여기서 시작
     needs: [ deploy-a, deploy-b ]
-    if: success()
     runs-on: [ prod ]
     steps:
       - name: Change Nginx Config

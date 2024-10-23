@@ -1,0 +1,25 @@
+name: rollback server
+
+on:
+  workflow_call:
+    inputs:
+      self_hosted_runner:
+        description: 'self hosted runner label'
+        required: true
+        type: string
+      port:
+        description: 'rollback port'
+        required: true
+        type: string
+    outputs:
+      rollback_port:
+        value: ${{ inputs.port }}
+
+jobs:
+  rollback:
+    runs-on: ${{ inputs.self_hosted_runner }}
+    steps:
+      - name: Execute rollback # todo exit 1
+        run: |
+          echo "Deploy failed. Rollback server port: ${{ inputs.port }}"
+          sudo lsof -t -i :${{ inputs.port }} | xargs kill -9
