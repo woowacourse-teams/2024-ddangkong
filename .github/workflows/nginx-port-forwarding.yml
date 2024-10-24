@@ -23,6 +23,9 @@ on:
         description: 'shutdown before update'
         required: false
         type: boolean
+      test:
+        type: boolean
+        required: false
     outputs:
       old_port:
         value: ${{ inputs.old_port }}
@@ -40,6 +43,10 @@ jobs:
   update-nginx-port-forwarding:
     runs-on: ${{ inputs.self_hosted_runner }}
     steps:
+      - name: rollback test
+        if: runner.name == 'ip-10-0-21-212' && ${{ inputs.test }}
+        run: exit 1
+
       - name: Update Nginx port forwarding from ${{ inputs.old_port }} to ${{ inputs.new_port }}
         run: ${{ inputs.app_path }}/change_nginx_port_forwarding.sh ${{ inputs.old_port }} ${{ inputs.new_port }}
       

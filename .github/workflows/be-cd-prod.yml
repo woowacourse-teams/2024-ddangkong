@@ -80,6 +80,7 @@ jobs:
       app_path: ~/app
       old_port: ${{ needs.deploy-b.outputs.blue_port }}
       new_port: ${{ needs.deploy-b.outputs.green_port }}
+      test: true
 
   detect-configure-nginx-faliure:
     needs: [ configure-nginx-a, configure-nginx-b ]
