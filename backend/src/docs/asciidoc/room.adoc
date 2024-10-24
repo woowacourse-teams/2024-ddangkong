@@ -98,6 +98,10 @@ include::{snippets}/room/leave/path-parameters.adoc[]
 
 include::{snippets}/room/leave/http-response.adoc[]
 
+response cookies
+
+include::{snippets}/room/leave/response-cookies.adoc[]
+
 '''
 
 === 방 설정 변경
