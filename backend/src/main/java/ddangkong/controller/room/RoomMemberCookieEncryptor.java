@@ -23,19 +23,18 @@ public class RoomMemberCookieEncryptor {
         this.rejoinKey = rejoinKey;
     }
 
-    public ResponseCookie getEncodedCookie(Object value, String requestURL) {
+    public ResponseCookie getEncodedCookie(Object value, String origin) {
         String encrypt = encryptionUtils.encrypt(String.valueOf(value));
         return ResponseCookie.from(rejoinKey, encrypt)
                 .httpOnly(true)
                 .secure(true)
                 .path(DEFAULT_PATH)
-                .sameSite(getSameSiteOption(requestURL))
+                .sameSite(getSameSiteOption(origin))
                 .build();
     }
 
-    private String getSameSiteOption(String url) {
-        log.info("request url = {}", url);
-        if (url.startsWith(LOCALHOST)) {
+    private String getSameSiteOption(String origin) {
+        if (origin.startsWith(LOCALHOST)) {
             return NONE;
         }
         return LAX;

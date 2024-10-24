@@ -20,10 +20,10 @@ class RoomMemberCookieEncryptorTest extends BaseControllerTest {
         void 로컬_환경인_경우_SameSite는_None_이다() {
             // given
             String value = "ThisIsMySecretKe";
-            String uri = "http://localhost:3306/api";
+            String origin = "http://localhost:3306/api";
            
             // when
-            ResponseCookie encodedCookie = roomMemberCookieEncryptor.getEncodedCookie(value, uri);
+            ResponseCookie encodedCookie = roomMemberCookieEncryptor.getEncodedCookie(value, origin);
 
             // then
             assertThat(encodedCookie.getSameSite()).isEqualTo("None");
@@ -33,10 +33,10 @@ class RoomMemberCookieEncryptorTest extends BaseControllerTest {
         void 로컬_환경이_아닌_경우_SameSite는_Lax_이다() {
             // given
             String value = "ThisIsMySecretKe";
-            String uri = "ddangkong.kr";
+            String origin = "ddangkong.kr";
 
             // when
-            ResponseCookie encodedCookie = roomMemberCookieEncryptor.getEncodedCookie(value, uri);
+            ResponseCookie encodedCookie = roomMemberCookieEncryptor.getEncodedCookie(value, origin);
 
             // then
             assertThat(encodedCookie.getSameSite()).isEqualTo("Lax");
