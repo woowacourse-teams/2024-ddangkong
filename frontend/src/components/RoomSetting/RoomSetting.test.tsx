@@ -28,7 +28,7 @@ describe('RoomSetting 컴포넌트 테스트', () => {
   it('방장이 아닌 사람이 RoomSetting를 누르면 설정 modal이 뜨지 않는다', async () => {
     // Given
     server.use(
-      http.get(MOCK_API_URL.getMember, async () => {
+      http.get(MOCK_API_URL.getUserInfo, async () => {
         return HttpResponse.json(
           {
             member: {
