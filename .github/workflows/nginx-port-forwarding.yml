@@ -19,7 +19,7 @@ on:
         description: 'new port for Nginx port forwarding'
         required: true
         type: string
-      with_shutdown:
+      old_shutdown:
         description: 'shutdown before update'
         required: false
         type: boolean
@@ -30,8 +30,8 @@ on:
         value: ${{ inputs.new_port }}
 
 jobs:
-  shutdown:
-    if: ${{ inputs.with_shutdown }}
+  old_shutdown:
+    if: ${{ inputs.old_shutdown }}
     uses: ./.github/workflows/shutdown.yml
     with:
       self_hosted_runner: ${{ inputs.self_hosted_runner }}

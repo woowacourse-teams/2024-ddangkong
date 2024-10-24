@@ -103,7 +103,7 @@ jobs:
       app_path: ~/app
       old_port: ${{ needs.detect-configure-nginx-faliure.outputs.new_port_a }}
       new_port: ${{ needs.detect-configure-nginx-faliure.outputs.old_port_a }}
-      with_shutdown: true
+      old_shutdown: true
  
   rollback-nginx-b:
     needs: [ detect-configure-nginx-faliure ]
@@ -114,7 +114,7 @@ jobs:
       app_path: ~/app
       old_port: ${{ needs.detect-configure-nginx-faliure.outputs.new_port_b }}
       new_port: ${{ needs.detect-configure-nginx-faliure.outputs.old_port_b }}
-      with_shutdown: true
+      old_shutdown: true
 
   blue-shutdown-a:
     needs: [ configure-nginx-a ]
