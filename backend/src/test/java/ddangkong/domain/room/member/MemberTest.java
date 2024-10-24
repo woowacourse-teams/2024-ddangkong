@@ -66,7 +66,7 @@ class MemberTest {
             assertThat(actual).isFalse();
         }
     }
-    
+
     @Nested
     class 닉네임_검증 {
 
@@ -78,7 +78,7 @@ class MemberTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = {"0", "", "0123456789123"})
+        @ValueSource(strings = {" ", "", "0123456789123"})
         void 닉네임_길이가_유효하지_않는_경우_예외를_발생시킨다(String name) {
             // when & then
             assertThatThrownBy(() -> Member.createMaster(name, ROOM))
