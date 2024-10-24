@@ -63,6 +63,12 @@ export const rankPercentWrapper = css`
   width: 15%;
 `;
 
+export const rankPercentWrapper = css`
+  display: flex;
+  justify-content: center;
+  width: 15%;
+`;
+
 export const rankPercent = css`
   ${Theme.typography.headline3};
 `;
