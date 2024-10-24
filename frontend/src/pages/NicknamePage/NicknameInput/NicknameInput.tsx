@@ -5,7 +5,7 @@ import { nicknameInput, nicknameInputContainer, nicknameLengthText } from './Nic
 import createRandomNickname from '../createRandomNickname';
 
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
-import { NICKNAME_MAX_LENGTH } from '@/constants/config';
+import { NICKNAME_MIN_LENGTH, NICKNAME_MAX_LENGTH } from '@/constants/config';
 
 interface NicknameInputProps {
   nicknameInputRef: RefObject<HTMLInputElement>;
@@ -32,6 +32,7 @@ const NicknameInput = ({ nicknameInputRef, handleMakeOrEnterRoom }: NicknameInpu
         ref={nicknameInputRef}
         css={nicknameInput}
         placeholder={randomNickname}
+        minLength={NICKNAME_MIN_LENGTH}
         maxLength={NICKNAME_MAX_LENGTH}
         value={nickname}
         onChange={handleChangeInput}

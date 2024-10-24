@@ -8,6 +8,7 @@ export const ERROR_MESSAGE: Record<ErrorCode, string> = {
   NOT_FOUND_ROOM: '해당 방을 찾을 수 없어요. 방을 새로 만들어주세요!', // 없는 방 또는 모두 나간 방에 참여를 요청할 때
 
   // 유저 관련 에러 (master)
+  INVALID_NICKNAME: '닉네임은 최소 1글자 이상 최대 12글자 이하여야 합니다.',
   NOT_ROOM_MEMBER: '사용자가 해당 방에 존재하지 않아요. 다시 접속해볼까요?', // 잘못된 memberId를 보낼 때 (투표, 최종 결과)
   EXCEED_MAX_MEMBER_COUNT: '방의 최대 인원을 초과했습니다.', // 인원이 꽉 찬 방에 들어가려고 할 때
   ALREADY_EXIST_MASTER: '이미 방장이 존재합니다.',
