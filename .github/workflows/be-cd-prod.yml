@@ -64,7 +64,7 @@ jobs:
       port: ${{ needs.detect-deploy-failure.outputs.green_port_b }}
 
   configure-nginx-a:
-    needs: [ deploy-a ]
+    needs: [ deploy-a, deploy-b ]
     uses: ./.github/workflows/nginx-port-forwarding.yml
     with:
       self_hosted_runner: prod-c # todo a
@@ -73,7 +73,7 @@ jobs:
       new_port: ${{ needs.deploy-a.outputs.green_port }}
 
   configure-nginx-b:
-    needs: [ deploy-b ]
+    needs: [ deploy-a, deploy-b ]
     uses: ./.github/workflows/nginx-port-forwarding.yml
     with:
       self_hosted_runner: prod-d # todo b
