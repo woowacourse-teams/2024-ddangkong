@@ -36,32 +36,29 @@ jobs:
       profile: prod
       app_path: ~/app
 
-  detect-deploy-failure:
+  rollback-a:
     needs: [ deploy-a, deploy-b ]
     if: failure() && (needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure')
-    runs-on: ubuntu-latest
-    outputs:
-      green_port_a: ${{ needs.deploy-a.outputs.green_port }}
-      green_port_b: ${{ needs.deploy-b.outputs.green_port }}
-    steps:
-      - name: Send notification to Discord # todo
-        run: echo "테스트입니다"
-
-  rollback-a:
-    needs: [ detect-deploy-failure ]
-    if: failure() && needs.detect-deploy-failure.result == 'success'
     uses: ./.github/workflows/shutdown.yml
     with:
       self_hosted_runner: prod-c # todo a
-      port: ${{ needs.detect-deploy-failure.outputs.green_port_a }}
+      port: ${{ needs.deploy-a.outputs.green_port }}
 
   rollback-b:
-    needs: [ detect-deploy-failure ]
-    if: failure() && needs.detect-deploy-failure.result == 'success'
+    needs: [ deploy-a, deploy-b ]
+    if: failure() && (needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure')
     uses: ./.github/workflows/shutdown.yml
     with:
       self_hosted_runner: prod-d # todo b
-      port: ${{ needs.detect-deploy-failure.outputs.green_port_b }}
+      port: ${{ needs.deploy-b.outputs.green_port }}
+
+  deploy-failure-notification:
+    needs: [ deploy-a, deploy-b ]
+    if: failure() && (needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification to Discord # todo
+        run: echo "테스트입니다"
 
   configure-nginx-a:
     needs: [ deploy-a, deploy-b ]
@@ -82,40 +79,35 @@ jobs:
       new_port: ${{ needs.deploy-b.outputs.green_port }}
       test: true
 
-  detect-configure-nginx-faliure:
+  rollback-nginx-a:
     needs: [ configure-nginx-a, configure-nginx-b ]
     if: failure() && (needs.configure-nginx-a.result == 'failure' || needs.configure-nginx-b.result == 'failure')
-    runs-on: ubuntu-latest
-    outputs:
-      old_port_a: ${{ needs.configure-nginx-a.outputs.old_port }}
-      new_port_a: ${{ needs.configure-nginx-a.outputs.new_port }}
-      old_port_b: ${{ needs.configure-nginx-b.outputs.old_port }}
-      new_port_b: ${{ needs.configure-nginx-b.outputs.new_port }}
-    steps:
-      - name: Send notification to Discord # todo
-        run: echo "테스트입니다"
-
-  rollback-nginx-a:
-    needs: [ detect-configure-nginx-faliure ]
-    if: failure() && needs.detect-configure-nginx-faliure.result == 'success'
     uses: ./.github/workflows/nginx-port-forwarding.yml
     with:
       self_hosted_runner: prod-c # todo a
       app_path: ~/app
-      old_port: ${{ needs.detect-configure-nginx-faliure.outputs.new_port_a }}
-      new_port: ${{ needs.detect-configure-nginx-faliure.outputs.old_port_a }}
+      old_port: ${{ needs.configure-nginx-a.outputs.new_port }}
+      new_port: ${{ needs.configure-nginx-a.outputs.old_port }}
       old_shutdown: true
- 
+
   rollback-nginx-b:
-    needs: [ detect-configure-nginx-faliure ]
-    if: failure() && needs.detect-configure-nginx-faliure.result == 'success'
+    needs: [ configure-nginx-a, configure-nginx-b ]
+    if: failure() && (needs.configure-nginx-a.result == 'failure' || needs.configure-nginx-b.result == 'failure')
     uses: ./.github/workflows/nginx-port-forwarding.yml
     with:
       self_hosted_runner: prod-d # todo b
       app_path: ~/app
-      old_port: ${{ needs.detect-configure-nginx-faliure.outputs.new_port_b }}
-      new_port: ${{ needs.detect-configure-nginx-faliure.outputs.old_port_b }}
+      old_port: ${{ needs.configure-nginx-b.outputs.new_port }}
+      new_port: ${{ needs.configure-nginx-b.outputs.old_port }}
       old_shutdown: true
+
+  configure-nginx-faliure-notification:
+    needs: [ configure-nginx-a, configure-nginx-b ]
+    if: failure() && (needs.configure-nginx-a.result == 'failure' || needs.configure-nginx-b.result == 'failure')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification to Discord # todo
+        run: echo "테스트입니다"
 
   blue-shutdown-a:
     needs: [ configure-nginx-a, configure-nginx-b ]
@@ -130,11 +122,3 @@ jobs:
     with:
       self_hosted_runner: prod-d # todo b
       port: ${{ needs.configure-nginx-b.outputs.old_port }}
-
-  # on-failure:
-  #   needs: [ blue-down ] # 알림
-    
-  #   if: ${{ needs.blue-down.result == 'failure' }}
-  #   steps:
-  #     - name: Send Notification
-  #       run: echo "테스트입니다"
