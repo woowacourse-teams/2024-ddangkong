@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Deploy blue/green in A
         id: blue-green
-        uses: ./.github/actions/blue-green/action.yml
+        uses: ./.github/actions/blue-green
         with:
           artifact_name: ${{ needs.build.outputs.artifact_name }}
           jar_name: ${{ needs.build.outputs.jar_name }}
@@ -45,14 +45,14 @@ jobs:
     steps:
       - name: Deploy blue/green in B
         id: blue-green
-        uses: ./.github/actions/blue-green/action.yml
+        uses: ./.github/actions/blue-green
         with:
           artifact_name: ${{ needs.build.outputs.artifact_name }}
           jar_name: ${{ needs.build.outputs.jar_name }}
           profile: ${{ env.PROFILE }}
           app_path: ${{ env.APP_PATH }}
 
-  deploy-rollback-notification:
+  detect-deploy-failure:
     needs: [ deploy-a, deploy-b ]
     if: failure() && contains(needs.*.result, 'failure')
     runs-on: ubuntu-latest
@@ -64,24 +64,24 @@ jobs:
         run: echo "테스트입니다"
 
   rollback-a:
-    needs: [ deploy-rollback-notification ]
+    needs: [ detect-deploy-failure ]
     if: failure() && contains(needs.*.result, 'success')
     runs-on: [ prod-c ] # todo a
     steps:
       - name: Shutdown green in A
-        uses: ./.github/actions/shutdown/action.yml
+        uses: ./.github/actions/shutdown
         with:
-          port: ${{ needs.deploy-rollback-notification.outputs.green_port_a }}
+          port: ${{ needs.detect-deploy-failure.outputs.green_port_a }}
 
   rollback-b:
-    needs: [ deploy-rollback-notification ]
+    needs: [ detect-deploy-failure ]
     if: failure() && contains(needs.*.result, 'success')
     runs-on: [ prod-d ] # todo b
     steps:
       - name: Shutdown green in B
-        uses: ./.github/actions/shutdown/action.yml
+        uses: ./.github/actions/shutdown
         with:
-          port: ${{ needs.deploy-rollback-notification.outputs.green_port_b }}
+          port: ${{ needs.detect-deploy-failure.outputs.green_port_b }}
 
   configure-nginx-a:
     needs: [ deploy-a ]
@@ -91,7 +91,7 @@ jobs:
       green_port: ${{ needs.deploy-a.outputs.green_port }}
     steps:
       - name: Change Nginx port forwarding to green port in A
-        uses: ./.github/actions/nginx-port-forwarding/action.yml
+        uses: ./.github/actions/nginx-port-forwarding
         with:
           app_path: ${{ env.APP_PATH }}
           new_port: ${{ needs.deploy-a.outputs.green_port }}
@@ -107,7 +107,7 @@ jobs:
       green_port: ${{ needs.deploy-b.outputs.green_port }}
     steps:
       - name: Update Nginx port forwarding to green port in B
-        uses: ./.github/actions/nginx-port-forwarding/action.yml
+        uses: ./.github/actions/nginx-port-forwarding
         with:
           app_path: ${{ env.APP_PATH }}
           new_port: ${{ needs.deploy-b.outputs.green_port }}
@@ -115,7 +115,7 @@ jobs:
       - name: Reload Nginx
         run: sudo nginx -s reload # todo 에러 처리
 
-  configure-nginx-rollback-notification:
+  detect-configure-nginx-faliure:
     needs: [ configure-nginx-a, configure-nginx-b ]
     if: failure() && contains(needs.*.result, 'failure')
     runs-on: ubuntu-latest
@@ -129,49 +129,49 @@ jobs:
         run: echo "테스트입니다"
   
   rollback-nginx-a:
-    needs: [ configure-nginx-rollback-notification ]
+    needs: [ detect-configure-nginx-faliure ]
     if: failure() && contains(needs.*.result, 'success')
     runs-on: [ prod-c ] # todo a
     steps:
       - name: Rollback Nginx port forwarding to blue port in A
-        uses: ./.github/actions/nginx-port-forwarding/action.yml
+        uses: ./.github/actions/nginx-port-forwarding
         with:
           app_path: ${{ env.APP_PATH }}
-          new_port: ${{ needs.configure-nginx-rollback-notification.outputs.blue_port_a }}
+          new_port: ${{ needs.detect-configure-nginx-faliure.outputs.blue_port_a }}
 
       - name: Reload Nginx
         run: sudo nginx -s reload # todo 에러 처리
 
       - name: Shutdown green in A
-        uses: ./.github/actions/shutdown/action.yml
+        uses: ./.github/actions/shutdown
         with:
-          port: ${{ needs.configure-nginx-rollback-notification.outputs.green_port_a }}
+          port: ${{ needs.detect-configure-nginx-faliure.outputs.green_port_a }}
  
   rollback-nginx-b:
-    needs: [ configure-nginx-rollback-notification ]
+    needs: [ detect-configure-nginx-faliure ]
     if: failure() && contains(needs.*.result, 'success')
     runs-on: [ prod-d ] # todo b
     steps:
       - name: Rollback Nginx port forwarding to blue port in B
-        uses: ./.github/actions/nginx-port-forwarding/action.yml
+        uses: ./.github/actions/nginx-port-forwarding
         with:
           app_path: ${{ env.APP_PATH }}
-          new_port: ${{ needs.configure-nginx-rollback-notification.outputs.blue_port_b }}
+          new_port: ${{ needs.detect-configure-nginx-faliure.outputs.blue_port_b }}
 
       - name: Reload Nginx
         run: sudo nginx -s reload # todo 에러 처리
 
       - name: Shutdown green in B
-        uses: ./.github/actions/shutdown/action.yml
+        uses: ./.github/actions/shutdown
         with:
-          port: ${{ needs.configure-nginx-rollback-notification.outputs.green_port_b }}
+          port: ${{ needs.detect-configure-nginx-faliure.outputs.green_port_b }}
 
   blue-shutdown-a:
     needs: [ configure-nginx-a ]
     runs-on: [ prod-c ] # todo a
     steps:
       - name: Shutdown blue in A
-        uses: ./.github/actions/shutdown/action.yml
+        uses: ./.github/actions/shutdown
         with:
           port: ${{ needs.configure-nginx-a.outputs.blue_port }}
   
@@ -180,7 +180,7 @@ jobs:
     runs-on: [ prod-d ] # todo b
     steps:
       - name: Shutdown blue in B
-        uses: ./.github/actions/shutdown/action.yml
+        uses: ./.github/actions/shutdown
         with:
           port: ${{ needs.configure-nginx-b.outputs.blue_port }}
 
