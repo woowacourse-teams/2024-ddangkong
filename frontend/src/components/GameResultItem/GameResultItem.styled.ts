@@ -6,7 +6,9 @@ export const rankItem = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.4rem;
   width: 100%;
+
   ${Theme.typography.headline3};
 
   :focus {
@@ -34,15 +36,25 @@ export const rankNumber = css`
 export const nicknameContainer = (percent: number) => css`
   display: flex;
   overflow: visible;
+  position: relative;
   align-items: center;
   gap: 1rem;
-  width: ${percent > 5 ? percent - 5 : percent}%;
+
+  width: ${percent > 15 ? percent - 15 : percent}%;
   height: 100%;
-  padding: 1.2rem;
+  padding: 2rem 1.2rem;
   border-radius: ${Theme.borderRadius.radius20};
 
   background-color: ${Theme.color.peanut400};
-  transition: all 2s;
+  transition: all 1s;
+`;
+
+export const useInfoWrapper = css`
+  display: flex;
+  position: absolute;
+  align-items: center;
+  gap: 0.8rem;
+  width: 55vw;
 `;
 
 export const rankPercentWrapper = css`

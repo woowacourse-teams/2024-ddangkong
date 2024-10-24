@@ -9,6 +9,7 @@ import {
   rankNumberContainer,
   rankPercent,
   rankPercentWrapper,
+  useInfoWrapper,
 } from './GameResultItem.styled';
 
 import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
@@ -34,8 +35,10 @@ const GameResultItem = forwardRef<HTMLLIElement, GameResultItemProps>(
             <span css={rankNumber}>{`${rank}위`}</span>
           </div>
           <div css={nicknameContainer(animatedRankPercent)}>
-            <img src={SillyDdangkongMedium} alt="" css={profileImage} />
-            <span css={nickname}>{nickname}</span>
+            <div css={useInfoWrapper}>
+              <img src={SillyDdangkongMedium} alt="" css={profileImage} />
+              <span css={nickname}>{nickname}</span>
+            </div>
           </div>
         </div>
         <div css={rankPercentWrapper}>
