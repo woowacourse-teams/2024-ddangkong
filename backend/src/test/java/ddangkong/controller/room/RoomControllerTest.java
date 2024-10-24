@@ -1,6 +1,7 @@
 package ddangkong.controller.room;
 
 import static ddangkong.support.fixture.MemberFixture.PRIN;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -369,6 +370,35 @@ class RoomControllerTest extends BaseControllerTest {
 
             // then
             assertThat(body.nickname()).isEqualTo(roomJoinResponse.member().nickname());
+        }
+
+        @Test
+        void 방을_나가면_쿠키를_삭제한다() {
+            // given
+            RoomJoinRequest body = new RoomJoinRequest("참가자");
+            String cookie = RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .body(body)
+                    .when().post("/api/balances/rooms")
+                    .getCookie("test_cookie");
+
+            RoomJoinResponse roomJoinResponse = RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .cookie("test_cookie", cookie)
+                    .when().get("/api/balances/rooms/member")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomJoinResponse.class);
+
+            // when
+            String deleteCookie = RestAssured.given().log().all()
+                    .pathParam("roomId", roomJoinResponse.roomId())
+                    .pathParam("memberId", roomJoinResponse.member().memberId())
+                    .cookie("test_cookie", cookie)
+                    .when().delete("/api/balances/rooms/{roomId}/members/{memberId}")
+                    .getCookie("test_cookie");
+
+            assertThat(deleteCookie).isBlank();
         }
     }
 }

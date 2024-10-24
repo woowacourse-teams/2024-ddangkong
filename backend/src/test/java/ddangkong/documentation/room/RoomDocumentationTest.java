@@ -271,6 +271,9 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             pathParameters(
                                     parameterWithName("roomId").description("방 ID"),
                                     parameterWithName("memberId").description("멤버 ID")
+                            ),
+                            responseCookies(
+                                    cookieWithName("test_cookie").description("삭제 쿠키")
                             )
                     ));
         }
