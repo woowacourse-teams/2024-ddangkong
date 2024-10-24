@@ -26,7 +26,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ddangkong.controller.room.RejoinCookieEncryptor;
+import ddangkong.controller.room.RoomMemberCookieEncryptor;
 import ddangkong.controller.room.EncryptionUtils;
 import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
@@ -37,6 +37,7 @@ import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomMemberResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomSettingResponse;
 import ddangkong.facade.room.dto.RoomStatusResponse;
@@ -53,7 +54,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 
 @WebMvcTest(value = RoomController.class)
-@Import(value = {RejoinCookieEncryptor.class, EncryptionUtils.class})
+@Import(value = {RoomMemberCookieEncryptor.class, EncryptionUtils.class})
 class RoomDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
@@ -218,16 +219,16 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     }
 
     @Nested
-    class 방_재참여 {
+    class 사용자_정보_조회 {
 
-        private static final String ENDPOINT = "/api/balances/rooms/rejoin";
+        private static final String ENDPOINT = "/api/balances/rooms/member";
 
         @Test
-        void 방에_재참여하여_유저_정보를_조회한다() throws Exception {
+        void 사용자_정보를_조회한다() throws Exception {
             // given
-            RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
+            RoomMemberResponse response = new RoomMemberResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
                     new MemberResponse(2L, "타콩", false));
-            when(roomFacade.rejoinRoom(anyLong())).thenReturn(response);
+            when(roomFacade.getRoomMemberInfo(anyLong())).thenReturn(response);
 
             //when & then
             mockMvc.perform(get(ENDPOINT)
@@ -235,7 +236,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             .cookie(new Cookie("test_cookie", "oNnHwjSR1G4E5L8Mute61w=="))
                     )
                     .andExpect(status().isOk())
-                    .andDo(document("room/rejoin",
+                    .andDo(document("room/member",
                             requestCookies(
                                     cookieWithName("test_cookie").description("사용자 인증에 필요한 쿠키(쿠키의 키 값은 UUID로 예측할 수 없는 값이 들어감)")
                             ),

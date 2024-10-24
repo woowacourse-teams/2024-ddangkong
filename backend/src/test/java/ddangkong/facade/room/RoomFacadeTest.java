@@ -26,6 +26,7 @@ import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomMemberResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
@@ -126,10 +127,10 @@ class RoomFacadeTest extends BaseServiceTest {
     }
 
     @Nested
-    class 방_재참여 {
+    class 사용자_정보_조회 {
 
         @Test
-        void 이전_방에_재참여한다() {
+        void 사용자_정보를_조회한다() {
             // given
             String nickname = "나는참가자";
             String uuid = "uuid4";
@@ -137,7 +138,7 @@ class RoomFacadeTest extends BaseServiceTest {
             roomFacade.joinRoom(nickname, uuid);
 
             // when
-            RoomJoinResponse actual = roomFacade.rejoinRoom(14L);
+            RoomMemberResponse actual = roomFacade.getRoomMemberInfo(14L);
 
             // then
             assertAll(
@@ -148,12 +149,12 @@ class RoomFacadeTest extends BaseServiceTest {
         }
 
         @Test
-        void 존재하지_않는_아이디로_방에_재참여할_수_없다() {
+        void 존재하지_않는_아이디로_사용자_정보를_조회할_수_없다() {
             // given
             Long notExistMemberId = 0L;
 
             // when & then
-            assertThatThrownBy(() -> roomFacade.rejoinRoom(notExistMemberId))
+            assertThatThrownBy(() -> roomFacade.getRoomMemberInfo(notExistMemberId))
                     .isExactlyInstanceOf(InvalidMemberIdException.class);
         }
     }
