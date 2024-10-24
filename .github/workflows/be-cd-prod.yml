@@ -118,14 +118,14 @@ jobs:
       old_shutdown: true
 
   blue-shutdown-a:
-    needs: [ configure-nginx-a ]
+    needs: [ configure-nginx-a, configure-nginx-b ]
     uses: ./.github/workflows/shutdown.yml
     with:
       self_hosted_runner: prod-c # todo a
       port: ${{ needs.configure-nginx-a.outputs.old_port }}
   
   blue-shutdown-b:
-    needs: [ configure-nginx-b ]
+    needs: [ configure-nginx-a, configure-nginx-b ]
     uses: ./.github/workflows/shutdown.yml
     with:
       self_hosted_runner: prod-d # todo b

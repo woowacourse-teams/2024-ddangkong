@@ -48,7 +48,7 @@ jobs:
         run: exit 1
 
       - name: Update Nginx port forwarding from ${{ inputs.old_port }} to ${{ inputs.new_port }}
-        run: ${{ inputs.app_path }}/change_nginx_port_forwarding.sh ${{ inputs.old_port }} ${{ inputs.new_port }}
+        run: ${{ inputs.app_path }}/change_nginx_port_forwarding.sh ${{ inputs.new_port }}
       
       - name: Reload Nginx
         run: sudo nginx -s reload # todo 에러 처리
