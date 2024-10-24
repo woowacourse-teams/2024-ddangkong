@@ -6,7 +6,9 @@ import useGetUserInfo from '@/hooks/useGetUserInfo';
 import { deleteAllCookies } from '@/utils/cookie';
 
 export const useExit = () => {
-  const { member: memberId } = useGetUserInfo();
+  const {
+    member: { memberId },
+  } = useGetUserInfo();
   const navigate = useNavigate();
   const { roomId } = useParams();
 
