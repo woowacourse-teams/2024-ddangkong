@@ -2,6 +2,7 @@ package ddangkong.controller.room;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.server.Cookie.SameSite;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +10,6 @@ import org.springframework.stereotype.Component;
 public class RoomMemberCookieEncryptor {
 
     private static final String DEFAULT_PATH = "/api/balances/rooms";
-    private static final String NONE = "None";
-    private static final String LAX = "Lax";
     private static final String LOCALHOST = "http://localhost";
 
     private final EncryptionUtils encryptionUtils;
@@ -34,9 +33,9 @@ public class RoomMemberCookieEncryptor {
 
     private String getSameSiteOption(String origin) {
         if (origin != null && origin.startsWith(LOCALHOST)) {
-            return NONE;
+            return SameSite.NONE.attributeValue();
         }
-        return LAX;
+        return SameSite.LAX.attributeValue();
     }
 
     public Long getDecodedCookieValue(String cookieValue) {
