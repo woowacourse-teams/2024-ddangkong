@@ -1,12 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
 
 import { startGame } from '@/apis/room';
-import { memberInfoState } from '@/recoil/atom';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 
 export const useGameStart = () => {
-  const [memberInfo, setMemberInfo] = useRecoilState(memberInfoState);
+  const {
+    member: { isMaster },
+  } = useGetUserInfo();
   const { roomId } = useParams();
 
   const startGameMutation = useMutation({
@@ -14,10 +15,10 @@ export const useGameStart = () => {
   });
 
   const handleGameStart = () => {
-    if (memberInfo.isMaster) {
+    if (isMaster) {
       startGameMutation.mutate();
     }
   };
 
-  return { memberInfo, handleGameStart, setMemberInfo, ...startGameMutation };
+  return { isMaster, handleGameStart, ...startGameMutation };
 };

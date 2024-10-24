@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 
 import useMoveNextRoundMutation from './NextRoundButton.hook';
 import { createRandomNextRoundMessage, getNextRoundButtonText } from './NextRoundButton.utils';
@@ -9,14 +8,16 @@ import Button from '../Button/Button';
 import { bottomButtonLayout } from '../Button/Button.styled';
 
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 import useModal from '@/hooks/useModal';
-import { memberInfoState } from '@/recoil/atom';
 
 const NextRoundButton = () => {
   const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
   const { mutate: moveNextRound, isPending, isSuccess } = useMoveNextRoundMutation(Number(roomId));
-  const memberInfo = useRecoilValue(memberInfoState);
+  const {
+    member: { isMaster },
+  } = useGetUserInfo();
   const { show } = useModal();
 
   const returnFocusRef = useRef<HTMLButtonElement>(null);
@@ -33,9 +34,9 @@ const NextRoundButton = () => {
       <Button
         ref={returnFocusRef}
         style={{ width: '100%' }}
-        text={getNextRoundButtonText(memberInfo.isMaster, isLastRound, isPending || isSuccess)}
+        text={getNextRoundButtonText(isMaster, isLastRound, isPending || isSuccess)}
         onClick={isLastRound ? moveNextRound : showModal}
-        disabled={!memberInfo.isMaster || isPending || isSuccess}
+        disabled={!isMaster || isPending || isSuccess}
       />
     </div>
   );

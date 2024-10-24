@@ -4,6 +4,7 @@ import CATEGORY_LIST from '../data/categoryList.json';
 import CREATE_ROOM_RESPONSE from '../data/createRoomResponse.json';
 import ENTER_ROOM_RESPONSE from '../data/enterRoomResponse.json';
 import MASTER_AND_INITIAL from '../data/masterAndInitial.json';
+import ROOM_AND_MASTER from '../data/roomAndMaster.json';
 import ROOM_INFO from '../data/roomInfo.json';
 
 import { MOCK_API_URL } from '@/constants/url';
@@ -62,7 +63,12 @@ const isJoinableRoomHandler = () => {
   return HttpResponse.json({ isJoinable: false }, { status: 200 });
 };
 
+const getUserInfoHandler = () => {
+  return HttpResponse.json(ROOM_AND_MASTER, { status: 200 });
+};
+
 export const roomHandler = [
+  http.get(MOCK_API_URL.getUserInfo, getUserInfoHandler),
   http.get(MOCK_API_URL.getRoomInfo, getRoomInfoHandler),
   http.post(MOCK_API_URL.room, createRoomHandler),
   http.post(MOCK_API_URL.enterRoom, enterRoomHandler),

@@ -38,7 +38,13 @@ enableMocking().then(() => {
           <ToastProvider>
             <RouterProvider router={router} />
           </ToastProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
+          <div
+            style={{
+              fontSize: '18px',
+            }}
+          >
+            <ReactQueryDevtools initialIsOpen={false} />
+          </div>
         </ThemeProvider>
       </RecoilRoot>
     </QueryClientProvider>,

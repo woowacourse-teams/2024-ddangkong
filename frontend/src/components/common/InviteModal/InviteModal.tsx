@@ -1,6 +1,5 @@
 import { RefObject } from 'react';
 import QRCode from 'react-qr-code';
-import { useRecoilValue } from 'recoil';
 
 import {
   inviteModalLi,
@@ -18,8 +17,8 @@ import Modal from '../Modal/Modal';
 
 import CopyIcon from '@/assets/images/copyIcon.png';
 import { INVITE_URL } from '@/constants/url';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 import useToast from '@/hooks/useToast';
-import { roomUuidState } from '@/recoil/atom';
 
 interface InviteModalProps {
   isOpen: boolean;
@@ -28,7 +27,7 @@ interface InviteModalProps {
 }
 
 const InviteModal = ({ isOpen, onClose, returnFocusRef }: InviteModalProps) => {
-  const roomUuid = useRecoilValue(roomUuidState);
+  const { roomUuid } = useGetUserInfo();
   const inviteUrl = INVITE_URL(roomUuid);
 
   const { copyToClipboard } = useClipBoard();

@@ -1,31 +1,23 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
 
 import { enterRoom, createRoom } from '@/apis/room';
 import { ROUTES } from '@/constants/routes';
-import { memberInfoState, roomUuidState } from '@/recoil/atom';
 import { CreateOrEnterRoomResponse } from '@/types/room';
 import { CustomError } from '@/utils/error';
 
 const useMakeOrEnterRoom = () => {
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-  const [{ isMaster }, setMemberInfo] = useRecoilState(memberInfoState);
-
-  const [, setRoomUuidState] = useRecoilState(roomUuidState);
   const { roomUuid } = useParams();
+
+  // roomUuId가 없다 -> 초대링크를 받지 않은 master이다.
+  const isMaster = !roomUuid;
 
   const createRoomMutation = useMutation<CreateOrEnterRoomResponse, CustomError, string>({
     mutationFn: createRoom,
     onSuccess: (data) => {
-      setMemberInfo((prev) => ({
-        ...prev,
-        memberId: data.member.memberId,
-        nickname: data.member.nickname,
-      }));
-      setRoomUuidState(data.roomUuid || '');
       navigate(ROUTES.ready(Number(data.roomId)), { replace: true });
     },
   });
@@ -37,12 +29,6 @@ const useMakeOrEnterRoom = () => {
   >({
     mutationFn: ({ nickname, roomUuid }) => enterRoom(roomUuid, nickname),
     onSuccess: (data) => {
-      setMemberInfo((prev) => ({
-        ...prev,
-        memberId: data.member.memberId,
-        nickname: data.member.nickname,
-      }));
-      setRoomUuidState(data.roomUuid || '');
       navigate(ROUTES.ready(Number(data.roomId)), { replace: true });
     },
   });

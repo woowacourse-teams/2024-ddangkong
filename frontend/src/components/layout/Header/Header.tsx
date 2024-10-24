@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 
 import {
   buttonWrapper,
@@ -26,8 +25,8 @@ import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingMo
 import { convertMsecToSecond } from '@/components/SelectContainer/Timer/Timer.util';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useFocus from '@/hooks/useFocus';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 import useModal from '@/hooks/useModal';
-import { memberInfoState } from '@/recoil/atom';
 
 interface HeaderProps {
   title: string;
@@ -67,7 +66,10 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 // 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
-  const { isMaster } = useRecoilValue(memberInfoState);
+  const {
+    member: { isMaster },
+  } = useGetUserInfo();
+
   const { handleExit } = useExit();
   const returnFocusRef = useRef(null);
   const focusRef = useFocus<HTMLElement>();

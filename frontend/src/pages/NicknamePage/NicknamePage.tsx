@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
 
 import NicknameInput from './NicknameInput/NicknameInput';
 import {
@@ -20,12 +19,10 @@ import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
 import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
-import { roomUuidState } from '@/recoil/atom';
 
 const NicknamePage = () => {
   const { nicknameInputRef, handleMakeOrEnterRoom, isLoading } = useMakeOrEnterRoom();
   const { roomUuid } = useParams();
-  const setRoomUuidState = useSetRecoilState(roomUuidState);
   const { bottomButtonHeight } = useButtonHeightOnKeyboard();
 
   const { data, isLoading: isJoinableLoading } = useQuery({
@@ -35,14 +32,10 @@ const NicknamePage = () => {
   });
 
   useEffect(() => {
-    if (roomUuid) {
-      setRoomUuidState(roomUuid);
-    }
-
     if (nicknameInputRef.current) {
       nicknameInputRef.current.focus();
     }
-  }, [roomUuid, setRoomUuidState, nicknameInputRef]);
+  }, [roomUuid, nicknameInputRef]);
 
   if (!isJoinableLoading && roomUuid && !data?.isJoinable)
     return (
