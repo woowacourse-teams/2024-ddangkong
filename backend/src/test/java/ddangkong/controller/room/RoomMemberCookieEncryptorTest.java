@@ -20,7 +20,7 @@ class RoomMemberCookieEncryptorTest extends BaseControllerTest {
         void 로컬_환경인_경우_SameSite는_None_이다() {
             // given
             String value = "ThisIsMySecretKe";
-            String uri = "localhost";
+            String uri = "http://localhost:3306/api";
            
             // when
             ResponseCookie encodedCookie = roomMemberCookieEncryptor.getEncodedCookie(value, uri);

@@ -10,7 +10,7 @@ public class RoomMemberCookieEncryptor {
     private static final String DEFAULT_PATH = "/api/balances/rooms";
     private static final String NONE = "None";
     private static final String LAX = "Lax";
-    private static final String LOCALHOST = "localhost";
+    private static final String LOCALHOST = "http://localhost";
 
     private final EncryptionUtils encryptionUtils;
 
@@ -32,7 +32,7 @@ public class RoomMemberCookieEncryptor {
     }
 
     private String getSameSiteOption(String uri) {
-        if (uri.equals(LOCALHOST)) {
+        if (uri.startsWith(LOCALHOST)) {
             return NONE;
         }
         return LAX;
