@@ -77,9 +77,9 @@ jobs:
       app_path: ~/app
       old_port: ${{ needs.deploy-b.outputs.blue_port }}
       new_port: ${{ needs.deploy-b.outputs.green_port }}
-      test: true
 
   rollback-nginx-a:
+    name: Rollback Nginx Port Forwarding A!!!!! [test]
     needs: [ configure-nginx-a, configure-nginx-b ]
     if: failure() && (needs.configure-nginx-a.result == 'failure' || needs.configure-nginx-b.result == 'failure')
     uses: ./.github/workflows/nginx-port-forwarding.yml
