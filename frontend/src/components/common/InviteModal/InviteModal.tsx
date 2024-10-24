@@ -1,5 +1,5 @@
+import { RefObject } from 'react';
 import QRCode from 'react-qr-code';
-import { useRecoilValue } from 'recoil';
 
 import {
   inviteModalLi,
@@ -17,16 +17,17 @@ import Modal from '../Modal/Modal';
 
 import CopyIcon from '@/assets/images/copyIcon.png';
 import { INVITE_URL } from '@/constants/url';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 import useToast from '@/hooks/useToast';
-import { roomUuidState } from '@/recoil/atom';
 
 interface InviteModalProps {
   isOpen: boolean;
   onClose: () => void;
+  returnFocusRef?: RefObject<HTMLElement>;
 }
 
-const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
-  const roomUuid = useRecoilValue(roomUuidState);
+const InviteModal = ({ isOpen, onClose, returnFocusRef }: InviteModalProps) => {
+  const { roomUuid } = useGetUserInfo();
   const inviteUrl = INVITE_URL(roomUuid);
 
   const { copyToClipboard } = useClipBoard();
@@ -38,7 +39,12 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} css={inviteModalLayout}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      css={inviteModalLayout}
+      returnFocusRef={returnFocusRef}
+    >
       <Modal.Header position="center">
         <Modal.Title css={inviteModalTitle}>초대하기</Modal.Title>
         <Modal.IconButton onClick={onClose} />

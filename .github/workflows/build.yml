@@ -1,0 +1,68 @@
+name: backend build jar file and upload artifact file
+
+on:
+  workflow_call:
+    inputs:
+      profile:
+        description: 'profile'
+        required: true
+        type: string
+      artifact_name:
+        description: 'artifact name'
+        default: 'app-artifact'
+        required: false
+        type: string
+      jar_name:
+        description: 'jar name'
+        default: 'app.jar'
+        required: false
+        type: string
+      gradlew_options:
+        description: 'gradle options'
+        required: false
+        type: string
+    secrets:
+      secret_yml:
+        description: 'secret yml'
+        required: true
+    outputs:
+      artifact_name:
+        value: ${{ inputs.artifact_name }}
+      jar_name:
+        value: ${{ inputs.jar_name }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setting ${{ inputs.profile }}-secret.yml
+        run: |
+          echo "${{ secrets.secret_yml }}" > ./src/main/resources/${{ inputs.profile }}-secret.yml
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: BootJar with Gradle
+        run: ./gradlew bootJar ${{ inputs.gradlew_options }}
+
+      - name: Move artifact file # todo script 환경 분리
+        run: |
+          mkdir -p ${{ inputs.artifact_name }} && \
+          mv build/libs/*.jar ${{ inputs.artifact_name }}/${{ inputs.jar_name }} && \
+          mv scripts/* ${{ inputs.artifact_name }}/
+
+      - name: Upload artifact file
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: ./backend/${{ inputs.artifact_name }}

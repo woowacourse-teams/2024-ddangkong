@@ -1,7 +1,13 @@
 import fetcher from './fetcher';
 
 import { API_URL } from '@/constants/url';
-import { RoomInfo, CreateOrEnterRoomResponse, Category, RoomSettingApply } from '@/types/room';
+import {
+  RoomInfo,
+  CreateOrEnterRoomResponse,
+  Category,
+  RoomSettingApply,
+  RoomAndMember,
+} from '@/types/room';
 
 interface CategoryResponse {
   categories: Category[];
@@ -134,5 +140,14 @@ export const isJoinableRoom = async (roomUuid: string): Promise<{ isJoinable: bo
 
   const data = await res.json();
 
+  return data;
+};
+
+// 사용자 정보 조회
+export const getUserInfo = async (): Promise<RoomAndMember> => {
+  const res = await fetcher.get({
+    url: API_URL.getUserInfo,
+  });
+  const data = await res.json();
   return data;
 };

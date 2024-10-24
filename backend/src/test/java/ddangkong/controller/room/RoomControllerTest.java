@@ -1,11 +1,11 @@
 package ddangkong.controller.room;
 
 import static ddangkong.support.fixture.MemberFixture.PRIN;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.controller.BaseControllerTest;
-import ddangkong.controller.exception.ErrorResponse;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
@@ -13,7 +13,6 @@ import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.member.Member;
-import ddangkong.exception.ClientErrorCode;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
@@ -27,8 +26,6 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.HttpStatus;
 
 class RoomControllerTest extends BaseControllerTest {
@@ -314,6 +311,94 @@ class RoomControllerTest extends BaseControllerTest {
                     () -> assertThat(actual.isInitial()).isTrue(),
                     () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
             );
+        }
+    }
+
+    @Nested
+    class 쿠키 {
+
+        @Test
+        void 방_생성시_쿠키를_생성한다() {
+            // given
+            RoomJoinRequest body = new RoomJoinRequest("방장");
+
+            // when
+            String cookie = RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .body(body)
+                    .when().post("/api/balances/rooms")
+                    .getCookie("test_cookie");
+
+            // then
+            assertThat(cookie).isNotBlank();
+        }
+
+        @Test
+        void 방_참여시_쿠키를_생성한다() {
+            // given
+            RoomJoinRequest body = new RoomJoinRequest("참가자");
+
+            // when
+            String cookie = RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .body(body)
+                    .when().post("/api/balances/rooms")
+                    .getCookie("test_cookie");
+
+            // then
+            assertThat(cookie).isNotBlank();
+        }
+
+        @Test
+        void 쿠키를_통해_사용자_정보를_조회_할_수_있다() {
+            // given
+            RoomJoinRequest body = new RoomJoinRequest("참가자");
+            String cookie = RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .body(body)
+                    .when().post("/api/balances/rooms")
+                    .getCookie("test_cookie");
+
+            // when
+            RoomJoinResponse roomJoinResponse = RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .cookie("test_cookie", cookie)
+                    .when().get("/api/balances/rooms/member")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomJoinResponse.class);
+
+            // then
+            assertThat(body.nickname()).isEqualTo(roomJoinResponse.member().nickname());
+        }
+
+        @Test
+        void 방을_나가면_쿠키를_삭제한다() {
+            // given
+            RoomJoinRequest body = new RoomJoinRequest("참가자");
+            String cookie = RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .body(body)
+                    .when().post("/api/balances/rooms")
+                    .getCookie("test_cookie");
+
+            RoomJoinResponse roomJoinResponse = RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .cookie("test_cookie", cookie)
+                    .when().get("/api/balances/rooms/member")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(RoomJoinResponse.class);
+
+            // when
+            String deleteCookie = RestAssured.given().log().all()
+                    .pathParam("roomId", roomJoinResponse.roomId())
+                    .pathParam("memberId", roomJoinResponse.member().memberId())
+                    .cookie("test_cookie", cookie)
+                    .when().delete("/api/balances/rooms/{roomId}/members/{memberId}")
+                    .getCookie("test_cookie");
+
+            assertThat(deleteCookie).isBlank();
         }
     }
 }

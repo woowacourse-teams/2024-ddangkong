@@ -24,7 +24,7 @@ public enum ClientErrorCode {
 
     // RoomSetting
     // todo s로 변경
-    INVALID_TIME_LIMIT("시간 제한은 %dms / %dms / %dms 만 가능합니다. requested timeLimit: %d"),
+    INVALID_TIME_LIMIT("시간 제한은 %s 만 가능합니다. requested timeLimit: %d"),
     INVALID_RANGE_TOTAL_ROUND("총 라운드는 %d 이상, %d 이하만 가능합니다. requested totalRound: %d"),
 
     // Member
@@ -36,6 +36,7 @@ public enum ClientErrorCode {
     EXCEED_MAX_MEMBER_COUNT("방의 최대 인원을 초과했습니다. 현재 멤버 수: %d"),
     NOT_ROOM_MEMBER("방에 존재하지 않는 멤버입니다."),
     INVALID_NICKNAME("닉네임은 최소 %d글자, 최대 %d글자여야 합니다."),
+    INVALID_MEMBER_ID("해당 ID에 일치하는 멤버가 없습니다."),
 
     // RoomContent
     NOT_FOUND_ROOM_CONTENT("방에 존재하지 않는 컨텐츠입니다."),
@@ -47,6 +48,10 @@ public enum ClientErrorCode {
     VOTE_FINISHED("투표가 종료되었습니다."),
     VOTE_NOT_FINISHED("아직 투표가 종료되지 않았습니다."),
     CAN_NOT_CHECK_MATCHING_PERCENT("종료되지 않은 방의 투표 매칭도는 확인할 수 없습니다."),
+
+    // Cookie
+    NOT_FOUND_COOKIE("일치하는 쿠키가 없습니다."),
+    INVALID_COOKIE("유효하지 않는 쿠키입니다."),
 
     // Common
     FIELD_ERROR("입력이 잘못되었습니다."),

@@ -6,8 +6,12 @@ export const headerLayout = (isCenter?: boolean) => css`
   display: flex;
   justify-content: ${isCenter ? 'center' : 'space-between'};
   align-items: center;
-  height: 15vh;
+  height: 12vh;
   padding: 0 2.4rem;
+
+  :focus {
+    outline: none;
+  }
 `;
 
 export const roundText = css`

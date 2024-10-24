@@ -1,3 +1,5 @@
+import { RefObject } from 'react';
+
 import CategoryDropdown from './CategoryDropdown/CategoryDropdown';
 import useRoomSetting from './hooks/useRoomSetting';
 import RoomSettingContainer from './RoomSettingContainer/RoomSettingContainer';
@@ -12,14 +14,15 @@ import Modal from '../Modal/Modal';
 import { POLLING_DELAY } from '@/constants/config';
 
 const TOTAL_ROUND_LIST = [5, 7, 10];
-const TIMER_PER_ROUND_LIST = [5000, 10000, 15000];
+const TIMER_PER_ROUND_LIST = [10000, 15000, 30000, 60000];
 
 interface RoomSettingModalProps {
   isOpen: boolean;
   onClose: () => void;
+  returnFocusRef?: RefObject<HTMLElement>;
 }
 
-const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
+const RoomSettingModal = ({ isOpen, onClose, returnFocusRef }: RoomSettingModalProps) => {
   const {
     roomSetting,
     handleClickOption,
@@ -31,7 +34,12 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
   const { category, totalRound, timeLimitPerRound } = roomSetting;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} css={roomSettingModalLayout}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      returnFocusRef={returnFocusRef}
+      css={roomSettingModalLayout}
+    >
       <Modal.Header position="center">
         <Modal.Title css={roomSettingModalTitle}>방 설정</Modal.Title>
         <Modal.IconButton onClick={onClose} />
@@ -44,19 +52,26 @@ const RoomSettingModal = ({ isOpen, onClose }: RoomSettingModalProps) => {
           <RoomSettingContainer title="총 라운드">
             {TOTAL_ROUND_LIST.map((round) => (
               <li key={round}>
-                <button css={roomSettingButton(totalRound === round)} onClick={handleClickRound}>
+                <button
+                  role="radio"
+                  onClick={handleClickRound}
+                  aria-checked={totalRound === round}
+                  css={roomSettingButton(totalRound === round)}
+                >
                   {round}
                 </button>
               </li>
             ))}
           </RoomSettingContainer>
-          <RoomSettingContainer title="라운드 당 타이머">
+          <RoomSettingContainer title="제한 시간">
             {TIMER_PER_ROUND_LIST.map((timeLimit) => (
               <li key={timeLimit}>
                 <button
-                  css={roomSettingButton(timeLimitPerRound === timeLimit)}
+                  role="radio"
                   onClick={handleClickTimeLimit}
                   value={timeLimit}
+                  aria-checked={timeLimitPerRound === timeLimit}
+                  css={roomSettingButton(timeLimitPerRound === timeLimit)}
                 >
                   {timeLimit / POLLING_DELAY}초
                 </button>

@@ -18,6 +18,8 @@ export const nicknameInput = css`
   border: 0;
 
   background-color: ${Theme.color.gray200};
+
+  font-size: 1.6rem;
   outline: none;
 `;
 

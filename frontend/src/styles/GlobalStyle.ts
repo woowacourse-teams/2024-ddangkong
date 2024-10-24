@@ -137,8 +137,13 @@ const reset = css`
     border: none;
 
     background-color: inherit;
+
     outline: none;
     cursor: pointer;
+
+    :enabled {
+      color: black;
+    }
   }
 `;
 

@@ -13,6 +13,13 @@ spring:
 cors:
   origin: "*"
 
+cookie:
+  rejoin-key: test_cookie
+
+encrypt:
+  secret-key: 1234567890123456
+  algorithm: AES
+
 logging:
   level:
     org:

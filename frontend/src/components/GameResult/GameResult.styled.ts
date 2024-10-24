@@ -7,7 +7,7 @@ export const gameResultLayout = css`
   align-items: center;
   gap: 4.8rem;
   width: 100%;
-  height: calc(100vh - 15vh - 7.2rem);
+  height: calc(100dvh - 15dvh - 7.2rem);
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
@@ -35,8 +35,8 @@ export const noMatchingLayout = css`
 `;
 
 export const noMatchingImg = css`
-  width: 18rem;
-  height: 30vh;
+  width: 16rem;
+  height: 16rem;
 `;
 
 export const noMatchingText = css`

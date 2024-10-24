@@ -6,21 +6,29 @@ export const rankItem = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   ${Theme.typography.headline3};
+
+  :focus {
+    outline: none;
+  }
 `;
 
-export const rankInfoContainer = css`
+export const rankNicknameWrapper = css`
   display: flex;
-  flex-basis: 85%;
   align-items: center;
-  gap: 1.2rem;
+  width: 85%;
+`;
+
+export const rankNumberContainer = css`
+  display: flex;
+  justify-content: center;
+  width: 15%;
 `;
 
 export const rankNumber = css`
-  display: flex;
-  justify-content: center;
-  width: 2.4rem;
-  ${Theme.typography.headline1}
+  font-weight: bold;
+  font-size: 1.6rem;
 `;
 
 export const nicknameContainer = (percent: number) => css`
@@ -37,8 +45,13 @@ export const nicknameContainer = (percent: number) => css`
   transition: all 2s;
 `;
 
+export const rankPercentWrapper = css`
+  display: flex;
+  justify-content: center;
+  width: 15%;
+`;
+
 export const rankPercent = css`
-  width: 1.6rem;
   ${Theme.typography.headline3};
 `;
 

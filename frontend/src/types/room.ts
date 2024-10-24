@@ -40,3 +40,9 @@ export interface Category {
   value: CategoryValue;
   label: CategoryLabel;
 }
+
+export interface RoomAndMember {
+  roomId: number;
+  roomUuid: string;
+  member: Member;
+}

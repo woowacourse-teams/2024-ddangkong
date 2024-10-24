@@ -8,6 +8,7 @@ import ddangkong.exception.room.NotReadyRoomException;
 import ddangkong.exception.room.member.AlreadyExistMasterException;
 import ddangkong.exception.room.member.ExceedMaxMemberCountException;
 import ddangkong.exception.room.member.InvalidMasterCreationException;
+import ddangkong.exception.room.member.InvalidMemberIdException;
 import ddangkong.exception.room.member.NotExistMasterException;
 import ddangkong.exception.room.member.NotRoomMemberException;
 import java.util.List;
@@ -93,5 +94,11 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member getMaster(Room room) {
         return findRoomMembers(room).getMaster();
+    }
+
+    @Transactional(readOnly = true)
+    public Member getMemberById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(InvalidMemberIdException::new);
     }
 }

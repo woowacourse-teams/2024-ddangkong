@@ -29,7 +29,9 @@ export type ErrorCode =
   | 'METHOD_ARGUMENT_TYPE_MISMATCH'
   | 'NO_RESOURCE_FOUND'
   | 'METHOD_NOT_SUPPORTED'
-  | 'INTERNAL_SERVER_ERROR';
+  | 'INTERNAL_SERVER_ERROR'
+  | 'NOT_FOUND_COOKIE'
+  | 'INVALID_COOKIE';
 
 export interface UrlParameterError extends ResponseError {
   errorCode: 'URL_PARAMETER_ERROR';

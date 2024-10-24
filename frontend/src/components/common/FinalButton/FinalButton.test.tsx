@@ -7,7 +7,7 @@ import FinalButton from './FinalButton';
 import { ERROR_MESSAGE } from '@/constants/message';
 import { MOCK_API_URL } from '@/constants/url';
 import { server } from '@/mocks/server';
-import { customRenderWithIsMaster } from '@/utils/test-utils';
+import { customRenderWithMaster } from '@/utils/test-utils';
 
 describe('FinalButton 테스트', () => {
   it('확인 버튼을 클릭했을 때, 방 초기화 API에서 에러가 발생하면 알림 모달이 뜬다.', async () => {
@@ -24,9 +24,9 @@ describe('FinalButton 테스트', () => {
       }),
     );
 
-    customRenderWithIsMaster(<FinalButton />, true);
+    customRenderWithMaster(<FinalButton />);
 
-    const finalButton = await screen.findByRole('button', { name: '확인' });
+    const finalButton = await screen.findByRole('button', { name: '대기실로 이동' });
     await user.click(finalButton);
 
     await waitFor(() => {

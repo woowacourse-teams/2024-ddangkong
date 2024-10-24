@@ -17,7 +17,11 @@ const CategoryDropdown = ({ category, handleClickOption }: CategoryDropdownProps
   if (!categoryList || !category) return <div>카테고리가 없습니다.</div>;
 
   return (
-    <Dropdown<Category> text={category} optionList={categoryList} handleClick={handleClickOption} />
+    <Dropdown<Category>
+      text={category}
+      optionList={categoryList}
+      handleClickOption={handleClickOption}
+    />
   );
 };
 

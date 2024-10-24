@@ -24,25 +24,21 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <MainPage />,
+        element: (
+          <AsyncErrorBoundary>
+            <MainPage />
+          </AsyncErrorBoundary>
+        ),
       },
       {
         path: '/',
         element: <HeaderLayout />,
         children: [
           {
-            path: ':roomId/game',
-            element: (
-              <AsyncErrorBoundary pendingFallback={<GameSkeleton />}>
-                <GamePage />
-              </AsyncErrorBoundary>
-            ),
-          },
-          {
             path: 'nickname/:roomUuid?',
             element: (
               <AsyncErrorBoundary>
-                <NicknamePage />,
+                <NicknamePage />
               </AsyncErrorBoundary>
             ),
           },
@@ -51,6 +47,14 @@ export const router = createBrowserRouter([
             element: (
               <AsyncErrorBoundary pendingFallback={<ReadySkeleton />}>
                 <ReadyPage />
+              </AsyncErrorBoundary>
+            ),
+          },
+          {
+            path: ':roomId/game',
+            element: (
+              <AsyncErrorBoundary pendingFallback={<GameSkeleton />}>
+                <GamePage />
               </AsyncErrorBoundary>
             ),
           },

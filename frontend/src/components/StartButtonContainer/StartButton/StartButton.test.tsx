@@ -7,7 +7,7 @@ import StartButton from './StartButton';
 import { ERROR_MESSAGE } from '@/constants/message';
 import { MOCK_API_URL } from '@/constants/url';
 import { server } from '@/mocks/server';
-import { customRenderWithIsMaster } from '@/utils/test-utils';
+import { customRenderWithMaster } from '@/utils/test-utils';
 
 describe('StartButton 테스트', () => {
   it('시작 버튼을 클릭했을 때, 게임 시작 API에서 에러가 발생하면 알림 모달이 뜬다.', async () => {
@@ -24,7 +24,7 @@ describe('StartButton 테스트', () => {
       }),
     );
 
-    customRenderWithIsMaster(<StartButton />, true);
+    customRenderWithMaster(<StartButton />);
 
     const startButton = await screen.findByRole('button', { name: '시작' });
     await user.click(startButton);

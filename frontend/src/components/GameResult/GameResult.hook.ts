@@ -1,16 +1,11 @@
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-
-import AlertModal from '../common/AlertModal/AlertModal';
 
 import { fetchMatchingResult } from '@/apis/balanceContent';
 import { resetRoom } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import useModal from '@/hooks/useModal';
-import { memberInfoState } from '@/recoil/atom';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 import { MatchingResult, MemberMatchingInfo } from '@/types/balanceContent';
-import { CustomError } from '@/utils/error';
 
 type MatchingResultQueryResponse = UseQueryResult<MatchingResult, Error> & {
   matchedMembers?: MemberMatchingInfo[];
@@ -19,15 +14,17 @@ type MatchingResultQueryResponse = UseQueryResult<MatchingResult, Error> & {
 
 export const useMatchingResultQuery = (): MatchingResultQueryResponse => {
   const { roomId } = useParams();
-  const memberInfo = useRecoilValue(memberInfoState);
+  const {
+    member: { memberId },
+  } = useGetUserInfo();
 
   const matchingResultQuery = useQuery({
-    queryKey: [QUERY_KEYS.matchingResult, roomId, memberInfo.memberId],
+    queryKey: [QUERY_KEYS.matchingResult, roomId, memberId],
     queryFn: async () => {
-      if (!memberInfo.memberId) {
+      if (!memberId) {
         throw new Error('Member ID is required');
       }
-      return await fetchMatchingResult({ roomId: Number(roomId), memberId: memberInfo.memberId });
+      return await fetchMatchingResult({ roomId: Number(roomId), memberId: memberId });
     },
   });
 
@@ -39,12 +36,7 @@ export const useMatchingResultQuery = (): MatchingResultQueryResponse => {
 };
 
 export const useResetRoomMutation = (roomId: number) => {
-  const { show: showModal } = useModal();
-
   return useMutation({
     mutationFn: async () => await resetRoom(roomId),
-    onError: (error: CustomError) => {
-      showModal(AlertModal, { title: '방 초기화 에러', message: error.message });
-    },
   });
 };

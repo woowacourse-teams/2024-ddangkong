@@ -5,7 +5,8 @@ import getBorderRadius from '@/styles/utils/getBorderRadius';
 
 export const roomSettingLayout = css`
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 10rem;
@@ -16,22 +17,35 @@ export const roomSettingLayout = css`
   cursor: pointer;
 `;
 
-export const roomSettingBox = css`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
 export const bigTitle = css`
+  width: 10rem;
+
   font-weight: 800;
   font-size: 2.8rem;
 `;
 
 export const smallTitle = css`
+  width: 10rem;
+
   font-weight: 800;
   font-size: 2rem;
 `;
 
-export const roomSettingLabel = css`
+export const roomSettingKey = css`
+  width: 10rem;
+`;
+
+export const roomSettingKeyBox = css`
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+
   font-weight: 600;
+`;
+
+export const roomSettingValueBox = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
 `;

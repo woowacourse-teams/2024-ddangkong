@@ -21,10 +21,12 @@ import ddangkong.domain.room.member.Member;
 import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.exception.room.NotFoundRoomException;
+import ddangkong.exception.room.member.InvalidMemberIdException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
+import ddangkong.facade.room.dto.RoomMemberResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
@@ -121,6 +123,39 @@ class RoomFacadeTest extends BaseServiceTest {
             Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
             long memberCountInRoom = memberRepository.countByRoom(foundRoom);
             assertThat(memberCountInRoom).isEqualTo(12);
+        }
+    }
+
+    @Nested
+    class 사용자_정보_조회 {
+
+        @Test
+        void 사용자_정보를_조회한다() {
+            // given
+            String nickname = "나는참가자";
+            String uuid = "uuid4";
+            MemberResponse expectedMemberResponse = new MemberResponse(14L, nickname, false);
+            roomFacade.joinRoom(nickname, uuid);
+
+            // when
+            RoomMemberResponse actual = roomFacade.getRoomMemberInfo(14L);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.roomId()).isEqualTo(4L),
+                    () -> assertThat(actual.roomUuid()).isEqualTo(uuid),
+                    () -> assertThat(actual.member()).isEqualTo(expectedMemberResponse)
+            );
+        }
+
+        @Test
+        void 존재하지_않는_아이디로_사용자_정보를_조회할_수_없다() {
+            // given
+            Long notExistMemberId = 0L;
+
+            // when & then
+            assertThatThrownBy(() -> roomFacade.getRoomMemberInfo(notExistMemberId))
+                    .isExactlyInstanceOf(InvalidMemberIdException.class);
         }
     }
 
@@ -428,7 +463,7 @@ class RoomFacadeTest extends BaseServiceTest {
 
         private static final RoomStatus STATUS = RoomStatus.FINISH;
 
-        private static final RoomSetting ROOM_SETTING = new RoomSetting(5, 5000, Category.IF);
+        private static final RoomSetting ROOM_SETTING = new RoomSetting(5, 15_000, Category.IF);
 
         private BalanceContent content;
 

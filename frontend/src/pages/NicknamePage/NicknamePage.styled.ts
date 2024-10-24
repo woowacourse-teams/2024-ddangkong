@@ -22,7 +22,7 @@ export const nicknameContainer = css`
   flex-direction: column;
   gap: 1.2rem;
   width: 26.8rem;
-  margin: 2rem 0;
+  margin-bottom: 2rem;
 `;
 
 export const nicknameTitle = css`
@@ -46,6 +46,7 @@ export const nicknameInput = css`
   border: 0;
 
   background-color: ${Theme.color.gray200};
+
   outline: none;
 `;
 
