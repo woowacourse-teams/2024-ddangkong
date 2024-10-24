@@ -1,0 +1,20 @@
+name: Shutdown Server
+
+on:
+  workflow_call:    
+    inputs:
+      self_hosted_runner:
+        description: 'self hosted runner label'
+        required: true
+        type: string
+      port:
+        description: 'shutdown port'
+        required: true
+        type: string
+
+jobs:
+  shutdown:
+    runs-on: ${{ inputs.self_hosted_runner }}
+    steps:
+      - name: Shutdown server - port ${{ inputs.port }}
+        run: sudo lsof -t -i:${{ inputs.port }} | xargs sudo kill -9
