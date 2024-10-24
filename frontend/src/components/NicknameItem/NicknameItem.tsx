@@ -4,6 +4,7 @@ import { nicknameItemLayout, nicknameText, profileImage } from './NicknameItem.s
 
 import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
 import { memberInfoState } from '@/recoil/atom';
+
 interface NicknameItemProp {
   nickName: string;
 }

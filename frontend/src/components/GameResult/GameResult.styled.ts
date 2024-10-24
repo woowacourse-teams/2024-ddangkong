@@ -35,8 +35,8 @@ export const noMatchingLayout = css`
 `;
 
 export const noMatchingImg = css`
-  width: 18rem;
-  height: 30vh;
+  width: 16rem;
+  height: 16rem;
 `;
 
 export const noMatchingText = css`

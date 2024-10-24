@@ -11,7 +11,7 @@ export const spinnerWrapper = css`
 
 export const rotatingImage = (size: number) => css`
   width: ${size}rem;
-  height: 20vh;
+  height: 18rem;
 
   animation: spin 2s linear infinite; /* 2초 동안 한 바퀴 회전하는 애니메이션 */
 

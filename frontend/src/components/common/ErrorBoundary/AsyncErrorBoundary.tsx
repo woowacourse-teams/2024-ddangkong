@@ -4,7 +4,7 @@ import { PropsWithChildren, Suspense } from 'react';
 
 import DeferredComponent from '../DeferredComponent/DeferredComponent';
 import AsyncErrorFallback from '../ErrorFallback/AsyncErrorFallback/AsyncErrorFallback';
-import Spinner from '../Spinner/Spinner';
+import SpinnerErrorFallback from '../ErrorFallback/SpinnerErrorFallback/SpinnerErrorFallback';
 
 import { CustomError } from '@/utils/error';
 
@@ -13,7 +13,7 @@ interface AsyncErrorBoundaryProps {
 }
 
 const AsyncErrorBoundary = ({
-  pendingFallback = <Spinner />,
+  pendingFallback = <SpinnerErrorFallback />,
   children,
 }: PropsWithChildren<AsyncErrorBoundaryProps>) => {
   const { reset } = useQueryErrorResetBoundary();

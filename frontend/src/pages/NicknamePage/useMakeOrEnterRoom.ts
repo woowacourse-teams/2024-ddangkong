@@ -23,6 +23,7 @@ const useMakeOrEnterRoom = () => {
       setMemberInfo((prev) => ({
         ...prev,
         memberId: data.member.memberId,
+        nickname: data.member.nickname,
       }));
       setRoomUuidState(data.roomUuid || '');
       navigate(ROUTES.ready(Number(data.roomId)), { replace: true });
@@ -36,7 +37,11 @@ const useMakeOrEnterRoom = () => {
   >({
     mutationFn: ({ nickname, roomUuid }) => enterRoom(roomUuid, nickname),
     onSuccess: (data) => {
-      setMemberInfo((prev) => ({ ...prev, memberId: data.member.memberId }));
+      setMemberInfo((prev) => ({
+        ...prev,
+        memberId: data.member.memberId,
+        nickname: data.member.nickname,
+      }));
       setRoomUuidState(data.roomUuid || '');
       navigate(ROUTES.ready(Number(data.roomId)), { replace: true });
     },

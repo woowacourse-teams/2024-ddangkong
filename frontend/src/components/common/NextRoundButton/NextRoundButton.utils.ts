@@ -1,6 +1,17 @@
 import randomPicker from '@/utils/randomPicker';
 
-const createRandomNextRoundMessage = () => {
+export const getNextRoundButtonText = (
+  isMaster: boolean,
+  isLastRound: boolean,
+  isPending: boolean,
+) => {
+  if (isMaster && isPending) return '로딩중...';
+  if (isMaster && isLastRound) return '결과 확인';
+  if (isMaster && !isLastRound) return '다음';
+  return '방장이 진행해 주세요';
+};
+
+export const createRandomNextRoundMessage = () => {
   const nextRoundMessage = [
     '대화를 충분히 나누셨나요?\n확인을 누르면 다음 라운드로 진행됩니다 :)',
     '충분히 이야기 나누셨나요?\n다음 라운드로 넘어가려면 확인을 눌러주세요 :)',
@@ -15,5 +26,3 @@ const createRandomNextRoundMessage = () => {
 
   return randomNextRoundMessage;
 };
-
-export default createRandomNextRoundMessage;

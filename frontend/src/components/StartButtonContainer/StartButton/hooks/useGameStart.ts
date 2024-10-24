@@ -19,5 +19,5 @@ export const useGameStart = () => {
     }
   };
 
-  return { memberInfo, handleGameStart, setMemberInfo };
+  return { memberInfo, handleGameStart, setMemberInfo, ...startGameMutation };
 };
