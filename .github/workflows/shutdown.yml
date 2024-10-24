@@ -17,4 +17,4 @@ jobs:
     runs-on: ${{ inputs.self_hosted_runner }}
     steps:
       - name: Shutdown server - port ${{ inputs.port }}
-        run: sudo lsof -t -i:${{ inputs.port }} | xargs --no-run-if-empty sudo kill -9
+        run: sudo lsof -t -i:${{ inputs.port }} | xargs --no-run-if-empty sudo kill -15

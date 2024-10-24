@@ -6,8 +6,8 @@ import ddangkong.exception.BadRequestException;
 
 public class InvalidNicknameException extends BadRequestException {
 
-    public InvalidNicknameException(int minLength, int maxLength) {
-        super(INVALID_NICKNAME.getMessage().formatted(minLength, maxLength));
+    public InvalidNicknameException(int maxLength) {
+        super(INVALID_NICKNAME.getMessage().formatted(maxLength));
     }
 
     @Override

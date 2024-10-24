@@ -15,13 +15,13 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Member {
 
-    private static final int NICKNAME_MIN_LENGTH = 2;
     private static final int NICKNAME_MAX_LENGTH = 12;
 
     @Id
@@ -46,8 +46,8 @@ public class Member {
     }
 
     private void validateNickname(String nickname) {
-        if (nickname.length() < NICKNAME_MIN_LENGTH || nickname.length() > NICKNAME_MAX_LENGTH) {
-            throw new InvalidNicknameException(NICKNAME_MIN_LENGTH, NICKNAME_MAX_LENGTH);
+        if (Strings.isBlank(nickname) || nickname.length() > NICKNAME_MAX_LENGTH) {
+            throw new InvalidNicknameException(NICKNAME_MAX_LENGTH);
         }
     }
 

@@ -31,7 +31,8 @@ export type ErrorCode =
   | 'METHOD_NOT_SUPPORTED'
   | 'INTERNAL_SERVER_ERROR'
   | 'NOT_FOUND_COOKIE'
-  | 'INVALID_COOKIE';
+  | 'INVALID_COOKIE'
+  | 'INVALID_NICKNAME';
 
 export interface UrlParameterError extends ResponseError {
   errorCode: 'URL_PARAMETER_ERROR';
