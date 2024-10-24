@@ -1,0 +1,15 @@
+name: Shutdown Server
+
+inputs:
+  port:
+    description: 'shutdown port'
+    required: true
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Shutdown
+      run: |
+        echo "Shutdown server - port: ${{ inputs.port }}"
+        sudo lsof -t -i:${{ inputs.port }} | xargs sudo kill -9

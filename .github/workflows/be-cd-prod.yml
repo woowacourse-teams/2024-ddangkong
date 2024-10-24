@@ -9,9 +9,8 @@ on:
       - backend/**
 
 env:
-  ARTIFACT_NAME: app-artifact
-  JAR_NAME: app.jar
   APP_PATH: ~/app
+  PROFILE: prod
 
 jobs:
   build:
@@ -23,23 +22,35 @@ jobs:
 
   deploy-a:
     needs: [ build ]
-    uses: ./.github/workflows/self-hosted-runner-deployment.yml
-    with:
-      self_hosted_runner: prod-c # todo a
-      artifact_name: ${{ needs.build.outputs.artifact_name }}
-      jar_name: ${{ needs.build.outputs.jar_name }}
-      profile: prod
-      app_path: ~/app
+    runs-on: [ prod-c ] # todo a
+    outputs:
+      blue_port: ${{ steps.blue-green.outputs.blue_port }}
+      green_port: ${{ steps.blue-green.outputs.green_port }}
+    steps:
+      - name: Deploy blue/green in A
+        id: blue-green
+        uses: ./.github/actions/blue-green/action.yml
+        with:
+          artifact_name: ${{ needs.build.outputs.artifact_name }}
+          jar_name: ${{ needs.build.outputs.jar_name }}
+          profile: ${{ env.PROFILE }}
+          app_path: ${{ env.APP_PATH }}
 
   deploy-b:
     needs: [ build ]
-    uses: ./.github/workflows/self-hosted-runner-deployment.yml
-    with:
-      self_hosted_runner: prod-d # todo b
-      artifact_name: ${{ needs.build.outputs.artifact_name }}
-      jar_name: ${{ needs.build.outputs.jar_name }}
-      profile: prod
-      app_path: ~/app
+    runs-on: [ prod-d ] # todo b
+    outputs:
+      blue_port: ${{ steps.blue-green.outputs.blue_port }}
+      green_port: ${{ steps.blue-green.outputs.green_port }}
+    steps:
+      - name: Deploy blue/green in B
+        id: blue-green
+        uses: ./.github/actions/blue-green/action.yml
+        with:
+          artifact_name: ${{ needs.build.outputs.artifact_name }}
+          jar_name: ${{ needs.build.outputs.jar_name }}
+          profile: ${{ env.PROFILE }}
+          app_path: ${{ env.APP_PATH }}
 
   deploy-rollback-notification:
     needs: [ deploy-a, deploy-b ]
@@ -55,49 +66,128 @@ jobs:
   rollback-a:
     needs: [ deploy-rollback-notification ]
     if: failure() && contains(needs.*.result, 'success')
-    uses: ./.github/workflows/server-rollback.yml
-    with:
-      self_hosted_runner: prod-c # todo a
-      port: ${{ needs.deploy-rollback-notification.outputs.green_port_a }}
+    runs-on: [ prod-c ] # todo a
+    steps:
+      - name: Shutdown green in A
+        uses: ./.github/actions/shutdown/action.yml
+        with:
+          port: ${{ needs.deploy-rollback-notification.outputs.green_port_a }}
 
   rollback-b:
     needs: [ deploy-rollback-notification ]
     if: failure() && contains(needs.*.result, 'success')
-    uses: ./.github/workflows/server-rollback.yml
-    with:
-      self_hosted_runner: prod-d # todo b
-      port: ${{ needs.deploy-rollback-notification.outputs.green_port_b }}
-
-  nginx-config: # 여기서 시작
-    needs: [ deploy-a, deploy-b ]
-    runs-on: [ prod ]
+    runs-on: [ prod-d ] # todo b
     steps:
-      - name: Change Nginx Config
-        run: |
-          ${{ env.APP_PATH }}/change_nginx_port_forwarding.sh ${{ needs.deploy.outputs.green_port }}
-      
-      - name: Rollback
-        if: ${{ failure() }}
-        run: |
-          echo "Nginx Config Change failed"
-          echo "Rollback Nginx Config and Green deployment"
-          ${{ env.APP_PATH }}/change_nginx_port_forwarding.sh ${{ needs.deploy.outputs.blue_port }}
-          sudo lsof -i :${{ needs.deploy.outputs.green_port }} | awk 'NR!=1 {print $2}' | xargs kill -9
-          exit 1
+      - name: Shutdown green in B
+        uses: ./.github/actions/shutdown/action.yml
+        with:
+          port: ${{ needs.deploy-rollback-notification.outputs.green_port_b }}
 
-  blue-down:
-    needs: [ nginx-config ]
-    runs-on: [ prod ]
+  configure-nginx-a:
+    needs: [ deploy-a ]
+    runs-on: [ prod-c ] # todo a
+    outputs:
+      blue_port: ${{ needs.deploy-a.outputs.blue_port }}
+      green_port: ${{ needs.deploy-a.outputs.green_port }}
     steps:
-      - name: Blue Down
-        run: |
-          sudo kill -15 $(sudo lsof -t -i: ${{ needs.deploy.outputs.blue_port }})
-          echo "Blue Down completed"
+      - name: Change Nginx port forwarding to green port in A
+        uses: ./.github/actions/nginx-port-forwarding/action.yml
+        with:
+          app_path: ${{ env.APP_PATH }}
+          new_port: ${{ needs.deploy-a.outputs.green_port }}
 
-  on-failure:
-    needs: [ blue-down ] # 알림
-    runs-on: [ prod ]
-    if: ${{ needs.blue-down.result == 'failure' }}
+      - name: Reload Nginx
+        run: sudo nginx -s reload # todo 에러 처리
+
+  configure-nginx-b:
+    needs: [ deploy-b ]
+    runs-on: [ prod-d ] # todo b
+    outputs:
+      blue_port: ${{ needs.deploy-b.outputs.blue_port }}
+      green_port: ${{ needs.deploy-b.outputs.green_port }}
     steps:
-      - name: Send Notification
+      - name: Update Nginx port forwarding to green port in B
+        uses: ./.github/actions/nginx-port-forwarding/action.yml
+        with:
+          app_path: ${{ env.APP_PATH }}
+          new_port: ${{ needs.deploy-b.outputs.green_port }}
+
+      - name: Reload Nginx
+        run: sudo nginx -s reload # todo 에러 처리
+
+  configure-nginx-rollback-notification:
+    needs: [ configure-nginx-a, configure-nginx-b ]
+    if: failure() && contains(needs.*.result, 'failure')
+    runs-on: ubuntu-latest
+    outputs:
+      blue_port_a: ${{ needs.configure-nginx-a.outputs.blue_port }}
+      green_port_a: ${{ needs.configure-nginx-a.outputs.green_port }}
+      blue_port_b: ${{ needs.configure-nginx-b.outputs.blue_port }}
+      green_port_b: ${{ needs.configure-nginx-b.outputs.green_port }}
+    steps:
+      - name: Send notification to Discord # todo
         run: echo "테스트입니다"
+  
+  rollback-nginx-a:
+    needs: [ configure-nginx-rollback-notification ]
+    if: failure() && contains(needs.*.result, 'success')
+    runs-on: [ prod-c ] # todo a
+    steps:
+      - name: Rollback Nginx port forwarding to blue port in A
+        uses: ./.github/actions/nginx-port-forwarding/action.yml
+        with:
+          app_path: ${{ env.APP_PATH }}
+          new_port: ${{ needs.configure-nginx-rollback-notification.outputs.blue_port_a }}
+
+      - name: Reload Nginx
+        run: sudo nginx -s reload # todo 에러 처리
+
+      - name: Shutdown green in A
+        uses: ./.github/actions/shutdown/action.yml
+        with:
+          port: ${{ needs.configure-nginx-rollback-notification.outputs.green_port_a }}
+ 
+  rollback-nginx-b:
+    needs: [ configure-nginx-rollback-notification ]
+    if: failure() && contains(needs.*.result, 'success')
+    runs-on: [ prod-d ] # todo b
+    steps:
+      - name: Rollback Nginx port forwarding to blue port in B
+        uses: ./.github/actions/nginx-port-forwarding/action.yml
+        with:
+          app_path: ${{ env.APP_PATH }}
+          new_port: ${{ needs.configure-nginx-rollback-notification.outputs.blue_port_b }}
+
+      - name: Reload Nginx
+        run: sudo nginx -s reload # todo 에러 처리
+
+      - name: Shutdown green in B
+        uses: ./.github/actions/shutdown/action.yml
+        with:
+          port: ${{ needs.configure-nginx-rollback-notification.outputs.green_port_b }}
+
+  blue-shutdown-a:
+    needs: [ configure-nginx-a ]
+    runs-on: [ prod-c ] # todo a
+    steps:
+      - name: Shutdown blue in A
+        uses: ./.github/actions/shutdown/action.yml
+        with:
+          port: ${{ needs.configure-nginx-a.outputs.blue_port }}
+  
+  blue-shutdown-b:
+    needs: [ configure-nginx-b ]
+    runs-on: [ prod-d ] # todo b
+    steps:
+      - name: Shutdown blue in B
+        uses: ./.github/actions/shutdown/action.yml
+        with:
+          port: ${{ needs.configure-nginx-b.outputs.blue_port }}
+
+  # on-failure:
+  #   needs: [ blue-down ] # 알림
+    
+  #   if: ${{ needs.blue-down.result == 'failure' }}
+  #   steps:
+  #     - name: Send Notification
+  #       run: echo "테스트입니다"

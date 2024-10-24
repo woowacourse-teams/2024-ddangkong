@@ -1,0 +1,45 @@
+name: Blue Green Deployment
+
+inputs:
+  artifact_name:
+    description: 'uploaded artifact name'
+    required: true
+    type: string
+  jar_name:
+    description: 'uploaded jar name'
+    required: true
+    type: string
+  profile:
+    description: 'profile'
+    required: true
+    type: string
+  app_path:
+    description: 'app path'
+    required: true
+    type: string
+outputs:
+  green_port: ${{ steps.blue_green_port.outputs.green_port }}
+  blue_port: ${{ steps.blue_green_port.outputs.blue_port }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Download artifact file
+      uses: actions/download-artifact@v4
+      with:
+          name: ${{ inputs.artifact_name }}
+          path: ${{ inputs.app_path }}
+
+    - name: Change permission of shell script
+      run: chmod +x ${{ inputs.app_path }}/*.sh
+
+    - name: Get blue green port
+      id: blue_green_port
+      run: ${{ inputs.app_path }}/get_blue_green_port.sh | awk '{print $0}' >> $GITHUB_OUTPUT
+
+    - name: Run green java application
+      run: sudo nohup java -Dspring.profiles.active=${{ inputs.profile }} -Dserver.port=${{ steps.blue_green_port.outputs.green_port }} -Duser.timezone=Asia/Seoul -jar ${{ inputs.app_path }}/${{ inputs.jar_name }} &
+
+    - name: Health check green
+      run: |
+        ${{ inputs.app_path }}/green_health_check.sh ${{ steps.blue_green_port.outputs.green_port }}
