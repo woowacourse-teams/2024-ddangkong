@@ -33,7 +33,7 @@ public class RoomMemberCookieEncryptor {
     }
 
     private String getSameSiteOption(String origin) {
-        if (origin.startsWith(LOCALHOST)) {
+        if (origin != null && origin.startsWith(LOCALHOST)) {
             return NONE;
         }
         return LAX;
