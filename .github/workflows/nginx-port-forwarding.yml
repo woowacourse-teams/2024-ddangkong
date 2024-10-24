@@ -20,7 +20,7 @@ on:
         required: true
         type: string
       old_shutdown:
-        description: 'shutdown before update'
+        description: 'old shutdown flag'
         required: false
         type: boolean
     outputs:
@@ -30,7 +30,7 @@ on:
         value: ${{ inputs.new_port }}
 
 jobs:
-  old_shutdown:
+  old-shutdown:
     if: ${{ inputs.old_shutdown }}
     uses: ./.github/workflows/shutdown.yml
     with:
