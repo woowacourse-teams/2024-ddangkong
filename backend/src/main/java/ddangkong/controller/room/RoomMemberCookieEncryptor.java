@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class RoomMemberCookieEncryptor {
 
-    private static final String ROOT_PATH = "/";
     private static final String DEFAULT_PATH = "/api/balances/rooms";
     private static final String LOCALHOST = "http://localhost";
 
@@ -31,11 +30,12 @@ public class RoomMemberCookieEncryptor {
                 .build();
     }
 
-    public ResponseCookie deleteCookie() {
+    public ResponseCookie deleteCookie(String origin) {
         return ResponseCookie.from(rejoinKey, null)
                 .httpOnly(true)
                 .secure(true)
-                .path(ROOT_PATH)
+                .path(DEFAULT_PATH)
+                .sameSite(getSameSiteOption(origin))
                 .maxAge(0)
                 .build();
     }
