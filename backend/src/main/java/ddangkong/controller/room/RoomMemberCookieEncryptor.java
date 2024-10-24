@@ -21,13 +21,13 @@ public class RoomMemberCookieEncryptor {
         this.rejoinKey = rejoinKey;
     }
 
-    public ResponseCookie getEncodedCookie(Object value, String requestURI) {
+    public ResponseCookie getEncodedCookie(Object value, String requestURL) {
         String encrypt = encryptionUtils.encrypt(String.valueOf(value));
         return ResponseCookie.from(rejoinKey, encrypt)
                 .httpOnly(true)
                 .secure(true)
                 .path(DEFAULT_PATH)
-                .sameSite(getSameSiteOption(requestURI))
+                .sameSite(getSameSiteOption(requestURL))
                 .build();
     }
 

@@ -126,8 +126,8 @@ public class RoomController {
     private void setEncryptCookie(HttpServletRequest request,
                                   HttpServletResponse response,
                                   Object cookieValue) {
-        String requestURI = request.getRequestURI();
-        ResponseCookie encodedCookie = roomMemberCookieEncryptor.getEncodedCookie(cookieValue, requestURI);
+        String requestURL = request.getRequestURL().toString();
+        ResponseCookie encodedCookie = roomMemberCookieEncryptor.getEncodedCookie(cookieValue, requestURL);
         response.addHeader(HttpHeaders.SET_COOKIE, encodedCookie.toString());
     }
 }
