@@ -38,6 +38,7 @@ jobs:
       port: ${{ inputs.old_port }}
 
   update-nginx-port-forwarding:
+    name: update
     runs-on: ${{ inputs.self_hosted_runner }}
     steps:
       - name: Update Nginx port forwarding from ${{ inputs.old_port }} to ${{ inputs.new_port }}

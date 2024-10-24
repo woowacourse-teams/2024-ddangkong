@@ -37,6 +37,7 @@ jobs:
       app_path: ~/app
 
   rollback-a:
+    name: "[Failure] Rollback Deploy A"
     needs: [ deploy-a, deploy-b ]
     if: failure() && (needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure')
     uses: ./.github/workflows/shutdown.yml
@@ -45,6 +46,7 @@ jobs:
       port: ${{ needs.deploy-a.outputs.green_port }}
 
   rollback-b:
+    name: "[Failure] Rollback Deploy B"
     needs: [ deploy-a, deploy-b ]
     if: failure() && (needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure')
     uses: ./.github/workflows/shutdown.yml
@@ -53,6 +55,7 @@ jobs:
       port: ${{ needs.deploy-b.outputs.green_port }}
 
   deploy-failure-notification:
+    name: "[Failure] Deploy Failure Notification"
     needs: [ deploy-a, deploy-b ]
     if: failure() && (needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure')
     runs-on: ubuntu-latest
@@ -79,7 +82,7 @@ jobs:
       new_port: ${{ needs.deploy-b.outputs.green_port }}
 
   rollback-nginx-a:
-    name: Rollback Nginx Port Forwarding A!!!!! [test]
+    name: "[Failure] Rollback Nginx A"
     needs: [ configure-nginx-a, configure-nginx-b ]
     if: failure() && (needs.configure-nginx-a.result == 'failure' || needs.configure-nginx-b.result == 'failure')
     uses: ./.github/workflows/nginx-port-forwarding.yml
@@ -91,6 +94,7 @@ jobs:
       old_shutdown: true
 
   rollback-nginx-b:
+    name: "[Failure] Rollback Nginx B"
     needs: [ configure-nginx-a, configure-nginx-b ]
     if: failure() && (needs.configure-nginx-a.result == 'failure' || needs.configure-nginx-b.result == 'failure')
     uses: ./.github/workflows/nginx-port-forwarding.yml
@@ -102,6 +106,7 @@ jobs:
       old_shutdown: true
 
   configure-nginx-faliure-notification:
+    name: "[Failure] Nginx Failure Notification"
     needs: [ configure-nginx-a, configure-nginx-b ]
     if: failure() && (needs.configure-nginx-a.result == 'failure' || needs.configure-nginx-b.result == 'failure')
     runs-on: ubuntu-latest
