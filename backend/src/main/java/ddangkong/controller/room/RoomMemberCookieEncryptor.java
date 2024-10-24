@@ -5,28 +5,37 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RejoinCookieEncryptor {
+public class RoomMemberCookieEncryptor {
 
-    private static final String SAME_SITE_OPTION = "None";
     private static final String DEFAULT_PATH = "/api/balances/rooms";
+    private static final String NONE = "None";
+    private static final String LAX = "Lax";
+    private static final String LOCALHOST = "localhost";
 
     private final EncryptionUtils encryptionUtils;
 
     private final String rejoinKey;
 
-    public RejoinCookieEncryptor(EncryptionUtils encryptionUtils, @Value("${cookie.rejoin-key}") String rejoinKey) {
+    public RoomMemberCookieEncryptor(EncryptionUtils encryptionUtils, @Value("${cookie.rejoin-key}") String rejoinKey) {
         this.encryptionUtils = encryptionUtils;
         this.rejoinKey = rejoinKey;
     }
 
-    public ResponseCookie getEncodedCookie(Object value) {
+    public ResponseCookie getEncodedCookie(Object value, String requestURI) {
         String encrypt = encryptionUtils.encrypt(String.valueOf(value));
         return ResponseCookie.from(rejoinKey, encrypt)
                 .httpOnly(true)
                 .secure(true)
                 .path(DEFAULT_PATH)
-                .sameSite(SAME_SITE_OPTION)
+                .sameSite(getSameSiteOption(requestURI))
                 .build();
+    }
+
+    private String getSameSiteOption(String uri) {
+        if (uri.equals(LOCALHOST)) {
+            return NONE;
+        }
+        return LAX;
     }
 
     public Long getDecodedCookieValue(String cookieValue) {

@@ -26,7 +26,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ddangkong.controller.room.RejoinCookieEncryptor;
+import ddangkong.controller.room.RoomMemberCookieEncryptor;
 import ddangkong.controller.room.EncryptionUtils;
 import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
@@ -54,7 +54,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 
 @WebMvcTest(value = RoomController.class)
-@Import(value = {RejoinCookieEncryptor.class, EncryptionUtils.class})
+@Import(value = {RoomMemberCookieEncryptor.class, EncryptionUtils.class})
 class RoomDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
