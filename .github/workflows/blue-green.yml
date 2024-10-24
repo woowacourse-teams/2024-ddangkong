@@ -36,6 +36,10 @@ jobs:
       green_port: ${{ steps.blue_green_port.outputs.green_port }}
       blue_port: ${{ steps.blue_green_port.outputs.blue_port }}
     steps:
+      - name: test # 롤백 테스트
+        if: runner.name == '10-0-21-212'
+        run: exit 1
+
       - name: Download artifact file
         uses: actions/download-artifact@v4
         with:
