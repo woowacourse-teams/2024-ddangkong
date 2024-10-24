@@ -25,7 +25,7 @@ describe('SelectContainer', () => {
 
     customRender(<SelectContainer />);
 
-    const optionButton = await screen.findByRole('button', { name: SELECT_OPTION });
+    const optionButton = await screen.findByRole('radio', { name: SELECT_OPTION });
     await user.click(optionButton);
 
     const selectButton = await screen.findByRole('button', { name: '선택' });

@@ -8,6 +8,10 @@ export const headerLayout = (isCenter?: boolean) => css`
   align-items: center;
   height: 12vh;
   padding: 0 2.4rem;
+
+  :focus {
+    outline: none;
+  }
 `;
 
 export const roundText = css`

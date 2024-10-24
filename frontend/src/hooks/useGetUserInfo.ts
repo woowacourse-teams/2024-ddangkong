@@ -1,14 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { getMember } from '@/apis/room';
+import { getUserInfo } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { RoomAndMember } from '@/types/room';
 
-const useGetmember = (): RoomAndMember => {
+const USER_INFO_STALE_TIME = 2 * 60 * 60 * 1000;
+
+const useGetUserInfo = (): RoomAndMember => {
   const { data } = useQuery({
-    queryKey: [QUERY_KEYS.getMember],
-    queryFn: getMember,
-    staleTime: 30000,
+    queryKey: [QUERY_KEYS.getUserInfo],
+    queryFn: getUserInfo,
+    staleTime: USER_INFO_STALE_TIME,
   });
 
   return {
@@ -22,4 +24,4 @@ const useGetmember = (): RoomAndMember => {
   };
 };
 
-export default useGetmember;
+export default useGetUserInfo;

@@ -1,14 +1,14 @@
 import { nicknameItemLayout, nicknameText, profileImage } from './NicknameItem.styled';
 
 import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
-import useGetmember from '@/hooks/useGetmember';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 
 interface NicknameItemProp {
   nickName: string;
 }
 
 const NicknameItem = ({ nickName }: NicknameItemProp) => {
-  const { member } = useGetmember();
+  const { member } = useGetUserInfo();
   const isMyNickname = member.nickname === nickName;
 
   return (

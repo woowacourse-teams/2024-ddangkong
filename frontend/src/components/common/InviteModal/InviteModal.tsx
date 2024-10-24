@@ -17,7 +17,7 @@ import Modal from '../Modal/Modal';
 
 import CopyIcon from '@/assets/images/copyIcon.png';
 import { INVITE_URL } from '@/constants/url';
-import useGetmember from '@/hooks/useGetmember';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 import useToast from '@/hooks/useToast';
 
 interface InviteModalProps {
@@ -27,7 +27,7 @@ interface InviteModalProps {
 }
 
 const InviteModal = ({ isOpen, onClose, returnFocusRef }: InviteModalProps) => {
-  const { roomUuid } = useGetmember();
+  const { roomUuid } = useGetUserInfo();
   const inviteUrl = INVITE_URL(roomUuid);
 
   const { copyToClipboard } = useClipBoard();

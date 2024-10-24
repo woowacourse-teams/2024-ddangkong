@@ -75,7 +75,7 @@ const customRender = (ui: React.ReactNode, options: CustomRenderOptions = {}) =>
 
 const customRenderWithMaster = (Component: React.ReactNode) => {
   server.use(
-    http.get(MOCK_API_URL.getMember, async () => {
+    http.get(MOCK_API_URL.getUserInfo, async () => {
       return HttpResponse.json(ROOM_AND_MASTER, { status: 200 });
     }),
   );
@@ -84,7 +84,7 @@ const customRenderWithMaster = (Component: React.ReactNode) => {
 
 const customRenderWithNotMaster = (Component: React.ReactNode) => {
   server.use(
-    http.get(MOCK_API_URL.getMember, async () => {
+    http.get(MOCK_API_URL.getUserInfo, async () => {
       return HttpResponse.json(ROOM_AND_NOT_MASTER, { status: 200 });
     }),
   );

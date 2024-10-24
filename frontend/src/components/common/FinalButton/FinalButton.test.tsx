@@ -26,7 +26,7 @@ describe('FinalButton 테스트', () => {
 
     customRenderWithMaster(<FinalButton />);
 
-    const finalButton = await screen.findByRole('button', { name: '확인' });
+    const finalButton = await screen.findByRole('button', { name: '대기실로 이동' });
     await user.click(finalButton);
 
     await waitFor(() => {

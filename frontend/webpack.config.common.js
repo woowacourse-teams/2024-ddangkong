@@ -13,6 +13,11 @@ module.exports = {
     publicPath: '/',
     clean: true,
   },
+  devServer: {
+    open: true,
+    port: 3000,
+    historyApiFallback: true,
+  },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {

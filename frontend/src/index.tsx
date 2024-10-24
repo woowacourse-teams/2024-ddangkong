@@ -6,8 +6,6 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
-import AsyncErrorBoundary from './components/common/ErrorBoundary/AsyncErrorBoundary';
-import RootErrorBoundary from './components/common/ErrorBoundary/RootErrorBoundary';
 import ToastProvider from './providers/ToastProvider/ToastProvider';
 import { router } from './router';
 import GlobalStyle from './styles/GlobalStyle';
@@ -38,11 +36,7 @@ enableMocking().then(() => {
         <ThemeProvider theme={Theme}>
           <Global styles={GlobalStyle} />
           <ToastProvider>
-            <RootErrorBoundary>
-              <AsyncErrorBoundary>
-                <RouterProvider router={router} />
-              </AsyncErrorBoundary>
-            </RootErrorBoundary>
+            <RouterProvider router={router} />
           </ToastProvider>
           <div
             style={{

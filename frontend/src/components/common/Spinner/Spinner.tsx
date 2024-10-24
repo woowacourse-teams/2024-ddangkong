@@ -11,7 +11,7 @@ interface SpinnerProps {
 const Spinner = ({
   message = '로딩 중입니다...',
   imageSrc = SpinDdangKong,
-  imageSize = 9,
+  imageSize = 12,
 }: SpinnerProps) => {
   return (
     <div css={spinnerWrapper}>

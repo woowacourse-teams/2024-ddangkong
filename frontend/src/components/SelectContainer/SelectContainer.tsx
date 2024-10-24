@@ -20,7 +20,7 @@ const SelectContainer = () => {
         isVoted={selectedOption.isCompleted}
         completeSelection={completeSelection}
       />
-      <section css={selectSection}>
+      <section role="radiogroup" css={selectSection}>
         <SelectOption
           option={balanceContent.firstOption}
           selectedOption={selectedOption}

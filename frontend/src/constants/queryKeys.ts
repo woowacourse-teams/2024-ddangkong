@@ -7,5 +7,5 @@ export const QUERY_KEYS = {
   roomMembers: 'roomMembers',
   isRoomInitial: 'isRoomInitial',
   categoryList: 'categoryList',
-  getMember: 'getMember',
+  getUserInfo: 'getUserInfo',
 } as const;

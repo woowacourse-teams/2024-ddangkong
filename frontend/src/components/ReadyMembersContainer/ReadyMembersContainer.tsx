@@ -17,6 +17,7 @@ import A11yOnly from '../common/a11yOnly/A11yOnly';
 import crownIcon from '@/assets/images/crownIcon.webp';
 import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
 import InviteModal from '@/components/common/InviteModal/InviteModal';
+import { QUERY_KEYS } from '@/constants/queryKeys';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useModal from '@/hooks/useModal';
 
@@ -25,20 +26,20 @@ const ReadyMembersContainer = () => {
   const { show } = useModal();
   const queryClient = useQueryClient();
   const returnFocusRef = useRef<HTMLButtonElement>(null);
+  const memberCountMessage = `총 인원 ${members.length}명`;
 
   const handleClickInvite = () => {
     show(InviteModal, { returnFocusRef });
   };
 
   useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ['getMember'] });
+    queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.getUserInfo] });
   }, [master.memberId]);
 
   return (
     <section css={readyMembersContainerLayout}>
-      <A11yOnly aria-live="polite">총 인원 {members.length}명</A11yOnly>
       <div css={totalNumber}>
-        <div aria-hidden>총 인원 {members.length}명</div>
+        <div role="status">{memberCountMessage}</div>
         <button css={inviteButton} onClick={handleClickInvite} ref={returnFocusRef}>
           초대하기
         </button>

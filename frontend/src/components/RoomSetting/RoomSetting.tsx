@@ -11,8 +11,8 @@ import {
 
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
-import useGetmember from '@/hooks/useGetmember';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 import useModal from '@/hooks/useModal';
 
 const RoomSetting = () => {
@@ -20,7 +20,7 @@ const RoomSetting = () => {
   const { roomSetting } = useGetRoomInfo();
   const {
     member: { isMaster },
-  } = useGetmember();
+  } = useGetUserInfo();
   const { show } = useModal();
   const screenReaderRoomSetting = `
         방 정보.

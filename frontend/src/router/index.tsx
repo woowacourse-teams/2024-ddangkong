@@ -24,7 +24,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <MainPage />,
+        element: (
+          <AsyncErrorBoundary>
+            <MainPage />
+          </AsyncErrorBoundary>
+        ),
       },
       {
         path: '/',

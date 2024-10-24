@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
 import { voteBalanceContent } from '@/apis/balanceContent';
-import useGetmember from '@/hooks/useGetmember';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 
 interface UseSelectCompleteMutationProps {
   selectedId: number;
@@ -18,7 +18,7 @@ const useCompleteSelectionMutation = ({
   const { roomId } = useParams();
   const {
     member: { memberId },
-  } = useGetmember();
+  } = useGetUserInfo();
 
   return useMutation({
     mutationFn: async () => {

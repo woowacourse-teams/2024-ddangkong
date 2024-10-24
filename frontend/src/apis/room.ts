@@ -144,9 +144,9 @@ export const isJoinableRoom = async (roomUuid: string): Promise<{ isJoinable: bo
 };
 
 // 사용자 정보 조회
-export const getMember = async (): Promise<RoomAndMember> => {
+export const getUserInfo = async (): Promise<RoomAndMember> => {
   const res = await fetcher.get({
-    url: API_URL.getMember,
+    url: API_URL.getUserInfo,
   });
   const data = await res.json();
   return data;

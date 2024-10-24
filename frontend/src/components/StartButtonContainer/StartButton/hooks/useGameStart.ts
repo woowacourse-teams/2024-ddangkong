@@ -2,12 +2,12 @@ import { useMutation } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
 import { startGame } from '@/apis/room';
-import useGetmember from '@/hooks/useGetmember';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 
 export const useGameStart = () => {
   const {
     member: { isMaster },
-  } = useGetmember();
+  } = useGetUserInfo();
   const { roomId } = useParams();
 
   const startGameMutation = useMutation({
@@ -20,5 +20,5 @@ export const useGameStart = () => {
     }
   };
 
-  return { isMaster, handleGameStart };
+  return { isMaster, handleGameStart, ...startGameMutation };
 };

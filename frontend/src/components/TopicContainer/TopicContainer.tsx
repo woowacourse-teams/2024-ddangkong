@@ -21,7 +21,7 @@ const TopicContainer = () => {
       <span css={categoryText} aria-hidden>
         {isGamePage && balanceContent.category}
       </span>
-      <span css={topicText} aria-hidden>
+      <span css={topicText(isGamePage)} aria-hidden>
         {balanceContent.question}
       </span>
     </section>

@@ -4,10 +4,6 @@ const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'production',
-  devServer: {
-    port: 3000,
-    historyApiFallback: true,
-  },
   devtool: 'hidden-source-map',
   plugins: [
     sentryWebpackPlugin({

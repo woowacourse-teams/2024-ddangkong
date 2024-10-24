@@ -25,7 +25,7 @@ import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingMo
 import { convertMsecToSecond } from '@/components/SelectContainer/Timer/Timer.util';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useFocus from '@/hooks/useFocus';
-import useGetmember from '@/hooks/useGetmember';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
 import useModal from '@/hooks/useModal';
 
 interface HeaderProps {
@@ -68,7 +68,7 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
   const {
     member: { isMaster },
-  } = useGetmember();
+  } = useGetUserInfo();
 
   const { handleExit } = useExit();
   const returnFocusRef = useRef(null);
