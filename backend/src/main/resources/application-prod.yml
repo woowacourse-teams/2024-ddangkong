@@ -26,9 +26,6 @@ spring:
         jdbc:
           batch_size: 1000
 
-server:
-  port: ${secret.application.port}
-
 cors:
   origin: ${secret.cors.origin}
 
@@ -46,9 +43,6 @@ logging:
   location: ${secret.application.log.location}
 
 management:
-  server:
-    port: ${secret.actuator.port}
-
   endpoints:
     enabled-by-default: false
     web:

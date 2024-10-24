@@ -8,104 +8,122 @@ on:
     paths:
       - backend/**
 
-env:
-  ARTIFACT_NAME: app-artifact
-  ARTIFACT_PATH: ./artifact
-  JAR_NAME: app.jar
-
 jobs:
   build:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
-    outputs:
-      artifact_name: ${{ env.ARTIFACT_NAME }}
-      jar_name: ${{ env.JAR_NAME }}
-
-    steps:    
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setting prod-secret.yml
-        run: |
-          echo "${{ secrets.PROD_SECRET_YML }}" > ./src/main/resources/prod-secret.yml
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: BootJar with Gradle
-        run: ./gradlew bootJar
-
-      - name: Move artifact file
-        run: mv build/libs/*.jar ${{ env.ARTIFACT_PATH }}/${{ env.JAR_NAME }}
-      
-      - name: Copy scripts file
-        run: cp scripts/ ${{ env.ARTIFACT_PATH }}/
-
-      - name: Upload artifact file
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.ARTIFACT_NAME }}
-          path: ${{ env.ARTIFACT_PATH }}
+    uses: ./.github/workflows/build.yml
+    with:
+      profile: prod
+    secrets:
+      secret_yml: ${{ secrets.PROD_SECRET_YML }}
 
   deploy-a:
-    needs: build
-    uses: ./.github/workflows/self-hosted-runner-deployment.yml
+    needs: [ build ]
+    uses: ./.github/workflows/blue-green.yml
     with:
-      self_hosted_runner: prod-c # 추후 변경 prod-a
+      self_hosted_runner: prod-a
       artifact_name: ${{ needs.build.outputs.artifact_name }}
       jar_name: ${{ needs.build.outputs.jar_name }}
       profile: prod
+      app_path: ~/app
 
   deploy-b:
-    needs: build
-    uses: ./.github/workflows/self-hosted-runner-deployment.yml
+    needs: [ build ]
+    uses: ./.github/workflows/blue-green.yml
     with:
-      self_hosted_runner: prod-d # 추후 변경 prod-b
+      self_hosted_runner: prod-b
       artifact_name: ${{ needs.build.outputs.artifact_name }}
       jar_name: ${{ needs.build.outputs.jar_name }}
       profile: prod
+      app_path: ~/app
 
-  error-handling:
+  rollback-a:
+    name: "[Failure] Rollback Deploy A"
     needs: [ deploy-a, deploy-b ]
-    runs-on: ubuntu-latest
-    if: ${{ failure() }}
-    steps:
-      - name: Debug
-        run: echo "Deploy failed" # 추후 수정 + green 롤백 + 디스코드 알림
+    if: failure() && (needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure')
+    uses: ./.github/workflows/shutdown.yml
+    with:
+      self_hosted_runner: prod-a
+      port: ${{ needs.deploy-a.outputs.green_port }}
 
-  change-nginx-config-a:
-    needs: [ deploy-a, error-handling]
-    uses: ./.github/workflows/change_nginx_config.yml
+  rollback-b:
+    name: "[Failure] Rollback Deploy B"
+    needs: [ deploy-a, deploy-b ]
+    if: failure() && (needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure')
+    uses: ./.github/workflows/shutdown.yml
     with:
-      self_hosted_runner: prod-c # 추후 변경 prod-a
-      green_port: ${{ needs.deploy-a.outputs.green_port }}
-  
-  change-nginx-config-b:
-    needs: [ deploy-b, error-handling]
-    uses: ./.github/workflows/change_nginx_config.yml
+      self_hosted_runner: prod-b
+      port: ${{ needs.deploy-b.outputs.green_port }}
+
+  deploy-failure-notification:
+    name: "[Failure] Deploy Failure Notification"
+    needs: [ deploy-a, deploy-b ]
+    if: failure() && (needs.deploy-a.result == 'failure' || needs.deploy-b.result == 'failure')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification to Discord # todo
+        run: echo "테스트입니다"
+
+  configure-nginx-a:
+    needs: [ deploy-a, deploy-b ]
+    uses: ./.github/workflows/nginx-port-forwarding.yml
     with:
-      self_hosted_runner: prod-d # 추후 변경 prod-b
-      green_port: ${{ needs.deploy-b.outputs.green_port }}
-  
-  on-failure:
-    needs: [change-nginx-config-a, change-nginx-config-b]
-    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
-    if: failure()
+      self_hosted_runner: prod-a
+      app_path: ~/app
+      old_port: ${{ needs.deploy-a.outputs.blue_port }}
+      new_port: ${{ needs.deploy-a.outputs.green_port }}
+
+  configure-nginx-b:
+    needs: [ deploy-a, deploy-b ]
+    uses: ./.github/workflows/nginx-port-forwarding.yml
+    with:
+      self_hosted_runner: prod-b
+      app_path: ~/app
+      old_port: ${{ needs.deploy-b.outputs.blue_port }}
+      new_port: ${{ needs.deploy-b.outputs.green_port }}
+
+  rollback-nginx-a:
+    name: "[Failure] Rollback Nginx A"
+    needs: [ configure-nginx-a, configure-nginx-b ]
+    if: failure() && (needs.configure-nginx-a.result == 'failure' || needs.configure-nginx-b.result == 'failure')
+    uses: ./.github/workflows/nginx-port-forwarding.yml
+    with:
+      self_hosted_runner: prod-a
+      app_path: ~/app
+      old_port: ${{ needs.configure-nginx-a.outputs.new_port }}
+      new_port: ${{ needs.configure-nginx-a.outputs.old_port }}
+      old_shutdown: true
+
+  rollback-nginx-b:
+    name: "[Failure] Rollback Nginx B"
+    needs: [ configure-nginx-a, configure-nginx-b ]
+    if: failure() && (needs.configure-nginx-a.result == 'failure' || needs.configure-nginx-b.result == 'failure')
+    uses: ./.github/workflows/nginx-port-forwarding.yml
+    with:
+      self_hosted_runner: prod-b
+      app_path: ~/app
+      old_port: ${{ needs.configure-nginx-b.outputs.new_port }}
+      new_port: ${{ needs.configure-nginx-b.outputs.old_port }}
+      old_shutdown: true
+
+  configure-nginx-faliure-notification:
+    name: "[Failure] Nginx Failure Notification"
+    needs: [ configure-nginx-a, configure-nginx-b ]
+    if: failure() && (needs.configure-nginx-a.result == 'failure' || needs.configure-nginx-b.result == 'failure')
+    runs-on: ubuntu-latest
     steps:
-      - name: Rollback
-        run: |
-          sudo kill -15 $(sudo lsof -t -i: ${{ needs.deploy-a.outputs.green_port }})
+      - name: Send notification to Discord # todo
+        run: echo "테스트입니다"
+
+  blue-shutdown-a:
+    needs: [ configure-nginx-a, configure-nginx-b ]
+    uses: ./.github/workflows/shutdown.yml
+    with:
+      self_hosted_runner: prod-a
+      port: ${{ needs.configure-nginx-a.outputs.old_port }}
   
-  on-success:
-    needs: [change-nginx-config-a, change-nginx-config-b]
-    runs-on: [ prod-c, prod-d ] # 추후 변경 prod-a, prod-b
-    if: success()
-    steps:
-      - name: Blue Down
-        run: |
-          sudo kill -15 $(sudo lsof -t -i: 8080) # todo blue port
+  blue-shutdown-b:
+    needs: [ configure-nginx-a, configure-nginx-b ]
+    uses: ./.github/workflows/shutdown.yml
+    with:
+      self_hosted_runner: prod-b
+      port: ${{ needs.configure-nginx-b.outputs.old_port }}

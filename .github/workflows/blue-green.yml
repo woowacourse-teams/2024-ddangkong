@@ -1,0 +1,60 @@
+name: Blue Green Deployment
+
+on:
+  workflow_call:
+    inputs:
+      self_hosted_runner:
+        description: 'self hosted runner label'
+        required: true
+        type: string
+      artifact_name:
+        description: 'uploaded artifact name'
+        required: true
+        type: string
+      jar_name:
+        description: 'uploaded jar name'
+        required: true
+        type: string
+      profile:
+        description: 'profile'
+        required: true
+        type: string
+      app_path:
+        description: 'app path'
+        required: true
+        type: string
+    outputs:
+      green_port:
+        value: ${{ jobs.deploy-green.outputs.green_port }}
+      blue_port:
+        value: ${{ jobs.deploy-green.outputs.blue_port }}
+
+jobs:
+  deploy-green:
+    runs-on: ${{ inputs.self_hosted_runner }}
+    outputs:
+      green_port: ${{ steps.blue_green_port.outputs.green_port }}
+      blue_port: ${{ steps.blue_green_port.outputs.blue_port }}
+    steps:
+      - name: Download artifact file
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: ${{ inputs.app_path }}
+
+      - name: Change permission of shell script
+        run: chmod +x ${{ inputs.app_path }}/*.sh
+
+      - name: Get blue green port
+        id: blue_green_port
+        run: ${{ inputs.app_path }}/get_blue_green_port.sh | awk '{print $0}' >> $GITHUB_OUTPUT
+
+      - name: Run green java application in ${{ inputs.self_hosted_runner }}
+        run: sudo nohup java -Dspring.profiles.active=${{ inputs.profile }} -Dserver.port=${{ steps.blue_green_port.outputs.green_port }} -Duser.timezone=Asia/Seoul -jar ${{ inputs.app_path }}/${{ inputs.jar_name }} &
+  
+  health_check:
+    needs: [ deploy-green ]
+    runs-on: ${{ inputs.self_hosted_runner }}
+    steps:
+      - name: Health check green
+        run: ${{ inputs.app_path }}/green_health_check.sh ${{ needs.deploy-green.outputs.green_port }}
