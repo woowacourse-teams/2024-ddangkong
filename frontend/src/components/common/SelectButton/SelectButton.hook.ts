@@ -19,6 +19,7 @@ const useCompleteSelectionMutation = ({
   const {
     member: { memberId },
   } = useGetmember();
+
   return useMutation({
     mutationFn: async () => {
       if (typeof contentId === 'undefined') {

@@ -7,5 +7,6 @@ export const useCreateRoom = () => {
   const handleRoomCreate = () => {
     navigate(ROUTES.nickname);
   };
+
   return { handleRoomCreate };
 };
