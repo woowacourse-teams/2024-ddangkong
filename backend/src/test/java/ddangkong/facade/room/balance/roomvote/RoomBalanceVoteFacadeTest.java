@@ -200,10 +200,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
-            assertAll(
-                    () -> assertThat(actual.isFinished()).isTrue(),
-                    () -> assertThat(actual.master().memberId()).isEqualTo(prin.getId())
-            );
+            assertThat(actual.isFinished()).isTrue();
         }
 
         @Test
@@ -218,10 +215,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
-            assertAll(
-                    () -> assertThat(actual.isFinished()).isTrue(),
-                    () -> assertThat(actual.master().memberId()).isEqualTo(prin.getId())
-            );
+            assertThat(actual.isFinished()).isTrue();
         }
 
         @Test
@@ -237,10 +231,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), content.getId());
 
             // then
-            assertAll(
-                    () -> assertThat(actual.isFinished()).isFalse(),
-                    () -> assertThat(actual.master().memberId()).isEqualTo(prin.getId())
-            );
+            assertThat(actual.isFinished()).isFalse();
         }
 
         @Test
