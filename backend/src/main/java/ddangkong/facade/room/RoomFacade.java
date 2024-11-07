@@ -144,7 +144,6 @@ public class RoomFacade {
     @Transactional(readOnly = true)
     public InitialRoomResponse isInitialRoom(Long roomId) {
         Room room = roomService.getRoom(roomId);
-        Member master = memberService.getMaster(room);
-        return new InitialRoomResponse(room.isInitialRoom(), master);
+        return new InitialRoomResponse(room.isInitialRoom());
     }
 }

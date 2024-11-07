@@ -547,16 +547,12 @@ class RoomFacadeTest extends BaseServiceTest {
         void 초기화된_방인지_확인한다() {
             // given
             Room room = roomRepository.save(new Room("uuid", 5, RoomStatus.READY, ROOM_SETTING));
-            Member master = memberRepository.save(PRIN.master(room));
 
             // when
             InitialRoomResponse actual = roomFacade.isInitialRoom(room.getId());
 
             // then
-            assertAll(
-                    () -> assertThat(actual.isInitial()).isFalse(),
-                    () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
-            );
+            assertThat(actual.isInitial()).isFalse();
         }
     }
 
