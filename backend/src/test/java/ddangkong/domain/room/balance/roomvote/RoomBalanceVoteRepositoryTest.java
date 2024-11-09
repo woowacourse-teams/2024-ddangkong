@@ -1,6 +1,6 @@
 package ddangkong.domain.room.balance.roomvote;
 
-import static ddangkong.support.fixture.MemberFixture.PRIN;
+import static ddangkong.support.fixture.MembersFixture.PRIN;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.BaseRepositoryTest;

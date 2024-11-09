@@ -1,9 +1,9 @@
 package ddangkong.controller.room.balance.roomvote;
 
-import static ddangkong.support.fixture.MemberFixture.EDEN;
-import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
-import static ddangkong.support.fixture.MemberFixture.PRIN;
-import static ddangkong.support.fixture.MemberFixture.TACAN;
+import static ddangkong.support.fixture.MembersFixture.EDEN;
+import static ddangkong.support.fixture.MembersFixture.KEOCHAN;
+import static ddangkong.support.fixture.MembersFixture.PRIN;
+import static ddangkong.support.fixture.MembersFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -33,38 +33,22 @@ import org.junit.jupiter.api.Test;
 
 class RoomBalanceVoteControllerTest extends BaseControllerTest {
 
-    private Room room;
-
-    private BalanceContent balanceContent;
-
-    private BalanceOption optionA;
-
-    private BalanceOption optionB;
-
-    private Member prin;
-
-    private Member tacan;
-
-    private Member keochan;
-
-    private Member eden;
-
-    @BeforeEach
-    void setUp() {
-        balanceContent = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
-        optionA = balanceOptionRepository.save(new BalanceOption("A", balanceContent));
-        optionB = balanceOptionRepository.save(new BalanceOption("B", balanceContent));
-
-        room = roomRepository.save(Room.createNewRoom());
-        prin = memberRepository.save(PRIN.master(room));
-        tacan = memberRepository.save(TACAN.common(room));
-        keochan = memberRepository.save(KEOCHAN.common(room));
-        eden = memberRepository.save(EDEN.common(room));
-    }
-
     @Nested
     @FixedClock(date = "2024-07-18", time = "20:00:02")
     class 투표_생성 {
+
+        @BeforeEach
+        void setUp() {
+            balanceContent = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
+            optionA = balanceOptionRepository.save(new BalanceOption("A", balanceContent));
+            optionB = balanceOptionRepository.save(new BalanceOption("B", balanceContent));
+
+            room = roomRepository.save(Room.createNewRoom());
+            prin = memberRepository.save(PRIN.master(room));
+            tacan = memberRepository.save(TACAN.common(room));
+            keochan = memberRepository.save(KEOCHAN.common(room));
+            eden = memberRepository.save(EDEN.common(room));
+        }
 
         @Test
         void 현재_방에서_투표할_수_있다() {

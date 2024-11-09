@@ -1,9 +1,9 @@
 package ddangkong.facade.room.balance.roomvote;
 
-import static ddangkong.support.fixture.MemberFixture.EDEN;
-import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
-import static ddangkong.support.fixture.MemberFixture.PRIN;
-import static ddangkong.support.fixture.MemberFixture.TACAN;
+import static ddangkong.support.fixture.MembersFixture.EDEN;
+import static ddangkong.support.fixture.MembersFixture.KEOCHAN;
+import static ddangkong.support.fixture.MembersFixture.PRIN;
+import static ddangkong.support.fixture.MembersFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;

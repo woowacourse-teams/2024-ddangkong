@@ -1,8 +1,8 @@
 package ddangkong.service.room.member;
 
-import static ddangkong.support.fixture.MemberFixture.EDEN;
-import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
-import static ddangkong.support.fixture.MemberFixture.PRIN;
+import static ddangkong.support.fixture.MembersFixture.EDEN;
+import static ddangkong.support.fixture.MembersFixture.KEOCHAN;
+import static ddangkong.support.fixture.MembersFixture.PRIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -14,7 +14,6 @@ import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
-import ddangkong.exception.BadRequestException;
 import ddangkong.exception.room.NotReadyRoomException;
 import ddangkong.exception.room.member.AlreadyExistMasterException;
 import ddangkong.exception.room.member.ExceedMaxMemberCountException;

@@ -1,7 +1,6 @@
 package ddangkong.controller.room;
 
-import static ddangkong.support.fixture.MemberFixture.PRIN;
-import static org.assertj.core.api.Assertions.*;
+import static ddangkong.support.fixture.MembersFixture.PRIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

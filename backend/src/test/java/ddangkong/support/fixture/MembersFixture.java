@@ -3,7 +3,7 @@ package ddangkong.support.fixture;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
 
-public enum MemberFixture {
+public enum MembersFixture {
     PRIN,
     TACAN,
     KEOCHAN,

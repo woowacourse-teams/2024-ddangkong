@@ -13,7 +13,7 @@ import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.facade.BaseServiceTest;
-import ddangkong.support.fixture.MemberFixture;
+import ddangkong.support.fixture.MembersFixture;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,10 +46,10 @@ class RoomMigratorTest extends BaseServiceTest {
         optionA = balanceOptionRepository.save(new BalanceOption("A", content));
         optionB = balanceOptionRepository.save(new BalanceOption("B", content));
         finishedRoom = roomRepository.save(new Room("uuid", 5, RoomStatus.FINISH, RoomSetting.createNewRoomSetting()));
-        prin = memberRepository.save(MemberFixture.PRIN.master(finishedRoom));
-        keochan = memberRepository.save(MemberFixture.KEOCHAN.common(finishedRoom));
-        maru = memberRepository.save(MemberFixture.MARU.common(finishedRoom));
-        pome = memberRepository.save(MemberFixture.POME.common(finishedRoom));
+        prin = memberRepository.save(MembersFixture.PRIN.master(finishedRoom));
+        keochan = memberRepository.save(MembersFixture.KEOCHAN.common(finishedRoom));
+        maru = memberRepository.save(MembersFixture.MARU.common(finishedRoom));
+        pome = memberRepository.save(MembersFixture.POME.common(finishedRoom));
     }
 
     @Nested

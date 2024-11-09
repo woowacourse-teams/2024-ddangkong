@@ -8,7 +8,7 @@ import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.room.member.InvalidMasterCountException;
 import ddangkong.exception.room.member.NotExistCommonMemberException;
 import ddangkong.exception.room.member.NotRoomMemberException;
-import ddangkong.support.fixture.MemberFixture;
+import ddangkong.support.fixture.MembersFixture;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -30,10 +30,10 @@ class RoomMembersTest {
         @Test
         void 방_멤버들_객체를_생성한다() {
             // given
-            Member prin = MemberFixture.PRIN.master(room);
-            Member eden = MemberFixture.EDEN.common(room);
-            Member keochan = MemberFixture.KEOCHAN.common(room);
-            Member tacan = MemberFixture.TACAN.common(room);
+            Member prin = MembersFixture.PRIN.master(room);
+            Member eden = MembersFixture.EDEN.common(room);
+            Member keochan = MembersFixture.KEOCHAN.common(room);
+            Member tacan = MembersFixture.TACAN.common(room);
             List<Member> members = List.of(prin, eden, keochan, tacan);
 
             // when
@@ -46,10 +46,10 @@ class RoomMembersTest {
         @Test
         void 방장이_여러명인_경우_예외를_발생한다() {
             // given
-            Member prin = MemberFixture.PRIN.master(room);
-            Member eden = MemberFixture.EDEN.master(room);
-            Member keochan = MemberFixture.KEOCHAN.common(room);
-            Member tacan = MemberFixture.TACAN.common(room);
+            Member prin = MembersFixture.PRIN.master(room);
+            Member eden = MembersFixture.EDEN.master(room);
+            Member keochan = MembersFixture.KEOCHAN.common(room);
+            Member tacan = MembersFixture.TACAN.common(room);
             List<Member> members = List.of(prin, eden, keochan, tacan);
 
             // when & then
@@ -61,10 +61,10 @@ class RoomMembersTest {
         @Test
         void 방장이_없는_경우_예외가_발생한다() {
             // given
-            Member prin = MemberFixture.PRIN.common(room);
-            Member eden = MemberFixture.EDEN.common(room);
-            Member keochan = MemberFixture.KEOCHAN.common(room);
-            Member tacan = MemberFixture.TACAN.common(room);
+            Member prin = MembersFixture.PRIN.common(room);
+            Member eden = MembersFixture.EDEN.common(room);
+            Member keochan = MembersFixture.KEOCHAN.common(room);
+            Member tacan = MembersFixture.TACAN.common(room);
             List<Member> members = List.of(prin, eden, keochan, tacan);
 
             // when & then
@@ -87,10 +87,10 @@ class RoomMembersTest {
         @Test
         void 방장을_조회한다() {
             // given
-            Member prin = MemberFixture.PRIN.master(room);
-            Member eden = MemberFixture.EDEN.common(room);
-            Member keochan = MemberFixture.KEOCHAN.common(room);
-            Member tacan = MemberFixture.TACAN.common(room);
+            Member prin = MembersFixture.PRIN.master(room);
+            Member eden = MembersFixture.EDEN.common(room);
+            Member keochan = MembersFixture.KEOCHAN.common(room);
+            Member tacan = MembersFixture.TACAN.common(room);
             List<Member> members = List.of(prin, eden, keochan, tacan);
             RoomMembers roomMembers = new RoomMembers(members);
 
@@ -115,11 +115,11 @@ class RoomMembersTest {
         @Test
         void 임의의_일반_멤버를_조회할_수_있다() {
             // given
-            Member prin = MemberFixture.PRIN.master(room);
+            Member prin = MembersFixture.PRIN.master(room);
             EntityTestUtils.setId(prin, 1L);
-            Member eden = MemberFixture.EDEN.common(room);
+            Member eden = MembersFixture.EDEN.common(room);
             EntityTestUtils.setId(eden, 2L);
-            Member takan = MemberFixture.TACAN.common(room);
+            Member takan = MembersFixture.TACAN.common(room);
             EntityTestUtils.setId(eden, 3L);
             List<Member> members = List.of(prin, eden, takan);
             RoomMembers roomMembers = new RoomMembers(members);
@@ -134,7 +134,7 @@ class RoomMembersTest {
         @Test
         void 일반_멤버가_없다면_예외를_발생시킨다() {
             // given
-            Member prin = MemberFixture.PRIN.master(room);
+            Member prin = MembersFixture.PRIN.master(room);
             EntityTestUtils.setId(prin, 1L);
             List<Member> members = List.of(prin);
             RoomMembers roomMembers = new RoomMembers(members);
@@ -158,9 +158,9 @@ class RoomMembersTest {
         @Test
         void 특정_멤버를_조회한다() {
             // given
-            Member prin = MemberFixture.PRIN.master(room);
+            Member prin = MembersFixture.PRIN.master(room);
             EntityTestUtils.setId(prin, 1L);
-            Member eden = MemberFixture.EDEN.common(room);
+            Member eden = MembersFixture.EDEN.common(room);
             EntityTestUtils.setId(eden, 2L);
             List<Member> members = List.of(prin, eden);
             RoomMembers roomMembers = new RoomMembers(members);
@@ -175,9 +175,9 @@ class RoomMembersTest {
         @Test
         void 존재하지_않는_멤버를_조회하면_예외가_발생한다() {
             // given
-            Member keochan = MemberFixture.KEOCHAN.master(room);
+            Member keochan = MembersFixture.KEOCHAN.master(room);
             EntityTestUtils.setId(keochan, 1L);
-            Member tacan = MemberFixture.TACAN.common(room);
+            Member tacan = MembersFixture.TACAN.common(room);
             EntityTestUtils.setId(tacan, 2L);
             List<Member> members = List.of(keochan, tacan);
             RoomMembers roomMembers = new RoomMembers(members);
