@@ -13,6 +13,8 @@ import ddangkong.domain.room.member.MemberRepository;
 import ddangkong.support.extension.DatabaseCleanerExtension;
 import ddangkong.support.fixture.BalanceContentFixture;
 import ddangkong.support.fixture.BalanceOptionFixture;
+import ddangkong.support.fixture.MemberFixture;
+import ddangkong.support.fixture.RoomBalanceVoteFixture;
 import ddangkong.support.fixture.RoomContentFixture;
 import ddangkong.support.fixture.RoomFixture;
 import io.restassured.RestAssured;
@@ -61,6 +63,12 @@ public abstract class BaseControllerTest {
 
     @Autowired
     protected RoomContentFixture roomContentFixture;
+
+    @Autowired
+    protected MemberFixture memberFixture;
+
+    @Autowired
+    protected RoomBalanceVoteFixture roomBalanceVoteFixture;
 
     @LocalServerPort
     private int port;

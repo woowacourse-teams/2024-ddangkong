@@ -1,9 +1,5 @@
 package ddangkong.controller.room.balance.roomvote;
 
-import static ddangkong.support.fixture.MembersFixture.EDEN;
-import static ddangkong.support.fixture.MembersFixture.KEOCHAN;
-import static ddangkong.support.fixture.MembersFixture.PRIN;
-import static ddangkong.support.fixture.MembersFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -33,30 +29,32 @@ import org.junit.jupiter.api.Test;
 
 class RoomBalanceVoteControllerTest extends BaseControllerTest {
 
+    BalanceContent balanceContent;
+    BalanceOption optionA;
+    BalanceOption optionB;
+
+    @BeforeEach
+    void setUp() {
+        balanceContent = balanceContentFixture.create(Category.IF, "A vs B");
+        optionA = balanceOptionFixture.create("A", balanceContent);
+        optionB = balanceOptionFixture.create("B", balanceContent);
+    }
+
     @Nested
     @FixedClock(date = "2024-07-18", time = "20:00:02")
     class 투표_생성 {
 
-        @BeforeEach
-        void setUp() {
-            balanceContent = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
-            optionA = balanceOptionRepository.save(new BalanceOption("A", balanceContent));
-            optionB = balanceOptionRepository.save(new BalanceOption("B", balanceContent));
-
-            room = roomRepository.save(Room.createNewRoom());
-            prin = memberRepository.save(PRIN.master(room));
-            tacan = memberRepository.save(TACAN.common(room));
-            keochan = memberRepository.save(KEOCHAN.common(room));
-            eden = memberRepository.save(EDEN.common(room));
-        }
-
         @Test
         void 현재_방에서_투표할_수_있다() {
             // given
-            LocalDateTime voteDeadline = LocalDateTime.parse("2024-07-18T20:00:08");
-            roomContentRepository.save(new RoomContent(room, balanceContent, 1, voteDeadline));
+            Room room = roomFixture.createRoom(1, 5, 10_000, Category.IF, RoomStatus.PROGRESS);
+            memberFixture.createMaster(room);
+            Member common = memberFixture.createCommon("common", room);
 
-            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(keochan.getId(), optionA.getId());
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-07-18T20:00:08");
+            roomContentFixture.create(room, balanceContent, 1, voteDeadline);
+
+            RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(common.getId(), optionA.getId());
 
             // when
             RoomBalanceVoteResponse actual = RestAssured.given().log().all()
@@ -80,15 +78,25 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
 
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/contents/{contentId}/vote-finished";
 
+        private Room room;
+        private Member master;
+        private Member common;
+
+        @BeforeEach
+        void init() {
+            room = roomFixture.createRoom(1, 5, 10_000, Category.IF, RoomStatus.PROGRESS);
+            master = memberFixture.createMaster(room);
+            common = memberFixture.createCommon("common", room);
+        }
+
         @Test
         void 방의_모든_멤버가_투표하면_투표가_종료된다() {
             // given
             LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:08");
-            roomContentRepository.save(new RoomContent(room, balanceContent, 1, voteDeadline));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionA));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionB));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionB));
+            roomContentFixture.create(room, balanceContent, 1, voteDeadline);
+
+            roomBalanceVoteFixture.create(master, optionA);
+            roomBalanceVoteFixture.create(common, optionB);
 
             // when
             VoteFinishedResponse actual = RestAssured.given().log().all()
@@ -107,7 +115,7 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
         void 방_컨텐츠의_투표_마감_시간이_지나면_투표가_종료된다() {
             // given
             LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:00");
-            roomContentRepository.save(new RoomContent(room, balanceContent, 1, voteDeadline));
+            roomContentFixture.create(room, balanceContent, 1, voteDeadline);
 
             // when
             VoteFinishedResponse actual = RestAssured.given().log().all()
@@ -126,7 +134,7 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
         void 투표_마감_시간이_지나지_않고_방의_모든_멤버가_투표하지_않으면_투표가_종료되지_않는다() {
             // given
             LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:08");
-            roomContentRepository.save(new RoomContent(room, balanceContent, 1, voteDeadline));
+            roomContentFixture.create(room, balanceContent, 1, voteDeadline);
 
             // when
             VoteFinishedResponse actual = RestAssured.given().log().all()
@@ -145,38 +153,34 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
     @Nested
     class 투표_매칭도_조회 {
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members/{memberId}/matching";
-        private Member member1;
-        private Member member2;
-        private Member member3;
+        private Member master;
+        private Member common1;
+        private Member common2;
         private Room room;
         private List<RoomContent> roomContents;
 
         @BeforeEach
         void init() {
             roomContents = new ArrayList<>();
-            room = roomRepository.save(new Room(
-                    "투표_매칭도_조회",
-                    3,
-                    RoomStatus.FINISH,
-                    new RoomSetting(3, 15_000, Category.IF)));
+            room = roomFixture.createRoom(3, new RoomSetting(3, 15_000, Category.IF), RoomStatus.FINISH);
 
-            BalanceContent balanceContent1 = balanceContentRepository.save(new BalanceContent(Category.IF, "if1"));
-            balanceOptionRepository.save(new BalanceOption("option1", balanceContent1));
-            balanceOptionRepository.save(new BalanceOption("option2", balanceContent1));
-            BalanceContent balanceContent2 = balanceContentRepository.save(new BalanceContent(Category.IF, "if2"));
-            balanceOptionRepository.save(new BalanceOption("option1", balanceContent2));
-            balanceOptionRepository.save(new BalanceOption("option2", balanceContent2));
-            BalanceContent balanceContent3 = balanceContentRepository.save(new BalanceContent(Category.IF, "if3"));
-            balanceOptionRepository.save(new BalanceOption("option1", balanceContent3));
-            balanceOptionRepository.save(new BalanceOption("option2", balanceContent3));
+            BalanceContent balanceContent1 = balanceContentFixture.create(Category.IF, "if1");
+            balanceOptionFixture.create("option1", balanceContent1);
+            balanceOptionFixture.create("option2", balanceContent1);
+            BalanceContent balanceContent2 = balanceContentFixture.create(Category.IF, "if2");
+            balanceOptionFixture.create("option1", balanceContent2);
+            balanceOptionFixture.create("option2", balanceContent2);
+            BalanceContent balanceContent3 = balanceContentFixture.create(Category.IF, "if3");
+            balanceOptionFixture.create("option1", balanceContent3);
+            balanceOptionFixture.create("option2", balanceContent3);
 
-            roomContents.add(roomContentRepository.save(RoomContent.newRoomContent(room, balanceContent1, 1)));
-            roomContents.add(roomContentRepository.save(RoomContent.newRoomContent(room, balanceContent2, 2)));
-            roomContents.add(roomContentRepository.save(RoomContent.newRoomContent(room, balanceContent3, 3)));
+            roomContents.add(roomContentFixture.create(room, balanceContent1, 1, null));
+            roomContents.add(roomContentFixture.create(room, balanceContent2, 2, null));
+            roomContents.add(roomContentFixture.create(room, balanceContent3, 3, null));
 
-            member1 = memberRepository.save(Member.createMaster("M1", room));
-            member2 = memberRepository.save(Member.createCommon("M2", room));
-            member3 = memberRepository.save(Member.createCommon("M3", room));
+            master = memberFixture.createMaster(room);
+            common1 = memberFixture.createCommon("common1", room);
+            common2 = memberFixture.createCommon("common2", room);
         }
 
         @Test
@@ -185,15 +189,15 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
             for (RoomContent roomContent : roomContents) {
                 List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(
                         roomContent.getBalanceContent());
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member1, balanceOptions.get(0)));
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member2, balanceOptions.get(0)));
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member3, balanceOptions.get(1)));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(master, balanceOptions.get(0)));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(common1, balanceOptions.get(0)));
+                roomBalanceVoteRepository.save(new RoomBalanceVote(common2, balanceOptions.get(1)));
             }
 
             // when
             RoomMembersVoteMatchingResponse actual = RestAssured.given().log().all()
                     .pathParam("roomId", room.getId())
-                    .pathParam("memberId", member1.getId())
+                    .pathParam("memberId", master.getId())
                     .when().get(ENDPOINT)
                     .then().log().all()
                     .statusCode(200)
@@ -203,10 +207,10 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
             assertAll(
                     () -> assertThat(actual.existMatching()).isTrue(),
                     () -> assertThat(actual.matchedMembers()).hasSize(2),
-                    () -> assertThat(actual.matchedMembers().get(0).memberId()).isEqualTo(member2.getId()),
+                    () -> assertThat(actual.matchedMembers().get(0).memberId()).isEqualTo(common1.getId()),
                     () -> assertThat(actual.matchedMembers().get(0).rank()).isEqualTo(1),
                     () -> assertThat(actual.matchedMembers().get(0).matchingPercent()).isEqualTo(100),
-                    () -> assertThat(actual.matchedMembers().get(1).memberId()).isEqualTo(member3.getId()),
+                    () -> assertThat(actual.matchedMembers().get(1).memberId()).isEqualTo(common2.getId()),
                     () -> assertThat(actual.matchedMembers().get(1).matchingPercent()).isEqualTo(0),
                     () -> assertThat(actual.matchedMembers().get(1).rank()).isEqualTo(2)
             );
