@@ -9,7 +9,7 @@ import {
   timerText,
   timerWrapper,
 } from './Timer.styled';
-import { convertMsecToSecond, formatLeftRoundTime, isAlertTimer } from './Timer.util';
+import { formatLeftRoundTime, isAlertTimer } from './Timer.util';
 import useVoteIsFinished from '../hooks/useVoteIsFinished';
 
 import DdangkongTimer from '@/assets/images/ddangkongTimer.webp';

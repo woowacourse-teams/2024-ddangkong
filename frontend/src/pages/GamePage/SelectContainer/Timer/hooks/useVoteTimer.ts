@@ -1,8 +1,8 @@
 import useTimer from './useTimer';
 import { convertMsecToSecond } from '../Timer.util';
 
-import useCompleteSelectionMutation from '@/components/common/SelectButton/SelectButton.hook';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import useCompleteSelectionMutation from '@/pages/GamePage/SelectButton/SelectButton.hook';
 
 const DEFAULT_TIME_LIMIT_SEC = 10;
 

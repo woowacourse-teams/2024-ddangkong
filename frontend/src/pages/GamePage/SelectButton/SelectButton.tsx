@@ -1,6 +1,7 @@
 import useCompleteSelectionMutation from './SelectButton.hook';
-import Button from '../Button/Button';
-import { bottomButtonLayout } from '../Button/Button.styled';
+
+import Button from '@/components/common/Button/Button';
+import { bottomButtonLayout } from '@/components/common/Button/Button.styled';
 
 interface SelectButtonProps {
   contentId: number;
