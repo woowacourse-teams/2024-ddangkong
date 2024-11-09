@@ -10,7 +10,7 @@ import {
 } from './RoomSetting.styled';
 
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
-import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
+import RoomSettingModal from '@/components/RoomSettingModal/RoomSettingModal';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useGetUserInfo from '@/hooks/useGetUserInfo';
 import useModal from '@/hooks/useModal';

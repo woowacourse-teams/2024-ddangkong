@@ -9,7 +9,7 @@ import {
   roomSettingModalLayout,
   roomSettingModalTitle,
 } from './RoomSettingModal.styled';
-import Modal from '../Modal/Modal';
+import Modal from '../common/Modal/Modal';
 
 import { POLLING_DELAY } from '@/constants/config';
 

@@ -3,10 +3,10 @@ import { useParams } from 'react-router-dom';
 
 import useMoveNextRoundMutation from './NextRoundButton.hook';
 import { createRandomNextRoundMessage, getNextRoundButtonText } from './NextRoundButton.utils';
-import AlertModal from '../../../components/common/AlertModal/AlertModal';
 import Button from '../../../components/common/Button/Button';
 import { bottomButtonLayout } from '../../../components/common/Button/Button.styled';
 
+import AlertModal from '@/components/AlertModal/AlertModal';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useGetUserInfo from '@/hooks/useGetUserInfo';
 import useModal from '@/hooks/useModal';

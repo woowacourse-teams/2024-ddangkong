@@ -1,8 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { PropsWithChildren } from 'react';
 
-import AlertModal from '../AlertModal/AlertModal';
-
+import AlertModal from '@/components/AlertModal/AlertModal';
 import useModal from '@/hooks/useModal';
 import useToast from '@/hooks/useToast';
 import { CustomError, NetworkError } from '@/utils/error';

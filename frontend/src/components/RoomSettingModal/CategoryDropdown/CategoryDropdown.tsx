@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { emptyLayout } from './CategoryDropdown.styled';
-import Dropdown from '../../Dropdown/Dropdown';
 import useCategoryListQuery from '../hooks/useCategoryListQuery';
 
+import Dropdown from '@/components/common/Dropdown/Dropdown';
 import { Category } from '@/types/room';
 
 interface CategoryDropdownProps<T> {

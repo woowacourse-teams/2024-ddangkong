@@ -1,6 +1,7 @@
 import { RefObject } from 'react';
 import QRCode from 'react-qr-code';
 
+import useClipBoard from './hooks/useClipBoard';
 import {
   inviteModalLi,
   inviteModalTitle,
@@ -12,8 +13,7 @@ import {
   inviteModalText,
   qrcodeWrapper,
 } from './InviteModal.styled';
-import useClipBoard from './useClipBoard';
-import Modal from '../Modal/Modal';
+import Modal from '../common/Modal/Modal';
 
 import CopyIcon from '@/assets/images/copyIcon.png';
 import { INVITE_URL } from '@/constants/url';

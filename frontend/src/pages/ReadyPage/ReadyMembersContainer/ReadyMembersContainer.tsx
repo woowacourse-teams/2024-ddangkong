@@ -16,7 +16,7 @@ import {
 import crownIcon from '@/assets/images/crownIcon.webp';
 import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
-import InviteModal from '@/components/common/InviteModal/InviteModal';
+import InviteModal from '@/components/InviteModal/InviteModal';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import useModal from '@/hooks/useModal';

@@ -1,7 +1,7 @@
 import { Fragment, RefObject } from 'react';
 
 import { alertModalTitle, alertText, messageContainer } from './AlertModal.styled';
-import Modal from '../Modal/Modal';
+import Modal from '../common/Modal/Modal';
 
 interface AlertModalProps {
   isOpen: boolean;

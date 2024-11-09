@@ -19,7 +19,6 @@ export const inviteModalUl = css`
 `;
 
 export const qrcodeWrapper = css`
-
   display: flex;
   justify-content: center;
   align-items: center;
