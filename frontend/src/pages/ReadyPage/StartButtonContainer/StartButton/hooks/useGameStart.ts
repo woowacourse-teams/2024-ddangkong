@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { startGame } from '@/apis/room';
 import useGetUserInfo from '@/hooks/useGetUserInfo';
 
-export const useGameStart = () => {
+const useGameStart = () => {
   const {
     member: { isMaster },
   } = useGetUserInfo();
@@ -22,3 +22,5 @@ export const useGameStart = () => {
 
   return { isMaster, handleGameStart, ...startGameMutation };
 };
+
+export default useGameStart;

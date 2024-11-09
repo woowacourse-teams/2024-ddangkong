@@ -22,6 +22,7 @@ const RoomSetting = () => {
     member: { isMaster },
   } = useGetUserInfo();
   const { show } = useModal();
+
   const screenReaderRoomSetting = `
         방 정보.
         카테고리 ${roomSetting.category.label}. 

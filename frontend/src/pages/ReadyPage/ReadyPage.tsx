@@ -1,7 +1,8 @@
+import ReadyMembersContainer from './ReadyMembersContainer/ReadyMembersContainer';
+import RoomSetting from './RoomSetting/RoomSetting';
+import StartButtonContainer from './StartButtonContainer/StartButtonContainer';
+
 import Content from '@/components/layout/Content/Content';
-import ReadyMembersContainer from '@/components/ReadyMembersContainer/ReadyMembersContainer';
-import RoomSetting from '@/components/RoomSetting/RoomSetting';
-import StartButtonContainer from '@/components/StartButtonContainer/StartButtonContainer';
 
 const ReadyPage = () => {
   return (

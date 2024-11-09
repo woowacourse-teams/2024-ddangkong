@@ -1,4 +1,4 @@
-import { useGameStart } from './hooks/useGameStart';
+import useGameStart from './hooks/useGameStart';
 import getStartButtonText from './StartButton.utils';
 
 import Button from '@/components/common/Button/Button';
