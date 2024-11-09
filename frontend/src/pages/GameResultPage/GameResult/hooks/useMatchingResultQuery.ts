@@ -1,8 +1,7 @@
-import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
 import { fetchMatchingResult } from '@/apis/balanceContent';
-import { resetRoom } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import useGetUserInfo from '@/hooks/useGetUserInfo';
 import { MatchingResult, MemberMatchingInfo } from '@/types/balanceContent';
@@ -12,7 +11,7 @@ type MatchingResultQueryResponse = UseQueryResult<MatchingResult, Error> & {
   existMatching?: boolean;
 };
 
-export const useMatchingResultQuery = (): MatchingResultQueryResponse => {
+const useMatchingResultQuery = (): MatchingResultQueryResponse => {
   const { roomId } = useParams();
   const {
     member: { memberId },
@@ -35,8 +34,4 @@ export const useMatchingResultQuery = (): MatchingResultQueryResponse => {
   };
 };
 
-export const useResetRoomMutation = (roomId: number) => {
-  return useMutation({
-    mutationFn: async () => await resetRoom(roomId),
-  });
-};
+export default useMatchingResultQuery;

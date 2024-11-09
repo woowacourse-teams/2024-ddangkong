@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import { useMatchingResultQuery } from './GameResult.hook';
+import FinalButton from './FinalButton/FinalButton';
 import {
   gameResultLayout,
   rankListContainer,
@@ -9,11 +9,11 @@ import {
   noMatchingText,
   floatingButton,
 } from './GameResult.styled';
+import GameResultItem from './GameResultItem/GameResultItem';
+import useMatchingResultQuery from './hooks/useMatchingResultQuery';
 import useScrollControl from './hooks/useScrollControl';
 import useScrollState from './hooks/useScrollState';
-import FinalButton from '../common/FinalButton/FinalButton';
-import Spinner from '../common/Spinner/Spinner';
-import GameResultItem from '../GameResultItem/GameResultItem';
+import Spinner from '../../../components/common/Spinner/Spinner';
 
 import ArrowDown from '@/assets/images/arrowDown.svg';
 import ArrowUp from '@/assets/images/arrowUp.svg';

@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
 
 import getFinalButtonText from './FinalButton.utils';
-import Button from '../Button/Button';
-import { bottomButtonLayout } from '../Button/Button.styled';
+import useResetRoomMutation from './hooks/useResetRoomMutation';
+import Button from '../../../../components/common/Button/Button';
+import { bottomButtonLayout } from '../../../../components/common/Button/Button.styled';
 
-import { useResetRoomMutation } from '@/components/GameResult/GameResult.hook';
 import useGetUserInfo from '@/hooks/useGetUserInfo';
 
 const FinalButton = () => {
