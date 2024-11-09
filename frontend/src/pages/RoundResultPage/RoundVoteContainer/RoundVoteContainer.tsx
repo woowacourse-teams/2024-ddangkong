@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
+import RoundResultTab from './RoundResultTab/RoundResultTab';
 import { tabLayout, tabWrapper } from './RoundVoteContainer.styled';
-import RoundResultTab from '../RoundResultTab/RoundResultTab';
-import TabContentContainer from '../TabContentContainer/TabContentContainer';
+import TabContentContainer from './TabContentContainer/TabContentContainer';
 
 const RoundVoteContainer = () => {
   const [activeTab, setActiveTab] = useState<'voteStatistics' | 'voteStatus'>('voteStatistics');

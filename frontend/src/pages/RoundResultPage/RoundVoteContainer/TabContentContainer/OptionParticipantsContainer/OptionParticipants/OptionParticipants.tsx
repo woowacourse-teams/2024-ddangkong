@@ -1,10 +1,11 @@
+import NicknameItem from './NicknameItem/NicknameItem';
 import {
   optionInfo,
   optionParticipantsLayout,
   participantsListWrapper,
 } from './OptionParticipants.styled';
-import A11yOnly from '../common/a11yOnly/A11yOnly';
-import NicknameItem from '../NicknameItem/NicknameItem';
+
+import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 
 export interface OptionParticipantsProps {
   optionName: string;

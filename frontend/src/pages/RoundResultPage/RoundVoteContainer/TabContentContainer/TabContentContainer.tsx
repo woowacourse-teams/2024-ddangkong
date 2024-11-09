@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
 
 import EmptyVoteContent from './EmptyVoteContent/EmptyVoteContent';
+import OptionParticipantsContainer from './OptionParticipantsContainer/OptionParticipantsContainer';
 import { tabContentContainerLayout } from './TabContentContainer.styled';
 import { isExistVoteMember } from './TabContentContainer.util';
 import VoteStatisticContent from './VoteStatisticContent/VoteStatisticContent';
-import OptionParticipantsContainer from '../OptionParticipantsContainer/OptionParticipantsContainer';
-import TopicContainer from '../TopicContainer/TopicContainer';
 
+import TopicContainer from '@/components/TopicContainer/TopicContainer';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useMyGameStatus from '@/hooks/useMyGameStatus';
 import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';

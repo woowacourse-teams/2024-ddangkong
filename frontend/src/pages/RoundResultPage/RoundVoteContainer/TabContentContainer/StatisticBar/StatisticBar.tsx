@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import useTotalCountAnimation from './hooks/useTotalCountAnimation';
 import { barContainer, firstBar, secondBar } from './StatisticBar.styled';
 
-import useTotalCountAnimation from '@/components/RoundVoteContainer/RoundVoteContainer.hook';
 import { Group } from '@/types/roundVoteResult';
 
 const INITIAL_OPTION_PERCENT = 50;

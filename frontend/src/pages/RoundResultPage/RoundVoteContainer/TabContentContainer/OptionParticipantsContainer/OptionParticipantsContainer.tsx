@@ -1,8 +1,8 @@
+import OptionParticipants from './OptionParticipants/OptionParticipants';
 import {
   horizontalDivider,
   optionParticipantsContainerLayout,
 } from './OptionParticipantsContainer.styled';
-import OptionParticipants from '../OptionParticipants/OptionParticipants';
 
 import { Group } from '@/types/roundVoteResult';
 
