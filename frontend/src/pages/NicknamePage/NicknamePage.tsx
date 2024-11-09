@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import NicknameInput from './components/NicknameInput/NicknameInput';
 import useMakeOrEnterRoom from './hooks/useMakeOrEnterRoom';
-import NicknameInput from './NicknameInput/NicknameInput';
 import {
   profileWrapper,
   profileImg,

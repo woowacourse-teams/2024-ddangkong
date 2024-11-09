@@ -3,7 +3,7 @@ import { fn } from '@storybook/test';
 import { useState } from 'react';
 
 import RoomSettingModal from './RoomSettingModal';
-import Button from '../Button/Button';
+import Button from '../common/Button/Button';
 
 const meta = {
   title: 'modal/RoomSettingModal',

@@ -3,7 +3,7 @@ import { fn } from '@storybook/test';
 import { useState } from 'react';
 
 import AlertModal from './AlertModal';
-import Button from '../Button/Button';
+import Button from '../common/Button/Button';
 
 const meta = {
   title: 'modal/AlertModal',

@@ -13,11 +13,11 @@ import GameResultItem from './GameResultItem/GameResultItem';
 import useMatchingResultQuery from './hooks/useMatchingResultQuery';
 import useScrollControl from './hooks/useScrollControl';
 import useScrollState from './hooks/useScrollState';
-import Spinner from '../../../components/common/Spinner/Spinner';
 
 import ArrowDown from '@/assets/images/arrowDown.svg';
 import ArrowUp from '@/assets/images/arrowUp.svg';
 import SadDdangKong from '@/assets/images/sadDdangkong.webp';
+import Spinner from '@/components/common/Spinner/Spinner';
 
 const GameResult = () => {
   const { matchedMembers, existMatching, isLoading } = useMatchingResultQuery();
