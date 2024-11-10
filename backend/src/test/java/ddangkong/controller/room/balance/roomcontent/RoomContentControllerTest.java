@@ -35,7 +35,7 @@ class RoomContentControllerTest extends BaseControllerTest {
             String balanceOption2Name = "B";
             RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, category);
 
-            room = roomFixture.createRoom(currentRound, roomSetting, status);
+            room = roomFixture.createNotStartedRoom(currentRound, roomSetting, status);
             BalanceContent balanceContent = balanceContentFixture.create(Category.IF, balanceContentName);
             balanceOptionFixture.create(balanceOption1Name, balanceContent);
             balanceOptionFixture.create(balanceOption2Name, balanceContent);

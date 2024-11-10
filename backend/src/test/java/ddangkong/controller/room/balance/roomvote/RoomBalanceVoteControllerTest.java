@@ -47,7 +47,7 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
         @Test
         void 현재_방에서_투표할_수_있다() {
             // given
-            Room room = roomFixture.createRoom(1, 5, 10_000, Category.IF, RoomStatus.PROGRESS);
+            Room room = roomFixture.createNotStartedRoom(1, 5, 10_000, Category.IF, RoomStatus.PROGRESS);
             memberFixture.createMaster(room);
             Member common = memberFixture.createCommon("common", room);
 
@@ -84,7 +84,7 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
 
         @BeforeEach
         void init() {
-            room = roomFixture.createRoom(1, 5, 10_000, Category.IF, RoomStatus.PROGRESS);
+            room = roomFixture.createNotStartedRoom(1, 5, 10_000, Category.IF, RoomStatus.PROGRESS);
             master = memberFixture.createMaster(room);
             common = memberFixture.createCommon("common", room);
         }
@@ -162,7 +162,7 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
         @BeforeEach
         void init() {
             roomContents = new ArrayList<>();
-            room = roomFixture.createRoom(3, new RoomSetting(3, 15_000, Category.IF), RoomStatus.FINISH);
+            room = roomFixture.createNotStartedRoom(3, new RoomSetting(3, 15_000, Category.IF), RoomStatus.FINISH);
 
             BalanceContent balanceContent1 = balanceContentFixture.create(Category.IF, "if1");
             balanceOptionFixture.create("option1", balanceContent1);

@@ -15,6 +15,9 @@ public class RoomContentFixture {
     private FixtureSettingManager fixtureSettingManager;
 
     @Autowired
+    private BalanceContentFixture balanceContentFixture;
+
+    @Autowired
     private RoomContentRepository roomContentRepository;
 
     public RoomContent create(Room room, BalanceContent balanceContent, int round, LocalDateTime voteDeadline) {
@@ -22,5 +25,12 @@ public class RoomContentFixture {
         fixtureSettingManager.setField(roomContent, "voteDeadline", voteDeadline);
 
         return roomContentRepository.save(roomContent);
+    }
+
+    public void initRoomContents(Room room) {
+        for (int i = 0; i < room.getTotalRound(); i++) {
+            BalanceContent balanceContent = balanceContentFixture.create(room.getCategory(), "Content" + i);
+            create(room, balanceContent, i + 1, null);
+        }
     }
 }
