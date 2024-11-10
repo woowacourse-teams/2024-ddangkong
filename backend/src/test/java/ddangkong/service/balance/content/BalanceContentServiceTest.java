@@ -24,7 +24,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 아이디로_컨텐츠를_조회한다() {
             // given
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
+            BalanceContent content = balanceContentFixture.create(Category.IF, "A vs B");
 
             // when
             BalanceContent foundContent = balanceContentService.getBalanceContent(content.getId());
@@ -36,10 +36,10 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 존재하지_않는_컨텐츠를_조회하면_예외가_발생한다() {
             // given
-            Long invalidContentId = 99L;
+            Long notExistContentId = 0L;
 
             // when & then
-            assertThatThrownBy(() -> balanceContentService.getBalanceContent(invalidContentId))
+            assertThatThrownBy(() -> balanceContentService.getBalanceContent(notExistContentId))
                     .isExactlyInstanceOf(NotFoundBalanceContentException.class);
         }
     }
@@ -51,13 +51,10 @@ class BalanceContentServiceTest extends BaseServiceTest {
         void 카테고리에_해당하는_컨텐츠를_주어진_개수만큼_선택한다() {
             // given
             Category category = Category.IF;
-            balanceContentRepository.saveAll(List.of(
-                    new BalanceContent(category, "민초 vs 반민초"),
-                    new BalanceContent(category, "카리나 vs 윈터"),
-                    new BalanceContent(category, "산 vs 바다"),
-                    new BalanceContent(category, "얼굴 vs 성격"),
-                    new BalanceContent(category, "부먹 vs 찍먹")
-            ));
+            balanceContentFixture.create(category, "민초 vs 반민초");
+            balanceContentFixture.create(category, "카리나 vs 윈터");
+            balanceContentFixture.create(category, "산 vs 바다");
+
             int pickCount = 3;
 
             // when
@@ -72,11 +69,9 @@ class BalanceContentServiceTest extends BaseServiceTest {
         void 카테고리에_해당하는_컨텐츠가_부족하면_예외가_발생한다() {
             // given
             Category category = Category.IF;
-            balanceContentRepository.saveAll(List.of(
-                    new BalanceContent(category, "민초 vs 반민초"),
-                    new BalanceContent(category, "카리나 vs 윈터")
-            ));
-            int pickCount = 10;
+            balanceContentFixture.create(category, "민초 vs 반민초");
+            balanceContentFixture.create(category, "카리나 vs 윈터");
+            int pickCount = 3;
 
             // when & then
             assertThatThrownBy(() -> balanceContentService.pickBalanceContents(category, pickCount))

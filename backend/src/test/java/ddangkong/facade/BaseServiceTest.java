@@ -10,17 +10,16 @@ import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.MemberRepository;
 import ddangkong.support.extension.DatabaseCleanerExtension;
+import ddangkong.support.fixture.BalanceContentFixture;
 import java.time.Clock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.test.context.jdbc.Sql;
 
 @ExtendWith(DatabaseCleanerExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @SpyBean(Clock.class)
-@Sql(scripts = "/init-test.sql")
 public abstract class BaseServiceTest {
 
     @Autowired
@@ -43,4 +42,7 @@ public abstract class BaseServiceTest {
 
     @Autowired
     protected RoomBalanceVoteRepository roomBalanceVoteRepository;
+
+    @Autowired
+    protected BalanceContentFixture balanceContentFixture;
 }
