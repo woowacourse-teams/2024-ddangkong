@@ -18,6 +18,9 @@ public class RoomContentFixture {
     private BalanceContentFixture balanceContentFixture;
 
     @Autowired
+    private BalanceOptionFixture balanceOptionFixture;
+
+    @Autowired
     private RoomContentRepository roomContentRepository;
 
     public RoomContent create(Room room, BalanceContent balanceContent, int round, LocalDateTime voteDeadline) {
@@ -30,6 +33,8 @@ public class RoomContentFixture {
     public void initRoomContents(Room room) {
         for (int i = 0; i < room.getTotalRound(); i++) {
             BalanceContent balanceContent = balanceContentFixture.create(room.getCategory(), "Content" + i);
+            balanceOptionFixture.create("Option1", balanceContent);
+            balanceOptionFixture.create("Option2", balanceContent);
             create(room, balanceContent, i + 1, null);
         }
     }

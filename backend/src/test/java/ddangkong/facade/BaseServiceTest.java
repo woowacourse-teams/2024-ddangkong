@@ -11,6 +11,11 @@ import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.MemberRepository;
 import ddangkong.support.extension.DatabaseCleanerExtension;
 import ddangkong.support.fixture.BalanceContentFixture;
+import ddangkong.support.fixture.BalanceOptionFixture;
+import ddangkong.support.fixture.MemberFixture;
+import ddangkong.support.fixture.RoomBalanceVoteFixture;
+import ddangkong.support.fixture.RoomContentFixture;
+import ddangkong.support.fixture.RoomFixture;
 import java.time.Clock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +49,20 @@ public abstract class BaseServiceTest {
     protected RoomBalanceVoteRepository roomBalanceVoteRepository;
 
     @Autowired
+    protected RoomFixture roomFixture;
+
+    @Autowired
     protected BalanceContentFixture balanceContentFixture;
+
+    @Autowired
+    protected BalanceOptionFixture balanceOptionFixture;
+
+    @Autowired
+    protected RoomContentFixture roomContentFixture;
+
+    @Autowired
+    protected MemberFixture memberFixture;
+
+    @Autowired
+    protected RoomBalanceVoteFixture roomBalanceVoteFixture;
 }
