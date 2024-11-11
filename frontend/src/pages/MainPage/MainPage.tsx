@@ -1,3 +1,4 @@
+import useCreateRoom from './hooks/useCreateRoom';
 import {
   mainPageLayout,
   logoWrapper,
@@ -7,7 +8,6 @@ import {
   titleContainer,
   buttonText,
 } from './MainPage.styled';
-import { useCreateRoom } from './useCreateRoom';
 
 import Ddangkong from '@/assets/images/ddangkong.webp';
 import Button from '@/components/common/Button/Button';

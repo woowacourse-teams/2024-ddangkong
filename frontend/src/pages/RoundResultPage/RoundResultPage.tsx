@@ -1,6 +1,7 @@
-import NextRoundButton from '@/components/common/NextRoundButton/NextRoundButton';
+import NextRoundButton from './components/NextRoundButton/NextRoundButton';
+import RoundVoteContainer from './components/RoundVoteContainer/RoundVoteContainer';
+
 import Content from '@/components/layout/Content/Content';
-import RoundVoteContainer from '@/components/RoundVoteContainer/RoundVoteContainer';
 
 const RoundResultPage = () => {
   return (

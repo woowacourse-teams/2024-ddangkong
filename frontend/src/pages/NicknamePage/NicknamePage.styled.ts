@@ -57,7 +57,9 @@ export const nicknameLengthText = css`
 export const noVoteTextContainer = css`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  height: 50vh;
 `;
 
 export const noVoteText = css`
