@@ -1,7 +1,6 @@
 package ddangkong.controller.room;
 
 import static ddangkong.support.fixture.MemberFixture.PRIN;
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -12,7 +11,6 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
-import ddangkong.domain.room.member.Member;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
@@ -269,14 +267,13 @@ class RoomControllerTest extends BaseControllerTest {
     class 방_초기화 {
 
         private Room room;
-        private Member master;
 
         @BeforeEach
         void setUp() {
             BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
             RoomSetting roomSetting = new RoomSetting(3, 10_000, Category.IF);
             room = roomRepository.save(new Room("roomResetSetUpUUID", 3, RoomStatus.FINISH, roomSetting));
-            master = memberRepository.save(PRIN.master(room));
+            memberRepository.save(PRIN.master(room));
             roomContentRepository.save(new RoomContent(room, content, 1, null));
             roomContentRepository.save(new RoomContent(room, content, 2, null));
             roomContentRepository.save(new RoomContent(room, content, 3, null));
@@ -307,10 +304,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .as(InitialRoomResponse.class);
 
             // then
-            assertAll(
-                    () -> assertThat(actual.isInitial()).isTrue(),
-                    () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
-            );
+            assertThat(actual.isInitial()).isTrue();
         }
     }
 

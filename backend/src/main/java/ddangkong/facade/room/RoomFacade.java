@@ -109,8 +109,7 @@ public class RoomFacade {
     @Transactional(readOnly = true)
     public RoundFinishedResponse getRoundFinished(Long roomId, int round) {
         Room room = roomService.getRoom(roomId);
-        Member master = memberService.getMaster(room);
-        return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished(), master);
+        return new RoundFinishedResponse(room.isRoundFinished(round), room.isAllRoundFinished());
     }
 
     @Transactional
@@ -145,7 +144,6 @@ public class RoomFacade {
     @Transactional(readOnly = true)
     public InitialRoomResponse isInitialRoom(Long roomId) {
         Room room = roomService.getRoom(roomId);
-        Member master = memberService.getMaster(room);
-        return new InitialRoomResponse(room.isInitialRoom(), master);
+        return new InitialRoomResponse(room.isInitialRoom());
     }
 }

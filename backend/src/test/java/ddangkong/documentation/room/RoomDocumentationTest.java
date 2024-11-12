@@ -328,8 +328,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 라운드가_종료되었는지_조회한다() throws Exception {
             // given
-            MasterResponse prin = new MasterResponse(1L, "프콩");
-            RoundFinishedResponse response = new RoundFinishedResponse(true, false, prin);
+            RoundFinishedResponse response = new RoundFinishedResponse(true, false);
             when(roomFacade.getRoundFinished(anyLong(), anyInt())).thenReturn(response);
 
             // when & then
@@ -346,10 +345,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             ),
                             responseFields(
                                     fieldWithPath("isRoundFinished").description("라운드 종료 여부"),
-                                    fieldWithPath("isGameFinished").description("게임 종료 여부"),
-                                    fieldWithPath("master").type(OBJECT).description("방장 정보"),
-                                    fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
-                                    fieldWithPath("master.nickname").type(STRING).description("닉네임")
+                                    fieldWithPath("isGameFinished").description("게임 종료 여부")
                             )
                     ));
         }
@@ -402,8 +398,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방이_초기화되었는지_확인한다() throws Exception {
             // given
             String endpoint = "/api/balances/rooms/{roomId}/initial";
-            MasterResponse prin = new MasterResponse(1L, "프콩");
-            InitialRoomResponse response = new InitialRoomResponse(true, prin);
+            InitialRoomResponse response = new InitialRoomResponse(true);
             when(roomFacade.isInitialRoom(anyLong())).thenReturn(response);
 
             // when & then
@@ -414,10 +409,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     parameterWithName("roomId").description("방 ID")
                             ),
                             responseFields(
-                                    fieldWithPath("isInitial").description("방 초기화 여부"),
-                                    fieldWithPath("master").type(OBJECT).description("방장 정보"),
-                                    fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
-                                    fieldWithPath("master.nickname").type(STRING).description("닉네임")
+                                    fieldWithPath("isInitial").description("방 초기화 여부")
                             )
                     ));
 
