@@ -24,7 +24,7 @@ class RoomContentFacadeTest extends BaseServiceTest {
         void 방의_진행_중인_밸런스_게임_내용을_조회할_수_있다() {
             // given
             Room progressRoom = roomFixture.createProgressRoom(1);
-            roomContentFixture.initRoomContents(progressRoom);
+            roomContentFixture.initRoomContentsWithOption(progressRoom);
 
             // when
             RoomContentResponse actual = roomContentFacade.getRecentRoomContent(progressRoom.getId());

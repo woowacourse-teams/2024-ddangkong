@@ -30,7 +30,22 @@ public class RoomContentFixture {
         return roomContentRepository.save(roomContent);
     }
 
+    public void initRoomContent(Room room, BalanceContent balanceContent, int round) {
+        create(room, balanceContent, round, null);
+    }
+
+    public void initRoomContent(Room room, BalanceContent balanceContent, int round, LocalDateTime voteDeadline) {
+        create(room, balanceContent, round, voteDeadline);
+    }
+
     public void initRoomContents(Room room) {
+        for (int i = 0; i < room.getTotalRound(); i++) {
+            BalanceContent balanceContent = balanceContentFixture.create(room.getCategory(), "Content" + i);
+            create(room, balanceContent, i + 1, null);
+        }
+    }
+
+    public void initRoomContentsWithOption(Room room) {
         for (int i = 0; i < room.getTotalRound(); i++) {
             BalanceContent balanceContent = balanceContentFixture.create(room.getCategory(), "Content" + i);
             balanceOptionFixture.create("Option1", balanceContent);
