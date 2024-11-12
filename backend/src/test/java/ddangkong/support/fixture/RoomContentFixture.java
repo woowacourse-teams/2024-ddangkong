@@ -34,8 +34,9 @@ public class RoomContentFixture {
         create(room, balanceContent, round, null);
     }
 
-    public void initRoomContent(Room room, BalanceContent balanceContent, int round, LocalDateTime voteDeadline) {
-        create(room, balanceContent, round, voteDeadline);
+    public RoomContent initRoomContent(Room room, BalanceContent balanceContent, int round,
+                                       LocalDateTime voteDeadline) {
+        return create(room, balanceContent, round, voteDeadline);
     }
 
     public void initRoomContents(Room room) {

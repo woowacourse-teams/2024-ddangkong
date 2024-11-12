@@ -56,6 +56,17 @@ public class RoomFixture {
         return roomRepository.save(room);
     }
 
+    public Room createProgressRoom(int currentRound, RoomSetting roomSetting) {
+        RoomStatus roomStatus = RoomStatus.PROGRESS;
+
+        Room room = Room.createNewRoom();
+
+        fixtureSettingManager.setField(room, "currentRound", currentRound);
+        fixtureSettingManager.setField(room, "status", roomStatus);
+        fixtureSettingManager.setField(room, "roomSetting", roomSetting);
+        return roomRepository.save(room);
+    }
+
     public Room createFinishedRoom() {
         int currentRound = 5;
         int totalRound = 5;

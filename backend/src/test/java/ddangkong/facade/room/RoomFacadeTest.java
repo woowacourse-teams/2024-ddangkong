@@ -2,7 +2,6 @@ package ddangkong.facade.room;
 
 import static ddangkong.support.fixture.MembersFixture.EDEN;
 import static ddangkong.support.fixture.MembersFixture.KEOCHAN;
-import static ddangkong.support.fixture.MembersFixture.MARU;
 import static ddangkong.support.fixture.MembersFixture.PRIN;
 import static ddangkong.support.fixture.MembersFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,6 +30,7 @@ import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
+import ddangkong.support.annotation.FixedClock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -54,14 +54,14 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 방_생성_시_방장_멤버를_생성하고_방을_생성한다() {
             // given
-            String nickname = "나는방장";
-            MemberResponse expectedMemberResponse = new MemberResponse(14L, nickname, true);
+            String nickname = "방장";
+            MemberResponse expectedMemberResponse = new MemberResponse(1L, nickname, true);
 
             // when
             RoomJoinResponse actual = roomFacade.createRoom(nickname);
 
             // then
-            assertThat(actual.roomId()).isEqualTo(8L);
+            assertThat(actual.roomId()).isEqualTo(1L);
             assertThat(actual.member()).isEqualTo(expectedMemberResponse);
         }
     }
@@ -72,17 +72,19 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 이미_생성된_방에_참여한다() {
             // given
-            String nickname = "나는참가자";
-            String uuid = "uuid4";
-            MemberResponse expectedMemberResponse = new MemberResponse(14L, nickname, false);
+            Room room = roomFixture.createNotStartedRoom();
+            memberFixture.createMaster(room);
+
+            String nickname = "참가자";
+            MemberResponse expectedMemberResponse = new MemberResponse(2L, nickname, false);
 
             // when
-            RoomJoinResponse actual = roomFacade.joinRoom(nickname, uuid);
+            RoomJoinResponse actual = roomFacade.joinRoom(nickname, room.getUuid());
 
             // then
             assertAll(
-                    () -> assertThat(actual.roomId()).isEqualTo(4L),
-                    () -> assertThat(actual.roomUuid()).isEqualTo(uuid),
+                    () -> assertThat(actual.roomId()).isEqualTo(1L),
+                    () -> assertThat(actual.roomUuid()).isEqualTo(room.getUuid()),
                     () -> assertThat(actual.member()).isEqualTo(expectedMemberResponse)
             );
         }
@@ -90,8 +92,8 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 존재하지_않는_방에_참여시_예외를_던진다() {
             // given
-            String nickname = "나는참가자";
-            String nonExistUuid = "hi";
+            String nickname = "참가자";
+            String nonExistUuid = "nonExistUuid";
 
             // when & then
             assertThatThrownBy(() -> roomFacade.joinRoom(nickname, nonExistUuid))
@@ -101,15 +103,16 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 동시에_최대_인원수만큼_방에_참여해도_예외를_발생한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            memberRepository.save(PRIN.master(room));
+            Room room = roomFixture.createNotStartedRoom();
+            memberFixture.createMaster(room);
+
             for (int i = 0; i < 10; i++) {
-                memberRepository.save(EDEN.common(room, i));
+                memberFixture.createCommon("member" + i, room);
             }
 
             // when
-            Thread t1 = new Thread(() -> roomFacade.joinRoom("t1member", room.getUuid()));
-            Thread t2 = new Thread(() -> roomFacade.joinRoom("t2member", room.getUuid()));
+            Thread t1 = new Thread(() -> roomFacade.joinRoom("member12-1", room.getUuid()));
+            Thread t2 = new Thread(() -> roomFacade.joinRoom("member12-2", room.getUuid()));
             t1.start();
             t2.start();
 
@@ -132,18 +135,20 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 사용자_정보를_조회한다() {
             // given
-            String nickname = "나는참가자";
-            String uuid = "uuid4";
-            MemberResponse expectedMemberResponse = new MemberResponse(14L, nickname, false);
-            roomFacade.joinRoom(nickname, uuid);
+            Room room = roomFixture.createNotStartedRoom();
+            memberFixture.createMaster(room);
+
+            String nickname = "참가자";
+            MemberResponse expectedMemberResponse = new MemberResponse(2L, nickname, false);
+            roomFacade.joinRoom(nickname, room.getUuid());
 
             // when
-            RoomMemberResponse actual = roomFacade.getRoomMemberInfo(14L);
+            RoomMemberResponse actual = roomFacade.getRoomMemberInfo(2L);
 
             // then
             assertAll(
-                    () -> assertThat(actual.roomId()).isEqualTo(4L),
-                    () -> assertThat(actual.roomUuid()).isEqualTo(uuid),
+                    () -> assertThat(actual.roomId()).isEqualTo(1L),
+                    () -> assertThat(actual.roomUuid()).isEqualTo(room.getUuid()),
                     () -> assertThat(actual.member()).isEqualTo(expectedMemberResponse)
             );
         }
@@ -162,15 +167,28 @@ class RoomFacadeTest extends BaseServiceTest {
     @Nested
     class 방_나가기 {
 
+        Room room;
+        BalanceContent balanceContent;
+        BalanceOption option1;
+        BalanceOption option2;
+
+        @BeforeEach
+        void init() {
+            room = roomFixture.createNotStartedRoom();
+            balanceContent = balanceContentFixture.create(room.getCategory(), "Content1");
+            option1 = balanceOptionFixture.create("Option1", balanceContent);
+            option2 = balanceOptionFixture.create("Option2", balanceContent);
+        }
+
         @Test
         void 해당_멤버의_투표를_옮긴_후에_요청한_멤버를_삭제한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            memberRepository.save(EDEN.master(room));
-            Member commonMember = memberRepository.save(KEOCHAN.common(room));
+            memberFixture.createMaster(room);
+            Member commonMember = memberFixture.createCommon("common", room);
 
-            BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
-            RoomBalanceVote roomBalanceVote = getRoomBalanceVote(commonMember, balanceContent);
+            roomContentFixture.initRoomContent(room, balanceContent, 1, LocalDateTime.now());
+            RoomBalanceVote roomBalanceVote = roomBalanceVoteFixture.create(commonMember, option1);
+
             long countOfTotalVotes = totalBalanceVoteRepository.count();
 
             // when
@@ -188,23 +206,14 @@ class RoomFacadeTest extends BaseServiceTest {
             );
         }
 
-        private RoomBalanceVote getRoomBalanceVote(Member member, BalanceContent balanceContent) {
-            BalanceOption balanceOption = balanceOptionRepository.findAllByBalanceContent(balanceContent).get(0);
-            RoomBalanceVote roomBalanceVote = new RoomBalanceVote(member, balanceOption);
-            return roomBalanceVoteRepository.save(roomBalanceVote);
-        }
-
         @Test
         void 방에서_마지막_멤버가_나가면_방을_삭제한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            Member member = memberRepository.save(EDEN.master(room));
-
-            BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
-            RoomContent roomContent = getSavedRoomContent(room, balanceContent);
+            Member lastMember = memberFixture.createMaster(room);
+            RoomContent roomContent = roomContentFixture.initRoomContent(room, balanceContent, 1, LocalDateTime.now());
 
             // when
-            roomFacade.leaveRoom(room.getId(), member.getId());
+            roomFacade.leaveRoom(room.getId(), lastMember.getId());
 
             // then
             Optional<RoomContent> deletedRoomContent = roomContentRepository.findById(roomContent.getId());
@@ -215,17 +224,11 @@ class RoomFacadeTest extends BaseServiceTest {
             );
         }
 
-        private RoomContent getSavedRoomContent(Room room, BalanceContent content) {
-            RoomContent roomContent = RoomContent.newRoomContent(room, content, 1);
-            return roomContentRepository.save(roomContent);
-        }
-
         @Test
         void 방의_마스터가_나가면_다른_일반_멤버를_마스터로_승급한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            Member master = memberRepository.save(EDEN.master(room));
-            Member commonMember = memberRepository.save(KEOCHAN.common(room));
+            Member master = memberFixture.createMaster(room);
+            Member commonMember = memberFixture.createCommon("common", room);
 
             // when
             roomFacade.leaveRoom(room.getId(), master.getId());
@@ -242,10 +245,10 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 게임_방_정보를_조회한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            Member master = memberRepository.save(EDEN.master(room));
-            memberRepository.save(KEOCHAN.common(room));
-            memberRepository.save(MARU.common(room));
+            Room room = roomFixture.createNotStartedRoom();
+            Member master = memberFixture.createMaster(room);
+            memberFixture.createCommon("common1", room);
+            memberFixture.createCommon("common2", room);
 
             // when
             RoomInfoResponse actual = roomFacade.getRoomInfo(room.getId());
@@ -253,8 +256,8 @@ class RoomFacadeTest extends BaseServiceTest {
             // then
             assertAll(
                     () -> assertThat(actual.isGameStart()).isFalse(),
-                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(10_000),
-                    () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(5),
+                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(room.getTimeLimit()),
+                    () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(room.getTotalRound()),
                     () -> assertThat(actual.members()).hasSize(3),
                     () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
             );
@@ -267,7 +270,7 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 방_설정_정보를_변경한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
+            Room room = roomFixture.createNotStartedRoom();
 
             int totalRound = 8;
             int timeLimit = 10_000;
@@ -291,28 +294,30 @@ class RoomFacadeTest extends BaseServiceTest {
     @Nested
     class 게임_시작 {
 
-        private static final Long READY_ROOM_ID = 4L;
-
         @Test
         void 게임_시작_시_방이_진행_상태가_된다() {
             // when
-            roomFacade.startGame(READY_ROOM_ID);
+            Room notStartedRoom = roomFixture.createNotStartedRoom();
+            roomContentFixture.initRoomContents(notStartedRoom);
+            roomFacade.startGame(notStartedRoom.getId());
 
             // then
-            Room room = roomRepository.findById(READY_ROOM_ID).orElseThrow();
+            Room room = roomRepository.findById(notStartedRoom.getId()).orElseThrow();
             assertThat(room.isGameProgress()).isTrue();
         }
 
         @Test
         void 게임_시작_시_해당_방의_컨텐츠가_생성된다() {
             // given
+            Room notStartedRoom = roomFixture.createNotStartedRoom();
+            balanceContentFixture.createContents(notStartedRoom.getCategory(), notStartedRoom.getTotalRound());
             long beforeRoomContentCount = roomContentRepository.count();
 
             // when
-            roomFacade.startGame(READY_ROOM_ID);
+            roomFacade.startGame(notStartedRoom.getId());
 
             // then
-            Room room = roomRepository.findById(READY_ROOM_ID).orElseThrow();
+            Room room = roomRepository.findById(notStartedRoom.getId()).orElseThrow();
             long afterRoomContentCount = roomContentRepository.count();
             long addedRoomContentCount = afterRoomContentCount - beforeRoomContentCount;
             assertThat(addedRoomContentCount).isEqualTo(room.getTotalRound());
@@ -325,23 +330,20 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 중간_라운드라면_다음_라운드로_넘어갈_수_있다() {
             // given
-            int currentRound = 2;
-            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
-            Room room = roomRepository.save(
-                    new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting)
-            );
-            BalanceContent content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
-            roomContentRepository.save(RoomContent.newRoomContent(room, content, currentRound + 1));
+            Room room = roomFixture.createProgressRoom();
+            roomContentFixture.initRoomContents(room);
+
+            int nextRound = room.getCurrentRound() + 1;
 
             // when
             roomFacade.moveToNextRound(room.getId());
 
             // then
             Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
-            RoomContent roomContent = roomContentRepository.findByRoomAndRound(foundRoom, currentRound + 1)
+            RoomContent roomContent = roomContentRepository.findByRoomAndRound(foundRoom, nextRound)
                     .orElseThrow();
             assertAll(
-                    () -> assertThat(foundRoom.getCurrentRound()).isEqualTo(currentRound + 1),
+                    () -> assertThat(foundRoom.getCurrentRound()).isEqualTo(nextRound),
                     () -> assertThat(foundRoom.isGameProgress()).isTrue(),
                     () -> assertThat(roomContent.getVoteDeadline()).isNotNull()
             );
@@ -352,9 +354,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             int currentRound = 5;
             RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
-            Room room = roomRepository.save(
-                    new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting)
-            );
+            Room room = roomFixture.createProgressRoom(currentRound, roomSetting);
 
             // when
             roomFacade.moveToNextRound(room.getId());
@@ -371,18 +371,13 @@ class RoomFacadeTest extends BaseServiceTest {
     @Nested
     class 라운드_종료_여부 {
 
-        private static final int TOTAL_ROUND = 5;
-        private static final int TIME_LIMIT = 10_000;
-        private static final RoomStatus STATUS = RoomStatus.PROGRESS;
-        private static final Category CATEGORY = Category.IF;
-
         @Test
         void 라운드가_종료되지_않았으면_게임도_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 2;
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = roomRepository.save(new Room("uuid", currentRound, STATUS, roomSetting));
-            Member master = memberRepository.save(PRIN.master(room));
+            Room room = roomFixture.createProgressRoom(currentRound);
+            Member master = memberFixture.createMaster(room);
+
             int round = 2;
 
             // when
@@ -400,9 +395,8 @@ class RoomFacadeTest extends BaseServiceTest {
         void 라운드가_종료되면_게임은_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 2;
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = roomRepository.save(new Room("uuid", currentRound, STATUS, roomSetting));
-            Member master = memberRepository.save(PRIN.master(room));
+            Room room = roomFixture.createProgressRoom(currentRound);
+            Member master = memberFixture.createMaster(room);
             int round = 1;
 
             // when
@@ -419,11 +413,8 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 게임이_종료되면_라운드는_종료되지_않은_상태여야_한다() {
             // given
-            int currentRound = 5;
-            RoomStatus status = RoomStatus.FINISH;
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = roomRepository.save(new Room("uuid", currentRound, status, roomSetting));
-            Member master = memberRepository.save(PRIN.master(room));
+            Room room = roomFixture.createFinishedRoom();
+            Member master = memberFixture.createMaster(room);
             int round = 5;
 
             // when
@@ -441,9 +432,8 @@ class RoomFacadeTest extends BaseServiceTest {
         void 현재_마지막_라운드여도_게임이_종료되지_않은_상태이면_라운드도_종료되지_않은_상태여야_한다() {
             // given
             int currentRound = 5;
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = roomRepository.save(new Room("uuid", currentRound, STATUS, roomSetting));
-            Member master = memberRepository.save(PRIN.master(room));
+            Room room = roomFixture.createProgressRoom(currentRound);
+            Member master = memberFixture.createMaster(room);
             int round = 5;
 
             // when
@@ -568,13 +558,17 @@ class RoomFacadeTest extends BaseServiceTest {
     }
 
     @Nested
+    @FixedClock(date = "2024-07-18", time = "20:00:00")
     class 변경_시간이_특정_시각_이전_방_삭제 {
 
         @Test
         void 변경이_특정_시각_이전에_일어난_모든_방을_지운다() {
             // given
-            LocalDateTime standardModified = LocalDateTime.of(2024, 7, 18, 19, 52, 0);
-            long countOfExpectedRestRoom = 5;
+            roomFixture.createNotStartedRoom();
+            roomFixture.createNotStartedRoom();
+
+            LocalDateTime standardModified = LocalDateTime.of(2024, 7, 18, 20, 5, 0);
+            long countOfExpectedRestRoom = 2;
 
             // when
             roomFacade.migrateExpiredRooms(standardModified);
@@ -641,10 +635,8 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 준비중인_방에_참여할_수_있다() {
             // given
-            Room room = roomRepository.save(
-                    new Room("uuid", 5, RoomStatus.READY, new RoomSetting(3, 10_000, Category.IF)
-                    ));
-            memberRepository.save(TACAN.master(room));
+            Room room = roomFixture.createNotStartedRoom();
+            memberFixture.createMaster(room);
 
             // when
             RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
@@ -656,13 +648,10 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 진행중인_방에_참여할_수_없다() {
             // given
-            Room room = roomRepository.save(
-                    new Room("uuid", 5, RoomStatus.PROGRESS, new RoomSetting(3, 10_000, Category.IF))
-            );
-            memberRepository.save(TACAN.master(room));
+            Room progressRoom = roomFixture.createProgressRoom();
 
             // when
-            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+            RoomStatusResponse actual = roomFacade.getRoomStatus(progressRoom.getUuid());
 
             // then
             assertThat(actual.isJoinable()).isFalse();
@@ -671,13 +660,10 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 종료된_방에_참여할_수_없다() {
             // given
-            Room room = roomRepository.save(
-                    new Room("uuid", 5, RoomStatus.FINISH, new RoomSetting(3, 10_000, Category.IF))
-            );
-            memberRepository.save(TACAN.master(room));
+            Room finishedRoom = roomFixture.createFinishedRoom();
 
             // when
-            RoomStatusResponse actual = roomFacade.getRoomStatus(room.getUuid());
+            RoomStatusResponse actual = roomFacade.getRoomStatus(finishedRoom.getUuid());
 
             // then
             assertThat(actual.isJoinable()).isFalse();
