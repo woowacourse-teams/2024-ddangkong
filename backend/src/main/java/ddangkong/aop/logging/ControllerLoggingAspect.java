@@ -18,7 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 abstract class ControllerLoggingAspect {
     private static final String TRACE_ID_KEY = "traceId";
 
-    @Pointcut("execution(* ddangkong.controller..*Controller.*(..))")
+    @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
     public void allController() {
     }
 
