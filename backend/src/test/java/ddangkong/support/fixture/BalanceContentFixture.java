@@ -3,6 +3,8 @@ package ddangkong.support.fixture;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +20,12 @@ public class BalanceContentFixture {
         return balanceContentRepository.save(new BalanceContent(category, name));
     }
 
-    public void createContents(Category category, int count) {
+    public List<BalanceContent> createContents(Category category, int count) {
+        List<BalanceContent> balanceContents = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            balanceContentRepository.save(new BalanceContent(category, DEFAULT_NAME + i));
+            balanceContents.add(balanceContentRepository.save(new BalanceContent(category, DEFAULT_NAME + i)));
         }
+
+        return balanceContents;
     }
 }
