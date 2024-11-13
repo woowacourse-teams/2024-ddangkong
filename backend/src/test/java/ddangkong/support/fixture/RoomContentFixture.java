@@ -7,23 +7,21 @@ import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RoomContentFixture {
 
-    @Autowired
-    private FixtureSettingManager fixtureSettingManager;
+    private final FixtureSettingManager fixtureSettingManager;
+    private final BalanceContentFixture balanceContentFixture;
+    private final RoomContentRepository roomContentRepository;
 
-    @Autowired
-    private BalanceContentFixture balanceContentFixture;
-
-    @Autowired
-    private BalanceOptionFixture balanceOptionFixture;
-
-    @Autowired
-    private RoomContentRepository roomContentRepository;
+    public RoomContentFixture(FixtureSettingManager fixtureSettingManager, BalanceContentFixture balanceContentFixture,
+                              RoomContentRepository roomContentRepository) {
+        this.fixtureSettingManager = fixtureSettingManager;
+        this.balanceContentFixture = balanceContentFixture;
+        this.roomContentRepository = roomContentRepository;
+    }
 
     public RoomContent create(Room room, BalanceContent balanceContent, int round, LocalDateTime voteDeadline) {
         RoomContent roomContent = RoomContent.newRoomContent(room, balanceContent, round);

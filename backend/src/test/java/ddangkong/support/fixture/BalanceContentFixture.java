@@ -5,7 +5,6 @@ import ddangkong.domain.balance.content.BalanceContentRepository;
 import ddangkong.domain.balance.content.Category;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,8 +12,11 @@ public class BalanceContentFixture {
 
     private static final String DEFAULT_NAME = "Content";
 
-    @Autowired
-    private BalanceContentRepository balanceContentRepository;
+    private final BalanceContentRepository balanceContentRepository;
+
+    public BalanceContentFixture(BalanceContentRepository balanceContentRepository) {
+        this.balanceContentRepository = balanceContentRepository;
+    }
 
     public BalanceContent create(Category category, String name) {
         return balanceContentRepository.save(new BalanceContent(category, name));

@@ -7,14 +7,16 @@ import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BalanceOptionFixture {
 
-    @Autowired
-    private BalanceOptionRepository balanceOptionRepository;
+    private final BalanceOptionRepository balanceOptionRepository;
+
+    public BalanceOptionFixture(BalanceOptionRepository balanceOptionRepository) {
+        this.balanceOptionRepository = balanceOptionRepository;
+    }
 
     public BalanceOption create(String name, BalanceContent balanceContent) {
         return balanceOptionRepository.save(new BalanceOption(name, balanceContent));

@@ -5,17 +5,18 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RoomFixture {
 
-    @Autowired
-    private FixtureSettingManager fixtureSettingManager;
+    private final FixtureSettingManager fixtureSettingManager;
+    private final RoomRepository roomRepository;
 
-    @Autowired
-    private RoomRepository roomRepository;
+    public RoomFixture(FixtureSettingManager fixtureSettingManager, RoomRepository roomRepository) {
+        this.fixtureSettingManager = fixtureSettingManager;
+        this.roomRepository = roomRepository;
+    }
 
     public Room createNotStartedRoom(int currentRound, int totalRound, int timeLimit, Category category,
                                      RoomStatus roomStatus) {
