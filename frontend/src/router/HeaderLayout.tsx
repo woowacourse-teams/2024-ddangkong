@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
-import QueryClientDefaultOptionProvider from '@/components/common/QueryClientDefaultOptionProvider/QueryClientDefaultOptionProvider';
 import Header from '@/components/layout/Header/Header';
+import QueryClientDefaultOptionProvider from '@/providers/QueryClientDefaultOptionProvider/QueryClientDefaultOptionProvider';
 
 const HeaderLayout = () => {
   return (

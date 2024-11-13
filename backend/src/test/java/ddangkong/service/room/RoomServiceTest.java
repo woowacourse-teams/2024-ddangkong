@@ -22,7 +22,7 @@ class RoomServiceTest extends BaseServiceTest {
         @Test
         void 방_설정_정보를_변경한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
+            Room room = roomFixture.createNotStartedRoom();
 
             int totalRound = 8;
             int timeLimit = 10_000;

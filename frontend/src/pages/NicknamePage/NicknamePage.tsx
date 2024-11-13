@@ -2,7 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import NicknameInput from './NicknameInput/NicknameInput';
+import NicknameInput from './components/NicknameInput/NicknameInput';
+import useMakeOrEnterRoom from './hooks/useMakeOrEnterRoom';
 import {
   profileWrapper,
   profileImg,
@@ -11,7 +12,6 @@ import {
   angryImage,
   nicknameContainer,
 } from './NicknamePage.styled';
-import useMakeOrEnterRoom from './useMakeOrEnterRoom';
 
 import { isJoinableRoom } from '@/apis/room';
 import AngryDdangkong from '@/assets/images/angryDdangkong.webp';
@@ -31,6 +31,10 @@ const NicknamePage = () => {
     enabled: !!roomUuid,
   });
 
+  const goToHome = () => {
+    window.location.href = '/';
+  };
+
   useEffect(() => {
     if (nicknameInputRef.current) {
       nicknameInputRef.current.focus();
@@ -42,6 +46,7 @@ const NicknamePage = () => {
       <div css={noVoteTextContainer}>
         <img src={AngryDdangkong} alt="화난 땅콩" css={angryImage} />
         <span css={noVoteText}>잘못된 링크에 접속했어요 :{`)`}</span>
+        <Button onClick={goToHome} text="홈으로" size="medium" radius="medium" />
       </div>
     );
 

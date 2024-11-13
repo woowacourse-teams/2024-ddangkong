@@ -19,14 +19,14 @@ import useRoutePath from './hooks/useRoutePath';
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
 import ExitIcon from '@/assets/images/exitIcon.svg';
 import SettingIcon from '@/assets/images/settingIcon.svg';
+import AlertModal from '@/components/AlertModal/AlertModal';
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
-import AlertModal from '@/components/common/AlertModal/AlertModal';
-import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
-import { convertMsecToSecond } from '@/components/SelectContainer/Timer/Timer.util';
+import RoomSettingModal from '@/components/RoomSettingModal/RoomSettingModal';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useFocus from '@/hooks/useFocus';
 import useGetUserInfo from '@/hooks/useGetUserInfo';
 import useModal from '@/hooks/useModal';
+import { convertMsecToSecond } from '@/pages/GamePage/components/SelectContainer/Timer/Timer.util';
 
 interface HeaderProps {
   title: string;
