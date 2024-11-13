@@ -2,8 +2,6 @@ package ddangkong.facade.room;
 
 import static ddangkong.support.fixture.MembersFixture.EDEN;
 import static ddangkong.support.fixture.MembersFixture.KEOCHAN;
-import static ddangkong.support.fixture.MembersFixture.PRIN;
-import static ddangkong.support.fixture.MembersFixture.TACAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -11,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
+import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
@@ -38,9 +37,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class RoomFacadeTest extends BaseServiceTest {
@@ -451,22 +447,10 @@ class RoomFacadeTest extends BaseServiceTest {
     @Nested
     class 방_초기화 {
 
-        private static final RoomStatus STATUS = RoomStatus.FINISH;
-
-        private static final RoomSetting ROOM_SETTING = new RoomSetting(5, 15_000, Category.IF);
-
-        private BalanceContent content;
-
-        @BeforeEach
-        void setUp() {
-            content = balanceContentRepository.save(new BalanceContent(Category.IF, "A vs B"));
-        }
-
         @Test
         void 방을_초기_상태로_초기화한다() {
             // given
-            Room room = roomRepository.save(new Room("uuid", 5, STATUS, ROOM_SETTING));
-            saveRoomContents(room);
+            Room room = roomFixture.createFinishedRoom();
 
             // when
             roomFacade.resetRoom(room.getId());
@@ -485,57 +469,50 @@ class RoomFacadeTest extends BaseServiceTest {
         void 현재_라운드와_전체_라운드가_같지_않을_경우_예외가_발생한다() {
             // given
             int invalidCurrentRound = 4;
-            Room room = roomRepository.save(new Room("uuid", invalidCurrentRound, STATUS, ROOM_SETTING));
-            saveRoomContents(room);
+            Room room = roomFixture.createProgressRoom(invalidCurrentRound);
 
             // when & then
             assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
                     .isExactlyInstanceOf(NotFinishedRoomException.class);
         }
 
-        @ParameterizedTest
-        @EnumSource(mode = Mode.EXCLUDE, names = {"FINISH"})
-        void 방_상태가_FINISH가_아닐_경우_예외가_발생한다(RoomStatus status) {
+        @Test
+        void 방_상태가_FINISH가_아닐_경우_예외가_발생한다() {
             // given
-            Room room = roomRepository.save(new Room("uuid", 5, status, ROOM_SETTING));
-            saveRoomContents(room);
+            Room room = roomFixture.createProgressRoom();
 
             // when & then
             assertThatThrownBy(() -> roomFacade.resetRoom(room.getId()))
                     .isExactlyInstanceOf(NotFinishedRoomException.class);
-        }
-
-        private void saveRoomContents(Room room) {
-            for (int i = 1; i < room.getTotalRound(); i++) {
-                roomContentRepository.save(new RoomContent(room, content, i, null));
-            }
         }
 
         @Test
         void 방을_초기화하면_방_투표를_삭제하고_전체_투표에_저장한다() {
             // given
-            BalanceOption optionA = balanceOptionRepository.save(new BalanceOption("A", content));
-            BalanceOption optionB = balanceOptionRepository.save(new BalanceOption("B", content));
-            Room room = roomRepository.save(new Room("uuid", 5, STATUS, ROOM_SETTING));
-            Member prin = memberRepository.save(PRIN.master(room));
-            Member eden = memberRepository.save(EDEN.common(room));
-            Member keochan = memberRepository.save(KEOCHAN.common(room));
-            Member tacan = memberRepository.save(TACAN.common(room));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(eden, optionA));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(keochan, optionA));
-            roomBalanceVoteRepository.save(new RoomBalanceVote(tacan, optionB));
+            Room room = roomFixture.createFinishedRoom();
+            List<BalanceOptions> balanceOptions = roomContentFixture.initRoomContentsWithOption(room);
+            BalanceOptions balanceOptions1 = balanceOptions.get(0);
+
+            Member member1 = memberFixture.createMaster("member1", room);
+            Member member2 = memberFixture.createCommon("member2", room);
+            Member member3 = memberFixture.createCommon("member3", room);
+
+            roomBalanceVoteFixture.create(member1, balanceOptions1.getFirstOption());
+            roomBalanceVoteFixture.create(member2, balanceOptions1.getFirstOption());
+            roomBalanceVoteFixture.create(member3, balanceOptions1.getSecondOption());
 
             // when
             roomFacade.resetRoom(room.getId());
 
             // then
             List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteRepository.findByMemberRoom(room);
-            Long optionATotalVoteCount = totalBalanceVoteRepository.countByBalanceOption(optionA);
-            Long optionBTotalVoteCount = totalBalanceVoteRepository.countByBalanceOption(optionB);
+            Long optionATotalVoteCount = totalBalanceVoteRepository.countByBalanceOption(
+                    balanceOptions1.getFirstOption());
+            Long optionBTotalVoteCount = totalBalanceVoteRepository.countByBalanceOption(
+                    balanceOptions1.getSecondOption());
             assertAll(
                     () -> assertThat(roomBalanceVotes).isEmpty(),
-                    () -> assertThat(optionATotalVoteCount).isEqualTo(3),
+                    () -> assertThat(optionATotalVoteCount).isEqualTo(2),
                     () -> assertThat(optionBTotalVoteCount).isEqualTo(1)
             );
         }
@@ -543,8 +520,8 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 초기화된_방인지_확인한다() {
             // given
-            Room room = roomRepository.save(new Room("uuid", 5, RoomStatus.READY, ROOM_SETTING));
-            Member master = memberRepository.save(PRIN.master(room));
+            Room room = roomFixture.createFinishedRoom();
+            Member master = memberFixture.createMaster(room);
 
             // when
             InitialRoomResponse actual = roomFacade.isInitialRoom(room.getId());

@@ -1,10 +1,14 @@
 package ddangkong.support.fixture;
 
 import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.option.BalanceOption;
+import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,12 +50,18 @@ public class RoomContentFixture {
         }
     }
 
-    public void initRoomContentsWithOption(Room room) {
+    public List<BalanceOptions> initRoomContentsWithOption(Room room) {
+        List<BalanceOptions> options = new ArrayList<>();
+
         for (int i = 0; i < room.getTotalRound(); i++) {
             BalanceContent balanceContent = balanceContentFixture.create(room.getCategory(), "Content" + i);
-            balanceOptionFixture.create("Option1", balanceContent);
-            balanceOptionFixture.create("Option2", balanceContent);
+            BalanceOption option1 = balanceOptionFixture.create("Option1", balanceContent);
+            BalanceOption option2 = balanceOptionFixture.create("Option2", balanceContent);
+            options.add(new BalanceOptions(List.of(option1, option2)));
+
             create(room, balanceContent, i + 1, null);
         }
+
+        return options;
     }
 }
