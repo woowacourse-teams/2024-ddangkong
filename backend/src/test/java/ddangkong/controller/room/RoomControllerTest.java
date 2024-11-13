@@ -74,7 +74,7 @@ class RoomControllerTest extends BaseControllerTest {
 
             Room room = roomFixture.createNotStartedRoom(currentRound, totalRound, timeLimit, category, roomStatus);
             memberFixture.createMaster(room);
-            memberFixture.createCommon("common", room);
+            memberFixture.createCommon(room);
 
             // when
             RoomInfoResponse actual = RestAssured.given()

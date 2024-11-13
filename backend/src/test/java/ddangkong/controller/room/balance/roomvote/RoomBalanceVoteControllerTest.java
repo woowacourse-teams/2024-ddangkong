@@ -49,7 +49,7 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
             // given
             Room room = roomFixture.createNotStartedRoom(1, 5, 10_000, Category.IF, RoomStatus.PROGRESS);
             memberFixture.createMaster(room);
-            Member common = memberFixture.createCommon("common", room);
+            Member common = memberFixture.createCommon(room);
 
             LocalDateTime voteDeadline = LocalDateTime.parse("2024-07-18T20:00:08");
             roomContentFixture.create(room, balanceContent, 1, voteDeadline);
@@ -86,7 +86,7 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
         void init() {
             room = roomFixture.createNotStartedRoom(1, 5, 10_000, Category.IF, RoomStatus.PROGRESS);
             master = memberFixture.createMaster(room);
-            common = memberFixture.createCommon("common", room);
+            common = memberFixture.createCommon(room);
         }
 
         @Test
@@ -179,8 +179,8 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
             roomContents.add(roomContentFixture.create(room, balanceContent3, 3, null));
 
             master = memberFixture.createMaster(room);
-            common1 = memberFixture.createCommon("common1", room);
-            common2 = memberFixture.createCommon("common2", room);
+            common1 = memberFixture.createCommon(1, room);
+            common2 = memberFixture.createCommon(2, room);
         }
 
         @Test

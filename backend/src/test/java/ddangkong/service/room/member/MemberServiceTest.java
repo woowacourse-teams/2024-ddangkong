@@ -61,7 +61,7 @@ class MemberServiceTest extends BaseServiceTest {
         void 방에_멤버가_존재하는_상태에서_방장을_생성하면_예외가_발생한다() {
             // given
             Room room = roomFixture.createNotStartedRoom();
-            memberFixture.createCommon("member", room);
+            memberFixture.createCommon(room);
 
             // when & then
             assertThatThrownBy(() -> memberService.saveMasterMember("master", room))
@@ -168,8 +168,8 @@ class MemberServiceTest extends BaseServiceTest {
         void init() {
             room = roomFixture.createNotStartedRoom();
             master = memberFixture.createMaster(room);
-            common1 = memberFixture.createCommon("common1", room);
-            common2 = memberFixture.createCommon("common2", room);
+            common1 = memberFixture.createCommon(1, room);
+            common2 = memberFixture.createCommon(2, room);
         }
 
         @Test
@@ -205,7 +205,7 @@ class MemberServiceTest extends BaseServiceTest {
             // given
             Room room = roomFixture.createNotStartedRoom();
             Member master = memberFixture.createMaster(room);
-            Member common = memberFixture.createCommon("common", room);
+            Member common = memberFixture.createCommon(room);
 
             // when
             memberService.deleteMember(room);

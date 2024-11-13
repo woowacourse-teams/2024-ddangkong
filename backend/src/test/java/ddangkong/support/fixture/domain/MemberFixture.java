@@ -21,6 +21,14 @@ public class MemberFixture {
         return memberRepository.save(Member.createCommon(nickname, room));
     }
 
+    public Member createCommon(Room room) {
+        return createCommon(COMMON_NICKNAME, room);
+    }
+
+    public Member createCommon(int order, Room room) {
+        return createCommon(COMMON_NICKNAME + order, room);
+    }
+
     public Member createMaster(String nickname, Room room) {
         return memberRepository.save(Member.createMaster(nickname, room));
     }

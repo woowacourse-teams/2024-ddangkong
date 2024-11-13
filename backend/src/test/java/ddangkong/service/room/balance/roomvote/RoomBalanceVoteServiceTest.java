@@ -97,8 +97,8 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
         void setUp() {
             room = roomFixture.createNotStartedRoom();
             member1 = memberFixture.createMaster(room);
-            member2 = memberFixture.createCommon("member2", room);
-            member3 = memberFixture.createCommon("member3", room);
+            member2 = memberFixture.createCommon(1, room);
+            member3 = memberFixture.createCommon(2, room);
             members = new RoomMembers(List.of(member1, member2, member3));
 
             balanceContent = balanceContentFixture.create(room.getCategory(), "Content");

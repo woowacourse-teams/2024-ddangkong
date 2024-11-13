@@ -37,9 +37,9 @@ class RoomMigratorTest extends BaseServiceTest {
         option1 = balanceOptionFixture.create("Option1", balanceContent);
         option2 = balanceOptionFixture.create("Option2", balanceContent);
 
-        member1 = memberFixture.createMaster("member1", finishedRoom);
-        member2 = memberFixture.createCommon("member2", finishedRoom);
-        member3 = memberFixture.createCommon("member3", finishedRoom);
+        member1 = memberFixture.createMaster(finishedRoom);
+        member2 = memberFixture.createCommon(1, finishedRoom);
+        member3 = memberFixture.createCommon(2, finishedRoom);
     }
 
     @Nested

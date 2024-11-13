@@ -99,10 +99,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             Room room = roomFixture.createNotStartedRoom();
             memberFixture.createMaster(room);
-
-            for (int i = 0; i < 10; i++) {
-                memberFixture.createCommon("member" + i, room);
-            }
+            memberFixture.createCommons(room, 10);
 
             // when
             Thread t1 = new Thread(() -> roomFacade.joinRoom("member12-1", room.getUuid()));
@@ -178,7 +175,7 @@ class RoomFacadeTest extends BaseServiceTest {
         void 해당_멤버의_투표를_옮긴_후에_요청한_멤버를_삭제한다() {
             // given
             memberFixture.createMaster(room);
-            Member commonMember = memberFixture.createCommon("common", room);
+            Member commonMember = memberFixture.createCommon(room);
 
             roomContentFixture.initRoomContent(room, balanceContent, 1, LocalDateTime.now());
             RoomBalanceVote roomBalanceVote = roomBalanceVoteFixture.create(commonMember, option1);
@@ -222,7 +219,7 @@ class RoomFacadeTest extends BaseServiceTest {
         void 방의_마스터가_나가면_다른_일반_멤버를_마스터로_승급한다() {
             // given
             Member master = memberFixture.createMaster(room);
-            Member commonMember = memberFixture.createCommon("common", room);
+            Member commonMember = memberFixture.createCommon(room);
 
             // when
             roomFacade.leaveRoom(room.getId(), master.getId());
@@ -241,8 +238,8 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             Room room = roomFixture.createNotStartedRoom();
             Member master = memberFixture.createMaster(room);
-            memberFixture.createCommon("common1", room);
-            memberFixture.createCommon("common2", room);
+            memberFixture.createCommon(1, room);
+            memberFixture.createCommon(2, room);
 
             // when
             RoomInfoResponse actual = roomFacade.getRoomInfo(room.getId());
@@ -487,9 +484,9 @@ class RoomFacadeTest extends BaseServiceTest {
             List<BalanceOptions> balanceOptions = balanceOptionFixture.initOptions(roomContents);
             BalanceOptions balanceOptions1 = balanceOptions.get(0);
 
-            Member member1 = memberFixture.createMaster("member1", room);
-            Member member2 = memberFixture.createCommon("member2", room);
-            Member member3 = memberFixture.createCommon("member3", room);
+            Member member1 = memberFixture.createMaster(room);
+            Member member2 = memberFixture.createCommon(1, room);
+            Member member3 = memberFixture.createCommon(2, room);
 
             roomBalanceVoteFixture.create(member1, balanceOptions1.getFirstOption());
             roomBalanceVoteFixture.create(member2, balanceOptions1.getFirstOption());
@@ -554,7 +551,7 @@ class RoomFacadeTest extends BaseServiceTest {
             LocalDateTime standardModified = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
             Room room = getSavedRoom(standardModified.minusSeconds(1));
             Member master = memberFixture.createMaster(room);
-            Member common = memberFixture.createCommon("common", room);
+            Member common = memberFixture.createCommon(room);
 
             BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
             RoomContent roomContent = getSavedRoomContent(room, balanceContent);

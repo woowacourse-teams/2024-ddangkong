@@ -129,11 +129,11 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // given
             int currentRound = 1;
             Room room = roomFixture.createProgressRoom(currentRound);
-            Member member1 = memberFixture.createMaster("member1", room);
-            Member member2 = memberFixture.createCommon("member2", room);
-            Member member3 = memberFixture.createCommon("member3", room);
-            Member member4 = memberFixture.createCommon("member4", room);
-            Member giveUpMember = memberFixture.createCommon("member5", room);
+            Member member1 = memberFixture.createMaster(room);
+            Member member2 = memberFixture.createCommon(1, room);
+            Member member3 = memberFixture.createCommon(2, room);
+            Member member4 = memberFixture.createCommon(3, room);
+            Member giveUpMember = memberFixture.createCommon(4, room);
 
             BalanceContent balanceContent = balanceContentFixture.create(Category.IF, "Content");
             BalanceOption option1 = balanceOptionFixture.create("Option1", balanceContent);
@@ -169,7 +169,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             int beforeRound = 1;
             int currentRound = 2;
             Room room = roomFixture.createProgressRoom(currentRound);
-            memberFixture.createMaster("member1", room);
+            memberFixture.createMaster(room);
 
             BalanceContent beforeBalanceContent = balanceContentFixture.create(room.getCategory(), "Content1");
             balanceOptionFixture.create("Option1", beforeBalanceContent);
@@ -205,8 +205,8 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
         void init() {
             int currentRound = 1;
             room = roomFixture.createProgressRoom(currentRound);
-            master = memberFixture.createMaster("master", room);
-            member1 = memberFixture.createCommon("member1", room);
+            master = memberFixture.createMaster(room);
+            member1 = memberFixture.createCommon(1, room);
 
             balanceContent = balanceContentFixture.create(room.getCategory(), "Content");
             option1 = balanceOptionFixture.create("Option1", balanceContent);
@@ -291,9 +291,9 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             roomContents = roomContentFixture.initRoomContents(room);
             balanceOptionFixture.initOptions(roomContents);
 
-            member1 = memberFixture.createMaster("member1", room);
-            member2 = memberFixture.createCommon("member2", room);
-            member3 = memberFixture.createCommon("member3", room);
+            member1 = memberFixture.createMaster(room);
+            member2 = memberFixture.createCommon(1, room);
+            member3 = memberFixture.createCommon(2, room);
         }
 
         @Test
