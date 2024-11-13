@@ -20,10 +20,6 @@ public class VoteContext {
         this.voteFinished = voteFinished;
     }
 
-    public Member getMaster() {
-        return roomMembers.getMaster();
-    }
-
     public Member getMember(Long memberId) {
         return roomMembers.getMember(memberId);
     }

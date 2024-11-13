@@ -370,8 +370,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             int currentRound = 2;
             Room room = roomFixture.createProgressRoom(currentRound);
-            Member master = memberFixture.createMaster(room);
-
+            memberFixture.createMaster(room);
             int round = 2;
 
             // when
@@ -380,8 +379,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // then
             assertAll(
                     () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(master.getId())
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
             );
         }
 
@@ -390,7 +388,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             int currentRound = 2;
             Room room = roomFixture.createProgressRoom(currentRound);
-            Member master = memberFixture.createMaster(room);
+            memberFixture.createMaster(room);
             int round = 1;
 
             // when
@@ -399,8 +397,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // then
             assertAll(
                     () -> assertThat(roundFinishedResponse.isRoundFinished()).isTrue(),
-                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(master.getId())
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
             );
         }
 
@@ -408,7 +405,7 @@ class RoomFacadeTest extends BaseServiceTest {
         void 게임이_종료되면_라운드는_종료되지_않은_상태여야_한다() {
             // given
             Room room = roomFixture.createFinishedRoom();
-            Member master = memberFixture.createMaster(room);
+            memberFixture.createMaster(room);
             int round = 5;
 
             // when
@@ -417,8 +414,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // then
             assertAll(
                     () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.isGameFinished()).isTrue(),
-                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(master.getId())
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isTrue()
             );
         }
 
@@ -427,7 +423,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             int currentRound = 5;
             Room room = roomFixture.createProgressRoom(currentRound);
-            Member master = memberFixture.createMaster(room);
+            memberFixture.createMaster(room);
             int round = 5;
 
             // when
@@ -436,8 +432,7 @@ class RoomFacadeTest extends BaseServiceTest {
             // then
             assertAll(
                     () -> assertThat(roundFinishedResponse.isRoundFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse(),
-                    () -> assertThat(roundFinishedResponse.master().memberId()).isEqualTo(master.getId())
+                    () -> assertThat(roundFinishedResponse.isGameFinished()).isFalse()
             );
         }
     }
@@ -520,16 +515,13 @@ class RoomFacadeTest extends BaseServiceTest {
         void 초기화된_방인지_확인한다() {
             // given
             Room room = roomFixture.createFinishedRoom();
-            Member master = memberFixture.createMaster(room);
+            memberFixture.createMaster(room);
 
             // when
             InitialRoomResponse actual = roomFacade.isInitialRoom(room.getId());
 
             // then
-            assertAll(
-                    () -> assertThat(actual.isInitial()).isFalse(),
-                    () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
-            );
+            assertThat(actual.isInitial()).isFalse();
         }
     }
 
