@@ -1,7 +1,5 @@
 package ddangkong.facade.room;
 
-import static ddangkong.support.fixture.MembersFixture.EDEN;
-import static ddangkong.support.fixture.MembersFixture.KEOCHAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -563,8 +561,8 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             LocalDateTime standardModified = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
             Room room = getSavedRoom(standardModified.minusSeconds(1));
-            Member master = memberRepository.save(EDEN.master(room));
-            Member common = memberRepository.save(KEOCHAN.common(room));
+            Member master = memberFixture.createMaster(room);
+            Member common = memberFixture.createCommon("common", room);
 
             BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
             RoomContent roomContent = getSavedRoomContent(room, balanceContent);

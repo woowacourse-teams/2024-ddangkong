@@ -8,7 +8,6 @@ import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.room.member.InvalidMasterCountException;
 import ddangkong.exception.room.member.NotExistCommonMemberException;
 import ddangkong.exception.room.member.NotRoomMemberException;
-import ddangkong.support.fixture.MembersFixture;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -30,27 +29,23 @@ class RoomMembersTest {
         @Test
         void 방_멤버들_객체를_생성한다() {
             // given
-            Member prin = MembersFixture.PRIN.master(room);
-            Member eden = MembersFixture.EDEN.common(room);
-            Member keochan = MembersFixture.KEOCHAN.common(room);
-            Member tacan = MembersFixture.TACAN.common(room);
-            List<Member> members = List.of(prin, eden, keochan, tacan);
+            Member master = Member.createMaster("master", room);
+            Member member1 = Member.createCommon("common", room);
+            List<Member> members = List.of(master, member1);
 
             // when
             RoomMembers roomMembers = new RoomMembers(members);
 
             // then
-            assertThat(roomMembers.getMembers()).hasSize(4);
+            assertThat(roomMembers.getMembers()).hasSize(2);
         }
 
         @Test
         void 방장이_여러명인_경우_예외를_발생한다() {
             // given
-            Member prin = MembersFixture.PRIN.master(room);
-            Member eden = MembersFixture.EDEN.master(room);
-            Member keochan = MembersFixture.KEOCHAN.common(room);
-            Member tacan = MembersFixture.TACAN.common(room);
-            List<Member> members = List.of(prin, eden, keochan, tacan);
+            Member master1 = Member.createMaster("master1", room);
+            Member master2 = Member.createMaster("master2", room);
+            List<Member> members = List.of(master1, master2);
 
             // when & then
             assertThatThrownBy(() -> new RoomMembers(members))
@@ -61,11 +56,9 @@ class RoomMembersTest {
         @Test
         void 방장이_없는_경우_예외가_발생한다() {
             // given
-            Member prin = MembersFixture.PRIN.common(room);
-            Member eden = MembersFixture.EDEN.common(room);
-            Member keochan = MembersFixture.KEOCHAN.common(room);
-            Member tacan = MembersFixture.TACAN.common(room);
-            List<Member> members = List.of(prin, eden, keochan, tacan);
+            Member member1 = Member.createCommon("common1", room);
+            Member member2 = Member.createCommon("common2", room);
+            List<Member> members = List.of(member1, member2);
 
             // when & then
             assertThatThrownBy(() -> new RoomMembers(members))
@@ -87,18 +80,16 @@ class RoomMembersTest {
         @Test
         void 방장을_조회한다() {
             // given
-            Member prin = MembersFixture.PRIN.master(room);
-            Member eden = MembersFixture.EDEN.common(room);
-            Member keochan = MembersFixture.KEOCHAN.common(room);
-            Member tacan = MembersFixture.TACAN.common(room);
-            List<Member> members = List.of(prin, eden, keochan, tacan);
+            Member master = Member.createMaster("master", room);
+            Member member1 = Member.createCommon("common1", room);
+            List<Member> members = List.of(master, member1);
             RoomMembers roomMembers = new RoomMembers(members);
 
             // when
-            Member master = roomMembers.getMaster();
+            Member findMaster = roomMembers.getMaster();
 
             // then
-            assertThat(master.getNickname()).isEqualTo(prin.getNickname());
+            assertThat(findMaster.getNickname()).isEqualTo(master.getNickname());
         }
     }
 
@@ -115,28 +106,28 @@ class RoomMembersTest {
         @Test
         void 임의의_일반_멤버를_조회할_수_있다() {
             // given
-            Member prin = MembersFixture.PRIN.master(room);
-            EntityTestUtils.setId(prin, 1L);
-            Member eden = MembersFixture.EDEN.common(room);
-            EntityTestUtils.setId(eden, 2L);
-            Member takan = MembersFixture.TACAN.common(room);
-            EntityTestUtils.setId(eden, 3L);
-            List<Member> members = List.of(prin, eden, takan);
+            Member master = Member.createMaster("master", room);
+            EntityTestUtils.setId(master, 1L);
+            Member member1 = Member.createCommon("common1", room);
+            EntityTestUtils.setId(member1, 2L);
+            Member member2 = Member.createCommon("common2", room);
+            EntityTestUtils.setId(member2, 3L);
+            List<Member> members = List.of(master, member1, member2);
             RoomMembers roomMembers = new RoomMembers(members);
 
             // when
             Member commonMember = roomMembers.getAnyCommonMember();
 
             // then
-            assertThat(commonMember.getNickname()).isIn(eden.getNickname(), takan.getNickname());
+            assertThat(commonMember.getNickname()).isIn(member1.getNickname(), member2.getNickname());
         }
 
         @Test
         void 일반_멤버가_없다면_예외를_발생시킨다() {
             // given
-            Member prin = MembersFixture.PRIN.master(room);
-            EntityTestUtils.setId(prin, 1L);
-            List<Member> members = List.of(prin);
+            Member master = Member.createMaster("master", room);
+            EntityTestUtils.setId(master, 1L);
+            List<Member> members = List.of(master);
             RoomMembers roomMembers = new RoomMembers(members);
 
             // when & then
@@ -158,28 +149,30 @@ class RoomMembersTest {
         @Test
         void 특정_멤버를_조회한다() {
             // given
-            Member prin = MembersFixture.PRIN.master(room);
-            EntityTestUtils.setId(prin, 1L);
-            Member eden = MembersFixture.EDEN.common(room);
-            EntityTestUtils.setId(eden, 2L);
-            List<Member> members = List.of(prin, eden);
+            Member master = Member.createMaster("master", room);
+            EntityTestUtils.setId(master, 1L);
+            Member member1 = Member.createCommon("common1", room);
+            EntityTestUtils.setId(member1, 2L);
+            Member member2 = Member.createCommon("common2", room);
+            EntityTestUtils.setId(member2, 3L);
+            List<Member> members = List.of(master, member1, member2);
             RoomMembers roomMembers = new RoomMembers(members);
 
             // when
-            Member member = roomMembers.getMember(eden.getId());
+            Member findMember = roomMembers.getMember(member1.getId());
 
             // then
-            assertThat(member.getNickname()).isEqualTo(eden.getNickname());
+            assertThat(findMember.getNickname()).isEqualTo(member1.getNickname());
         }
 
         @Test
         void 존재하지_않는_멤버를_조회하면_예외가_발생한다() {
             // given
-            Member keochan = MembersFixture.KEOCHAN.master(room);
-            EntityTestUtils.setId(keochan, 1L);
-            Member tacan = MembersFixture.TACAN.common(room);
-            EntityTestUtils.setId(tacan, 2L);
-            List<Member> members = List.of(keochan, tacan);
+            Member master = Member.createMaster("master", room);
+            EntityTestUtils.setId(master, 1L);
+            Member member1 = Member.createCommon("common1", room);
+            EntityTestUtils.setId(member1, 2L);
+            List<Member> members = List.of(master, member1);
             RoomMembers roomMembers = new RoomMembers(members);
 
             // when & then

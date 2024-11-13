@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MemberFixture {
 
-    private static final String COMMON_MEMBER_NICKNAME = "common";
+    private static final String COMMON_NICKNAME = "common";
+    private static final String MASTER_NICKNAME = "master";
 
     @Autowired
     private MemberRepository memberRepository;
@@ -23,12 +24,12 @@ public class MemberFixture {
     }
 
     public Member createMaster(Room room) {
-        return memberRepository.save(Member.createMaster("master", room));
+        return createMaster(MASTER_NICKNAME, room);
     }
 
     public void createCommons(Room room, int count) {
         for (int i = 0; i < count; i++) {
-            createCommon(COMMON_MEMBER_NICKNAME + i, room);
+            createCommon(COMMON_NICKNAME + i, room);
         }
     }
 }

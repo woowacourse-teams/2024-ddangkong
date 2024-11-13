@@ -23,7 +23,7 @@ public class BalanceContentFixture {
     public List<BalanceContent> createContents(Category category, int count) {
         List<BalanceContent> balanceContents = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            balanceContents.add(balanceContentRepository.save(new BalanceContent(category, DEFAULT_NAME + i)));
+            balanceContents.add(create(category, DEFAULT_NAME + i));
         }
 
         return balanceContents;

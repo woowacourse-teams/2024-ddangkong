@@ -1,6 +1,5 @@
 package ddangkong.domain.room.balance.roomvote;
 
-import static ddangkong.support.fixture.MembersFixture.PRIN;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.BaseRepositoryTest;
@@ -26,14 +25,14 @@ class RoomBalanceVoteRepositoryTest extends BaseRepositoryTest {
         void 같은_멤버가_같은_옵션에_투표하면_예외가_발생한다() {
             // given
             Room room = save(Room.createNewRoom());
-            Member prin = save(PRIN.master(room));
+            Member master = save(Member.createMaster("member", room));
             BalanceContent content = save(new BalanceContent(Category.IF, "A vs B"));
             BalanceOption optionA = save(new BalanceOption("A", content));
 
-            roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA));
+            roomBalanceVoteRepository.save(new RoomBalanceVote(master, optionA));
 
             // when & then
-            assertThatThrownBy(() -> roomBalanceVoteRepository.save(new RoomBalanceVote(prin, optionA)))
+            assertThatThrownBy(() -> roomBalanceVoteRepository.save(new RoomBalanceVote(master, optionA)))
                     .isExactlyInstanceOf(DataIntegrityViolationException.class);
         }
     }
