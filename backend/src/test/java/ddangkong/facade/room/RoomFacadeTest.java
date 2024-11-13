@@ -490,7 +490,8 @@ class RoomFacadeTest extends BaseServiceTest {
         void 방을_초기화하면_방_투표를_삭제하고_전체_투표에_저장한다() {
             // given
             Room room = roomFixture.createFinishedRoom();
-            List<BalanceOptions> balanceOptions = roomContentFixture.initRoomContentsWithOption(room);
+            List<RoomContent> roomContents = roomContentFixture.initRoomContents(room);
+            List<BalanceOptions> balanceOptions = balanceOptionFixture.initOptions(roomContents);
             BalanceOptions balanceOptions1 = balanceOptions.get(0);
 
             Member member1 = memberFixture.createMaster("member1", room);

@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.exception.room.NotProgressedRoomException;
 import ddangkong.exception.room.balance.roomcontent.NotFoundCurrentRoundRoomContentException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.balance.roomcontent.dto.RoomContentResponse;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,8 @@ class RoomContentFacadeTest extends BaseServiceTest {
         void 방의_진행_중인_밸런스_게임_내용을_조회할_수_있다() {
             // given
             Room progressRoom = roomFixture.createProgressRoom(1);
-            roomContentFixture.initRoomContentsWithOption(progressRoom);
+            List<RoomContent> roomContents = roomContentFixture.initRoomContents(progressRoom);
+            balanceOptionFixture.initOptions(roomContents);
 
             // when
             RoomContentResponse actual = roomContentFacade.getRecentRoomContent(progressRoom.getId());

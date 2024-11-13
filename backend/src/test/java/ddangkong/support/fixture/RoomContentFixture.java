@@ -1,8 +1,6 @@
 package ddangkong.support.fixture;
 
 import ddangkong.domain.balance.content.BalanceContent;
-import ddangkong.domain.balance.option.BalanceOption;
-import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
@@ -43,25 +41,13 @@ public class RoomContentFixture {
         return create(room, balanceContent, round, voteDeadline);
     }
 
-    public void initRoomContents(Room room) {
+    public List<RoomContent> initRoomContents(Room room) {
+        List<RoomContent> roomContents = new ArrayList<>();
         for (int i = 0; i < room.getTotalRound(); i++) {
             BalanceContent balanceContent = balanceContentFixture.create(room.getCategory(), "Content" + i);
-            create(room, balanceContent, i + 1, null);
-        }
-    }
-
-    public List<BalanceOptions> initRoomContentsWithOption(Room room) {
-        List<BalanceOptions> options = new ArrayList<>();
-
-        for (int i = 0; i < room.getTotalRound(); i++) {
-            BalanceContent balanceContent = balanceContentFixture.create(room.getCategory(), "Content" + i);
-            BalanceOption option1 = balanceOptionFixture.create("Option1", balanceContent);
-            BalanceOption option2 = balanceOptionFixture.create("Option2", balanceContent);
-            options.add(new BalanceOptions(List.of(option1, option2)));
-
-            create(room, balanceContent, i + 1, null);
+            roomContents.add(create(room, balanceContent, i + 1, null));
         }
 
-        return options;
+        return roomContents;
     }
 }

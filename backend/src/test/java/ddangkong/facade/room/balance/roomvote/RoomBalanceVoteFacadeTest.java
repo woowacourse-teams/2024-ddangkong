@@ -8,10 +8,7 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.room.Room;
-import ddangkong.domain.room.RoomSetting;
-import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
-import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.room.balance.roomcontent.MismatchRoundException;
 import ddangkong.exception.room.balance.roomvote.CanNotCheckMatchingPercentException;
@@ -29,7 +26,6 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomMembersVoteMatchingRespons
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
 import ddangkong.support.annotation.FixedClock;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -299,27 +295,13 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
         @BeforeEach
         void init() {
-            roomContents = new ArrayList<>();
-            room = roomRepository.save(
-                    new Room("투표_매칭도_조회", 3, RoomStatus.FINISH, new RoomSetting(3, 15_000, Category.IF)));
+            room = roomFixture.createFinishedRoom();
+            roomContents = roomContentFixture.initRoomContents(room);
+            balanceOptionFixture.initOptions(roomContents);
 
-            BalanceContent balanceContent1 = balanceContentRepository.save(new BalanceContent(Category.IF, "if1"));
-            balanceOptionRepository.save(new BalanceOption("option1", balanceContent1));
-            balanceOptionRepository.save(new BalanceOption("option2", balanceContent1));
-            BalanceContent balanceContent2 = balanceContentRepository.save(new BalanceContent(Category.IF, "if2"));
-            balanceOptionRepository.save(new BalanceOption("option1", balanceContent2));
-            balanceOptionRepository.save(new BalanceOption("option2", balanceContent2));
-            BalanceContent balanceContent3 = balanceContentRepository.save(new BalanceContent(Category.IF, "if3"));
-            balanceOptionRepository.save(new BalanceOption("option1", balanceContent3));
-            balanceOptionRepository.save(new BalanceOption("option2", balanceContent3));
-
-            roomContents.add(roomContentRepository.save(RoomContent.newRoomContent(room, balanceContent1, 1)));
-            roomContents.add(roomContentRepository.save(RoomContent.newRoomContent(room, balanceContent2, 2)));
-            roomContents.add(roomContentRepository.save(RoomContent.newRoomContent(room, balanceContent3, 3)));
-
-            member1 = memberRepository.save(Member.createMaster("M1", room));
-            member2 = memberRepository.save(Member.createCommon("M2", room));
-            member3 = memberRepository.save(Member.createCommon("M3", room));
+            member1 = memberFixture.createMaster("member1", room);
+            member2 = memberFixture.createCommon("member2", room);
+            member3 = memberFixture.createCommon("member3", room);
         }
 
         @Test
@@ -328,9 +310,9 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             for (RoomContent roomContent : roomContents) {
                 List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(
                         roomContent.getBalanceContent());
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member1, balanceOptions.get(0)));
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member2, balanceOptions.get(0)));
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member3, balanceOptions.get(1)));
+                roomBalanceVoteFixture.create(member1, balanceOptions.get(0));
+                roomBalanceVoteFixture.create(member2, balanceOptions.get(0));
+                roomBalanceVoteFixture.create(member3, balanceOptions.get(1));
             }
 
             // when
@@ -350,11 +332,13 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
         @Test
         void 게임이_종료되지_않은_방은_매칭도_조회가_불가능하다() {
-            Room notFinishedRoom = roomRepository.save(Room.createNewRoom());
-            Member member = memberRepository.save(Member.createCommon("new", room));
+            // given
+            Room notFinishedRoom = roomFixture.createNotStartedRoom();
+            memberFixture.createMaster(notFinishedRoom);
 
+            // when & then
             assertThatThrownBy(() -> roomBalanceVoteFacade.getRoomMembersVoteMatching(notFinishedRoom.getId(),
-                    member.getId())).isExactlyInstanceOf(CanNotCheckMatchingPercentException.class);
+                    member1.getId())).isExactlyInstanceOf(CanNotCheckMatchingPercentException.class);
         }
 
         @Test
@@ -363,9 +347,9 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             for (RoomContent roomContent : roomContents) {
                 List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(
                         roomContent.getBalanceContent());
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member1, balanceOptions.get(0)));
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member2, balanceOptions.get(0)));
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member3, balanceOptions.get(1)));
+                roomBalanceVoteFixture.create(member1, balanceOptions.get(0));
+                roomBalanceVoteFixture.create(member2, balanceOptions.get(0));
+                roomBalanceVoteFixture.create(member3, balanceOptions.get(1));
             }
 
             // when
@@ -383,9 +367,9 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             for (RoomContent roomContent : roomContents) {
                 List<BalanceOption> balanceOptions = balanceOptionRepository.findAllByBalanceContent(
                         roomContent.getBalanceContent());
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member1, balanceOptions.get(0)));
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member2, balanceOptions.get(0)));
-                roomBalanceVoteRepository.save(new RoomBalanceVote(member3, balanceOptions.get(0)));
+                roomBalanceVoteFixture.create(member1, balanceOptions.get(0));
+                roomBalanceVoteFixture.create(member2, balanceOptions.get(0));
+                roomBalanceVoteFixture.create(member3, balanceOptions.get(0));
             }
 
             // when
