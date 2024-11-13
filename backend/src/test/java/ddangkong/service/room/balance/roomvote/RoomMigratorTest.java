@@ -33,9 +33,9 @@ class RoomMigratorTest extends BaseServiceTest {
     @BeforeEach
     void setUp() {
         finishedRoom = roomFixture.createFinishedRoom();
-        balanceContent = balanceContentFixture.create(finishedRoom.getCategory(), "Content");
-        option1 = balanceOptionFixture.create("Option1", balanceContent);
-        option2 = balanceOptionFixture.create("Option2", balanceContent);
+        balanceContent = balanceContentFixture.create(finishedRoom.getCategory());
+        option1 = balanceOptionFixture.create(balanceContent);
+        option2 = balanceOptionFixture.create(balanceContent);
 
         member1 = memberFixture.createMaster(finishedRoom);
         member2 = memberFixture.createCommon(1, finishedRoom);

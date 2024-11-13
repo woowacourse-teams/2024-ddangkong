@@ -115,7 +115,7 @@ class RoomContentServiceTest extends BaseServiceTest {
             Room room = roomFixture.createProgressRoom(currentRound);
             LocalDateTime voteFinishedTime = LocalDateTime.parse("2024-08-17T16:20:14");
 
-            BalanceContent balanceContent = balanceContentFixture.create(room.getCategory(), "Content");
+            BalanceContent balanceContent = balanceContentFixture.create(room.getCategory());
             roomContentFixture.initRoomContent(room, balanceContent, currentRound, voteFinishedTime);
 
             // when

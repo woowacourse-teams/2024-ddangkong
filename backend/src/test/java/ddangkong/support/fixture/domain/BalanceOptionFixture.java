@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class BalanceOptionFixture {
 
+    private static final String DEFAULT_OPTION = "Option";
+    private static final String FIRST_OPTION = "Option1";
+    private static final String SECOND_OPTION = "Option2";
+
     private final BalanceOptionRepository balanceOptionRepository;
 
     public BalanceOptionFixture(BalanceOptionRepository balanceOptionRepository) {
@@ -22,12 +26,22 @@ public class BalanceOptionFixture {
         return balanceOptionRepository.save(new BalanceOption(name, balanceContent));
     }
 
+    public BalanceOption create(BalanceContent balanceContent) {
+        return create(DEFAULT_OPTION, balanceContent);
+    }
+
+    public BalanceOptions initOption(BalanceContent balanceContent) {
+        BalanceOption option1 = create(FIRST_OPTION, balanceContent);
+        BalanceOption option2 = create(SECOND_OPTION, balanceContent);
+        return new BalanceOptions(List.of(option1, option2));
+    }
+
     public List<BalanceOptions> initOptions(List<RoomContent> roomContents) {
         List<BalanceOptions> options = new ArrayList<>();
         for (RoomContent roomContent : roomContents) {
             BalanceContent balanceContent = roomContent.getBalanceContent();
-            BalanceOption option1 = create("Option1", balanceContent);
-            BalanceOption option2 = create("Option2", balanceContent);
+            BalanceOption option1 = create(FIRST_OPTION, balanceContent);
+            BalanceOption option2 = create(SECOND_OPTION, balanceContent);
             options.add(new BalanceOptions(List.of(option1, option2)));
         }
 

@@ -39,9 +39,8 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
             room = roomFixture.createNotStartedRoom();
             member = memberFixture.createMaster(room);
 
-            balanceContent = balanceContentFixture.create(room.getCategory(), "Content");
-            option1 = balanceOptionFixture.create("Option1", balanceContent);
-            option2 = balanceOptionFixture.create("Option2", balanceContent);
+            balanceContent = balanceContentFixture.create(room.getCategory());
+            balanceOptionFixture.initOption(balanceContent);
             balanceOptions = new BalanceOptions(List.of(option1, option2));
         }
 
@@ -101,9 +100,9 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
             member3 = memberFixture.createCommon(2, room);
             members = new RoomMembers(List.of(member1, member2, member3));
 
-            balanceContent = balanceContentFixture.create(room.getCategory(), "Content");
-            option1 = balanceOptionFixture.create("Option1", balanceContent);
-            option2 = balanceOptionFixture.create("Option2", balanceContent);
+            balanceContent = balanceContentFixture.create(room.getCategory());
+            option1 = balanceOptionFixture.create(balanceContent);
+            option2 = balanceOptionFixture.create(balanceContent);
             balanceOptions = new BalanceOptions(List.of(option1, option2));
         }
 

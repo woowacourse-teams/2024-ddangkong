@@ -24,7 +24,7 @@ class BalanceContentServiceTest extends BaseServiceTest {
         @Test
         void 아이디로_컨텐츠를_조회한다() {
             // given
-            BalanceContent content = balanceContentFixture.create(Category.IF, "A vs B");
+            BalanceContent content = balanceContentFixture.create(Category.IF);
 
             // when
             BalanceContent foundContent = balanceContentService.getBalanceContent(content.getId());
@@ -51,9 +51,9 @@ class BalanceContentServiceTest extends BaseServiceTest {
         void 카테고리에_해당하는_컨텐츠를_주어진_개수만큼_선택한다() {
             // given
             Category category = Category.IF;
-            balanceContentFixture.create(category, "민초 vs 반민초");
-            balanceContentFixture.create(category, "카리나 vs 윈터");
-            balanceContentFixture.create(category, "산 vs 바다");
+            balanceContentFixture.create(category);
+            balanceContentFixture.create(category);
+            balanceContentFixture.create(category);
 
             int pickCount = 3;
 
@@ -68,8 +68,8 @@ class BalanceContentServiceTest extends BaseServiceTest {
         void 카테고리에_해당하는_컨텐츠가_부족하면_예외가_발생한다() {
             // given
             Category category = Category.IF;
-            balanceContentFixture.create(category, "민초 vs 반민초");
-            balanceContentFixture.create(category, "카리나 vs 윈터");
+            balanceContentFixture.create(category);
+            balanceContentFixture.create(category);
             int pickCount = 3;
 
             // when & then

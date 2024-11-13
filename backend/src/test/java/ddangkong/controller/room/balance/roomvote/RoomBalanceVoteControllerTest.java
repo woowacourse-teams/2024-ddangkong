@@ -34,9 +34,9 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
 
     @BeforeEach
     void setUp() {
-        balanceContent = balanceContentFixture.create(Category.IF, "A vs B");
-        optionA = balanceOptionFixture.create("A", balanceContent);
-        optionB = balanceOptionFixture.create("B", balanceContent);
+        balanceContent = balanceContentFixture.create(Category.IF);
+        optionA = balanceOptionFixture.create(balanceContent);
+        optionB = balanceOptionFixture.create(balanceContent);
     }
 
     @Nested

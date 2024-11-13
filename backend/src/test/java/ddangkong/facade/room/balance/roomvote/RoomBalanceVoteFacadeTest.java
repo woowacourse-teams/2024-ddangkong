@@ -54,9 +54,8 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             room = roomFixture.createProgressRoom(currentRound);
             member = memberFixture.createMaster(room);
 
-            balanceContent = balanceContentFixture.create(room.getCategory(), "Content");
-            option1 = balanceOptionFixture.create("Option1", balanceContent);
-            option2 = balanceOptionFixture.create("Option2", balanceContent);
+            balanceContent = balanceContentFixture.create(room.getCategory());
+            balanceOptionFixture.initOption(balanceContent);
         }
 
         @Test
@@ -107,9 +106,9 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             // given
             LocalDateTime voteDeadline = LocalDateTime.parse("2024-07-18T20:00:12");
 
-            BalanceContent beforeBalanceContent = balanceContentFixture.create(Category.FOOD, "Content");
-            BalanceOption beforeContentOption = balanceOptionFixture.create("Option1", beforeBalanceContent);
-            balanceOptionFixture.create("Option2", beforeBalanceContent);
+            BalanceContent beforeBalanceContent = balanceContentFixture.create(Category.FOOD);
+            BalanceOption beforeContentOption = balanceOptionFixture.create(beforeBalanceContent);
+            balanceOptionFixture.create(beforeBalanceContent);
             roomContentFixture.initRoomContent(room, beforeBalanceContent, 2, voteDeadline);
 
             RoomBalanceVoteRequest request = new RoomBalanceVoteRequest(member.getId(), beforeContentOption.getId());
@@ -135,9 +134,9 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             Member member4 = memberFixture.createCommon(3, room);
             Member giveUpMember = memberFixture.createCommon(4, room);
 
-            BalanceContent balanceContent = balanceContentFixture.create(Category.IF, "Content");
-            BalanceOption option1 = balanceOptionFixture.create("Option1", balanceContent);
-            BalanceOption option2 = balanceOptionFixture.create("Option2", balanceContent);
+            BalanceContent balanceContent = balanceContentFixture.create(Category.IF);
+            BalanceOption option1 = balanceOptionFixture.create(balanceContent);
+            BalanceOption option2 = balanceOptionFixture.create(balanceContent);
             roomContentFixture.initRoomContent(room, balanceContent, currentRound, LocalDateTime.now().minusSeconds(1));
 
             roomBalanceVoteFixture.create(member1, option1);
@@ -171,15 +170,13 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             Room room = roomFixture.createProgressRoom(currentRound);
             memberFixture.createMaster(room);
 
-            BalanceContent beforeBalanceContent = balanceContentFixture.create(room.getCategory(), "Content1");
-            balanceOptionFixture.create("Option1", beforeBalanceContent);
-            balanceOptionFixture.create("Option2", beforeBalanceContent);
+            BalanceContent beforeBalanceContent = balanceContentFixture.create(room.getCategory());
+            balanceOptionFixture.initOption(beforeBalanceContent);
             roomContentFixture.initRoomContent(room, beforeBalanceContent, beforeRound,
                     LocalDateTime.now().minusSeconds(1));
 
-            BalanceContent currentBalanceContent = balanceContentFixture.create(room.getCategory(), "Content2");
-            balanceOptionFixture.create("Option3", currentBalanceContent);
-            balanceOptionFixture.create("Option4", currentBalanceContent);
+            BalanceContent currentBalanceContent = balanceContentFixture.create(room.getCategory());
+            balanceOptionFixture.initOption(currentBalanceContent);
             roomContentFixture.initRoomContent(room, currentBalanceContent, currentRound,
                     LocalDateTime.now().plusDays(1));
 
@@ -208,9 +205,9 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             master = memberFixture.createMaster(room);
             member1 = memberFixture.createCommon(1, room);
 
-            balanceContent = balanceContentFixture.create(room.getCategory(), "Content");
-            option1 = balanceOptionFixture.create("Option1", balanceContent);
-            option2 = balanceOptionFixture.create("Option2", balanceContent);
+            balanceContent = balanceContentFixture.create(room.getCategory());
+            option1 = balanceOptionFixture.create(balanceContent);
+            option2 = balanceOptionFixture.create(balanceContent);
 
         }
 

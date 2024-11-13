@@ -166,9 +166,9 @@ class RoomFacadeTest extends BaseServiceTest {
         @BeforeEach
         void init() {
             room = roomFixture.createNotStartedRoom();
-            balanceContent = balanceContentFixture.create(room.getCategory(), "Content1");
-            option1 = balanceOptionFixture.create("Option1", balanceContent);
-            option2 = balanceOptionFixture.create("Option2", balanceContent);
+            balanceContent = balanceContentFixture.create(room.getCategory());
+            option1 = balanceOptionFixture.create(balanceContent);
+            option2 = balanceOptionFixture.create(balanceContent);
         }
 
         @Test
