@@ -1,4 +1,4 @@
-package ddangkong.support.fixture;
+package ddangkong.support.fixture.domain;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.option.BalanceOption;

@@ -1,10 +1,11 @@
-package ddangkong.support.fixture;
+package ddangkong.support.fixture.domain;
 
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomRepository;
 import ddangkong.domain.room.RoomSetting;
 import ddangkong.domain.room.RoomStatus;
+import ddangkong.support.fixture.FixtureSettingManager;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,4 +1,4 @@
-package ddangkong.support.fixture;
+package ddangkong.support.fixture.domain;
 
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;

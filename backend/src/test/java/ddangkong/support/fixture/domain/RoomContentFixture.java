@@ -1,9 +1,10 @@
-package ddangkong.support.fixture;
+package ddangkong.support.fixture.domain;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
+import ddangkong.support.fixture.FixtureSettingManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
