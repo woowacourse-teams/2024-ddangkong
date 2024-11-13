@@ -66,13 +66,7 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 게임_방_정보_조회() {
             // given
-            int currentRound = 1;
-            int totalRound = 5;
-            int timeLimit = 10_000;
-            Category category = Category.IF;
-            RoomStatus roomStatus = RoomStatus.READY;
-
-            Room room = roomFixture.createNotStartedRoom(currentRound, totalRound, timeLimit, category, roomStatus);
+            Room room = roomFixture.createNotStartedRoom();
             memberFixture.createMaster(room);
             memberFixture.createCommon(room);
 
@@ -88,8 +82,8 @@ class RoomControllerTest extends BaseControllerTest {
             assertAll(
                     () -> assertThat(actual.members()).hasSize(2),
                     () -> assertThat(actual.isGameStart()).isFalse(),
-                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(timeLimit),
-                    () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(totalRound)
+                    () -> assertThat(actual.roomSetting().timeLimit()).isEqualTo(room.getTimeLimit()),
+                    () -> assertThat(actual.roomSetting().totalRound()).isEqualTo(room.getTotalRound())
             );
         }
     }
