@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class RoomFixture {
 
+    private static final String CURRENT_ROUND_FIELD = "currentRound";
+    private static final String STATUS_FIELD = "status";
+    private static final String ROOM_SETTING_FIELD = "roomSetting";
+
     private final FixtureSettingManager fixtureSettingManager;
     private final RoomRepository roomRepository;
 
@@ -27,10 +31,7 @@ public class RoomFixture {
 
     public Room createNotStartedRoom(int currentRound, RoomSetting roomSetting, RoomStatus roomStatus) {
         Room room = Room.createNewRoom();
-
-        fixtureSettingManager.setField(room, "currentRound", currentRound);
-        fixtureSettingManager.setField(room, "status", roomStatus);
-        fixtureSettingManager.setField(room, "roomSetting", roomSetting);
+        setRoom(currentRound, roomSetting, roomStatus, room);
         return roomRepository.save(room);
     }
 
@@ -51,10 +52,8 @@ public class RoomFixture {
 
         Room room = Room.createNewRoom();
         RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, category);
+        setRoom(currentRound, roomSetting, roomStatus, room);
 
-        fixtureSettingManager.setField(room, "currentRound", currentRound);
-        fixtureSettingManager.setField(room, "status", roomStatus);
-        fixtureSettingManager.setField(room, "roomSetting", roomSetting);
         return roomRepository.save(room);
     }
 
@@ -62,10 +61,8 @@ public class RoomFixture {
         RoomStatus roomStatus = RoomStatus.PROGRESS;
 
         Room room = Room.createNewRoom();
+        setRoom(currentRound, roomSetting, roomStatus, room);
 
-        fixtureSettingManager.setField(room, "currentRound", currentRound);
-        fixtureSettingManager.setField(room, "status", roomStatus);
-        fixtureSettingManager.setField(room, "roomSetting", roomSetting);
         return roomRepository.save(room);
     }
 
@@ -78,10 +75,14 @@ public class RoomFixture {
 
         Room room = Room.createNewRoom();
         RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, category);
+        setRoom(currentRound, roomSetting, roomStatus, room);
 
-        fixtureSettingManager.setField(room, "currentRound", currentRound);
-        fixtureSettingManager.setField(room, "status", roomStatus);
-        fixtureSettingManager.setField(room, "roomSetting", roomSetting);
         return roomRepository.save(room);
+    }
+
+    private void setRoom(int currentRound, RoomSetting roomSetting, RoomStatus roomStatus, Room room) {
+        fixtureSettingManager.setField(room, CURRENT_ROUND_FIELD, currentRound);
+        fixtureSettingManager.setField(room, STATUS_FIELD, roomStatus);
+        fixtureSettingManager.setField(room, ROOM_SETTING_FIELD, roomSetting);
     }
 }
