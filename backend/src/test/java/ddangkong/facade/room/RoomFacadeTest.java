@@ -14,7 +14,6 @@ import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.balance.roomcontent.RoomContent;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
-import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.exception.room.NotFoundRoomException;
 import ddangkong.exception.room.member.InvalidMemberIdException;
@@ -28,6 +27,7 @@ import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
 import ddangkong.support.annotation.FixedClock;
+import ddangkong.support.fixture.EntityFixtureUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -581,7 +581,7 @@ class RoomFacadeTest extends BaseServiceTest {
 
         private Room getSavedRoom(LocalDateTime lastModifiedAt) {
             Room room = Room.createNewRoom();
-            EntityTestUtils.setLastModifiedAt(room, lastModifiedAt);
+            EntityFixtureUtils.setLastModifiedAt(room, lastModifiedAt);
             return roomRepository.save(room);
         }
 

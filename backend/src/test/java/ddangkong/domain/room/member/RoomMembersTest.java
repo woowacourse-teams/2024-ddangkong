@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.room.Room;
-import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.room.member.InvalidMasterCountException;
 import ddangkong.exception.room.member.NotExistCommonMemberException;
 import ddangkong.exception.room.member.NotRoomMemberException;
+import ddangkong.support.fixture.EntityFixtureUtils;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -23,7 +23,7 @@ class RoomMembersTest {
         @BeforeEach
         void setUp() {
             room = Room.createNewRoom();
-            EntityTestUtils.setId(room, 1L);
+            EntityFixtureUtils.setId(room, 1L);
         }
 
         @Test
@@ -107,11 +107,11 @@ class RoomMembersTest {
         void 임의의_일반_멤버를_조회할_수_있다() {
             // given
             Member master = Member.createMaster("master", room);
-            EntityTestUtils.setId(master, 1L);
+            EntityFixtureUtils.setId(master, 1L);
             Member member1 = Member.createCommon("common1", room);
-            EntityTestUtils.setId(member1, 2L);
+            EntityFixtureUtils.setId(member1, 2L);
             Member member2 = Member.createCommon("common2", room);
-            EntityTestUtils.setId(member2, 3L);
+            EntityFixtureUtils.setId(member2, 3L);
             List<Member> members = List.of(master, member1, member2);
             RoomMembers roomMembers = new RoomMembers(members);
 
@@ -126,7 +126,7 @@ class RoomMembersTest {
         void 일반_멤버가_없다면_예외를_발생시킨다() {
             // given
             Member master = Member.createMaster("master", room);
-            EntityTestUtils.setId(master, 1L);
+            EntityFixtureUtils.setId(master, 1L);
             List<Member> members = List.of(master);
             RoomMembers roomMembers = new RoomMembers(members);
 
@@ -150,11 +150,11 @@ class RoomMembersTest {
         void 특정_멤버를_조회한다() {
             // given
             Member master = Member.createMaster("master", room);
-            EntityTestUtils.setId(master, 1L);
+            EntityFixtureUtils.setId(master, 1L);
             Member member1 = Member.createCommon("common1", room);
-            EntityTestUtils.setId(member1, 2L);
+            EntityFixtureUtils.setId(member1, 2L);
             Member member2 = Member.createCommon("common2", room);
-            EntityTestUtils.setId(member2, 3L);
+            EntityFixtureUtils.setId(member2, 3L);
             List<Member> members = List.of(master, member1, member2);
             RoomMembers roomMembers = new RoomMembers(members);
 
@@ -169,9 +169,9 @@ class RoomMembersTest {
         void 존재하지_않는_멤버를_조회하면_예외가_발생한다() {
             // given
             Member master = Member.createMaster("master", room);
-            EntityTestUtils.setId(master, 1L);
+            EntityFixtureUtils.setId(master, 1L);
             Member member1 = Member.createCommon("common1", room);
-            EntityTestUtils.setId(member1, 2L);
+            EntityFixtureUtils.setId(member1, 2L);
             List<Member> members = List.of(master, member1);
             RoomMembers roomMembers = new RoomMembers(members);
 

@@ -6,9 +6,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.balance.option.InvalidBalanceOptionCountException;
 import ddangkong.exception.balance.option.NotFoundBalanceOptionException;
+import ddangkong.support.fixture.EntityFixtureUtils;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -86,9 +86,9 @@ class BalanceOptionsTest {
         void 아이디로_옵션을_조회한다() {
             // given
             BalanceOption firstOption = new BalanceOption("A", content);
-            EntityTestUtils.setId(firstOption, 1L);
+            EntityFixtureUtils.setId(firstOption, 1L);
             BalanceOption secondOption = new BalanceOption("B", content);
-            EntityTestUtils.setId(secondOption, 2L);
+            EntityFixtureUtils.setId(secondOption, 2L);
             BalanceOptions balanceOptions = new BalanceOptions(List.of(firstOption, secondOption));
 
             // when
@@ -102,9 +102,9 @@ class BalanceOptionsTest {
         void 존재하지_않는_옵션을_조회할_경우_예외가_발생한다() {
             // given
             BalanceOption firstOption = new BalanceOption("A", content);
-            EntityTestUtils.setId(firstOption, 1L);
+            EntityFixtureUtils.setId(firstOption, 1L);
             BalanceOption secondOption = new BalanceOption("B", content);
-            EntityTestUtils.setId(secondOption, 2L);
+            EntityFixtureUtils.setId(secondOption, 2L);
             BalanceOptions balanceOptions = new BalanceOptions(List.of(firstOption, secondOption));
 
             // when & then
