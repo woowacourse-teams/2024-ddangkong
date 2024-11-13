@@ -55,7 +55,8 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             member = memberFixture.createMaster(room);
 
             balanceContent = balanceContentFixture.create(room.getCategory());
-            balanceOptionFixture.initOption(balanceContent);
+            option1 = balanceOptionFixture.create(balanceContent);
+            option2 = balanceOptionFixture.create(balanceContent);
         }
 
         @Test
