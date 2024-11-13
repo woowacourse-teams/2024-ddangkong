@@ -65,7 +65,6 @@ class BalanceContentServiceTest extends BaseServiceTest {
         }
 
         @Test
-            // todo init-test.sql 제거되면 pickCount 3으로 수정
         void 카테고리에_해당하는_컨텐츠가_부족하면_예외가_발생한다() {
             // given
             Category category = Category.IF;
