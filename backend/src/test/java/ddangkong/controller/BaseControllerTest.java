@@ -11,6 +11,12 @@ import ddangkong.domain.room.balance.roomcontent.RoomContentRepository;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.MemberRepository;
 import ddangkong.support.extension.DatabaseCleanerExtension;
+import ddangkong.support.fixture.domain.BalanceContentFixture;
+import ddangkong.support.fixture.domain.BalanceOptionFixture;
+import ddangkong.support.fixture.domain.MemberFixture;
+import ddangkong.support.fixture.domain.RoomBalanceVoteFixture;
+import ddangkong.support.fixture.domain.RoomContentFixture;
+import ddangkong.support.fixture.domain.RoomFixture;
 import io.restassured.RestAssured;
 import java.time.Clock;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.jdbc.Sql;
 
 @ExtendWith(DatabaseCleanerExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @SpyBean(Clock.class)
-@Sql(scripts = "/init-test.sql")
 public abstract class BaseControllerTest {
 
     @Autowired
@@ -47,6 +51,24 @@ public abstract class BaseControllerTest {
 
     @Autowired
     protected RoomBalanceVoteRepository roomBalanceVoteRepository;
+
+    @Autowired
+    protected RoomFixture roomFixture;
+
+    @Autowired
+    protected BalanceContentFixture balanceContentFixture;
+
+    @Autowired
+    protected BalanceOptionFixture balanceOptionFixture;
+
+    @Autowired
+    protected RoomContentFixture roomContentFixture;
+
+    @Autowired
+    protected MemberFixture memberFixture;
+
+    @Autowired
+    protected RoomBalanceVoteFixture roomBalanceVoteFixture;
 
     @LocalServerPort
     private int port;

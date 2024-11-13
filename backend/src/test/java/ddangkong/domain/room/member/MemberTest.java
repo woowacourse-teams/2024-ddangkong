@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.room.Room;
-import ddangkong.domain.support.EntityTestUtils;
 import ddangkong.exception.room.member.AlreadyMasterException;
 import ddangkong.exception.room.member.InvalidNicknameException;
+import ddangkong.support.fixture.EntityFixtureUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,7 +36,7 @@ class MemberTest {
         void 마스터_유저인_경우_예외를_발생한다() {
             // given
             Member master = Member.createMaster("prin", ROOM);
-            EntityTestUtils.setId(master, 3L);
+            EntityFixtureUtils.setId(master, 3L);
 
             // when & then
             assertThatThrownBy(() -> master.promoteToMaster())
