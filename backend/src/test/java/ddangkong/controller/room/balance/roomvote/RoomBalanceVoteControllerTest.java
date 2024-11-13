@@ -21,7 +21,6 @@ import ddangkong.support.annotation.FixedClock;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -161,22 +160,9 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
 
         @BeforeEach
         void init() {
-            roomContents = new ArrayList<>();
             room = roomFixture.createNotStartedRoom(3, new RoomSetting(3, 15_000, Category.IF), RoomStatus.FINISH);
-
-            BalanceContent balanceContent1 = balanceContentFixture.create(Category.IF, "if1");
-            balanceOptionFixture.create("option1", balanceContent1);
-            balanceOptionFixture.create("option2", balanceContent1);
-            BalanceContent balanceContent2 = balanceContentFixture.create(Category.IF, "if2");
-            balanceOptionFixture.create("option1", balanceContent2);
-            balanceOptionFixture.create("option2", balanceContent2);
-            BalanceContent balanceContent3 = balanceContentFixture.create(Category.IF, "if3");
-            balanceOptionFixture.create("option1", balanceContent3);
-            balanceOptionFixture.create("option2", balanceContent3);
-
-            roomContents.add(roomContentFixture.create(room, balanceContent1, 1, null));
-            roomContents.add(roomContentFixture.create(room, balanceContent2, 2, null));
-            roomContents.add(roomContentFixture.create(room, balanceContent3, 3, null));
+            roomContents = roomContentFixture.initRoomContents(room);
+            balanceOptionFixture.initOptions(roomContents);
 
             master = memberFixture.createMaster(room);
             common1 = memberFixture.createCommon(1, room);
