@@ -17,10 +17,6 @@ public class MemberFixture {
         this.memberRepository = memberRepository;
     }
 
-    public Member createCommon(String nickname, Room room) {
-        return memberRepository.save(Member.createCommon(nickname, room));
-    }
-
     public Member createCommon(Room room) {
         return createCommon(COMMON_NICKNAME, room);
     }
@@ -29,17 +25,21 @@ public class MemberFixture {
         return createCommon(COMMON_NICKNAME + order, room);
     }
 
+    private Member createCommon(String nickname, Room room) {
+        return memberRepository.save(Member.createCommon(nickname, room));
+    }
+
+    public void createCommons(Room room, int count) {
+        for (int i = 0; i < count; i++) {
+            createCommon(i, room);
+        }
+    }
+
     public Member createMaster(String nickname, Room room) {
         return memberRepository.save(Member.createMaster(nickname, room));
     }
 
     public Member createMaster(Room room) {
         return createMaster(MASTER_NICKNAME, room);
-    }
-
-    public void createCommons(Room room, int count) {
-        for (int i = 0; i < count; i++) {
-            createCommon(COMMON_NICKNAME + i, room);
-        }
     }
 }
