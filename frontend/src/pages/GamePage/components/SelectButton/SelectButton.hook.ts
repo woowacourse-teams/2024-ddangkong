@@ -3,11 +3,12 @@ import { useParams } from 'react-router-dom';
 
 import { voteBalanceContent } from '@/apis/balanceContent';
 import useGetUserInfo from '@/hooks/useGetUserInfo';
+import useThrottle from '@/hooks/useThrottle';
 
 interface UseSelectCompleteMutationProps {
   selectedId: number;
-  contentId?: number;
   completeSelection: () => void;
+  contentId?: number;
 }
 
 const useCompleteSelectionMutation = ({
@@ -20,7 +21,7 @@ const useCompleteSelectionMutation = ({
     member: { memberId },
   } = useGetUserInfo();
 
-  return useMutation({
+  const completeSelectionMutation = useMutation({
     mutationFn: async () => {
       if (typeof contentId === 'undefined') {
         throw new Error('contentId 가 존재하지 않습니다.');
@@ -36,6 +37,10 @@ const useCompleteSelectionMutation = ({
       completeSelection();
     },
   });
+
+  const throttledVote = useThrottle(completeSelectionMutation.mutate);
+
+  return { ...completeSelectionMutation, vote: throttledVote };
 };
 
 export default useCompleteSelectionMutation;
