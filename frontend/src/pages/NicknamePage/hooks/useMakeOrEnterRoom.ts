@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { enterRoom, createRoom } from '@/apis/room';
 import { ROUTES } from '@/constants/routes';
+import useThrottle from '@/hooks/useThrottle';
 import { CreateOrEnterRoomResponse } from '@/types/room';
 import { CustomError } from '@/utils/error';
 
@@ -22,6 +23,8 @@ const useMakeOrEnterRoom = () => {
     },
   });
 
+  const throttledCreateRoom = useThrottle(createRoomMutation.mutate);
+
   const enterRoomMutation = useMutation<
     CreateOrEnterRoomResponse,
     CustomError,
@@ -33,12 +36,19 @@ const useMakeOrEnterRoom = () => {
     },
   });
 
+  const throttledEnterRoom = useThrottle(enterRoomMutation.mutate);
+
   const handleMakeOrEnterRoom = () => {
     const nickname = nicknameInputRef.current?.value || nicknameInputRef.current?.placeholder || '';
+
     if (isMaster) {
-      createRoomMutation.mutate(nickname);
+      if (createRoomMutation.isPending) return;
+
+      throttledCreateRoom(nickname);
     } else {
-      enterRoomMutation.mutate({ nickname, roomUuid: roomUuid || '' });
+      if (enterRoomMutation.isPending) return;
+
+      throttledEnterRoom({ nickname, roomUuid: roomUuid || '' });
     }
   };
 
