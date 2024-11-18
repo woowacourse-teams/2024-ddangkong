@@ -1,16 +1,18 @@
 import { useRef } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const useThrottle = (func: (...args: any[]) => void, delay = 1000) => {
-  const isThrottle = useRef(false);
+const useThrottle = <T extends (...args: any[]) => void>(
+  func: T,
+  delay = 3000,
+): ((...args: Parameters<T>) => void) => {
+  const isThrottledRef = useRef(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (...args: any[]) => {
-    if (!isThrottle.current) {
+  return (...args: Parameters<T>) => {
+    if (!isThrottledRef.current) {
       func(...args);
-      isThrottle.current = true;
+      isThrottledRef.current = true;
       setTimeout(() => {
-        isThrottle.current = false;
+        isThrottledRef.current = false;
       }, delay);
     }
   };
