@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import NicknameInput from './components/NicknameInput/NicknameInput';
-import useMakeOrEnterRoom from './hooks/useMakeOrEnterRoom';
+import useCreateOrEnterRoom from './hooks/useCreateOrEnterRoom';
 import {
   profileWrapper,
   profileImg,
@@ -21,7 +21,7 @@ import Content from '@/components/layout/Content/Content';
 import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
 
 const NicknamePage = () => {
-  const { nicknameInputRef, handleMakeOrEnterRoom, isLoading } = useMakeOrEnterRoom();
+  const { nicknameInputRef, handleCreateOrEnterRoom, isLoading } = useCreateOrEnterRoom();
   const { roomUuid } = useParams();
   const { bottomButtonHeight } = useButtonHeightOnKeyboard();
 
@@ -58,10 +58,10 @@ const NicknamePage = () => {
       <div css={nicknameContainer}>
         <NicknameInput
           nicknameInputRef={nicknameInputRef}
-          handleMakeOrEnterRoom={handleMakeOrEnterRoom}
+          handleCreateOrEnterRoom={handleCreateOrEnterRoom}
         />
         <Button
-          onClick={handleMakeOrEnterRoom}
+          onClick={handleCreateOrEnterRoom}
           disabled={isLoading}
           text={isLoading ? '접속 중...' : '확인'}
           style={{ width: '100%', bottom: bottomButtonHeight }}
