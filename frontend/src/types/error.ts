@@ -32,7 +32,8 @@ export type ErrorCode =
   | 'INTERNAL_SERVER_ERROR'
   | 'NOT_FOUND_COOKIE'
   | 'INVALID_COOKIE'
-  | 'INVALID_NICKNAME';
+  | 'INVALID_NICKNAME'
+  | 'CAN_NOT_JOIN_ROOM';
 
 export interface UrlParameterError extends ResponseError {
   errorCode: 'URL_PARAMETER_ERROR';
