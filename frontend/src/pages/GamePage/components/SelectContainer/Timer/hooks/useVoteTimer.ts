@@ -17,7 +17,7 @@ const useVoteTimer = ({ roomId, selectedId, isVoted, completeSelection }: UseVot
   const { balanceContent } = useBalanceContentQuery(roomId);
   const timeLimit = convertMsecToSecond(balanceContent.timeLimit) || DEFAULT_TIME_LIMIT_SEC;
 
-  const { mutate: vote } = useCompleteSelectionMutation({
+  const { vote } = useCompleteSelectionMutation({
     selectedId,
     contentId: balanceContent.contentId,
     completeSelection,

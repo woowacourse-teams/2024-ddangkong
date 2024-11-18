@@ -26,6 +26,7 @@ const useCompleteSelectionMutation = ({
       if (typeof contentId === 'undefined') {
         throw new Error('contentId 가 존재하지 않습니다.');
       }
+
       return await voteBalanceContent({
         roomId: Number(roomId),
         optionId: selectedId,
@@ -33,7 +34,7 @@ const useCompleteSelectionMutation = ({
         memberId: Number(memberId),
       });
     },
-    onSuccess: () => {
+    onMutate: () => {
       completeSelection();
     },
   });

@@ -36,6 +36,7 @@ const SelectContainer = () => {
       <SelectButton
         contentId={balanceContent.contentId}
         selectedId={selectedOption.id}
+        isVoted={selectedOption.isCompleted}
         completeSelection={completeSelection}
       />
     </div>
