@@ -4,9 +4,9 @@ import { useParams } from 'react-router-dom';
 import useCreateRoom from './useCreateRoom';
 import useEnterRoom from './useEnterRoom';
 
-const useCreateOrEnterRoom = () => {
-  const nicknameInputRef = useRef<HTMLInputElement>(null);
+const useAccessRoom = () => {
   const { roomUuid } = useParams();
+  const nicknameInputRef = useRef<HTMLInputElement>(null);
 
   // roomUuId가 없다 -> 초대링크를 받지 않은 master이다.
   const isMaster = !roomUuid;
@@ -14,20 +14,13 @@ const useCreateOrEnterRoom = () => {
   const { createRoomMutation, handleCreateRoom } = useCreateRoom({ nicknameInputRef });
   const { enterRoomMutation, handleEnterRoom } = useEnterRoom({ nicknameInputRef });
 
-  const handleCreateOrEnterRoom = () => {
-    if (isMaster) {
-      handleCreateRoom();
-    } else {
-      handleEnterRoom();
-    }
-  };
-
   return {
     nicknameInputRef,
-    handleCreateOrEnterRoom,
+    handleCreateRoom,
+    handleEnterRoom,
     isLoading: isMaster ? createRoomMutation.isPending : enterRoomMutation.isPending,
     isSuccess: createRoomMutation.isSuccess || enterRoomMutation.isSuccess,
   };
 };
 
-export default useCreateOrEnterRoom;
+export default useAccessRoom;

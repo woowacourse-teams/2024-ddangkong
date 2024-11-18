@@ -9,13 +9,13 @@ import { NICKNAME_MIN_LENGTH, NICKNAME_MAX_LENGTH } from '@/constants/config';
 
 interface NicknameInputProps {
   nicknameInputRef: RefObject<HTMLInputElement>;
-  handleCreateOrEnterRoom: () => void;
+  handleAccessRoom: () => void;
 }
 const randomNickname = createRandomNickname();
 
-const NicknameInput = ({ nicknameInputRef, handleCreateOrEnterRoom }: NicknameInputProps) => {
+const NicknameInput = ({ nicknameInputRef, handleAccessRoom }: NicknameInputProps) => {
   const { nickname, handleChangeInput, handleKeyDown } = useNicknameInput({
-    handleCreateOrEnterRoom,
+    handleAccessRoom,
   });
 
   const [statusMessage, setStatusMessage] = useState('');

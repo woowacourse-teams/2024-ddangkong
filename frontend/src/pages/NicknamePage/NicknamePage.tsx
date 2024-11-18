@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import NicknameInput from './components/NicknameInput/NicknameInput';
-import useCreateOrEnterRoom from './hooks/useCreateOrEnterRoom';
+import useAccessRoom from './hooks/useAccessRoom';
 import useIsJoinableRoomQuery from './hooks/useIsJoinableRoomQuery';
 import { profileWrapper, profileImg, nicknameContainer } from './NicknamePage.styled';
 
@@ -13,9 +13,11 @@ import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
 
 const NicknamePage = () => {
   const { roomUuid } = useParams();
-  const { nicknameInputRef, handleCreateOrEnterRoom, isLoading, isSuccess } =
-    useCreateOrEnterRoom();
+  const { nicknameInputRef, handleCreateRoom, handleEnterRoom, isLoading, isSuccess } =
+    useAccessRoom();
   const { bottomButtonHeight } = useButtonHeightOnKeyboard();
+
+  const isMaster = !roomUuid;
 
   useIsJoinableRoomQuery({ roomUuid });
 
@@ -33,12 +35,12 @@ const NicknamePage = () => {
       <div css={nicknameContainer}>
         <NicknameInput
           nicknameInputRef={nicknameInputRef}
-          handleCreateOrEnterRoom={handleCreateOrEnterRoom}
+          handleAccessRoom={isMaster ? handleCreateRoom : handleEnterRoom}
         />
         <Button
-          onClick={handleCreateOrEnterRoom}
-          disabled={isLoading || isSuccess}
           text={isLoading || isSuccess ? '접속 중...' : '확인'}
+          onClick={isMaster ? handleCreateRoom : handleEnterRoom}
+          disabled={isLoading || isSuccess}
           style={{ width: '100%', bottom: bottomButtonHeight }}
           bottom
         />
