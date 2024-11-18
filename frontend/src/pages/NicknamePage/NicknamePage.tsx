@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import NicknameInput from './components/NicknameInput/NicknameInput';
 import useCreateOrEnterRoom from './hooks/useCreateOrEnterRoom';
+import useIsJoinableRoomQuery from './hooks/useIsJoinableRoomQuery';
 import {
   profileWrapper,
   profileImg,
@@ -13,7 +13,6 @@ import {
   nicknameContainer,
 } from './NicknamePage.styled';
 
-import { isJoinableRoom } from '@/apis/room';
 import AngryDdangkong from '@/assets/images/angryDdangkong.webp';
 import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import Button from '@/components/common/Button/Button';
@@ -21,15 +20,10 @@ import Content from '@/components/layout/Content/Content';
 import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
 
 const NicknamePage = () => {
-  const { nicknameInputRef, handleCreateOrEnterRoom, isLoading } = useCreateOrEnterRoom();
   const { roomUuid } = useParams();
+  const { nicknameInputRef, handleCreateOrEnterRoom, isLoading } = useCreateOrEnterRoom();
+  const { isJoinable, isPending: isJoinableLoading } = useIsJoinableRoomQuery({ roomUuid });
   const { bottomButtonHeight } = useButtonHeightOnKeyboard();
-
-  const { data, isLoading: isJoinableLoading } = useQuery({
-    queryKey: ['isJoinable', roomUuid],
-    queryFn: async () => isJoinableRoom(roomUuid || ''),
-    enabled: !!roomUuid,
-  });
 
   const goToHome = () => {
     window.location.href = '/';
@@ -41,7 +35,7 @@ const NicknamePage = () => {
     }
   }, [roomUuid, nicknameInputRef]);
 
-  if (!isJoinableLoading && roomUuid && !data?.isJoinable)
+  if (!isJoinableLoading && roomUuid && isJoinable)
     return (
       <div css={noVoteTextContainer}>
         <img src={AngryDdangkong} alt="화난 땅콩" css={angryImage} />

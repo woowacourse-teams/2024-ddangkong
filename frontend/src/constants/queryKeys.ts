@@ -8,4 +8,5 @@ export const QUERY_KEYS = {
   isRoomInitial: 'isRoomInitial',
   categoryList: 'categoryList',
   getUserInfo: 'getUserInfo',
+  isJoinable: 'isJoinable',
 } as const;
