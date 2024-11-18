@@ -13,7 +13,8 @@ import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
 
 const NicknamePage = () => {
   const { roomUuid } = useParams();
-  const { nicknameInputRef, handleCreateOrEnterRoom, isLoading } = useCreateOrEnterRoom();
+  const { nicknameInputRef, handleCreateOrEnterRoom, isLoading, isSuccess } =
+    useCreateOrEnterRoom();
   const { bottomButtonHeight } = useButtonHeightOnKeyboard();
 
   useIsJoinableRoomQuery({ roomUuid });
@@ -36,8 +37,8 @@ const NicknamePage = () => {
         />
         <Button
           onClick={handleCreateOrEnterRoom}
-          disabled={isLoading}
-          text={isLoading ? '접속 중...' : '확인'}
+          disabled={isLoading || isSuccess}
+          text={isLoading || isSuccess ? '접속 중...' : '확인'}
           style={{ width: '100%', bottom: bottomButtonHeight }}
           bottom
         />

@@ -26,6 +26,7 @@ const useCreateOrEnterRoom = () => {
     nicknameInputRef,
     handleCreateOrEnterRoom,
     isLoading: isMaster ? createRoomMutation.isPending : enterRoomMutation.isPending,
+    isSuccess: createRoomMutation.isSuccess || enterRoomMutation.isSuccess,
   };
 };
 
