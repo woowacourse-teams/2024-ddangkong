@@ -2,19 +2,28 @@ import useCompleteSelectionMutation from './SelectButton.hook';
 
 import Button from '@/components/common/Button/Button';
 import { bottomButtonLayout } from '@/components/common/Button/Button.styled';
+import { SelectedOption } from '@/types/balanceContent';
 
 interface SelectButtonProps {
   contentId: number;
-  selectedId: number;
-  isVoted: boolean;
+  selectedOption: SelectedOption;
   completeSelection: () => void;
+  cancelSelection: () => void;
 }
 
-const SelectButton = ({ contentId, selectedId, isVoted, completeSelection }: SelectButtonProps) => {
+const SelectButton = ({
+  contentId,
+  selectedOption,
+  completeSelection,
+  cancelSelection,
+}: SelectButtonProps) => {
+  const { id: selectedId, isVoted } = selectedOption;
+
   const { isSuccess, isPending, vote } = useCompleteSelectionMutation({
     selectedId,
     contentId,
     completeSelection,
+    cancelSelection,
   });
 
   return (
