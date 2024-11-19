@@ -11,11 +11,27 @@ interface UseTimerProps {
 
 const useTimer = ({ timeLimit, isSelectedOption, isVoted, vote }: UseTimerProps) => {
   const [leftRoundTime, setLeftRoundTime] = useState(timeLimit);
+  const workerRef = useRef<Worker | null>(null);
 
   const isVoteTimeout = leftRoundTime <= 0;
   const isAlmostFinished = leftRoundTime <= ALMOST_FINISH_SECOND;
 
-  const timeout = useRef<NodeJS.Timeout>();
+  useEffect(() => {
+    const timerWorker = new Worker(new URL('./timerWorker.ts', import.meta.url));
+    workerRef.current = timerWorker;
+
+    timerWorker.postMessage({ type: 'start', delay: POLLING_DELAY });
+
+    timerWorker.onmessage = () => {
+      setLeftRoundTime((prev) => prev - 1);
+    };
+
+    // 타이머가 끝나기 전에 투표가 완료될 경우 clean-up
+    return () => {
+      timerWorker.postMessage({ type: 'stop' });
+      timerWorker.terminate();
+    };
+  }, []);
 
   useEffect(() => {
     if (isVoteTimeout) {
@@ -23,19 +39,10 @@ const useTimer = ({ timeLimit, isSelectedOption, isVoted, vote }: UseTimerProps)
         vote();
       }
 
-      clearInterval(timeout.current);
+      workerRef.current?.postMessage({ type: 'stop' });
+      workerRef.current?.terminate();
     }
   }, [isVoteTimeout, isSelectedOption, isVoted, vote]);
-
-  useEffect(() => {
-    timeout.current = setInterval(() => {
-      setLeftRoundTime((prev) => prev - 1);
-    }, POLLING_DELAY);
-
-    return () => {
-      clearInterval(timeout.current);
-    };
-  }, [timeLimit]);
 
   return { leftRoundTime, isAlmostFinished };
 };
