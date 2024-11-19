@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 import { getUserInfo } from '@/apis/room';
 import { QUERY_KEYS } from '@/constants/queryKeys';
@@ -7,8 +8,10 @@ import { RoomAndMember } from '@/types/room';
 const USER_INFO_STALE_TIME = 2 * 60 * 60 * 1000;
 
 const useGetUserInfo = (): RoomAndMember => {
+  const { roomId } = useParams();
+
   const { data } = useQuery({
-    queryKey: [QUERY_KEYS.getUserInfo],
+    queryKey: [QUERY_KEYS.getUserInfo, roomId],
     queryFn: getUserInfo,
     staleTime: USER_INFO_STALE_TIME,
   });
@@ -19,7 +22,7 @@ const useGetUserInfo = (): RoomAndMember => {
     member: {
       memberId: data?.member?.memberId || 0,
       nickname: data?.member?.nickname || '',
-      isMaster: data?.member?.isMaster || false,
+      isMaster: Boolean(data?.member?.isMaster && Number(roomId) === data?.roomId),
     },
   };
 };
