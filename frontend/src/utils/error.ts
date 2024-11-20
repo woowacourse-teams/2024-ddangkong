@@ -23,3 +23,8 @@ export class NetworkError extends Error {
   status = 555;
   message = '네트워크가 불안정해요. 다시 시도해주세요!';
 }
+
+export class UnhandledError extends Error {
+  status = 5002;
+  message = '예기치 못한 에러가 발생했어요. 관리자에게 문의 바랍니다.';
+}
