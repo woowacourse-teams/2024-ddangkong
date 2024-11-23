@@ -45,6 +45,11 @@ public class RoomBalanceVoteService {
     }
 
     @Transactional(readOnly = true)
+    public List<RoomBalanceVote> getVotesInRoom(RoomMembers roomMembers, BalanceOption balanceOption) {
+        return roomVoteRepository.findByMemberInAndBalanceOption(roomMembers.getMembers(), balanceOption);
+    }
+
+    @Transactional(readOnly = true)
     public boolean isAllMemberVoted(RoomMembers roomMembers, BalanceOptions balanceOptions) {
         long voteCount = roomVoteRepository.countByMemberInAndBalanceOptionIn(roomMembers.getMembers(),
                 balanceOptions.getOptions());
@@ -56,19 +61,10 @@ public class RoomBalanceVoteService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoomBalanceVote> getVotesInRoom(RoomMembers roomMembers, BalanceOption balanceOption) {
-        return roomVoteRepository.findByMemberInAndBalanceOption(roomMembers.getMembers(), balanceOption);
-    }
-
     public List<RoomBalanceVote> findRoomVotesByBalanceOptionsWithoutMember(List<BalanceOption> memberRoomVoteOptions,
                                                                             Room room,
                                                                             Member member) {
-        return roomVoteRepository.findRoomBalanceVotesByBalanceOptionsAndRoomWithoutMember(memberRoomVoteOptions, room,
-                member);
-    }
-
-    @Transactional
-    public void deleteRoomVotes(List<RoomBalanceVote> roomBalanceVotes) {
-        roomVoteRepository.deleteAllInBatch(roomBalanceVotes);
+        return roomVoteRepository.findRoomBalanceVotesByBalanceOptionsAndRoomWithoutMember(
+                memberRoomVoteOptions, room, member);
     }
 }
