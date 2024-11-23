@@ -130,10 +130,12 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
         }
 
         @Test
-        void 투표_마감_시간이_지나지_않고_방의_모든_멤버가_투표하지_않으면_투표가_종료되지_않는다() {
+        void 투표_진행_중인_상황을_알_수_있다() {
             // given
             LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:08");
             roomContentFixture.create(room, balanceContent, 1, voteDeadline);
+
+            roomBalanceVoteFixture.create(master, optionA);
 
             // when
             VoteFinishedResponse actual = RestAssured.given().log().all()
@@ -145,7 +147,19 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
                     .extract().as(VoteFinishedResponse.class);
 
             // then
-            assertThat(actual.isFinished()).isEqualTo(false);
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isFalse(),
+                    () -> assertThat(actual.memberCount()).isEqualTo(2),
+                    () -> assertThat(actual.voteCount()).isEqualTo(1),
+                    () -> assertThat(actual.memberStates().get(0).member().memberId()).isEqualTo(master.getId()),
+                    () -> assertThat(actual.memberStates().get(0).member().isMaster()).isEqualTo(master.isMaster()),
+                    () -> assertThat(actual.memberStates().get(0).member().nickname()).isEqualTo(master.getNickname()),
+                    () -> assertThat(actual.memberStates().get(0).isVoteFinished()).isTrue(),
+                    () -> assertThat(actual.memberStates().get(1).member().memberId()).isEqualTo(common.getId()),
+                    () -> assertThat(actual.memberStates().get(1).member().isMaster()).isEqualTo(common.isMaster()),
+                    () -> assertThat(actual.memberStates().get(1).member().nickname()).isEqualTo(common.getNickname()),
+                    () -> assertThat(actual.memberStates().get(1).isVoteFinished()).isFalse()
+            );
         }
     }
 

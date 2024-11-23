@@ -31,6 +31,8 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomMemberVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomMembersVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
+import ddangkong.facade.room.balance.roomvote.dto.VoteStatusPerMemberResponse;
+import ddangkong.facade.room.member.dto.MemberResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -166,7 +168,11 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
         @Test
         void 투표가_종료되었는지_조회한다() throws Exception {
             // given
-            VoteFinishedResponse response = new VoteFinishedResponse(true);
+            List<VoteStatusPerMemberResponse> memberStates = List.of(
+                    new VoteStatusPerMemberResponse(new MemberResponse(1L, "커찬", false), false),
+                    new VoteStatusPerMemberResponse(new MemberResponse(2L, "마루", true), true)
+            );
+            VoteFinishedResponse response = new VoteFinishedResponse(true, 2, 1, memberStates);
             when(roomBalanceVoteFacade.getVoteFinished(anyLong(), anyLong())).thenReturn(response);
 
             // when & then
@@ -178,7 +184,15 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             parameterWithName("contentId").description("콘텐츠 ID")
                                     ),
                                     responseFields(
-                                            fieldWithPath("isFinished").type(BOOLEAN).description("투표 종료 여부")
+                                            fieldWithPath("isFinished").type(BOOLEAN).description("투표 종료 여부"),
+                                            fieldWithPath("memberCount").type(NUMBER).description("방에 참여한 인원"),
+                                            fieldWithPath("voteCount").type(NUMBER).description("투표한 인원"),
+                                            fieldWithPath("memberStates").type(ARRAY).description("방 참여 인원들의 투표 현황"),
+                                            fieldWithPath("memberStates[].member").type(OBJECT).description("해당 멤버 정보"),
+                                            fieldWithPath("memberStates[].member.memberId").type(NUMBER).description("멤버 ID"),
+                                            fieldWithPath("memberStates[].member.nickname").type(STRING).description("멤버 이름"),
+                                            fieldWithPath("memberStates[].member.isMaster").type(BOOLEAN).description("마스터 여부"),
+                                            fieldWithPath("memberStates[].isVoteFinished").type(BOOLEAN).description("멤버 투표 여부")
                                     )
                             )
                     );
@@ -187,6 +201,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
 
     @Nested
     class 투표_매칭도_조회 {
+
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members/{memberId}/matching";
 
         @Test

@@ -209,7 +209,6 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             balanceContent = balanceContentFixture.create(room.getCategory());
             option1 = balanceOptionFixture.create(balanceContent);
             option2 = balanceOptionFixture.create(balanceContent);
-
         }
 
         @Test
@@ -258,6 +257,29 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
 
             // then
             assertThat(actual.isFinished()).isFalse();
+        }
+
+        @Test
+        void 현재_투표가_진행_중인_상황들을_조회할_수_있다() {
+            // given
+            int round = 1;
+            LocalDateTime notFinishedTime = LocalDateTime.parse("2024-08-03T11:00:09");
+            roomContentFixture.initRoomContent(room, balanceContent, round, notFinishedTime);
+            roomBalanceVoteFixture.create(master, option1);
+
+            // when
+            VoteFinishedResponse actual = roomBalanceVoteFacade.getVoteFinished(room.getId(), balanceContent.getId());
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isFalse(),
+                    () -> assertThat(actual.memberCount()).isEqualTo(2),
+                    () -> assertThat(actual.voteCount()).isEqualTo(1),
+                    () -> assertThat(actual.memberStates().get(0).member().memberId()).isEqualTo(master.getId()),
+                    () -> assertThat(actual.memberStates().get(0).isVoteFinished()).isTrue(),
+                    () -> assertThat(actual.memberStates().get(1).member().memberId()).isEqualTo(member1.getId()),
+                    () -> assertThat(actual.memberStates().get(1).isVoteFinished()).isFalse()
+            );
         }
 
         @Test

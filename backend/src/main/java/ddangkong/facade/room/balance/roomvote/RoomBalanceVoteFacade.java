@@ -113,7 +113,7 @@ public class RoomBalanceVoteFacade {
     @Transactional(readOnly = true)
     public VoteFinishedResponse getVoteFinished(Long roomId, Long contentId) {
         VotingStatus votingStatus = getVotingStatus(roomId, contentId);
-        return new VoteFinishedResponse(votingStatus.isVoteFinished());
+        return VoteFinishedResponse.from(votingStatus);
     }
 
     private VotingStatus getVotingStatus(Long roomId, Long contentId) {
