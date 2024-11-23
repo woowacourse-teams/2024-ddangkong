@@ -38,6 +38,10 @@ public class RoomBalanceVote {
         this.balanceOption = balanceOption;
     }
 
+    public boolean isOwner(Member member) {
+        return this.member.getId().equals(member.getId());
+    }
+
     public Long getOptionId() {
         return balanceOption.getId();
     }

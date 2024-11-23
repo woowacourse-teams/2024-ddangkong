@@ -10,14 +10,12 @@ import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.room.balance.roomvote.AlreadyVotedException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class RoomBalanceVoteService {
 
     private final RoomBalanceVoteRepository roomVoteRepository;
@@ -50,14 +48,9 @@ public class RoomBalanceVoteService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isAllMemberVoted(RoomMembers roomMembers, BalanceOptions balanceOptions) {
-        long voteCount = roomVoteRepository.countByMemberInAndBalanceOptionIn(roomMembers.getMembers(),
-                balanceOptions.getOptions());
-        if (voteCount > roomMembers.size()) {
-            log.error("[Concurrency Error] 투표한 인원 수가 방 인원 수보다 많습니다. 투표한 인원 수: {}, 방 인원 수: {}",
-                    voteCount, roomMembers.size());
-        }
-        return voteCount >= roomMembers.size();
+    public List<RoomBalanceVote> getVotesInRound(RoomMembers roomMembers, BalanceOptions balanceOptions) {
+        return roomVoteRepository.findByMemberInAndBalanceOptionIn(
+                roomMembers.getMembers(), balanceOptions.getOptions());
     }
 
     @Transactional(readOnly = true)

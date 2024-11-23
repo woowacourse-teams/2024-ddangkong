@@ -11,7 +11,7 @@ import ddangkong.exception.room.balance.roomvote.CanNotCheckMatchingPercentExcep
 import ddangkong.exception.room.balance.roomvote.VoteFinishedException;
 import ddangkong.exception.room.balance.roomvote.VoteNotFinishedException;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
-import ddangkong.facade.room.balance.roomvote.context.VotingStatus;
+import ddangkong.domain.room.balance.roomvote.VotingStatus;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
@@ -121,10 +121,12 @@ public class RoomBalanceVoteFacade {
         BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
         RoomMembers roomMembers = memberService.findRoomMembers(room);
         BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-        boolean isOverVoteDeadline = roomContentService.isOverVoteDeadline(room, balanceContent);
-        boolean isAllMemberVoted = roomBalanceVoteService.isAllMemberVoted(roomMembers, balanceOptions);
+        List<RoomBalanceVote> votes = roomBalanceVoteService.getVotesInRound(roomMembers, balanceOptions);
 
-        return new VotingStatus(roomMembers, balanceOptions, isOverVoteDeadline || isAllMemberVoted);
+        boolean isOverVoteDeadline = roomContentService.isOverVoteDeadline(room, balanceContent);
+        boolean isAllMemberVoted = votes.size() >= roomMembers.size();
+
+        return new VotingStatus(roomMembers, balanceOptions, votes, isOverVoteDeadline || isAllMemberVoted);
     }
 
     @Transactional(readOnly = true)
