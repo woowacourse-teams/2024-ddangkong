@@ -6,7 +6,7 @@ import ddangkong.domain.room.member.RoomMembers;
 import lombok.Getter;
 
 @Getter
-public class VoteContext {
+public class VotingStatus {
 
     private final RoomMembers roomMembers;
 
@@ -14,7 +14,7 @@ public class VoteContext {
 
     private final boolean voteFinished;
 
-    public VoteContext(RoomMembers roomMembers, BalanceOptions balanceOptions, boolean voteFinished) {
+    public VotingStatus(RoomMembers roomMembers, BalanceOptions balanceOptions, boolean voteFinished) {
         this.roomMembers = roomMembers;
         this.balanceOptions = balanceOptions;
         this.voteFinished = voteFinished;
