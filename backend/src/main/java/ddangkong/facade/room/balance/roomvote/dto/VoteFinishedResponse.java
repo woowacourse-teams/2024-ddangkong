@@ -10,10 +10,6 @@ public record VoteFinishedResponse(
         List<VoteStatusPerMemberResponse> memberStates
 ) {
 
-    public VoteFinishedResponse(boolean isFinished) {
-        this(isFinished, 0, 0, List.of());
-    }
-
     public static VoteFinishedResponse from(VotingStatus status) {
         List<VoteStatusPerMemberResponse> memberStates = status.getMembers()
                 .stream()
