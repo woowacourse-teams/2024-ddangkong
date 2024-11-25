@@ -5,13 +5,13 @@ import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
+import ddangkong.domain.room.balance.roomvote.VotingStatus;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.room.balance.roomvote.CanNotCheckMatchingPercentException;
 import ddangkong.exception.room.balance.roomvote.VoteFinishedException;
 import ddangkong.exception.room.balance.roomvote.VoteNotFinishedException;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
-import ddangkong.domain.room.balance.roomvote.VotingStatus;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
@@ -26,15 +26,15 @@ import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import ddangkong.service.room.balance.roomvote.RoomBalanceVoteService;
 import ddangkong.service.room.member.MemberService;
 import ddangkong.util.PercentageCalculator;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -147,10 +147,9 @@ public class RoomBalanceVoteFacade {
         List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteService.findRoomVotesByBalanceOptionsWithoutMember(
                 memberRoomVoteOptions, room, member);
 
-        Map<Member, Long> membersVoteMatchingCount = roomBalanceVotes.stream()
+        return roomBalanceVotes.stream()
                 .map(RoomBalanceVote::getMember)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-        return membersVoteMatchingCount;
     }
 
     private RoomMembersVoteMatchingResponse getRoomMembersVoteMatchingPercent(Map<Member, Long> membersAndMatchingCount,

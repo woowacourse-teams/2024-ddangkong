@@ -49,11 +49,6 @@ public class VotingStatus {
         return roomMembers.size();
     }
 
-    public boolean didVote(Member member) {
-        return votes.stream()
-                .anyMatch(vote -> vote.isOwner(member));
-    }
-
     public boolean isVoteNotFinished() {
         return !voteFinished;
     }

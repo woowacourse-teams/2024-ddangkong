@@ -48,16 +48,9 @@ public class RoomBalanceVoteService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoomBalanceVote> getVotesInRound(RoomMembers roomMembers, BalanceOptions balanceOptions) {
-        return roomVoteRepository.findByMemberInAndBalanceOptionIn(
-                roomMembers.getMembers(), balanceOptions.getOptions());
-    }
-
-    @Transactional(readOnly = true)
     public int countVotesInRound(RoomMembers roomMembers, BalanceOptions balanceOptions) {
-        int voteCount = roomVoteRepository.countByMemberInAndBalanceOptionIn(
+        return roomVoteRepository.countByMemberInAndBalanceOptionIn(
                 roomMembers.getMembers(), balanceOptions.getOptions());
-        return voteCount;
     }
 
     @Transactional(readOnly = true)
