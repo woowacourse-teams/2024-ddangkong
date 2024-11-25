@@ -113,7 +113,7 @@ public class RoomBalanceVoteFacade {
     @Transactional(readOnly = true)
     public VoteFinishedResponse getVoteFinished(Long roomId, Long contentId) {
         VotingStatus votingStatus = getVotingStatus(roomId, contentId);
-        return VoteFinishedResponse.from(votingStatus);
+        return new VoteFinishedResponse(votingStatus);
     }
 
     private VotingStatus getVotingStatus(Long roomId, Long contentId) {
@@ -121,12 +121,12 @@ public class RoomBalanceVoteFacade {
         BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
         RoomMembers roomMembers = memberService.findRoomMembers(room);
         BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-        List<RoomBalanceVote> votes = roomBalanceVoteService.getVotesInRound(roomMembers, balanceOptions);
+        int voteCount = roomBalanceVoteService.countVotesInRound(roomMembers, balanceOptions);
 
         boolean isOverVoteDeadline = roomContentService.isOverVoteDeadline(room, balanceContent);
-        boolean isAllMemberVoted = votes.size() >= roomMembers.size();
+        boolean isAllMemberVoted = voteCount >= roomMembers.size();
 
-        return new VotingStatus(roomMembers, balanceOptions, votes, isOverVoteDeadline || isAllMemberVoted);
+        return new VotingStatus(roomMembers, balanceOptions, voteCount, isOverVoteDeadline || isAllMemberVoted);
     }
 
     @Transactional(readOnly = true)

@@ -8,11 +8,11 @@ import ddangkong.domain.room.balance.roomvote.RoomBalanceVoteRepository;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.room.balance.roomvote.AlreadyVotedException;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +51,13 @@ public class RoomBalanceVoteService {
     public List<RoomBalanceVote> getVotesInRound(RoomMembers roomMembers, BalanceOptions balanceOptions) {
         return roomVoteRepository.findByMemberInAndBalanceOptionIn(
                 roomMembers.getMembers(), balanceOptions.getOptions());
+    }
+
+    @Transactional(readOnly = true)
+    public int countVotesInRound(RoomMembers roomMembers, BalanceOptions balanceOptions) {
+        int voteCount = roomVoteRepository.countByMemberInAndBalanceOptionIn(
+                roomMembers.getMembers(), balanceOptions.getOptions());
+        return voteCount;
     }
 
     @Transactional(readOnly = true)

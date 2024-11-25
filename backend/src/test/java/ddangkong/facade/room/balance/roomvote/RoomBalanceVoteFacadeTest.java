@@ -274,11 +274,7 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             assertAll(
                     () -> assertThat(actual.isFinished()).isFalse(),
                     () -> assertThat(actual.memberCount()).isEqualTo(2),
-                    () -> assertThat(actual.voteCount()).isEqualTo(1),
-                    () -> assertThat(actual.memberStates().get(0).member().memberId()).isEqualTo(master.getId()),
-                    () -> assertThat(actual.memberStates().get(0).isVoteFinished()).isTrue(),
-                    () -> assertThat(actual.memberStates().get(1).member().memberId()).isEqualTo(member1.getId()),
-                    () -> assertThat(actual.memberStates().get(1).isVoteFinished()).isFalse()
+                    () -> assertThat(actual.voteCount()).isEqualTo(1)
             );
         }
 

@@ -6,20 +6,10 @@ import java.util.List;
 public record VoteFinishedResponse(
         boolean isFinished,
         int memberCount,
-        int voteCount,
-        List<VoteStatusPerMemberResponse> memberStates
+        int voteCount
 ) {
 
-    public static VoteFinishedResponse from(VotingStatus status) {
-        List<VoteStatusPerMemberResponse> memberStates = status.getMembers()
-                .stream()
-                .map(member -> new VoteStatusPerMemberResponse(member, status.didVote(member)))
-                .toList();
-
-        return new VoteFinishedResponse(
-                status.isVoteFinished(),
-                status.getMemberCount(),
-                status.getVoteCount(),
-                memberStates);
+    public VoteFinishedResponse(VotingStatus status) {
+        this(status.isVoteFinished(), status.getMemberCount(), status.getVoteCount());
     }
 }
