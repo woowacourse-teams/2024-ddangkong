@@ -14,7 +14,7 @@ const isServerError = (status: number) =>
 // 테스트 환경에서 retry 값이 있을 경우 에러 폴백 테스트가 돌지 않아 분기 처리
 const QueryClientDefaultOptionProvider = ({ children }: PropsWithChildren) => {
   const queryClient = useQueryClient();
-  const { show } = useToast();
+  const { showToast } = useToast();
   const { show: showModal } = useModal();
 
   queryClient.setDefaultOptions({
@@ -25,7 +25,7 @@ const QueryClientDefaultOptionProvider = ({ children }: PropsWithChildren) => {
     mutations: {
       onError: (error) => {
         if (error instanceof NetworkError) {
-          show(error.message);
+          showToast(error.message);
           return;
         }
 
