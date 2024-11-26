@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const useThrottle = <T extends (...args: any[]) => void>(
+const useThrottle = <T extends (...args: Parameters<T>) => void>(
   func: T,
   delay = 3000,
 ): ((...args: Parameters<T>) => void) => {
