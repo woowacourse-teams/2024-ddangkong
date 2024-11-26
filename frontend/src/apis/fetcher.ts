@@ -26,7 +26,7 @@ const fetcher = {
 
       return response;
     } catch (error) {
-      if (error instanceof TypeError && !navigator.onLine) {
+      if (!navigator.onLine) {
         throw new NetworkError();
       }
 
