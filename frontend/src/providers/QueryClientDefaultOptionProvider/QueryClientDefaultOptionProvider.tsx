@@ -15,7 +15,7 @@ const isServerError = (status: number) =>
 const QueryClientDefaultOptionProvider = ({ children }: PropsWithChildren) => {
   const queryClient = useQueryClient();
   const { showToast } = useToast();
-  const { show: showModal } = useModal();
+  const { showModal } = useModal();
 
   queryClient.setDefaultOptions({
     queries: {
