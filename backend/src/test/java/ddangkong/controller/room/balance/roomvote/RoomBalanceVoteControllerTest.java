@@ -20,11 +20,11 @@ import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
 import ddangkong.support.annotation.FixedClock;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDateTime;
-import java.util.List;
 
 class RoomBalanceVoteControllerTest extends BaseControllerTest {
 

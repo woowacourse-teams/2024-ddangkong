@@ -12,11 +12,11 @@ import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.room.balance.roomvote.AlreadyVotedException;
 import ddangkong.facade.BaseServiceTest;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
 
 class RoomBalanceVoteServiceTest extends BaseServiceTest {
 

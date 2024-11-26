@@ -31,13 +31,13 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomMemberVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomMembersVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebMvcTest(RoomBalanceVoteController.class)
 public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
