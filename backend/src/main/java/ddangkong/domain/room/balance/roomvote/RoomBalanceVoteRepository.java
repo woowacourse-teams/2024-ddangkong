@@ -11,8 +11,6 @@ public interface RoomBalanceVoteRepository extends JpaRepository<RoomBalanceVote
 
     List<RoomBalanceVote> findByMemberInAndBalanceOption(List<Member> members, BalanceOption balanceOption);
 
-    List<RoomBalanceVote> findByMemberInAndBalanceOptionIn(List<Member> members, List<BalanceOption> balanceOptions);
-
     int countByMemberInAndBalanceOptionIn(List<Member> members, List<BalanceOption> balanceOptions);
 
     List<RoomBalanceVote> findByMemberRoom(Room room);
