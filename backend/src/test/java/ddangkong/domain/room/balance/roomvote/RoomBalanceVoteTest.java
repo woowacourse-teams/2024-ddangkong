@@ -22,25 +22,31 @@ class RoomBalanceVoteTest {
 
         @Test
         void 투표한_사람인지_확인_할_수_있다() {
+            // given
             Member member = Member.createCommon("일반 유저", ROOM);
             EntityFixtureUtils.setId(member, 1L);
             RoomBalanceVote vote = new RoomBalanceVote(member, OPTION);
 
+            // when
             boolean actual = vote.isOwner(member);
 
+            // then
             assertThat(actual).isTrue();
         }
 
         @Test
         void 투표한_사람이_아닌지_확인_할_수_있다() {
+            // given
             Member member = Member.createCommon("일반 유저", ROOM);
             EntityFixtureUtils.setId(member, 1L);
             Member otherMember = Member.createCommon("일반 유저2", ROOM);
             EntityFixtureUtils.setId(otherMember, 2L);
             RoomBalanceVote vote = new RoomBalanceVote(member, OPTION);
 
+            // when
             boolean actual = vote.isOwner(otherMember);
 
+            // then
             assertThat(actual).isFalse();
         }
     }
