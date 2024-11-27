@@ -3,7 +3,7 @@
 GREEN_PORT=$1
 
 health_check_process() {
-    # 헬스 체크를 최대 5번 시도 (3초 간격)
+    # 헬스 체크를 최대 5번 시도 (15초 간격)
     for i in $(seq 1 5); do
         check_health
         if [ $? -eq 0 ]; then
@@ -11,7 +11,7 @@ health_check_process() {
             return 0
         fi
         echo "Waiting 3 seconds before next check..."
-        sleep 3
+        sleep 15
     done
     
     # 5번 시도 후에도 실패하면 종료
