@@ -1,7 +1,6 @@
 package ddangkong.facade.room.balance.roomvote.dto;
 
 import ddangkong.domain.room.balance.roomvote.VotingStatus;
-import java.util.List;
 
 public record VoteFinishedResponse(
         boolean isFinished,

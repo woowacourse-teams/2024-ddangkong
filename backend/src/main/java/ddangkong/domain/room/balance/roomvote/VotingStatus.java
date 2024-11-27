@@ -3,9 +3,9 @@ package ddangkong.domain.room.balance.roomvote;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
+import java.util.List;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import java.util.List;
 
 @Getter
 @Slf4j
@@ -13,24 +13,22 @@ public class VotingStatus {
 
     private final RoomMembers roomMembers;
     private final BalanceOptions balanceOptions;
-    private final List<RoomBalanceVote> votes;
     private final int voteCount;
-    private final boolean voteFinished;
+    private final boolean isVoteFinished;
 
     public VotingStatus(RoomMembers roomMembers,
                         BalanceOptions balanceOptions,
                         int voteCount,
-                        boolean voteFinished) {
+                        boolean isVoteFinished) {
         checkVoteSize(roomMembers, voteCount);
 
         this.roomMembers = roomMembers;
         this.balanceOptions = balanceOptions;
-        this.votes = List.of();
         this.voteCount = voteCount;
-        this.voteFinished = voteFinished;
+        this.isVoteFinished = isVoteFinished;
     }
 
-    private static void checkVoteSize(RoomMembers roomMembers, int voteCount) {
+    private void checkVoteSize(RoomMembers roomMembers, int voteCount) {
         if (voteCount > roomMembers.size()) {
             log.error("[Concurrency Error] 투표한 인원 수가 방 인원 수보다 많습니다. 투표한 인원 수: {}, 방 인원 수: {}",
                     voteCount, roomMembers.size());
@@ -50,6 +48,6 @@ public class VotingStatus {
     }
 
     public boolean isVoteNotFinished() {
-        return !voteFinished;
+        return !isVoteFinished;
     }
 }
