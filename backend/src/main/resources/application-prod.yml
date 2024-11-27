@@ -13,6 +13,11 @@ spring:
       password: ${secret.datasource.replica.password}
       jdbc-url: jdbc:mysql://${secret.datasource.replica.host}:${secret.datasource.replica.port}/${secret.datasource.database}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
 
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${secret.datasource.host}:${secret.datasource.port}/${secret.datasource.database}?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&autoReconnect=true&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+    username: ${secret.datasource.username}
+    password: ${secret.datasource.password}
+
   sql:
     init:
       mode: never
