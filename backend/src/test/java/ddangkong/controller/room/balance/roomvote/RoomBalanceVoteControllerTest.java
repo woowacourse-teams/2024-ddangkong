@@ -107,7 +107,11 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
                     .extract().as(VoteFinishedResponse.class);
 
             // then
-            assertThat(actual.isFinished()).isEqualTo(true);
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isTrue(),
+                    () -> assertThat(actual.memberCount()).isEqualTo(2),
+                    () -> assertThat(actual.voteCount()).isEqualTo(2)
+            );
         }
 
         @Test
@@ -126,11 +130,15 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
                     .extract().as(VoteFinishedResponse.class);
 
             // then
-            assertThat(actual.isFinished()).isEqualTo(true);
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isTrue(),
+                    () -> assertThat(actual.memberCount()).isEqualTo(2),
+                    () -> assertThat(actual.voteCount()).isEqualTo(0)
+            );
         }
 
         @Test
-        void 투표_진행_중인_상황을_알_수_있다() {
+        void 투표_마감_시간이_지나지_않고_방의_모든_멤버가_투표하지_않으면_투표가_종료되지_않는다() {
             // given
             LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:08");
             roomContentFixture.create(room, balanceContent, 1, voteDeadline);
