@@ -46,7 +46,7 @@ jobs:
   deploy:
     needs: build
     timeout-minutes: 2
-    runs-on: [ self-hosted, linux, ARM64, dev ]
+    runs-on: [ dev, X64, Linux ]
 
     steps:
       - name: Download artifact file
