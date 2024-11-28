@@ -8,57 +8,51 @@ on:
       - 'frontend/**' # frontend 폴더가 변경된 경우에만 실행
 
 jobs:
-  build:
-    name: FE Build for Dev
+  build-and-deploy:
+    name: FE Build and Deploy for Dev
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Repository Checkout
+      # 1. Setup Node.js (Version 20)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      # 2. Repository Checkout
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # 2. Install Dependencies
+      # 3. Generate .env File from Secret
+      - name: Generate .env File
+        working-directory: ./frontend
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+
+      # 4. Install Dependencies
       - name: Install Dependencies
         working-directory: ./frontend
         run: npm install
 
-      # 3. Build Project
+      # 5. Build Project
       - name: Build for Dev
         working-directory: ./frontend
         run: npm run build:prod
 
-      # 4. Upload Build Artifact
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: frontend-build-dev
-          path: ./frontend/dist
-
-  deploy:
-    name: FE Deploy for Dev
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      # 1. Download Build Artifact
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: frontend-build-dev
-
-      # 2. Configure AWS CLI
+      # 6. Configure AWS CLI
       - name: Configure AWS CLI
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set default.region ${{ secrets.AWS_REGION }}
 
-      # 3. Upload to S3
+      # 7. Upload to S3
       - name: Upload to S3 (Dev)
+        working-directory: ./frontend/dist
         run: |
-          aws s3 sync /home/runner/work/2024-ddangkong/2024-ddangkong s3://${{ secrets.AWS_S3_BUCKET_DEV }} --delete
+          aws s3 sync . s3://${{ secrets.AWS_S3_BUCKET_DEV }} --delete
 
-      # 4. Invalidate CloudFront Cache
+      # 8. Invalidate CloudFront Cache
       - name: Invalidate CloudFront Cache (Dev)
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID_DEV }} --paths "/*"
