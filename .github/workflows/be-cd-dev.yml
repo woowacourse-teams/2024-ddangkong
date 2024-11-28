@@ -42,11 +42,19 @@ jobs:
         with:
           name: app-artifact
           path: ./backend/build/libs/app.jar
+          if-no-files-found: error
+
+      - name: Upload deploy scripts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-scripts
+          path: ./backend/scripts/dev/
+          if-no-files-found: error
 
   deploy:
     needs: build
     timeout-minutes: 2
-    runs-on: [ self-hosted, linux, ARM64, dev ]
+    runs-on: [ dev, X64, Linux ]
 
     steps:
       - name: Download artifact file
@@ -55,8 +63,14 @@ jobs:
           name: app-artifact
           path: ~/app
 
+      - name: Download deploy scripts
+        uses: actions/download-artifact@v4
+        with:
+          name: deploy-scripts
+          path: ~/app/scripts
+
       - name: Replace application to latest
-        run: sudo sh ~/scripts/replace-new-version.sh
+        run: sudo sh ~/app/scripts/replace-new-version.sh
 
       - name: Health check latest application
-        run: sudo sh ~/scripts/health-check.sh
+        run: sudo sh ~/app/scripts/health-check.sh
