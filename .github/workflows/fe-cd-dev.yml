@@ -1,4 +1,4 @@
-name: FE Build and Deploy for Dev
+name: FE Build and Deploy for Develop
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-and-deploy:
-    name: FE Build and Deploy for Dev
+    name: FE Build and Deploy for Prod
     runs-on: ubuntu-latest
 
     steps:
@@ -23,11 +23,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # 3. Generate .env File from Secret
+      # 3. Generate .env File from Individual Secrets
       - name: Generate .env File
         working-directory: ./frontend
         run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
+          echo "API_BASE_URL=${{ secrets.API_BASE_URL_DEV }}" >> .env
+          echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
+          echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> .env
 
       # 4. Install Dependencies
       - name: Install Dependencies
