@@ -41,9 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-artifact
-          path: |
-            ./backend/build/libs/app.jar
-            ./backend/scripts/dev/
+          path: ./backend/build/libs/app.jar
           if-no-files-found: error
 
       - name: Upload deploy scripts
