@@ -19,7 +19,7 @@ const useAccessRoom = () => {
     handleCreateRoom,
     handleEnterRoom,
     isLoading: isMaster ? createRoomMutation.isPending : enterRoomMutation.isPending,
-    isSuccess: createRoomMutation.isSuccess || enterRoomMutation.isSuccess,
+    isSuccess: isMaster ? createRoomMutation.isSuccess : enterRoomMutation.isSuccess,
   };
 };
 
