@@ -9,7 +9,7 @@ interface useIsJoinableRoomQueryProps {
 }
 
 const useIsJoinableRoomQuery = ({ roomUuid }: useIsJoinableRoomQueryProps) => {
-  const isJoinableRoomQuery = useQuery({
+  useQuery({
     queryKey: [QUERY_KEYS.isJoinable, roomUuid],
     queryFn: async () => isJoinableRoom(roomUuid || ''),
     select: ({ isJoinable }) => {
@@ -19,11 +19,6 @@ const useIsJoinableRoomQuery = ({ roomUuid }: useIsJoinableRoomQueryProps) => {
     },
     enabled: !!roomUuid,
   });
-
-  return {
-    ...isJoinableRoomQuery,
-    isJoinable: isJoinableRoomQuery.data,
-  };
 };
 
 export default useIsJoinableRoomQuery;
