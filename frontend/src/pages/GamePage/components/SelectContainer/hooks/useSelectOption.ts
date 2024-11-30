@@ -1,9 +1,11 @@
 import { useState } from 'react';
 
+import { SelectedOption } from '@/types/balanceContent';
+
 const useSelectOption = () => {
-  const [selectedOption, setSelectedOption] = useState({
+  const [selectedOption, setSelectedOption] = useState<SelectedOption>({
     id: 0,
-    isCompleted: false,
+    isVoted: false,
   });
 
   const handleClickOption = (selectedId: number) => {
@@ -11,10 +13,14 @@ const useSelectOption = () => {
   };
 
   const completeSelection = () => {
-    setSelectedOption((prev) => ({ ...prev, isCompleted: true }));
+    setSelectedOption((prev) => ({ ...prev, isVoted: true }));
   };
 
-  return { selectedOption, handleClickOption, completeSelection };
+  const cancelSelection = () => {
+    setSelectedOption((prev) => ({ ...prev, isVoted: false }));
+  };
+
+  return { selectedOption, handleClickOption, completeSelection, cancelSelection };
 };
 
 export default useSelectOption;

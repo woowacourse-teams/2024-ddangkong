@@ -19,7 +19,7 @@ export const 클릭되지_않은_옵션: Story = {
     option: { name: '100억 빚 송강', optionId: 1 },
     selectedOption: {
       id: 0,
-      isCompleted: false,
+      isVoted: false,
     },
   },
 };
@@ -29,7 +29,7 @@ export const 클릭된_옵션: Story = {
     option: { name: '100억 부자 송강호', optionId: 2 },
     selectedOption: {
       id: 2,
-      isCompleted: false,
+      isVoted: false,
     },
   },
 };
@@ -39,7 +39,7 @@ export const 선택_완료된_옵션: Story = {
     option: { name: '100억 부자 송강호', optionId: 2 },
     selectedOption: {
       id: 2,
-      isCompleted: true,
+      isVoted: true,
     },
   },
 };

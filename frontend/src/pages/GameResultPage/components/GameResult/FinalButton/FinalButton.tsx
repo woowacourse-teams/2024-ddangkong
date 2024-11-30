@@ -9,7 +9,7 @@ import useGetUserInfo from '@/hooks/useGetUserInfo';
 
 const FinalButton = () => {
   const { roomId } = useParams();
-  const { mutate: resetRoom, isPending } = useResetRoomMutation(Number(roomId));
+  const { mutate: resetRoom, isPending, isSuccess } = useResetRoomMutation(Number(roomId));
   const {
     member: { isMaster },
   } = useGetUserInfo();
@@ -18,9 +18,9 @@ const FinalButton = () => {
     <div css={bottomButtonLayout}>
       <Button
         style={{ width: '100%' }}
-        text={getFinalButtonText(isMaster, isPending)}
+        text={getFinalButtonText(isMaster, isPending, isSuccess)}
         onClick={resetRoom}
-        disabled={!isMaster || isPending}
+        disabled={!isMaster || isPending || isSuccess}
       />
     </div>
   );
