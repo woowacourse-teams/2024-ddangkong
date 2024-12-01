@@ -107,7 +107,7 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
                     .extract().as(VoteFinishedResponse.class);
 
             // then
-            assertThat(actual.isFinished()).isEqualTo(true);
+            assertThat(actual.isFinished()).isTrue();
         }
 
         @Test
@@ -126,7 +126,7 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
                     .extract().as(VoteFinishedResponse.class);
 
             // then
-            assertThat(actual.isFinished()).isEqualTo(true);
+            assertThat(actual.isFinished()).isTrue();
         }
 
         @Test
@@ -145,13 +145,15 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
                     .extract().as(VoteFinishedResponse.class);
 
             // then
-            assertThat(actual.isFinished()).isEqualTo(false);
+            assertThat(actual.isFinished()).isFalse();
         }
     }
 
     @Nested
     class 투표_매칭도_조회 {
+
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members/{memberId}/matching";
+
         private Member master;
         private Member common1;
         private Member common2;

@@ -17,16 +17,16 @@ public class MemberFixture {
         this.memberRepository = memberRepository;
     }
 
-    public Member createCommon(Room room) {
-        return createCommon(COMMON_NICKNAME, room);
+    private Member createCommon(String nickname, Room room) {
+        return memberRepository.save(Member.createCommon(nickname, room));
     }
 
     public Member createCommon(int order, Room room) {
         return createCommon(COMMON_NICKNAME + order, room);
     }
 
-    private Member createCommon(String nickname, Room room) {
-        return memberRepository.save(Member.createCommon(nickname, room));
+    public Member createCommon(Room room) {
+        return createCommon(COMMON_NICKNAME, room);
     }
 
     public void createCommons(Room room, int count) {
