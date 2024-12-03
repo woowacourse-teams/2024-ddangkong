@@ -3,8 +3,8 @@ import { ErrorCode } from '@/types/error';
 
 interface CustomErrorParams {
   errorCode: ErrorCode;
-  message: string;
   status: number;
+  message?: string;
 }
 
 export class CustomError extends Error {
@@ -14,8 +14,8 @@ export class CustomError extends Error {
   constructor({ errorCode, status }: CustomErrorParams) {
     super();
     this.errorCode = errorCode;
-    this.message = ERROR_MESSAGE[errorCode];
     this.status = status;
+    this.message = ERROR_MESSAGE[errorCode];
   }
 }
 

@@ -1,10 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { PropsWithChildren } from 'react';
 
-import AlertModal from '@/components/AlertModal/AlertModal';
-import useModal from '@/hooks/useModal';
-import useToast from '@/hooks/useToast';
-import { CustomError, NetworkError } from '@/utils/error';
+import useDefaultMutationErrorHandler from '@/hooks/useDefaultMutationErrorHandler';
+import { CustomError } from '@/utils/error';
 
 const isServerError = (status: number) => status >= 500 && status !== 555;
 
@@ -12,8 +10,7 @@ const isServerError = (status: number) => status >= 500 && status !== 555;
 // 테스트 환경에서 retry 값이 있을 경우 에러 폴백 테스트가 돌지 않아 분기 처리
 const QueryClientDefaultOptionProvider = ({ children }: PropsWithChildren) => {
   const queryClient = useQueryClient();
-  const { show } = useToast();
-  const { show: showModal } = useModal();
+  const handleError = useDefaultMutationErrorHandler();
 
   queryClient.setDefaultOptions({
     queries: {
@@ -21,13 +18,7 @@ const QueryClientDefaultOptionProvider = ({ children }: PropsWithChildren) => {
       throwOnError: true,
     },
     mutations: {
-      onError: (error) => {
-        if (error instanceof NetworkError) {
-          show(error.message);
-          return;
-        }
-        showModal(AlertModal, { title: '에러', message: error.message });
-      },
+      onError: handleError,
       throwOnError: (err) => {
         const error = err as CustomError;
         return isServerError(error.status);

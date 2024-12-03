@@ -5,13 +5,13 @@ import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
+import ddangkong.domain.room.balance.roomvote.VotingStatus;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.room.balance.roomvote.CanNotCheckMatchingPercentException;
 import ddangkong.exception.room.balance.roomvote.VoteFinishedException;
 import ddangkong.exception.room.balance.roomvote.VoteNotFinishedException;
 import ddangkong.facade.balance.vote.dto.ContentTotalBalanceVoteResponse;
-import ddangkong.facade.room.balance.roomvote.context.VoteContext;
 import ddangkong.facade.room.balance.roomvote.dto.ContentRoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
@@ -56,25 +56,25 @@ public class RoomBalanceVoteFacade {
 
     @Transactional
     public RoomBalanceVoteResponse createVote(RoomBalanceVoteRequest request, Long roomId, Long contentId) {
-        VoteContext voteContext = getVoteContext(roomId, contentId);
-        if (voteContext.isVoteFinished()) {
+        VotingStatus votingStatus = getVotingStatus(roomId, contentId);
+        if (votingStatus.isVoteFinished()) {
             throw new VoteFinishedException();
         }
-        Member member = voteContext.getMember(request.memberId());
-        RoomBalanceVote roomBalanceVote = roomBalanceVoteService.createVote(member, voteContext.getBalanceOptions(),
+        Member member = votingStatus.getMember(request.memberId());
+        RoomBalanceVote roomBalanceVote = roomBalanceVoteService.createVote(member, votingStatus.getBalanceOptions(),
                 request.optionId());
         return new RoomBalanceVoteResponse(roomBalanceVote);
     }
 
     @Transactional(readOnly = true)
     public RoomBalanceVoteResultResponse getAllVoteResult(Long roomId, Long contentId) {
-        VoteContext voteContext = getVoteContext(roomId, contentId);
-        if (voteContext.isVoteNotFinished()) {
+        VotingStatus votingStatus = getVotingStatus(roomId, contentId);
+        if (votingStatus.isVoteNotFinished()) {
             throw new VoteNotFinishedException();
         }
-        ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(voteContext.getRoomMembers(),
-                voteContext.getBalanceOptions());
-        ContentTotalBalanceVoteResponse total = getContentTotalBalanceVoteResponse(voteContext.getBalanceOptions());
+        ContentRoomBalanceVoteResponse group = getContentRoomBalanceVoteResponse(votingStatus.getRoomMembers(),
+                votingStatus.getBalanceOptions());
+        ContentTotalBalanceVoteResponse total = getContentTotalBalanceVoteResponse(votingStatus.getBalanceOptions());
         return new RoomBalanceVoteResultResponse(group, total);
     }
 
@@ -112,19 +112,21 @@ public class RoomBalanceVoteFacade {
 
     @Transactional(readOnly = true)
     public VoteFinishedResponse getVoteFinished(Long roomId, Long contentId) {
-        VoteContext voteContext = getVoteContext(roomId, contentId);
-        return new VoteFinishedResponse(voteContext.isVoteFinished());
+        VotingStatus votingStatus = getVotingStatus(roomId, contentId);
+        return new VoteFinishedResponse(votingStatus);
     }
 
-    private VoteContext getVoteContext(Long roomId, Long contentId) {
+    private VotingStatus getVotingStatus(Long roomId, Long contentId) {
         Room room = roomService.getRoom(roomId);
         BalanceContent balanceContent = balanceContentService.getBalanceContent(contentId);
         RoomMembers roomMembers = memberService.findRoomMembers(room);
         BalanceOptions balanceOptions = balanceOptionService.getBalanceOptions(balanceContent);
-        boolean isOverVoteDeadline = roomContentService.isOverVoteDeadline(room, balanceContent);
-        boolean isAllMemberVoted = roomBalanceVoteService.isAllMemberVoted(roomMembers, balanceOptions);
+        int voteCount = roomBalanceVoteService.countVotesInRound(roomMembers, balanceOptions);
 
-        return new VoteContext(roomMembers, balanceOptions, isOverVoteDeadline || isAllMemberVoted);
+        boolean isOverVoteDeadline = roomContentService.isOverVoteDeadline(room, balanceContent);
+        boolean isAllMemberVoted = voteCount >= roomMembers.size();
+
+        return new VotingStatus(roomMembers, balanceOptions, voteCount, isOverVoteDeadline || isAllMemberVoted);
     }
 
     @Transactional(readOnly = true)
@@ -145,10 +147,9 @@ public class RoomBalanceVoteFacade {
         List<RoomBalanceVote> roomBalanceVotes = roomBalanceVoteService.findRoomVotesByBalanceOptionsWithoutMember(
                 memberRoomVoteOptions, room, member);
 
-        Map<Member, Long> membersVoteMatchingCount = roomBalanceVotes.stream()
+        return roomBalanceVotes.stream()
                 .map(RoomBalanceVote::getMember)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-        return membersVoteMatchingCount;
     }
 
     private RoomMembersVoteMatchingResponse getRoomMembersVoteMatchingPercent(Map<Member, Long> membersAndMatchingCount,

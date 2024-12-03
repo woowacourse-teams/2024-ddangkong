@@ -1,0 +1,60 @@
+name: FE Build and Deploy for Develop
+
+on:
+  push:
+    branches:
+      - develop # develop 브랜치에서만 실행
+    paths:
+      - 'frontend/**' # frontend 폴더가 변경된 경우에만 실행
+
+jobs:
+  build-and-deploy:
+    name: FE Build and Deploy for Prod
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Setup Node.js (Version 20)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      # 2. Repository Checkout
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 3. Generate .env File from Individual Secrets
+      - name: Generate .env File
+        working-directory: ./frontend
+        run: |
+          echo "API_BASE_URL=${{ secrets.API_BASE_URL_DEV }}" >> .env
+          echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
+          echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> .env
+
+      # 4. Install Dependencies
+      - name: Install Dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      # 5. Build Project
+      - name: Build for Dev
+        working-directory: ./frontend
+        run: npm run build:prod
+
+      # 6. Configure AWS CLI
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ secrets.AWS_REGION }}
+
+      # 7. Upload to S3
+      - name: Upload to S3 (Dev)
+        working-directory: ./frontend/dist
+        run: |
+          aws s3 sync . s3://${{ secrets.AWS_S3_BUCKET_DEV }} --delete
+
+      # 8. Invalidate CloudFront Cache
+      - name: Invalidate CloudFront Cache (Dev)
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID_DEV }} --paths "/*"
