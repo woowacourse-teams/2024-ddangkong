@@ -59,7 +59,7 @@ jobs:
         run: |
           mkdir -p ${{ inputs.artifact_name }} && \
           mv build/libs/*.jar ${{ inputs.artifact_name }}/${{ inputs.jar_name }} && \
-          mv scripts/* ${{ inputs.artifact_name }}/
+          mv scripts/${{ inputs.profile }}/* ${{ inputs.artifact_name }}/
 
       - name: Upload artifact file
         uses: actions/upload-artifact@v4

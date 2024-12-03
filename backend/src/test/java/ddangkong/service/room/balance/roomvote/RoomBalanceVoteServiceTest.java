@@ -10,7 +10,6 @@ import ddangkong.domain.balance.option.BalanceOptions;
 import ddangkong.domain.room.Room;
 import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
-import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.room.balance.roomvote.AlreadyVotedException;
 import ddangkong.facade.BaseServiceTest;
 import java.util.List;
@@ -76,62 +75,6 @@ class RoomBalanceVoteServiceTest extends BaseServiceTest {
             assertThatThrownBy(() -> roomBalanceVoteService.createVote(member, balanceOptions,
                     option2.getId())).isExactlyInstanceOf(AlreadyVotedException.class).hasMessageContaining(
                     "이미 투표했습니다. nickname: %s, option name: %s".formatted(member.getNickname(), option1.getName()));
-        }
-    }
-
-    @Nested
-    class 모든_멤버_투표_완료_여부 {
-
-        private BalanceOptions balanceOptions;
-
-        private Room room;
-        private RoomMembers members;
-        private Member member1;
-        private Member member2;
-        private Member member3;
-        private BalanceContent balanceContent;
-        private BalanceOption option1;
-        private BalanceOption option2;
-
-        @BeforeEach
-        void setUp() {
-            room = roomFixture.createNotStartedRoom();
-            member1 = memberFixture.createMaster(room);
-            member2 = memberFixture.createCommon(1, room);
-            member3 = memberFixture.createCommon(2, room);
-            members = new RoomMembers(List.of(member1, member2, member3));
-
-            balanceContent = balanceContentFixture.create(room.getCategory());
-            option1 = balanceOptionFixture.create(balanceContent);
-            option2 = balanceOptionFixture.create(balanceContent);
-            balanceOptions = new BalanceOptions(List.of(option1, option2));
-        }
-
-        @Test
-        void 모든_인원이_투표했으면_true를_반환한다() {
-            // given
-            roomBalanceVoteFixture.create(member1, option1);
-            roomBalanceVoteFixture.create(member2, option1);
-            roomBalanceVoteFixture.create(member3, option2);
-
-            // when
-            boolean isAllMemberVoted = roomBalanceVoteService.isAllMemberVoted(members, balanceOptions);
-
-            // then
-            assertThat(isAllMemberVoted).isTrue();
-        }
-
-        @Test
-        void 모든_인원이_투표하지_않았으면_false를_반환한다() {
-            // given
-            roomBalanceVoteFixture.create(member1, option1);
-            roomBalanceVoteFixture.create(member2, option1);
-
-            // when
-            boolean isAllMemberVoted = roomBalanceVoteService.isAllMemberVoted(members, balanceOptions);
-
-            // then
-            assertThat(isAllMemberVoted).isFalse();
         }
     }
 }

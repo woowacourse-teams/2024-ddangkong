@@ -2,10 +2,11 @@ import { ErrorCode } from '@/types/error';
 
 export const ERROR_MESSAGE: Record<ErrorCode, string> = {
   // 방 관련 에러 (room)
-  NOT_READY_ROOM: '해당 방의 게임이 이미 시작되었어요. 게임이 끝날 때까지 기다려볼까요?', // 게임 시작된 방에 참가 요청할 때
+  NOT_READY_ROOM: '이미 게임이 시작되었어요. 게임이 끝날 때까지 기다려볼까요?', // 게임 시작된 방에 참가 요청할 때
   NOT_PROGRESSED_ROOM: '이미 게임이 종료되었어요. 최종 결과를 확인해볼까요?', // FIXME: 방장이 최종 결과 화면으로 넘어갔는데, 화면 안보고 있었으면 투표 화면에 갇힘
-  NOT_FINISHED_ROOM: '해당 방의 게임이 아직 종료되지 않았어요.',
-  NOT_FOUND_ROOM: '해당 방을 찾을 수 없어요. 방을 새로 만들어주세요!', // 없는 방 또는 모두 나간 방에 참여를 요청할 때
+  NOT_FINISHED_ROOM: '게임이 아직 종료되지 않았어요. 게임이 끝날 때까지 기다려볼까요?',
+  NOT_FOUND_ROOM: '방을 찾을 수 없어요. 방을 새로 만들어주세요!', // 없는 방 또는 모두 나간 방에 참여를 요청할 때
+  CAN_NOT_JOIN_ROOM: '방에 참여할 수 없어요. 방의 진행 상태를 확인해주세요!', // 게임이 대기 상태가 아닐 때 or 잘못된 링크로 접속했을 때
 
   // 유저 관련 에러 (master)
   INVALID_NICKNAME: '닉네임은 최소 1글자 이상 최대 12글자 이하여야 합니다.',

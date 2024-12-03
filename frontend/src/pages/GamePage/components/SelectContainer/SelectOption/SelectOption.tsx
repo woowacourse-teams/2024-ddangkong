@@ -1,11 +1,6 @@
 import { SelectOptionLayout } from './SelectOption.styled';
 
-import { BalanceContent } from '@/types/balanceContent';
-
-interface SelectedOption {
-  id: number;
-  isCompleted: boolean;
-}
+import { BalanceContent, SelectedOption } from '@/types/balanceContent';
 
 interface SelectOptionProps {
   option: BalanceContent['firstOption'];
@@ -14,14 +9,14 @@ interface SelectOptionProps {
 }
 
 const SelectOption = ({ option, selectedOption, handleClickOption }: SelectOptionProps) => {
-  const { id: selectedId, isCompleted } = selectedOption;
+  const { id: selectedId, isVoted } = selectedOption;
 
   return (
     <button
       role="radio"
-      css={SelectOptionLayout(selectedId === option.optionId, isCompleted)}
+      css={SelectOptionLayout(selectedId === option.optionId, isVoted)}
       onClick={() => handleClickOption(option.optionId)}
-      disabled={isCompleted}
+      disabled={isVoted}
       aria-checked={selectedId === option.optionId}
     >
       {option.name}

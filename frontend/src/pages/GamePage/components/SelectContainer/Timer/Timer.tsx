@@ -15,21 +15,23 @@ import useVoteIsFinished from '../hooks/useVoteIsFinished';
 import DdangkongTimer from '@/assets/images/ddangkongTimer.webp';
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import { SelectedOption } from '@/types/balanceContent';
 
 interface TimerProps {
-  selectedId: number;
-  isVoted: boolean;
+  selectedOption: SelectedOption;
   completeSelection: () => void;
+  cancelSelection: () => void;
 }
 
-const Timer = ({ selectedId, isVoted, completeSelection }: TimerProps) => {
+const Timer = ({ selectedOption, completeSelection, cancelSelection }: TimerProps) => {
   const { roomId } = useParams();
   const { balanceContent, isFetching } = useBalanceContentQuery(Number(roomId));
   const { leftRoundTime, isAlmostFinished, timeLimit } = useVoteTimer({
     roomId: Number(roomId),
-    selectedId,
-    isVoted,
+    selectedId: selectedOption.id,
+    isVoted: selectedOption.isVoted,
     completeSelection,
+    cancelSelection,
   });
   const screenReaderLeftRoundTime = `${leftRoundTime}초 남았습니다.`;
 
