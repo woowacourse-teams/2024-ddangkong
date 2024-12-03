@@ -1,0 +1,83 @@
+name: Update PR Labels Daily
+
+on:
+  schedule:
+    - cron: "0 15 * * *" # 매일 밤 12시 실행
+  workflow_dispatch: # 수동 실행 허용
+
+jobs:
+  update-labels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Update PR Labels with github-script
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // 열려 있는 모든 PR을 가져온다.
+            const pullRequests = await github.pulls.list({
+              owner,
+              repo,
+              state: 'open',
+            });
+
+            console.log(pullRequests);
+
+            for (const pr of pullRequests.data) {
+              const { number, labels } = pr;
+
+              // Check if 'FE' label exists
+              // 열려 있는 PR에 FE 라벨이 달려있는지 확인한다.
+              const hasFeLabel = labels.some(label => label.name === 'FE');
+
+              if (!hasFeLabel) {
+                console.log(`PR #${number} does not have 'FE' label. Skipping.`);
+                continue;
+              }
+
+              // 'D-'로 시작하는 라벨이 있는지 확인한다.
+              const dLabel = labels.find(label => label.name.startsWith('D-'));
+
+              // 'D-'로 시작하는 라벨이 없다면 D-3' 라벨을 추가하고 끝낸다.
+              if (!dLabel) {
+                await github.issues.addLabels({
+                  owner,
+                  repo,
+                  issue_number: number,
+                  labels: ['D-3'],
+                });
+                console.log(`Added 'D-3' label to PR #${number}`);
+                continue;
+              }
+
+              // 'D-n'로 시작하는 라벨이 있다면 n 값을 가져온다.
+              const currentDay = parseInt(dLabel.name.split('-')[1], 10);
+
+              if (isNaN(currentDay) || currentDay <= 1) {
+                console.log(`PR #${number} 유효하지 않은 라벨이거나 연산할 수 없는 라벨 '${dLabel.name}'.`);
+                continue;
+              }
+
+              // 현재 'D-n' 라벨을 제거한다.
+              await github.issues.removeLabel({
+                owner,
+                repo,
+                issue_number: number,
+                name: dLabel.name,
+              });
+
+              // 'D-(n-1)' 라벨을 새로 추가한다.
+              const newDay = currentDay - 1;
+              const newLabel = `D-${newDay}`;
+              await github.issues.addLabels({
+                owner,
+                repo,
+                issue_number: number,
+                labels: [newLabel],
+              });
+
+              console.log(`Updated PR #${number}: '${dLabel.name}' -> '${newLabel}'`);
+            }
