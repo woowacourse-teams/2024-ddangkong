@@ -5,12 +5,16 @@ import { http, HttpResponse } from 'msw';
 import RoomSetting from './RoomSetting';
 
 import { MOCK_API_URL } from '@/constants/url';
+import useIsMaster from '@/hooks/useIsMaster';
 import { server } from '@/mocks/server';
 import { customRender } from '@/utils/test-utils';
+
+jest.mock('@/hooks/useIsMaster');
 
 describe('RoomSetting 컴포넌트 테스트', () => {
   it('방장이 RoomSetting를 누르면 설정 modal이 뜬다', async () => {
     // Given
+    (useIsMaster as jest.Mock).mockReturnValue(true);
     const user = userEvent.setup();
     customRender(<RoomSetting />);
     const settingButton = await screen.findByRole('button', { name: '방 설정' });
@@ -27,6 +31,7 @@ describe('RoomSetting 컴포넌트 테스트', () => {
 
   it('방장이 아닌 사람이 RoomSetting를 누르면 설정 modal이 뜨지 않는다', async () => {
     // Given
+    (useIsMaster as jest.Mock).mockReturnValue(false);
     server.use(
       http.get(MOCK_API_URL.getUserInfo, async () => {
         return HttpResponse.json(

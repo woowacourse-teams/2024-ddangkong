@@ -6,12 +6,17 @@ import FinalButton from './FinalButton';
 
 import { ERROR_MESSAGE } from '@/constants/message';
 import { MOCK_API_URL } from '@/constants/url';
+import useIsMaster from '@/hooks/useIsMaster';
 import { server } from '@/mocks/server';
-import { customRenderWithMaster } from '@/utils/test-utils';
+import { customRender } from '@/utils/test-utils';
+
+jest.mock('@/hooks/useIsMaster');
 
 describe('FinalButton 테스트', () => {
-  it('확인 버튼을 클릭했을 때, 방 초기화 API에서 에러가 발생하면 알림 모달이 뜬다.', async () => {
+  it('방장이 확인 버튼을 클릭했을 때, 방 초기화 API에서 에러가 발생하면 알림 모달이 뜬다.', async () => {
+    // Given
     const user = userEvent.setup();
+    (useIsMaster as jest.Mock).mockReturnValue(true);
     server.use(
       http.patch(MOCK_API_URL.resetRoom, async () => {
         return HttpResponse.json(
@@ -23,12 +28,13 @@ describe('FinalButton 테스트', () => {
         );
       }),
     );
+    customRender(<FinalButton />);
 
-    customRenderWithMaster(<FinalButton />);
-
+    // When
     const finalButton = await screen.findByRole('button', { name: '대기실로 이동' });
     await user.click(finalButton);
 
+    // Then
     await waitFor(() => {
       const closeIcon = screen.getByAltText('닫기 버튼');
       expect(closeIcon).toBeInTheDocument();
