@@ -20,9 +20,9 @@ const useGetUserInfo = (): RoomAndMember => {
     roomId: data?.roomId || 0,
     roomUuid: data?.roomUuid || '',
     member: {
-      memberId: data?.member?.memberId || 0,
-      nickname: data?.member?.nickname || '',
-      isMaster: Boolean(data?.member?.isMaster && Number(roomId) === data?.roomId),
+      memberId: data?.member.memberId || 0,
+      nickname: data?.member.nickname || '',
+      isMaster: Boolean(data?.member.isMaster && Number(roomId) === data?.roomId),
     },
   };
 };
