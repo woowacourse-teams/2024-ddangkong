@@ -1,0 +1,126 @@
+name: FE Review Reminder for Discord
+
+on:
+  schedule:
+    - cron: '0 2 * * 1-5' # 매주 월요일부터 금요일까지, 한국 시간 오전 11시에 실행
+jobs:
+  review-reminder:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Send Reminder to Discord
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DISCORD_WEBHOOK: ${{ secrets.FE_REVIEW_NOTIFICATION_WEBHOOK_URL }}
+        run: |
+          const discordMentions = {
+            'useon': '썬데이',
+            'novice0840': '포메',
+            'rbgksqkr': '마루',
+          };
+
+          const owner = '${{ github.repository_owner }}';
+          const repo = '${{ github.event.repository.name }}';
+          const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+          const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
+
+          async function main() {
+            # 열린 PR 목록 가져오기
+            const pullRequests = await fetch(
+              `https://api.github.com/repos/${owner}/${repo}/pulls`,
+              {
+                headers: {
+                  Authorization: `token ${GITHUB_TOKEN}`,
+                  Accept: 'application/vnd.github.v3+json'
+                }
+              }
+            ).then(res => res.json());
+            # 🫧 FE 라벨이 달린 PR만 필터링하고, D-값으로 우선 순위 정렬
+            const fePrs = pullRequests
+              .filter(pr => pr.labels.some(label => label.name === '🫧 FE'))
+              .map(pr => {
+                const dLabel = pr.labels.find(label => label.name.startsWith('D-'));
+                const urgency = dLabel ? parseInt(dLabel.name.split('-')[1], 10) : Number.MAX_SAFE_INTEGER;
+                return { ...pr, urgency };
+              })
+              .sort((a, b) => a.urgency - b.urgency);
+            
+            # 열린 PR 중 FE PR이 없는 경우 실행 종료
+            if (fePrs.length === 0) {
+              console.log('No FE PRs to remind.');
+              return;
+            }
+
+            const messages = await Promise.all(
+              fePrs.map(async pr => {
+                # 리뷰 상태 가져오기
+                const reviews = await getReviews(owner, repo, pr.number);
+                const requestedReviewers = pr.requested_reviewers.map(r => r.login);
+
+                # 승인한 리뷰어 목록 확인
+                const approvedReviewers = reviews.filter(review => review.state === 'APPROVED').map(r => r.user.login);
+                const allApproved = requestedReviewers.every(reviewer => approvedReviewers.includes(reviewer));
+
+                # 각 리뷰어의 상태 생성
+                const reviewStatuses = reviews.map(review => {
+                  const discordUsername = discordMentions[review.user.login] || `@${review.user.login}`;
+                  const reviewState = review.state.toLowerCase();
+                  return review.state === 'APPROVED' 
+                    ? `**${discordUsername}(${reviewState})**` # APPROVED인 경우 멘션 없이 이름만 표시
+                    : `${discordUsername}(${reviewState})`; # 나머지 상태인 경우 멘션
+                });
+
+                # 아직 리뷰를 시작하지 않은 리뷰어 표시
+                const notStartedReviewers = requestedReviewers.filter(
+                  reviewer => !reviews.some(review => review.user.login === reviewer)
+                );
+
+                const notStartedMentions = notStartedReviewers.map(reviewer => {
+                  const discordUsername = discordMentions[reviewer] || `@${reviewer}`;
+                  return `${discordUsername}(not started)`;
+                });
+
+                const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
+
+                # 모든 리뷰어가 APPROVED인 경우 메시지 생성
+                if (allApproved) {
+                  const authorMention = discordMentions[pr.user.login] || `@${pr.user.login}`;
+                  return `제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n${authorMention}, 모든 리뷰어의 승인 완료! 코멘트를 확인 후 머지해 주세요 🚀\n링크: ${pr.html_url}`;
+                }
+
+                # 일반적인 리마인드 메시지 생성
+                return `제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n링크: ${pr.html_url}`;
+              })
+            );
+
+            # 최종 메시지 Discord에 전송
+            const finalMessage = `🍀 [FE] 오늘의 PR 리뷰 목록 🍀\n\n${messages.join('\n\n')}`;
+
+            await fetch(DISCORD_WEBHOOK, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ content: finalMessage }),
+            });
+          }
+
+          # 특정 PR의 리뷰 상태 가져오기
+          async function getReviews(owner, repo, prNumber) {
+            return await fetch(
+              `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}/reviews`,
+              {
+                headers: {
+                  Authorization: `token ${GITHUB_TOKEN}`,
+                  Accept: 'application/vnd.github.v3+json'
+                }
+              }
+            ).then(res => res.json());
+          }
+
+          # 메인 함수 실행 및 에러 처리
+          main().catch(err => {
+            console.error('Error:', err);
+            process.exit(1);
+          });
