@@ -45,7 +45,13 @@ jobs:
               .map(pr => {
                 const dLabel = pr.labels.find(label => label.name.startsWith('D-'));
                 const urgency = dLabel ? parseInt(dLabel.name.split('-')[1], 10) : Number.MAX_SAFE_INTEGER;
-                return { ...pr, urgency, dLabelName: dLabel?.name || 'D-unknown' };
+                return { 
+                  ...pr, 
+                  urgency, 
+                  dLabelName: dLabel?.name || 'D-unknown',
+                  updatedAt: pr.updated_at, // 마지막 수정 시간 추가
+                  createdAt: pr.created_at, // 생성 시간 추가
+                };
               })
               .sort((a, b) => a.urgency - b.urgency);
 
@@ -85,14 +91,18 @@ jobs:
 
                 const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
 
+                // 생성일과 마지막 수정일 표시
+                const createdDate = new Date(pr.createdAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+                const lastUpdated = new Date(pr.updatedAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+
                 // 모든 리뷰어가 APPROVED인 경우 메시지 생성
                 if (allApproved) {
                   const authorMention = discordMentions[pr.user.login] || `@${pr.user.login}`;
-                  return `마감일: [${pr.dLabelName}]\n제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n${authorMention}, 모든 리뷰어의 승인 완료! 코멘트를 확인 후 머지해 주세요 🚀\n링크: ${pr.html_url}`;
+                  return `마감일: [${pr.dLabelName}]\n제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n생성일: ${createdDate}\n마지막 수정: ${lastUpdated}\n${authorMention}, 모든 리뷰어의 승인 완료! 코멘트를 확인 후 머지해 주세요 🚀\n링크: ${pr.html_url}`;
                 }
 
                 // 일반적인 리마인드 메시지 생성
-                return `마감일: [${pr.dLabelName}]\n제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n링크: ${pr.html_url}`;
+                return `마감일: [${pr.dLabelName}]\n제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n생성일: ${createdDate}\n마지막 수정: ${lastUpdated}\n링크: ${pr.html_url}`;
               })
             );
 
