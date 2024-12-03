@@ -1,4 +1,4 @@
-name: Update PR Labels Daily
+name: FE PR D-n 라벨 수정 자동화
 
 on:
   schedule:
@@ -18,20 +18,17 @@ jobs:
             const repo = context.repo.repo;
 
             // 열려 있는 모든 PR을 가져온다.
-            const pullRequests = await github.pulls.list({
+            const pullRequests = await github.rest.pulls.list({
               owner,
               repo,
               state: 'open',
             });
 
-            console.log(pullRequests);
-
             for (const pr of pullRequests.data) {
               const { number, labels } = pr;
 
-              // Check if 'FE' label exists
               // 열려 있는 PR에 FE 라벨이 달려있는지 확인한다.
-              const hasFeLabel = labels.some(label => label.name === 'FE');
+              const hasFeLabel = labels.some(label => label.name === '🫧 FE');
 
               if (!hasFeLabel) {
                 console.log(`PR #${number} does not have 'FE' label. Skipping.`);
@@ -43,7 +40,7 @@ jobs:
 
               // 'D-'로 시작하는 라벨이 없다면 D-3' 라벨을 추가하고 끝낸다.
               if (!dLabel) {
-                await github.issues.addLabels({
+                await github.rest.issues.addLabels({
                   owner,
                   repo,
                   issue_number: number,
@@ -53,16 +50,22 @@ jobs:
                 continue;
               }
 
+              // 'D-0'이면 카운팅을 스킵한다.
+              if (dLabel.name === 'D-0') {
+                console.log(`PR #${number} already at 'D-0'. Skipping decrement.`);
+                continue;
+              }
+
               // 'D-n'로 시작하는 라벨이 있다면 n 값을 가져온다.
               const currentDay = parseInt(dLabel.name.split('-')[1], 10);
 
-              if (isNaN(currentDay) || currentDay <= 1) {
+              if (isNaN(currentDay) || currentDay < 1) {
                 console.log(`PR #${number} 유효하지 않은 라벨이거나 연산할 수 없는 라벨 '${dLabel.name}'.`);
                 continue;
               }
 
               // 현재 'D-n' 라벨을 제거한다.
-              await github.issues.removeLabel({
+              await github.rest.issues.removeLabel({
                 owner,
                 repo,
                 issue_number: number,
@@ -72,7 +75,7 @@ jobs:
               // 'D-(n-1)' 라벨을 새로 추가한다.
               const newDay = currentDay - 1;
               const newLabel = `D-${newDay}`;
-              await github.issues.addLabels({
+              await github.rest.issues.addLabels({
                 owner,
                 repo,
                 issue_number: number,
