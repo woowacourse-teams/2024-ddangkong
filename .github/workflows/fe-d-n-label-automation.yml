@@ -17,6 +17,23 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
+            // 현재 시간(Locale)
+            const curr = new Date();
+
+            // UTC 시간 계산
+            const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
+
+            // UTC to KST (UTC + 9시간)
+            const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+            const kr_curr = new Date(utc + KR_TIME_DIFF);
+            const KSTDayOfWeek = kr_curr.getDay(); // 0: 일요일, 6: 토요일
+
+            // 한국 시간 기준으로 주말인지 판단
+            if (KSTDayOfWeek === 0 || KSTDayOfWeek === 6) {
+              console.log("주말은 쉬어야죠!");
+              return;
+            }
+
             // 열려 있는 모든 PR을 가져온다.
             const pullRequests = await github.rest.pulls.list({
               owner,
