@@ -21,7 +21,7 @@ const RoomSetting = () => {
   const {
     member: { isMaster },
   } = useGetUserInfo();
-  const { show } = useModal();
+  const { showModal } = useModal();
 
   const screenReaderRoomSetting = `
         방 정보.
@@ -30,7 +30,7 @@ const RoomSetting = () => {
         제한시간 ${roomSetting.timeLimit / 1000}초.`;
 
   const handleClickCategory = () => {
-    show(RoomSettingModal, { returnFocusRef });
+    showModal(RoomSettingModal, { returnFocusRef });
   };
 
   return (

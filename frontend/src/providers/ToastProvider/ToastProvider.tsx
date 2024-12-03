@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { toastLayout } from './ToastProvider.styled';
 
 interface ToastContext {
-  show: (message: string) => void;
+  showToast: (message: string) => void;
 }
 
 export const ToastContext = createContext<ToastContext | null>(null);
@@ -13,7 +13,7 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
   const [toastMessage, setToastMessage] = useState('');
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const show = useCallback((message: string) => {
+  const showToast = useCallback((message: string) => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
@@ -34,7 +34,7 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   return (
-    <ToastContext.Provider value={{ show }}>
+    <ToastContext.Provider value={{ showToast }}>
       {children}
       {toastMessage &&
         createPortal(

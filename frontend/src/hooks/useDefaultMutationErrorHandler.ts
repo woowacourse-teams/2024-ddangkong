@@ -4,12 +4,12 @@ import useToast from '@/hooks/useToast';
 import { CustomError, NetworkError } from '@/utils/error';
 
 const useDefaultMutationErrorHandler = () => {
-  const { show } = useToast();
-  const { show: showModal } = useModal();
+  const { showToast } = useToast();
+  const { showModal } = useModal();
 
   return (error: unknown) => {
     if (error instanceof NetworkError) {
-      show(error.message);
+      showToast(error.message);
       return;
     }
     if (error instanceof CustomError) {

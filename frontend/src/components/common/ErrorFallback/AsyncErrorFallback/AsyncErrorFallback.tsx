@@ -7,7 +7,7 @@ import {
 } from '../ErrorFallback.styled';
 
 import ErrorDdangkong from '@/assets/images/errorDdangkong.webp';
-import { CustomError } from '@/utils/error';
+import { CustomError, UnhandledError } from '@/utils/error';
 
 interface AsyncErrorFallback {
   error: unknown;
@@ -22,7 +22,9 @@ const AsyncErrorFallback = ({ error, resetError }: AsyncErrorFallback) => {
   return (
     <section css={errorFallbackLayout}>
       <img src={ErrorDdangkong} alt="에러나서 슬픈 땅콩" css={errorImage} />
-      <h2 css={errorText}>{error instanceof CustomError && error.message}</h2>
+      <h2 css={errorText}>
+        {(error instanceof CustomError || error instanceof UnhandledError) && error.message}
+      </h2>
       <div css={fallbackButtonContainer}>
         <Button onClick={resetError} text="다시 시도" size="medium" radius="medium" />
         <Button onClick={goToHome} text="홈으로" size="medium" radius="medium" />

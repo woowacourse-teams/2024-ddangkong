@@ -23,13 +23,13 @@ import useModal from '@/hooks/useModal';
 
 const ReadyMembersContainer = () => {
   const { members, master } = useGetRoomInfo();
-  const { show } = useModal();
+  const { showModal } = useModal();
   const queryClient = useQueryClient();
   const returnFocusRef = useRef<HTMLButtonElement>(null);
   const memberCountMessage = `총 인원 ${members.length}명`;
 
   const handleClickInvite = () => {
-    show(InviteModal, { returnFocusRef });
+    showModal(InviteModal, { returnFocusRef });
   };
 
   useEffect(() => {
