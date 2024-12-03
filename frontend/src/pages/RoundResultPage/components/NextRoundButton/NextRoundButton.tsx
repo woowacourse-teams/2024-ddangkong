@@ -8,16 +8,14 @@ import { bottomButtonLayout } from '../../../../components/common/Button/Button.
 
 import AlertModal from '@/components/AlertModal/AlertModal';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
-import useGetUserInfo from '@/hooks/useGetUserInfo';
+import useIsMaster from '@/hooks/useIsMaster';
 import useModal from '@/hooks/useModal';
 
 const NextRoundButton = () => {
   const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
   const { mutate: moveNextRound, isPending, isSuccess } = useMoveNextRoundMutation(Number(roomId));
-  const {
-    member: { isMaster },
-  } = useGetUserInfo();
+  const isMaster = useIsMaster();
   const { show } = useModal();
 
   const returnFocusRef = useRef<HTMLButtonElement>(null);

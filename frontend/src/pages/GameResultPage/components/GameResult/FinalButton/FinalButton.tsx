@@ -5,14 +5,12 @@ import useResetRoomMutation from './hooks/useResetRoomMutation';
 
 import Button from '@/components/common/Button/Button';
 import { bottomButtonLayout } from '@/components/common/Button/Button.styled';
-import useGetUserInfo from '@/hooks/useGetUserInfo';
+import useIsMaster from '@/hooks/useIsMaster';
 
 const FinalButton = () => {
   const { roomId } = useParams();
   const { mutate: resetRoom, isPending } = useResetRoomMutation(Number(roomId));
-  const {
-    member: { isMaster },
-  } = useGetUserInfo();
+  const isMaster = useIsMaster();
 
   return (
     <div css={bottomButtonLayout}>

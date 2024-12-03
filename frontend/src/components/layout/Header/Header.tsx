@@ -24,7 +24,7 @@ import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import RoomSettingModal from '@/components/RoomSettingModal/RoomSettingModal';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useFocus from '@/hooks/useFocus';
-import useGetUserInfo from '@/hooks/useGetUserInfo';
+import useIsMaster from '@/hooks/useIsMaster';
 import useModal from '@/hooks/useModal';
 import { convertMsecToSecond } from '@/pages/GamePage/components/SelectContainer/Timer/Timer.util';
 
@@ -66,9 +66,7 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 // 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const { show } = useModal();
-  const {
-    member: { isMaster },
-  } = useGetUserInfo();
+  const isMaster = useIsMaster();
 
   const { handleExit } = useExit();
   const returnFocusRef = useRef(null);
