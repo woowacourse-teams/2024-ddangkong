@@ -41,16 +41,18 @@ jobs:
               state: 'open',
             });
 
-            for (const pr of pullRequests.data) {
+            // "FE" 라벨이 포함된 PR만 필터링
+            const FEPullRequests = pullRequests.data.filter(pr => 
+              pr.labels.some(label => label.name.includes('FE'))
+            );
+
+            if (FEPullRequests.length === 0) {
+              console.log("열려있는 FE PR이 없습니다.");
+              return;
+            }
+
+            for (const pr of FEPullRequests) {
               const { number, labels } = pr;
-
-              // 열려 있는 PR에 FE 라벨이 달려있는지 확인한다.
-              const hasFeLabel = labels.some(label => label.name.includes('FE'));
-
-              if (!hasFeLabel) {
-                console.log(`PR #${number} does not have 'FE' label. Skipping.`);
-                continue;
-              }
 
               // 'D-'로 시작하는 라벨이 있는지 확인한다.
               const dLabel = labels.find(label => label.name.startsWith('D-'));
