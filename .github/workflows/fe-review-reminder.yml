@@ -17,7 +17,7 @@ jobs:
         uses: actions/github-script@v7
         env:
           DISCORD_WEBHOOK: ${{ secrets.FE_REVIEW_NOTIFICATION_WEBHOOK_URL }}
-          DISCORD_MENTION: ${{  secrets.FE_GITHUB_DISCORD_ID }}
+          DISCORD_MENTION: ${{ secrets.FE_GITHUB_DISCORD_ID }}
         with:
           script: |
             const owner = context.repo.owner;
