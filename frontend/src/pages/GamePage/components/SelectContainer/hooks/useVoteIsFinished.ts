@@ -13,7 +13,7 @@ interface UseRoundIsFinishedProps {
 const useVoteIsFinished = ({ contentId, isFetching }: UseRoundIsFinishedProps) => {
   const navigate = useNavigate();
   const { roomId } = useParams();
-  const { isFinished } = useRoundIsFinishedQuery({
+  const { isFinished, memberCount, voteCount } = useRoundIsFinishedQuery({
     contentId,
     enabled: !!contentId && !isFetching,
   });
@@ -24,7 +24,7 @@ const useVoteIsFinished = ({ contentId, isFetching }: UseRoundIsFinishedProps) =
     }
   }, [isFinished, navigate, roomId, isFetching]);
 
-  return { isFinished };
+  return { memberCount, voteCount };
 };
 
 export default useVoteIsFinished;
