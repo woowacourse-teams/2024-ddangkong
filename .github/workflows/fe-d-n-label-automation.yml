@@ -45,7 +45,7 @@ jobs:
               const { number, labels } = pr;
 
               // 열려 있는 PR에 FE 라벨이 달려있는지 확인한다.
-              const hasFeLabel = labels.some(label => label.name === '🫧 FE');
+              const hasFeLabel = labels.some(label => label.name.includes('FE'));
 
               if (!hasFeLabel) {
                 console.log(`PR #${number} does not have 'FE' label. Skipping.`);
