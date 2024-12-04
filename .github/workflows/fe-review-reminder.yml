@@ -17,16 +17,19 @@ jobs:
         uses: actions/github-script@v7
         env:
           DISCORD_WEBHOOK: ${{ secrets.FE_REVIEW_NOTIFICATION_WEBHOOK_URL }}
+          DISCORD_MENTION: ${{  secrets.FE_GITHUB_DISCORD_ID }}
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
-            // GitHub 사용자명을 Discord 멘션으로 매핑
-            const discordMentions = {
-              'useon': '@썬데이',
-              'novice0840': '@포메',
-              'rbgksqkr': '@마루',
+            // GitHub 사용자명과 디스코드 아이디 또는 닉네임으로 매핑
+            const discordMentions = JSON.parse(process.env.DISCORD_MENTION);
+
+            const discordNotMentions = {
+              'useon': '썬데이',
+              'novice0840': '포메',
+              'rbgksqkr': '마루',
             };
 
             async function getReviews(owner, repo, prNumber) {
@@ -79,9 +82,7 @@ jobs:
                   const allApproved = requestedReviewers.every(reviewer => approvedReviewers.includes(reviewer));
 
                   // 각 리뷰어의 상태 생성
-                  const reviewStatuses = reviews.map(review => {
-                    const discordUsername = discordMentions[review.user.login] || `@${review.user.login}`;
-                    
+                  const reviewStatuses = reviews.map(review => {                    
                     // state마다 약자 정의
                     const stateAbbreviations = {
                       APPROVED: 'A',      
@@ -93,18 +94,17 @@ jobs:
                     const reviewState = stateAbbreviations[review.state] || review.state.toLowerCase();
 
                     return review.state === 'APPROVED'
-                      ? `${discordUsername.replace('@', '')} (${reviewState})` // APPROVED인 경우 멘션 없이 이름만 표시
-                      : `${discordUsername} (${reviewState})`; // 나머지 상태인 경우 멘션
+                      ? `${discordNotMentions[review.user.login]}(${reviewState})` // APPROVED인 경우 멘션 없이 이름만 표시
+                      : `<@${discordMentions[review.user.login]}>(${reviewState})`; // 나머지 상태인 경우 멘션
                   });
 
-                  // 리뷰를 시작하지 않은 리뷰어
+                  // 리뷰를 시작하지 않은 리뷰어 멘션
                   const notStartedReviewers = requestedReviewers.filter(
                     reviewer => !reviews.some(review => review.user.login === reviewer)
                   );
 
                   const notStartedMentions = notStartedReviewers.map(reviewer => {
-                    const discordUsername = discordMentions[reviewer] || `@${reviewer}`;
-                    return `${discordUsername} (X)`;
+                    return `<@${discordMentions[reviewer]}>(X)`;
                   });
 
                   const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
