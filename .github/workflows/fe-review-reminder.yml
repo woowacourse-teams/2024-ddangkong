@@ -124,8 +124,6 @@ jobs:
                 })
               );
 
-              const allowedUsers = Object.values(discordMentions);
-
               // 최종 메시지 Discord에 전송
               await fetch(process.env.DISCORD_WEBHOOK, {
                 method: 'POST',
@@ -133,7 +131,7 @@ jobs:
                 body: JSON.stringify({
                   content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}`,
                   allowed_mentions: {
-                    users: allowedUsers, // 멘션 가능 사용자 명시
+                    parse: ["user"],
                   },
                 }),
               });
