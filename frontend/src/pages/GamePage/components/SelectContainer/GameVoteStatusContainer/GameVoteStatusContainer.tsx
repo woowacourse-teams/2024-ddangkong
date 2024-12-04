@@ -16,7 +16,7 @@ const GameVoteStatusContainer = ({ contentId, isFetching }: GameVoteStatusContai
     isFetching,
   });
 
-  const voteStatusText = `${memberCount || 0}명 중 ${voteCount || 0}명이 투표했어요!`;
+  const voteStatusText = `${memberCount ?? 0}명 중 ${voteCount ?? 0}명이 투표했어요!`;
 
   return (
     <div css={gameVoteStatusLayout}>
