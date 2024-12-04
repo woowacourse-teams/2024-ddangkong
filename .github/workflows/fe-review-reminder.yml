@@ -94,8 +94,8 @@ jobs:
                     const reviewState = stateAbbreviations[review.state] || review.state.toLowerCase();
 
                     return review.state === 'APPROVED'
-                      ? `${discordNotMentions[review.user.login]}(${reviewState})` // APPROVED인 경우 멘션 없이 이름만 표시
-                      : `<@${discordMentions[review.user.login]}>(${reviewState})`; // 나머지 상태인 경우 멘션
+                      ? `${discordNotMentions[review.user.login]} ${reviewState}` // APPROVED인 경우 멘션 없이 이름만 표시
+                      : `<@${discordMentions[review.user.login]}> ${reviewState}`; // 나머지 상태인 경우 멘션
                   });
 
                   // 리뷰를 시작하지 않은 리뷰어 멘션
@@ -104,7 +104,7 @@ jobs:
                   );
 
                   const notStartedMentions = notStartedReviewers.map(reviewer => {
-                    return `<@${discordMentions[reviewer]}>(X)`;
+                    return `<@${discordMentions[reviewer]}> (X)`;
                   });
 
                   const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
@@ -115,7 +115,7 @@ jobs:
 
                   // 모든 리뷰어가 APPROVED인 경우
                   if (allApproved) {
-                    const authorMention = discordMentions[pr.user.login] || `@${pr.user.login}`;
+                    const authorMention = discordMentions[pr.user.login] || `${pr.user.login}`;
                     return `마감일: [${pr.dLabelName}]\n제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n생성일: ${createdDate}\n마지막 수정: ${lastUpdated}\n${authorMention}, 모든 리뷰어의 승인 완료! 코멘트를 확인 후 머지해 주세요 🚀\n링크: ${pr.html_url}`;
                   }
 
