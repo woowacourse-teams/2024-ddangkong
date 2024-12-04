@@ -24,9 +24,9 @@ jobs:
 
             // GitHub 사용자명을 Discord 멘션으로 매핑
             const discordMentions = {
-              'useon': '썬데이',
-              'novice0840': '포메',
-              'rbgksqkr': '마루',
+              'useon': '@썬데이',
+              'novice0840': '@포메',
+              'rbgksqkr': '@마루',
             };
 
             async function getReviews(owner, repo, prNumber) {
