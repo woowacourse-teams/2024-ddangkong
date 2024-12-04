@@ -81,10 +81,20 @@ jobs:
                   // 각 리뷰어의 상태 생성
                   const reviewStatuses = reviews.map(review => {
                     const discordUsername = discordMentions[review.user.login] || `@${review.user.login}`;
-                    const reviewState = review.state.toLowerCase();
+                    
+                    // state마다 약자 정의
+                    const stateAbbreviations = {
+                      APPROVED: 'A',      
+                      CHANGES_REQUESTED: 'RC', 
+                      COMMENTED: 'C',
+                    };
+
+                    // 약자가 없는 상태일 경우 기본적으로 state 그대로 사용
+                    const reviewState = stateAbbreviations[review.state] || review.state.toLowerCase();
+
                     return review.state === 'APPROVED'
-                      ? `${discordUsername.replace('@', '')}(${reviewState})` // APPROVED인 경우 멘션 없이 이름만 표시
-                      : `${discordUsername}(${reviewState})`; // 나머지 상태인 경우 멘션
+                      ? `${discordUsername.replace('@', '')} (${reviewState})` // APPROVED인 경우 멘션 없이 이름만 표시
+                      : `${discordUsername} (${reviewState})`; // 나머지 상태인 경우 멘션
                   });
 
                   // 리뷰를 시작하지 않은 리뷰어
@@ -94,7 +104,7 @@ jobs:
 
                   const notStartedMentions = notStartedReviewers.map(reviewer => {
                     const discordUsername = discordMentions[reviewer] || `@${reviewer}`;
-                    return `${discordUsername}(not started)`;
+                    return `${discordUsername} (X)`;
                   });
 
                   const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
