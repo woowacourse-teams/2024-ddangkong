@@ -7,45 +7,31 @@ on:
   schedule:
     - cron: '0 2 * * 1-5' # 매주 월요일부터 금요일까지, 한국 시간 오전 11시에 실행
   workflow_dispatch:
+
 jobs:
   review-reminder:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
       - name: Send Reminder to Discord
+        uses: actions/github-script@v7
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DISCORD_WEBHOOK: ${{ secrets.FE_REVIEW_NOTIFICATION_WEBHOOK_URL }}
-        run: |
-          const discordMentions = {
-            'useon': '썬데이',
-            'novice0840': '포메',
-            'rbgksqkr': '마루',
-          };
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
 
-          const owner = '${{ github.repository_owner }}';
-          const repo = '${{ github.event.repository.name }}';
-          const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-          const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
-
-          async function main() {
-            // 열린 PR 목록 가져오기
-            const pullRequests = await fetch(
-              `https://api.github.com/repos/${owner}/${repo}/pulls`,
-              {
-                headers: {
-                  Authorization: `token ${GITHUB_TOKEN}`,
-                  Accept: 'application/vnd.github.v3+json',
-                },
-              }
-            ).then(res => res.json());
+            // 열려 있는 PR 목록 가져오기
+            const pullRequests = await github.rest.pulls.list({
+              owner,
+              repo,
+              state: 'open',
+            });
 
             // FE 라벨이 달린 PR을 D-DAY가 임박한 순서로 정렬
-            const fePrs = pullRequests
-            .filter(pr => pr.labels.some(label => label.name.includes('FE')))
+            const fePrs = pullRequests.data
+              .filter(pr => pr.labels.some(label => label.name.includes('FE')))
               .map(pr => {
                 const dLabel = pr.labels.find(label => label.name.startsWith('D-'));
                 const urgency = dLabel ? parseInt(dLabel.name.split('-')[1], 10) : Number.MAX_SAFE_INTEGER;
@@ -53,8 +39,8 @@ jobs:
                   ...pr, 
                   urgency, 
                   dLabelName: dLabel?.name || 'D-unknown',
-                  updatedAt: pr.updated_at, // 마지막 수정 시간 추가
-                  createdAt: pr.created_at, // 생성 시간 추가
+                  updatedAt: pr.updated_at,
+                  createdAt: pr.created_at,
                 };
               })
               .sort((a, b) => a.urgency - b.urgency);
@@ -111,30 +97,9 @@ jobs:
             );
 
             // 최종 메시지 Discord에 전송
-            const finalMessage = `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}`;
-
-            await fetch(DISCORD_WEBHOOK, {
+            const fetch = require('node-fetch');
+            await fetch(process.env.DISCORD_WEBHOOK, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ content: finalMessage }),
+              body: JSON.stringify({ content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}` }),
             });
-          }
-
-          // 특정 PR의 리뷰 상태 가져오기
-          async function getReviews(owner, repo, prNumber) {
-            return await fetch(
-              `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}/reviews`,
-              {
-                headers: {
-                  Authorization: `token ${GITHUB_TOKEN}`,
-                  Accept: 'application/vnd.github.v3+json',
-                },
-              }
-            ).then(res => res.json());
-          }
-
-          // 메인 함수 실행 및 에러 처리
-          main().catch(err => {
-            console.error('Error:', err);
-            process.exit(1);
-          });
