@@ -10,9 +10,11 @@ export const gameVoteStatusLayout = css`
   height: 4rem;
 `;
 
-export const voteStatusMessage = css`
+export const voteStatusMessage = (theme: Theme, isPending: boolean) => css`
   font-weight: bold;
   font-size: 1.6rem;
+  opacity: ${isPending ? theme.opacity.invisible : theme.opacity.default};
+  transition: 1s;
 `;
 
 export const voteAnnounceMessage = (theme: Theme) => css`
