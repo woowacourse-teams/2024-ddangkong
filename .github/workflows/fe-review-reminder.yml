@@ -115,13 +115,15 @@ jobs:
               );
 
               // 최종 메시지 Discord에 전송
-              const fetch = require('node-fetch');
-              await fetch(process.env.DISCORD_WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}` }),
-              });
-            } catch (error) {
-              console.error('Error sending reminder to Discord:', error.message);
-              throw error; // 워크플로우 실패 상태 반환
-            }
+              try {
+                await fetch(process.env.DISCORD_WEBHOOK, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}`,
+                  }),
+                });
+              } catch (error) {
+                console.error('Error sending reminder to Discord:', error.message);
+                throw error; // 워크플로우 실패 상태 반환
+              }
