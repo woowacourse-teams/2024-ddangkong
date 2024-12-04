@@ -94,8 +94,8 @@ jobs:
                     const reviewState = stateAbbreviations[review.state] || review.state.toLowerCase();
 
                     return review.state === 'APPROVED'
-                      ? `${discordNotMentions[review.user.login]} ${reviewState}` // APPROVED인 경우 멘션 없이 이름만 표시
-                      : `<@${discordMentions[review.user.login]}> ${reviewState}`; // 나머지 상태인 경우 멘션
+                      ? `${discordNotMentions[review.user.login]}${reviewState}` // APPROVED인 경우 멘션 없이 이름만 표시
+                      : `<@${discordMentions[review.user.login]}>${reviewState}`; // 나머지 상태인 경우 멘션
                   });
 
                   // 리뷰를 시작하지 않은 리뷰어 멘션
@@ -104,7 +104,7 @@ jobs:
                   );
 
                   const notStartedMentions = notStartedReviewers.map(reviewer => {
-                    return `<@${discordMentions[reviewer]}> (X)`;
+                    return `<@${discordMentions[reviewer]}>(X)`;
                   });
 
                   const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
@@ -124,12 +124,17 @@ jobs:
                 })
               );
 
+              const allowedUsers = Object.values(discordMentions);
+
               // 최종 메시지 Discord에 전송
               await fetch(process.env.DISCORD_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}`,
+                  allowed_mentions: {
+                    users: allowedUsers, // 멘션 가능 사용자 명시
+                  },
                 }),
               });
             } catch (error) {
