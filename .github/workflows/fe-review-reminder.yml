@@ -22,84 +22,106 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
-            // 열려 있는 PR 목록 가져오기
-            const pullRequests = await github.rest.pulls.list({
-              owner,
-              repo,
-              state: 'open',
-            });
+            // GitHub 사용자명을 Discord 멘션으로 매핑
+            const discordMentions = {
+              'useon': '썬데이',
+              'novice0840': '포메',
+              'rbgksqkr': '마루',
+            };
 
-            // FE 라벨이 달린 PR을 D-DAY가 임박한 순서로 정렬
-            const fePrs = pullRequests.data
-              .filter(pr => pr.labels.some(label => label.name.includes('FE')))
-              .map(pr => {
-                const dLabel = pr.labels.find(label => label.name.startsWith('D-'));
-                const urgency = dLabel ? parseInt(dLabel.name.split('-')[1], 10) : Number.MAX_SAFE_INTEGER;
-                return { 
-                  ...pr, 
-                  urgency, 
-                  dLabelName: dLabel?.name || 'D-unknown',
-                  updatedAt: pr.updated_at,
-                  createdAt: pr.created_at,
-                };
-              })
-              .sort((a, b) => a.urgency - b.urgency);
-
-            // 열린 PR 중 FE PR이 없는 경우 실행 종료
-            if (fePrs.length === 0) {
-              console.log('No FE PRs to remind.');
-              return;
+            async function getReviews(owner, repo, prNumber) {
+              // 특정 PR의 리뷰 상태 가져오기
+              const reviews = await github.rest.pulls.listReviews({
+                owner,
+                repo,
+                pull_number: prNumber,
+              });
+              return reviews.data;
             }
 
-            const messages = await Promise.all(
-              fePrs.map(async pr => {
-                const reviews = await getReviews(owner, repo, pr.number);
-                const requestedReviewers = pr.requested_reviewers.map(r => r.login);
+            try {
+              // 열려 있는 PR 목록 가져오기
+              const pullRequests = await github.rest.pulls.list({
+                owner,
+                repo,
+                state: 'open',
+              });
 
-                // 승인한 리뷰어 목록 확인
-                const approvedReviewers = reviews.filter(review => review.state === 'APPROVED').map(r => r.user.login);
-                const allApproved = requestedReviewers.every(reviewer => approvedReviewers.includes(reviewer));
+              // FE 라벨이 달린 PR을 D-DAY가 임박한 순서로 정렬
+              const fePrs = pullRequests.data
+                .filter(pr => pr.labels.some(label => label.name.includes('FE')))
+                .map(pr => {
+                  const dLabel = pr.labels.find(label => label.name.startsWith('D-'));
+                  const urgency = dLabel ? parseInt(dLabel.name.split('-')[1], 10) : Number.MAX_SAFE_INTEGER;
+                  return {
+                    ...pr,
+                    urgency,
+                    dLabelName: dLabel?.name || 'D-unknown',
+                    updatedAt: pr.updated_at,
+                    createdAt: pr.created_at,
+                  };
+                })
+                .sort((a, b) => a.urgency - b.urgency);
 
-                // 각 리뷰어의 상태 생성
-                const reviewStatuses = reviews.map(review => {
-                  const discordUsername = discordMentions[review.user.login] || `@${review.user.login}`;
-                  const reviewState = review.state.toLowerCase();
-                  return review.state === 'APPROVED'
-                    ? `${discordUsername.replace('@', '')}(${reviewState})` // APPROVED인 경우 멘션 없이 이름만 표시
-                    : `${discordUsername}(${reviewState})`; // 나머지 상태인 경우 멘션
-                });
+              // 열린 PR 중 FE PR이 없는 경우 실행 종료
+              if (fePrs.length === 0) {
+                console.log('No FE PRs to remind.');
+                return;
+              }
 
-                // 아직 리뷰를 시작하지 않은 리뷰어 표시
-                const notStartedReviewers = requestedReviewers.filter(
-                  reviewer => !reviews.some(review => review.user.login === reviewer)
-                );
+              const messages = await Promise.all(
+                fePrs.map(async pr => {
+                  const reviews = await getReviews(owner, repo, pr.number);
+                  const requestedReviewers = pr.requested_reviewers.map(r => r.login);
 
-                const notStartedMentions = notStartedReviewers.map(reviewer => {
-                  const discordUsername = discordMentions[reviewer] || `@${reviewer}`;
-                  return `${discordUsername}(not started)`;
-                });
+                  // 승인된 리뷰어 목록 확인
+                  const approvedReviewers = reviews.filter(review => review.state === 'APPROVED').map(r => r.user.login);
+                  const allApproved = requestedReviewers.every(reviewer => approvedReviewers.includes(reviewer));
 
-                const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
+                  // 각 리뷰어의 상태 생성
+                  const reviewStatuses = reviews.map(review => {
+                    const discordUsername = discordMentions[review.user.login] || `@${review.user.login}`;
+                    const reviewState = review.state.toLowerCase();
+                    return review.state === 'APPROVED'
+                      ? `${discordUsername.replace('@', '')}(${reviewState})` // APPROVED인 경우 멘션 없이 이름만 표시
+                      : `${discordUsername}(${reviewState})`; // 나머지 상태인 경우 멘션
+                  });
 
-                // 생성일과 마지막 수정일 표시
-                const createdDate = new Date(pr.createdAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
-                const lastUpdated = new Date(pr.updatedAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+                  // 리뷰를 시작하지 않은 리뷰어
+                  const notStartedReviewers = requestedReviewers.filter(
+                    reviewer => !reviews.some(review => review.user.login === reviewer)
+                  );
 
-                // 모든 리뷰어가 APPROVED인 경우 메시지 생성
-                if (allApproved) {
-                  const authorMention = discordMentions[pr.user.login] || `@${pr.user.login}`;
-                  return `마감일: [${pr.dLabelName}]\n제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n생성일: ${createdDate}\n마지막 수정: ${lastUpdated}\n${authorMention}, 모든 리뷰어의 승인 완료! 코멘트를 확인 후 머지해 주세요 🚀\n링크: ${pr.html_url}`;
-                }
+                  const notStartedMentions = notStartedReviewers.map(reviewer => {
+                    const discordUsername = discordMentions[reviewer] || `@${reviewer}`;
+                    return `${discordUsername}(not started)`;
+                  });
 
-                // 일반적인 리마인드 메시지 생성
-                return `마감일: [${pr.dLabelName}]\n제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n생성일: ${createdDate}\n마지막 수정: ${lastUpdated}\n링크: ${pr.html_url}`;
-              })
-            );
+                  const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
 
-            // 최종 메시지 Discord에 전송
-            const fetch = require('node-fetch');
-            await fetch(process.env.DISCORD_WEBHOOK, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}` }),
-            });
+                  // 생성일과 마지막 수정일 표시
+                  const createdDate = new Date(pr.createdAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+                  const lastUpdated = new Date(pr.updatedAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+
+                  // 모든 리뷰어가 APPROVED인 경우
+                  if (allApproved) {
+                    const authorMention = discordMentions[pr.user.login] || `@${pr.user.login}`;
+                    return `마감일: [${pr.dLabelName}]\n제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n생성일: ${createdDate}\n마지막 수정: ${lastUpdated}\n${authorMention}, 모든 리뷰어의 승인 완료! 코멘트를 확인 후 머지해 주세요 🚀\n링크: ${pr.html_url}`;
+                  }
+
+                  // 일반적인 리마인드 메시지
+                  return `마감일: [${pr.dLabelName}]\n제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n생성일: ${createdDate}\n마지막 수정: ${lastUpdated}\n링크: ${pr.html_url}`;
+                })
+              );
+
+              // 최종 메시지 Discord에 전송
+              const fetch = require('node-fetch');
+              await fetch(process.env.DISCORD_WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}` }),
+              });
+            } catch (error) {
+              console.error('Error sending reminder to Discord:', error.message);
+              throw error; // 워크플로우 실패 상태 반환
+            }
