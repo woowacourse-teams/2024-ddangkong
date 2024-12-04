@@ -131,7 +131,7 @@ jobs:
                 body: JSON.stringify({
                   content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}`,
                   allowed_mentions: {
-                    parse: ["user"],
+                    parse: ["users"],
                   },
                 }),
               });
