@@ -55,15 +55,15 @@ jobs:
               // 'D-'로 시작하는 라벨이 있는지 확인한다.
               const dLabel = labels.find(label => label.name.startsWith('D-'));
 
-              // 'D-'로 시작하는 라벨이 없다면 D-3' 라벨을 추가하고 끝낸다.
+              // 'D-'로 시작하는 라벨이 없다면 D-2' 라벨을 추가하고 끝낸다.
               if (!dLabel) {
                 await github.rest.issues.addLabels({
                   owner,
                   repo,
                   issue_number: number,
-                  labels: ['D-3'],
+                  labels: ['D-2'],
                 });
-                console.log(`Added 'D-3' label to PR #${number}`);
+                console.log(`Added 'D-2' label to PR #${number}`);
                 continue;
               }
 
