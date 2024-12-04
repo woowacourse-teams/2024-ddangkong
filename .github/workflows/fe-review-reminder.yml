@@ -125,7 +125,7 @@ jobs:
               );
 
               // 최종 메시지 Discord에 전송
-              await fetch(process.env.DISCORD_WEBHOOK, {
+              const response = await fetch(process.env.DISCORD_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -135,6 +135,8 @@ jobs:
                   },
                 }),
               });
+
+              console.log('Response status:', response.status);
             } catch (error) {
               console.error('Error processing FE PR reminders:', error.message);
               throw error; // 워크플로우 실패 상태 반환
