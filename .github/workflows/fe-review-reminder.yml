@@ -116,11 +116,11 @@ jobs:
                   // 모든 리뷰어가 APPROVED인 경우
                   if (allApproved) {
                     const authorMention = discordMentions[pr.user.login] || `${pr.user.login}`;
-                    return `마감일: [${pr.dLabelName}]\n제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n생성일: ${createdDate}\n마지막 수정: ${lastUpdated}\n${authorMention}, 모든 리뷰어의 승인 완료! 코멘트를 확인 후 머지해 주세요 🚀\n링크: ${pr.html_url}`;
+                    return `[${pr.dLabelName} ${pr.title}](${pr.html_url})\n현황: ${reviewStatusMessage.join(', ')}\n마지막 수정: ${lastUpdated}\n<@${authorMention}>, 모든 리뷰어의 승인 완료! 코멘트를 확인 후 머지해 주세요 🚀`;
                   }
 
                   // 일반적인 리마인드 메시지
-                  return `마감일: [${pr.dLabelName}]\n제목: ${pr.title}\n현황: ${reviewStatusMessage.join(', ')}\n생성일: ${createdDate}\n마지막 수정: ${lastUpdated}\n링크: ${pr.html_url}`;
+                  return `[${pr.dLabelName} ${pr.title}](${pr.html_url})\n현황: ${reviewStatusMessage.join(', ')}\n마지막 수정: ${lastUpdated}`;
                 })
               );
 
