@@ -107,7 +107,11 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
                     .extract().as(VoteFinishedResponse.class);
 
             // then
-            assertThat(actual.isFinished()).isTrue();
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isTrue(),
+                    () -> assertThat(actual.memberCount()).isEqualTo(2),
+                    () -> assertThat(actual.voteCount()).isEqualTo(2)
+            );
         }
 
         @Test
@@ -126,7 +130,11 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
                     .extract().as(VoteFinishedResponse.class);
 
             // then
-            assertThat(actual.isFinished()).isTrue();
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isTrue(),
+                    () -> assertThat(actual.memberCount()).isEqualTo(2),
+                    () -> assertThat(actual.voteCount()).isEqualTo(0)
+            );
         }
 
         @Test
@@ -134,6 +142,8 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
             // given
             LocalDateTime voteDeadline = LocalDateTime.parse("2024-08-03T20:00:08");
             roomContentFixture.create(room, balanceContent, 1, voteDeadline);
+
+            roomBalanceVoteFixture.create(master, optionA);
 
             // when
             VoteFinishedResponse actual = RestAssured.given().log().all()
@@ -145,7 +155,11 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
                     .extract().as(VoteFinishedResponse.class);
 
             // then
-            assertThat(actual.isFinished()).isFalse();
+            assertAll(
+                    () -> assertThat(actual.isFinished()).isFalse(),
+                    () -> assertThat(actual.memberCount()).isEqualTo(2),
+                    () -> assertThat(actual.voteCount()).isEqualTo(1)
+            );
         }
     }
 

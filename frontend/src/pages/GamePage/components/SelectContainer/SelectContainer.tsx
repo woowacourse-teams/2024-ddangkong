@@ -11,14 +11,15 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 const SelectContainer = () => {
   const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
-  const { selectedOption, handleClickOption, completeSelection } = useSelectOption();
+  const { selectedOption, handleClickOption, completeSelection, cancelSelection } =
+    useSelectOption();
 
   return (
     <div css={selectContainerLayout}>
       <Timer
-        selectedId={selectedOption.id}
-        isVoted={selectedOption.isCompleted}
+        selectedOption={selectedOption}
         completeSelection={completeSelection}
+        cancelSelection={cancelSelection}
       />
       <section role="radiogroup" css={selectSection}>
         <SelectOption
@@ -35,8 +36,9 @@ const SelectContainer = () => {
       </section>
       <SelectButton
         contentId={balanceContent.contentId}
-        selectedId={selectedOption.id}
+        selectedOption={selectedOption}
         completeSelection={completeSelection}
+        cancelSelection={cancelSelection}
       />
     </div>
   );

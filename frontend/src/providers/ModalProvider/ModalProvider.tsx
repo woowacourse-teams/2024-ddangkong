@@ -18,7 +18,7 @@ interface Modal extends ModalProps {
 }
 
 interface ModalDispatchContextProps {
-  show: (Component: React.FC<ModalState> | null, props?: ModalProps) => void;
+  showModal: (Component: React.FC<ModalState> | null, props?: ModalProps) => void;
   close: () => void;
 }
 
@@ -33,7 +33,7 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
     onConfirm: () => {},
   });
 
-  const show = (Component: React.FC<ModalState> | null, props?: ModalProps) => {
+  const showModal = (Component: React.FC<ModalState> | null, props?: ModalProps) => {
     setModal({
       Component,
       title: props?.title,
@@ -52,7 +52,7 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
     }));
   };
 
-  const dispatch = useMemo(() => ({ show, close }), []);
+  const dispatch = useMemo(() => ({ showModal, close }), []);
 
   return (
     <ModalDispatchContext.Provider value={dispatch}>

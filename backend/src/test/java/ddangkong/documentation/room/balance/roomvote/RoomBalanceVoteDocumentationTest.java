@@ -166,7 +166,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
         @Test
         void 투표가_종료되었는지_조회한다() throws Exception {
             // given
-            VoteFinishedResponse response = new VoteFinishedResponse(true);
+            VoteFinishedResponse response = new VoteFinishedResponse(true, 2, 1);
             when(roomBalanceVoteFacade.getVoteFinished(anyLong(), anyLong())).thenReturn(response);
 
             // when & then
@@ -178,7 +178,9 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             parameterWithName("contentId").description("콘텐츠 ID")
                                     ),
                                     responseFields(
-                                            fieldWithPath("isFinished").type(BOOLEAN).description("투표 종료 여부")
+                                            fieldWithPath("isFinished").type(BOOLEAN).description("투표 종료 여부"),
+                                            fieldWithPath("memberCount").type(NUMBER).description("방에 참여한 인원"),
+                                            fieldWithPath("voteCount").type(NUMBER).description("투표한 인원")
                                     )
                             )
                     );
@@ -187,6 +189,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
 
     @Nested
     class 투표_매칭도_조회 {
+
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members/{memberId}/matching";
 
         @Test

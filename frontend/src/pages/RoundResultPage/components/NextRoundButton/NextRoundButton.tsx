@@ -18,15 +18,19 @@ const NextRoundButton = () => {
   const {
     member: { isMaster },
   } = useGetUserInfo();
-  const { show } = useModal();
+  const { showModal } = useModal();
 
   const returnFocusRef = useRef<HTMLButtonElement>(null);
 
   const randomRoundNextMessage = createRandomNextRoundMessage();
   const isLastRound = balanceContent?.currentRound === balanceContent?.totalRound;
 
-  const showModal = () => {
-    show(AlertModal, { message: randomRoundNextMessage, onConfirm: moveNextRound, returnFocusRef });
+  const handleNextRoundModal = () => {
+    showModal(AlertModal, {
+      message: randomRoundNextMessage,
+      onConfirm: moveNextRound,
+      returnFocusRef,
+    });
   };
 
   return (
@@ -35,7 +39,7 @@ const NextRoundButton = () => {
         ref={returnFocusRef}
         style={{ width: '100%' }}
         text={getNextRoundButtonText(isMaster, isLastRound, isPending || isSuccess)}
-        onClick={isLastRound ? moveNextRound : showModal}
+        onClick={isLastRound ? moveNextRound : handleNextRoundModal}
         disabled={!isMaster || isPending || isSuccess}
       />
     </div>

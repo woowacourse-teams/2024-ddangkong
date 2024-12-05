@@ -11,16 +11,24 @@ interface UseVoteTimerProps {
   selectedId: number;
   isVoted: boolean;
   completeSelection: () => void;
+  cancelSelection: () => void;
 }
 
-const useVoteTimer = ({ roomId, selectedId, isVoted, completeSelection }: UseVoteTimerProps) => {
+const useVoteTimer = ({
+  roomId,
+  selectedId,
+  isVoted,
+  completeSelection,
+  cancelSelection,
+}: UseVoteTimerProps) => {
   const { balanceContent } = useBalanceContentQuery(roomId);
   const timeLimit = convertMsecToSecond(balanceContent.timeLimit) || DEFAULT_TIME_LIMIT_SEC;
 
-  const { mutate: vote } = useCompleteSelectionMutation({
+  const { vote } = useCompleteSelectionMutation({
     selectedId,
     contentId: balanceContent.contentId,
     completeSelection,
+    cancelSelection,
   });
 
   const { leftRoundTime, isAlmostFinished } = useTimer({
