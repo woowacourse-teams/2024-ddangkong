@@ -23,7 +23,7 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
-            // GitHub 사용자명과 디스코드 아이디 또는 닉네임으로 매핑
+            // GitHub 사용자명과 Discord 멘션 정보 매핑
             const discordMentions = JSON.parse(process.env.DISCORD_MENTION);
 
             const discordNotMentions = {
@@ -77,44 +77,42 @@ jobs:
                   const reviews = await getReviews(owner, repo, pr.number);
                   const requestedReviewers = pr.requested_reviewers.map(r => r.login);
 
-                  // 승인된 리뷰어 목록 확인
-                  const approvedReviewers = reviews.filter(review => review.state === 'APPROVED').map(r => r.user.login);
-                  const allApproved = requestedReviewers.every(reviewer => approvedReviewers.includes(reviewer));
-
-                  // 각 리뷰어의 상태 생성
-                  const reviewStatuses = reviews.map(review => {                    
-                    // state마다 약자 정의
-                    const stateAbbreviations = {
-                      APPROVED: 'A',      
-                      CHANGES_REQUESTED: 'RC', 
-                      COMMENTED: 'C',
-                    };
-
-                    // 약자가 없는 상태일 경우 기본적으로 state 그대로 사용
-                    const reviewState = stateAbbreviations[review.state] || review.state.toLowerCase();
-
-                    return review.state === 'APPROVED'
-                      ? `${discordNotMentions[review.user.login]}(${reviewState})` // APPROVED인 경우 멘션 없이 이름만 표시
-                      : `<@${discordMentions[review.user.login]}>(${reviewState})`; // 나머지 상태인 경우 멘션
+                  // 리뷰 상태를 관리하는 Map 객체 생성
+                  const reviewStates = new Map();
+                  reviews.forEach(review => {
+                    const reviewer = review.user.login;
+                    const state = review.state;
+                    if (reviewer !== pr.user.login) { // PR 작성자는 제외
+                      reviewStates.set(reviewer, state);
+                    }
                   });
 
-                  // 리뷰를 시작하지 않은 리뷰어 멘션
-                  const notStartedReviewers = requestedReviewers.filter(
-                    reviewer => !reviews.some(review => review.user.login === reviewer)
-                  );
+                  // 리뷰 상태 메시지 생성
+                  const reviewStatuses = Array.from(reviewStates.entries()).map(([reviewer, state]) => {
+                    const discordUsername = discordMentions[reviewer] || `${reviewer}`;
+                    const stateAbbreviations = {
+                      APPROVED: 'A',
+                      CHANGES_REQUESTED: 'RC',
+                      COMMENTED: 'C',
+                    };
+                    const reviewState = stateAbbreviations[state] || state.toLowerCase();
+                    return state === 'APPROVED'
+                      ? `${discordNotMentions[reviewer]}(${reviewState})` // APPROVED인 경우 멘션 없이 이름만 표시
+                      : `<@${discordMentions[reviewer]}>(${reviewState})`; // 나머지 상태인 경우 멘션
+                  });
 
+                  // 리뷰를 시작하지 않은 리뷰어 추가
+                  const notStartedReviewers = requestedReviewers.filter(
+                    reviewer => !reviewStates.has(reviewer) && reviewer !== pr.user.login // PR 작성자 제외
+                  );
                   const notStartedMentions = notStartedReviewers.map(reviewer => {
                     return `<@${discordMentions[reviewer]}>(X)`;
                   });
 
                   const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
 
-                  // 생성일과 마지막 수정일 표시
-                  const createdDate = new Date(pr.createdAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
-                  const lastUpdated = new Date(pr.updatedAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
-
                   // 모든 리뷰어가 APPROVED인 경우
-                  if (allApproved) {
+                  if (Array.from(reviewStates.values()).every(state => state === 'APPROVED')) {
                     const authorMention = discordMentions[pr.user.login] || `${pr.user.login}`;
                     return `[[${pr.dLabelName}] ${pr.title}](<${pr.html_url}>)\n리뷰어: ${reviewStatusMessage.join(', ')}\n<@${authorMention}>, 모든 리뷰어의 승인 완료! 코멘트를 확인 후 머지해 주세요 🚀`;
                   }
@@ -131,7 +129,7 @@ jobs:
                 body: JSON.stringify({
                   content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}`,
                   allowed_mentions: {
-                    parse: ["users"],
+                    parse: ["users"], // 멘션 가능한 사용자만 허용
                   },
                 }),
               });
