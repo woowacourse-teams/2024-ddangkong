@@ -3,8 +3,8 @@ import { useLocation, useParams } from 'react-router-dom';
 import { categoryText, topicContainerLayout, topicText } from './TopicContainer.styled';
 import A11yOnly from '../common/a11yOnly/A11yOnly';
 
-import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
+import { ROUTES } from '@/constants/routes';
 
 const TopicContainer = () => {
   const location = useLocation();
