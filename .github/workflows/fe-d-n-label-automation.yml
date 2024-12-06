@@ -2,7 +2,7 @@ name: FE PR D-n 라벨 수정 자동화
 
 on:
   schedule:
-    - cron: "0 15 * * *" # 매일 밤 12시 실행
+    - cron: '10 15 * * *' # 매일 밤 12시 10분 실행
   workflow_dispatch: # 수동 실행 허용
 
 jobs:
