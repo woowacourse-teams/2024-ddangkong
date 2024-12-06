@@ -5,7 +5,9 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import importPlugin from 'eslint-plugin-import';
 import tseslint from 'typescript-eslint';
 import globals from 'globals';
-import { fixupPluginRules } from '@eslint/compat';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import storybook from 'eslint-plugin-storybook';
+import pluginQuery from '@tanstack/eslint-plugin-query';
 
 export default tseslint.config({
   extends: [
@@ -13,6 +15,9 @@ export default tseslint.config({
     tseslint.configs.recommended,
     importPlugin.flatConfigs.recommended,
     react.configs.flat.recommended,
+    jsxA11y.flatConfigs.recommended,
+    ...storybook.configs['flat/recommended'],
+    ...pluginQuery.configs['flat/recommended'],
   ],
   files: ['**/*.ts', '**/*.tsx'],
   languageOptions: {
