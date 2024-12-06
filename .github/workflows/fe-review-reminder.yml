@@ -59,7 +59,7 @@ jobs:
                   return {
                     ...pr,
                     urgency,
-                    dLabelName: dLabel?.name || 'D-unknown',
+                    dLabelName: dLabel?.name || 'D-3',
                     updatedAt: pr.updated_at,
                     createdAt: pr.created_at,
                   };
