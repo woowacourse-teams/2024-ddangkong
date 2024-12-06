@@ -8,6 +8,7 @@ import globals from 'globals';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import storybook from 'eslint-plugin-storybook';
 import pluginQuery from '@tanstack/eslint-plugin-query';
+import ddangkong from './eslint-ddangkong/eslint-plugin-ddangkong.js';
 
 export default tseslint.config({
   extends: [
@@ -33,10 +34,12 @@ export default tseslint.config({
 
   plugins: {
     react,
+    ddangkong,
     'react-hooks': reactHooks,
     'react-refresh': reactRefresh,
   },
   rules: {
+    'ddangkong/enforce-foo-bar': 'error',
     ...reactHooks.configs.recommended.rules,
     'no-console': 'error',
     'react/react-in-jsx-scope': 'off',
