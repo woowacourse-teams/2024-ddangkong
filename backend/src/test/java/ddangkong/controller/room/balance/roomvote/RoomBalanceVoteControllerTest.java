@@ -28,13 +28,13 @@ import org.junit.jupiter.api.Test;
 
 class RoomBalanceVoteControllerTest extends BaseControllerTest {
 
-    BalanceContent balanceContent;
-    BalanceOption optionA;
-    BalanceOption optionB;
+    private BalanceContent balanceContent;
+    private BalanceOption optionA;
+    private BalanceOption optionB;
 
     @BeforeEach
     void setUp() {
-        balanceContent = balanceContentFixture.create(Category.IF);
+        balanceContent = balanceContentFixture.create();
         optionA = balanceOptionFixture.create(balanceContent);
         optionB = balanceOptionFixture.create(balanceContent);
     }
@@ -165,7 +165,9 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
 
     @Nested
     class 투표_매칭도_조회 {
+
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/members/{memberId}/matching";
+
         private Member master;
         private Member common1;
         private Member common2;
