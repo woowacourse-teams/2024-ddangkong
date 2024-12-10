@@ -76,9 +76,9 @@ jobs:
                 fePrs.map(async pr => {
                   console.log(pr, 'pr')
                   const reviews = await getReviews(owner, repo, pr.number);
+                  console.log(reviews, 'reviews');
                   console.log(pr.requested_reviewers, 'requested_reviewers')
-                  const requestedReviewers = pr.requested_reviewers.map(r => r.login);
-                  pr.requested_reviewers.map((r) => console.log(r, r.login))
+                  const requestedReviewers = ['useon', 'novice0840', 'rbgksqkr'];
 
                   // 리뷰 상태를 관리하는 Map 객체 생성
                   const reviewStates = new Map();
