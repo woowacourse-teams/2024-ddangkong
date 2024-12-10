@@ -134,18 +134,18 @@ jobs:
               );
 
               // 최종 메시지 Discord에 전송
-            #   const response = await fetch(process.env.DISCORD_WEBHOOK, {
-            #     method: 'POST',
-            #     headers: { 'Content-Type': 'application/json' },
-            #     body: JSON.stringify({
-            #       content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}\n\n`,
-            #       allowed_mentions: {
-            #         parse: ["users"], // 멘션 가능한 사용자만 허용
-            #       },
-            #     }),
-            #   });
-
-            #   console.log('Response status:', response.status);
+              /* const response = await fetch(process.env.DISCORD_WEBHOOK, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}\n\n`,
+                    allowed_mentions: {
+                      parse: ["users"], // 멘션 가능한 사용자만 허용
+                    },
+                  }),
+                });
+               */
+              console.log('Response status:', response.status);
             } catch (error) {
               console.error('Error processing FE PR reminders:', error.message);
               throw error; // 워크플로우 실패 상태 반환
