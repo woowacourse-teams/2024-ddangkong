@@ -1,9 +1,6 @@
 name: FE Review Reminder for Discord
 
 on:
-  pull_request:
-    branches:
-      - develop
   schedule:
     - cron: '10 1 * * 1-5' # 매주 월요일부터 금요일까지, 한국 시간 오전 10시 10분에 실행
   workflow_dispatch:
