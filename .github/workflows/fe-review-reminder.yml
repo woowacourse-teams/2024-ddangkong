@@ -74,6 +74,7 @@ jobs:
 
               const messages = await Promise.all(
                 fePrs.map(async pr => {
+                  console.log(pr, 'pr')
                   const reviews = await getReviews(owner, repo, pr.number);
                   console.log(pr.requested_reviewers, 'requested_reviewers')
                   const requestedReviewers = pr.requested_reviewers.map(r => r.login);
