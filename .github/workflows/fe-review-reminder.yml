@@ -114,8 +114,9 @@ jobs:
                   const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
 
                   console.log(reviewStates, '모든 리뷰 상태 확인');
+                  console.log(requestedReviewers, '요청된 리뷰어 확인');
                   const allReviewersApproved = requestedReviewers.every(
-                    (reviewer) => return reviewStates.get(reviewer) === 'APPROVED'
+                    reviewer => reviewStates.get(reviewer) === 'APPROVED'
                   );
                   console.log(allReviewersApproved, '모든 리뷰어가 어프루브 상태인가?')
 
@@ -133,19 +134,19 @@ jobs:
               );
 
               // 최종 메시지 Discord에 전송
-              const response = await fetch(process.env.DISCORD_WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}\n\n`,
-                  allowed_mentions: {
-                    parse: ["users"], // 멘션 가능한 사용자만 허용
-                  },
-                }),
-              });
+            #   const response = await fetch(process.env.DISCORD_WEBHOOK, {
+            #     method: 'POST',
+            #     headers: { 'Content-Type': 'application/json' },
+            #     body: JSON.stringify({
+            #       content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}\n\n`,
+            #       allowed_mentions: {
+            #         parse: ["users"], // 멘션 가능한 사용자만 허용
+            #       },
+            #     }),
+            #   });
 
-              console.log('Response status:', response.status);
-            } catch (error) {
-              console.error('Error processing FE PR reminders:', error.message);
-              throw error; // 워크플로우 실패 상태 반환
-            }
+            #   console.log('Response status:', response.status);
+            # } catch (error) {
+            #   console.error('Error processing FE PR reminders:', error.message);
+            #   throw error; // 워크플로우 실패 상태 반환
+            # }
