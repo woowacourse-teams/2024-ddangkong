@@ -10,7 +10,7 @@ public enum Category {
     IF("만약에"),
     MBTI("MBTI"),
     FOOD("음식"),
-    DEVELOPER("개발"),
+    DEVELOP("개발"),
     ;
 
     private static final List<Category> CATEGORIES = Arrays.stream(Category.values()).toList();
