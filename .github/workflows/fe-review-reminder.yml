@@ -75,7 +75,9 @@ jobs:
               const messages = await Promise.all(
                 fePrs.map(async pr => {
                   const reviews = await getReviews(owner, repo, pr.number);
+                  console.log(pr.requested_reviewers, 'requested_reviewers')
                   const requestedReviewers = pr.requested_reviewers.map(r => r.login);
+                  pr.requested_reviewers.map((r) => console.log(r, r.login))
 
                   // 리뷰 상태를 관리하는 Map 객체 생성
                   const reviewStates = new Map();
@@ -144,8 +146,8 @@ jobs:
                     },
                   }),
                 });
-               */
-              console.log('Response status:', response.status);
+                console.log('Response status:', response.status);
+                */
             } catch (error) {
               console.error('Error processing FE PR reminders:', error.message);
               throw error; // 워크플로우 실패 상태 반환
