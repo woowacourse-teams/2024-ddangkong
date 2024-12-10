@@ -1,9 +1,6 @@
 name: FE Review Reminder for Discord
 
 on:
-  pull_request:
-    branches:
-      - develop
   schedule:
     - cron: '10 1 * * 1-5' # 매주 월요일부터 금요일까지, 한국 시간 오전 10시 10분에 실행
   workflow_dispatch:
@@ -115,7 +112,7 @@ jobs:
 
                   const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
 
-                  console.log(reviewStates, '모든 리뷰 상태 확인');
+                  console.log(reviewStates, '현재 리뷰 상태 확인');
                   console.log(requestedReviewers, '요청된 리뷰어 확인');
                   const allReviewersApproved = requestedReviewers.every(
                     reviewer => reviewStates.get(reviewer) === 'APPROVED'
@@ -136,7 +133,7 @@ jobs:
               );
 
               // 최종 메시지 Discord에 전송
-              /* const response = await fetch(process.env.DISCORD_WEBHOOK, {
+              const response = await fetch(process.env.DISCORD_WEBHOOK, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
@@ -147,7 +144,6 @@ jobs:
                   }),
                 });
                 console.log('Response status:', response.status);
-                */
             } catch (error) {
               console.error('Error processing FE PR reminders:', error.message);
               throw error; // 워크플로우 실패 상태 반환
