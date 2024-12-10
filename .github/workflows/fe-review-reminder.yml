@@ -32,6 +32,8 @@ jobs:
               'rbgksqkr': '마루',
             };
 
+            const feReviewers = ['useon', 'novice0840', 'rbgksqkr']
+
             async function getReviews(owner, repo, prNumber) {
               // 특정 PR의 리뷰 상태 가져오기
               const reviews = await github.rest.pulls.listReviews({
@@ -74,11 +76,8 @@ jobs:
 
               const messages = await Promise.all(
                 fePrs.map(async pr => {
-                  console.log(pr, 'pr')
                   const reviews = await getReviews(owner, repo, pr.number);
-                  console.log(reviews, 'reviews');
-                  console.log(pr.requested_reviewers, 'requested_reviewers')
-                  const requestedReviewers = ['useon', 'novice0840', 'rbgksqkr'];
+                  const requestedReviewers = feReviewers.filter((reviewer) => reviewer !== pr.user.login) // PR 작성자 제외
 
                   // 리뷰 상태를 관리하는 Map 객체 생성
                   const reviewStates = new Map();
@@ -106,7 +105,7 @@ jobs:
 
                   // 리뷰를 시작하지 않은 리뷰어 추가
                   const notStartedReviewers = requestedReviewers.filter(
-                    reviewer => !reviewStates.has(reviewer) && reviewer !== pr.user.login // PR 작성자 제외
+                    reviewer => !reviewStates.has(reviewer)
                   );
                   console.log(notStartedReviewers, '리뷰를 시작하지 않은 리뷰어')
                   
