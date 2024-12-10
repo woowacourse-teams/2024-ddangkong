@@ -5,13 +5,13 @@ import ddangkong.exception.room.InvalidRangeTotalRoundException;
 import ddangkong.exception.room.InvalidTimeLimitException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 @Getter
 @Embeddable
@@ -33,8 +33,8 @@ public class RoomSetting {
     @Column(nullable = false)
     private int timeLimit;
 
-    @Column(nullable = false, length = 20)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20, columnDefinition = "VARCHAR(20)")
     private Category category;
 
     public static RoomSetting createNewRoomSetting() {
