@@ -146,7 +146,7 @@ jobs:
             #   });
 
             #   console.log('Response status:', response.status);
-            # } catch (error) {
-            #   console.error('Error processing FE PR reminders:', error.message);
-            #   throw error; // 워크플로우 실패 상태 반환
-            # }
+            } catch (error) {
+              console.error('Error processing FE PR reminders:', error.message);
+              throw error; // 워크플로우 실패 상태 반환
+            }
