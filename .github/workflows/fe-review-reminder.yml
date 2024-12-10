@@ -115,10 +115,7 @@ jobs:
 
                   console.log(reviewStates, '모든 리뷰 상태 확인');
                   const allReviewersApproved = requestedReviewers.every(
-                    (reviewer) => {
-                        reviewStates.get(reviewer) === 'APPROVED'
-                        console.log(reviewer, reviewStates.get(reviewer))
-                      }
+                    (reviewer) => return reviewStates.get(reviewer) === 'APPROVED'
                   );
                   console.log(allReviewersApproved, '모든 리뷰어가 어프루브 상태인가?')
 
