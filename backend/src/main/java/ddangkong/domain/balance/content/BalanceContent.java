@@ -21,7 +21,7 @@ public class BalanceContent {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20, columnDefinition = "VARCHAR(20)")
     private Category category;
 
     @Column(nullable = false)

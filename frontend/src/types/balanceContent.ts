@@ -31,3 +31,8 @@ export interface MemberMatchingInfo {
   nickname: string;
   matchingPercent: number;
 }
+
+export interface SelectedOption {
+  id: number;
+  isVoted: boolean;
+}

@@ -19,14 +19,14 @@ import useRoutePath from './hooks/useRoutePath';
 import ArrowLeft from '@/assets/images/arrowLeft.svg';
 import ExitIcon from '@/assets/images/exitIcon.svg';
 import SettingIcon from '@/assets/images/settingIcon.svg';
+import AlertModal from '@/components/AlertModal/AlertModal';
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
-import AlertModal from '@/components/common/AlertModal/AlertModal';
-import RoomSettingModal from '@/components/common/RoomSettingModal/RoomSettingModal';
-import { convertMsecToSecond } from '@/components/SelectContainer/Timer/Timer.util';
+import RoomSettingModal from '@/components/RoomSettingModal/RoomSettingModal';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useFocus from '@/hooks/useFocus';
 import useGetUserInfo from '@/hooks/useGetUserInfo';
 import useModal from '@/hooks/useModal';
+import { convertMsecToSecond } from '@/pages/GamePage/components/SelectContainer/Timer/Timer.util';
 
 interface HeaderProps {
   title: string;
@@ -65,7 +65,7 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 
 // 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
-  const { show } = useModal();
+  const { showModal } = useModal();
   const {
     member: { isMaster },
   } = useGetUserInfo();
@@ -75,11 +75,11 @@ export const RoomSettingHeader = ({ title }: HeaderProps) => {
   const focusRef = useFocus<HTMLElement>();
 
   const handleClickRoomSetting = () => {
-    show(RoomSettingModal, { returnFocusRef });
+    showModal(RoomSettingModal, { returnFocusRef });
   };
 
   const handleClickExit = () => {
-    show(AlertModal, { message: '정말로 나가시겠습니까?', onConfirm: handleExit });
+    showModal(AlertModal, { message: '정말로 나가시겠습니까?', onConfirm: handleExit });
   };
 
   return (

@@ -1,20 +1,13 @@
 package ddangkong.service.room.member;
 
-import static ddangkong.support.fixture.MemberFixture.EDEN;
-import static ddangkong.support.fixture.MemberFixture.KEOCHAN;
-import static ddangkong.support.fixture.MemberFixture.PRIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.room.Room;
-import ddangkong.domain.room.RoomSetting;
-import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
-import ddangkong.exception.BadRequestException;
 import ddangkong.exception.room.NotReadyRoomException;
 import ddangkong.exception.room.member.AlreadyExistMasterException;
 import ddangkong.exception.room.member.ExceedMaxMemberCountException;
@@ -24,6 +17,7 @@ import ddangkong.exception.room.member.NotExistMasterException;
 import ddangkong.exception.room.member.NotRoomMemberException;
 import ddangkong.facade.BaseServiceTest;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,37 +33,38 @@ class MemberServiceTest extends BaseServiceTest {
         @Test
         void 방장을_생성한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
+            Room room = roomFixture.createNotStartedRoom();
+            String masterNickname = "master";
 
             // when
-            Member prin = memberService.saveMasterMember("prin", room);
+            Member master = memberFixture.createMaster(masterNickname, room);
 
             // then
             assertAll(
-                    () -> assertThat(prin.getNickname()).isEqualTo("prin"),
-                    () -> assertThat(prin.isMaster()).isTrue()
+                    () -> assertThat(master.getNickname()).isEqualTo(masterNickname),
+                    () -> assertThat(master.isMaster()).isTrue()
             );
         }
 
         @Test
         void 이미_방장이_존재하는_방에_방장을_생성하면_예외가_발생한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            memberRepository.save(PRIN.master(room));
+            Room room = roomFixture.createNotStartedRoom();
+            memberFixture.createMaster(room);
 
             // when & then
-            assertThatThrownBy(() -> memberService.saveMasterMember("eden", room))
+            assertThatThrownBy(() -> memberService.saveMasterMember("anotherMaster", room))
                     .isExactlyInstanceOf(AlreadyExistMasterException.class);
         }
 
         @Test
         void 방에_멤버가_존재하는_상태에서_방장을_생성하면_예외가_발생한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            memberRepository.save(PRIN.common(room));
+            Room room = roomFixture.createNotStartedRoom();
+            memberFixture.createCommon(room);
 
             // when & then
-            assertThatThrownBy(() -> memberService.saveMasterMember("eden", room))
+            assertThatThrownBy(() -> memberService.saveMasterMember("master", room))
                     .isExactlyInstanceOf(InvalidMasterCreationException.class)
                     .hasMessage("방에 멤버가 존재하면 방장을 생성할 수 없습니다. 현재 멤버 수: 1");
         }
@@ -78,20 +73,19 @@ class MemberServiceTest extends BaseServiceTest {
     @Nested
     class 일반_멤버_생성 {
 
-        private static final int MAX_MEMBER_COUNT = 12;
-
         @Test
         void 일반_멤버를_생성한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            memberRepository.save(PRIN.master(room));
+            Room room = roomFixture.createNotStartedRoom();
+            memberFixture.createMaster(room);
 
             // when
-            Member eden = memberService.saveCommonMember("eden", room);
+            String commonMemberNickname = "commonMember";
+            Member eden = memberService.saveCommonMember(commonMemberNickname, room);
 
             // then
             assertAll(
-                    () -> assertThat(eden.getNickname()).isEqualTo("eden"),
+                    () -> assertThat(eden.getNickname()).isEqualTo(commonMemberNickname),
                     () -> assertThat(eden.isMaster()).isFalse()
             );
         }
@@ -99,39 +93,35 @@ class MemberServiceTest extends BaseServiceTest {
         @Test
         void 진행_상태인_방이면_일반_멤버를_생성할_수_없다() {
             // given
-
-            RoomStatus roomStatus = RoomStatus.PROGRESS;
-            RoomSetting roomSetting = new RoomSetting(5, 10_000, Category.IF);
-
-            Room room = roomRepository.save(new Room("uuid", 2, roomStatus, roomSetting));
-            memberRepository.save(PRIN.master(room));
+            Room progressRoom = roomFixture.createProgressRoom(1);
+            memberFixture.createMaster(progressRoom);
 
             // when & then
-            assertThatThrownBy(() -> memberService.saveCommonMember("eden", room))
+            assertThatThrownBy(() -> memberService.saveCommonMember("newMember", progressRoom))
                     .isExactlyInstanceOf(NotReadyRoomException.class);
         }
 
         @Test
         void 방장이_존재하지_않는_방에_일반_멤버를_생성하면_예외가_발생한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
+            Room room = roomFixture.createNotStartedRoom();
 
             // when & then
-            assertThatThrownBy(() -> memberService.saveCommonMember("prin", room))
+            assertThatThrownBy(() -> memberService.saveCommonMember("newMember", room))
                     .isExactlyInstanceOf(NotExistMasterException.class);
         }
 
         @Test
         void 방의_인원이_가득찬_방에_일반_멤버를_생성하면_예외가_발생한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            memberRepository.save(PRIN.master(room));
-            for (int i = 0; i < MAX_MEMBER_COUNT - 1; i++) {
-                memberRepository.save(EDEN.common(room, i));
-            }
+            final int maxMemberCount = 12;
+
+            Room room = roomFixture.createNotStartedRoom();
+            memberFixture.createMaster(room);
+            memberFixture.createCommons(room, maxMemberCount - 1);
 
             // when & then
-            assertThatThrownBy(() -> memberService.saveCommonMember("tacan", room))
+            assertThatThrownBy(() -> memberService.saveCommonMember("newMember", room))
                     .isExactlyInstanceOf(ExceedMaxMemberCountException.class)
                     .hasMessage("방의 최대 인원을 초과했습니다. 현재 멤버 수: 12");
         }
@@ -143,25 +133,25 @@ class MemberServiceTest extends BaseServiceTest {
         @Test
         void 방의_멤버를_조회한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            Member prin = memberRepository.save(PRIN.master(room));
+            Room room = roomFixture.createNotStartedRoom();
+            Member member = memberFixture.createMaster(room);
 
             // when
-            Member findMember = memberService.getRoomMember(prin.getId(), room);
+            Member findMember = memberService.getRoomMember(member.getId(), room);
 
             // then
-            assertThat(findMember.getId()).isEqualTo(prin.getId());
+            assertThat(findMember.getId()).isEqualTo(member.getId());
         }
 
         @Test
         void 방에_존재하지_않은_멤버일_경우_예외가_발생한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            Member prin = memberRepository.save(PRIN.master(room));
-            Room otherRoom = roomRepository.save(Room.createNewRoom());
+            Room room = roomFixture.createNotStartedRoom();
+            Member member = memberFixture.createMaster(room);
+            Room otherRoom = roomFixture.createNotStartedRoom();
 
             // when & then
-            assertThatThrownBy(() -> memberService.getRoomMember(prin.getId(), otherRoom))
+            assertThatThrownBy(() -> memberService.getRoomMember(member.getId(), otherRoom))
                     .isExactlyInstanceOf(NotRoomMemberException.class);
         }
     }
@@ -169,28 +159,36 @@ class MemberServiceTest extends BaseServiceTest {
     @Nested
     class 방장_넘겨주기 {
 
-        private static final Room ROOM = Room.createNewRoom();
-        private static final Member MASTER = Member.createMaster("master", ROOM);
-        private static final Member COMMON1 = Member.createCommon("common1", ROOM);
-        private static final Member COMMON2 = Member.createCommon("common2", ROOM);
+        private Room room;
+        private Member master;
+        private Member common1;
+        private Member common2;
+
+        @BeforeEach
+        void init() {
+            room = roomFixture.createNotStartedRoom();
+            master = memberFixture.createMaster(room);
+            common1 = memberFixture.createCommon(1, room);
+            common2 = memberFixture.createCommon(2, room);
+        }
 
         @Test
         void 임의의_일반_멤버에게_방장_권한을_준다() {
             // given
-            List<Member> members = List.of(MASTER, COMMON1, COMMON2);
+            List<Member> members = List.of(master, common1, common2);
             RoomMembers roomMembers = new RoomMembers(members);
 
             // when
             memberService.promoteOtherMember(roomMembers);
 
             // then
-            assertTrue((COMMON1.isMaster() && COMMON2.isCommon()) || (COMMON1.isCommon() && COMMON2.isMaster()));
+            assertTrue((common1.isMaster() && common2.isCommon()) || (common1.isCommon() && common2.isMaster()));
         }
 
         @Test
         void 해당_방에_일반_멤버가_없다면_예외를_던진다() {
             // given
-            List<Member> members = List.of(MASTER);
+            List<Member> members = List.of(master);
             RoomMembers roomMembers = new RoomMembers(members);
 
             // when & then
@@ -205,9 +203,9 @@ class MemberServiceTest extends BaseServiceTest {
         @Test
         void 해당_방에_있는_멤버를_모두_삭제한다() {
             // given
-            Room room = roomRepository.save(Room.createNewRoom());
-            Member master = memberRepository.save(PRIN.master(room));
-            Member common = memberRepository.save(KEOCHAN.common(room));
+            Room room = roomFixture.createNotStartedRoom();
+            Member master = memberFixture.createMaster(room);
+            Member common = memberFixture.createCommon(room);
 
             // when
             memberService.deleteMember(room);

@@ -10,13 +10,13 @@ import type { MutableSnapshot } from 'recoil';
 
 import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
 import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
-import QueryClientDefaultOptionProvider from '@/components/common/QueryClientDefaultOptionProvider/QueryClientDefaultOptionProvider';
 import Spinner from '@/components/common/Spinner/Spinner';
 import { MOCK_API_URL } from '@/constants/url';
 import ROOM_AND_MASTER from '@/mocks/data/roomAndMaster.json';
 import ROOM_AND_NOT_MASTER from '@/mocks/data/roomAndNotMaster.json';
 import { server } from '@/mocks/server';
 import ModalProvider from '@/providers/ModalProvider/ModalProvider';
+import QueryClientDefaultOptionProvider from '@/providers/QueryClientDefaultOptionProvider/QueryClientDefaultOptionProvider';
 import ToastProvider from '@/providers/ToastProvider/ToastProvider';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
