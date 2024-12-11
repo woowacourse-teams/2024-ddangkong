@@ -1,11 +1,8 @@
 name: FE Review Reminder for Discord
 
 on:
-  pull_request:
-    branches:
-      - develop
   schedule:
-    - cron: '0 2 * * 1-5' # 매주 월요일부터 금요일까지, 한국 시간 오전 11시에 실행
+    - cron: '10 1 * * 1-5' # 매주 월요일부터 금요일까지, 한국 시간 오전 10시 10분에 실행
   workflow_dispatch:
 
 jobs:
@@ -31,6 +28,8 @@ jobs:
               'novice0840': '포메',
               'rbgksqkr': '마루',
             };
+
+            const feReviewers = ['useon', 'novice0840', 'rbgksqkr']
 
             async function getReviews(owner, repo, prNumber) {
               // 특정 PR의 리뷰 상태 가져오기
@@ -59,7 +58,7 @@ jobs:
                   return {
                     ...pr,
                     urgency,
-                    dLabelName: dLabel?.name || 'D-unknown',
+                    dLabelName: dLabel?.name || 'D-3',
                     updatedAt: pr.updated_at,
                     createdAt: pr.created_at,
                   };
@@ -75,7 +74,7 @@ jobs:
               const messages = await Promise.all(
                 fePrs.map(async pr => {
                   const reviews = await getReviews(owner, repo, pr.number);
-                  const requestedReviewers = pr.requested_reviewers.map(r => r.login);
+                  const requestedReviewers = feReviewers.filter((reviewer) => reviewer !== pr.user.login) // PR 작성자 제외
 
                   // 리뷰 상태를 관리하는 Map 객체 생성
                   const reviewStates = new Map();
@@ -103,17 +102,23 @@ jobs:
 
                   // 리뷰를 시작하지 않은 리뷰어 추가
                   const notStartedReviewers = requestedReviewers.filter(
-                    reviewer => !reviewStates.has(reviewer) && reviewer !== pr.user.login // PR 작성자 제외
+                    reviewer => !reviewStates.has(reviewer)
                   );
+                  console.log(notStartedReviewers, '리뷰를 시작하지 않은 리뷰어')
+                  
                   const notStartedMentions = notStartedReviewers.map(reviewer => {
                     return `<@${discordMentions[reviewer]}>(X)`;
                   });
 
                   const reviewStatusMessage = [...reviewStatuses, ...notStartedMentions];
 
+                  console.log(reviewStates, '현재 리뷰 상태 확인');
+                  console.log(requestedReviewers, '요청된 리뷰어 확인');
                   const allReviewersApproved = requestedReviewers.every(
                     reviewer => reviewStates.get(reviewer) === 'APPROVED'
                   );
+                  console.log(allReviewersApproved, '모든 리뷰어가 어프루브 상태인가?')
+
                   const noPendingReviews = notStartedReviewers.length === 0;
 
                   // 모든 리뷰어가 APPROVED 상태이고 리뷰를 시작하지 않은 리뷰어가 없는 경우
@@ -129,17 +134,16 @@ jobs:
 
               // 최종 메시지 Discord에 전송
               const response = await fetch(process.env.DISCORD_WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}`,
-                  allowed_mentions: {
-                    parse: ["users"], // 멘션 가능한 사용자만 허용
-                  },
-                }),
-              });
-
-              console.log('Response status:', response.status);
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    content: `🍀 [FE] 리뷰가 필요한 PR 목록 🍀\n\n${messages.join('\n\n')}\n\n`,
+                    allowed_mentions: {
+                      parse: ["users"], // 멘션 가능한 사용자만 허용
+                    },
+                  }),
+                });
+                console.log('Response status:', response.status);
             } catch (error) {
               console.error('Error processing FE PR reminders:', error.message);
               throw error; // 워크플로우 실패 상태 반환
