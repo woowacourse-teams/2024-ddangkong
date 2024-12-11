@@ -33,7 +33,12 @@ const useVoteIsFinishedQuery = ({ contentId, enabled }: UseVoteIsFinishedQueryPr
     gcTime: 0,
   });
 
-  return { ...voteIsFinishedQuery, isFinished: voteIsFinishedQuery.data?.isFinished };
+  return {
+    ...voteIsFinishedQuery,
+    isFinished: voteIsFinishedQuery.data?.isFinished,
+    memberCount: voteIsFinishedQuery.data?.memberCount,
+    voteCount: voteIsFinishedQuery.data?.voteCount,
+  };
 };
 
 export default useVoteIsFinishedQuery;
