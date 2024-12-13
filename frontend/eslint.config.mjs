@@ -20,7 +20,7 @@ export default tseslint.config(
       jsxA11y.flatConfigs.recommended,
       ...pluginQuery.configs['flat/recommended'],
     ],
-    files: ['./src/**/*.ts', './src/**/*.tsx'],
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {
@@ -88,7 +88,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['./src/**/*stories*.{js,jsx,ts,tsx}'],
+    files: ['src/**/*stories*.{js,jsx,ts,tsx}'],
     extends: [...storybook.configs['flat/recommended']],
   },
 );
