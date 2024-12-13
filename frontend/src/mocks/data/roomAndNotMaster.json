@@ -1,8 +1,8 @@
 {
-  "roomId": 142,
+  "roomId": 1,
   "roomUuid": "bc950f33f12f467da159a263a905bb40",
   "member": {
-    "memberId": 217,
+    "memberId": 1234,
     "nickname": "땅콩",
     "isMaster": false
   }
