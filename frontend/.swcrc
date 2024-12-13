@@ -4,11 +4,15 @@
       "syntax": "typescript",
       "tsx": true
     },
-    "target": "esnext",
     "transform": {
       "react": {
-        "runtime": "automatic"
+        "runtime": "automatic",
+        "importSource": "@emotion/react"
       }
     }
+  },
+  "env": {
+    "targets": "> 1%, not dead",
+    "coreJs": "3.37"
   }
 }

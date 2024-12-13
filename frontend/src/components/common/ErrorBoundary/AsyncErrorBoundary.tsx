@@ -6,7 +6,7 @@ import DeferredComponent from '../DeferredComponent/DeferredComponent';
 import AsyncErrorFallback from '../ErrorFallback/AsyncErrorFallback/AsyncErrorFallback';
 import SpinnerErrorFallback from '../ErrorFallback/SpinnerErrorFallback/SpinnerErrorFallback';
 
-import { CustomError } from '@/utils/error';
+import { CustomError, UnhandledError } from '@/utils/error';
 
 interface AsyncErrorBoundaryProps {
   pendingFallback?: React.ReactNode;
@@ -25,7 +25,7 @@ const AsyncErrorBoundary = ({
         <AsyncErrorFallback error={error} resetError={resetError} />
       )}
       onError={(error) => {
-        if (error instanceof CustomError) {
+        if (error instanceof CustomError || error instanceof UnhandledError) {
           withScope((scope) => {
             scope.setLevel('warning');
             scope.setTag('api', 'internalServerError');

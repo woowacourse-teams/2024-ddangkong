@@ -26,6 +26,10 @@ public class BalanceContentFixture {
         return create(category, DEFAULT_NAME);
     }
 
+    public BalanceContent create() {
+        return create(Category.IF, DEFAULT_NAME);
+    }
+
     public List<BalanceContent> createContents(Category category, int count) {
         List<BalanceContent> balanceContents = new ArrayList<>();
         for (int i = 0; i < count; i++) {

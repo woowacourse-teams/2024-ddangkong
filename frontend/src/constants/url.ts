@@ -1,5 +1,3 @@
-import { getUserInfo } from '@/apis/room';
-
 const BASE_URL = process.env.API_BASE_URL;
 
 export const API_URL = {

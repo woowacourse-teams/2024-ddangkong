@@ -1,0 +1,3 @@
+export const SERVER_ERROR_STATUS = 500;
+export const NETWORK_ERROR_STATUS = 5001;
+export const UNHANDLED_ERROR_STATUS = 5002;

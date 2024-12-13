@@ -19,11 +19,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomSetting {
 
-    private static final int DEFAULT_TOTAL_ROUND = 5;
     private static final int MIN_TOTAL_ROUND = 3;
     private static final int MAX_TOTAL_ROUND = 10;
     private static final List<Integer> ALLOWED_TIME_LIMIT = List.of(10_000, 15_000, 30_000, 60_000);
+
+    private static final int DEFAULT_TOTAL_ROUND = 5;
     private static final int DEFAULT_TIME_LIMIT_MSEC = 10_000;
+    private static final Category DEFAULT_CATEGORY = Category.IF;
 
     @Column(nullable = false)
     private int totalRound;
@@ -31,12 +33,12 @@ public class RoomSetting {
     @Column(nullable = false)
     private int timeLimit;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20, columnDefinition = "VARCHAR(20)")
     private Category category;
 
     public static RoomSetting createNewRoomSetting() {
-        return new RoomSetting(DEFAULT_TOTAL_ROUND, DEFAULT_TIME_LIMIT_MSEC, Category.IF);
+        return new RoomSetting(DEFAULT_TOTAL_ROUND, DEFAULT_TIME_LIMIT_MSEC, DEFAULT_CATEGORY);
     }
 
     public RoomSetting(int totalRound, int timeLimit, Category category) {

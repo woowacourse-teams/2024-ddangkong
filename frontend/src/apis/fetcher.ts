@@ -1,4 +1,4 @@
-import { CustomError, NetworkError } from '@/utils/error';
+import { CustomError, NetworkError, UnhandledError } from '@/utils/error';
 
 interface RequestProps {
   url: string;
@@ -26,11 +26,15 @@ const fetcher = {
 
       return response;
     } catch (error) {
+      if (!navigator.onLine) {
+        throw new NetworkError();
+      }
+
       if (error instanceof CustomError) {
         throw error;
       }
 
-      throw new NetworkError();
+      throw new UnhandledError();
     }
   },
 

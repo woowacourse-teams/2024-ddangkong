@@ -65,19 +65,19 @@ export const TitleHeader = ({ title }: HeaderProps) => (
 
 // 3. 가운데 제목, 우측 상단 차지하는 헤더 : 게임 대기 화면
 export const RoomSettingHeader = ({ title }: HeaderProps) => {
-  const { show } = useModal();
   const isMaster = useIsMaster();
+  const { showModal } = useModal();
 
   const { handleExit } = useExit();
   const returnFocusRef = useRef(null);
   const focusRef = useFocus<HTMLElement>();
 
   const handleClickRoomSetting = () => {
-    show(RoomSettingModal, { returnFocusRef });
+    showModal(RoomSettingModal, { returnFocusRef });
   };
 
   const handleClickExit = () => {
-    show(AlertModal, { message: '정말로 나가시겠습니까?', onConfirm: handleExit });
+    showModal(AlertModal, { message: '정말로 나가시겠습니까?', onConfirm: handleExit });
   };
 
   return (

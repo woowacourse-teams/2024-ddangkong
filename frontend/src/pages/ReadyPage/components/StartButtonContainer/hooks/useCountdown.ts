@@ -17,7 +17,7 @@ const useCountdown = ({ isGameStart }: UseCountdownProps) => {
   };
 
   const goToGame = () => {
-    navigate(ROUTES.game(Number(roomId)));
+    navigate(ROUTES.game(Number(roomId)), { replace: true });
   };
 
   useEffect(() => {

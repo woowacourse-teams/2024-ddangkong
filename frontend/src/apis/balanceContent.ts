@@ -21,6 +21,8 @@ interface myGameStatusParams {
 
 interface VoteIsFinished {
   isFinished: boolean;
+  memberCount: number;
+  voteCount: number;
 }
 
 interface MatchingResultParams {
