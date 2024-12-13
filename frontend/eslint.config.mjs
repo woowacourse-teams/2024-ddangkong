@@ -39,7 +39,7 @@ export default tseslint.config({
     'react-refresh': reactRefresh,
   },
   rules: {
-    'ddangkong/enforce-foo-bar': 'error',
+    'ddangkong/enforce-is-boolean': 'error',
     ...reactHooks.configs.recommended.rules,
     'no-console': 'error',
     'react/react-in-jsx-scope': 'off',
@@ -81,6 +81,12 @@ export default tseslint.config({
       },
     ],
   },
+  overrides: [
+    {
+      files: ['**/*stories*.{js,jsx,ts,tsx}'],
+      extends: [...storybook.configs['flat/recommended']],
+    },
+  ],
   settings: {
     react: {
       version: 'detect',
