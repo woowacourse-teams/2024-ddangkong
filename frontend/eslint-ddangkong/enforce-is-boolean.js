@@ -6,16 +6,13 @@ module.exports = {
     docs: {
       description: "Enforce that variables starting with 'is' must be of type boolean.",
     },
-    fixable: null, // No automatic fix provided for this rule
+    fixable: null,
     schema: [],
   },
   create(context) {
     return {
-      // Perform action on every variable declarator
       VariableDeclarator(node) {
-        // Check if the variable name starts with 'is'
         if (node.id.type === 'Identifier' && node.id.name.startsWith('is')) {
-          // Check if the initializer exists and its type is boolean
           if ((node.init && node.init.type !== 'Literal') || typeof node.init.value !== 'boolean') {
             context.report({
               node,
