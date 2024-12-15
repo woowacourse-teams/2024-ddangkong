@@ -16,7 +16,7 @@ module.exports = {
         if (node.id.type === 'Identifier' && node.id.name.startsWith('is')) {
           // Check if the variable is initialized with an arrow function
           if (node.init && node.init.type === 'ArrowFunctionExpression') {
-            return; // Skip Arrow Functions to be handled in ArrowFunctionExpression
+            return; // Skip further checks for ArrowFunctionExpression
           }
 
           // Check if the variable is a boolean literal
@@ -40,8 +40,8 @@ module.exports = {
           for (const returnStatement of returnStatements) {
             if (
               returnStatement.argument &&
-              (returnStatement.argument.type !== 'Literal' ||
-                typeof returnStatement.argument.value !== 'boolean')
+              returnStatement.argument.type !== 'Literal' &&
+              returnStatement.argument.type !== 'BinaryExpression'
             ) {
               context.report({
                 node: returnStatement,
@@ -67,7 +67,8 @@ module.exports = {
           } else if (
             node.body.type !== 'Literal' &&
             node.body.type !== 'Identifier' &&
-            node.body.type !== 'BinaryExpression'
+            node.body.type !== 'BinaryExpression' &&
+            node.body.type !== 'LogicalExpression'
           ) {
             context.report({
               node: node.body,
