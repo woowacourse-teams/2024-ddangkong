@@ -12,6 +12,9 @@ import ddangkong from './eslint-ddangkong/eslint-plugin-ddangkong.js';
 
 export default tseslint.config(
   {
+    ignores: ['public/'],
+  },
+  {
     extends: [
       eslint.configs.recommended,
       tseslint.configs.recommended,

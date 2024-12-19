@@ -20,14 +20,14 @@ import {
 import CloseIcon from '@/assets/images/closeIcon.png';
 import useFocus from '@/hooks/useFocus';
 
-export interface ModalProps
-  extends React.PropsWithChildren<{
-    isOpen: boolean;
-    onClose: () => void;
-    position?: 'top' | 'bottom' | 'center';
-    style?: React.CSSProperties;
-    returnFocusRef?: RefObject<HTMLElement>;
-  }> {}
+export interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  position?: 'top' | 'bottom' | 'center';
+  style?: React.CSSProperties;
+  returnFocusRef?: RefObject<HTMLElement>;
+  children?: React.ReactNode;
+}
 
 const Modal = ({
   children,
@@ -48,12 +48,14 @@ const Modal = ({
   };
 
   useEffect(() => {
+    const currentRef = returnFocusRef?.current; // ref를 지역 변수에 저장
+
     return () => {
-      if (returnFocusRef?.current) {
-        returnFocusRef.current.focus();
+      if (currentRef) {
+        currentRef.focus();
       }
     };
-  }, [returnFocusRef?.current]);
+  }, [returnFocusRef]);
 
   if (!isOpen) return null;
 
@@ -161,15 +163,15 @@ interface ModalContentProps extends React.PropsWithChildren<HTMLAttributes<HTMLE
   fontSize?: string;
 }
 
-const ModalContent = ({ children, fontSize, ...restProps }: ModalContentProps) => {
+const ModalContent = ({ children, fontSize = '1.4rem', ...restProps }: ModalContentProps) => {
   return (
-    <section css={modalContentLayout({ fontSize: '1.4rem' })} {...restProps}>
+    <section css={modalContentLayout({ fontSize })} {...restProps}>
       {children}
     </section>
   );
 };
 
-interface ModalInputProps extends HTMLAttributes<HTMLElement> {}
+type ModalInputProps = HTMLAttributes<HTMLElement>;
 
 const ModalInput = ({ ...restProps }: ModalInputProps) => {
   return <input css={modalInputLayout} {...restProps} />;
