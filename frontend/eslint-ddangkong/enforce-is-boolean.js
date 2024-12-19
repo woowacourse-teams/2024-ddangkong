@@ -1,81 +1,52 @@
-// enforce-is-boolean.js
-
 module.exports = {
   meta: {
     type: 'problem',
     docs: {
       description:
-        "Enforce that variables starting with 'is' must be of type boolean, and functions starting with 'is' must return a boolean value.",
+        'boolean 값 또는 boolean을 반환하는 함수는 변수명이 반드시 "is"로 시작해야 합니다.',
+      category: 'Stylistic Issues',
+      recommended: true,
     },
-    fixable: null,
-    schema: [],
+    schema: [], // 옵션 없음
   },
   create(context) {
+    function isBooleanReturningFunction(node) {
+      // 화살표 함수 또는 함수 표현식에서 boolean 반환 여부 확인
+      if (node.type === 'ArrowFunctionExpression' || node.type === 'FunctionExpression') {
+        if (
+          node.body.type === 'Literal' &&
+          typeof node.body.value === 'boolean' // true/false 리터럴 반환
+        ) {
+          return true;
+        }
+        if (
+          node.body.type === 'BinaryExpression' &&
+          ['==', '===', '!=', '!==', '>', '>=', '<', '<='].includes(node.body.operator) // BinaryExpression 반환
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     return {
       VariableDeclarator(node) {
-        if (node.id.type === 'Identifier' && node.id.name.startsWith('is')) {
-          // Check if the variable is initialized with an arrow function
-          if (node.init && node.init.type === 'ArrowFunctionExpression') {
-            return; // Skip further checks for ArrowFunctionExpression
-          }
+        const init = node.init;
+        if (!init) return; // 초기화되지 않은 변수는 건너뜀
 
-          // Check if the variable is a boolean literal
-          if ((node.init && node.init.type !== 'Literal') || typeof node.init.value !== 'boolean') {
+        if (
+          (init.type === 'Literal' && typeof init.value === 'boolean') || // true/false 리터럴 확인
+          (init.type === 'BinaryExpression' &&
+            ['==', '===', '!=', '!==', '>', '>=', '<', '<='].includes(init.operator)) || // BinaryExpression 결과가 boolean인지 확인
+          isBooleanReturningFunction(init) // boolean을 반환하는 함수 확인
+        ) {
+          const variableName = node.id.name;
+
+          // 변수명이 "is"로 시작하지 않는 경우 에러 발생
+          if (!variableName.startsWith('is')) {
             context.report({
               node,
-              message: "Variable '{{ variableName }}' must be initialized with a boolean value.",
-              data: {
-                variableName: node.id.name,
-              },
-            });
-          }
-        }
-      },
-      FunctionDeclaration(node) {
-        if (node.id && node.id.name.startsWith('is')) {
-          const returnStatements = node.body.body.filter(
-            (statement) => statement.type === 'ReturnStatement',
-          );
-
-          for (const returnStatement of returnStatements) {
-            if (
-              returnStatement.argument &&
-              returnStatement.argument.type !== 'Literal' &&
-              returnStatement.argument.type !== 'BinaryExpression'
-            ) {
-              context.report({
-                node: returnStatement,
-                message: "Function '{{ functionName }}' must return a boolean value.",
-                data: {
-                  functionName: node.id.name,
-                },
-              });
-            }
-          }
-        }
-      },
-      ArrowFunctionExpression(node) {
-        if (node.parent.type === 'VariableDeclarator' && node.parent.id.name.startsWith('is')) {
-          if (node.body.type === 'Literal' && typeof node.body.value !== 'boolean') {
-            context.report({
-              node: node.body,
-              message: "Arrow function '{{ functionName }}' must return a boolean value.",
-              data: {
-                functionName: node.parent.id.name,
-              },
-            });
-          } else if (
-            node.body.type !== 'Literal' &&
-            node.body.type !== 'Identifier' &&
-            node.body.type !== 'BinaryExpression' &&
-            node.body.type !== 'LogicalExpression'
-          ) {
-            context.report({
-              node: node.body,
-              message: "Arrow function '{{ functionName }}' must return a boolean value.",
-              data: {
-                functionName: node.parent.id.name,
-              },
+              message: `변수명: "${variableName}". boolean 값 또는 boolean을 반환하는 함수는 "is"로 시작해야 합니다.`,
             });
           }
         }
