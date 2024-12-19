@@ -16,6 +16,7 @@ export default tseslint.config(
   },
   {
     extends: [
+      ddangkong.configs.recommended,
       eslint.configs.recommended,
       tseslint.configs.recommended,
       importPlugin.flatConfigs.recommended,
@@ -37,12 +38,10 @@ export default tseslint.config(
 
     plugins: {
       react,
-      ddangkong,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
     rules: {
-      'ddangkong/enforce-is-boolean': 'error',
       ...reactHooks.configs.recommended.rules,
       'no-console': 'error',
       'react/react-in-jsx-scope': 'off',

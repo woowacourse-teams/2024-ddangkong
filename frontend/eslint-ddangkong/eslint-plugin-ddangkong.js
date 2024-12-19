@@ -1,5 +1,22 @@
-// eslint-plugin-ddangkong.js
-
 const enforceIsBoolean = require('./enforce-is-boolean');
-const plugin = { rules: { 'enforce-is-boolean': enforceIsBoolean } };
+
+const plugin = {
+  configs: {
+    recommended: [
+      {
+        plugins: {
+          ddangkong: {
+            rules: {
+              'enforce-is-boolean': enforceIsBoolean,
+            },
+          },
+        },
+        rules: {
+          'ddangkong/enforce-is-boolean': 'error',
+        },
+      },
+    ],
+  },
+};
+
 module.exports = plugin;
