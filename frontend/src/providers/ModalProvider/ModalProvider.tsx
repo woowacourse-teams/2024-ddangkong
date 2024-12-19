@@ -1,4 +1,6 @@
-import { createContext, PropsWithChildren, RefObject, useMemo, useState } from 'react';
+import { PropsWithChildren, RefObject, useMemo, useState } from 'react';
+
+import ModalContext from './ModalContext';
 
 interface ModalProps {
   title?: string;
@@ -16,13 +18,6 @@ interface Modal extends ModalProps {
   Component: React.FC<ModalState> | null;
   isOpen: boolean;
 }
-
-interface ModalDispatchContextProps {
-  showModal: (Component: React.FC<ModalState> | null, props?: ModalProps) => void;
-  close: () => void;
-}
-
-export const ModalDispatchContext = createContext<ModalDispatchContextProps | null>(null);
 
 const ModalProvider = ({ children }: PropsWithChildren) => {
   const [modal, setModal] = useState<Modal>({
@@ -55,10 +50,10 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
   const dispatch = useMemo(() => ({ showModal, close }), []);
 
   return (
-    <ModalDispatchContext.Provider value={dispatch}>
+    <ModalContext.Provider value={dispatch}>
       {children}
       {modal.isOpen && modal.Component && <modal.Component onClose={close} {...modal} />}
-    </ModalDispatchContext.Provider>
+    </ModalContext.Provider>
   );
 };
 
