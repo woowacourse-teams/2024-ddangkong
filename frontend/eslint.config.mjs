@@ -90,5 +90,8 @@ export default tseslint.config(
   {
     files: ['src/**/*stories*.{js,jsx,ts,tsx}'],
     extends: [...storybook.configs['flat/recommended']],
+    rules: {
+      'storybook/prefer-pascal-case': 'off',
+    },
   },
 );
