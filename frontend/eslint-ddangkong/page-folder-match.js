@@ -5,7 +5,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description: '페이지 폴더에 해당하는 파일이 존재하는지 확인합니다.',
+      description:
+        'pages 폴더 안에는 Page로 끝나는 폴더와 해당 폴더명과 일치하는 tsx 파일이 있어야 한다.',
     },
     schema: [],
   },
@@ -21,10 +22,10 @@ module.exports = {
           const expectedFileName = `${dirName}.tsx`;
           const expectedFilePath = path.join(parentDir, dirName, expectedFileName);
 
-          if (!fs.existsSync(expectedFilePath)) {
+          if (!fs.existsSync(expectedFilePath) || !parentDir.endsWith('pages')) {
             context.report({
               node,
-              message: `pages 폴더 안에는 "${dirName}" 폴더에 해당하는 "${expectedFileName}" 파일이 있어야 합니다.`,
+              message: `pages 폴더 안에 "${dirName}" 폴더와 이에 해당하는 "${expectedFileName}" 파일이 있어야 합니다.`,
             });
           }
         }
