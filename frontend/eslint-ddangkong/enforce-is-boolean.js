@@ -4,13 +4,14 @@ module.exports = {
     docs: {
       description:
         'boolean 값 또는 boolean을 반환하는 함수는 변수명이 반드시 "is"로 시작해야 합니다.',
-      category: 'Stylistic Issues',
       recommended: true,
     },
-    schema: [], // 옵션 없음
+    messages: {
+      isPrefix: `변수명: "{{name}}". boolean 값 또는 boolean을 반환하는 함수는 "is"로 시작해야 합니다.`,
+    },
   },
   create(context) {
-    function isBooleanReturningFunction(node) {
+    const isBooleanReturningFunction = (node) => {
       // 화살표 함수 또는 함수 표현식에서 boolean 반환 여부 확인
       if (node.type === 'ArrowFunctionExpression' || node.type === 'FunctionExpression') {
         if (
@@ -27,7 +28,7 @@ module.exports = {
         }
       }
       return false;
-    }
+    };
 
     return {
       VariableDeclarator(node) {
@@ -46,7 +47,10 @@ module.exports = {
           if (!variableName.startsWith('is')) {
             context.report({
               node,
-              message: `변수명: "${variableName}". boolean 값 또는 boolean을 반환하는 함수는 "is"로 시작해야 합니다.`,
+              messageId: 'isPrefix',
+              data: {
+                name: variableName,
+              },
             });
           }
         }

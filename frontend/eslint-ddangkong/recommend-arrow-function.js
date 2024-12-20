@@ -3,6 +3,7 @@ module.exports = {
     type: 'suggestion',
     docs: {
       description: '함수를 선언할 때는 화살표 함수의 사용을 권장합니다.',
+      recommended: true,
     },
     messages: {
       noFunctionKeyword: '{{name}} 함수를 선언할 때는 화살표 함수의 사용을 권장합니다.',

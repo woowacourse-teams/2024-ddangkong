@@ -4,12 +4,14 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description: ` 변수에 언더바(_)를 사용하는 경우 "대문자 + 언더바(_)"로 작성해야 합니다
-          변수명이 소문자로 시작하는 경우 특수문자를 사용하지 않고 camelCase를 사용해야 합니다
+      description: `변수명 규칙 검사 
         `,
+      recommended: true,
     },
-    fixable: null,
-    schema: [],
+    message: {
+      uppercaseSnakeCase: `변수명: "{{name}}". 변수에 언더바(_)를 사용하는 경우 "대문자 + 언더바(_)"로 작성해야 합니다`,
+      lowercaseCamelCase: `변수명: "{{name}}". 변수명이 소문자로 시작하는 경우 특수문자를 사용하지 않고 camelCase를 사용해야 합니다`,
+    },
   },
   create(context) {
     return {
@@ -25,7 +27,7 @@ module.exports = {
         if (hasUnderscore && hasLowercase) {
           context.report({
             node,
-            message: `변수에 언더바(_)를 사용하는 경우 "대문자 + 언더바(_)"로 작성해야 합니다`,
+            messageId: 'uppercaseSnakeCase',
             data: {
               name,
             },
@@ -33,8 +35,7 @@ module.exports = {
         } else if (startsWithLowercase && hasSpecialCharacter) {
           context.report({
             node,
-            message:
-              '변수명이 소문자로 시작하는 경우 특수문자를 사용하지 않고 camelCase를 사용해야 합니다',
+            messageId: 'lowercaseCamelCase',
             data: {
               name,
             },
