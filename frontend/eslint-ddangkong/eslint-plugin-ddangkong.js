@@ -1,4 +1,5 @@
 const enforceIsBoolean = require('./enforce-is-boolean');
+const variableNaming = require('./variable-naming');
 
 const plugin = {
   configs: {
@@ -8,11 +9,13 @@ const plugin = {
           ddangkong: {
             rules: {
               'enforce-is-boolean': enforceIsBoolean,
+              'variable-naming': variableNaming,
             },
           },
         },
         rules: {
           'ddangkong/enforce-is-boolean': 'error',
+          'ddangkong/variable-naming': 'error',
         },
       },
     ],
