@@ -9,12 +9,12 @@ import {
 import ErrorDdangkong from '@/assets/images/errorDdangkong.webp';
 import { CustomError, UnhandledError } from '@/utils/error';
 
-interface AsyncErrorFallback {
+interface AsyncErrorFallbackProps {
   error: unknown;
   resetError: () => void;
 }
 
-const AsyncErrorFallback = ({ error, resetError }: AsyncErrorFallback) => {
+const AsyncErrorFallback = ({ error, resetError }: AsyncErrorFallbackProps) => {
   const goToHome = () => {
     window.location.href = '/';
   };

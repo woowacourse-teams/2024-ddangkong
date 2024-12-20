@@ -3,6 +3,7 @@ const variableNaming = require('./variable-naming');
 const pageFolderMatch = require('./page-folder-match');
 const componentFolderMatch = require('./component-folder-match');
 const recommendArrowFunction = require('./recommend-arrow-function');
+const componentPropsInterface = require('./component-props-interface');
 
 const plugin = {
   configs: {
@@ -16,6 +17,7 @@ const plugin = {
               'page-folder-match': pageFolderMatch,
               'component-folder-match': componentFolderMatch,
               'recommend-arrow-function': recommendArrowFunction,
+              'component-props-interface': componentPropsInterface,
             },
           },
         },
@@ -24,6 +26,7 @@ const plugin = {
           'ddangkong/variable-naming': 'error',
           'ddangkong/page-folder-match': 'error',
           'ddangkong/component-folder-match': 'error',
+          'ddangkong/component-props-interface': 'error',
           'ddangkong/recommend-arrow-function': 'warn',
         },
       },

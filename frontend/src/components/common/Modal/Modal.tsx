@@ -48,7 +48,7 @@ const Modal = ({
   };
 
   useEffect(() => {
-    const currentRef = returnFocusRef?.current; // ref를 지역 변수에 저장
+    const currentRef = returnFocusRef?.current;
 
     return () => {
       if (currentRef) {
