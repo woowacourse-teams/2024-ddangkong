@@ -2,12 +2,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
 import { startGame } from '@/apis/room';
-import useGetUserInfo from '@/hooks/useGetUserInfo';
+import useIsMaster from '@/hooks/useIsMaster';
 
 const useGameStart = () => {
-  const {
-    member: { isMaster },
-  } = useGetUserInfo();
+  const isMaster = useIsMaster();
   const { roomId } = useParams();
 
   const startGameMutation = useMutation({

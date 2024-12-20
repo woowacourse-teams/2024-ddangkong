@@ -26,13 +26,10 @@ import ddangkong.facade.room.dto.RoomSettingRequest;
 import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
-import ddangkong.support.annotation.FixedClock;
-import ddangkong.support.fixture.EntityFixtureUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -523,7 +520,6 @@ class RoomFacadeTest extends BaseServiceTest {
     }
 
     @Nested
-    @FixedClock(date = "2024-07-18", time = "20:00:00")
     class 변경_시간이_특정_시각_이전_방_삭제 {
 
         @Test
@@ -531,32 +527,46 @@ class RoomFacadeTest extends BaseServiceTest {
             // given
             roomFixture.createNotStartedRoom();
             roomFixture.createNotStartedRoom();
-
-            LocalDateTime standardModified = LocalDateTime.of(2024, 7, 18, 20, 5, 0);
-            long countOfExpectedRestRoom = 2;
+            LocalDateTime afterModifiedAt = LocalDateTime.now();
 
             // when
-            roomFacade.migrateExpiredRooms(standardModified);
+            roomFacade.migrateExpiredRooms(afterModifiedAt);
 
             // then
             long countOfRoom = roomRepository.count();
-            assertThat(countOfRoom).isEqualTo(countOfExpectedRestRoom);
+            assertThat(countOfRoom).isZero();
         }
 
         @Test
-        @Disabled
-            // TODO @LastModifiedDate 비활성화 후 테스트
+        void 변경이_특정_시각_이후에_일어난_방은_지우지_않는다() {
+            // given
+            LocalDateTime beforeModifiedAt = LocalDateTime.now();
+            roomFixture.createNotStartedRoom();
+            roomFixture.createNotStartedRoom();
+            long expectedCount = 2;
+
+            // when
+            roomFacade.migrateExpiredRooms(beforeModifiedAt);
+
+            // then
+            long countOfRoom = roomRepository.count();
+            assertThat(countOfRoom).isEqualTo(expectedCount);
+        }
+
+        @Test
         void 해당_방과_연관된_모든_정보를_삭제할_수_있다() {
             // given
-            LocalDateTime standardModified = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
-            Room room = getSavedRoom(standardModified.minusSeconds(1));
+            BalanceContent balanceContent = balanceContentFixture.create();
+            BalanceOption firstBalanceOption = balanceOptionFixture.create(balanceContent);
+            BalanceOption secondBalanceOption = balanceOptionFixture.create(balanceContent);
+
+            Room room = roomFixture.createNotStartedRoom();
             Member master = memberFixture.createMaster(room);
             Member common = memberFixture.createCommon(room);
-
-            BalanceContent balanceContent = balanceContentRepository.findById(1L).get();
-            RoomContent roomContent = getSavedRoomContent(room, balanceContent);
-            RoomBalanceVote roomVote = getSavedRoomBalanceVote(master, balanceContent);
-            long countOfTotalVotes = totalBalanceVoteRepository.count();
+            List<RoomContent> roomContent = roomContentFixture.initRoomContents(room);
+            RoomBalanceVote roomBalanceVote1 = roomBalanceVoteFixture.create(master, firstBalanceOption);
+            RoomBalanceVote roomBalanceVote2 = roomBalanceVoteFixture.create(common, secondBalanceOption);
+            LocalDateTime standardModified = LocalDateTime.now();
 
             // when
             roomFacade.migrateExpiredRooms(standardModified);
@@ -564,33 +574,16 @@ class RoomFacadeTest extends BaseServiceTest {
             // then
             Optional<Room> deletedRoom = roomRepository.findById(room.getId());
             Optional<Member> deletedMember = memberRepository.findById(common.getId());
-            Optional<RoomContent> deletedRoomContent = roomContentRepository.findById(roomContent.getId());
-            Optional<RoomBalanceVote> deletedRoomVote = roomBalanceVoteRepository.findById(roomVote.getId());
+            Optional<RoomContent> deletedRoomContent = roomContentRepository.findById(roomContent.get(0).getId());
+            Optional<RoomBalanceVote> deletedRoomVote = roomBalanceVoteRepository.findById(roomBalanceVote1.getId());
             long afterCountOfTotalVotes = totalBalanceVoteRepository.count();
             assertAll(
                     () -> assertThat(deletedRoom).isEmpty(),
                     () -> assertThat(deletedMember).isEmpty(),
                     () -> assertThat(deletedRoomContent).isEmpty(),
                     () -> assertThat(deletedRoomVote).isEmpty(),
-                    () -> assertThat(afterCountOfTotalVotes).isEqualTo(countOfTotalVotes + 1)
+                    () -> assertThat(afterCountOfTotalVotes).isEqualTo(2)
             );
-        }
-
-        private Room getSavedRoom(LocalDateTime lastModifiedAt) {
-            Room room = Room.createNewRoom();
-            EntityFixtureUtils.setLastModifiedAt(room, lastModifiedAt);
-            return roomRepository.save(room);
-        }
-
-        private RoomBalanceVote getSavedRoomBalanceVote(Member member, BalanceContent balanceContent) {
-            BalanceOption balanceOption = balanceOptionRepository.findAllByBalanceContent(balanceContent).get(0);
-            RoomBalanceVote roomBalanceVote = new RoomBalanceVote(member, balanceOption);
-            return roomBalanceVoteRepository.save(roomBalanceVote);
-        }
-
-        private RoomContent getSavedRoomContent(Room room, BalanceContent content) {
-            RoomContent roomContent = RoomContent.newRoomContent(room, content, 1);
-            return roomContentRepository.save(roomContent);
         }
     }
 

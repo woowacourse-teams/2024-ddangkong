@@ -12,15 +12,13 @@ import {
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import RoomSettingModal from '@/components/RoomSettingModal/RoomSettingModal';
 import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
-import useGetUserInfo from '@/hooks/useGetUserInfo';
+import useIsMaster from '@/hooks/useIsMaster';
 import useModal from '@/hooks/useModal';
 
 const RoomSetting = () => {
   const returnFocusRef = useRef<HTMLButtonElement>(null);
   const { roomSetting } = useGetRoomInfo();
-  const {
-    member: { isMaster },
-  } = useGetUserInfo();
+  const isMaster = useIsMaster();
   const { showModal } = useModal();
 
   const screenReaderRoomSetting = `

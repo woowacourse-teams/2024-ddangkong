@@ -61,7 +61,7 @@ const opacity = {
   invisible: 0,
   disabled: 0.6,
   default: 1,
-};
+} as const;
 
 export const Theme = {
   color,

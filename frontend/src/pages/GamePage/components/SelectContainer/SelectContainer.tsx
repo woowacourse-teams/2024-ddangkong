@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 
+import GameVoteStatusContainer from './GameVoteStatusContainer/GameVoteStatusContainer';
 import useSelectOption from './hooks/useSelectOption';
 import { selectContainerLayout, selectSection } from './SelectContainer.styled';
 import SelectOption from './SelectOption/SelectOption';
@@ -10,7 +11,7 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
 const SelectContainer = () => {
   const { roomId } = useParams();
-  const { balanceContent } = useBalanceContentQuery(Number(roomId));
+  const { balanceContent, isFetching } = useBalanceContentQuery(Number(roomId));
   const { selectedOption, handleClickOption, completeSelection, cancelSelection } =
     useSelectOption();
 
@@ -34,6 +35,7 @@ const SelectContainer = () => {
           handleClickOption={handleClickOption}
         />
       </section>
+      <GameVoteStatusContainer contentId={balanceContent.contentId} isFetching={isFetching} />
       <SelectButton
         contentId={balanceContent.contentId}
         selectedOption={selectedOption}

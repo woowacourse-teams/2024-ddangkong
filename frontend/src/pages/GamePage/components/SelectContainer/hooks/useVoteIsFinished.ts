@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import useRoundIsFinishedQuery from './useVoteIsFinishedQuery';
+import useVoteIsFinishedQuery from './useVoteIsFinishedQuery';
 
 import { ROUTES } from '@/constants/routes';
 
@@ -13,7 +13,7 @@ interface UseRoundIsFinishedProps {
 const useVoteIsFinished = ({ contentId, isFetching }: UseRoundIsFinishedProps) => {
   const navigate = useNavigate();
   const { roomId } = useParams();
-  const { isFinished } = useRoundIsFinishedQuery({
+  const { isFinished, memberCount, voteCount, isPending } = useVoteIsFinishedQuery({
     contentId,
     enabled: !!contentId && !isFetching,
   });
@@ -24,7 +24,7 @@ const useVoteIsFinished = ({ contentId, isFetching }: UseRoundIsFinishedProps) =
     }
   }, [isFinished, navigate, roomId, isFetching]);
 
-  return { isFinished };
+  return { memberCount, voteCount, isPending };
 };
 
 export default useVoteIsFinished;
