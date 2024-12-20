@@ -29,11 +29,6 @@ module.exports = {
           return;
         }
 
-        // 파일의 모든 인터페이스 찾기
-        const interfaces = sourceCode.ast.body.filter(
-          (item) => item.type === 'TSInterfaceDeclaration',
-        );
-
         // 컴포넌트 이름으로 선언된 변수 찾기
         const matchingDeclaration = sourceCode.ast.body.find(
           (item) =>
