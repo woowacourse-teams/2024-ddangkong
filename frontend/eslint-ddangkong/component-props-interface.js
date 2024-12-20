@@ -2,14 +2,11 @@ module.exports = {
   meta: {
     type: 'suggestion', // 규칙의 성격
     docs: {
-      description:
-        "Ensure component props interface names follow the 'ComponentNameProps' convention",
-      category: 'Best Practices',
-      recommended: false,
+      description: '컴포넌트의 props 타입은 interface로 나타내며 이름은 컴포넌트 명 + props이다.',
+      recommended: true,
     },
-    schema: [], // 옵션 없음
     messages: {
-      invalidPropsName: "The props interface '{{actual}}' should be named '{{expected}}'.",
+      invalidPropsName: "The props interface의'{{actual}}' 이름을 '{{expected}}'로 변경해주세요.",
     },
   },
 
