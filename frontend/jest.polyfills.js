@@ -1,34 +1,60 @@
-// jest.polyfills.js
 /**
  * @note The block below contains polyfills for Node.js globals
  * required for Jest to function when running JSDOM tests.
- * These HAVE to be require's and HAVE to be in this exact
- * order, since "undici" depends on the "TextEncoder" global API.
- *
- * Consider migrating to a more modern test runner if
- * you don't want to deal with this.
  */
 
 const { TextDecoder, TextEncoder } = require('node:util');
 const { ReadableStream, TransformStream } = require('node:stream/web');
 
-Object.defineProperties(globalThis, {
-  TextDecoder: { value: TextDecoder },
-  TextEncoder: { value: TextEncoder },
-  ReadableStream: { value: ReadableStream },
-  TransformStream: { value: TransformStream },
-});
+if (!globalThis.TextDecoder) {
+  globalThis.TextDecoder = TextDecoder;
+}
+if (!globalThis.TextEncoder) {
+  globalThis.TextEncoder = TextEncoder;
+}
+if (!globalThis.ReadableStream) {
+  globalThis.ReadableStream = ReadableStream;
+}
+if (!globalThis.TransformStream) {
+  globalThis.TransformStream = TransformStream;
+}
 
 const { Blob, File } = require('node:buffer');
-
 const { fetch, Headers, FormData, Request, Response } = require('undici');
 
-Object.defineProperties(globalThis, {
-  fetch: { value: fetch, writable: true },
-  Blob: { value: Blob },
-  File: { value: File },
-  Headers: { value: Headers },
-  FormData: { value: FormData },
-  Request: { value: Request },
-  Response: { value: Response },
-});
+if (!globalThis.fetch) {
+  globalThis.fetch = fetch;
+}
+if (!globalThis.Blob) {
+  globalThis.Blob = Blob;
+}
+if (!globalThis.File) {
+  globalThis.File = File;
+}
+if (!globalThis.Headers) {
+  globalThis.Headers = Headers;
+}
+if (!globalThis.FormData) {
+  globalThis.FormData = FormData;
+}
+if (!globalThis.Request) {
+  globalThis.Request = Request;
+}
+if (!globalThis.Response) {
+  globalThis.Response = Response;
+}
+
+if (!globalThis.BroadcastChannel) {
+  globalThis.BroadcastChannel = class {
+    constructor(name) {
+      this.name = name;
+      this.onmessage = null;
+    }
+    postMessage(message) {
+      if (this.onmessage) {
+        this.onmessage({ data: message });
+      }
+    }
+    close() {}
+  };
+}

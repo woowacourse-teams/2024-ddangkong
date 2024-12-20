@@ -21,7 +21,9 @@ const AlertModal = ({
   returnFocusRef,
 }: AlertModalProps) => {
   const handleClick = () => {
-    onConfirm && onConfirm();
+    if (onConfirm) {
+      onConfirm();
+    }
     onClose();
   };
 

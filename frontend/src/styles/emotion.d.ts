@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import '@emotion/react';
 import { Theme } from './Theme';
 

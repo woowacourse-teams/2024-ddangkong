@@ -16,7 +16,7 @@ const useGetUserInfo = (): RoomAndMember => {
     staleTime: USER_INFO_STALE_TIME,
   });
 
-  if (Number(roomId) !== data?.roomId) {
+  if (roomId && data?.roomId && Number(roomId) !== data?.roomId) {
     navigate('/', { replace: true });
   }
 

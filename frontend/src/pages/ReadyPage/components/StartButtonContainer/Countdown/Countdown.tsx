@@ -26,7 +26,7 @@ const Countdown = ({ goToGame }: CountdownProps) => {
       clearInterval(timeout.current);
       goToGame();
     }
-  }, [count]);
+  }, [count, goToGame]);
 
   useEffect(() => {
     timeout.current = setInterval(() => {

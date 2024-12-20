@@ -26,7 +26,7 @@ const useMyGameStatus = ({ roomId }: UseMyGameStatusProps) => {
     if (isRoundFinished) {
       navigate(ROUTES.game(Number(roomId)));
     }
-  }, [isRoundFinished, isGameFinished]);
+  }, [isRoundFinished, isGameFinished, navigate, roomId]);
 };
 
 export default useMyGameStatus;
