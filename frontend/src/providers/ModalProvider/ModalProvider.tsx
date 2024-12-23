@@ -1,6 +1,6 @@
 import { PropsWithChildren, RefObject, useMemo, useState } from 'react';
 
-import ModalContext from './ModalContext';
+import ModalContext from '@/contexts/ModalContext';
 
 interface ModalProps {
   title?: string;
