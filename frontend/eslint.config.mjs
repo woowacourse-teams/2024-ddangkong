@@ -8,6 +8,7 @@ import globals from 'globals';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import storybook from 'eslint-plugin-storybook';
 import pluginQuery from '@tanstack/eslint-plugin-query';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import ddangkong from './eslint-ddangkong/eslint-plugin-ddangkong.js';
 
 export default tseslint.config(
@@ -17,6 +18,7 @@ export default tseslint.config(
   {
     extends: [
       ddangkong.configs.recommended,
+      eslintPluginPrettierRecommended,
       eslint.configs.recommended,
       tseslint.configs.recommended,
       importPlugin.flatConfigs.recommended,
