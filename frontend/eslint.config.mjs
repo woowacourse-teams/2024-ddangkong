@@ -9,7 +9,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import storybook from 'eslint-plugin-storybook';
 import pluginQuery from '@tanstack/eslint-plugin-query';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import ddangkong from './eslint-ddangkong/eslint-plugin-ddangkong.js';
+import ddangkong from './eslint-plugin-ddangkong/index.js';
 
 export default tseslint.config(
   {
