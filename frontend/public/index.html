@@ -97,9 +97,11 @@
     function gtag() {
       dataLayer.push(arguments);
     }
-    gtag('js', new Date());
 
-    gtag('config', 'G-3BFVVPQT0Z');
+    if (process.env.NODE_ENV == 'production') {
+      gtag('js', new Date());
+      gtag('config', 'G-3BFVVPQT0Z');
+    }
   </script>
 
   <body>
