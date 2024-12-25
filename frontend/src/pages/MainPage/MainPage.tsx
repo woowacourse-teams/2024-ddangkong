@@ -11,9 +11,12 @@ import {
 
 import Ddangkong from '@/assets/images/ddangkong.webp';
 import Button from '@/components/common/Button/Button';
+import useGAPageTimeSpent from '@/lib/googleAnalytics/hooks/useGAPageTimeSpent';
 
 const MainPage = () => {
   const { handleRoomCreate } = useCreateRoom();
+
+  useGAPageTimeSpent('메인 페이지');
 
   return (
     <div css={mainPageLayout}>
