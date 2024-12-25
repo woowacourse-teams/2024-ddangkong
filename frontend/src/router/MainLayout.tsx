@@ -4,13 +4,11 @@ import { Outlet } from 'react-router-dom';
 
 import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
 import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
+import useGAInitialize from '@/lib/googleAnalytics/hooks/useGAInitialize';
 import ModalProvider from '@/providers/ModalProvider/ModalProvider';
 
 const MainLayout = () => {
-  useEffect(() => {
-    ReactGA.initialize('G-3BFVVPQT0Z');
-    ReactGA.send({ hitType: 'pageview', page: '/my-path', title: 'Custom Title' });
-  });
+  useGAInitialize();
 
   return (
     <RootErrorBoundary>
