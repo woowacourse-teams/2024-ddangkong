@@ -2,8 +2,9 @@ import ReactGA from 'react-ga4';
 
 export const collectGameMemberNumber = (gameMemberNumber: number) => {
   ReactGA.event({
-    category: 'game',
-    action: 'collect_game_member_number',
+    category: 'User Engagement',
+    action: 'game_member_number',
+    label: '게임 참여 인원 수',
     value: gameMemberNumber,
   });
 };

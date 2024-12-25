@@ -21,6 +21,7 @@ export const 클릭되지_않은_옵션: Story = {
       id: 0,
       isVoted: false,
     },
+    position: 'left',
   },
 };
 
@@ -31,6 +32,7 @@ export const 클릭된_옵션: Story = {
       id: 2,
       isVoted: false,
     },
+    position: 'left',
   },
 };
 
@@ -41,5 +43,6 @@ export const 선택_완료된_옵션: Story = {
       id: 2,
       isVoted: true,
     },
+    position: 'left',
   },
 };
