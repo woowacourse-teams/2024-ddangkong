@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { getUserInfo } from '@/apis/room';
@@ -16,9 +17,11 @@ const useGetUserInfo = (): RoomAndMember => {
     staleTime: USER_INFO_STALE_TIME,
   });
 
-  if (Number(roomId) !== data?.roomId) {
-    navigate('/', { replace: true });
-  }
+  useEffect(() => {
+    if (roomId && data?.roomId && Number(roomId) !== data?.roomId) {
+      navigate('/', { replace: true });
+    }
+  }, []);
 
   return {
     roomId: data?.roomId || 0,
