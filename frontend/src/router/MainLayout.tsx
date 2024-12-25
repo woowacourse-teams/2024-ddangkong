@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import ReactGA from 'react-ga4';
 import { Outlet } from 'react-router-dom';
 
 import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
