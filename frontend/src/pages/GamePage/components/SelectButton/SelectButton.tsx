@@ -2,6 +2,7 @@ import useCompleteSelectionMutation from './SelectButton.hook';
 
 import Button from '@/components/common/Button/Button';
 import { bottomButtonLayout } from '@/components/common/Button/Button.styled';
+import { clickVoteConfirmButtonGA } from '@/lib/googleAnalytics/vote';
 import { SelectedOption } from '@/types/balanceContent';
 
 interface SelectButtonProps {
@@ -26,13 +27,20 @@ const SelectButton = ({
     cancelSelection,
   });
 
+  const handleClick = () => {
+    // GA 데이터 수집용 함수
+    clickVoteConfirmButtonGA();
+
+    vote();
+  };
+
   return (
     <div css={bottomButtonLayout}>
       <Button
         bottom
         disabled={!selectedId || isVoted || isSuccess || isPending}
         text={isSuccess || isPending ? '선택 완료' : '선택'}
-        onClick={vote}
+        onClick={handleClick}
       />
     </div>
   );

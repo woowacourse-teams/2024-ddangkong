@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import ReactGA from 'react-ga4';
 
-const useGAPageTimeSpent = (page: string) => {
+const useGAPageTimeSpentGA = (page: string) => {
   const startTimeRef = useRef(0);
 
   useEffect(() => {
@@ -30,4 +30,4 @@ const useGAPageTimeSpent = (page: string) => {
   }, [page]);
 };
 
-export default useGAPageTimeSpent;
+export default useGAPageTimeSpentGA;

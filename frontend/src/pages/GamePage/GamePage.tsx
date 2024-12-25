@@ -3,10 +3,11 @@ import SelectContainer from './components/SelectContainer/SelectContainer';
 import Content from '@/components/layout/Content/Content';
 import { GameHeader } from '@/components/layout/Header/Header';
 import TopicContainer from '@/components/TopicContainer/TopicContainer';
-import useGAPageTimeSpent from '@/lib/googleAnalytics/hooks/useGAPageTimeSpent';
+import useGAPageTimeSpentGA from '@/lib/googleAnalytics/hooks/usePageTimeSpentGA';
 
 const GamePage = () => {
-  useGAPageTimeSpent('게임 페이지');
+  // GA 데이터 수집용 함수
+  useGAPageTimeSpentGA('게임 페이지');
 
   return (
     <>

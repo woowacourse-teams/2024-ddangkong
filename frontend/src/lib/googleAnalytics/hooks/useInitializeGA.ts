@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import ReactGA from 'react-ga4';
 
-const useGAInitialize = () => {
+const useGAInitializeGA = () => {
   useEffect(() => {
     ReactGA.initialize(process.env.GA_MANAGEMENT_ID || '');
   }, []);
 };
 
-export default useGAInitialize;
+export default useGAInitializeGA;

@@ -1,6 +1,6 @@
 import { SelectOptionLayout } from './SelectOption.styled';
 
-import { clickLeftOption, clickRightOption } from '@/lib/googleAnalytics/vote';
+import { clickLeftOptionGA, clickRightOptionGA } from '@/lib/googleAnalytics/vote';
 import { BalanceContent, SelectedOption } from '@/types/balanceContent';
 
 interface SelectOptionProps {
@@ -20,9 +20,9 @@ const SelectOption = ({
 
   const handleClick = () => {
     if (position === 'left') {
-      clickLeftOption();
+      clickLeftOptionGA();
     } else if (position === 'right') {
-      clickRightOption();
+      clickRightOptionGA();
     }
     handleClickOption(option.optionId);
   };

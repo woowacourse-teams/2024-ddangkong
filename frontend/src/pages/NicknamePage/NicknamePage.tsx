@@ -10,7 +10,7 @@ import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
 import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
-import useGAPageTimeSpent from '@/lib/googleAnalytics/hooks/useGAPageTimeSpent';
+import useGAPageTimeSpentGA from '@/lib/googleAnalytics/hooks/usePageTimeSpentGA';
 
 const NicknamePage = () => {
   const { roomUuid } = useParams();
@@ -21,7 +21,7 @@ const NicknamePage = () => {
   const isMaster = !roomUuid;
 
   useIsJoinableRoomQuery({ roomUuid });
-  useGAPageTimeSpent('닉네임 페이지');
+  useGAPageTimeSpentGA('닉네임 페이지');
 
   useEffect(() => {
     if (nicknameInputRef.current) {

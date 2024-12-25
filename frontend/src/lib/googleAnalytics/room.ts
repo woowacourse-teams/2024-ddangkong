@@ -1,6 +1,6 @@
 import ReactGA from 'react-ga4';
 
-export const collectGameMemberNumber = (gameMemberNumber: number) => {
+export const collectGameMemberNumberGA = (gameMemberNumber: number) => {
   ReactGA.event({
     category: 'User Engagement',
     action: 'game_member_number',

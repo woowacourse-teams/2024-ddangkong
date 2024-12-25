@@ -2,11 +2,11 @@ import { Outlet } from 'react-router-dom';
 
 import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
 import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
-import useGAInitialize from '@/lib/googleAnalytics/hooks/useGAInitialize';
+import useGAInitializeGA from '@/lib/googleAnalytics/hooks/useInitializeGA';
 import ModalProvider from '@/providers/ModalProvider/ModalProvider';
 
 const MainLayout = () => {
-  useGAInitialize();
+  useGAInitializeGA();
 
   return (
     <RootErrorBoundary>
