@@ -28,9 +28,7 @@ const SelectButton = ({
   });
 
   const handleClick = () => {
-    // GA 데이터 수집용 함수
     clickVoteConfirmButtonGA();
-
     vote();
   };
 

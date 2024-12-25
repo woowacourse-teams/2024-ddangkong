@@ -6,7 +6,6 @@ import TopicContainer from '@/components/TopicContainer/TopicContainer';
 import useGAPageTimeSpentGA from '@/lib/googleAnalytics/hooks/usePageTimeSpentGA';
 
 const GamePage = () => {
-  // GA 데이터 수집용 함수
   useGAPageTimeSpentGA('게임 페이지');
 
   return (
