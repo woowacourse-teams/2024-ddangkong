@@ -9,18 +9,15 @@ interface ContentResponse {
 interface Content {
   contentId: number;
   question: string;
-  firstOption: {
-    optionId: number;
-    name: string;
-    count: number;
-    percent: number;
-  };
-  secondOption: {
-    optionId: number;
-    name: string;
-    count: number;
-    percent: number;
-  };
+  firstOption: Option;
+  secondOption: Option;
+}
+
+interface Option {
+  optionId: number;
+  name: string;
+  count: number;
+  percent: number;
 }
 
 interface ContentAppendParams {
