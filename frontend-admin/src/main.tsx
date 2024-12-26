@@ -8,11 +8,23 @@ import GlobalStyle from "./styles/GlobalStyle.ts";
 
 const queryClient = new QueryClient();
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Global styles={GlobalStyle} />
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </StrictMode>
-);
+const enableMocking = async () => {
+  if (process.env.NODE_ENV !== "development") {
+    return;
+  }
+
+  const { worker } = await import("./mocks/browser");
+
+  return await worker.start();
+};
+
+enableMocking().then(() => {
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <Global styles={GlobalStyle} />
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </StrictMode>
+  );
+});
