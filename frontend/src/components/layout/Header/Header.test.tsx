@@ -3,10 +3,11 @@ import { userEvent } from '@testing-library/user-event';
 
 import { RoomSettingHeader } from './Header';
 
-import useIsMaster from '@/hooks/useIsMaster';
 import { customRender } from '@/utils/test-utils';
 
-jest.mock('@/hooks/useIsMaster');
+import { useIsMaster } from '@/hooks';
+
+jest.mock('@/hooks');
 
 describe('Header 테스트', () => {
   it('방장이 방 설정 버튼을 클릭했을 때, 방 설정 모달이 뜬다.', async () => {

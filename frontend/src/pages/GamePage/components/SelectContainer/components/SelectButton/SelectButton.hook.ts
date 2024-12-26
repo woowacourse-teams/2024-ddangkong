@@ -2,9 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
 import { voteBalanceContent } from '@/apis/balanceContent';
-import useDefaultMutationErrorHandler from '@/hooks/useDefaultMutationErrorHandler';
-import useGetUserInfo from '@/hooks/useGetUserInfo';
-import useThrottle from '@/hooks/useThrottle';
+
+import { useDefaultMutationErrorHandler, useGetUserInfo, useThrottle } from '@/hooks';
 
 interface UseSelectCompleteMutationProps {
   selectedId: number;

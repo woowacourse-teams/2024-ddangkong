@@ -7,9 +7,8 @@ import { createRandomNextRoundMessage, getNextRoundButtonText } from './NextRoun
 import AlertModal from '@/components/AlertModal/AlertModal';
 import Button from '@/components/common/Button/Button';
 import { bottomButtonLayout } from '@/components/common/Button/Button.styled';
-import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
-import useIsMaster from '@/hooks/useIsMaster';
-import useModal from '@/hooks/useModal';
+
+import { useBalanceContentQuery, useIsMaster, useModal } from '@/hooks';
 
 const NextRoundButton = () => {
   const { roomId } = useParams();

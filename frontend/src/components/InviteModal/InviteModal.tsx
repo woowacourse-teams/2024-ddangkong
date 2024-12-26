@@ -15,10 +15,10 @@ import {
 } from './InviteModal.styled';
 import Modal from '../common/Modal/Modal';
 
-import CopyIcon from '@/assets/images/copyIcon.png';
 import { INVITE_URL } from '@/constants/url';
-import useGetUserInfo from '@/hooks/useGetUserInfo';
-import useToast from '@/hooks/useToast';
+
+import { CopyIcon } from '@/assets';
+import { useGetUserInfo, useToast } from '@/hooks';
 
 interface InviteModalProps {
   isOpen: boolean;

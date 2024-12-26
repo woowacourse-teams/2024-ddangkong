@@ -25,7 +25,8 @@ import {
 } from './Modal.styled';
 
 import CloseIcon from '@/assets/images/closeIcon.png';
-import useFocus from '@/hooks/useFocus';
+
+import { useFocus } from '@/hooks';
 
 export interface ModalProps {
   isOpen: boolean;

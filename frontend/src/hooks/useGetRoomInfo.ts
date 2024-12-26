@@ -5,7 +5,7 @@ import { getRoomInfo } from '@/apis/room';
 import { POLLING_DELAY, POLLING_ERROR_FAILURE_COUNT } from '@/constants/config';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 
-export const useGetRoomInfo = () => {
+const useGetRoomInfo = () => {
   const { roomId } = useParams();
 
   const { data } = useSuspenseQuery({
@@ -28,3 +28,5 @@ export const useGetRoomInfo = () => {
     isGameStart: data?.isGameStart,
   };
 };
+
+export default useGetRoomInfo;

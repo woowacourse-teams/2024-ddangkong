@@ -12,21 +12,15 @@ import {
   matchingResultCaption,
   MatchingResultHeaderContainer,
 } from './Header.styled';
-import { useBlockRefresh } from './hooks/useBlockRefresh';
-import { useExit } from './hooks/useExit';
-import useRoutePath from './hooks/useRoutePath';
+import { useBlockRefresh, useExit, useRoutePath } from './hooks';
 
-import ArrowLeft from '@/assets/images/arrowLeft.svg';
-import ExitIcon from '@/assets/images/exitIcon.svg';
-import SettingIcon from '@/assets/images/settingIcon.svg';
 import AlertModal from '@/components/AlertModal/AlertModal';
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import RoomSettingModal from '@/components/RoomSettingModal/RoomSettingModal';
-import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
-import useFocus from '@/hooks/useFocus';
-import useIsMaster from '@/hooks/useIsMaster';
-import useModal from '@/hooks/useModal';
 import { convertMsecToSecond } from '@/pages/GamePage/components/SelectContainer/components/Timer/Timer.util';
+
+import { ArrowLeft, ExitIcon, SettingIcon } from '@/assets';
+import { useBalanceContentQuery, useFocus, useIsMaster, useModal } from '@/hooks';
 
 interface HeaderProps {
   title: string;

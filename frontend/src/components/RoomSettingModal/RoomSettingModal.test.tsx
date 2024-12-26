@@ -4,9 +4,10 @@ import userEvent from '@testing-library/user-event';
 import RoomSettingModal from './RoomSettingModal';
 
 import { POLLING_DELAY } from '@/constants/config';
-import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import ROOM_INFO from '@/mocks/data/roomInfo.json';
 import { customRender, wrapper } from '@/utils/test-utils';
+
+import { useGetRoomInfo } from '@/hooks';
 
 describe('RoomSettingModal 방 설정 모달 테스트', () => {
   it('방 설정 모달에서 적용 버튼을 클릭하면 모달이 닫힌다.', async () => {
