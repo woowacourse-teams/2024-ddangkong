@@ -13,12 +13,10 @@ import {
   profileImage,
 } from './ReadyMembersContainer.styled';
 
-import crownIcon from '@/assets/images/crownIcon.webp';
-import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
-import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
-import InviteModal from '@/components/InviteModal/InviteModal';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 
+import { CrownIcon, SillyDdangkongMedium } from '@/assets';
+import { A11yOnly, InviteModal } from '@/components';
 import { useGetRoomInfo, useModal } from '@/hooks';
 
 const ReadyMembersContainer = () => {
@@ -54,7 +52,7 @@ const ReadyMembersContainer = () => {
               </div>
               <div css={memberStatus}>
                 <span aria-hidden>{member.nickname}</span>
-                {member.isMaster && <img src={crownIcon} alt="" />}
+                {member.isMaster && <img src={CrownIcon} alt="" />}
               </div>
             </li>
           ))}

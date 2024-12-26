@@ -1,8 +1,8 @@
 import SelectContainer from './components/SelectContainer/SelectContainer';
 
-import Content from '@/components/layout/Content/Content';
 import { GameHeader } from '@/components/layout/Header/components';
-import TopicContainer from '@/components/TopicContainer/TopicContainer';
+
+import { Content, TopicContainer } from '@/components';
 
 const GamePage = () => {
   return (

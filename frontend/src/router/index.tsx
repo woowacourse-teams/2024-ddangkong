@@ -11,10 +11,7 @@ import {
 } from './lazyPages';
 import MainLayout from './MainLayout';
 
-import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
-import RouterErrorFallback from '@/components/common/ErrorFallback/RouterErrorFallback/RouterErrorFallback';
-import GameSkeleton from '@/components/common/Skeleton/GameSkeleton/GameSkeleton';
-import ReadySkeleton from '@/components/common/Skeleton/ReadySkeleton/ReadySkeleton';
+import { AsyncErrorBoundary, RouterErrorFallback, GameSkeleton, ReadySkeleton } from '@/components';
 
 export const router = createBrowserRouter([
   {
