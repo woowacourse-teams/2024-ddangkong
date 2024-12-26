@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 
+import { FinalButton, GameResultItem } from './components';
 import {
   gameResultLayout,
   rankListContainer,
@@ -9,8 +10,6 @@ import {
   floatingButton,
 } from './GameResult.styled';
 import { useMatchingResultQuery, useScrollControl, useScrollState } from './hooks';
-
-import { FinalButton, GameResultItem } from './';
 
 import Spinner from '@/components/common/Spinner/Spinner';
 
