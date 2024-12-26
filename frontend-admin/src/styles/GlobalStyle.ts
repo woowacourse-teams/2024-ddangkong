@@ -147,7 +147,7 @@ const reset = css`
   }
 `;
 
-const GlobalStyle = css`
+const globalStyle = css`
   ${reset}
 
   html {
@@ -168,4 +168,4 @@ const GlobalStyle = css`
   }
 `;
 
-export default GlobalStyle;
+export default globalStyle;
