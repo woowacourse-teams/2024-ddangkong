@@ -26,7 +26,7 @@ import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 import useFocus from '@/hooks/useFocus';
 import useIsMaster from '@/hooks/useIsMaster';
 import useModal from '@/hooks/useModal';
-import { convertMsecToSecond } from '@/pages/GamePage/components/SelectContainer/Timer/Timer.util';
+import { convertMsecToSecond } from '@/pages/GamePage/components/SelectContainer/components/Timer/Timer.util';
 
 interface HeaderProps {
   title: string;

@@ -10,7 +10,7 @@ import {
   timerWrapper,
 } from './Timer.styled';
 import { formatLeftRoundTime, isAlertTimer } from './Timer.util';
-import useVoteIsFinished from '../hooks/useVoteIsFinished';
+import useVoteIsFinished from '../../hooks/useVoteIsFinished';
 
 import DdangkongTimer from '@/assets/images/ddangkongTimer.webp';
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';

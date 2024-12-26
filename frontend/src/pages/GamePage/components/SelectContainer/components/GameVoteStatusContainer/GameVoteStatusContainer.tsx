@@ -3,7 +3,7 @@ import {
   voteStatusMessage,
   voteAnnounceMessage,
 } from './GameVoteStatusContainer.styled';
-import useVoteIsFinished from '../hooks/useVoteIsFinished';
+import useVoteIsFinished from '../../hooks/useVoteIsFinished';
 
 interface GameVoteStatusContainerProps {
   contentId: number;
