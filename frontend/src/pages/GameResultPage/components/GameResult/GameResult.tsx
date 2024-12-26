@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 
-import FinalButton from './FinalButton/FinalButton';
 import {
   gameResultLayout,
   rankListContainer,
@@ -9,12 +8,10 @@ import {
   noMatchingText,
   floatingButton,
 } from './GameResult.styled';
-import GameResultItem from './GameResultItem/GameResultItem';
 import { useMatchingResultQuery, useScrollControl, useScrollState } from './hooks';
 
-// import ArrowDown from '@/assets/images/arrowDown.svg';
-// import ArrowUp from '@/assets/images/arrowUp.svg';
-// import SadDdangkong from '@/assets/images/sadDdangkong.webp';
+import { FinalButton, GameResultItem } from './';
+
 import Spinner from '@/components/common/Spinner/Spinner';
 
 import { ArrowDown, ArrowUp, SadDdangkong } from '@/assets';

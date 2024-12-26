@@ -1,5 +1,5 @@
 import GameResult from './components/GameResult/GameResult';
-import { useIsRoomInitial } from './hooks/useCheckRoomReset';
+import useIsRoomInitial from './hooks/useCheckRoomReset';
 
 import Content from '@/components/layout/Content/Content';
 
