@@ -1,5 +1,6 @@
 package ddangkong.controller.room;
 
+import ddangkong.aop.cookie.MemberId;
 import ddangkong.aop.logging.Polling;
 import ddangkong.facade.room.RoomFacade;
 import ddangkong.facade.room.dto.InitialRoomResponse;
@@ -52,8 +53,8 @@ public class RoomController {
     }
 
     @GetMapping("/balances/rooms/member")
-    public RoomMemberResponse getRoomMemberInfo(@CookieValue(name = "${cookie.rejoin-key}") String cookieValue) {
-        return roomFacade.getRoomMemberInfo(roomMemberCookieEncryptor.getDecodedCookieValue(cookieValue));
+    public RoomMemberResponse getRoomMemberInfo(@MemberId Long memberId) {
+        return roomFacade.getRoomMemberInfo(memberId);
     }
 
     @Polling

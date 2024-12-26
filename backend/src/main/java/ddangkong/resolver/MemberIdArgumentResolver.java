@@ -37,6 +37,10 @@ public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+            throw new NotFoundCookieException();
+        }
         Cookie cookie = Arrays.stream(request.getCookies())
                 .filter(curCookie -> curCookie.getName().equals(cookieKey))
                 .findAny()
