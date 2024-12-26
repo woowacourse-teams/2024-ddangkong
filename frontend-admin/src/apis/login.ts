@@ -1,12 +1,12 @@
 import { API_URL } from "@/constants/url";
 import fetcher from "./fetcher";
 
-interface ContentAppendParams {
+interface LoginParams {
   password: string;
 }
 
 // 로그인
-export const login = async ({ password }: ContentAppendParams) => {
+export const login = async ({ password }: LoginParams) => {
   const res = await fetcher.post(API_URL.login, {
     body: {
       password,
