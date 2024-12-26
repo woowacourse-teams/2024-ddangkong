@@ -23,7 +23,7 @@ const fetchVoteIsFinishedHandler = () => {
   return HttpResponse.json(VOTE_IS_FINISHED);
 };
 
-const getMyGameStatus = ({ request }: { request: Request }) => {
+const getMyGameStatus = () => {
   return HttpResponse.json(MY_GAME_STATUS);
 };
 
