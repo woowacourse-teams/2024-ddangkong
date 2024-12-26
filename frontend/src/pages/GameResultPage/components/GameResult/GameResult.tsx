@@ -10,14 +10,14 @@ import {
   floatingButton,
 } from './GameResult.styled';
 import GameResultItem from './GameResultItem/GameResultItem';
-import useMatchingResultQuery from './hooks/useMatchingResultQuery';
-import useScrollControl from './hooks/useScrollControl';
-import useScrollState from './hooks/useScrollState';
+import { useMatchingResultQuery, useScrollControl, useScrollState } from './hooks';
 
-import ArrowDown from '@/assets/images/arrowDown.svg';
-import ArrowUp from '@/assets/images/arrowUp.svg';
-import SadDdangKong from '@/assets/images/sadDdangkong.webp';
+// import ArrowDown from '@/assets/images/arrowDown.svg';
+// import ArrowUp from '@/assets/images/arrowUp.svg';
+// import SadDdangkong from '@/assets/images/sadDdangkong.webp';
 import Spinner from '@/components/common/Spinner/Spinner';
+
+import { ArrowDown, ArrowUp, SadDdangkong } from '@/assets';
 
 const GameResult = () => {
   const { matchedMembers, existMatching, isLoading } = useMatchingResultQuery();
@@ -75,7 +75,7 @@ const GameResult = () => {
         )}
         {!isLoading && !existMatching && (
           <div css={noMatchingLayout}>
-            <img src={SadDdangKong} alt="서운한 땅콩" css={noMatchingImg} />
+            <img src={SadDdangkong} alt="서운한 땅콩" css={noMatchingImg} />
             <span css={noMatchingText}>
               {'이번에는 나와 같은 선택을 한 사람이 없지만,\n다음 게임을 기대해 볼까요?'}
             </span>
