@@ -16,13 +16,18 @@ export const editButton = css`
 
 export const detailContainer = css`
   width: 100%;
+  height: 2.4rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
 export const detailText = css`
-  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  height: 2.4rem;
+  font-size: 1.4rem;
+  text-align: right;
   color: ${theme.color.gray400};
 `;
 

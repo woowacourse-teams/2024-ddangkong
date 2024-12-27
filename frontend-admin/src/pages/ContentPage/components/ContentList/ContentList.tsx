@@ -20,6 +20,9 @@ const HEADER_TEXT = [
   "비고",
 ];
 
+const QUESTION_LIMIT_LENGTH = 36;
+const OPTION_LIMIT_LENGTH = 16;
+
 interface ContentListProps {
   category: string;
 }
@@ -48,7 +51,9 @@ const ContentList = ({ category }: ContentListProps) => {
             <span>{content.question}</span>
             <div css={detailContainer}>
               <button css={editButton}>편집</button>
-              <span css={detailText}>{content.question.length}자</span>
+              <span css={detailText}>
+                {content.question.length}/{QUESTION_LIMIT_LENGTH}자
+              </span>
             </div>
           </div>
 
@@ -56,14 +61,18 @@ const ContentList = ({ category }: ContentListProps) => {
             <span>{content.firstOption.name}</span>
             <div css={detailContainer}>
               <button css={editButton}>편집</button>
-              <span css={detailText}>{content.firstOption.name.length}자</span>
+              <span css={detailText}>
+                {content.firstOption.name.length}/{OPTION_LIMIT_LENGTH}자
+              </span>
             </div>
           </div>
           <div css={gridItem}>
             <span>{content.secondOption.name}</span>
             <div css={detailContainer}>
               <button css={editButton}>편집</button>
-              <span css={detailText}>{content.secondOption.name.length}자</span>
+              <span css={detailText}>
+                {content.secondOption.name.length}/{OPTION_LIMIT_LENGTH}자
+              </span>
             </div>
           </div>
 
