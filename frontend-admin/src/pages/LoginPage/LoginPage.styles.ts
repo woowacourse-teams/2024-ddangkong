@@ -67,4 +67,8 @@ export const loginButton = css`
   &:focus {
     outline: 0.1rem solid black;
   }
+
+  &:hover {
+    background-color: ${theme.color.peanut500};
+  }
 `;
