@@ -1,15 +1,14 @@
-import { fetchBalanceContent } from "@/apis/content";
-import { useQuery } from "@tanstack/react-query";
 import { Fragment } from "react";
 import {
   deleteButton,
-  detailContainer,
   detailText,
-  editButton,
   gridContainer,
   gridHeader,
   gridItem,
 } from "./ContentList.styles";
+import QuestionCell from "./QuestionCell/QuestionCell";
+import OptionCell from "./OptionCell/OptionCell";
+import useContentListQuery from "./hooks/useContentListQuery";
 
 const HEADER_TEXT = [
   "질문",
@@ -20,20 +19,12 @@ const HEADER_TEXT = [
   "비고",
 ];
 
-const QUESTION_LIMIT_LENGTH = 36;
-const OPTION_LIMIT_LENGTH = 16;
-
 interface ContentListProps {
   category: string;
 }
 
 const ContentList = ({ category }: ContentListProps) => {
-  const { data: contents } = useQuery({
-    queryKey: ["contents", category],
-    queryFn: () => fetchBalanceContent(category),
-    select: (data) => data.contents,
-    staleTime: Infinity,
-  });
+  const { data: contents } = useContentListQuery(category);
 
   if (!contents) return null;
 
@@ -47,34 +38,12 @@ const ContentList = ({ category }: ContentListProps) => {
 
       {contents.map((content) => (
         <Fragment key={content.contentId}>
-          <div css={gridItem}>
-            <span>{content.question}</span>
-            <div css={detailContainer}>
-              <button css={editButton}>편집</button>
-              <span css={detailText}>
-                {content.question.length}/{QUESTION_LIMIT_LENGTH}자
-              </span>
-            </div>
-          </div>
-
-          <div css={gridItem}>
-            <span>{content.firstOption.name}</span>
-            <div css={detailContainer}>
-              <button css={editButton}>편집</button>
-              <span css={detailText}>
-                {content.firstOption.name.length}/{OPTION_LIMIT_LENGTH}자
-              </span>
-            </div>
-          </div>
-          <div css={gridItem}>
-            <span>{content.secondOption.name}</span>
-            <div css={detailContainer}>
-              <button css={editButton}>편집</button>
-              <span css={detailText}>
-                {content.secondOption.name.length}/{OPTION_LIMIT_LENGTH}자
-              </span>
-            </div>
-          </div>
+          <QuestionCell
+            question={content.question}
+            contentId={content.contentId}
+          />
+          <OptionCell option={content.firstOption} />
+          <OptionCell option={content.secondOption} />
 
           <div css={gridItem}>
             <span>{content.firstOption.percent}%</span>

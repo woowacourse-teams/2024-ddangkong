@@ -54,9 +54,8 @@ export const gridItem = css`
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
-  font-size: 2rem;
   gap: 0.8rem;
-  padding: 4rem;
+  padding: 3.2rem;
   border: 0.1rem solid ${theme.color.gray};
 `;
 
