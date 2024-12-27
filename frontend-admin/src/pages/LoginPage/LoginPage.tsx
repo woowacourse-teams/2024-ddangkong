@@ -23,6 +23,12 @@ const LoginPage = () => {
     login({ password });
   };
 
+  const handleKeyDownLogin = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      login({ password });
+    }
+  };
+
   return (
     <div css={loginLayout}>
       <div css={loginContainer}>
@@ -34,6 +40,7 @@ const LoginPage = () => {
           css={passwordInput}
           value={password}
           onChange={handleChange}
+          onKeyDown={handleKeyDownLogin}
           placeholder="비밀번호를 입력해주세요"
         />
         <button css={loginButton} onClick={handleClickLogin}>
