@@ -11,8 +11,8 @@ export const loginLayout = css`
 export const loginContainer = css`
   ${flexCenter}
   flex-direction: column;
-  gap: 3.2rem;
-  padding: 2.4rem 3.6rem;
+  gap: 2.8rem;
+  padding: 3.6rem 4.8rem;
   background-color: white;
   border-radius: 2.4rem;
 `;
@@ -45,6 +45,15 @@ export const passwordInput = css`
   &:focus {
     outline: 0.1rem solid black;
   }
+`;
+
+export const errorMessage = (isError: boolean) => css`
+  visibility: ${isError ? "visible" : "hidden"};
+  color: red;
+  font-size: 1.2rem;
+  min-height: 1.2rem;
+  margin-top: 0.8rem;
+  margin: 0.8rem 0 0 1.2rem;
 `;
 
 export const loginButton = css`
