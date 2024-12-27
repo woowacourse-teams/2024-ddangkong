@@ -8,26 +8,10 @@ import {
   loginTitle,
   passwordInput,
 } from "./LoginPage.styles";
-import { ChangeEvent, useState } from "react";
-import UseLoginMutation from "./hooks/UseLoginMutation";
+import usePassword from "./hooks/usePassword";
 
 const LoginPage = () => {
-  const { mutate: login } = UseLoginMutation();
-  const [password, setPassword] = useState("");
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handleClickLogin = () => {
-    login({ password });
-  };
-
-  const handleKeyDownLogin = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      login({ password });
-    }
-  };
+  const { password, handleChange, handleLogin, handleKeyDown } = usePassword();
 
   return (
     <div css={loginLayout}>
@@ -40,10 +24,10 @@ const LoginPage = () => {
           css={passwordInput}
           value={password}
           onChange={handleChange}
-          onKeyDown={handleKeyDownLogin}
+          onKeyDown={handleKeyDown}
           placeholder="비밀번호를 입력해주세요"
         />
-        <button css={loginButton} onClick={handleClickLogin}>
+        <button css={loginButton} onClick={handleLogin}>
           로그인
         </button>
       </div>
