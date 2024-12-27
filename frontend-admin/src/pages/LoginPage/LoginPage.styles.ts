@@ -1,18 +1,15 @@
+import { flexCenter } from "@/styles/common";
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 
 export const loginLayout = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${flexCenter}
   height: 100%;
   background-color: ${theme.color.peanut300};
 `;
 
 export const loginContainer = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  ${flexCenter}
   flex-direction: column;
   gap: 3.2rem;
   padding: 2.4rem 3.6rem;
@@ -21,9 +18,7 @@ export const loginContainer = css`
 `;
 
 export const loginHeaderContainer = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  ${flexCenter}
   gap: 2.4rem;
   height: 6rem;
 `;
