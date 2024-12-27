@@ -3,11 +3,11 @@ import { http, HttpResponse } from "msw";
 import { MOCK_API_URL } from "@/constants/url";
 
 const loginHandler = () => {
-  return new HttpResponse(null, { status: 200 });
+  return HttpResponse.json({ status: 200 });
 };
 
 const logoutHandler = () => {
-  return new HttpResponse(null, { status: 200 });
+  return HttpResponse.json({ status: 200 });
 };
 
 export const loginHandlers = [
