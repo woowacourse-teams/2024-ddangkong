@@ -1,6 +1,7 @@
 import { http, HttpResponse } from "msw";
 
 import BALANCE_CONTENT from "../data/balanceContent.json";
+import CATEGORY_LIST from "../data/categoryList.json";
 
 import { MOCK_API_URL } from "@/constants/url";
 
@@ -89,10 +90,15 @@ const deleteContentHandler = async ({ request }: { request: Request }) => {
   return new HttpResponse(null, { status: 204 });
 };
 
+const fetchCategoryListHandler = () => {
+  return HttpResponse.json(CATEGORY_LIST);
+};
+
 export const contentHandlers = [
   http.get(MOCK_API_URL.balanceContent, fetchBalanceContentHandler),
   http.post(MOCK_API_URL.contents, appendContentHandler),
   http.patch(MOCK_API_URL.contents, editQuestionHandler),
   http.patch(MOCK_API_URL.options, editOptionHandler),
   http.delete(MOCK_API_URL.deleteContent, deleteContentHandler),
+  http.get(MOCK_API_URL.categoryList, fetchCategoryListHandler),
 ];

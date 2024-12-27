@@ -9,6 +9,7 @@ export const API_URL = {
   options: `${BASE_URL}/api/admin/balances/options`,
   deleteContent: (contentId: number) =>
     `${BASE_URL}/api/admin/balances/contents/${contentId}`,
+  categoryList: `${BASE_URL}/api/admin/balances/categories`,
 };
 
 export const MOCK_API_URL = {
@@ -18,4 +19,5 @@ export const MOCK_API_URL = {
   contents: `${BASE_URL}/api/admin/balances/contents`,
   options: `${BASE_URL}/api/admin/balances/options`,
   deleteContent: `${BASE_URL}/api/admin/balances/contents/:contentId`,
+  categoryList: `${BASE_URL}/api/admin/balances/categories`,
 };
