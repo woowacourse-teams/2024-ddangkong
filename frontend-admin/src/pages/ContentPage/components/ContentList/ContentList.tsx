@@ -8,7 +8,7 @@ import {
 } from "./ContentList.styles";
 import QuestionCell from "./QuestionCell/QuestionCell";
 import OptionCell from "./OptionCell/OptionCell";
-import useContentListQuery from "./hooks/useContentListQuery";
+import useContentListQuery from "../../hooks/useContentListQuery";
 
 const HEADER_TEXT = [
   "질문",

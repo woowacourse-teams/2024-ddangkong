@@ -7,7 +7,7 @@ import {
 } from "../ContentList.styles";
 import { questionInput, questionText } from "./OptionCell.styles";
 import { Option } from "@/types/content";
-import useEditOptionMutation from "../hooks/useEditOptionMutation";
+import useEditOptionMutation from "@/pages/ContentPage/hooks/useEditOptionMutation";
 
 const OPTION_LIMIT_LENGTH = 16;
 
