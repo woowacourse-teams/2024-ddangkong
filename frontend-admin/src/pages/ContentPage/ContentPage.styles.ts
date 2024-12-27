@@ -62,32 +62,3 @@ export const logoutButton = css`
     background-color: ${theme.color.gray};
   }
 `;
-
-export const questionAppendButton = css`
-  font-size: 1.6rem;
-
-  padding: 1.2rem 2rem;
-  border-radius: 1.6rem;
-  background-color: ${theme.color.peanut400};
-
-  &:hover {
-    background-color: ${theme.color.peanut500};
-  }
-`;
-
-export const contentHeaderContainer = css`
-  width: 100%;
-  display: flex;
-  align-items: center;
-`;
-
-export const contentHeaderWrapper = css`
-  display: flex;
-
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 2.4rem;
-
-  width: 100%;
-`;

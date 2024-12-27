@@ -1,15 +1,12 @@
 import SpinDdangkong from "@/assets/images/spinDdangkong.webp";
 import {
   contentContainer,
-  contentHeaderContainer,
-  contentHeaderWrapper,
   contentLayout,
   headerContainer,
   image,
   leftHeader,
   loginTitle,
   logoutButton,
-  questionAppendButton,
   rightHeader,
 } from "./ContentPage.styles";
 import ContentContainer from "./components/ContentContainer/ContentContainer";
@@ -27,11 +24,7 @@ const ContentPage = () => {
             <button css={logoutButton}>로그아웃</button>
           </div>
         </div>
-        <div css={contentHeaderContainer}>
-          <div css={contentHeaderWrapper}>
-            <button css={questionAppendButton}>질문 추가</button>
-          </div>
-        </div>
+
         <ContentContainer />
       </div>
     </div>
