@@ -1,24 +1,10 @@
-import { Category } from "@/types/content";
+import { Category, Content } from "@/types/content";
 import fetcher from "./fetcher";
 
 import { API_URL } from "@/constants/url";
 
 interface ContentResponse {
   contents: Content[];
-}
-
-interface Content {
-  contentId: number;
-  question: string;
-  firstOption: Option;
-  secondOption: Option;
-}
-
-interface Option {
-  optionId: number;
-  name: string;
-  count: number;
-  percent: number;
 }
 
 interface ContentAppendParams {
