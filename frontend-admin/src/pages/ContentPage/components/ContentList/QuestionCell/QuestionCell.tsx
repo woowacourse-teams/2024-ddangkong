@@ -6,6 +6,7 @@ import {
   gridItem,
 } from "../ContentList.styles";
 import { questionInput, questionText } from "./QuestionCell.styles";
+import useEditQuestionMutation from "../hooks/useEditQuestionMutation";
 
 const QUESTION_LIMIT_LENGTH = 36;
 
@@ -14,16 +15,26 @@ interface QuestionCellProps {
   contentId: number;
 }
 
-const QuestionCell = ({ question }: QuestionCellProps) => {
+const QuestionCell = ({ question, contentId }: QuestionCellProps) => {
+  const { mutate: editQuestion } = useEditQuestionMutation();
   const [isEdit, setIsEdit] = useState(false);
   const [value, setValue] = useState(question);
 
-  const handleClickEdit = () => {
-    setIsEdit((prev) => !prev);
+  const handleEdit = () => {
+    setIsEdit(true);
+  };
+
+  const handleCompleteEdit = () => {
+    editQuestion(
+      { contentId, name: question },
+      { onSuccess: () => setIsEdit(false), onError: () => setValue(question) }
+    );
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    if (e.target.value.length <= QUESTION_LIMIT_LENGTH) {
+      setValue(e.target.value);
+    }
   };
 
   return (
@@ -31,10 +42,13 @@ const QuestionCell = ({ question }: QuestionCellProps) => {
       {isEdit ? (
         <input css={questionInput} value={value} onChange={handleChange} />
       ) : (
-        <span css={questionText}>{question}</span>
+        <span css={questionText}>{value}</span>
       )}
       <div css={detailContainer}>
-        <button css={editButton} onClick={handleClickEdit}>
+        <button
+          css={editButton}
+          onClick={isEdit ? handleCompleteEdit : handleEdit}
+        >
           {isEdit ? "완료" : "편집"}
         </button>
         <span css={detailText}>
