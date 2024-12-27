@@ -1,3 +1,4 @@
+import { Category } from "@/types/content";
 import fetcher from "./fetcher";
 
 import { API_URL } from "@/constants/url";
@@ -39,6 +40,10 @@ interface OptionEditParams {
 
 interface ContentDeleteParams {
   contentId: number;
+}
+
+interface CategoryResponse {
+  categories: Category[];
 }
 
 // 컨텐츠 가져오기
@@ -96,4 +101,11 @@ export const editOption = async ({ optionId, name }: OptionEditParams) => {
 // 컨텐츠 삭제
 export const deleteOption = async ({ contentId }: ContentDeleteParams) => {
   return await fetcher.delete(API_URL.deleteContent(contentId));
+};
+
+// 카테고리 목록 조회
+export const fetchCategoryList = async (): Promise<CategoryResponse> => {
+  const res = await fetcher.get(API_URL.categoryList);
+
+  return await res.json();
 };
