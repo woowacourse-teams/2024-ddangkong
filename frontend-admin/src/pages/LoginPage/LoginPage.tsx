@@ -8,8 +8,17 @@ import {
   loginTitle,
   passwordInput,
 } from "./LoginPage.styles";
+import { useState } from "react";
+import UseLoginMutation from "./hooks/UseLoginMutation";
 
 const LoginPage = () => {
+  const { mutate: login } = UseLoginMutation();
+  const [password, setPassword] = useState("");
+
+  const handleClickLogin = () => {
+    login({ password });
+  };
+
   return (
     <div css={loginLayout}>
       <div css={loginContainer}>
@@ -17,8 +26,15 @@ const LoginPage = () => {
           <img src={SpinDdangkong} alt="땅콩 로고" css={image} />
           <span css={loginTitle}>ddangkong</span>
         </div>
-        <input css={passwordInput} placeholder="비밀번호를 입력해주세요" />
-        <button css={loginButton}>로그인</button>
+        <input
+          css={passwordInput}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="비밀번호를 입력해주세요"
+        />
+        <button css={loginButton} onClick={handleClickLogin}>
+          로그인
+        </button>
       </div>
     </div>
   );
