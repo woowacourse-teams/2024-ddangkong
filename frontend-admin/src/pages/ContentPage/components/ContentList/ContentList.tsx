@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment } from "react";
 import {
   detailText,
   gradientOverlay,
@@ -11,6 +11,7 @@ import OptionCell from "./OptionCell/OptionCell";
 import useContentListQuery from "../../hooks/useContentListQuery";
 import ContentDeleteButton from "./ContentDeleteButton/ContentDeleteButton";
 import IntersectionObserverScroll from "@/components/IntersectionObserver/InterSectionObserver";
+import useObserverBottom from "../../hooks/useObserverBottom";
 
 const HEADER_TEXT = [
   "질문",
@@ -28,16 +29,8 @@ interface ContentListProps {
 const ContentList = ({ category }: ContentListProps) => {
   const { data: contents } = useContentListQuery(category);
 
-  const [isBottomVisible, setIsBottomVisible] = useState(false);
-  const observerRef = useRef<HTMLDivElement | null>(null);
-
-  const handleReachBottom = () => {
-    setIsBottomVisible(true);
-  };
-
-  const handleLeaveBottom = () => {
-    setIsBottomVisible(false);
-  };
+  const { isBottomVisible, handleReachBottom, handleLeaveBottom, observerRef } =
+    useObserverBottom();
 
   if (!contents) return null;
 
