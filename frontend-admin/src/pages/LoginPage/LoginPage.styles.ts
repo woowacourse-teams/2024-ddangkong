@@ -1,5 +1,5 @@
-import { flexCenter } from "@/styles/common";
-import { css, Theme } from "@emotion/react";
+import { flexCenter } from '@/styles/common';
+import { css, Theme } from '@emotion/react';
 
 export const loginLayout = (theme: Theme) => css`
   ${flexCenter}
@@ -47,7 +47,7 @@ export const passwordInput = (theme: Theme) => css`
 `;
 
 export const errorMessage = (isError: boolean) => css`
-  visibility: ${isError ? "visible" : "hidden"};
+  visibility: ${isError ? 'visible' : 'hidden'};
   color: red;
   font-size: 1.2rem;
   min-height: 1.2rem;

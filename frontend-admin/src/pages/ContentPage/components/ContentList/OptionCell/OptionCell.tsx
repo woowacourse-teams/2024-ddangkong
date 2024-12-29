@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from 'react';
 import {
   detailContainer,
   detailText,
@@ -6,9 +6,9 @@ import {
   gridItem,
   optionInput,
   optionText,
-} from "./OptionCell.styles";
-import { Option } from "@/types/content";
-import useEditOptionMutation from "@/pages/ContentPage/hooks/useEditOptionMutation";
+} from './OptionCell.styles';
+import { Option } from '@/types/content';
+import useEditOptionMutation from '@/pages/ContentPage/hooks/useEditOptionMutation';
 
 const OPTION_LIMIT_LENGTH = 16;
 
@@ -31,7 +31,7 @@ const OptionCell = ({ option }: OptionCellProps) => {
       {
         onSuccess: () => setIsEdit(false),
         onError: () => setValue(option.name),
-      }
+      },
     );
   };
 
@@ -49,11 +49,8 @@ const OptionCell = ({ option }: OptionCellProps) => {
         <span css={optionText}>{option.name}</span>
       )}
       <div css={detailContainer}>
-        <button
-          css={editButton}
-          onClick={isEdit ? handleCompleteEdit : handleEdit}
-        >
-          {isEdit ? "완료" : "편집"}
+        <button css={editButton} onClick={isEdit ? handleCompleteEdit : handleEdit}>
+          {isEdit ? '완료' : '편집'}
         </button>
         <span css={detailText}>
           {value.length}/{OPTION_LIMIT_LENGTH}자

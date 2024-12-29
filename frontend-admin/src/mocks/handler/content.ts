@@ -1,9 +1,9 @@
-import { http, HttpResponse, PathParams } from "msw";
+import { http, HttpResponse, PathParams } from 'msw';
 
-import BALANCE_CONTENT from "../data/balanceContent.json";
-import CATEGORY_LIST from "../data/categoryList.json";
+import BALANCE_CONTENT from '../data/balanceContent.json';
+import CATEGORY_LIST from '../data/categoryList.json';
 
-import { MOCK_API_URL } from "@/constants/url";
+import { MOCK_API_URL } from '@/constants/url';
 
 interface DeleteContentParams extends PathParams {
   contentId: string;
@@ -41,9 +41,7 @@ const appendContentHandler = async ({ request }: { request: Request }) => {
 const editQuestionHandler = async ({ request }: { request: Request }) => {
   const body = await request.json();
 
-  const content = BALANCE_CONTENT.contents.find(
-    (content) => content.contentId === body.contentId
-  );
+  const content = BALANCE_CONTENT.contents.find((content) => content.contentId === body.contentId);
 
   if (!content) return new HttpResponse(null, { status: 404 });
 
@@ -56,7 +54,7 @@ const editOptionHandler = async ({ request }: { request: Request }) => {
   const body = await request.json();
 
   const firstContent = BALANCE_CONTENT.contents.find(
-    (content) => content.firstOption.optionId === body.optionId
+    (content) => content.firstOption.optionId === body.optionId,
   );
 
   if (firstContent) {
@@ -65,7 +63,7 @@ const editOptionHandler = async ({ request }: { request: Request }) => {
   }
 
   const secondContent = BALANCE_CONTENT.contents.find(
-    (content) => content.secondOption.optionId === body.optionId
+    (content) => content.secondOption.optionId === body.optionId,
   );
 
   if (secondContent) {
@@ -76,11 +74,7 @@ const editOptionHandler = async ({ request }: { request: Request }) => {
   return new HttpResponse(null, { status: 404 });
 };
 
-const deleteContentHandler = async ({
-  params,
-}: {
-  params: DeleteContentParams;
-}) => {
+const deleteContentHandler = async ({ params }: { params: DeleteContentParams }) => {
   const contentId = params.contentId;
 
   if (!contentId) {
@@ -88,7 +82,7 @@ const deleteContentHandler = async ({
   }
 
   const filteredContent = BALANCE_CONTENT.contents.filter(
-    (content) => content.contentId !== Number(contentId)
+    (content) => content.contentId !== Number(contentId),
   );
 
   BALANCE_CONTENT.contents = filteredContent;

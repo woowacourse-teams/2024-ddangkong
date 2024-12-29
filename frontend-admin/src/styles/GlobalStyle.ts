@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import { css } from '@emotion/react';
 
 const reset = css`
   html,
@@ -123,7 +123,7 @@ const reset = css`
   blockquote::after,
   q::before,
   q::after {
-    content: "";
+    content: '';
     content: none;
   }
 
@@ -166,7 +166,7 @@ const globalStyle = css`
 
   * {
     box-sizing: border-box;
-    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    font-family: 'Pretendard Variable', Pretendard, sans-serif;
   }
 
   body {

@@ -1,9 +1,9 @@
-import { fetchCategoryList } from "@/apis/content";
-import { useQuery } from "@tanstack/react-query";
+import { fetchCategoryList } from '@/apis/content';
+import { useQuery } from '@tanstack/react-query';
 
 const useCategoryListQuery = () => {
   return useQuery({
-    queryKey: ["category"],
+    queryKey: ['category'],
     queryFn: () => fetchCategoryList(),
     select: (data) => data.categories,
     staleTime: Infinity,

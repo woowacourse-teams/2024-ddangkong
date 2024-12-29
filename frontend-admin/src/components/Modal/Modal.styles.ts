@@ -1,6 +1,6 @@
-import { css } from "@emotion/react";
+import { css } from '@emotion/react';
 
-import { ModalProps } from "./Modal";
+import { ModalProps } from './Modal';
 
 export const modalBackdropLayout = css`
   display: flex;
@@ -12,9 +12,7 @@ export const modalBackdropLayout = css`
   inset: 0;
 `;
 
-export const modalContentWrapper = ({
-  position,
-}: Pick<ModalProps, "position">) => css`
+export const modalContentWrapper = ({ position }: Pick<ModalProps, 'position'>) => css`
   display: flex;
   position: fixed;
   left: 50%;
@@ -35,17 +33,17 @@ export const modalContentWrapper = ({
 
   ${(() => {
     switch (position) {
-      case "top":
+      case 'top':
         return `
           top: 0;
           transform: translate(-50%, 0%);
         `;
-      case "bottom":
+      case 'bottom':
         return `
           bottom: 0;
           transform: translate(-50%, 0%);
         `;
-      case "center":
+      case 'center':
         return `
           top: 50%;
           transform: translate(-50%, -50%);
@@ -68,8 +66,8 @@ export const modalHeaderLayout = css`
   font-weight: bold;
 `;
 
-export const modalHeaderEmptyBox = (position: "center" | "left") => css`
-  display: ${position === "center" ? "block" : "none"};
+export const modalHeaderEmptyBox = (position: 'center' | 'left') => css`
+  display: ${position === 'center' ? 'block' : 'none'};
   width: 1.6rem;
 `;
 
@@ -153,7 +151,7 @@ export const modalInputLayout = css`
 `;
 
 interface ModalFooterProps {
-  position?: "left" | "center" | "right";
+  position?: 'left' | 'center' | 'right';
   gap?: string;
 }
 

@@ -1,4 +1,4 @@
-import { css, Theme } from "@emotion/react";
+import { css, Theme } from '@emotion/react';
 
 export const gridItem = (theme: Theme) => css`
   display: flex;

@@ -1,4 +1,4 @@
-import { css, Theme } from "@emotion/react";
+import { css, Theme } from '@emotion/react';
 
 export const alertModalTitle = css`
   font-size: 1.6rem;

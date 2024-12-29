@@ -1,4 +1,4 @@
-import SpinDdangkong from "@/assets/images/spinDdangkong.webp";
+import SpinDdangkong from '@/assets/images/spinDdangkong.webp';
 import {
   contentContainer,
   contentLayout,
@@ -8,8 +8,8 @@ import {
   loginTitle,
   logoutButton,
   rightHeader,
-} from "./ContentPage.styles";
-import ContentContainer from "./components/ContentContainer/ContentContainer";
+} from './ContentPage.styles';
+import ContentContainer from './components/ContentContainer/ContentContainer';
 
 const ContentPage = () => {
   return (

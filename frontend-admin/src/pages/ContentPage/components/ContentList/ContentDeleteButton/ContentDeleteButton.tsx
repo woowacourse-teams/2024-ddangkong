@@ -1,17 +1,14 @@
-import useModal from "@/hooks/useModal";
-import useDeleteContentMutation from "@/pages/ContentPage/hooks/useDeleteContentMutation";
-import DeleteModal from "../DeleteModal/DeleteModal";
-import { deleteButton } from "./ContentDeleteButton.styles";
+import useModal from '@/hooks/useModal';
+import useDeleteContentMutation from '@/pages/ContentPage/hooks/useDeleteContentMutation';
+import DeleteModal from '../DeleteModal/DeleteModal';
+import { deleteButton } from './ContentDeleteButton.styles';
 
 interface ContentDeleteButtonProps {
   contentId: number;
   question: string;
 }
 
-const ContentDeleteButton = ({
-  contentId,
-  question,
-}: ContentDeleteButtonProps) => {
+const ContentDeleteButton = ({ contentId, question }: ContentDeleteButtonProps) => {
   const { mutate: deleteContentItem } = useDeleteContentMutation();
   const { showModal } = useModal();
 

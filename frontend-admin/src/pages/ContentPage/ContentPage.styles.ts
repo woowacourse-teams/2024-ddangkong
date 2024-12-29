@@ -1,5 +1,5 @@
-import { flexCenter } from "@/styles/common";
-import { css, Theme } from "@emotion/react";
+import { flexCenter } from '@/styles/common';
+import { css, Theme } from '@emotion/react';
 
 export const contentLayout = (theme: Theme) => css`
   ${flexCenter}

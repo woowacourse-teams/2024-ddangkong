@@ -1,7 +1,7 @@
-import { Category, Content } from "@/types/content";
-import fetcher from "./fetcher";
+import { Category, Content } from '@/types/content';
+import fetcher from './fetcher';
 
-import { API_URL } from "@/constants/url";
+import { API_URL } from '@/constants/url';
 
 interface ContentResponse {
   contents: Content[];
@@ -33,9 +33,7 @@ interface CategoryResponse {
 }
 
 // 컨텐츠 가져오기
-export const fetchBalanceContent = async (
-  category: string
-): Promise<ContentResponse> => {
+export const fetchBalanceContent = async (category: string): Promise<ContentResponse> => {
   const res = await fetcher.get(API_URL.balanceContent(category));
 
   return await res.json();

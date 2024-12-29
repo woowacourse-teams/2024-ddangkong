@@ -1,8 +1,8 @@
-import { Fragment } from "react";
+import { Fragment } from 'react';
 
-import { alertText, closeButton, deleteButton } from "./DeleteModal.styles";
-import Modal from "@/components/Modal/Modal";
-import { theme } from "@/styles/theme";
+import { alertText, closeButton, deleteButton } from './DeleteModal.styles';
+import Modal from '@/components/Modal/Modal';
+import { theme } from '@/styles/theme';
 
 interface DeleteModalProps {
   isOpen: boolean;
@@ -12,13 +12,7 @@ interface DeleteModalProps {
   title?: string;
 }
 
-const DeleteModal = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  message,
-  title,
-}: DeleteModalProps) => {
+const DeleteModal = ({ isOpen, onClose, onConfirm, message, title }: DeleteModalProps) => {
   const handleClick = () => {
     if (onConfirm) {
       onConfirm();
@@ -27,21 +21,21 @@ const DeleteModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} css={{ padding: "4rem" }}>
-      <Modal.Header css={{ gap: "1.6rem" }}>
-        <Modal.Title>{title || "해당 질문을 삭제하시겠습니까?"}</Modal.Title>
+    <Modal isOpen={isOpen} onClose={onClose} css={{ padding: '4rem' }}>
+      <Modal.Header css={{ gap: '1.6rem' }}>
+        <Modal.Title>{title || '해당 질문을 삭제하시겠습니까?'}</Modal.Title>
         <Modal.IconButton onClick={onClose} imgSize="2.4rem" />
       </Modal.Header>
       <Modal.Content>
         {message &&
-          message.split("\n").map((text) => (
+          message.split('\n').map((text) => (
             <Fragment key={text}>
               <span css={alertText}>{text}</span>
               <br />
             </Fragment>
           ))}
       </Modal.Content>
-      <Modal.Footer css={{ height: "3.6rem" }}>
+      <Modal.Footer css={{ height: '3.6rem' }}>
         <Modal.TextButton
           onClick={handleClick}
           width="40%"

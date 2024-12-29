@@ -1,6 +1,6 @@
-import { login } from "@/apis/login";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { login } from '@/apis/login';
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 const UseLoginMutation = () => {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ const UseLoginMutation = () => {
   return useMutation({
     mutationFn: login,
     onSuccess: () => {
-      navigate("/content");
+      navigate('/content');
     },
     onError: (error) => {
       // 실패하면 인풋 아래에 에러 메시지 출력

@@ -1,5 +1,5 @@
-import { editOption } from "@/apis/content";
-import { useMutation } from "@tanstack/react-query";
+import { editOption } from '@/apis/content';
+import { useMutation } from '@tanstack/react-query';
 
 const useEditOptionMutation = () => {
   return useMutation({

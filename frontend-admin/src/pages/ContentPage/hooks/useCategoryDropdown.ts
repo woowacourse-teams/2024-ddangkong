@@ -1,10 +1,10 @@
-import useCategoryQueryParams from "@/hooks/useCategoryQueryParams";
-import { Category, CategoryLabel, CategoryValue } from "@/types/content";
-import { useState } from "react";
+import useCategoryQueryParams from '@/hooks/useCategoryQueryParams';
+import { Category, CategoryLabel, CategoryValue } from '@/types/content';
+import { useState } from 'react';
 
 const CATEGORY_INIT_DATA = {
-  label: "만약에",
-  value: "IF",
+  label: '만약에',
+  value: 'IF',
 } as const;
 
 const useCategoryDropdown = () => {

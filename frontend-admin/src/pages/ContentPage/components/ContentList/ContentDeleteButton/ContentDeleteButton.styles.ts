@@ -1,4 +1,4 @@
-import { css, Theme } from "@emotion/react";
+import { css, Theme } from '@emotion/react';
 
 export const deleteButton = (theme: Theme) => css`
   border: 0.1rem solid ${theme.color.red300};

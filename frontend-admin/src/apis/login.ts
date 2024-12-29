@@ -1,5 +1,5 @@
-import { API_URL } from "@/constants/url";
-import fetcher from "./fetcher";
+import { API_URL } from '@/constants/url';
+import fetcher from './fetcher';
 
 interface LoginParams {
   password: string;

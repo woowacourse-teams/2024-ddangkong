@@ -1,5 +1,5 @@
-import ModalContext from "@/contexts/ModalContext";
-import { PropsWithChildren, useMemo, useState } from "react";
+import ModalContext from '@/contexts/ModalContext';
+import { PropsWithChildren, useMemo, useState } from 'react';
 
 interface ModalProps {
   title?: string;
@@ -23,10 +23,7 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
     isOpen: false,
   });
 
-  const showModal = (
-    Component: React.FC<ModalState> | null,
-    props?: ModalProps
-  ) => {
+  const showModal = (Component: React.FC<ModalState> | null, props?: ModalProps) => {
     setModal({
       Component,
       title: props?.title,
@@ -49,9 +46,7 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
   return (
     <ModalContext.Provider value={dispatch}>
       {children}
-      {modal.isOpen && modal.Component && (
-        <modal.Component onClose={close} {...modal} />
-      )}
+      {modal.isOpen && modal.Component && <modal.Component onClose={close} {...modal} />}
     </ModalContext.Provider>
   );
 };

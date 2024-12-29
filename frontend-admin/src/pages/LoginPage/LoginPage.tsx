@@ -1,4 +1,4 @@
-import SpinDdangkong from "@/assets/images/spinDdangkong.webp";
+import SpinDdangkong from '@/assets/images/spinDdangkong.webp';
 import {
   errorMessage,
   image,
@@ -8,12 +8,11 @@ import {
   loginLayout,
   loginTitle,
   passwordInput,
-} from "./LoginPage.styles";
-import usePassword from "./hooks/usePassword";
+} from './LoginPage.styles';
+import usePassword from './hooks/usePassword';
 
 const LoginPage = () => {
-  const { password, error, handleChange, handleLogin, handleKeyDown } =
-    usePassword();
+  const { password, error, handleChange, handleLogin, handleKeyDown } = usePassword();
 
   return (
     <div css={loginLayout}>
@@ -30,7 +29,7 @@ const LoginPage = () => {
             onKeyDown={handleKeyDown}
             placeholder="비밀번호를 입력해주세요"
           />
-          <div css={errorMessage(Boolean(error))}>{error || " "}</div>
+          <div css={errorMessage(Boolean(error))}>{error || ' '}</div>
         </div>
         <button css={loginButton} onClick={handleLogin}>
           로그인

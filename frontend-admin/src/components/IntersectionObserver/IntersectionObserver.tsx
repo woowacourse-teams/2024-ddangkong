@@ -1,10 +1,4 @@
-import {
-  Fragment,
-  PropsWithChildren,
-  RefObject,
-  useEffect,
-  useState,
-} from "react";
+import { Fragment, PropsWithChildren, RefObject, useEffect, useState } from 'react';
 
 interface IntersectionObserverScrollProps {
   observerRef: RefObject<HTMLDivElement>;
@@ -45,7 +39,7 @@ const IntersectionObserverScroll = ({
       },
       {
         threshold,
-      }
+      },
     );
 
     observer.observe(observerRef.current);
@@ -61,8 +55,8 @@ const IntersectionObserverScroll = ({
       <div
         ref={observerRef}
         style={{
-          height: "1px",
-          background: "transparent",
+          height: '1px',
+          background: 'transparent',
         }}
       />
     </Fragment>

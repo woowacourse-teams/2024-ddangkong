@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from 'react';
 import {
   detailContainer,
   detailText,
@@ -6,8 +6,8 @@ import {
   gridItem,
   questionInput,
   questionText,
-} from "./QuestionCell.styles";
-import useEditQuestionMutation from "@/pages/ContentPage/hooks/useEditQuestionMutation";
+} from './QuestionCell.styles';
+import useEditQuestionMutation from '@/pages/ContentPage/hooks/useEditQuestionMutation';
 
 const QUESTION_LIMIT_LENGTH = 36;
 
@@ -28,7 +28,7 @@ const QuestionCell = ({ question, contentId }: QuestionCellProps) => {
   const handleCompleteEdit = () => {
     editQuestion(
       { contentId, name: question },
-      { onSuccess: () => setIsEdit(false), onError: () => setValue(question) }
+      { onSuccess: () => setIsEdit(false), onError: () => setValue(question) },
     );
   };
 
@@ -46,11 +46,8 @@ const QuestionCell = ({ question, contentId }: QuestionCellProps) => {
         <span css={questionText}>{value}</span>
       )}
       <div css={detailContainer}>
-        <button
-          css={editButton}
-          onClick={isEdit ? handleCompleteEdit : handleEdit}
-        >
-          {isEdit ? "완료" : "편집"}
+        <button css={editButton} onClick={isEdit ? handleCompleteEdit : handleEdit}>
+          {isEdit ? '완료' : '편집'}
         </button>
         <span css={detailText}>
           {value.length}/{QUESTION_LIMIT_LENGTH}자

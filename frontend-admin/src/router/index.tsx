@@ -1,18 +1,18 @@
-import ContentPage from "@/pages/ContentPage/ContentPage";
-import LoginPage from "@/pages/LoginPage/LoginPage";
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import ContentPage from '@/pages/ContentPage/ContentPage';
+import LoginPage from '@/pages/LoginPage/LoginPage';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Navigate to="/login" replace />,
   },
   {
-    path: "/login",
+    path: '/login',
     element: <LoginPage />,
   },
   {
-    path: "/content",
+    path: '/content',
     element: <ContentPage />,
   },
 ]);

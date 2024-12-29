@@ -5,10 +5,10 @@ import React, {
   useEffect,
   useRef,
   PropsWithChildren,
-} from "react";
-import ReactDOM from "react-dom";
+} from 'react';
+import ReactDOM from 'react-dom';
 
-import useModalEscClose from "./hooks/useModalEscClose";
+import useModalEscClose from './hooks/useModalEscClose';
 import {
   modalBackdropLayout,
   modalContentLayout,
@@ -20,15 +20,15 @@ import {
   modalInputLayout,
   modalTextButton,
   modalTitle,
-} from "./Modal.styles";
+} from './Modal.styles';
 
-import CloseIcon from "@/assets/images/close.svg";
-import { theme } from "@/styles/theme";
+import CloseIcon from '@/assets/images/close.svg';
+import { theme } from '@/styles/theme';
 
 export interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
   onClose: () => void;
-  position?: "top" | "bottom" | "center";
+  position?: 'top' | 'bottom' | 'center';
   style?: React.CSSProperties;
   returnFocusRef?: RefObject<HTMLElement>;
 }
@@ -38,20 +38,14 @@ const Modal = ({
   isOpen,
   onClose,
   returnFocusRef,
-  position = "center",
+  position = 'center',
   ...restProps
 }: PropsWithChildren<ModalProps>) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
   useModalEscClose(isOpen, onClose);
 
-  const handleOutsideClick = (
-    event: React.MouseEvent | React.KeyboardEvent
-  ) => {
-    if (
-      isOpen &&
-      modalRef.current &&
-      !modalRef.current.contains(event.target as Node)
-    ) {
+  const handleOutsideClick = (event: React.MouseEvent | React.KeyboardEvent) => {
+    if (isOpen && modalRef.current && !modalRef.current.contains(event.target as Node)) {
       onClose();
     }
   };
@@ -77,11 +71,7 @@ const Modal = ({
       onClick={handleOutsideClick}
       onKeyDown={handleOutsideClick}
     >
-      <div
-        css={modalContentWrapper({ position })}
-        ref={modalRef}
-        {...restProps}
-      >
+      <div css={modalContentWrapper({ position })} ref={modalRef} {...restProps}>
         {children}
       </div>
     </div>
@@ -90,16 +80,11 @@ const Modal = ({
   return ReactDOM.createPortal(modalContent, document.body);
 };
 
-interface ModalHeaderProps
-  extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {
-  position?: "center" | "left";
+interface ModalHeaderProps extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {
+  position?: 'center' | 'left';
 }
 
-const ModalHeader = ({
-  position = "center",
-  children,
-  ...restProps
-}: ModalHeaderProps) => {
+const ModalHeader = ({ position = 'center', children, ...restProps }: ModalHeaderProps) => {
   return (
     <header css={modalHeaderLayout} {...restProps}>
       <div css={modalHeaderEmptyBox(position)}></div>
@@ -108,15 +93,14 @@ const ModalHeader = ({
   );
 };
 
-interface ModalTitleProps
-  extends React.PropsWithChildren<HTMLAttributes<HTMLHeadingElement>> {
+interface ModalTitleProps extends React.PropsWithChildren<HTMLAttributes<HTMLHeadingElement>> {
   fontSize?: string;
   fontWeight?: string;
 }
 
 const ModalTitle = ({
-  fontSize = "2rem",
-  fontWeight = "bold",
+  fontSize = '2rem',
+  fontWeight = 'bold',
   children,
   ...restProps
 }: ModalTitleProps) => {
@@ -133,9 +117,9 @@ interface ModalIconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const ModalIconButton = ({
-  type = "button",
+  type = 'button',
   src = CloseIcon,
-  imgSize = "1.6rem",
+  imgSize = '1.6rem',
   ...restProps
 }: ModalIconButtonProps) => {
   return (
@@ -155,13 +139,13 @@ interface ModalTextButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const ModalTextButton = ({
-  type = "button",
+  type = 'button',
   onConfirm,
-  width = "100%",
-  height = "100%",
+  width = '100%',
+  height = '100%',
   backgroundColor = theme.color.peanut400,
-  fontSize = "1.6rem",
-  color = "#000000",
+  fontSize = '1.6rem',
+  color = '#000000',
   ...restProps
 }: ModalTextButtonProps) => {
   return (
@@ -174,16 +158,11 @@ const ModalTextButton = ({
   );
 };
 
-interface ModalContentProps
-  extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {
+interface ModalContentProps extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {
   fontSize?: string;
 }
 
-const ModalContent = ({
-  children,
-  fontSize = "1.6rem",
-  ...restProps
-}: ModalContentProps) => {
+const ModalContent = ({ children, fontSize = '1.6rem', ...restProps }: ModalContentProps) => {
   return (
     <section css={modalContentLayout({ fontSize })} {...restProps}>
       {children}
@@ -197,16 +176,15 @@ const ModalInput = ({ ...restProps }: ModalInputProps) => {
   return <input css={modalInputLayout} {...restProps} />;
 };
 
-interface ModalFooterProps
-  extends React.PropsWithChildren<HTMLAttributes<HTMLDivElement>> {
-  position?: "left" | "center" | "right";
+interface ModalFooterProps extends React.PropsWithChildren<HTMLAttributes<HTMLDivElement>> {
+  position?: 'left' | 'center' | 'right';
   gap?: string;
 }
 
 const ModalFooter = ({
   children,
-  position = "center",
-  gap = "1.2rem",
+  position = 'center',
+  gap = '1.2rem',
   ...restProps
 }: ModalFooterProps) => {
   return (

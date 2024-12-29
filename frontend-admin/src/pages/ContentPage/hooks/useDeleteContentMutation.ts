@@ -1,6 +1,6 @@
-import { deleteContent } from "@/apis/content";
-import useCategoryQueryParams from "@/hooks/useCategoryQueryParams";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteContent } from '@/apis/content';
+import useCategoryQueryParams from '@/hooks/useCategoryQueryParams';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const useDeleteContentMutation = () => {
   const queryClient = useQueryClient();
@@ -9,7 +9,7 @@ const useDeleteContentMutation = () => {
   return useMutation({
     mutationFn: deleteContent,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["contents", category] });
+      queryClient.invalidateQueries({ queryKey: ['contents', category] });
     },
   });
 };

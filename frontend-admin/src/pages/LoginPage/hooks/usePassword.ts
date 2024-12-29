@@ -1,14 +1,14 @@
-import { ChangeEvent, useState } from "react";
-import UseLoginMutation from "./UseLoginMutation";
+import { ChangeEvent, useState } from 'react';
+import UseLoginMutation from './UseLoginMutation';
 
 const usePassword = () => {
   const { mutate: login } = UseLoginMutation();
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-    setError("");
+    setError('');
   };
 
   const handleLogin = () => {
@@ -16,18 +16,18 @@ const usePassword = () => {
       { password },
       {
         onSuccess: () => {
-          setPassword("");
-          setError("");
+          setPassword('');
+          setError('');
         },
         onError: () => {
-          setError("비밀번호를 다시 입력해주세요.");
+          setError('비밀번호를 다시 입력해주세요.');
         },
-      }
+      },
     );
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       handleLogin();
     }
   };
