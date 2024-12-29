@@ -92,7 +92,7 @@ const Modal = ({
 
 interface ModalHeaderProps
   extends React.PropsWithChildren<HTMLAttributes<HTMLElement>> {
-  position: "center" | "left";
+  position?: "center" | "left";
 }
 
 const ModalHeader = ({
@@ -205,8 +205,8 @@ interface ModalFooterProps
 
 const ModalFooter = ({
   children,
-  buttonPosition,
-  buttonGap,
+  buttonPosition = "center",
+  buttonGap = "1.2rem",
   ...restProps
 }: ModalFooterProps) => {
   return (

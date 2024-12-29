@@ -161,8 +161,8 @@ interface ModalFooterProps {
 }
 
 export const modalFooter = ({
-  buttonPosition = "center",
-  buttonGap = "1.2rem",
+  buttonPosition,
+  buttonGap,
 }: ModalFooterProps) => css`
   display: flex;
   justify-content: ${buttonPosition};

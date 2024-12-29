@@ -11,6 +11,7 @@ const color = {
   gray500: "#7A7A7A",
   red300: "#FC4A4A",
   white: "#FFFFFF",
+  black: "#000000",
 } as const;
 
 const opacity = {
