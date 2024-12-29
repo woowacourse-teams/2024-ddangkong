@@ -1,17 +1,14 @@
+import useCategoryQueryParams from '@/hooks/useCategoryQueryParams';
 import { Category, CategoryLabel, CategoryValue } from '@/types/content';
 import { useState } from 'react';
 
-const CATEGORY_INIT_DATA = {
-  label: '만약에',
-  value: 'IF',
-} as const;
-
 interface UseCategoryOptions {
-  handleChangeCategory?: (categoryValue: CategoryValue) => void; // 추가 동작 콜백
+  handleChangeCategory?: (value: CategoryValue, label: CategoryLabel) => void;
 }
 
 const useCategory = ({ handleChangeCategory }: UseCategoryOptions = {}) => {
-  const [category, setCategory] = useState<Category>(CATEGORY_INIT_DATA);
+  const { category: value, label } = useCategoryQueryParams();
+  const [category, setCategory] = useState<Category>({ label, value });
 
   const handleClickOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
@@ -23,7 +20,7 @@ const useCategory = ({ handleChangeCategory }: UseCategoryOptions = {}) => {
     setCategory({ value: clickedCategoryValue, label: clickedCategoryLabel });
 
     if (handleChangeCategory) {
-      handleChangeCategory(clickedCategoryValue);
+      handleChangeCategory(clickedCategoryValue, clickedCategoryLabel);
     }
   };
 
