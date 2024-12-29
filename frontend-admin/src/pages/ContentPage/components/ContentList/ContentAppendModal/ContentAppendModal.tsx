@@ -44,7 +44,7 @@ const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) =
     if (newErrors.question || newErrors.firstOption || newErrors.secondOption) return;
 
     if (onConfirm) {
-      onConfirm({ category, question, firstOption, secondOption });
+      onConfirm({ category: category.value, question, firstOption, secondOption });
     }
     onClose();
   };

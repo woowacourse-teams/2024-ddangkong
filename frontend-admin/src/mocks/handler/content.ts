@@ -35,6 +35,8 @@ const appendContentHandler = async ({ request }: { request: Request }) => {
     },
   };
 
+  BALANCE_CONTENT.contents.push(newContent);
+
   return HttpResponse.json(newContent);
 };
 
