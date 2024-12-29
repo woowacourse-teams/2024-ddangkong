@@ -17,6 +17,7 @@ export const dropdownWrapper = css`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
+  margin-bottom: 1.4rem;
 `;
 
 export const dropdownLabel = css`

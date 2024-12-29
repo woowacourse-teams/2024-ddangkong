@@ -12,9 +12,9 @@ import Modal from '@/components/Modal/Modal';
 import Dropdown from '@/components/Dropdown/Dropdown';
 import useCategory from '@/pages/ContentPage/hooks/useCategory';
 import useCategoryListQuery from '@/hooks/useCategoryListQuery';
-import QuestionInput from './QuestionInput';
 import { ModalState } from '@/types/modal';
 import useInput from '@/hooks/useInput';
+import ContentInput from './ContentInput/ContentInput';
 
 const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) => {
   const { category, handleClickOption } = useCategory();
@@ -49,20 +49,20 @@ const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) =
             width="100%"
           />
         </div>
-        <QuestionInput
+        <ContentInput
           label="질문"
           value={question}
           handleChange={handleChangeQuestion}
           placeholder="추가할 질문을 입력해주세요"
           maxLength={36}
         />
-        <QuestionInput
+        <ContentInput
           label="옵션 1"
           value={firstOption}
           handleChange={handleChangeFirstOption}
           placeholder="첫 번째 옵션을 입력해주세요"
         />
-        <QuestionInput
+        <ContentInput
           label="옵션 2"
           value={secondOption}
           handleChange={handleChangeSecondOption}
