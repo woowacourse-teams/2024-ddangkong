@@ -1,7 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
 export const modalLayout = css`
-  padding: 4rem 8rem;
+  padding: 4rem 6rem;
 `;
 
 export const header = css`
