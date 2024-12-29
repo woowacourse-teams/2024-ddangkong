@@ -19,8 +19,8 @@ export const modalContentWrapper = ({
   position: fixed;
   left: 50%;
   flex-direction: column;
-  gap: 1.6rem;
-  width: 28rem;
+  gap: 2.4rem;
+
   height: fit-content;
   max-height: 70vh;
   min-height: 1.2rem;
@@ -83,11 +83,7 @@ export const modalTitle = ({ fontSize, fontWeight }: ModalTitleProps) => css`
   font-weight: ${fontWeight};
 `;
 
-export const modalIconButton = ({
-  imgSize = "1.6rem",
-}: {
-  imgSize?: string;
-}) => css`
+export const modalIconButton = ({ imgSize }: { imgSize?: string }) => css`
   width: ${imgSize};
   height: ${imgSize};
   padding: 0;
@@ -99,6 +95,7 @@ export const modalIconButton = ({
 
   img {
     width: 100%;
+    height: 100%;
   }
 `;
 
@@ -156,15 +153,12 @@ export const modalInputLayout = css`
 `;
 
 interface ModalFooterProps {
-  buttonPosition?: "left" | "center" | "right";
-  buttonGap?: string;
+  position?: "left" | "center" | "right";
+  gap?: string;
 }
 
-export const modalFooter = ({
-  buttonPosition,
-  buttonGap,
-}: ModalFooterProps) => css`
+export const modalFooter = ({ position, gap }: ModalFooterProps) => css`
   display: flex;
-  justify-content: ${buttonPosition};
-  gap: ${buttonGap};
+  justify-content: ${position};
+  gap: ${gap};
 `;
