@@ -78,12 +78,9 @@ interface ModalTitleProps {
   fontWeight?: string;
 }
 
-export const modalTitle = ({
-  fontSize = "bold",
-  fontWeight = "2rem",
-}: ModalTitleProps) => css`
-  font-weight: ${fontWeight};
+export const modalTitle = ({ fontSize, fontWeight }: ModalTitleProps) => css`
   font-size: ${fontSize};
+  font-weight: ${fontWeight};
 `;
 
 export const modalIconButton = ({
@@ -105,18 +102,41 @@ export const modalIconButton = ({
   }
 `;
 
-export const modalTextButton = css`
+interface ModalTextButtonProps {
+  width?: string;
+  height?: string;
+  fontSize?: string;
+  backgroundColor?: string;
+  color?: string;
+}
+
+export const modalTextButton = ({
+  width,
+  height,
+  fontSize,
+  backgroundColor,
+  color,
+}: ModalTextButtonProps) => css`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: ${width};
+  height: ${height};
   padding: 1rem;
   border: none;
   border-radius: 0.8rem;
 
+  background-color: ${backgroundColor};
+
   font-weight: bold;
+  font-size: ${fontSize};
 
   &:focus {
     outline: none;
+  }
+
+  &:enabled {
+    color: ${color};
   }
 `;
 
@@ -124,13 +144,7 @@ interface ModalContentProps {
   fontSize?: string;
 }
 
-export const modalContentLayout = ({
-  fontSize = "1.2rem",
-}: ModalContentProps) => css`
-  * {
-    box-sizing: border-box;
-  }
-
+export const modalContentLayout = ({ fontSize }: ModalContentProps) => css`
   font-size: ${fontSize};
 `;
 

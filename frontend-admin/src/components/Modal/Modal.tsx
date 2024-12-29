@@ -22,7 +22,7 @@ import {
   modalTitle,
 } from "./Modal.styles";
 
-import CloseIcon from "@/assets/images/closeIcon.png";
+import CloseIcon from "@/assets/images/close.svg";
 import { theme } from "@/styles/theme";
 
 export interface ModalProps {
@@ -115,8 +115,8 @@ interface ModalTitleProps
 }
 
 const ModalTitle = ({
-  fontSize,
-  fontWeight,
+  fontSize = "2rem",
+  fontWeight = "bold",
   children,
   ...restProps
 }: ModalTitleProps) => {
@@ -166,14 +166,7 @@ const ModalTextButton = ({
 }: ModalTextButtonProps) => {
   return (
     <button
-      css={modalTextButton}
-      style={{
-        width,
-        height,
-        color,
-        backgroundColor,
-        fontSize,
-      }}
+      css={modalTextButton({ width, height, color, backgroundColor, fontSize })}
       type={type}
       onClick={onConfirm}
       {...restProps}
@@ -188,7 +181,7 @@ interface ModalContentProps
 
 const ModalContent = ({
   children,
-  fontSize = "1.4rem",
+  fontSize = "1.6rem",
   ...restProps
 }: ModalContentProps) => {
   return (
