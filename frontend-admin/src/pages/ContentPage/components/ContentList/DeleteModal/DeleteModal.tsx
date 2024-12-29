@@ -1,11 +1,6 @@
 import { Fragment } from "react";
 
-import {
-  alertModalTitle,
-  alertText,
-  closeButton,
-  deleteButton,
-} from "./DeleteModal.styles";
+import { alertText, closeButton, deleteButton } from "./DeleteModal.styles";
 import Modal from "@/components/Modal/Modal";
 import { theme } from "@/styles/theme";
 
@@ -32,12 +27,10 @@ const DeleteModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <Modal.Header>
-        <Modal.Title css={alertModalTitle}>
-          {title || "해당 질문을 삭제하시겠습니까?"}
-        </Modal.Title>
-        <Modal.IconButton onClick={onClose} />
+    <Modal isOpen={isOpen} onClose={onClose} css={{ padding: "4rem" }}>
+      <Modal.Header css={{ gap: "1.6rem" }}>
+        <Modal.Title>{title || "해당 질문을 삭제하시겠습니까?"}</Modal.Title>
+        <Modal.IconButton onClick={onClose} imgSize="2.4rem" />
       </Modal.Header>
       <Modal.Content>
         {message &&
@@ -48,7 +41,7 @@ const DeleteModal = ({
             </Fragment>
           ))}
       </Modal.Content>
-      <Modal.Footer>
+      <Modal.Footer css={{ height: "3.6rem" }}>
         <Modal.TextButton
           onClick={handleClick}
           width="40%"
