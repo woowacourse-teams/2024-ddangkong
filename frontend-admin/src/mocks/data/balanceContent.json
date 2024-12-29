@@ -18,18 +18,18 @@
     },
     {
       "contentId": 27,
-      "question": "100억 부자 송강호 vs 100억 빚 송강",
+      "question": "두 직장 중 하나를 골라야 한다면?",
       "firstOption": {
         "optionId": 57,
-        "name": "100억 부자 송강호",
-        "count": 15,
-        "percent": 50
+        "name": "월 500 하기 싫은 일",
+        "count": 3,
+        "percent": 30
       },
       "secondOption": {
         "optionId": 58,
-        "name": "100억 부자 송강호",
-        "count": 15,
-        "percent": 50
+        "name": "월 250 하고 싶은 일",
+        "count": 7,
+        "percent": 70
       }
     },
     {
