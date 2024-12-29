@@ -1,7 +1,9 @@
 import { Category, CategoryLabel, CategoryValue } from "@/types/content";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const useCategoryDropdown = () => {
+  const [_, setSearchParams] = useSearchParams();
   const [category, setCategory] = useState<Category>({
     label: "만약에",
     value: "IF",
@@ -15,6 +17,7 @@ const useCategoryDropdown = () => {
     if (!clickedCategoryValue) return;
 
     setCategory({ value: clickedCategoryValue, label: clickedCategoryLabel });
+    setSearchParams({ category: clickedCategoryValue });
   };
 
   return { category, handleClickOption };
