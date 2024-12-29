@@ -6,6 +6,7 @@ import { router } from "./router/index.tsx";
 import { Global, ThemeProvider } from "@emotion/react";
 import globalStyle from "./styles/globalStyle.ts";
 import { theme } from "./styles/theme.ts";
+import ModalProvider from "./providers/ModalProvider/ModalProvider.tsx";
 
 const queryClient = new QueryClient();
 
@@ -23,9 +24,11 @@ enableMocking().then(() => {
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
+        <Global styles={globalStyle} />
         <ThemeProvider theme={theme}>
-          <Global styles={globalStyle} />
-          <RouterProvider router={router} />
+          <ModalProvider>
+            <RouterProvider router={router} />
+          </ModalProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </StrictMode>
