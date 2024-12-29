@@ -1,9 +1,13 @@
-import { http, HttpResponse } from "msw";
+import { http, HttpResponse, PathParams } from "msw";
 
 import BALANCE_CONTENT from "../data/balanceContent.json";
 import CATEGORY_LIST from "../data/categoryList.json";
 
 import { MOCK_API_URL } from "@/constants/url";
+
+interface DeleteContentParams extends PathParams {
+  contentId: string;
+}
 
 const fetchBalanceContentHandler = () => {
   return HttpResponse.json(BALANCE_CONTENT);
@@ -72,10 +76,12 @@ const editOptionHandler = async ({ request }: { request: Request }) => {
   return new HttpResponse(null, { status: 404 });
 };
 
-const deleteContentHandler = async ({ request }: { request: Request }) => {
-  const url = new URL(request.url);
-
-  const contentId = url.searchParams.get("contentId");
+const deleteContentHandler = async ({
+  params,
+}: {
+  params: DeleteContentParams;
+}) => {
+  const contentId = params.contentId;
 
   if (!contentId) {
     return new HttpResponse(null, { status: 404 });
