@@ -94,12 +94,7 @@ const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) =
         <Modal.TextButton onClick={handleClick} width="40%" css={appendButton}>
           추가
         </Modal.TextButton>
-        <Modal.TextButton
-          onClick={handleClick}
-          width="40%"
-          backgroundColor="white"
-          css={closeButton}
-        >
+        <Modal.TextButton onClick={onClose} width="40%" backgroundColor="white" css={closeButton}>
           취소
         </Modal.TextButton>
       </Modal.Footer>
