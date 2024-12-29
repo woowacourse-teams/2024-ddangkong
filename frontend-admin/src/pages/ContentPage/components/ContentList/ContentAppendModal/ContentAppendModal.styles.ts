@@ -1,7 +1,31 @@
 import { css, Theme } from '@emotion/react';
 
-export const alertText = css`
-  word-break: keep-all;
+export const modalLayout = css`
+  padding: 4rem 8rem;
+`;
+
+export const header = css`
+  gap: 1.6rem;
+`;
+
+export const contentContainer = css`
+  gap: 1.6rem;
+`;
+
+export const dropdownWrapper = css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+`;
+
+export const dropdownLabel = css`
+  font-size: 1.6rem;
+  font-weight: bold;
+`;
+
+export const footerContainer = css`
+  height: 3.6rem;
 `;
 
 export const appendButton = (theme: Theme) => css`
