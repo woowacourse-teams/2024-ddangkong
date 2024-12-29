@@ -1,14 +1,19 @@
 package ddangkong.controller.balance;
 
 import ddangkong.facade.balance.AdminBalanceContentFacade;
+import ddangkong.facade.balance.dto.BalanceContentAdminResponse;
+import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchResponse;
 import ddangkong.facade.balance.dto.BalanceOptionPatchRequest;
 import ddangkong.facade.balance.dto.BalanceOptionPatchResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,6 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminBalanceController {
 
     private final AdminBalanceContentFacade adminBalanceContentFacade;
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/admin/balances/contents")
+    public BalanceContentAdminResponse createContent(@RequestBody BalanceContentCreateRequest request) {
+        return adminBalanceContentFacade.createContent(request);
+    }
 
     @PatchMapping("/admin/balances/contents")
     public BalanceContentPatchResponse updateContent(@RequestBody BalanceContentPatchRequest request) {

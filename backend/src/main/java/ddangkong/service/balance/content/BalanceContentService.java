@@ -33,4 +33,9 @@ public class BalanceContentService {
         Collections.shuffle(contents);
         return contents.subList(0, pickCount);
     }
+
+    @Transactional
+    public BalanceContent createBalanceContent(Category category, String name) {
+        return balanceContentRepository.save(new BalanceContent(category, name));
+    }
 }

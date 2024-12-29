@@ -29,7 +29,13 @@ public class BalanceOptionService {
         return new BalanceOptions(balanceOptions);
     }
 
+    @Transactional(readOnly = true)
     public List<BalanceOption> findMemberRoomBalanceVoteOptions(Member member) {
         return balanceOptionRepository.findMemberRoomBalanceVoteOptions(member);
+    }
+
+    @Transactional
+    public BalanceOption createBalanceOption(String name, BalanceContent content) {
+        return balanceOptionRepository.save(new BalanceOption(name, content));
     }
 }

@@ -4,8 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.facade.BaseServiceTest;
+import ddangkong.facade.balance.dto.BalanceContentAdminResponse;
+import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
 import ddangkong.facade.balance.dto.BalanceOptionPatchRequest;
 import java.util.Optional;
@@ -17,6 +20,29 @@ class AdminBalanceContentFacadeTest extends BaseServiceTest {
 
     @Autowired
     private AdminBalanceContentFacade adminBalanceContentFacade;
+
+    @Nested
+    class 밸런스_게임_질문지_추가 {
+
+        @Test
+        void 밸런스_게임_질문지를_추가할_수_있다() {
+            // given
+            BalanceContentCreateRequest request = new BalanceContentCreateRequest(
+                    Category.IF, "다음 중 더 좋은 초능력은?", "순간이동", "불로장생");
+
+            // when
+            BalanceContentAdminResponse response = adminBalanceContentFacade.createContent(request);
+
+            // then
+            assertAll(
+                    () -> assertThat(response.question()).isEqualTo(request.question()),
+                    () -> assertThat(response.firstOption().name()).isEqualTo(request.firstOption()),
+                    () -> assertThat(response.secondOption().name()).isEqualTo(request.secondOption()),
+                    () -> assertThat(balanceContentRepository.count()).isEqualTo(1L),
+                    () -> assertThat(balanceOptionRepository.count()).isEqualTo(2L)
+            );
+        }
+    }
 
     @Nested
     class 밸런스_게임_질문지_변경 {
