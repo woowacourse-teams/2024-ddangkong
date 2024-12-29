@@ -1,22 +1,21 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useState, ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 
 interface QuestionInputProps {
-  label: string; // 라벨 텍스트
-  placeholder?: string; // 인풋의 placeholder
-  maxLength?: number; // 최대 글자수
+  label: string;
+  value: string;
+  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  maxLength?: number;
 }
 
-const QuestionInput = ({ label, placeholder = '', maxLength = 16 }: QuestionInputProps) => {
-  const [value, setValue] = useState('');
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length <= maxLength) {
-      setValue(e.target.value);
-    }
-  };
-
+const QuestionInput = ({
+  label,
+  value,
+  handleChange,
+  placeholder = '',
+  maxLength = 16,
+}: QuestionInputProps) => {
   return (
     <div css={container}>
       <label htmlFor="question-input" css={labelStyle}>
@@ -24,7 +23,6 @@ const QuestionInput = ({ label, placeholder = '', maxLength = 16 }: QuestionInpu
       </label>
       <input
         id="question-input"
-        type="text"
         css={inputStyle}
         placeholder={placeholder}
         value={value}

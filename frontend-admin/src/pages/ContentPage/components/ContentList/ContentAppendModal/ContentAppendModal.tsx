@@ -14,14 +14,19 @@ import useCategory from '@/pages/ContentPage/hooks/useCategory';
 import useCategoryListQuery from '@/hooks/useCategoryListQuery';
 import QuestionInput from './QuestionInput';
 import { ModalState } from '@/types/modal';
+import useInput from '@/hooks/useInput';
 
 const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) => {
   const { category, handleClickOption } = useCategory();
   const { data: categoryList } = useCategoryListQuery();
 
+  const { value: question, handleChange: handleChangeQuestion } = useInput({ maxLength: 36 });
+  const { value: firstOption, handleChange: handleChangeFirstOption } = useInput();
+  const { value: secondOption, handleChange: handleChangeSecondOption } = useInput();
+
   const handleClick = () => {
     if (onConfirm) {
-      onConfirm({ category: '', question: '', firstOption: '', secondOption: '' });
+      onConfirm({ category, question, firstOption, secondOption });
     }
     onClose();
   };
@@ -44,10 +49,25 @@ const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) =
             width="100%"
           />
         </div>
-
-        <QuestionInput label="질문" placeholder="추가할 질문을 입력해주세요" maxLength={36} />
-        <QuestionInput label="옵션 1" placeholder="첫 번째 옵션을 입력해주세요" maxLength={16} />
-        <QuestionInput label="옵션 2" placeholder="두 번째 옵션을 입력해주세요" maxLength={16} />
+        <QuestionInput
+          label="질문"
+          value={question}
+          handleChange={handleChangeQuestion}
+          placeholder="추가할 질문을 입력해주세요"
+          maxLength={36}
+        />
+        <QuestionInput
+          label="옵션 1"
+          value={firstOption}
+          handleChange={handleChangeFirstOption}
+          placeholder="첫 번째 옵션을 입력해주세요"
+        />
+        <QuestionInput
+          label="옵션 2"
+          value={secondOption}
+          handleChange={handleChangeSecondOption}
+          placeholder="두 번째 옵션을 입력해주세요"
+        />
       </Modal.Content>
       <Modal.Footer css={footerContainer}>
         <Modal.TextButton onClick={handleClick} width="40%" css={appendButton}>
