@@ -4,8 +4,8 @@ import {
   detailText,
   editButton,
   gridItem,
-  questionInput,
-  questionText,
+  optionInput,
+  optionText,
 } from "./OptionCell.styles";
 import { Option } from "@/types/content";
 import useEditOptionMutation from "@/pages/ContentPage/hooks/useEditOptionMutation";
@@ -44,9 +44,9 @@ const OptionCell = ({ option }: OptionCellProps) => {
   return (
     <div css={gridItem}>
       {isEdit ? (
-        <input css={questionInput} value={value} onChange={handleChange} />
+        <input css={optionInput} value={value} onChange={handleChange} />
       ) : (
-        <span css={questionText}>{option.name}</span>
+        <span css={optionText}>{option.name}</span>
       )}
       <div css={detailContainer}>
         <button

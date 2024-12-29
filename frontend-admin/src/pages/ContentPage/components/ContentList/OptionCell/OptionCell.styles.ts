@@ -10,7 +10,7 @@ export const gridItem = (theme: Theme) => css`
   border: 0.1rem solid ${theme.color.gray};
 `;
 
-export const questionInput = css`
+export const optionInput = css`
   font-size: 1.6rem;
   width: 100%;
   height: 4rem;
@@ -21,7 +21,7 @@ export const questionInput = css`
   outline: none;
 `;
 
-export const questionText = css`
+export const optionText = css`
   font-size: 2rem;
 
   height: 4rem;
