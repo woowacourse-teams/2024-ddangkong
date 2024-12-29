@@ -1,11 +1,4 @@
-import React, {
-  ButtonHTMLAttributes,
-  HTMLAttributes,
-  RefObject,
-  useEffect,
-  useRef,
-  PropsWithChildren,
-} from 'react';
+import React, { ButtonHTMLAttributes, HTMLAttributes, useRef, PropsWithChildren } from 'react';
 import ReactDOM from 'react-dom';
 
 import useModalEscClose from './hooks/useModalEscClose';
@@ -30,14 +23,12 @@ export interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   onClose: () => void;
   position?: 'top' | 'bottom' | 'center';
   style?: React.CSSProperties;
-  returnFocusRef?: RefObject<HTMLElement>;
 }
 
 const Modal = ({
   children,
   isOpen,
   onClose,
-  returnFocusRef,
   position = 'center',
   ...restProps
 }: PropsWithChildren<ModalProps>) => {
@@ -49,16 +40,6 @@ const Modal = ({
       onClose();
     }
   };
-
-  useEffect(() => {
-    const currentRef = returnFocusRef?.current;
-
-    return () => {
-      if (currentRef) {
-        currentRef.focus();
-      }
-    };
-  }, [returnFocusRef]);
 
   if (!isOpen) return null;
 

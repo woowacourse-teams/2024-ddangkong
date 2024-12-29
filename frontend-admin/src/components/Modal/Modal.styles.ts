@@ -20,7 +20,6 @@ export const modalContentWrapper = ({ position }: Pick<ModalProps, 'position'>) 
   gap: 2.4rem;
 
   height: fit-content;
-  max-height: 70vh;
   min-height: 1.2rem;
   transform: translateX(-50%);
   margin: 0;
@@ -68,7 +67,7 @@ export const modalHeaderLayout = css`
 
 export const modalHeaderEmptyBox = (position: 'center' | 'left') => css`
   display: ${position === 'center' ? 'block' : 'none'};
-  width: 1.6rem;
+  width: 2.4rem;
 `;
 
 interface ModalTitleProps {
@@ -141,7 +140,9 @@ interface ModalContentProps {
 
 export const modalContentLayout = ({ fontSize }: ModalContentProps) => css`
   font-size: ${fontSize};
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const modalInputLayout = css`
