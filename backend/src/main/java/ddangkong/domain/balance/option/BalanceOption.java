@@ -1,6 +1,8 @@
 package ddangkong.domain.balance.option;
 
 import ddangkong.domain.balance.content.BalanceContent;
+import ddangkong.exception.balance.option.BlankBalanceOptionException;
+import ddangkong.exception.balance.option.LongBalanceOptionException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,6 +20,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class BalanceOption {
 
+    private static final int MAX_NAME_LENGTH = 16;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,11 +34,27 @@ public class BalanceOption {
     private BalanceContent balanceContent;
 
     public BalanceOption(String name, BalanceContent balanceContent) {
+        validateName(name);
+
         this.name = name;
         this.balanceContent = balanceContent;
     }
 
+    private void validateName(String name) {
+        if (name.isBlank()) {
+            throw new BlankBalanceOptionException();
+        }
+        if (name.length() > MAX_NAME_LENGTH) {
+            throw new LongBalanceOptionException(MAX_NAME_LENGTH);
+        }
+    }
+
     protected boolean isSameId(Long id) {
         return this.id.equals(id);
+    }
+
+    public void updateName(String name) {
+        validateName(name);
+        this.name = name;
     }
 }

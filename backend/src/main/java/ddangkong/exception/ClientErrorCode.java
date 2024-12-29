@@ -53,6 +53,12 @@ public enum ClientErrorCode {
     NOT_FOUND_COOKIE("일치하는 쿠키가 없습니다."),
     INVALID_COOKIE("유효하지 않는 쿠키입니다."),
 
+    // ADMIN TODO Enum 분리, Docs 분리
+    BLANK_BALANCE_CONTENT_NAME("컨텐츠 이름이 비어 있습니다."),
+    LONG_BALANCE_CONTENT_NAME("컨텐츠 이름은 최대 %d자 입니다."),
+    BLANK_BALANCE_OPTION_NAME("컨텐츠 옵션이 비어 있습니다."),
+    LONG_BALANCE_OPTION_NAME("컨텐츠 옵션은 최대 %자 입니다."),
+
     // Common
     FIELD_ERROR("입력이 잘못되었습니다."),
     URL_PARAMETER_ERROR("입력이 잘못되었습니다."),
