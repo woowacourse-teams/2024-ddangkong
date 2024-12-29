@@ -12,6 +12,12 @@ export const inputLabel = css`
   font-weight: bold;
 `;
 
+export const errorLabel = (theme: Theme) => css`
+  color: ${theme.color.red300};
+  font-size: 1.2rem;
+  font-weight: normal;
+`;
+
 export const contentInput = (theme: Theme) => css`
   width: 100%;
   padding: 0.8rem 1.2rem;

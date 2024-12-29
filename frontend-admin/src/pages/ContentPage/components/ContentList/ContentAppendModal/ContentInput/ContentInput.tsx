@@ -1,5 +1,12 @@
 import { ChangeEvent } from 'react';
-import { contentInput, count, errorBorder, inputLabel, inputLayout } from './ContentInput.styles';
+import {
+  contentInput,
+  count,
+  errorBorder,
+  errorLabel,
+  inputLabel,
+  inputLayout,
+} from './ContentInput.styles';
 
 interface ContentInputProps {
   label: string;
@@ -21,7 +28,8 @@ const ContentInput = ({
   return (
     <div css={inputLayout}>
       <label htmlFor="content-input" css={inputLabel}>
-        {label}
+        {label} &nbsp;
+        {hasError && <span css={errorLabel}>*입력해주세요</span>}
       </label>
       <input
         id="content-input"
