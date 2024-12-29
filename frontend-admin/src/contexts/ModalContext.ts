@@ -1,16 +1,5 @@
-import { createContext, RefObject } from 'react';
-
-interface ModalProps {
-  title?: string;
-  message?: string;
-  onConfirm?: () => void;
-  returnFocusRef?: RefObject<HTMLElement>;
-}
-
-interface ModalState extends ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { ModalProps, ModalState } from '@/types/modal';
+import { createContext } from 'react';
 
 interface ModalContextProps {
   showModal: (Component: React.FC<ModalState> | null, props?: ModalProps) => void;

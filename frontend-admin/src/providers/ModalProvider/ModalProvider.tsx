@@ -1,16 +1,6 @@
 import ModalContext from '@/contexts/ModalContext';
+import { ModalProps, ModalState } from '@/types/modal';
 import { PropsWithChildren, useMemo, useState } from 'react';
-
-interface ModalProps {
-  title?: string;
-  message?: string;
-  onConfirm?: () => void;
-}
-
-interface ModalState extends ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
 
 interface Modal extends ModalProps {
   Component: React.FC<ModalState> | null;
