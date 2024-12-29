@@ -1,6 +1,4 @@
-import { css } from "@emotion/react";
-
-import { theme } from "@/styles/theme";
+import { css, Theme } from "@emotion/react";
 
 export const dropdownLayout = css`
   display: flex;
@@ -44,7 +42,7 @@ export const dropdownText = css`
   cursor: pointer;
 `;
 
-export const selectOptionList = (isOpen: boolean, count: number) => css`
+export const selectOptionList = css`
   display: flex;
   overflow: hidden;
   position: absolute;
@@ -53,8 +51,7 @@ export const selectOptionList = (isOpen: boolean, count: number) => css`
   flex-direction: column;
 
   width: 100%;
-  height: ${isOpen ? `${3.6 * count}rem` : 0};
-  border: ${isOpen ? `1px solid ${theme.color.gray200}` : "none"};
+
   border-radius: 0.8rem;
 
   background-color: white;
@@ -66,11 +63,9 @@ export const selectOptionList = (isOpen: boolean, count: number) => css`
   user-select: none;
 `;
 
-export const optionButton = (isSelected: boolean) => css`
+export const optionButton = (theme: Theme) => css`
   width: 100%;
   height: 3.6rem;
-
-  background-color: ${isSelected ? theme.color.gray300 : "white"};
 
   color: black;
 

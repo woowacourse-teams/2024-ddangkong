@@ -12,6 +12,7 @@ import {
 
 import ArrowDown from "@/assets/images/arrowDown.svg";
 import ArrowUp from "@/assets/images/arrowUp.svg";
+import { theme } from "@/styles/theme";
 
 interface Category {
   label: string;
@@ -82,7 +83,11 @@ const Dropdown = ({ text, optionList, handleClickOption }: DropdownProps) => {
           id="dropdown-listbox"
           role="listbox"
           aria-labelledby="dropdown-button"
-          css={selectOptionList(isOpen, optionList.length)}
+          css={selectOptionList}
+          style={{
+            height: isOpen ? `${3.6 * optionList.length}rem` : 0,
+            border: isOpen ? `1px solid ${theme.color.gray200}` : "none",
+          }}
         >
           {optionList.map((option) => (
             <li
@@ -91,7 +96,13 @@ const Dropdown = ({ text, optionList, handleClickOption }: DropdownProps) => {
               aria-selected={text === option.label}
             >
               <button
-                css={optionButton(text === option.label)}
+                css={optionButton}
+                style={{
+                  backgroundColor:
+                    text === option.label
+                      ? theme.color.gray300
+                      : theme.color.white,
+                }}
                 value={option.value}
                 onClick={handleSelectOption}
               >
