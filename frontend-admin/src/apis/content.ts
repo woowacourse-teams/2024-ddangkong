@@ -85,7 +85,7 @@ export const editOption = async ({ optionId, name }: OptionEditParams) => {
 };
 
 // 컨텐츠 삭제
-export const deleteOption = async ({ contentId }: ContentDeleteParams) => {
+export const deleteContent = async ({ contentId }: ContentDeleteParams) => {
   return await fetcher.delete(API_URL.deleteContent(contentId));
 };
 

@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import {
-  deleteButton,
   detailText,
   gridContainer,
   gridHeader,
@@ -9,6 +8,7 @@ import {
 import QuestionCell from "./QuestionCell/QuestionCell";
 import OptionCell from "./OptionCell/OptionCell";
 import useContentListQuery from "../../hooks/useContentListQuery";
+import ContentDeleteButton from "./ContentDeleteButton/ContentDeleteButton";
 
 const HEADER_TEXT = [
   "질문",
@@ -54,7 +54,10 @@ const ContentList = ({ category }: ContentListProps) => {
             <span css={detailText}>{content.secondOption.count}표</span>
           </div>
           <div css={gridItem}>
-            <button css={deleteButton}>삭제</button>
+            <ContentDeleteButton
+              contentId={content.contentId}
+              question={content.question}
+            />
           </div>
         </Fragment>
       ))}

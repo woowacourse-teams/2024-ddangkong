@@ -4,7 +4,7 @@ export const gridContainer = css`
   display: grid;
   grid-template-columns: 2fr 1.5fr 1.5fr 0.5fr 0.5fr 0.3fr;
   width: 100%;
-  height: 65vh;
+  height: 75vh;
   font-size: 1.6rem;
   overflow: auto;
 `;
@@ -35,21 +35,4 @@ export const detailText = (theme: Theme) => css`
   font-size: 1.4rem;
   text-align: right;
   color: ${theme.color.gray400};
-`;
-
-export const deleteButton = (theme: Theme) => css`
-  border: 0.1rem solid ${theme.color.red300};
-  padding: 0.8rem 1.6rem;
-  border-radius: 0.8rem;
-  white-space: nowrap;
-
-  &:enabled {
-    color: ${theme.color.red300};
-  }
-
-  &:hover {
-    background-color: ${theme.color.red300};
-    color: white;
-    transition: all 0.2s;
-  }
 `;
