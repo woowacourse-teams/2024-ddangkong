@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { contentInput, count, inputLabel, inputLayout } from './ContentInput.styles';
+import { contentInput, count, errorBorder, inputLabel, inputLayout } from './ContentInput.styles';
 
 interface ContentInputProps {
   label: string;
@@ -7,6 +7,7 @@ interface ContentInputProps {
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   maxLength?: number;
+  hasError?: boolean;
 }
 
 const ContentInput = ({
@@ -15,6 +16,7 @@ const ContentInput = ({
   handleChange,
   placeholder = '',
   maxLength = 16,
+  hasError = false,
 }: ContentInputProps) => {
   return (
     <div css={inputLayout}>
@@ -23,7 +25,7 @@ const ContentInput = ({
       </label>
       <input
         id="content-input"
-        css={contentInput}
+        css={[contentInput, hasError && errorBorder]}
         value={value}
         onChange={handleChange}
         placeholder={placeholder}

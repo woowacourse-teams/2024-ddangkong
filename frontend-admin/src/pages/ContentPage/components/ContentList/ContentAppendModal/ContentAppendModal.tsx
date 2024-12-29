@@ -15,6 +15,7 @@ import useCategoryListQuery from '@/hooks/useCategoryListQuery';
 import { ModalState } from '@/types/modal';
 import useInput from '@/hooks/useInput';
 import ContentInput from './ContentInput/ContentInput';
+import { useState } from 'react';
 
 const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) => {
   const { category, handleClickOption } = useCategory();
@@ -24,7 +25,24 @@ const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) =
   const { value: firstOption, handleChange: handleChangeFirstOption } = useInput();
   const { value: secondOption, handleChange: handleChangeSecondOption } = useInput();
 
+  // TODO: 입력값과 에러 상태를 묶어서 다루기
+  const [errors, setErrors] = useState({
+    question: false,
+    firstOption: false,
+    secondOption: false,
+  });
+
   const handleClick = () => {
+    const newErrors = {
+      question: !question,
+      firstOption: !firstOption,
+      secondOption: !secondOption,
+    };
+
+    setErrors(newErrors);
+
+    if (newErrors.question || newErrors.firstOption || newErrors.secondOption) return;
+
     if (onConfirm) {
       onConfirm({ category, question, firstOption, secondOption });
     }
@@ -53,6 +71,7 @@ const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) =
           label="질문"
           value={question}
           handleChange={handleChangeQuestion}
+          hasError={Boolean(errors.question)}
           placeholder="추가할 질문을 입력해주세요"
           maxLength={36}
         />
@@ -60,12 +79,14 @@ const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) =
           label="옵션 1"
           value={firstOption}
           handleChange={handleChangeFirstOption}
+          hasError={Boolean(errors.firstOption)}
           placeholder="첫 번째 옵션을 입력해주세요"
         />
         <ContentInput
           label="옵션 2"
           value={secondOption}
           handleChange={handleChangeSecondOption}
+          hasError={Boolean(errors.secondOption)}
           placeholder="두 번째 옵션을 입력해주세요"
         />
       </Modal.Content>
