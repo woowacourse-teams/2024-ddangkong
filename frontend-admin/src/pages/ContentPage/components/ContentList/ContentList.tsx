@@ -10,9 +10,9 @@ import QuestionCell from './QuestionCell/QuestionCell';
 import OptionCell from './OptionCell/OptionCell';
 import useContentListQuery from '../../hooks/useContentListQuery';
 import ContentDeleteButton from './ContentDeleteButton/ContentDeleteButton';
-import IntersectionObserverScroll from '@/components/IntersectionObserver/InterSectionObserver';
 import useObserverBottom from '../../hooks/useObserverBottom';
 import { theme } from '@/styles/theme';
+import IntersectionObserverScroll from '@/components/IntersectionObserverScroll/IntersectionObserverScroll';
 
 const HEADER_TEXT = ['질문', '옵션1', '옵션2', '옵션1 비율', '옵션2 비율', '비고'];
 
