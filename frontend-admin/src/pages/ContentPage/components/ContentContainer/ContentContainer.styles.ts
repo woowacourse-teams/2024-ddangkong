@@ -1,4 +1,4 @@
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 
 export const dropdownWrapper = css`
   display: flex;
@@ -6,16 +6,4 @@ export const dropdownWrapper = css`
   justify-content: flex-end;
   align-items: center;
   width: 100%;
-`;
-
-export const questionAppendButton = (theme: Theme) => css`
-  font-size: 1.6rem;
-
-  padding: 1.2rem 2rem;
-  border-radius: 1.6rem;
-  background-color: ${theme.color.peanut400};
-
-  &:hover {
-    background-color: ${theme.color.peanut500};
-  }
 `;

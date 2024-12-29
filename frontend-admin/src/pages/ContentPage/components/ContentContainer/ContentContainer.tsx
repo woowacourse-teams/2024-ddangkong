@@ -1,8 +1,9 @@
 import Dropdown from '@/components/Dropdown/Dropdown';
 import ContentList from '../ContentList/ContentList';
-import { dropdownWrapper, questionAppendButton } from './ContentContainer.styles';
+import { dropdownWrapper } from './ContentContainer.styles';
 import useCategoryDropdown from '../../hooks/useCategoryDropdown';
 import useCategoryListQuery from '@/hooks/useCategoryListQuery';
+import ContentAppendButton from '../ContentList/ContentAppendButton/ContentAppendButton';
 
 const ContentContainer = () => {
   const { data: categoryList } = useCategoryListQuery();
@@ -13,7 +14,7 @@ const ContentContainer = () => {
   return (
     <>
       <div css={dropdownWrapper}>
-        <button css={questionAppendButton}>질문 추가</button>
+        <ContentAppendButton />
         <Dropdown
           text={category.label}
           optionList={categoryList}
