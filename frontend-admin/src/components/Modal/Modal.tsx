@@ -25,7 +25,7 @@ import {
 import CloseIcon from "@/assets/images/close.svg";
 import { theme } from "@/styles/theme";
 
-export interface ModalProps {
+export interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
   onClose: () => void;
   position?: "top" | "bottom" | "center";
@@ -135,7 +135,7 @@ interface ModalIconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const ModalIconButton = ({
   type = "button",
   src = CloseIcon,
-  imgSize,
+  imgSize = "1.6rem",
   ...restProps
 }: ModalIconButtonProps) => {
   return (
@@ -199,18 +199,18 @@ const ModalInput = ({ ...restProps }: ModalInputProps) => {
 
 interface ModalFooterProps
   extends React.PropsWithChildren<HTMLAttributes<HTMLDivElement>> {
-  buttonPosition?: "left" | "center" | "right";
-  buttonGap?: string;
+  position?: "left" | "center" | "right";
+  gap?: string;
 }
 
 const ModalFooter = ({
   children,
-  buttonPosition = "center",
-  buttonGap = "1.2rem",
+  position = "center",
+  gap = "1.2rem",
   ...restProps
 }: ModalFooterProps) => {
   return (
-    <div css={modalFooter({ buttonPosition, buttonGap })} {...restProps}>
+    <div css={modalFooter({ position, gap })} {...restProps}>
       {children}
     </div>
   );
