@@ -42,7 +42,7 @@ export const gradientOverlay = css`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 200px;
+  height: 10rem;
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0),

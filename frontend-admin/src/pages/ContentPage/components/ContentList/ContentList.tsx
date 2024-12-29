@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import {
   detailText,
   gradientOverlay,
@@ -10,6 +10,7 @@ import QuestionCell from "./QuestionCell/QuestionCell";
 import OptionCell from "./OptionCell/OptionCell";
 import useContentListQuery from "../../hooks/useContentListQuery";
 import ContentDeleteButton from "./ContentDeleteButton/ContentDeleteButton";
+import IntersectionObserverScroll from "@/components/IntersectionObserver/InterSectionObserver";
 
 const HEADER_TEXT = [
   "질문",
@@ -28,54 +29,69 @@ const ContentList = ({ category }: ContentListProps) => {
   const { data: contents } = useContentListQuery(category);
 
   const [isBottomVisible, setIsBottomVisible] = useState(false);
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const target = e.currentTarget;
-    const isAtBottom =
-      target.scrollHeight - target.scrollTop <= target.clientHeight;
-    setIsBottomVisible(isAtBottom);
+  const handleReachBottom = () => {
+    setIsBottomVisible(true);
+  };
+
+  const handleLeaveBottom = () => {
+    setIsBottomVisible(false);
   };
 
   if (!contents) return null;
 
   return (
-    <div css={gridContainer} onScroll={handleScroll}>
-      {HEADER_TEXT.map((text) => (
-        <div key={text} css={gridHeader}>
-          {text}
-        </div>
-      ))}
-
-      {contents.map((content) => (
-        <Fragment key={content.contentId}>
-          <QuestionCell
-            question={content.question}
-            contentId={content.contentId}
-          />
-          <OptionCell option={content.firstOption} />
-          <OptionCell option={content.secondOption} />
-
-          <div css={gridItem}>
-            <span>{content.firstOption.percent}%</span>
-            <span css={detailText}>{content.firstOption.count}표</span>
+    <IntersectionObserverScroll
+      observerRef={observerRef}
+      onReachBottom={handleReachBottom}
+      onLeaveBottom={handleLeaveBottom}
+    >
+      <div css={gridContainer}>
+        {HEADER_TEXT.map((text) => (
+          <div key={text} css={gridHeader}>
+            {text}
           </div>
-          <div css={gridItem}>
-            <span>{content.secondOption.percent}%</span>
-            <span css={detailText}>{content.secondOption.count}표</span>
-          </div>
-          <div css={gridItem}>
-            <ContentDeleteButton
-              contentId={content.contentId}
+        ))}
+
+        {contents.map((content) => (
+          <Fragment key={content.contentId}>
+            <QuestionCell
               question={content.question}
+              contentId={content.contentId}
             />
-          </div>
-          <div
-            css={gradientOverlay}
-            style={{ opacity: isBottomVisible ? 0 : 0.3 }}
-          />
-        </Fragment>
-      ))}
-    </div>
+            <OptionCell option={content.firstOption} />
+            <OptionCell option={content.secondOption} />
+
+            <div css={gridItem}>
+              <span>{content.firstOption.percent}%</span>
+              <span css={detailText}>{content.firstOption.count}표</span>
+            </div>
+            <div css={gridItem}>
+              <span>{content.secondOption.percent}%</span>
+              <span css={detailText}>{content.secondOption.count}표</span>
+            </div>
+            <div css={gridItem}>
+              <ContentDeleteButton
+                contentId={content.contentId}
+                question={content.question}
+              />
+            </div>
+            <div
+              css={gradientOverlay}
+              style={{ opacity: isBottomVisible ? 0 : 0.3 }}
+            />
+          </Fragment>
+        ))}
+        <div
+          ref={observerRef}
+          style={{
+            height: "1px",
+            background: "transparent",
+          }}
+        />
+      </div>
+    </IntersectionObserverScroll>
   );
 };
 
