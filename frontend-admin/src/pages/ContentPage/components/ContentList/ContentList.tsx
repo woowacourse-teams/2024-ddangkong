@@ -1,6 +1,7 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import {
   detailText,
+  gradientOverlay,
   gridContainer,
   gridHeader,
   gridItem,
@@ -26,10 +27,19 @@ interface ContentListProps {
 const ContentList = ({ category }: ContentListProps) => {
   const { data: contents } = useContentListQuery(category);
 
+  const [isBottomVisible, setIsBottomVisible] = useState(false);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const isAtBottom =
+      target.scrollHeight - target.scrollTop <= target.clientHeight;
+    setIsBottomVisible(isAtBottom);
+  };
+
   if (!contents) return null;
 
   return (
-    <div css={gridContainer}>
+    <div css={gridContainer} onScroll={handleScroll}>
       {HEADER_TEXT.map((text) => (
         <div key={text} css={gridHeader}>
           {text}
@@ -59,6 +69,10 @@ const ContentList = ({ category }: ContentListProps) => {
               question={content.question}
             />
           </div>
+          <div
+            css={gradientOverlay}
+            style={{ opacity: isBottomVisible ? 0 : 0.3 }}
+          />
         </Fragment>
       ))}
     </div>
