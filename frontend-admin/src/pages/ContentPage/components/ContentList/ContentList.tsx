@@ -42,18 +42,17 @@ const ContentList = ({ category }: ContentListProps) => {
   if (!contents) return null;
 
   return (
-    <IntersectionObserverScroll
-      observerRef={observerRef}
-      onReachBottom={handleReachBottom}
-      onLeaveBottom={handleLeaveBottom}
-    >
-      <div css={gridContainer}>
-        {HEADER_TEXT.map((text) => (
-          <div key={text} css={gridHeader}>
-            {text}
-          </div>
-        ))}
-
+    <div css={gridContainer}>
+      {HEADER_TEXT.map((text) => (
+        <div key={text} css={gridHeader}>
+          {text}
+        </div>
+      ))}
+      <IntersectionObserverScroll
+        observerRef={observerRef}
+        onReachBottom={handleReachBottom}
+        onLeaveBottom={handleLeaveBottom}
+      >
         {contents.map((content) => (
           <Fragment key={content.contentId}>
             <QuestionCell
@@ -83,15 +82,8 @@ const ContentList = ({ category }: ContentListProps) => {
             />
           </Fragment>
         ))}
-        <div
-          ref={observerRef}
-          style={{
-            height: "1px",
-            background: "transparent",
-          }}
-        />
-      </div>
-    </IntersectionObserverScroll>
+      </IntersectionObserverScroll>
+    </div>
   );
 };
 

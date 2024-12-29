@@ -42,11 +42,11 @@ export const gradientOverlay = css`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 10rem;
+  height: 15rem;
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.6)
+    rgba(255, 255, 255, 0.8)
   );
   pointer-events: none;
 `;
