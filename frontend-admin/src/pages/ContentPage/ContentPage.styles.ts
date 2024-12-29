@@ -1,8 +1,7 @@
 import { flexCenter } from "@/styles/common";
-import { theme } from "@/styles/theme";
-import { css } from "@emotion/react";
+import { css, Theme } from "@emotion/react";
 
-export const contentLayout = css`
+export const contentLayout = (theme: Theme) => css`
   ${flexCenter}
   height: 100%;
   background-color: ${theme.color.peanut300};
@@ -51,7 +50,7 @@ export const rightHeader = css`
   align-items: center;
 `;
 
-export const logoutButton = css`
+export const logoutButton = (theme: Theme) => css`
   height: 100%;
   font-size: 1.6rem;
   font-weight: bold;

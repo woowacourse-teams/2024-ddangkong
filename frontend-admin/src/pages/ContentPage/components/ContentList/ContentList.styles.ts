@@ -1,5 +1,4 @@
-import { theme } from "@/styles/theme";
-import { css } from "@emotion/react";
+import { css, Theme } from "@emotion/react";
 
 export const gridContainer = css`
   display: grid;
@@ -10,7 +9,7 @@ export const gridContainer = css`
   overflow: auto;
 `;
 
-export const gridHeader = css`
+export const gridHeader = (theme: Theme) => css`
   padding: 1.2rem;
   border: 0.1rem solid ${theme.color.gray};
   background-color: ${theme.color.gray200};
@@ -19,7 +18,7 @@ export const gridHeader = css`
   text-align: center;
 `;
 
-export const gridItem = css`
+export const gridItem = (theme: Theme) => css`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -29,7 +28,7 @@ export const gridItem = css`
   border: 0.1rem solid ${theme.color.gray};
 `;
 
-export const detailText = css`
+export const detailText = (theme: Theme) => css`
   display: flex;
   align-items: center;
   height: 2.4rem;
@@ -38,7 +37,7 @@ export const detailText = css`
   color: ${theme.color.gray400};
 `;
 
-export const deleteButton = css`
+export const deleteButton = (theme: Theme) => css`
   border: 0.1rem solid ${theme.color.red300};
   padding: 0.8rem 1.6rem;
   border-radius: 0.8rem;

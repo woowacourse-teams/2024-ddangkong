@@ -1,8 +1,7 @@
 import { flexCenter } from "@/styles/common";
-import { theme } from "@/styles/theme";
-import { css } from "@emotion/react";
+import { css, Theme } from "@emotion/react";
 
-export const loginLayout = css`
+export const loginLayout = (theme: Theme) => css`
   ${flexCenter}
   height: 100%;
   background-color: ${theme.color.peanut300};
@@ -33,7 +32,7 @@ export const loginTitle = css`
   font-weight: bold;
 `;
 
-export const passwordInput = css`
+export const passwordInput = (theme: Theme) => css`
   width: 32rem;
   border: 0.1rem solid ${theme.color.gray};
   padding: 1.2rem;
@@ -56,7 +55,7 @@ export const errorMessage = (isError: boolean) => css`
   margin: 0.8rem 0 0 1.2rem;
 `;
 
-export const loginButton = css`
+export const loginButton = (theme: Theme) => css`
   width: 8rem;
   padding: 1.2rem;
   border-radius: 0.8rem;

@@ -1,5 +1,4 @@
-import { theme } from "@/styles/theme";
-import { css } from "@emotion/react";
+import { css, Theme } from "@emotion/react";
 
 export const dropdownWrapper = css`
   display: flex;
@@ -9,7 +8,7 @@ export const dropdownWrapper = css`
   width: 100%;
 `;
 
-export const questionAppendButton = css`
+export const questionAppendButton = (theme: Theme) => css`
   font-size: 1.6rem;
 
   padding: 1.2rem 2rem;
