@@ -4,8 +4,9 @@ import {
   detailText,
   editButton,
   gridItem,
-} from "../ContentList.styles";
-import { questionInput, questionText } from "./QuestionCell.styles";
+  questionInput,
+  questionText,
+} from "./QuestionCell.styles";
 import useEditQuestionMutation from "@/pages/ContentPage/hooks/useEditQuestionMutation";
 
 const QUESTION_LIMIT_LENGTH = 36;

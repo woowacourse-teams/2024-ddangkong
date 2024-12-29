@@ -1,36 +1,6 @@
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 
-export const editButton = css`
-  border: 0.1rem solid ${theme.color.peanut300};
-  background-color: ${theme.color.peanut300};
-  padding: 0.4rem 1.2rem;
-  border-radius: 0.8rem;
-  white-space: nowrap;
-
-  &:hover {
-    background-color: ${theme.color.peanut400};
-    transition: all 0.2s;
-  }
-`;
-
-export const detailContainer = css`
-  width: 100%;
-  height: 2.4rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const detailText = css`
-  display: flex;
-  align-items: center;
-  height: 2.4rem;
-  font-size: 1.4rem;
-  text-align: right;
-  color: ${theme.color.gray400};
-`;
-
 export const gridContainer = css`
   display: grid;
   grid-template-columns: 2fr 1.5fr 1.5fr 0.5fr 0.5fr 0.3fr;
@@ -57,6 +27,15 @@ export const gridItem = css`
   gap: 0.8rem;
   padding: 3.2rem;
   border: 0.1rem solid ${theme.color.gray};
+`;
+
+export const detailText = css`
+  display: flex;
+  align-items: center;
+  height: 2.4rem;
+  font-size: 1.4rem;
+  text-align: right;
+  color: ${theme.color.gray400};
 `;
 
 export const deleteButton = css`

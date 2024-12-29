@@ -4,8 +4,9 @@ import {
   detailText,
   editButton,
   gridItem,
-} from "../ContentList.styles";
-import { questionInput, questionText } from "./OptionCell.styles";
+  questionInput,
+  questionText,
+} from "./OptionCell.styles";
 import { Option } from "@/types/content";
 import useEditOptionMutation from "@/pages/ContentPage/hooks/useEditOptionMutation";
 
