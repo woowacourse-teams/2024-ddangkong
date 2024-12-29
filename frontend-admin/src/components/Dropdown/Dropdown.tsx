@@ -23,9 +23,10 @@ interface DropdownProps {
   text: string;
   optionList: Category[];
   handleClickOption: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  width?: string;
 }
 
-const Dropdown = ({ text, optionList, handleClickOption }: DropdownProps) => {
+const Dropdown = ({ text, optionList, handleClickOption, width = '16rem' }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -55,7 +56,7 @@ const Dropdown = ({ text, optionList, handleClickOption }: DropdownProps) => {
   }, [isOpen]);
 
   return (
-    <div css={dropdownLayout} ref={dropdownRef}>
+    <div css={dropdownLayout(width)} ref={dropdownRef}>
       <button
         ref={triggerRef}
         onClick={handleToggleDropdown}

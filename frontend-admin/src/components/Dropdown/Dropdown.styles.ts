@@ -1,11 +1,11 @@
 import { css, Theme } from '@emotion/react';
 
-export const dropdownLayout = css`
+export const dropdownLayout = (width: string) => css`
   display: flex;
   position: relative;
   align-items: center;
 
-  width: 16rem;
+  width: ${width};
   height: 3.6rem;
   padding: 0.8rem;
   border: 1px solid black;
