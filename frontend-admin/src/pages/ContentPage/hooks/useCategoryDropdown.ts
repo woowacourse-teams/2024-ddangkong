@@ -1,13 +1,15 @@
+import useCategoryQueryParams from "@/hooks/useCategoryQueryParams";
 import { Category, CategoryLabel, CategoryValue } from "@/types/content";
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+
+const CATEGORY_INIT_DATA = {
+  label: "만약에",
+  value: "IF",
+} as const;
 
 const useCategoryDropdown = () => {
-  const [_, setSearchParams] = useSearchParams();
-  const [category, setCategory] = useState<Category>({
-    label: "만약에",
-    value: "IF",
-  });
+  const { handleCategoryParams } = useCategoryQueryParams();
+  const [category, setCategory] = useState<Category>(CATEGORY_INIT_DATA);
 
   const handleClickOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
@@ -17,7 +19,7 @@ const useCategoryDropdown = () => {
     if (!clickedCategoryValue) return;
 
     setCategory({ value: clickedCategoryValue, label: clickedCategoryLabel });
-    setSearchParams({ category: clickedCategoryValue });
+    handleCategoryParams(clickedCategoryValue);
   };
 
   return { category, handleClickOption };

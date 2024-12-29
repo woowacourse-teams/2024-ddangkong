@@ -1,12 +1,10 @@
 import { deleteContent } from "@/apis/content";
+import useCategoryQueryParams from "@/hooks/useCategoryQueryParams";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
 
 const useDeleteContentMutation = () => {
-  const [searchParams, _] = useSearchParams();
-  const category = searchParams.get("category") || "IF";
-
   const queryClient = useQueryClient();
+  const category = useCategoryQueryParams();
 
   return useMutation({
     mutationFn: deleteContent,
