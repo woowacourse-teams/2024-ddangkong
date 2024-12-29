@@ -146,6 +146,7 @@ interface ModalContentProps {
 
 export const modalContentLayout = ({ fontSize }: ModalContentProps) => css`
   font-size: ${fontSize};
+  text-align: center;
 `;
 
 export const modalInputLayout = css`
