@@ -12,6 +12,7 @@ import useContentListQuery from '../../hooks/useContentListQuery';
 import ContentDeleteButton from './ContentDeleteButton/ContentDeleteButton';
 import IntersectionObserverScroll from '@/components/IntersectionObserver/InterSectionObserver';
 import useObserverBottom from '../../hooks/useObserverBottom';
+import { theme } from '@/styles/theme';
 
 const HEADER_TEXT = ['질문', '옵션1', '옵션2', '옵션1 비율', '옵션2 비율', '비고'];
 
@@ -56,9 +57,12 @@ const ContentList = ({ category }: ContentListProps) => {
             <div css={gridItem}>
               <ContentDeleteButton contentId={content.contentId} question={content.question} />
             </div>
-            <div css={gradientOverlay} style={{ opacity: isBottomVisible ? 0 : 0.3 }} />
           </Fragment>
         ))}
+        <div
+          css={gradientOverlay}
+          style={{ opacity: isBottomVisible ? theme.opacity.invisible : theme.opacity.default }}
+        />
       </IntersectionObserverScroll>
     </div>
   );
