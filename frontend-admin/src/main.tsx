@@ -6,7 +6,6 @@ import { router } from './router/index.tsx';
 import { Global, ThemeProvider } from '@emotion/react';
 import globalStyle from './styles/globalStyle.ts';
 import { theme } from './styles/theme.ts';
-import ModalProvider from './providers/ModalProvider/ModalProvider.tsx';
 import ToastProvider from './providers/ToastProvider/ToastProvider.tsx';
 
 const queryClient = new QueryClient();
@@ -28,9 +27,7 @@ enableMocking().then(() => {
         <Global styles={globalStyle} />
         <ThemeProvider theme={theme}>
           <ToastProvider>
-            <ModalProvider>
-              <RouterProvider router={router} />
-            </ModalProvider>
+            <RouterProvider router={router} />
           </ToastProvider>
         </ThemeProvider>
       </QueryClientProvider>
