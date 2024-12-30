@@ -63,13 +63,14 @@ export const selectOptionList = css`
   user-select: none;
 `;
 
-export const optionButton = (theme: Theme) => css`
+export const optionButton = (theme: Theme, isSelected: boolean) => css`
   width: 100%;
   height: 3.6rem;
 
   color: black;
 
   transition: background-color 0.1s ease-in;
+  background-color: ${isSelected ? theme.color.gray300 : theme.color.white};
 
   &:hover {
     background-color: ${theme.color.gray200};

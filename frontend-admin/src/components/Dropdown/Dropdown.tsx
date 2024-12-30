@@ -73,33 +73,28 @@ const Dropdown = ({ text, optionList, handleClickOption, width = '16rem' }: Drop
         </div>
       </button>
 
-      {isOpen && (
-        <ul
-          id="dropdown-listbox"
-          role="listbox"
-          aria-labelledby="dropdown-button"
-          css={selectOptionList}
-          style={{
-            height: isOpen ? `${3.6 * optionList.length}rem` : 0,
-            border: isOpen ? `1px solid ${theme.color.gray200}` : 'none',
-          }}
-        >
-          {optionList.map((option) => (
-            <li key={option.value} role="option" aria-selected={text === option.label}>
-              <button
-                css={optionButton}
-                style={{
-                  backgroundColor: text === option.label ? theme.color.gray300 : theme.color.white,
-                }}
-                value={option.value}
-                onClick={handleSelectOption}
-              >
-                {option.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul
+        id="dropdown-listbox"
+        role="listbox"
+        aria-labelledby="dropdown-button"
+        css={selectOptionList}
+        style={{
+          height: isOpen ? `${3.6 * optionList.length}rem` : 0,
+          border: isOpen ? `1px solid ${theme.color.gray200}` : 'none',
+        }}
+      >
+        {optionList.map((option) => (
+          <li key={option.value} role="option" aria-selected={text === option.label}>
+            <button
+              css={(theme) => optionButton(theme, text === option.label)}
+              value={option.value}
+              onClick={handleSelectOption}
+            >
+              {option.label}
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
