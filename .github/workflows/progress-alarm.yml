@@ -3,13 +3,16 @@ name: Webhook on Push
 on:
   push:
     branches:
-      - feat/#443 # 모든 브랜치에서 푸시 시 트리거
+      - "feat/#443" # 모든 브랜치에서 푸시 시 트리거
 
 jobs:
   send-webhook:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3 # 리포지토리 체크아웃
+
       - name: Gather Commit Information Test
         id: commit-info
         run: |
