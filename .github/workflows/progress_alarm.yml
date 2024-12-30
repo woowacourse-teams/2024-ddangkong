@@ -1,0 +1,28 @@
+name: Webhook on Push
+
+on:
+  push:
+    branches:
+      - "*" # 모든 브랜치에서 푸시 시 트리거
+
+jobs:
+  send-webhook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Gather Commit Information
+        id: commit-info
+        run: |
+          TODAY=$(date -u +"%Y-%m-%d")
+          COMMITS=$(git log --since="$TODAY" --pretty=format:"%an: %s" --decorate=short)
+          echo "Commits Today: $COMMITS"
+          echo "::set-output name=commits::$COMMITS"
+
+      - name: Send Discord Webhook Message
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.PROGRESS_ALARM_DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -X POST \
+          -H "Content-Type: application/json" \
+          -d "{ \"content\": \"Today's Commit Summary:\n ${{ steps.commit-info.outputs.commits }}\" }" \
+          "$DISCORD_WEBHOOK_URL"
