@@ -16,9 +16,10 @@ const fetchBalanceContentHandler = () => {
 const appendContentHandler = async ({ request }: { request: Request }) => {
   const body = await request.json();
 
-  const content = { ...BALANCE_CONTENT.contents[0] };
+  const content = { ...BALANCE_CONTENT.contents[BALANCE_CONTENT.contents.length - 1] };
 
   const newContent = {
+    category: body.category,
     contentId: ++content.contentId,
     question: body.question,
     firstOption: {

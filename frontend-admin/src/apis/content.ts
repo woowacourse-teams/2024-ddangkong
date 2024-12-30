@@ -14,6 +14,10 @@ interface ContentAppendParams {
   secondOption: string;
 }
 
+interface ContentAppendResponse extends ContentAppendParams {
+  contentId: number;
+}
+
 interface QuestionEditParams {
   contentId: number;
   name: string;
@@ -45,7 +49,7 @@ export const appendContent = async ({
   question,
   firstOption,
   secondOption,
-}: ContentAppendParams) => {
+}: ContentAppendParams): Promise<ContentAppendResponse> => {
   const res = await fetcher.post(API_URL.contents, {
     body: {
       category,
