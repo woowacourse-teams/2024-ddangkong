@@ -33,7 +33,7 @@ jobs:
                   repo,
                   since: `${today}T00:00:00Z`, // 오늘의 00:00부터 시작
                 });
-
+                console.log('Commits:', commits.data);
                 // 각 커밋에 대해 작성자와 PR 정보 추가
                 commits.data.forEach(commit => {
                   const author = commit.committer.login; // 커밋 작성자
