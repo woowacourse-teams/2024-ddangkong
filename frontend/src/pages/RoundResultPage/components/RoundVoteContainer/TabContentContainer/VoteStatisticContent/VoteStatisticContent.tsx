@@ -13,12 +13,12 @@ import { getDominantVoteData } from '../TabContentContainer.util';
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import { Group, Total } from '@/types/roundVoteResult';
 
-interface VoteStatisticsContentProps {
+interface VoteStatisticContentProps {
   groupRoundResult: Group;
   totalResult: Total;
 }
 
-const VoteStatisticContent = ({ groupRoundResult, totalResult }: VoteStatisticsContentProps) => {
+const VoteStatisticContent = ({ groupRoundResult, totalResult }: VoteStatisticContentProps) => {
   const dominantVoteData = getDominantVoteData(totalResult);
 
   const { firstOption, secondOption } = groupRoundResult;
