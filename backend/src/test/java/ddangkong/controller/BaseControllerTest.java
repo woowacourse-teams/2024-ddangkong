@@ -1,6 +1,5 @@
 package ddangkong.controller;
 
-
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 import ddangkong.domain.balance.content.BalanceContentRepository;
@@ -17,6 +16,7 @@ import ddangkong.support.fixture.domain.MemberFixture;
 import ddangkong.support.fixture.domain.RoomBalanceVoteFixture;
 import ddangkong.support.fixture.domain.RoomContentFixture;
 import ddangkong.support.fixture.domain.RoomFixture;
+import ddangkong.support.fixture.domain.TotalBalanceVoteFixture;
 import io.restassured.RestAssured;
 import java.time.Clock;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,6 +69,9 @@ public abstract class BaseControllerTest {
 
     @Autowired
     protected RoomBalanceVoteFixture roomBalanceVoteFixture;
+
+    @Autowired
+    protected TotalBalanceVoteFixture totalBalanceVoteFixture;
 
     @LocalServerPort
     private int port;

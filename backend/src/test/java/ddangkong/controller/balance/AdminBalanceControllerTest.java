@@ -102,4 +102,25 @@ class AdminBalanceControllerTest extends BaseControllerTest {
             );
         }
     }
+
+    @Nested
+    class 밸런스_게임_컨텐츠_삭제 {
+
+        @Test
+        void 밸런스_게임_컨텐츠를_삭제할_수_있다() {
+            // given
+            BalanceContent content = balanceContentFixture.create();
+            BalanceOption option1 = balanceOptionFixture.create(content);
+            BalanceOption option2 = balanceOptionFixture.create(content);
+            totalBalanceVoteFixture.create(option1);
+            totalBalanceVoteFixture.create(option2);
+
+            // when & then
+            RestAssured.given()
+                    .pathParam("contentId", content.getId())
+                    .delete("/api/admin/balances/contents/{contentId}")
+                    .then().log().all()
+                    .statusCode(204);
+        }
+    }
 }

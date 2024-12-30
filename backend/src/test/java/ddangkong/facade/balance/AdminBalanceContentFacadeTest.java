@@ -87,4 +87,28 @@ class AdminBalanceContentFacadeTest extends BaseServiceTest {
             );
         }
     }
+
+    @Nested
+    class 밸런스_게임_컨텐츠_삭제 {
+
+        @Test
+        void 밸런스_게임_컨텐츠와_관련된_모든_요소를_삭제할_수_있다() {
+            // given
+            BalanceContent content = balanceContentFixture.create();
+            BalanceOption option1 = balanceOptionFixture.create(content);
+            BalanceOption option2 = balanceOptionFixture.create(content);
+            totalBalanceVoteFixture.create(option1);
+            totalBalanceVoteFixture.create(option2);
+
+            // when
+            adminBalanceContentFacade.deleteContent(content.getId());
+
+            // then
+            assertAll(
+                    () -> assertThat(balanceContentRepository.count()).isZero(),
+                    () -> assertThat(balanceOptionRepository.count()).isZero(),
+                    () -> assertThat(totalBalanceVoteRepository.count()).isZero()
+            );
+        }
+    }
 }

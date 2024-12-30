@@ -1,5 +1,6 @@
 package ddangkong.service.balance.vote;
 
+import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.domain.balance.vote.TotalBalanceVoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,5 +16,10 @@ public class TotalBalanceVoteService {
     @Transactional(readOnly = true)
     public long getVoteCount(BalanceOption balanceOption) {
         return totalBalanceVoteRepository.countByBalanceOption(balanceOption);
+    }
+
+    @Transactional
+    public void deleteByBalanceContent(BalanceContent balanceContent) {
+        totalBalanceVoteRepository.deleteByBalanceOptionBalanceContent(balanceContent);
     }
 }

@@ -15,4 +15,6 @@ public interface RoomContentRepository extends JpaRepository<RoomContent, Long> 
     List<RoomContent> findAllByRoom(Room room);
 
     Optional<RoomContent> findByRoomAndBalanceContent(Room room, BalanceContent balanceContent);
+
+    boolean existsByBalanceContent(BalanceContent balanceContent);
 }
