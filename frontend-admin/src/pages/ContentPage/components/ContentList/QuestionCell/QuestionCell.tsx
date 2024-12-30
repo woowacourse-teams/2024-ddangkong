@@ -27,7 +27,7 @@ const QuestionCell = ({ question, contentId }: QuestionCellProps) => {
 
   const handleCompleteEdit = () => {
     editQuestion(
-      { contentId, name: question },
+      { contentId, name: value },
       { onSuccess: () => setIsEdit(false), onError: () => setValue(question) },
     );
   };

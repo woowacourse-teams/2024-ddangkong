@@ -48,7 +48,7 @@ const editQuestionHandler = async ({ request }: { request: Request }) => {
 
   if (!content) return new HttpResponse(null, { status: 404 });
 
-  content.firstOption.name = body.name;
+  content.question = body.name;
 
   return HttpResponse.json(content);
 };

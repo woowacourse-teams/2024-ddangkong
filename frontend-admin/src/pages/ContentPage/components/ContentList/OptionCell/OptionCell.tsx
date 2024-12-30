@@ -27,7 +27,7 @@ const OptionCell = ({ option }: OptionCellProps) => {
 
   const handleCompleteEdit = () => {
     editOption(
-      { optionId: option.optionId, name: option.name },
+      { optionId: option.optionId, name: value },
       {
         onSuccess: () => setIsEdit(false),
         onError: () => setValue(option.name),
@@ -46,7 +46,7 @@ const OptionCell = ({ option }: OptionCellProps) => {
       {isEdit ? (
         <input css={optionInput} value={value} onChange={handleChange} />
       ) : (
-        <span css={optionText}>{option.name}</span>
+        <span css={optionText}>{value}</span>
       )}
       <div css={detailContainer}>
         <button css={editButton} onClick={isEdit ? handleCompleteEdit : handleEdit}>
