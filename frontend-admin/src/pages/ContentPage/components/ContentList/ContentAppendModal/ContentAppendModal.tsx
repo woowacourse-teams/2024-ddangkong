@@ -49,6 +49,12 @@ const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) =
     onClose();
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleClick();
+    }
+  };
+
   if (!categoryList) return null;
 
   return (
@@ -71,6 +77,7 @@ const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) =
           label="질문"
           value={question}
           handleChange={handleChangeQuestion}
+          handleKeyDown={handleKeyDown}
           hasError={Boolean(errors.question)}
           placeholder="추가할 질문을 입력해주세요"
           maxLength={36}
@@ -79,6 +86,7 @@ const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) =
           label="옵션 1"
           value={firstOption}
           handleChange={handleChangeFirstOption}
+          handleKeyDown={handleKeyDown}
           hasError={Boolean(errors.firstOption)}
           placeholder="첫 번째 옵션을 입력해주세요"
         />
@@ -86,15 +94,16 @@ const ContentAppendModal = ({ isOpen, onClose, onConfirm, title }: ModalState) =
           label="옵션 2"
           value={secondOption}
           handleChange={handleChangeSecondOption}
+          handleKeyDown={handleKeyDown}
           hasError={Boolean(errors.secondOption)}
           placeholder="두 번째 옵션을 입력해주세요"
         />
       </Modal.Content>
       <Modal.Footer css={footerContainer}>
-        <Modal.TextButton onClick={handleClick} width="40%" css={appendButton}>
+        <Modal.TextButton onConfirm={handleClick} width="40%" css={appendButton}>
           추가
         </Modal.TextButton>
-        <Modal.TextButton onClick={onClose} width="40%" backgroundColor="white" css={closeButton}>
+        <Modal.TextButton onConfirm={onClose} width="40%" backgroundColor="white" css={closeButton}>
           취소
         </Modal.TextButton>
       </Modal.Footer>

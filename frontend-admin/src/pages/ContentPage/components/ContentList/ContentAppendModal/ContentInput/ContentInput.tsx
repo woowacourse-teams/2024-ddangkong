@@ -12,6 +12,7 @@ interface ContentInputProps {
   label: string;
   value: string;
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   maxLength?: number;
   hasError?: boolean;
@@ -21,6 +22,7 @@ const ContentInput = ({
   label,
   value,
   handleChange,
+  handleKeyDown,
   placeholder = '',
   maxLength = 16,
   hasError = false,
@@ -36,6 +38,7 @@ const ContentInput = ({
         css={[contentInput, hasError && errorBorder]}
         value={value}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         placeholder={placeholder}
       />
       <div css={count}>
