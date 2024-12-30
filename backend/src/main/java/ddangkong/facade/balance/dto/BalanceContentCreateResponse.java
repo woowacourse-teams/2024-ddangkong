@@ -12,15 +12,13 @@ public record BalanceContentCreateResponse(
         BalanceOptionAdminResponse secondOption
 ) {
 
-    public static BalanceContentCreateResponse noVoteResponse(BalanceContent content,
-                                                              BalanceOption firstOption,
-                                                              BalanceOption secondOption) {
-        return new BalanceContentCreateResponse(
-                content.getId(),
+    public BalanceContentCreateResponse(BalanceContent content,
+                                        BalanceOption firstOption,
+                                        BalanceOption secondOption) {
+        this(content.getId(),
                 content.getName(),
                 content.getCategory(),
                 BalanceOptionAdminResponse.notExistVoteResponse(firstOption),
-                BalanceOptionAdminResponse.notExistVoteResponse(secondOption)
-        );
+                BalanceOptionAdminResponse.notExistVoteResponse(secondOption));
     }
 }

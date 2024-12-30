@@ -35,7 +35,12 @@ public class BalanceOptionService {
     }
 
     @Transactional
-    public BalanceOption createBalanceOption(String name, BalanceContent content) {
-        return balanceOptionRepository.save(new BalanceOption(name, content));
+    public BalanceOption createBalanceOption(String name, BalanceContent balanceContent) {
+        return balanceOptionRepository.save(new BalanceOption(name, balanceContent));
+    }
+
+    @Transactional
+    public void deleteByBalanceContent(BalanceContent balanceContent) {
+        balanceOptionRepository.deleteByBalanceContent(balanceContent);
     }
 }

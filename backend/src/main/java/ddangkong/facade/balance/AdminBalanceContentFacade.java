@@ -2,6 +2,7 @@ package ddangkong.facade.balance;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.option.BalanceOption;
+import ddangkong.exception.balance.content.AlreadyUsingBalanceContentException;
 import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
 import ddangkong.facade.balance.dto.BalanceContentCreateResponse;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
@@ -10,6 +11,8 @@ import ddangkong.facade.balance.dto.BalanceOptionPatchRequest;
 import ddangkong.facade.balance.dto.BalanceOptionPatchResponse;
 import ddangkong.service.balance.content.BalanceContentService;
 import ddangkong.service.balance.option.BalanceOptionService;
+import ddangkong.service.balance.vote.TotalBalanceVoteService;
+import ddangkong.service.room.balance.roomcontent.RoomContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminBalanceContentFacade {
 
     private final BalanceContentService balanceContentService;
+
     private final BalanceOptionService balanceOptionService;
+
+    private final RoomContentService roomContentService;
+
+    private final TotalBalanceVoteService totalBalanceVoteService;
+
 
     @Transactional
     public BalanceContentCreateResponse createContent(BalanceContentCreateRequest request) {
@@ -27,7 +36,7 @@ public class AdminBalanceContentFacade {
         BalanceOption firstOption = balanceOptionService.createBalanceOption(request.firstOption(), content);
         BalanceOption secondOption = balanceOptionService.createBalanceOption(request.secondOption(), content);
 
-        return BalanceContentCreateResponse.noVoteResponse(content, firstOption, secondOption);
+        return new BalanceContentCreateResponse(content, firstOption, secondOption);
     }
 
     @Transactional
@@ -42,5 +51,17 @@ public class AdminBalanceContentFacade {
         BalanceOption option = balanceOptionService.getBalanceOption(request.optionId());
         option.updateName(request.name());
         return new BalanceOptionPatchResponse(option);
+    }
+
+    @Transactional
+    public void deleteContent(Long contentId) {
+        BalanceContent content = balanceContentService.getBalanceContent(contentId);
+        if (roomContentService.isUsingAtRoom(content)) {
+            throw new AlreadyUsingBalanceContentException();
+        }
+
+        totalBalanceVoteService.deleteByBalanceContent(content);
+        balanceOptionService.deleteByBalanceContent(content);
+        balanceContentService.delete(content);
     }
 }

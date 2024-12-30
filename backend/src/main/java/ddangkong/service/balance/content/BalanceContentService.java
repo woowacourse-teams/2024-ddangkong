@@ -38,4 +38,9 @@ public class BalanceContentService {
     public BalanceContent createBalanceContent(Category category, String name) {
         return balanceContentRepository.save(new BalanceContent(category, name));
     }
+
+    @Transactional
+    public void delete(BalanceContent content) {
+        balanceContentRepository.delete(content);
+    }
 }

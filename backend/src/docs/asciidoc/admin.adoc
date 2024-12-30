@@ -24,7 +24,7 @@ include::{snippets}/admin/balance/create/response-fields.adoc[]
 
 '''
 
-== 밸런스 게임 콘텐츠 수정
+=== 밸런스 게임 콘텐츠 수정
 
 ==== curl
 
@@ -48,7 +48,7 @@ include::{snippets}/admin/balance/patch-content/response-fields.adoc[]
 
 '''
 
-== 밸런스 게임 선택지 수정
+=== 밸런스 게임 선택지 수정
 
 ==== curl
 
@@ -69,5 +69,23 @@ include::{snippets}/admin/balance/patch-option/http-response.adoc[]
 response fields
 
 include::{snippets}/admin/balance/patch-option/response-fields.adoc[]
+
+'''
+
+=== 밸런스 게임 선택지 삭제
+
+==== curl
+
+include::{snippets}/admin/balance/delete/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/admin/balance/delete/http-request.adoc[]
+
+include::{snippets}/admin/balance/delete/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/admin/balance/delete/http-response.adoc[]
 
 '''

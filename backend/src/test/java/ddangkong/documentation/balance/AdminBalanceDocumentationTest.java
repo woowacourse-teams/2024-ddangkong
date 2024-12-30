@@ -1,7 +1,9 @@
 package ddangkong.documentation.balance;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
@@ -9,14 +11,16 @@ import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ddangkong.controller.balance.AdminBalanceController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.balance.AdminBalanceContentFacade;
-import ddangkong.facade.balance.dto.BalanceContentCreateResponse;
 import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
+import ddangkong.facade.balance.dto.BalanceContentCreateResponse;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchResponse;
 import ddangkong.facade.balance.dto.BalanceOptionAdminResponse;
@@ -138,6 +142,26 @@ public class AdminBalanceDocumentationTest extends BaseDocumentationTest {
                             responseFields(
                                     fieldWithPath("optionId").type(NUMBER).description("선택지 ID"),
                                     fieldWithPath("name").type(STRING).description("선택지")
+                            )));
+        }
+    }
+
+    @Nested
+    class 밸런스_게임_컨텐츠_삭제 {
+
+        private static final String ENDPOINT = "/api/admin/balances/contents/{contentId}";
+
+        @Test
+        void 밸런스_게임_컨텐츠를_삭제할_수_있다() throws Exception {
+            long contentId = 133L;
+            doNothing().when(adminBalanceContentFacade).deleteContent(contentId);
+
+            // when & then
+            mockMvc.perform(delete(ENDPOINT, contentId))
+                    .andExpect(status().isNoContent())
+                    .andDo(document("admin/balance/delete",
+                            pathParameters(
+                                    parameterWithName("contentId").description("콘텐츠 ID")
                             )));
         }
     }
