@@ -30,6 +30,11 @@ public class BalanceOptionService {
     }
 
     @Transactional(readOnly = true)
+    public List<BalanceOption> getBalanceOptions(List<BalanceContent> balanceContents) {
+        return balanceOptionRepository.findAllByBalanceContentIn(balanceContents);
+    }
+
+    @Transactional(readOnly = true)
     public List<BalanceOption> findMemberRoomBalanceVoteOptions(Member member) {
         return balanceOptionRepository.findMemberRoomBalanceVoteOptions(member);
     }

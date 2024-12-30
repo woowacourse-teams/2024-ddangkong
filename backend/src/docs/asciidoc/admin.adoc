@@ -1,5 +1,29 @@
 == 어드민 API
 
+=== 밸런스 게임 콘텐츠들 조회
+
+==== curl
+
+include::{snippets}/admin/balance/get/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/admin/balance/get/http-request.adoc[]
+
+query parameters
+
+include::{snippets}/admin/balance/get/query-parameters.adoc[]
+
+==== response
+
+include::{snippets}/admin/balance/get/http-response.adoc[]
+
+response fields
+
+include::{snippets}/admin/balance/get/response-fields.adoc[]
+
+'''
+
 === 밸런스 게임 콘텐츠 생성
 
 ==== curl

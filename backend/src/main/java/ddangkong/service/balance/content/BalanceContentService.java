@@ -24,6 +24,11 @@ public class BalanceContentService {
     }
 
     @Transactional(readOnly = true)
+    public List<BalanceContent> getBalanceContents(Category category) {
+        return balanceContentRepository.findByCategory(category);
+    }
+
+    @Transactional(readOnly = true)
     public List<BalanceContent> pickBalanceContents(Category category, int pickCount) {
         List<BalanceContent> contents = balanceContentRepository.findByCategory(category);
         if (contents.size() < pickCount) {

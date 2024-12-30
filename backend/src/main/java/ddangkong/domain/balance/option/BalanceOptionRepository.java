@@ -10,6 +10,8 @@ public interface BalanceOptionRepository extends JpaRepository<BalanceOption, Lo
 
     List<BalanceOption> findAllByBalanceContent(BalanceContent balanceContent);
 
+    List<BalanceOption> findAllByBalanceContentIn(List<BalanceContent> balanceContent);
+
     @Query("""
             SELECT bo
             FROM BalanceOption bo

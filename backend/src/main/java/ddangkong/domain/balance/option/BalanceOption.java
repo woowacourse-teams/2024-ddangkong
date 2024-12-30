@@ -53,6 +53,10 @@ public class BalanceOption {
         return this.id.equals(id);
     }
 
+    public boolean isContain(BalanceContent content) {
+        return this.balanceContent.getId().equals(content.getId());
+    }
+
     public void updateName(String name) {
         validateName(name);
         this.name = name;

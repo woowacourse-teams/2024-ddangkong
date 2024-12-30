@@ -10,6 +10,7 @@ import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
 import ddangkong.facade.balance.dto.BalanceContentCreateResponse;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
+import ddangkong.facade.balance.dto.BalanceContentsAdminResponse;
 import ddangkong.facade.balance.dto.BalanceOptionPatchRequest;
 import java.util.Optional;
 import org.junit.jupiter.api.Nested;
@@ -22,10 +23,57 @@ class AdminBalanceContentFacadeTest extends BaseServiceTest {
     private AdminBalanceContentFacade adminBalanceContentFacade;
 
     @Nested
-    class 밸런스_게임_질문지_추가 {
+    class 밸런스_게임_컨텐츠_조회 {
 
         @Test
-        void 밸런스_게임_질문지를_추가할_수_있다() {
+        void 밸런스_게임_컨텐츠와_전체_투표_결과를_조회할_수_있다() {
+            // given
+            BalanceContent content = balanceContentFixture.create();
+            BalanceOption option1 = balanceOptionFixture.create(content);
+            BalanceOption option2 = balanceOptionFixture.create(content);
+            totalBalanceVoteFixture.create(option1);
+            totalBalanceVoteFixture.create(option1);
+            totalBalanceVoteFixture.create(option2);
+
+            // when
+            BalanceContentsAdminResponse actual = adminBalanceContentFacade.getContents(content.getCategory());
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.contents()).hasSize(1),
+                    () -> assertThat(actual.contents().get(0).contentId()).isEqualTo(content.getId()),
+                    () -> assertThat(actual.contents().get(0).question()).isEqualTo(content.getName()),
+                    () -> assertThat(actual.contents().get(0).firstOption().optionId()).isEqualTo(option1.getId()),
+                    () -> assertThat(actual.contents().get(0).firstOption().name()).isEqualTo(option1.getName()),
+                    () -> assertThat(actual.contents().get(0).firstOption().count()).isEqualTo(2),
+                    () -> assertThat(actual.contents().get(0).firstOption().percent()).isEqualTo(67)
+            );
+        }
+
+        @Test
+        void 투표가_없을_경우_투표_기본값을_반환한다() {
+            // given
+            BalanceContent content = balanceContentFixture.create();
+            balanceOptionFixture.create(content);
+            balanceOptionFixture.create(content);
+
+            // when
+            BalanceContentsAdminResponse actual = adminBalanceContentFacade.getContents(content.getCategory());
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.contents()).hasSize(1),
+                    () -> assertThat(actual.contents().get(0).firstOption().count()).isEqualTo(0),
+                    () -> assertThat(actual.contents().get(0).firstOption().percent()).isEqualTo(0)
+            );
+        }
+    }
+
+    @Nested
+    class 밸런스_게임_컨텐츠_추가 {
+
+        @Test
+        void 밸런스_게임_컨텐츠를_추가할_수_있다() {
             // given
             BalanceContentCreateRequest request = new BalanceContentCreateRequest(
                     Category.IF, "다음 중 더 좋은 초능력은?", "순간이동", "불로장생");

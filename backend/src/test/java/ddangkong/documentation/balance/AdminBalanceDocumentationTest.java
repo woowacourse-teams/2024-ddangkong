@@ -4,8 +4,10 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -13,19 +15,23 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ddangkong.controller.balance.AdminBalanceController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.balance.AdminBalanceContentFacade;
+import ddangkong.facade.balance.dto.BalanceContentAdminResponse;
 import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
 import ddangkong.facade.balance.dto.BalanceContentCreateResponse;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchResponse;
+import ddangkong.facade.balance.dto.BalanceContentsAdminResponse;
 import ddangkong.facade.balance.dto.BalanceOptionAdminResponse;
 import ddangkong.facade.balance.dto.BalanceOptionPatchRequest;
 import ddangkong.facade.balance.dto.BalanceOptionPatchResponse;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -37,6 +43,54 @@ public class AdminBalanceDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
     private AdminBalanceContentFacade adminBalanceContentFacade;
+
+    @Nested
+    class 밸런스_게임_컨텐츠_조회 {
+
+        private static final String ENDPOINT = "/api/admin/balances/contents";
+
+        @Test
+        void 밸런스_게임_컨텐츠와_전체_투표_결과를_조회할_수_있다() throws Exception {
+            // given
+            Category category = Category.IF;
+            BalanceContentsAdminResponse response = new BalanceContentsAdminResponse(
+                    List.of(new BalanceContentAdminResponse(133L, "다음 중 더 좋은 초능력은?",
+                            new BalanceOptionAdminResponse(267L, "순간이동", 0, 50),
+                            new BalanceOptionAdminResponse(268L, "불로장생", 0, 50)
+                    ))
+            );
+            when(adminBalanceContentFacade.getContents(category)).thenReturn(response);
+
+            // when & then
+            mockMvc.perform(get(ENDPOINT)
+                            .queryParam("category", category.name())
+                    )
+                    .andExpect(status().isOk())
+                    .andDo(document("admin/balance/get",
+                            queryParameters(
+                                    parameterWithName("category").description("카테고리")
+                            ),
+                            responseFields(
+                                    fieldWithPath("contents").type(ARRAY).description("컨텐츠 배열"),
+                                    fieldWithPath("contents[].contentId").type(NUMBER).description("컨텐츠 ID"),
+                                    fieldWithPath("contents[].question").type(STRING).description("컨텐츠"),
+                                    fieldWithPath("contents[].firstOption.optionId").type(NUMBER)
+                                            .description("선택지 1 ID"),
+                                    fieldWithPath("contents[].firstOption.name").type(STRING).description("선택지 1"),
+                                    fieldWithPath("contents[].firstOption.count").type(NUMBER)
+                                            .description("선택지 1에 투표 횟수"),
+                                    fieldWithPath("contents[].firstOption.percent").type(NUMBER)
+                                            .description("선택지 1 선택 비율"),
+                                    fieldWithPath("contents[].secondOption.optionId").type(NUMBER)
+                                            .description("선택지 2 ID"),
+                                    fieldWithPath("contents[].secondOption.name").type(STRING).description("선택지 2"),
+                                    fieldWithPath("contents[].secondOption.count").type(NUMBER)
+                                            .description("선택지 2에 투표 횟수"),
+                                    fieldWithPath("contents[].secondOption.percent").type(NUMBER)
+                                            .description("선택지 2 선택 비율")
+                            )));
+        }
+    }
 
     @Nested
     class 밸런스_게임_질문지_추가 {

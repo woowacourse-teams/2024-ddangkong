@@ -11,6 +11,7 @@ import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
 import ddangkong.facade.balance.dto.BalanceContentCreateResponse;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchResponse;
+import ddangkong.facade.balance.dto.BalanceContentsAdminResponse;
 import ddangkong.facade.balance.dto.BalanceOptionPatchRequest;
 import ddangkong.facade.balance.dto.BalanceOptionPatchResponse;
 import io.restassured.RestAssured;
@@ -19,6 +20,36 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class AdminBalanceControllerTest extends BaseControllerTest {
+
+    @Nested
+    class 밸런스_게임_컨텐츠_조회 {
+
+        @Test
+        void 밸런스_게임_컨텐츠와_전체_투표_결과를_조회할_수_있다() {
+            // given
+            BalanceContent content1 = balanceContentFixture.create();
+            BalanceOption option1 = balanceOptionFixture.create(content1);
+            BalanceOption option2 = balanceOptionFixture.create(content1);
+            BalanceContent content2 = balanceContentFixture.create();
+            balanceOptionFixture.create(content2);
+            balanceOptionFixture.create(content2);
+
+            totalBalanceVoteFixture.create(option1);
+            totalBalanceVoteFixture.create(option1);
+            totalBalanceVoteFixture.create(option2);
+
+            // when
+            BalanceContentsAdminResponse actual = RestAssured.given()
+                    .queryParam("category", content1.getCategory())
+                    .get("/api/admin/balances/contents")
+                    .then().contentType(ContentType.JSON).log().all()
+                    .statusCode(200)
+                    .extract().as(BalanceContentsAdminResponse.class);
+
+            // then
+            assertThat(actual.contents()).hasSize(2);
+        }
+    }
 
     @Nested
     class 밸런스_게임_질문지_추가 {
@@ -45,7 +76,7 @@ class AdminBalanceControllerTest extends BaseControllerTest {
                     () -> assertThat(actual.firstOption().name()).isEqualTo(request.firstOption()),
                     () -> assertThat(actual.secondOption().name()).isEqualTo(request.secondOption()),
                     () -> assertThat(actual.firstOption().count()).isEqualTo(0),
-                    () -> assertThat(actual.firstOption().percent()).isEqualTo(50)
+                    () -> assertThat(actual.firstOption().percent()).isEqualTo(0)
             );
         }
     }
