@@ -1,7 +1,7 @@
 package ddangkong.controller.balance;
 
 import ddangkong.facade.balance.AdminBalanceContentFacade;
-import ddangkong.facade.balance.dto.BalanceContentAdminResponse;
+import ddangkong.facade.balance.dto.BalanceContentCreateResponse;
 import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchResponse;
@@ -25,7 +25,7 @@ public class AdminBalanceController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/admin/balances/contents")
-    public BalanceContentAdminResponse createContent(@RequestBody BalanceContentCreateRequest request) {
+    public BalanceContentCreateResponse createContent(@RequestBody BalanceContentCreateRequest request) {
         return adminBalanceContentFacade.createContent(request);
     }
 

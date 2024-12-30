@@ -7,8 +7,8 @@ import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.facade.BaseServiceTest;
-import ddangkong.facade.balance.dto.BalanceContentAdminResponse;
 import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
+import ddangkong.facade.balance.dto.BalanceContentCreateResponse;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
 import ddangkong.facade.balance.dto.BalanceOptionPatchRequest;
 import java.util.Optional;
@@ -31,11 +31,12 @@ class AdminBalanceContentFacadeTest extends BaseServiceTest {
                     Category.IF, "다음 중 더 좋은 초능력은?", "순간이동", "불로장생");
 
             // when
-            BalanceContentAdminResponse response = adminBalanceContentFacade.createContent(request);
+            BalanceContentCreateResponse response = adminBalanceContentFacade.createContent(request);
 
             // then
             assertAll(
                     () -> assertThat(response.question()).isEqualTo(request.question()),
+                    () -> assertThat(response.category()).isEqualTo(request.category()),
                     () -> assertThat(response.firstOption().name()).isEqualTo(request.firstOption()),
                     () -> assertThat(response.secondOption().name()).isEqualTo(request.secondOption()),
                     () -> assertThat(balanceContentRepository.count()).isEqualTo(1L),

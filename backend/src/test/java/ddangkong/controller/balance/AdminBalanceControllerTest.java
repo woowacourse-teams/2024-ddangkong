@@ -7,8 +7,8 @@ import ddangkong.controller.BaseControllerTest;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
-import ddangkong.facade.balance.dto.BalanceContentAdminResponse;
 import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
+import ddangkong.facade.balance.dto.BalanceContentCreateResponse;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchResponse;
 import ddangkong.facade.balance.dto.BalanceOptionPatchRequest;
@@ -30,17 +30,18 @@ class AdminBalanceControllerTest extends BaseControllerTest {
                     Category.IF, "다음 중 더 좋은 초능력은?", "순간이동", "불로장생");
 
             // when
-            BalanceContentAdminResponse actual = RestAssured.given()
+            BalanceContentCreateResponse actual = RestAssured.given()
                     .contentType(ContentType.JSON)
                     .body(request)
                     .post("/api/admin/balances/contents")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(201)
-                    .extract().as(BalanceContentAdminResponse.class);
+                    .extract().as(BalanceContentCreateResponse.class);
 
             // then
             assertAll(
                     () -> assertThat(actual.question()).isEqualTo(request.question()),
+                    () -> assertThat(actual.category()).isEqualTo(request.category()),
                     () -> assertThat(actual.firstOption().name()).isEqualTo(request.firstOption()),
                     () -> assertThat(actual.secondOption().name()).isEqualTo(request.secondOption()),
                     () -> assertThat(actual.firstOption().count()).isEqualTo(0),

@@ -15,7 +15,7 @@ import ddangkong.controller.balance.AdminBalanceController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.balance.AdminBalanceContentFacade;
-import ddangkong.facade.balance.dto.BalanceContentAdminResponse;
+import ddangkong.facade.balance.dto.BalanceContentCreateResponse;
 import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchResponse;
@@ -44,8 +44,8 @@ public class AdminBalanceDocumentationTest extends BaseDocumentationTest {
             // given
             BalanceContentCreateRequest request = new BalanceContentCreateRequest(
                     Category.IF, "다음 중 더 좋은 초능력은?", "순간이동", "불로장생");
-            BalanceContentAdminResponse response = new BalanceContentAdminResponse(
-                    133L, "다음 중 더 좋은 초능력은?",
+            BalanceContentCreateResponse response = new BalanceContentCreateResponse(
+                    133L, "다음 중 더 좋은 초능력은?", Category.IF,
                     new BalanceOptionAdminResponse(267L, "순간이동", 0, 50),
                     new BalanceOptionAdminResponse(268L, "불로장생", 0, 50)
             );
@@ -68,6 +68,7 @@ public class AdminBalanceDocumentationTest extends BaseDocumentationTest {
                             responseFields(
                                     fieldWithPath("contentId").type(NUMBER).description("컨텐츠 ID"),
                                     fieldWithPath("question").type(STRING).description("컨텐츠"),
+                                    fieldWithPath("category").type(STRING).description("카테고리"),
                                     fieldWithPath("firstOption.optionId").type(NUMBER).description("선택지 1 ID"),
                                     fieldWithPath("firstOption.name").type(STRING).description("선택지 1"),
                                     fieldWithPath("firstOption.count").type(NUMBER).description("선택지 1에 투표 횟수"),

@@ -2,8 +2,8 @@ package ddangkong.facade.balance;
 
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.option.BalanceOption;
-import ddangkong.facade.balance.dto.BalanceContentAdminResponse;
 import ddangkong.facade.balance.dto.BalanceContentCreateRequest;
+import ddangkong.facade.balance.dto.BalanceContentCreateResponse;
 import ddangkong.facade.balance.dto.BalanceContentPatchRequest;
 import ddangkong.facade.balance.dto.BalanceContentPatchResponse;
 import ddangkong.facade.balance.dto.BalanceOptionPatchRequest;
@@ -22,12 +22,12 @@ public class AdminBalanceContentFacade {
     private final BalanceOptionService balanceOptionService;
 
     @Transactional
-    public BalanceContentAdminResponse createContent(BalanceContentCreateRequest request) {
+    public BalanceContentCreateResponse createContent(BalanceContentCreateRequest request) {
         BalanceContent content = balanceContentService.createBalanceContent(request.category(), request.question());
         BalanceOption firstOption = balanceOptionService.createBalanceOption(request.firstOption(), content);
         BalanceOption secondOption = balanceOptionService.createBalanceOption(request.secondOption(), content);
 
-        return BalanceContentAdminResponse.noVoteResponse(content, firstOption, secondOption);
+        return BalanceContentCreateResponse.noVoteResponse(content, firstOption, secondOption);
     }
 
     @Transactional
