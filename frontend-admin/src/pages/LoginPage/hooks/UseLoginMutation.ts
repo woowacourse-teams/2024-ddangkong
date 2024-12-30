@@ -10,10 +10,6 @@ const UseLoginMutation = () => {
     onSuccess: () => {
       navigate('/content');
     },
-    onError: (error) => {
-      // 실패하면 인풋 아래에 에러 메시지 출력
-      console.error(error.message);
-    },
   });
 };
 
