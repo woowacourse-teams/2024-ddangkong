@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Gather Commit Information
+      - name: Gather Commit Information Test
         id: commit-info
         run: |
           TODAY=$(date -u +"%Y-%m-%d")
