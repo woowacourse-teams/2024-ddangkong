@@ -1,5 +1,6 @@
 const color = {
   // primary color
+
   peanut200: '#FFF0D4',
   peanut300: '#FFF4DF',
   peanut400: '#FFDD9A',
