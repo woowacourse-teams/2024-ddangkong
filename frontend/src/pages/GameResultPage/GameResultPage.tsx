@@ -6,7 +6,7 @@ import useGAPageTimeSpentGA from '@/lib/googleAnalytics/hooks/usePageTimeSpentGA
 
 const GameResultPage = () => {
   useIsRoomInitial();
-  useGAPageTimeSpentGA('게임 결과 페이지');
+  useGAPageTimeSpentGA('매칭 결과 페이지');
 
   return (
     <Content>

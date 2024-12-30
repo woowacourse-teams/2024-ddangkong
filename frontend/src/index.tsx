@@ -12,11 +12,13 @@ import GlobalStyle from './styles/GlobalStyle';
 import { Theme } from './styles/Theme';
 
 // Sentry 초기화
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  integrations: [Sentry.browserTracingIntegration()],
-  enableTracing: true, // tracesSampleRate와 tracesSampler 기본값 설정
-});
+if (process.env.NODE_ENV === 'production') {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    integrations: [Sentry.browserTracingIntegration()],
+    enableTracing: true, // tracesSampleRate와 tracesSampler 기본값 설정
+  });
+}
 
 // React-query 초기화
 const queryClient = new QueryClient();
