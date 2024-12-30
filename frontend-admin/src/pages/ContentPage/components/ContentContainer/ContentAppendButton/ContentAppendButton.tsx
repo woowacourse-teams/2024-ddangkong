@@ -1,7 +1,7 @@
 import useModal from '@/hooks/useModal';
 import { contentAppendButton } from './ContentAppendButton.styles';
 import useContentAppendMutation from '@/pages/ContentPage/hooks/useContentAppendMutation';
-import ContentAppendModal from '../ContentAppendModal/ContentAppendModal';
+import ContentAppendModal from '../ContentList/ContentAppendModal/ContentAppendModal';
 
 interface ContentAppendButtonProps {
   category: string;

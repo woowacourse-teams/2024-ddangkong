@@ -8,9 +8,9 @@ import {
 } from './ContentList.styles';
 import QuestionCell from './QuestionCell/QuestionCell';
 import OptionCell from './OptionCell/OptionCell';
-import useContentListQuery from '../../hooks/useContentListQuery';
+import useContentListQuery from '../../../hooks/useContentListQuery';
 import ContentDeleteButton from './ContentDeleteButton/ContentDeleteButton';
-import useObserverBottom from '../../hooks/useObserverBottom';
+import useObserverBottom from '../../../hooks/useObserverBottom';
 import { theme } from '@/styles/theme';
 import IntersectionObserverScroll from '@/components/IntersectionObserverScroll/IntersectionObserverScroll';
 
