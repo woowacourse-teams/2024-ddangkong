@@ -5,7 +5,7 @@ on:
     branches:
       - develop # develop 브랜치에서만 실행
     paths:
-      - 'frontend/**' # frontend 폴더가 변경된 경우에만 실행
+      - "frontend/**" # frontend 폴더가 변경된 경우에만 실행
 
 jobs:
   build-and-deploy:
@@ -39,7 +39,7 @@ jobs:
       # 5. Build Project
       - name: Build for Dev
         working-directory: ./frontend
-        run: npm run build:prod
+        run: npm run build:dev
 
       # 6. Configure AWS CLI
       - name: Configure AWS CLI

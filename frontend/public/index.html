@@ -98,10 +98,8 @@
       dataLayer.push(arguments);
     }
 
-    if (process.env.NODE_ENV == 'production') {
-      gtag('js', new Date());
-      gtag('config', 'G-3BFVVPQT0Z');
-    }
+    gtag('js', new Date());
+    gtag('config', 'G-3BFVVPQT0Z');
   </script>
 
   <body>
