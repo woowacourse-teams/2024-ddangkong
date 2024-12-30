@@ -3,29 +3,83 @@ name: Webhook on Push
 on:
   push:
     branches:
-      - "feat/#443" # 모든 브랜치에서 푸시 시 트리거
+      - "feat/#443" # 특정 브랜치에서 푸시 시 트리거
 
 jobs:
-  send-webhook:
+  review-reminder:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3 # 리포지토리 체크아웃
-
-      - name: Gather Commit Information Test
-        id: commit-info
-        run: |
-          TODAY=$(date -u +"%Y-%m-%d")
-          COMMITS=$(git log --since="$TODAY" --pretty=format:"%an: %s" --decorate=short)
-          echo "Commits Today: $COMMITS"
-          echo "::set-output name=commits::$COMMITS"
-
-      - name: Send Discord Webhook Message
+      - name: Send Reminder to Discord
+        uses: actions/github-script@v7
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.PROGRESS_ALARM_DISCORD_WEBHOOK_URL }}
-        run: |
-          curl -X POST \
-          -H "Content-Type: application/json" \
-          -d "{ \"content\": \"Today's Commit Summary:\n ${{ steps.commit-info.outputs.commits }}\" }" \
-          "$DISCORD_WEBHOOK_URL"
+          DISCORD_WEBHOOK: ${{ secrets.PROGRESS_ALARM_DISCORD_WEBHOOK_URL }}
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // 오늘 날짜 가져오기
+            const today = new Date().toISOString().split('T')[0];
+
+            // 커밋 요약을 저장할 객체
+            const commitSummary = {};
+
+            async function getCommits(owner, repo) {
+              try {
+                // 오늘의 커밋 목록 가져오기
+                const commits = await github.rest.repos.listCommits({
+                  owner,
+                  repo,
+                  since: `${today}T00:00:00Z`, // 오늘의 00:00부터 시작
+                });
+
+                // 각 커밋에 대해 작성자와 PR 정보 추가
+                commits.data.forEach(commit => {
+                  const author = commit.committer.login; // 커밋 작성자
+                  const prTitle = commit.commit.message.split('\n')[0]; // 첫 번째 커밋 메시지를 PR 제목으로 간주
+
+                  // 커밋 요약에 작성자가 이미 있으면, 갯수를 증가
+                  if (commitSummary[author]) {
+                    commitSummary[author].count++;
+                  } else {
+                    commitSummary[author] = {
+                      prTitle,
+                      count: 1,
+                    };
+                  }
+                });
+
+                // 커밋 정보를 메시지 형식으로 만들기
+                const messageList = Object.keys(commitSummary).map(author => {
+                  const { prTitle, count } = commitSummary[author];
+                  return `${author}: ${prTitle} - 커밋 수: ${count}`;
+                });
+
+                // 메시지가 없으면 종료
+                if (messageList.length === 0) {
+                  console.log('오늘의 커밋이 없습니다.');
+                  return;
+                }
+
+                // 디스코드 메시지 보내기
+                const response = await fetch(process.env.DISCORD_WEBHOOK, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    content: `🍀 오늘의 커밋 요약 🍀\n\n${messageList.join('\n')}`,
+                    allowed_mentions: {
+                      parse: ["users"], // 멘션 가능한 사용자만 허용
+                    },
+                  }),
+                });
+                
+                console.log('Response status:', response.status);
+              } catch (error) {
+                console.error('Error fetching commits:', error.message);
+                throw error;
+              }
+            }
+
+            // 커밋 가져오기 및 디스코드 알림
+            await getCommits(owner, repo);
