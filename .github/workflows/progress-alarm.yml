@@ -1,8 +1,11 @@
 name: Webhook on Push
 
 on:
+  push:
+    branches:
+      - "feat/#443"
   schedule:
-    - cron: "0 14 * * *" # 한국 시간 기준 매일 밤 11시 실행
+    - cron: "0 15 * * *" # 한국 시간 기준 매일 밤 12시 실행
 
 jobs:
   review-reminder:
@@ -38,8 +41,8 @@ jobs:
                   owner,
                   repo,
                   sha: branch,
-                  since: startOfYesterday.toISOString(), // 어제 자정 기준 (UTC)
-                  until: startOfToday.toISOString() // 오늘 자정 기준 (UTC)
+                  since: startOfYesterday.toISOString(), 
+                  until: startOfToday.toISOString() 
                 });
                 return commits.data;
               } catch (error) {
@@ -70,9 +73,9 @@ jobs:
                 if (commitCount === 0) continue; 
 
                 if (commitSummary[nickname]) {
-                  commitSummary[nickname].push(`${prTitle}: 커밋 수: ${commitCount}`);
+                  commitSummary[nickname].push(`Issue: ${prTitle}: ${commitCount} commit`);
                 } else {
-                  commitSummary[nickname] = [`${prTitle}: 커밋 수: ${commitCount}`];
+                  commitSummary[nickname] = [`Issue: ${prTitle}: ${commitCount} commit`];
                 }
               }
 
@@ -86,14 +89,17 @@ jobs:
                 return;
               }
 
+              const today = new Date();
+              const year = today.getFullYear();
+              const month = today.getMonth() + 1; 
+              const day = today.getDate();
+              const formattedDate = `${year}년 ${month}월 ${day}일`;
+
               const response = await fetch(process.env.DISCORD_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  content: `🍀 오늘의 커밋 요약 🍀\n\n${messageList.join('\n\n')}`,
-                  allowed_mentions: {
-                    parse: ["users"], // 멘션 가능한 사용자만 허용
-                  },
+                  content: `🍀 ${formattedDate} 진행 상황 공유 🍀\n\n${messageList.join('\n\n')}`,
                 }),
               });
               
