@@ -10,7 +10,7 @@ import {
 import StatisticBar from '../StatisticBar/StatisticBar';
 import { getDominantVoteData } from '../TabContentContainer.util';
 
-import A11yOnly from '@/components/common/A11yOnly/A11yOnly';
+import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import { Group, Total } from '@/types/roundVoteResult';
 
 interface VoteStatisticContentProps {

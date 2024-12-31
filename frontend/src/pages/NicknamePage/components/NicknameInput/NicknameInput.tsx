@@ -4,7 +4,7 @@ import useNicknameInput from './hooks/useNicknameInput';
 import { nicknameInput, nicknameInputContainer, nicknameLengthText } from './NicknameInput.styled';
 import createRandomNickname from './NicknameInput.utils';
 
-import A11yOnly from '@/components/common/A11yOnly/A11yOnly';
+import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 import { NICKNAME_MIN_LENGTH, NICKNAME_MAX_LENGTH } from '@/constants/config';
 
 interface NicknameInputProps {

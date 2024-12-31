@@ -1,4 +1,4 @@
-import A11yOnly from './A11yOnly/A11yOnly';
+import A11yOnly from './a11yOnly/A11yOnly';
 import Button from './Button/Button';
 import DeferredComponent from './DeferredComponent/DeferredComponent';
 import Dropdown from './Dropdown/Dropdown';

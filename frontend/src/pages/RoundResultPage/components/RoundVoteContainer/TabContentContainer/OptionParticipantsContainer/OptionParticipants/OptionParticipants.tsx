@@ -5,7 +5,7 @@ import {
   participantsListWrapper,
 } from './OptionParticipants.styled';
 
-import A11yOnly from '@/components/common/A11yOnly/A11yOnly';
+import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
 
 export interface OptionParticipantsProps {
   optionName: string;
