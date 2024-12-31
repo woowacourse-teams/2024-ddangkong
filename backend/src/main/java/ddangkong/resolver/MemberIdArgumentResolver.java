@@ -1,7 +1,7 @@
 package ddangkong.resolver;
 
 import ddangkong.aop.cookie.MemberId;
-import ddangkong.controller.room.RoomMemberCookieEncryptor;
+import ddangkong.aop.cookie.RoomMemberCookieEncryptor;
 import ddangkong.exception.room.NotFoundCookieException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package ddangkong.controller.room;
+package ddangkong.aop.cookie;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.Cookie.SameSite;

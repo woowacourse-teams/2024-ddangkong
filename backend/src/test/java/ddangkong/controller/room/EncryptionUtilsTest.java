@@ -3,6 +3,7 @@ package ddangkong.controller.room;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import ddangkong.aop.cookie.EncryptionUtils;
 import ddangkong.controller.BaseControllerTest;
 import ddangkong.exception.room.InvalidCookieException;
 import org.junit.jupiter.api.Nested;
