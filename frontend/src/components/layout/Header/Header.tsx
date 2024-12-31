@@ -1,10 +1,6 @@
-import {
-  TitleHeader,
-  RoomSettingHeader,
-  RoundResultHeader,
-  MatchingResultHeader,
-} from './components';
 import { useBlockRefresh, useRoutePath } from './hooks';
+
+import { TitleHeader, RoomSettingHeader, RoundResultHeader, MatchingResultHeader } from '.';
 
 const Header = () => {
   const { isNicknamePage, isReadyPage, isRoundResultPage, isMatchingResultPage } = useRoutePath();

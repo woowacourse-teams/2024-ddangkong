@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import { useParams } from 'react-router-dom';
 
-import { gameTitle, headerLayout, roundText } from '../../Header.styled';
+import { gameTitle, headerLayout, roundText } from '../Header.styled';
 
-import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
+import A11yOnly from '@/components/common/A11yOnly/A11yOnly';
 
 import { useBalanceContentQuery, useFocus } from '@/hooks';
 

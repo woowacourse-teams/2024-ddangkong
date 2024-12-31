@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import { useRef } from 'react';
 
-import { buttonWrapper, gameTitle, headerLayout, iconImage, roundText } from '../../Header.styled';
-import { useExit } from '../../hooks';
+import { buttonWrapper, gameTitle, headerLayout, iconImage, roundText } from '../Header.styled';
+import { useExit } from '../hooks';
 
 import { ExitIcon, SettingIcon } from '@/assets';
 import { AlertModal, RoomSettingModal } from '@/components';

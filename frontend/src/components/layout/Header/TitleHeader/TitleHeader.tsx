@@ -1,4 +1,4 @@
-import { gameTitle, headerLayout } from '../../Header.styled';
+import { gameTitle, headerLayout } from '../Header.styled';
 
 interface TitleHeaderProps {
   title: string;

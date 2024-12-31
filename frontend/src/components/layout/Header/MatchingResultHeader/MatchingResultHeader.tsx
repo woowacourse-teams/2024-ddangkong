@@ -4,7 +4,7 @@ import {
   matchingResultCaption,
   MatchingResultHeaderContainer,
   matchingResultTitle,
-} from '../../Header.styled';
+} from '../Header.styled';
 
 import { useFocus } from '@/hooks';
 

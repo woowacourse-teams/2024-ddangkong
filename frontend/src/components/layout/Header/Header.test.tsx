@@ -1,7 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 
-import { RoomSettingHeader } from './components';
+import { RoomSettingHeader } from '.';
 
 import { customRender } from '@/utils/test-utils';
 

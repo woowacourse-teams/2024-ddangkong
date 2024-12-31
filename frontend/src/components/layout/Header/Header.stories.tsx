@@ -1,7 +1,8 @@
 import type { StoryObj, Meta } from '@storybook/react';
 
-import { RoomSettingHeader, RoundResultHeader, TitleHeader } from './components';
 import Header from './Header';
+
+import { RoomSettingHeader, RoundResultHeader, TitleHeader } from '.';
 
 const meta = {
   title: 'Header',
