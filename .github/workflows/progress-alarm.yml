@@ -31,7 +31,7 @@ jobs:
                 const commits = await github.rest.repos.listCommits({
                   owner,
                   repo,
-                  since: `${today}T00:00:00Z`, // 오늘의 00:00부터 시작
+                  since: `2024-12-29T00:00:00Z`, // 오늘의 00:00부터 시작
                 });
                 console.log('Commits:', commits.data, owner, repo);
                 // 각 커밋에 대해 작성자와 PR 정보 추가
