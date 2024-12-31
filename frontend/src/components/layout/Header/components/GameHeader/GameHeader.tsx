@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { gameTitle, headerLayout, roundText } from '../../Header.styled';
 
 import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
-import { convertMsecToSecond } from '@/pages/GamePage/components/SelectContainer/components/Timer/Timer.util';
+import { convertMsecToSecond } from '@/pages/GamePage/components/SelectContainer/Timer/Timer.util';
 
 import { useBalanceContentQuery, useFocus } from '@/hooks';
 

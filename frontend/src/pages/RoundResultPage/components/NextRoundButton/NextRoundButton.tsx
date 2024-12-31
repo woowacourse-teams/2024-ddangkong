@@ -4,9 +4,10 @@ import { useParams } from 'react-router-dom';
 import useMoveNextRoundMutation from './NextRoundButton.hook';
 import { createRandomNextRoundMessage, getNextRoundButtonText } from './NextRoundButton.utils';
 
+import { Button } from '@/components/common';
 import { bottomButtonLayout } from '@/components/common/Button/Button.styled';
 
-import { AlertModal, Button } from '@/components';
+import { AlertModal } from '@/components';
 import { useBalanceContentQuery, useIsMaster, useModal } from '@/hooks';
 
 const NextRoundButton = () => {

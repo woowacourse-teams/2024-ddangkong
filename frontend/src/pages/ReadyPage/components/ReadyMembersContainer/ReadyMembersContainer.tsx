@@ -13,10 +13,11 @@ import {
   profileImage,
 } from './ReadyMembersContainer.styled';
 
+import { A11yOnly } from '@/components/common';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 
 import { CrownIcon, SillyDdangkongMedium } from '@/assets';
-import { A11yOnly, InviteModal } from '@/components';
+import { InviteModal } from '@/components';
 import { useGetRoomInfo, useModal } from '@/hooks';
 
 const ReadyMembersContainer = () => {

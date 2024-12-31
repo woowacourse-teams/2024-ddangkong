@@ -7,10 +7,10 @@ import { MemoryRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import type { MutableSnapshot } from 'recoil';
 
+import { AsyncErrorBoundary, RootErrorBoundary, Spinner } from '@/components/common';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
 
-import { AsyncErrorBoundary, RootErrorBoundary, Spinner } from '@/components';
 import { ModalProvider, QueryClientDefaultOptionProvider, ToastProvider } from '@/providers';
 
 const wrapper = ({

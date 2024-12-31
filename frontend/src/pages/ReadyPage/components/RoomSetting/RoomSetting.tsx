@@ -9,7 +9,9 @@ import {
   roomSettingKey,
 } from './RoomSetting.styled';
 
-import { A11yOnly, RoomSettingModal } from '@/components';
+import { A11yOnly } from '@/components/common';
+
+import { RoomSettingModal } from '@/components';
 import { useGetRoomInfo, useIsMaster, useModal } from '@/hooks';
 
 const RoomSetting = () => {
