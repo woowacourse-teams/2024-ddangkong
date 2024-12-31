@@ -18,11 +18,7 @@ jobs:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-
-            // 커밋 요약을 저장할 객체
             const commitSummary = {};
-
-            // 아이디를 닉네임으로 변환하는 객체
             const nicknames = {
               "rbgksqkr": "마루",
               "useon": "썬데이",
@@ -35,12 +31,11 @@ jobs:
 
             async function getCommits(owner, repo, branch) {
               try {
-                // 특정 브랜치의 커밋 목록 가져오기
                 const commits = await github.rest.repos.listCommits({
                   owner,
                   repo,
                   sha: branch,
-                  since: new Date(new Date().setHours(0, 0, 0, 0)).toISOString(), // 오늘 날짜 기준
+                  since: new Date(new Date().setHours(0, 0, 0, 0)).toISOString(), 
                 });
                 return commits.data;
               } catch (error) {
@@ -50,7 +45,6 @@ jobs:
             }
 
             try {
-              // 열려 있는 PR 목록 가져오기
               const pullRequests = await github.rest.pulls.list({
                 owner,
                 repo,
@@ -61,19 +55,16 @@ jobs:
                 const branch = pr.head.ref;
                 const commits = await getCommits(owner, repo, branch);
 
-                // 각 PR에 대해 작성자와 커밋 수를 요약
-                const author = pr.user.login; // PR 작성자
-                const nickname = nicknames[author]; // 닉네임으로 변환
+                const author = pr.user.login;
+                const nickname = nicknames[author]; 
 
-                // 닉네임이 없는 경우 제외
                 if (!nickname) continue;
 
-                const prTitle = pr.title; // PR 제목
-                const commitCount = commits.length; // 커밋 수
+                const prTitle = pr.title; 
+                const commitCount = commits.length; 
 
-                if (commitCount === 0) continue; // 커밋이 없는 경우 제외
+                if (commitCount === 0) continue; 
 
-                // 커밋 요약에 작성자가 이미 있으면, PR 정보 추가
                 if (commitSummary[nickname]) {
                   commitSummary[nickname].push(`${prTitle}: 커밋 수: ${commitCount}`);
                 } else {
@@ -81,27 +72,27 @@ jobs:
                 }
               }
 
-              // 커밋 정보를 메시지 형식으로 만들기
               const messageList = Object.keys(commitSummary).map(nickname => {
                 const prSummaries = commitSummary[nickname].join('\n');
                 return `${nickname}\n${prSummaries}`;
               });
 
-              // 메시지가 없으면 종료
               if (messageList.length === 0) {
                 console.log('오늘의 커밋이 없습니다.');
                 return;
               }
 
-              // 디스코드 메시지 보내기
+              const today = new Date();
+              const year = today.getFullYear();
+              const month = today.getMonth() + 1;
+              const day = today.getDate();
+              const formattedDate = `${year}년 ${month}월 ${day}일`;
+
               const response = await fetch(process.env.DISCORD_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  content: `🍀 오늘의 커밋 요약 🍀\n\n${messageList.join('\n\n')}`,
-                  allowed_mentions: {
-                    parse: ["users"], // 멘션 가능한 사용자만 허용
-                  },
+                  content: `🍀 {formattedDate} 진행 상황 공유 🍀\n\n${messageList.join('\n\n')}`,
                 }),
               });
               
