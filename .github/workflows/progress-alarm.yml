@@ -71,6 +71,8 @@ jobs:
                 const prTitle = pr.title; // PR 제목
                 const commitCount = commits.length; // 커밋 수
 
+                if (commitCount === 0) continue; // 커밋이 없는 경우 제외
+
                 // 커밋 요약에 작성자가 이미 있으면, PR 정보 추가
                 if (commitSummary[nickname]) {
                   commitSummary[nickname].push(`${prTitle}: 커밋 수: ${commitCount}`);
