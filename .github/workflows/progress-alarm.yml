@@ -2,7 +2,7 @@ name: Webhook on Push
 
 on:
   schedule:
-    - cron: "0 15 * * *" # 한국 시간 기준 매일 밤 12시 실행
+    - cron: "0 22 * * *" # 한국 시간 기준 아침 7시 실행
 
 jobs:
   review-reminder:
