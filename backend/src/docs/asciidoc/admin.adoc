@@ -1,0 +1,39 @@
+== 어드민 API
+
+=== 어드민 로그인
+
+==== curl
+
+include::{snippets}/admin/auth/login/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/admin/auth/login/http-request.adoc[]
+
+request fields
+
+include::{snippets}/admin/auth/login/request-fields.adoc[]
+
+==== response
+
+include::{snippets}/admin/auth/login/http-response.adoc[]
+
+'''
+
+=== 어드민 로그아웃
+
+CAUTION: 해당 API는 '어드민 로그인'으로 세션을 발급 받은 후에 이용해야 합니다
+
+==== curl
+
+include::{snippets}/admin/auth/logout/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/admin/auth/logout/http-request.adoc[]
+
+==== response
+
+include::{snippets}/admin/auth/logout/http-response.adoc[]
+
+'''
