@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom';
 
-import { GameVoteStatusContainer, SelectButton, SelectOption, Timer } from './components';
 import useSelectOption from './hooks/useSelectOption';
 import { selectContainerLayout, selectSection } from './SelectContainer.styled';
+
+import { GameVoteStatusContainer, SelectButton, SelectOption, Timer } from '.';
 
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
 
