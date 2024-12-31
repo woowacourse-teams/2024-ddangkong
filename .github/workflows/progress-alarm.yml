@@ -61,37 +61,27 @@ jobs:
                 const branch = pr.head.ref;
                 const commits = await getCommits(owner, repo, branch);
 
-                // 각 커밋에 대해 작성자와 PR 정보 추가
-                commits.forEach(commit => {
-                  const author = commit.committer.login; // 커밋 작성자
-                  const nickname = nicknames[author]; // 닉네임으로 변환
+                // 각 PR에 대해 작성자와 커밋 수를 요약
+                const author = pr.user.login; // PR 작성자
+                const nickname = nicknames[author]; // 닉네임으로 변환
 
-                  // 닉네임이 없는 경우 제외
-                  if (!nickname) return;
+                // 닉네임이 없는 경우 제외
+                if (!nickname) continue;
 
-                  const prTitle = commit.commit.message.split('\n')[0]; // 첫 번째 커밋 메시지를 PR 제목으로 간주
+                const prTitle = pr.title; // PR 제목
+                const commitCount = commits.length; // 커밋 수
 
-                  // 커밋 요약에 작성자가 이미 있으면, 갯수를 증가
-                  if (commitSummary[nickname]) {
-                    if (commitSummary[nickname][prTitle]) {
-                      commitSummary[nickname][prTitle]++;
-                    } else {
-                      commitSummary[nickname][prTitle] = 1;
-                    }
-                  } else {
-                    commitSummary[nickname] = {
-                      [prTitle]: 1,
-                    };
-                  }
-                });
+                // 커밋 요약에 작성자가 이미 있으면, PR 정보 추가
+                if (commitSummary[nickname]) {
+                  commitSummary[nickname].push(`${prTitle}: 커밋 수: ${commitCount}`);
+                } else {
+                  commitSummary[nickname] = [`${prTitle}: 커밋 수: ${commitCount}`];
+                }
               }
 
               // 커밋 정보를 메시지 형식으로 만들기
               const messageList = Object.keys(commitSummary).map(nickname => {
-                const prSummaries = Object.keys(commitSummary[nickname]).map(prTitle => {
-                  const count = commitSummary[nickname][prTitle];
-                  return `${prTitle}: 커밋 수: ${count}`;
-                }).join('\n');
+                const prSummaries = commitSummary[nickname].join('\n');
                 return `${nickname}\n${prSummaries}`;
               });
 
