@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ddangkong.controller.admin.AdminController;
 import ddangkong.controller.admin.dto.AdminLoginRequest;
-import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.service.admin.AdminService;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 @WebMvcTest(value = AdminController.class)
-public class AdminDocumentationTest extends BaseDocumentationTest {
+public class AdminDocumentationTest extends BaseAdminDocumentationTest {
 
     @MockBean
     private AdminService adminService;
@@ -59,7 +58,8 @@ public class AdminDocumentationTest extends BaseDocumentationTest {
         @Test
         void 로그아웃_할_수_있다() throws Exception {
             // when & then
-            mockMvc.perform(post(ENDPOINT))
+            mockMvc.perform(post(ENDPOINT)
+                            .session(session))
                     .andExpect(status().isOk())
                     .andDo(document("admin/auth/logout"));
         }

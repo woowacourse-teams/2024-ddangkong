@@ -35,6 +35,7 @@ public class AdminController {
         log.info("어드민이 로그인 했습니다. nickname = {}, session = {}", loginRequest.nickname(), session.getId());
     }
 
+    @AdminAuth
     @PostMapping("/admin/logout")
     public void logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
