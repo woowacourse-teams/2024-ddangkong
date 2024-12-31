@@ -53,6 +53,10 @@ public enum ClientErrorCode {
     NOT_FOUND_COOKIE("일치하는 쿠키가 없습니다."),
     INVALID_COOKIE("유효하지 않는 쿠키입니다."),
 
+    // ADMIN TODO Enum 분리, Docs 분리
+    NOT_MATCH_ADMIN_PASSWORD("어드민 비밀번호가 일치하지 않습니다."),
+    NOT_EXIST_ADMIN_SESSION("어드민으로 로그인하지 않았습니다."),
+
     // Common
     FIELD_ERROR("입력이 잘못되었습니다."),
     URL_PARAMETER_ERROR("입력이 잘못되었습니다."),

@@ -3,6 +3,7 @@ package ddangkong.controller.exception;
 import ddangkong.exception.BadRequestException;
 import ddangkong.exception.ClientErrorCode;
 import ddangkong.exception.InternalServerException;
+import ddangkong.exception.UnauthorizedException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ClientAbortException;
@@ -76,6 +77,15 @@ public class GlobalExceptionHandler {
 
         return new ErrorResponse(ClientErrorCode.NO_RESOURCE_FOUND);
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleUnauthorizedException(UnauthorizedException e) {
+        log.warn(e.getMessage());
+
+        return new ErrorResponse(e);
+    }
+
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
