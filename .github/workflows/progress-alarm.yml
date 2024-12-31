@@ -1,9 +1,8 @@
 name: Webhook on Push
 
 on:
-  push:
-    branches:
-      - "feat/#443" # 특정 브랜치에서 푸시 시 트리거
+  schedule:
+    - cron: "0 14 * * *" # 한국 시간 기준 매일 밤 11시 실행
 
 jobs:
   review-reminder:
@@ -31,11 +30,16 @@ jobs:
 
             async function getCommits(owner, repo, branch) {
               try {
+                const now = new Date();
+                const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+                const startOfYesterday = new Date(startOfToday.getTime() - 24 * 60 * 60 * 1000);
+
                 const commits = await github.rest.repos.listCommits({
                   owner,
                   repo,
                   sha: branch,
-                  since: new Date(new Date().setHours(0, 0, 0, 0)).toISOString(), 
+                  since: startOfYesterday.toISOString(), // 어제 자정 기준 (UTC)
+                  until: startOfToday.toISOString() // 오늘 자정 기준 (UTC)
                 });
                 return commits.data;
               } catch (error) {
@@ -66,9 +70,9 @@ jobs:
                 if (commitCount === 0) continue; 
 
                 if (commitSummary[nickname]) {
-                  commitSummary[nickname].push(`Issue: ${prTitle}: ${commitCount} commit`);
+                  commitSummary[nickname].push(`${prTitle}: 커밋 수: ${commitCount}`);
                 } else {
-                  commitSummary[nickname] = [`Issue: ${prTitle}: ${commitCount} commit`];
+                  commitSummary[nickname] = [`${prTitle}: 커밋 수: ${commitCount}`];
                 }
               }
 
@@ -78,21 +82,18 @@ jobs:
               });
 
               if (messageList.length === 0) {
-                console.log('오늘의 commit이 없습니다.');
+                console.log('오늘의 커밋이 없습니다.');
                 return;
               }
-
-              const today = new Date();
-              const year = today.getFullYear();
-              const month = today.getMonth() + 1;
-              const day = today.getDate();
-              const formattedDate = `${year}년 ${month}월 ${day}일`;
 
               const response = await fetch(process.env.DISCORD_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  content: `🍀 ${formattedDate} 진행 상황 공유 🍀\n\n${messageList.join('\n\n')}`,
+                  content: `🍀 오늘의 커밋 요약 🍀\n\n${messageList.join('\n\n')}`,
+                  allowed_mentions: {
+                    parse: ["users"], // 멘션 가능한 사용자만 허용
+                  },
                 }),
               });
               
