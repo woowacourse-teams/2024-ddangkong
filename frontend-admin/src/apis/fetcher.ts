@@ -17,6 +17,10 @@ const fetcher = {
         credentials: auth ? 'include' : 'same-origin',
       });
 
+      if (!response.ok) {
+        throw new Error('API ERROR 발생');
+      }
+
       return response;
     } catch (error) {
       throw new Error((error as Error).message);
