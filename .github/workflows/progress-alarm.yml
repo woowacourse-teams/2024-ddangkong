@@ -3,6 +3,7 @@ name: Webhook on Push
 on:
   schedule:
     - cron: "0 22 * * *" # 한국 시간 기준 아침 7시 실행
+  workflow_dispatch:
 
 jobs:
   review-reminder:
