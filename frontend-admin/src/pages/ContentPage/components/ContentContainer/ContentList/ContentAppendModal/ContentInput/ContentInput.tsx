@@ -1,12 +1,6 @@
 import { ChangeEvent } from 'react';
-import {
-  contentInput,
-  count,
-  errorBorder,
-  errorLabel,
-  inputLabel,
-  inputLayout,
-} from './ContentInput.styles';
+import { count, inputLayout } from './ContentInput.styles';
+import Input from '@/components/Input/Input';
 
 interface ContentInputProps {
   label: string;
@@ -16,33 +10,25 @@ interface ContentInputProps {
   placeholder?: string;
   maxLength?: number;
   hasError?: boolean;
+  error?: string;
 }
 
 const ContentInput = ({
-  label,
-  value,
-  handleChange,
-  handleKeyDown,
   placeholder = '',
   maxLength = 16,
   hasError = false,
+  ...inputProps
 }: ContentInputProps) => {
   return (
     <div css={inputLayout}>
-      <label htmlFor="content-input" css={inputLabel}>
-        {label} &nbsp;
-        {hasError && <span css={errorLabel}>*입력해주세요</span>}
-      </label>
-      <input
-        id="content-input"
-        css={[contentInput, hasError && errorBorder]}
-        value={value}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
+      <Input
+        {...inputProps}
         placeholder={placeholder}
+        maxLength={maxLength}
+        hasError={hasError || Boolean(inputProps.error)}
       />
       <div css={count}>
-        {value.length}/{maxLength} 자
+        {inputProps.value.length}/{maxLength} 자
       </div>
     </div>
   );
