@@ -1,4 +1,4 @@
-import useLoginMutation from './hooks/useLoginMutation';
+import useLoginMutation from './useLoginMutation';
 
 interface UseHandleLoginProps {
   nickname: string;
