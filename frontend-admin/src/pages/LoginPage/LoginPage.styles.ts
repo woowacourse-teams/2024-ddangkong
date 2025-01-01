@@ -8,6 +8,7 @@ export const loginLayout = (theme: Theme) => css`
 `;
 
 export const loginContainer = css`
+  width: 45rem;
   ${flexCenter}
   flex-direction: column;
   gap: 2.8rem;

@@ -160,6 +160,12 @@ const globalStyle = css`
     }
   }
 
+  @media (max-width: 480px) {
+    html {
+      font-size: 6px;
+    }
+  }
+
   #root {
     height: 100vh;
   }
