@@ -7,8 +7,15 @@ import {
   logoutButton,
   rightHeader,
 } from './ContentHeader.styles';
+import useLogoutMutation from '../../hooks/useLogoutMutation';
 
 const ContentHeader = () => {
+  const { mutate: logout } = useLogoutMutation();
+
+  const handleClickLogout = () => {
+    logout();
+  };
+
   return (
     <div css={headerContainer}>
       <div css={leftHeader}>
@@ -16,7 +23,9 @@ const ContentHeader = () => {
         <span css={loginTitle}>ddangkong</span>
       </div>
       <div css={rightHeader}>
-        <button css={logoutButton}>로그아웃</button>
+        <button css={logoutButton} onClick={handleClickLogout}>
+          로그아웃
+        </button>
       </div>
     </div>
   );

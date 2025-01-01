@@ -7,13 +7,12 @@ interface LoginParams {
 
 // 로그인
 export const login = async ({ password }: LoginParams) => {
-  const res = await fetcher.post(API_URL.login, {
+  return await fetcher.post(API_URL.login, {
     body: {
       password,
     },
+    auth: false,
   });
-
-  return await res.json();
 };
 
 // 로그아웃

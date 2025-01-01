@@ -2,17 +2,19 @@ interface RequestProps {
   method: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
   body?: Record<string, string | number>;
   headers?: Record<string, string>;
+  auth?: boolean;
 }
 
 type FetchProps = Omit<RequestProps, 'method'>;
 
 const fetcher = {
-  async request(url: string, { method, body, headers }: RequestProps) {
+  async request(url: string, { method, body, headers, auth = true }: RequestProps) {
     try {
       const response = await fetch(url, {
         method,
         body: body && JSON.stringify(body),
         headers: headers && { ...headers, 'Content-Type': 'application/json' },
+        credentials: auth ? 'include' : 'same-origin',
       });
 
       return response;
