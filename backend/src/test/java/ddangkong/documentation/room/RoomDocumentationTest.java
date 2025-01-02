@@ -26,9 +26,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ddangkong.aop.cookie.RoomMemberCookieEncryptor;
-import ddangkong.aop.cookie.EncryptionUtils;
-import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.balance.content.BalanceCategoryResponse;
@@ -48,13 +45,11 @@ import jakarta.servlet.http.Cookie;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 
-@WebMvcTest(value = RoomController.class)
-@Import(value = {RoomMemberCookieEncryptor.class, EncryptionUtils.class})
+@SpringBootTest
 class RoomDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
