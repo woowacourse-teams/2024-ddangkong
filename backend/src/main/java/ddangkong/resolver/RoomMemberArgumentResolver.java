@@ -15,13 +15,13 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
-public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
+public class RoomMemberArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final RoomMemberCookieEncryptor roomMemberCookieEncryptor;
 
     private final String cookieKey;
 
-    public MemberIdArgumentResolver(RoomMemberCookieEncryptor roomMemberCookieEncryptor, @Value("${cookie.rejoin-key}") String cookieKey) {
+    public RoomMemberArgumentResolver(RoomMemberCookieEncryptor roomMemberCookieEncryptor, @Value("${cookie.rejoin-key}") String cookieKey) {
         this.roomMemberCookieEncryptor = roomMemberCookieEncryptor;
         this.cookieKey = cookieKey;
     }
