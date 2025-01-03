@@ -21,17 +21,18 @@ public class AdminAuthorizationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        if (hasAnnotation(handler, AdminAuth.class)) {
+        if (hasAdminAuthAnnotation(handler)) {
             authorizeAdmin(request);
         }
         return true;
     }
 
-    private boolean hasAnnotation(Object handler, Class<AdminAuth> authClass) {
+    private boolean hasAdminAuthAnnotation(Object handler) {
         if (handler instanceof ResourceHttpRequestHandler) {
             return false;
         }
 
+        Class<AdminAuth> authClass = AdminAuth.class;
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         return handlerMethod.getMethodAnnotation(authClass) != null ||
                 handlerMethod.getBeanType().getAnnotation(authClass) != null;
