@@ -2,7 +2,7 @@ import { login } from '@/apis/login';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-const UseLoginMutation = () => {
+const useLoginMutation = () => {
   const navigate = useNavigate();
 
   return useMutation({
@@ -13,4 +13,4 @@ const UseLoginMutation = () => {
   });
 };
 
-export default UseLoginMutation;
+export default useLoginMutation;
