@@ -3,16 +3,9 @@ import { Fragment } from 'react';
 import { alertText, closeButton, deleteButton } from './DeleteModal.styles';
 import Modal from '@/components/Modal/Modal';
 import { theme } from '@/styles/theme';
+import { ModalState } from '@/types/modal';
 
-interface DeleteModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm?: () => void;
-  message?: string;
-  title?: string;
-}
-
-const DeleteModal = ({ isOpen, onClose, onConfirm, message, title }: DeleteModalProps) => {
+const DeleteModal = ({ isOpen, onClose, onConfirm, message, title }: ModalState) => {
   const handleClick = () => {
     if (onConfirm) {
       onConfirm();
