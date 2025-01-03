@@ -4,7 +4,7 @@ import ddangkong.domain.balance.content.TotalBalanceContent;
 import ddangkong.domain.balance.vote.TotalBalanceVotes;
 
 public record BalanceContentAdminResponse(
-        long contentId,
+        Long contentId,
         String question,
         BalanceOptionAdminResponse firstOption,
         BalanceOptionAdminResponse secondOption
