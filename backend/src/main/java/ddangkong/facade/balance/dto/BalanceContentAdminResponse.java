@@ -18,10 +18,8 @@ public record BalanceContentAdminResponse(
         return new BalanceContentAdminResponse(
                 totalContent.getContentId(),
                 totalContent.getContentName(),
-                BalanceOptionAdminResponse.existVoteResponse(
-                        totalContent.getFirstOption(), totalVoteCount, firstOptionVoteCount),
-                BalanceOptionAdminResponse.existVoteResponse(
-                        totalContent.getSecondOption(), totalVoteCount, secondOptionVoteCount)
+                new BalanceOptionAdminResponse(totalContent.getFirstOption(), totalVoteCount, firstOptionVoteCount),
+                new BalanceOptionAdminResponse(totalContent.getSecondOption(), totalVoteCount, secondOptionVoteCount)
         );
     }
 }

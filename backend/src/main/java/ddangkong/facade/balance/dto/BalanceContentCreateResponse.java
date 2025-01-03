@@ -18,7 +18,7 @@ public record BalanceContentCreateResponse(
         this(content.getId(),
                 content.getName(),
                 content.getCategory(),
-                BalanceOptionAdminResponse.notExistVoteResponse(firstOption),
-                BalanceOptionAdminResponse.notExistVoteResponse(secondOption));
+                new BalanceOptionAdminResponse(firstOption),
+                new BalanceOptionAdminResponse(secondOption));
     }
 }

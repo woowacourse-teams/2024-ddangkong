@@ -13,12 +13,16 @@ public record BalanceOptionAdminResponse(
     private static final int NOT_EXIST_VOTE_COUNT = 0;
     private static final int NOT_EXIST_VOTE_PERCENTAGE = 0;
 
-    public static BalanceOptionAdminResponse notExistVoteResponse(BalanceOption option) {
-        return new BalanceOptionAdminResponse(
+    public BalanceOptionAdminResponse(BalanceOption option) {
+        this(option.getId(), option.getName(), NOT_EXIST_VOTE_COUNT, NOT_EXIST_VOTE_PERCENTAGE);
+    }
+
+    public BalanceOptionAdminResponse(BalanceOption option, int contentVoteCount, int optionVoteCount) {
+        this(
                 option.getId(),
                 option.getName(),
-                NOT_EXIST_VOTE_COUNT,
-                NOT_EXIST_VOTE_PERCENTAGE
+                optionVoteCount,
+                PercentageCalculator.calculate(optionVoteCount, contentVoteCount)
         );
     }
 
