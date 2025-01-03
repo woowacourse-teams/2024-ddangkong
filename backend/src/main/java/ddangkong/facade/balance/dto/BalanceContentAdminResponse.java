@@ -10,7 +10,7 @@ public record BalanceContentAdminResponse(
         BalanceOptionAdminResponse secondOption
 ) {
 
-    public static BalanceContentAdminResponse of(TotalBalanceContent totalContent, TotalBalanceVotes totalVotes) {
+    public static BalanceContentAdminResponse create(TotalBalanceContent totalContent, TotalBalanceVotes totalVotes) {
         int firstOptionVoteCount = totalVotes.countVotes(totalContent.getFirstOption());
         int secondOptionVoteCount = totalVotes.countVotes(totalContent.getSecondOption());
         int totalVoteCount = firstOptionVoteCount + secondOptionVoteCount;

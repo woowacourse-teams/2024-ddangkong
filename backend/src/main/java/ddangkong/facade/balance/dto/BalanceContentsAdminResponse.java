@@ -6,10 +6,10 @@ import java.util.List;
 
 public record BalanceContentsAdminResponse(List<BalanceContentAdminResponse> contents) {
 
-    public static BalanceContentsAdminResponse of(List<TotalBalanceContent> totalContents,
-                                                  TotalBalanceVotes totalVotes) {
+    public static BalanceContentsAdminResponse create(List<TotalBalanceContent> totalContents,
+                                                      TotalBalanceVotes totalVotes) {
         List<BalanceContentAdminResponse> responses = totalContents.stream()
-                .map(totalContent -> BalanceContentAdminResponse.of(totalContent, totalVotes))
+                .map(totalContent -> BalanceContentAdminResponse.create(totalContent, totalVotes))
                 .toList();
         return new BalanceContentsAdminResponse(responses);
     }

@@ -41,7 +41,7 @@ public class AdminBalanceContentFacade {
         TotalBalanceVotes votes = totalBalanceVoteService.getVotes(options);
         List<TotalBalanceContent> totalContents = TotalBalanceContent.createContents(contents, options);
 
-        return BalanceContentsAdminResponse.of(totalContents, votes);
+        return BalanceContentsAdminResponse.create(totalContents, votes);
     }
 
     @Transactional
