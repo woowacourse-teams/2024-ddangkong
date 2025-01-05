@@ -65,4 +65,9 @@ public class RoomContentService {
         LocalDateTime now = LocalDateTime.now(clock);
         return roomContent.isOverVoteDeadline(now, room.getCurrentRound());
     }
+
+    @Transactional(readOnly = true)
+    public boolean isUsingAtRoom(BalanceContent balanceContent) {
+        return roomContentRepository.existsByBalanceContent(balanceContent);
+    }
 }

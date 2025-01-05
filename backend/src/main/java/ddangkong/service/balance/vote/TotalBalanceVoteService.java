@@ -1,7 +1,11 @@
 package ddangkong.service.balance.vote;
 
+import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.option.BalanceOption;
+import ddangkong.domain.balance.vote.TotalBalanceVote;
 import ddangkong.domain.balance.vote.TotalBalanceVoteRepository;
+import ddangkong.domain.balance.vote.TotalBalanceVotes;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,5 +19,17 @@ public class TotalBalanceVoteService {
     @Transactional(readOnly = true)
     public long getVoteCount(BalanceOption balanceOption) {
         return totalBalanceVoteRepository.countByBalanceOption(balanceOption);
+    }
+
+    @Transactional(readOnly = true)
+    public TotalBalanceVotes getVotes(List<BalanceOption> balanceOptions) {
+        List<TotalBalanceVote> votes =
+                totalBalanceVoteRepository.findAllByBalanceOptionIn(balanceOptions);
+        return new TotalBalanceVotes(votes);
+    }
+
+    @Transactional
+    public void deleteByBalanceContent(BalanceContent balanceContent) {
+        totalBalanceVoteRepository.deleteByBalanceOptionBalanceContent(balanceContent);
     }
 }
