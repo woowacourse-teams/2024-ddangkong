@@ -19,7 +19,9 @@ spring:
         default_batch_fetch_size: 1000
 
 cors:
-  origin: ${secret.cors.origin}
+  origin:
+    - ${secret.cors.origin1}
+    - ${secret.cors.origin2}
 
 cookie:
   rejoin-key: ${secret.cookie.rejoin-key}
