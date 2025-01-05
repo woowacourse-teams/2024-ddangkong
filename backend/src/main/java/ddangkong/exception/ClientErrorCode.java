@@ -59,7 +59,7 @@ public enum ClientErrorCode {
     BLANK_BALANCE_CONTENT_NAME("컨텐츠 이름이 비어 있습니다."),
     LONG_BALANCE_CONTENT_NAME("컨텐츠 이름은 최대 %d자 입니다."),
     BLANK_BALANCE_OPTION_NAME("컨텐츠 옵션이 비어 있습니다."),
-    LONG_BALANCE_OPTION_NAME("컨텐츠 옵션은 최대 %자 입니다."),
+    LONG_BALANCE_OPTION_NAME("컨텐츠 옵션은 최대 %d자 입니다."),
     ALREADY_USING_AT_ROOM_BALANCE_CONTENT("현재 게임에서 사용 중인 컨텐츠입니다."),
 
     // Common
