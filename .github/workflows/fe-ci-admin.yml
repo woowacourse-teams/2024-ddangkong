@@ -22,8 +22,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "pnpm"
-          cache-dependency-path: frontend-admin/pnpm-lock.yaml
+          cache: "npm"
+          cache-dependency-path: frontend-admin/package-lock.json
 
       - name: Install Dependencies
         run: npm install
@@ -34,10 +34,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: "**/node_modules"
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Build
-        run: pnpm build
+        run: npm run build
         working-directory: ./frontend-admin
