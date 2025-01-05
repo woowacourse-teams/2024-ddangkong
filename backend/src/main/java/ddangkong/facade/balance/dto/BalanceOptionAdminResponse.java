@@ -4,7 +4,7 @@ import ddangkong.domain.balance.option.BalanceOption;
 import ddangkong.util.PercentageCalculator;
 
 public record BalanceOptionAdminResponse(
-        long optionId,
+        Long optionId,
         String name,
         int count,
         int percent
@@ -19,17 +19,6 @@ public record BalanceOptionAdminResponse(
 
     public BalanceOptionAdminResponse(BalanceOption option, int contentVoteCount, int optionVoteCount) {
         this(
-                option.getId(),
-                option.getName(),
-                optionVoteCount,
-                PercentageCalculator.calculate(optionVoteCount, contentVoteCount)
-        );
-    }
-
-    public static BalanceOptionAdminResponse existVoteResponse(BalanceOption option,
-                                                               int contentVoteCount,
-                                                               int optionVoteCount) {
-        return new BalanceOptionAdminResponse(
                 option.getId(),
                 option.getName(),
                 optionVoteCount,

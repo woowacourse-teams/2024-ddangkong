@@ -5,7 +5,7 @@ import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
 
 public record BalanceContentCreateResponse(
-        long contentId,
+        Long contentId,
         String question,
         Category category,
         BalanceOptionAdminResponse firstOption,
