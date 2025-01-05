@@ -8,7 +8,10 @@ interface RequestProps {
 type FetchProps = Omit<RequestProps, 'method'>;
 
 const fetcher = {
-  async request(url: string, { method, body, headers, auth = true }: RequestProps) {
+  async request(
+    url: string,
+    { method, body, headers = { 'Content-Type': 'application/json' }, auth = true }: RequestProps,
+  ) {
     try {
       const response = await fetch(url, {
         method,
