@@ -142,4 +142,34 @@ class RoomContentServiceTest extends BaseServiceTest {
             assertThat(isOverVoteDeadline).isFalse();
         }
     }
+
+    @Nested
+    class 질문지_사용_여부_조회 {
+
+        @Test
+        void 질문지가_현재_사용_중인지_확인할_수_있다() {
+            // given
+            BalanceContent content = balanceContentFixture.create();
+            Room room = roomFixture.createNotStartedRoom();
+            roomContentFixture.initRoomContent(room, content, 1);
+
+            // when
+            boolean actual = roomContentService.isUsingAtRoom(content);
+
+            // then
+            assertThat(actual).isTrue();
+        }
+
+        @Test
+        void 질문지가_현자_사용_안하는지_확인할_수_있다() {
+            // given
+            BalanceContent content = balanceContentFixture.create();
+
+            // when
+            boolean actual = roomContentService.isUsingAtRoom(content);
+
+            // then
+            assertThat(actual).isFalse();
+        }
+    }
 }
