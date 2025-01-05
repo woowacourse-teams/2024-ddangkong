@@ -9,8 +9,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ddangkong.controller.admin.AdminController;
-import ddangkong.controller.admin.dto.AdminLoginRequest;
-import ddangkong.service.admin.AdminService;
+import ddangkong.facade.admin.dto.AdminLoginRequest;
+import ddangkong.facade.admin.AdminService;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -33,7 +33,7 @@ public class AdminDocumentationTest extends BaseAdminDocumentationTest {
             // given
             AdminLoginRequest request = new AdminLoginRequest("이든", "password");
             String content = objectMapper.writeValueAsString(request);
-            doNothing().when(adminService).validatePassword(request.password());
+            doNothing().when(adminService).validatePassword(request);
 
             // when & then
             mockMvc.perform(post(ENDPOINT)

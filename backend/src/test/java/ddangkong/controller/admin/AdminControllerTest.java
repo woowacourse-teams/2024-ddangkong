@@ -1,6 +1,6 @@
 package ddangkong.controller.admin;
 
-import ddangkong.controller.admin.dto.AdminLoginRequest;
+import ddangkong.facade.admin.dto.AdminLoginRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Nested;

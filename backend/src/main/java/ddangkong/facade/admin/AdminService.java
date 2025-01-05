@@ -1,6 +1,7 @@
-package ddangkong.service.admin;
+package ddangkong.facade.admin;
 
 import ddangkong.exception.admin.NotMatchAdminPasswordException;
+import ddangkong.facade.admin.dto.AdminLoginRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,8 @@ public class AdminService {
         this.adminPassword = adminPassword;
     }
 
-    public void validatePassword(String password) {
-        if (!adminPassword.equals(password)) {
+    public void validatePassword(AdminLoginRequest request) {
+        if (!adminPassword.equals(request.password())) {
             throw new NotMatchAdminPasswordException();
         }
     }

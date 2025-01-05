@@ -1,7 +1,7 @@
 package ddangkong.controller.admin;
 
-import ddangkong.controller.admin.dto.AdminLoginRequest;
-import ddangkong.service.admin.AdminService;
+import ddangkong.facade.admin.AdminService;
+import ddangkong.facade.admin.dto.AdminLoginRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +26,11 @@ public class AdminController {
     }
 
     @PostMapping("/admin/login")
-    public void login(@RequestBody AdminLoginRequest loginRequest, HttpServletRequest request) {
-        adminService.validatePassword(loginRequest.password());
+    public void login(@RequestBody AdminLoginRequest loginRequest, HttpServletRequest httpRequest) {
+        adminService.validatePassword(loginRequest);
 
         Admin admin = new Admin(loginRequest.nickname());
-        HttpSession session = request.getSession();
+        HttpSession session = httpRequest.getSession();
         session.setAttribute(sessionKey, admin);
         log.info("어드민이 로그인 했습니다. nickname = {}, session = {}", loginRequest.nickname(), session.getId());
     }
