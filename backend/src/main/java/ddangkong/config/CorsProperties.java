@@ -6,10 +6,10 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+@ConfigurationProperties(prefix = "cors")
+@Component
 @Getter
 @Setter
-@Component
-@ConfigurationProperties(prefix = "cors")
 public class CorsProperties {
 
     private List<String> origin;
