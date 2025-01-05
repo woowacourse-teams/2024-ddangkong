@@ -19,7 +19,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ddangkong.controller.balance.AdminBalanceController;
-import ddangkong.documentation.BaseDocumentationTest;
+import ddangkong.documentation.admin.BaseAdminDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.balance.AdminBalanceContentFacade;
 import ddangkong.facade.balance.dto.BalanceContentAdminResponse;
@@ -39,7 +39,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 @WebMvcTest(value = AdminBalanceController.class)
-public class AdminBalanceDocumentationTest extends BaseDocumentationTest {
+public class AdminBalanceDocumentationTest extends BaseAdminDocumentationTest {
 
     @MockBean
     private AdminBalanceContentFacade adminBalanceContentFacade;
@@ -64,6 +64,7 @@ public class AdminBalanceDocumentationTest extends BaseDocumentationTest {
             // when & then
             mockMvc.perform(get(ENDPOINT)
                             .queryParam("category", category.name())
+                            .session(session)
                     )
                     .andExpect(status().isOk())
                     .andDo(document("admin/balance/get",
@@ -112,6 +113,7 @@ public class AdminBalanceDocumentationTest extends BaseDocumentationTest {
 
             // when & then
             mockMvc.perform(post(ENDPOINT)
+                            .session(session)
                             .content(content)
                             .contentType(MediaType.APPLICATION_JSON)
                     )
@@ -154,6 +156,7 @@ public class AdminBalanceDocumentationTest extends BaseDocumentationTest {
 
             // when & then
             mockMvc.perform(patch(ENDPOINT)
+                            .session(session)
                             .content(content)
                             .contentType(MediaType.APPLICATION_JSON)
                     )
@@ -185,6 +188,7 @@ public class AdminBalanceDocumentationTest extends BaseDocumentationTest {
 
             // when & then
             mockMvc.perform(patch(ENDPOINT)
+                            .session(session)
                             .content(content)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -211,7 +215,7 @@ public class AdminBalanceDocumentationTest extends BaseDocumentationTest {
             doNothing().when(adminBalanceContentFacade).deleteContent(contentId);
 
             // when & then
-            mockMvc.perform(delete(ENDPOINT, contentId))
+            mockMvc.perform(delete(ENDPOINT, contentId).session(session))
                     .andExpect(status().isNoContent())
                     .andDo(document("admin/balance/delete",
                             pathParameters(

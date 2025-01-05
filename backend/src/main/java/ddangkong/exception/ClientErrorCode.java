@@ -54,6 +54,8 @@ public enum ClientErrorCode {
     INVALID_COOKIE("유효하지 않는 쿠키입니다."),
 
     // ADMIN TODO Enum 분리, Docs 분리
+    NOT_MATCH_ADMIN_PASSWORD("어드민 비밀번호가 일치하지 않습니다."),
+    NOT_EXIST_ADMIN_SESSION("어드민으로 로그인하지 않았습니다."),
     BLANK_BALANCE_CONTENT_NAME("컨텐츠 이름이 비어 있습니다."),
     LONG_BALANCE_CONTENT_NAME("컨텐츠 이름은 최대 %d자 입니다."),
     BLANK_BALANCE_OPTION_NAME("컨텐츠 옵션이 비어 있습니다."),

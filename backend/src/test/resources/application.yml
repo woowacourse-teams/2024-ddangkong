@@ -20,6 +20,10 @@ encrypt:
   secret-key: 1234567890123456
   algorithm: AES
 
+admin:
+  session-key : admin
+  password : 1234
+
 logging:
   level:
     org:

@@ -3,7 +3,7 @@ package ddangkong.controller.balance;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import ddangkong.controller.BaseControllerTest;
+import ddangkong.controller.admin.BaseAdminControllerTest;
 import ddangkong.domain.balance.content.BalanceContent;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.domain.balance.option.BalanceOption;
@@ -19,7 +19,7 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class AdminBalanceControllerTest extends BaseControllerTest {
+class AdminBalanceControllerTest extends BaseAdminControllerTest {
 
     @Nested
     class 밸런스_게임_컨텐츠_조회 {
@@ -41,6 +41,7 @@ class AdminBalanceControllerTest extends BaseControllerTest {
             // when
             BalanceContentsAdminResponse actual = RestAssured.given()
                     .queryParam("category", content1.getCategory())
+                    .sessionId(sessionId)
                     .get("/api/admin/balances/contents")
                     .then().contentType(ContentType.JSON).log().all()
                     .statusCode(200)
@@ -62,6 +63,7 @@ class AdminBalanceControllerTest extends BaseControllerTest {
 
             // when
             BalanceContentCreateResponse actual = RestAssured.given()
+                    .sessionId(sessionId)
                     .contentType(ContentType.JSON)
                     .body(request)
                     .post("/api/admin/balances/contents")
@@ -75,8 +77,8 @@ class AdminBalanceControllerTest extends BaseControllerTest {
                     () -> assertThat(actual.category()).isEqualTo(request.category()),
                     () -> assertThat(actual.firstOption().name()).isEqualTo(request.firstOption()),
                     () -> assertThat(actual.secondOption().name()).isEqualTo(request.secondOption()),
-                    () -> assertThat(actual.firstOption().count()).isEqualTo(0),
-                    () -> assertThat(actual.firstOption().percent()).isEqualTo(0)
+                    () -> assertThat(actual.firstOption().count()).isZero(),
+                    () -> assertThat(actual.firstOption().percent()).isZero()
             );
         }
     }
@@ -92,6 +94,7 @@ class AdminBalanceControllerTest extends BaseControllerTest {
 
             // when
             BalanceContentPatchResponse actual = RestAssured.given()
+                    .sessionId(sessionId)
                     .contentType(ContentType.JSON)
                     .body(request)
                     .patch("/api/admin/balances/contents")
@@ -119,6 +122,7 @@ class AdminBalanceControllerTest extends BaseControllerTest {
 
             // when
             BalanceOptionPatchResponse actual = RestAssured.given()
+                    .sessionId(sessionId)
                     .contentType(ContentType.JSON)
                     .body(request)
                     .patch("/api/admin/balances/options")
@@ -149,6 +153,7 @@ class AdminBalanceControllerTest extends BaseControllerTest {
             // when & then
             RestAssured.given()
                     .pathParam("contentId", content.getId())
+                    .sessionId(sessionId)
                     .delete("/api/admin/balances/contents/{contentId}")
                     .then().log().all()
                     .statusCode(204);

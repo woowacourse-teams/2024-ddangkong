@@ -1,6 +1,46 @@
 == 어드민 API
 
+=== 어드민 로그인
+
+==== curl
+
+include::{snippets}/admin/auth/login/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/admin/auth/login/http-request.adoc[]
+
+request fields
+
+include::{snippets}/admin/auth/login/request-fields.adoc[]
+
+==== response
+
+include::{snippets}/admin/auth/login/http-response.adoc[]
+
+'''
+
+=== 어드민 로그아웃
+
+CAUTION: 해당 API는 '어드민 로그인'으로 세션을 발급 받은 후에 이용해야 합니다
+
+==== curl
+
+include::{snippets}/admin/auth/logout/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/admin/auth/logout/http-request.adoc[]
+
+==== response
+
+include::{snippets}/admin/auth/logout/http-response.adoc[]
+
+'''
+
 === 밸런스 게임 콘텐츠들 조회
+
+CAUTION: 해당 API는 '어드민 로그인'으로 세션을 발급 받은 후에 이용해야 합니다
 
 ==== curl
 
@@ -26,6 +66,8 @@ include::{snippets}/admin/balance/get/response-fields.adoc[]
 
 === 밸런스 게임 콘텐츠 생성
 
+CAUTION: 해당 API는 '어드민 로그인'으로 세션을 발급 받은 후에 이용해야 합니다
+
 ==== curl
 
 include::{snippets}/admin/balance/create/curl-request.adoc[]
@@ -49,6 +91,8 @@ include::{snippets}/admin/balance/create/response-fields.adoc[]
 '''
 
 === 밸런스 게임 콘텐츠 수정
+
+CAUTION: 해당 API는 '어드민 로그인'으로 세션을 발급 받은 후에 이용해야 합니다
 
 ==== curl
 
@@ -74,6 +118,8 @@ include::{snippets}/admin/balance/patch-content/response-fields.adoc[]
 
 === 밸런스 게임 선택지 수정
 
+CAUTION: 해당 API는 '어드민 로그인'으로 세션을 발급 받은 후에 이용해야 합니다
+
 ==== curl
 
 include::{snippets}/admin/balance/patch-option/curl-request.adoc[]
@@ -97,6 +143,8 @@ include::{snippets}/admin/balance/patch-option/response-fields.adoc[]
 '''
 
 === 밸런스 게임 선택지 삭제
+
+CAUTION: 해당 API는 '어드민 로그인'으로 세션을 발급 받은 후에 이용해야 합니다
 
 ==== curl
 
