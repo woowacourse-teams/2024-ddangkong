@@ -32,10 +32,9 @@ public class AdminAuthorizationInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        Class<AdminAuth> authClass = AdminAuth.class;
         HandlerMethod handlerMethod = (HandlerMethod) handler;
-        return handlerMethod.getMethodAnnotation(authClass) != null ||
-                handlerMethod.getBeanType().getAnnotation(authClass) != null;
+        return handlerMethod.getMethodAnnotation(AdminAuth.class) != null ||
+                handlerMethod.getBeanType().getAnnotation(AdminAuth.class) != null;
     }
 
     private void authorizeAdmin(HttpServletRequest request) {

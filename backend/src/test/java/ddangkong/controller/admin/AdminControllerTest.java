@@ -34,10 +34,20 @@ class AdminControllerTest extends BaseAdminControllerTest {
         void 이미_로그인_한_유저는_로그아웃_할_수_있다() {
             // when & then
             RestAssured.given().log().all()
-                    .cookie("JSESSIONID", sessionId)
+                    .sessionId(sessionId)
                     .when().post("/api/admin/logout")
                     .then().log().all()
                     .statusCode(200);
+        }
+
+        @Test
+        void 로그인_하지_않은_유저는_로그아웃_시도시_에러를_발생한다() {
+            // when & then
+            RestAssured.given().log().all()
+                    .cookie("JSESSIONID", "NO-SESSION")
+                    .when().post("/api/admin/logout")
+                    .then().log().all()
+                    .statusCode(401);
         }
     }
 }
