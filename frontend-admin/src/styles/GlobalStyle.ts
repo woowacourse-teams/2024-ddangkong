@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import { css } from '@emotion/react';
 
 const reset = css`
   html,
@@ -123,7 +123,7 @@ const reset = css`
   blockquote::after,
   q::before,
   q::after {
-    content: "";
+    content: '';
     content: none;
   }
 
@@ -154,13 +154,25 @@ const globalStyle = css`
     font-size: 10px;
   }
 
+  @media (max-width: 768px) {
+    html {
+      font-size: 8px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    html {
+      font-size: 6px;
+    }
+  }
+
   #root {
     height: 100vh;
   }
 
   * {
     box-sizing: border-box;
-    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    font-family: 'Pretendard Variable', Pretendard, sans-serif;
   }
 
   body {
