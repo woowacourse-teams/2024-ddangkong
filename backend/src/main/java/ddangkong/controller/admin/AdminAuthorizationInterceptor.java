@@ -4,7 +4,9 @@ import ddangkong.exception.admin.NotExistAdminSessionException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -20,11 +22,20 @@ public class AdminAuthorizationInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(@NotNull HttpServletRequest request,
+                             @NotNull HttpServletResponse response,
+                             @NotNull Object handler) {
+        if (isPreflightRequest(request)) {
+            return true;
+        }
         if (hasAdminAuthAnnotation(handler)) {
             authorizeAdmin(request);
         }
         return true;
+    }
+
+    private boolean isPreflightRequest(HttpServletRequest request) {
+        return HttpMethod.OPTIONS.name().equals(request.getMethod());
     }
 
     private boolean hasAdminAuthAnnotation(Object handler) {
