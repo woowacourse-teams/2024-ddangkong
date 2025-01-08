@@ -21,9 +21,7 @@ spring:
           batch_size: 1000
 
 cors:
-  origin:
-    - ${secret.cors.origin1}
-    - ${secret.cors.origin2}
+  origin: ${secret.cors.origin}
 
 cookie:
   rejoin-key: ${secret.cookie.rejoin-key}

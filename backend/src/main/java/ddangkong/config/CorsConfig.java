@@ -1,26 +1,24 @@
 package ddangkong.config;
 
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Slf4j
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
-    private final CorsProperties corsProperties;
+    private final String[] corsOrigin;
 
-    public CorsConfig(CorsProperties corsProperties) {
-        log.info("CORS 허용 확인 : {}", corsProperties.getOrigin()); // TODO 제거하기
-        this.corsProperties = corsProperties;
+    public CorsConfig(@Value("${cors.origin}") String[] corsOrigin) {
+        this.corsOrigin = corsOrigin;
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns(corsProperties.getOrigins())
+                .allowedOriginPatterns(corsOrigin)
                 .allowedMethods(
                         HttpMethod.GET.name(),
                         HttpMethod.POST.name(),

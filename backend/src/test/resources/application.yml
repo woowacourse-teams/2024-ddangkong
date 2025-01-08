@@ -37,8 +37,7 @@ logging:
           interceptor: TRACE
 
 cors:
-  origin:
-    - "*"
+  origin: '*'
 
 cookie:
   rejoin-key: test_cookie
