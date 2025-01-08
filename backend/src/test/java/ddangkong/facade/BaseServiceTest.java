@@ -16,6 +16,7 @@ import ddangkong.support.fixture.domain.MemberFixture;
 import ddangkong.support.fixture.domain.RoomBalanceVoteFixture;
 import ddangkong.support.fixture.domain.RoomContentFixture;
 import ddangkong.support.fixture.domain.RoomFixture;
+import ddangkong.support.fixture.domain.TotalBalanceVoteFixture;
 import java.time.Clock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,4 +66,7 @@ public abstract class BaseServiceTest {
 
     @Autowired
     protected RoomBalanceVoteFixture roomBalanceVoteFixture;
+
+    @Autowired
+    protected TotalBalanceVoteFixture totalBalanceVoteFixture;
 }

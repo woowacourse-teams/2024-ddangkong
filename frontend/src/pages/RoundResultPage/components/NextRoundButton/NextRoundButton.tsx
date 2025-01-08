@@ -3,21 +3,19 @@ import { useParams } from 'react-router-dom';
 
 import useMoveNextRoundMutation from './NextRoundButton.hook';
 import { createRandomNextRoundMessage, getNextRoundButtonText } from './NextRoundButton.utils';
-import Button from '../../../../components/common/Button/Button';
-import { bottomButtonLayout } from '../../../../components/common/Button/Button.styled';
 
 import AlertModal from '@/components/AlertModal/AlertModal';
+import Button from '@/components/common/Button/Button';
+import { bottomButtonLayout } from '@/components/common/Button/Button.styled';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
-import useGetUserInfo from '@/hooks/useGetUserInfo';
+import useIsMaster from '@/hooks/useIsMaster';
 import useModal from '@/hooks/useModal';
 
 const NextRoundButton = () => {
   const { roomId } = useParams();
   const { balanceContent } = useBalanceContentQuery(Number(roomId));
   const { mutate: moveNextRound, isPending, isSuccess } = useMoveNextRoundMutation(Number(roomId));
-  const {
-    member: { isMaster },
-  } = useGetUserInfo();
+  const isMaster = useIsMaster();
   const { showModal } = useModal();
 
   const returnFocusRef = useRef<HTMLButtonElement>(null);

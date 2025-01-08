@@ -1,0 +1,24 @@
+{
+  "categories": [
+    {
+      "value": "ROMANCE",
+      "label": "연애"
+    },
+    {
+      "value": "IF",
+      "label": "만약에"
+    },
+    {
+      "value": "MBTI",
+      "label": "MBTI"
+    },
+    {
+      "value": "FOOD",
+      "label": "음식"
+    },
+    {
+      "value": "DEVELOP",
+      "label": "개발"
+    }
+  ]
+}

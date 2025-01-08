@@ -1,7 +1,22 @@
 spring:
   profiles:
     active: test
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    username: sa
+
   jpa:
+    hibernate:
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -9,16 +24,6 @@ spring:
         show_sql: true
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
-
-cors:
-  origin: "*"
-
-cookie:
-  rejoin-key: test_cookie
-
-encrypt:
-  secret-key: 1234567890123456
-  algorithm: AES
 
 logging:
   level:
@@ -31,15 +36,17 @@ logging:
         transaction:
           interceptor: TRACE
 
----
-spring:
-  config:
-    activate:
-      on-profile: test
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
-    username: sa
-  jpa:
-    hibernate:
-      ddl-auto: create
+cors:
+  origin: '*'
+
+cookie:
+  rejoin-key: test_cookie
+
+encrypt:
+  secret-key: 1234567890123456
+  algorithm: AES
+
+admin:
+  session-key: admin
+  password: 1234
+

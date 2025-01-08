@@ -10,11 +10,15 @@ public interface BalanceOptionRepository extends JpaRepository<BalanceOption, Lo
 
     List<BalanceOption> findAllByBalanceContent(BalanceContent balanceContent);
 
+    List<BalanceOption> findAllByBalanceContentIn(List<BalanceContent> balanceContent);
+
     @Query("""
             SELECT bo
             FROM BalanceOption bo
                 JOIN RoomBalanceVote rbv ON bo = rbv.balanceOption
             WHERE rbv.member = :member
-             """)
+            """)
     List<BalanceOption> findMemberRoomBalanceVoteOptions(Member member);
+
+    void deleteByBalanceContent(BalanceContent balanceContent);
 }

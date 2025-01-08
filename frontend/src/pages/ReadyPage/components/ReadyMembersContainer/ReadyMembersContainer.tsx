@@ -34,7 +34,7 @@ const ReadyMembersContainer = () => {
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.getUserInfo] });
-  }, [master.memberId]);
+  }, [master.memberId, queryClient]);
 
   return (
     <section css={readyMembersContainerLayout}>

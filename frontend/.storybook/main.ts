@@ -15,7 +15,7 @@ const config: StorybookConfig = {
     name: '@storybook/react-webpack5',
     options: {
       builder: {
-        useSWC: true,
+        useSWC: true, // Storybook의 SWC 설정 활성화
       },
     },
   },
@@ -25,16 +25,13 @@ const config: StorybookConfig = {
   webpackFinal: async (config: Configuration) => {
     const { resolve, module } = config;
 
-    // storybook에 emotion 관련 babel 설정 추가
+    // storybook에 emotion 관련 SWC 설정 추가
     module?.rules?.push({
       test: /\.(ts|tsx)$/,
       exclude: /node_modules/,
       use: [
         {
-          loader: require.resolve('babel-loader'),
-          options: {
-            plugins: [require.resolve('@emotion/babel-plugin')],
-          },
+          loader: require.resolve('swc-loader'),
         },
       ],
     });

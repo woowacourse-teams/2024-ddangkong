@@ -1,0 +1,13 @@
+import { css, Theme } from '@emotion/react';
+
+export const contentAppendButton = (theme: Theme) => css`
+  font-size: 1.6rem;
+
+  padding: 1.2rem 2rem;
+  border-radius: 1.6rem;
+  background-color: ${theme.color.peanut400};
+
+  &:hover {
+    background-color: ${theme.color.peanut500};
+  }
+`;

@@ -1,6 +1,6 @@
 let intervalId: NodeJS.Timeout;
 
-self.onmessage = function (e) {
+self.onmessage = (e) => {
   const { type, delay } = e.data;
 
   if (type === 'start') {

@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", // 코드의 변환 대상 ECMAScript 버전을 최신 버전으로 지정
+    "module": "ESNext", // 최신 ECMAScript 버전 모듈 시스템을 타겟으로 컴파일
+    "outDir": "./dist", // 컴파일된 파일이 저장될 출력 디렉토리 지정
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+    "allowSyntheticDefaultImports": true, // default export 가 없어도 import 허용
+
+    /* Linting */
+    "noImplicitAny": true, // 암시적 any를 허용하지 않음
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}

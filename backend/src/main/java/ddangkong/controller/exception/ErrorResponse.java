@@ -5,6 +5,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import ddangkong.exception.BadRequestException;
 import ddangkong.exception.ClientErrorCode;
+import ddangkong.exception.UnauthorizedException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Path;
 import java.util.List;
@@ -21,6 +22,10 @@ public record ErrorResponse(
 ) {
 
     public <T extends BadRequestException> ErrorResponse(T e) {
+        this(e.getErrorCode(), e.getMessage(), null, null);
+    }
+
+    public <T extends UnauthorizedException> ErrorResponse(T e) {
         this(e.getErrorCode(), e.getMessage(), null, null);
     }
 
