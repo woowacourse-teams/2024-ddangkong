@@ -23,7 +23,7 @@ jobs:
       - name: Generate .env File
         working-directory: ./frontend-admin
         run: |
-          echo "API_BASE_URL=${{ secrets.API_BASE_URL_PROD }}" >> .env
+          echo "VITE_API_BASE_URL=${{ secrets.API_BASE_URL_PROD }}" >> .env
 
       - name: Install Dependencies
         run: npm install
