@@ -8,15 +8,14 @@ interface RequestProps {
 type FetchProps = Omit<RequestProps, 'method'>;
 
 const fetcher = {
-  async request(
-    url: string,
-    { method, body, headers = { 'Content-Type': 'application/json' }, auth = true }: RequestProps,
-  ) {
+  async request(url: string, { method, body, headers, auth = true }: RequestProps) {
     try {
       const response = await fetch(url, {
         method,
         body: body && JSON.stringify(body),
-        headers: headers && { ...headers, 'Content-Type': 'application/json' },
+        headers: headers
+          ? { ...headers, 'Content-Type': 'application/json' }
+          : { 'Content-Type': 'application/json' },
         credentials: auth ? 'include' : 'same-origin',
       });
 
