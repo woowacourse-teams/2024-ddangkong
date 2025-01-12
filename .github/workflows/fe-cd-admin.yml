@@ -1,7 +1,7 @@
 name: FE Deploy for admin
 
 on:
-  push:
+  pull_request:
     branches: ["main", "develop"]
     paths:
       - "frontend-admin/**"
