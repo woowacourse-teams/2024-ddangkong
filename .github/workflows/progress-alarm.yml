@@ -4,9 +4,9 @@ on:
   push: # Trigger the workflow on every push
     branches:
       - "feat/#443" # Matches all branches
-  schedule:
-    - cron: "0 22 * * *" # 한국 시간 기준 아침 7시 실행
-  workflow_dispatch: # Allows manual triggering
+  # schedule:
+  #   - cron: "0 22 * * *" # 한국 시간 기준 아침 7시 실행
+  # workflow_dispatch: # Allows manual triggering
 
 jobs:
   review-reminder:
@@ -38,7 +38,7 @@ jobs:
                 const now = new Date();
 
                 // 오전 7시에 작업이 시작되므로 7시간 전이 전날 밤 12시가 된다 
-                const until = new Date(now.getTime() - 7 * 60 * 60 * 1000); 
+                const until = new Date(now.getTime() * 60 * 60 * 1000); 
                 // until로부터 24시간 전이 전날 자정이 된다
                 const since = new Date(until.getTime() - 24 * 60 * 60 * 1000); 
 
