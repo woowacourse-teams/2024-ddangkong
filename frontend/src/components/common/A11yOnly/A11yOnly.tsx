@@ -1,6 +1,6 @@
 import { ElementType, AriaRole, PropsWithChildren } from 'react';
 
-import { A11yOnlyLayout } from './A11yOnly.styled';
+import { a11yOnlyLayout } from './A11yOnly.styled';
 
 interface A11yOnlyProps<T extends ElementType = 'span'> {
   as?: T;
@@ -15,7 +15,7 @@ const A11yOnly = <T extends ElementType = 'span'>({
   const Component = as || 'span';
 
   return (
-    <Component css={A11yOnlyLayout} {...props}>
+    <Component css={a11yOnlyLayout} {...props}>
       {children}
     </Component>
   );

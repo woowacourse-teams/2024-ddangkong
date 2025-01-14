@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-export const A11yOnlyLayout = css`
+export const a11yOnlyLayout = css`
   overflow: hidden;
   position: absolute;
   width: 1px;
