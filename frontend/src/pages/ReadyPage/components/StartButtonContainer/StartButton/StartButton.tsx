@@ -2,8 +2,9 @@ import useGameStart from './hooks/useGameStart';
 import getStartButtonText from './StartButton.utils';
 
 import Button from '@/components/common/Button/Button';
-import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
 import { collectGameMemberNumberGA } from '@/lib/googleAnalytics/room';
+
+import { useGetRoomInfo } from '@/hooks';
 
 const StartButton = () => {
   const { isMaster, handleGameStart, isPending, isSuccess } = useGameStart();
