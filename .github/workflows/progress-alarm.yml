@@ -1,9 +1,12 @@
 name: Progress Alarm for Discord
 
 on:
+  push: # Trigger the workflow on every push
+    branches:
+      - "**" # Matches all branches
   schedule:
     - cron: "0 22 * * *" # 한국 시간 기준 아침 7시 실행
-  workflow_dispatch:
+  workflow_dispatch: # Allows manual triggering
 
 jobs:
   review-reminder:
@@ -71,14 +74,15 @@ jobs:
                 if (!nickname) continue;
 
                 const prTitle = pr.title; 
+                const prUrl = pr.html_url;
                 const commitCount = commits.length; 
 
                 if (commitCount === 0) continue; 
 
                 if (commitSummary[nickname]) {
-                  commitSummary[nickname].push(`Issue: ${prTitle}: ${commitCount} commit`);
+                  commitSummary[nickname].push(`Issue: [${prTitle}](${prUrl}): ${commitCount} commit(s)`);
                 } else {
-                  commitSummary[nickname] = [`Issue: ${prTitle}: ${commitCount} commit`];
+                  commitSummary[nickname] = [`Issue: [${prTitle}](${prUrl}): ${commitCount} commit(s)`];
                 }
               }
 
