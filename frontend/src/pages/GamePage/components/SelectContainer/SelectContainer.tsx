@@ -25,12 +25,14 @@ const SelectContainer = () => {
           option={balanceContent.firstOption}
           selectedOption={selectedOption}
           handleClickOption={handleClickOption}
+          position="left"
         />
         <span aria-hidden>VS</span>
         <SelectOption
           option={balanceContent.secondOption}
           selectedOption={selectedOption}
           handleClickOption={handleClickOption}
+          position="right"
         />
       </section>
       <GameVoteStatusContainer contentId={balanceContent.contentId} isFetching={isFetching} />

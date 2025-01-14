@@ -8,6 +8,7 @@ import { profileWrapper, profileImg, nicknameContainer } from './NicknamePage.st
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
 import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
+import useGAPageTimeSpentGA from '@/lib/googleAnalytics/hooks/usePageTimeSpentGA';
 
 import { SillyDdangkong } from '@/assets';
 
@@ -20,6 +21,7 @@ const NicknamePage = () => {
   const isMaster = !roomUuid;
 
   useIsJoinableRoomQuery({ roomUuid });
+  useGAPageTimeSpentGA('닉네임 페이지');
 
   useEffect(() => {
     if (nicknameInputRef.current) {

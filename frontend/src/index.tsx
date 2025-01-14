@@ -11,14 +11,19 @@ import { router } from './router';
 import GlobalStyle from './styles/GlobalStyle';
 import { Theme } from './styles/Theme';
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  integrations: [Sentry.browserTracingIntegration()],
-  enableTracing: true, // tracesSampleRate와 tracesSampler 기본값 설정
-});
+// Sentry 초기화
+if (process.env.NODE_ENV === 'production') {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    integrations: [Sentry.browserTracingIntegration()],
+    enableTracing: true, // tracesSampleRate와 tracesSampler 기본값 설정
+  });
+}
 
+// React-query 초기화
 const queryClient = new QueryClient();
 
+// MSW 초기화
 const enableMocking = async () => {
   if (process.env.NODE_ENV !== 'development') {
     return;

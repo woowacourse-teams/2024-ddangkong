@@ -93,13 +93,15 @@
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-3BFVVPQT0Z"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
+    if (window.location.origin === 'https://ddangkong.kr') {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
 
-    gtag('config', 'G-3BFVVPQT0Z');
+      gtag('js', new Date());
+      gtag('config', 'G-3BFVVPQT0Z');
+    }
   </script>
 
   <body>
