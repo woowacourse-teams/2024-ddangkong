@@ -4,7 +4,7 @@ export const clickLeftOptionGA = () => {
   ReactGA.event({
     category: 'User Engagement',
     action: 'vote',
-    label: '왼쪽 버튼 클릭',
+    label: '왼쪽 선택지 클릭',
   });
 };
 
@@ -12,7 +12,7 @@ export const clickRightOptionGA = () => {
   ReactGA.event({
     category: 'User Engagement',
     action: 'vote',
-    label: '오른쪽 버튼 클릭',
+    label: '오른쪽 선택지 클릭',
   });
 };
 
