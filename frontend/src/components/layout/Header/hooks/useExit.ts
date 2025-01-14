@@ -2,10 +2,11 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { exitRoom } from '@/apis/room';
-import useGetUserInfo from '@/hooks/useGetUserInfo';
 import { deleteAllCookies } from '@/utils/cookie';
 
-export const useExit = () => {
+import { useGetUserInfo } from '@/hooks';
+
+const useExit = () => {
   const {
     member: { memberId },
   } = useGetUserInfo();
@@ -26,3 +27,5 @@ export const useExit = () => {
 
   return { handleExit };
 };
+
+export default useExit;

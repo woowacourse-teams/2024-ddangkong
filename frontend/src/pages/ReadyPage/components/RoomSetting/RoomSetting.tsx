@@ -9,11 +9,10 @@ import {
   roomSettingKey,
 } from './RoomSetting.styled';
 
-import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
-import RoomSettingModal from '@/components/RoomSettingModal/RoomSettingModal';
-import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
-import useIsMaster from '@/hooks/useIsMaster';
-import useModal from '@/hooks/useModal';
+import { A11yOnly } from '@/components/common';
+
+import { RoomSettingModal } from '@/components';
+import { useGetRoomInfo, useIsMaster, useModal } from '@/hooks';
 
 const RoomSetting = () => {
   const returnFocusRef = useRef<HTMLButtonElement>(null);

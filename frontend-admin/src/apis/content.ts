@@ -1,23 +1,10 @@
-import fetcher from "./fetcher";
+import { Category, Content } from '@/types/content';
+import fetcher from './fetcher';
 
-import { API_URL } from "@/constants/url";
+import { API_URL } from '@/constants/url';
 
 interface ContentResponse {
   contents: Content[];
-}
-
-interface Content {
-  contentId: number;
-  question: string;
-  firstOption: Option;
-  secondOption: Option;
-}
-
-interface Option {
-  optionId: number;
-  name: string;
-  count: number;
-  percent: number;
 }
 
 interface ContentAppendParams {
@@ -25,6 +12,10 @@ interface ContentAppendParams {
   question: string;
   firstOption: string;
   secondOption: string;
+}
+
+interface ContentAppendResponse extends ContentAppendParams {
+  contentId: number;
 }
 
 interface QuestionEditParams {
@@ -41,10 +32,12 @@ interface ContentDeleteParams {
   contentId: number;
 }
 
+interface CategoryResponse {
+  categories: Category[];
+}
+
 // 컨텐츠 가져오기
-export const fetchBalanceContent = async (
-  category: string
-): Promise<ContentResponse> => {
+export const fetchBalanceContent = async (category: string): Promise<ContentResponse> => {
   const res = await fetcher.get(API_URL.balanceContent(category));
 
   return await res.json();
@@ -56,7 +49,7 @@ export const appendContent = async ({
   question,
   firstOption,
   secondOption,
-}: ContentAppendParams) => {
+}: ContentAppendParams): Promise<ContentAppendResponse> => {
   const res = await fetcher.post(API_URL.contents, {
     body: {
       category,
@@ -94,6 +87,13 @@ export const editOption = async ({ optionId, name }: OptionEditParams) => {
 };
 
 // 컨텐츠 삭제
-export const deleteOption = async ({ contentId }: ContentDeleteParams) => {
+export const deleteContent = async ({ contentId }: ContentDeleteParams) => {
   return await fetcher.delete(API_URL.deleteContent(contentId));
+};
+
+// 카테고리 목록 조회
+export const fetchCategoryList = async (): Promise<CategoryResponse> => {
+  const res = await fetcher.get(API_URL.categoryList);
+
+  return await res.json();
 };

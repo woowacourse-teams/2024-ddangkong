@@ -1,0 +1,30 @@
+name: FE Build for admin
+
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - "frontend-admin/**"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend-admin
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ./frontend-admin
+
+      - name: Build
+        run: npm run build
+        working-directory: ./frontend-admin

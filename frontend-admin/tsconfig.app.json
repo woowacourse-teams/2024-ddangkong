@@ -15,6 +15,7 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "allowSyntheticDefaultImports": true, // default export 가 없어도 import 허용
 
     /* Linting */
@@ -29,6 +30,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "vite.config.ts"],
+  "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

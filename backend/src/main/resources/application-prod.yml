@@ -30,6 +30,17 @@ encrypt:
   secret-key: ${secret.encrypt.secret-key}
   algorithm: ${secret.encrypt.algorithm}
 
+admin:
+  session-key : admin
+  password : ${secret.admin.password}
+
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true
+
 logging:
   config: classpath:logback-prod.xml
   discord:

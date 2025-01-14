@@ -1,8 +1,10 @@
-import "@emotion/react";
-import { theme } from "./theme";
+/* eslint-disable */
+
+import '@emotion/react';
+import { theme } from './theme';
 
 type ExtendedTheme = typeof theme;
 
-declare module "@emotion/react" {
-  export type Theme = ExtendedTheme;
+declare module '@emotion/react' {
+  interface Theme extends ExtendedTheme {}
 }

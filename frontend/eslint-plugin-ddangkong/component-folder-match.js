@@ -20,8 +20,8 @@ module.exports = {
         const dirName = path.basename(path.dirname(filePath)); // 현재 파일이 속한 폴더 이름
         const parentDir = path.dirname(path.dirname(filePath)); // 상위 디렉터리
 
-        // 부모 폴더가 "components"로 끝나는 폴더만 검사
-        if (parentDir.endsWith('components')) {
+        // 부모 폴더가 "components"로 끝나면서 대문자로 시작하는 폴더는 컴포넌트 폴더로 간주
+        if (parentDir.endsWith('components') && /^[A-Z]/.test(dirName)) {
           const expectedFileName = `${dirName}.tsx`;
           const expectedFilePath = path.join(parentDir, dirName, expectedFileName);
 

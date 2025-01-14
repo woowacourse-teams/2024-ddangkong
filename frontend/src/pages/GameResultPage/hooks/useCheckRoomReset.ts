@@ -7,7 +7,7 @@ import { POLLING_DELAY, POLLING_ERROR_FAILURE_COUNT } from '@/constants/config';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { ROUTES } from '@/constants/routes';
 
-export const useIsRoomInitial = () => {
+const useIsRoomInitial = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
   const { data } = useQuery({
@@ -29,3 +29,5 @@ export const useIsRoomInitial = () => {
     }
   }, [data?.isInitial, roomId, navigate]);
 };
+
+export default useIsRoomInitial;

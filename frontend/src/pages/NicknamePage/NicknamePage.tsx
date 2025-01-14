@@ -2,15 +2,15 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import NicknameInput from './components/NicknameInput/NicknameInput';
-import useAccessRoom from './hooks/useAccessRoom';
-import useIsJoinableRoomQuery from './hooks/useIsJoinableRoomQuery';
+import { useAccessRoom, useIsJoinableRoomQuery } from './hooks';
 import { profileWrapper, profileImg, nicknameContainer } from './NicknamePage.styled';
 
-import SillyDdangkong from '@/assets/images/sillyDdangkong.webp';
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
 import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
 import useGAPageTimeSpentGA from '@/lib/googleAnalytics/hooks/usePageTimeSpentGA';
+
+import { SillyDdangkong } from '@/assets';
 
 const NicknamePage = () => {
   const { roomUuid } = useParams();

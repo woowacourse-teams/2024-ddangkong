@@ -1,10 +1,11 @@
 import { screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 
-import { RoomSettingHeader } from './Header';
+import { RoomSettingHeader } from '.';
 
-import useIsMaster from '@/hooks/useIsMaster';
 import { customRender } from '@/utils/test-utils';
+
+import { useIsMaster } from '@/hooks';
 
 jest.mock('@/hooks/useIsMaster');
 

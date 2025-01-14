@@ -1,7 +1,7 @@
 import { useLocation, useParams } from 'react-router-dom';
 
 import { categoryText, topicContainerLayout, topicText } from './TopicContainer.styled';
-import A11yOnly from '../common/a11yOnly/A11yOnly';
+import A11yOnly from '../common/A11yOnly/A11yOnly';
 
 import { ROUTES } from '@/constants/routes';
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';

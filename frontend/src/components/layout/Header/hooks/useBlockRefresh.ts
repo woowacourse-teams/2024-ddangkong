@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export const useBlockRefresh = () => {
+const useBlockRefresh = () => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'F5' || (event.ctrlKey && event.key === 'r')) {
@@ -24,3 +24,5 @@ export const useBlockRefresh = () => {
     };
   }, []);
 };
+
+export default useBlockRefresh;
