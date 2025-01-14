@@ -38,7 +38,7 @@ jobs:
                 const now = new Date();
 
                 // 오전 7시에 작업이 시작되므로 7시간 전이 전날 밤 12시가 된다 
-                const until = new Date(now.getTime() * 60 * 60 * 1000); 
+                const until = new Date(now.getTime() - 7 * 60 * 60 * 1000); 
                 // until로부터 24시간 전이 전날 자정이 된다
                 const since = new Date(until.getTime() - 24 * 60 * 60 * 1000); 
 
@@ -92,7 +92,13 @@ jobs:
               });
 
               if (messageList.length === 0) {
-                console.log('오늘의 커밋이 없습니다.');
+                await fetch(process.env.DISCORD_WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  content: `🍀 오늘은 commit이 없습니다 🍀`,
+                }),
+                });
                 return;
               }
 
