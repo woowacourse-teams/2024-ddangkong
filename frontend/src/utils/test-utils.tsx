@@ -7,14 +7,11 @@ import { MemoryRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import type { MutableSnapshot } from 'recoil';
 
-import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
-import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
-import Spinner from '@/components/common/Spinner/Spinner';
-import ModalProvider from '@/providers/ModalProvider/ModalProvider';
-import QueryClientDefaultOptionProvider from '@/providers/QueryClientDefaultOptionProvider/QueryClientDefaultOptionProvider';
-import ToastProvider from '@/providers/ToastProvider/ToastProvider';
+import { AsyncErrorBoundary, RootErrorBoundary, Spinner } from '@/components/common';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
+
+import { ModalProvider, QueryClientDefaultOptionProvider, ToastProvider } from '@/providers';
 
 const wrapper = ({
   children,

@@ -2,7 +2,7 @@ import Countdown from './Countdown/Countdown';
 import useCountdown from './hooks/useCountdown';
 import StartButton from './StartButton/StartButton';
 
-import { useGetRoomInfo } from '@/hooks/useGetRoomInfo';
+import useGetRoomInfo from '@/hooks/useGetRoomInfo';
 
 const StartButtonContainer = () => {
   const { isGameStart } = useGetRoomInfo();

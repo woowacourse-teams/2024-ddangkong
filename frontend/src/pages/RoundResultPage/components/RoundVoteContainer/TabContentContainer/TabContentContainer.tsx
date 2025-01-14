@@ -7,9 +7,8 @@ import { isExistVoteMember } from './TabContentContainer.util';
 import VoteStatisticContent from './VoteStatisticContent/VoteStatisticContent';
 
 import TopicContainer from '@/components/TopicContainer/TopicContainer';
-import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';
-import useMyGameStatus from '@/hooks/useMyGameStatus';
-import useRoundVoteResultQuery from '@/hooks/useRoundVoteResultQuery';
+
+import { useBalanceContentQuery, useMyGameStatus, useRoundVoteResultQuery } from '@/hooks';
 
 interface TabContentContainerProps {
   isVoteStatisticsTabActive: boolean;

@@ -13,6 +13,7 @@ const A11yOnly = <T extends ElementType = 'span'>({
   ...props
 }: PropsWithChildren<A11yOnlyProps<T>>) => {
   const Component = as || 'span';
+
   return (
     <Component css={a11yOnlyLayout} {...props}>
       {children}
