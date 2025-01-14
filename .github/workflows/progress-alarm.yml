@@ -3,7 +3,7 @@ name: Progress Alarm for Discord
 on:
   push: # Trigger the workflow on every push
     branches:
-      - "*" # Matches all branches
+      - "feat/#443" # Matches all branches
   schedule:
     - cron: "0 22 * * *" # 한국 시간 기준 아침 7시 실행
   workflow_dispatch: # Allows manual triggering
