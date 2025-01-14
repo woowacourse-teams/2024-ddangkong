@@ -1,12 +1,9 @@
 name: Progress Alarm for Discord
 
 on:
-  push: # Trigger the workflow on every push
-    branches:
-      - "feat/#443" # Matches all branches
-  # schedule:
-  #   - cron: "0 22 * * *" # 한국 시간 기준 아침 7시 실행
-  # workflow_dispatch: # Allows manual triggering
+  schedule:
+    - cron: "0 22 * * *" # 한국 시간 기준 아침 7시 실행
+  workflow_dispatch:
 
 jobs:
   review-reminder:
@@ -92,13 +89,7 @@ jobs:
               });
 
               if (messageList.length === 0) {
-                await fetch(process.env.DISCORD_WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  content: `🍀 오늘은 commit이 없습니다 🍀`,
-                }),
-                });
+                console.log(`🍀 오늘은 commit이 없습니다 🍀)
                 return;
               }
 
