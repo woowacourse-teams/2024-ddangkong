@@ -7,6 +7,9 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ddangkong.aop.cookie.EncryptionUtils;
+import ddangkong.aop.cookie.RoomMemberCookieAspect;
+import ddangkong.aop.cookie.RoomMemberCookieEncryptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(RestDocumentationExtension.class)
-@Import(TestCookieConfig.class)
+@Import(value = {RoomMemberCookieEncryptor.class, EncryptionUtils.class, RoomMemberCookieAspect.class})
 public abstract class BaseDocumentationTest {
 
     @Autowired
