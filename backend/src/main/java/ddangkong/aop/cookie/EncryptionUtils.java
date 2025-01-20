@@ -1,4 +1,4 @@
-package ddangkong.controller.room;
+package ddangkong.aop.cookie;
 
 import ddangkong.exception.room.CipherException;
 import ddangkong.exception.room.InvalidCookieException;

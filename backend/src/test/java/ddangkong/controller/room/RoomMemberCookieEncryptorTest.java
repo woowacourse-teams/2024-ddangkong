@@ -2,6 +2,7 @@ package ddangkong.controller.room;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import ddangkong.aop.cookie.RoomMemberCookieEncryptor;
 import ddangkong.controller.BaseControllerTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
