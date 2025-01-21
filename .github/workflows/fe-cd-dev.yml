@@ -39,7 +39,7 @@ jobs:
       # 5. Build Project
       - name: Build for Dev
         working-directory: ./frontend
-        run: npm run build:dev
+        run: npm run build:prod
 
       # 6. Configure AWS CLI
       - name: Configure AWS CLI
