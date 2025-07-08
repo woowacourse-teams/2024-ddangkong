@@ -32,6 +32,7 @@ import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.balance.content.BalanceCategoryResponse;
 import ddangkong.facade.room.RoomFacade;
 import ddangkong.facade.room.dto.InitialRoomResponse;
+import ddangkong.facade.room.dto.PassMasterRequest;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -211,6 +212,35 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                             ),
                             responseCookies(
                                     cookieWithName("test_cookie").description("방 재참여시 사용되는 쿠키")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    class 방장_교체 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/pass-master";
+
+        @Test
+        void 방장의_권한을_다른_멤버에게_넘긴다() throws Exception {
+            // given
+            Long roomId = 1L;
+            Long nextMasterId = 2L;
+            PassMasterRequest request = new PassMasterRequest(nextMasterId);
+
+            // when & then
+            mockMvc.perform(patch(ENDPOINT, roomId)
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/passMaster",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            ),
+                            requestFields(
+                                    fieldWithPath("nextMasterId").type(NUMBER).description("새로운 방장 멤버 ID")
                             )
                     ));
         }

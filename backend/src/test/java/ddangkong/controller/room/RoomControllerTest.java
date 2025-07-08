@@ -9,6 +9,7 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.RoomStatus;
 import ddangkong.domain.room.member.Member;
 import ddangkong.facade.room.dto.InitialRoomResponse;
+import ddangkong.facade.room.dto.PassMasterRequest;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -141,6 +142,56 @@ class RoomControllerTest extends BaseControllerTest {
     }
 
     @Nested
+    class 방장_변경 {
+
+        @Test
+        void 방장의_권한을_다른_멤버에게_넘길_수_있다() {
+            // given
+            Room room = roomFixture.createNotStartedRoom();
+            Member beforeMaster = memberFixture.createMaster(room);
+            Member afterMaster = memberFixture.createCommon(room);
+
+            PassMasterRequest request = new PassMasterRequest(afterMaster.getId());
+
+            // when
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .pathParam("roomId", room.getId())
+                    .body(request)
+                    .when().patch("/api/balances/rooms/{roomId}/pass-master")
+                    .then().log().all()
+                    .statusCode(HttpStatus.NO_CONTENT.value());
+
+            // then
+            Member savedBeforeMaster = memberRepository.findById(beforeMaster.getId()).orElseThrow();
+            Member savedAfterMaster = memberRepository.findById(afterMaster.getId()).orElseThrow();
+            assertAll(
+                    () -> assertThat(savedBeforeMaster.isMaster()).isFalse(),
+                    () -> assertThat(savedAfterMaster.isMaster()).isTrue()
+            );
+        }
+
+        @Test
+        void 게임이_진행중일때는_방장을_변경할_수_없다() {
+            // given
+            Room progressRoom = roomFixture.createProgressRoom();
+            Member master = memberFixture.createMaster(progressRoom);
+            Member newMaster = memberFixture.createCommon(progressRoom);
+
+            PassMasterRequest request = new PassMasterRequest(newMaster.getId());
+
+            // when & then
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .pathParam("roomId", progressRoom.getId())
+                    .body(request)
+                    .when().patch("/api/balances/rooms/{roomId}/pass-master")
+                    .then().log().all()
+                    .statusCode(HttpStatus.BAD_REQUEST.value());
+        }
+    }
+
+    @Nested
     class 방_설정_변경 {
 
         @Test
@@ -167,7 +218,7 @@ class RoomControllerTest extends BaseControllerTest {
                     .then().log().all()
                     .statusCode(HttpStatus.NO_CONTENT.value());
 
-            Room changedRoom = roomRepository.findById(room.getId()).get();
+            Room changedRoom = roomRepository.findById(room.getId()).orElseThrow();
 
             // then
             assertThat(changedRoom.getCategory()).isEqualTo(Category.FOOD);

@@ -82,6 +82,26 @@ include::{snippets}/room/member/response-fields.adoc[]
 
 '''
 
+=== 방장 변경
+
+==== curl
+
+include::{snippets}/room/passMaster/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/passMaster/http-request.adoc[]
+
+include::{snippets}/room/passMaster/path-parameters.adoc[]
+
+include::{snippets}/room/passMaster/request-fields.adoc[]
+
+==== response
+
+include::{snippets}/room/passMaster/http-response.adoc[]
+
+'''
+
 === 방 나가기
 
 ==== curl
