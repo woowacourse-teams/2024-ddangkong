@@ -17,6 +17,6 @@ else
   fi
 fi
 
-JAR_FILE=$(ls /home/ubuntu/app/*.jar | head -n 1)
+JAR_FILE=$(ls /home/ddangkong/app/*.jar | head -n 1)
 
 sudo nohup java -Dspring.profiles.active=dev -Duser.timezone=Asia/Seoul -Dserver.port=8080 -jar "$JAR_FILE" &
