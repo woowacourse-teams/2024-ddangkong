@@ -63,6 +63,9 @@ jobs:
           name: app-artifact
           path: ~/app
 
+      - name: check pwd
+        run: pwd
+
       - name: Download deploy scripts
         uses: actions/download-artifact@v4
         with:
