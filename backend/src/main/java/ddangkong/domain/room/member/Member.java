@@ -1,6 +1,7 @@
 package ddangkong.domain.room.member;
 
 import ddangkong.domain.room.Room;
+import ddangkong.exception.room.member.AlreadyCommonException;
 import ddangkong.exception.room.member.AlreadyMasterException;
 import ddangkong.exception.room.member.InvalidNicknameException;
 import jakarta.persistence.Column;
@@ -64,6 +65,13 @@ public class Member {
             throw new AlreadyMasterException(id);
         }
         isMaster = true;
+    }
+
+    public void demoteToCommon() {
+        if (isCommon()) {
+            throw new AlreadyCommonException(id);
+        }
+        isMaster = false;
     }
 
     public boolean isSameId(Long id) {

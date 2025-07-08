@@ -30,6 +30,7 @@ public enum ClientErrorCode {
     // Member
     ALREADY_EXIST_MASTER("이미 방장이 존재합니다."),
     ALREADY_MASTER("해당 멤버는 이미 방장입니다. memberId : %d"),
+    ALREADY_COMMON("해당 멤버는 이미 일반 유저입니다. memberId : %d"),
     INVALID_MASTER_CREATION("방에 멤버가 존재하면 방장을 생성할 수 없습니다. 현재 멤버 수: %d"),
     NOT_EXIST_MASTER("방장이 존재하지 않습니다."),
     NOT_EXIST_COMMON("일반 멤버가 존재하지 않습니다."),
