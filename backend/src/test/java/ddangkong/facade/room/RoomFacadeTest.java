@@ -16,6 +16,7 @@ import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.exception.room.NotFoundRoomException;
+import ddangkong.exception.room.NotReadyRoomException;
 import ddangkong.exception.room.member.InvalidMemberIdException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.InitialRoomResponse;
@@ -149,6 +150,41 @@ class RoomFacadeTest extends BaseServiceTest {
             // when & then
             assertThatThrownBy(() -> roomFacade.getRoomMemberInfo(notExistMemberId))
                     .isExactlyInstanceOf(InvalidMemberIdException.class);
+        }
+    }
+
+    @Nested
+    class 방_마스터_교체 {
+
+        @Test
+        void 방_마스터를_교체한다() {
+            // given
+            Room room = roomFixture.createNotStartedRoom();
+            Member beforeMaster = memberFixture.createMaster(room);
+            Member afterMaster = memberFixture.createCommon(room);
+
+            // when
+            roomFacade.passMaster(room.getId(), afterMaster.getId());
+
+            // then
+            Member savedBeforeMaster = memberRepository.findById(beforeMaster.getId()).orElseThrow();
+            Member savedAfterMaster = memberRepository.findById(afterMaster.getId()).orElseThrow();
+            assertAll(
+                    () -> assertThat(savedBeforeMaster.isMaster()).isFalse(),
+                    () -> assertThat(savedAfterMaster.isMaster()).isTrue()
+            );
+        }
+
+        @Test
+        void 방이_진행중인_경우_방_마스터를_교체할_수_없다() {
+            // given
+            Room room = roomFixture.createProgressRoom();
+            Member master = memberFixture.createMaster(room);
+            Member nextMaster = memberFixture.createCommon(room);
+
+            // when & then
+            assertThatThrownBy(() -> roomFacade.passMaster(room.getId(), nextMaster.getId()))
+                    .isExactlyInstanceOf(NotReadyRoomException.class);
         }
     }
 

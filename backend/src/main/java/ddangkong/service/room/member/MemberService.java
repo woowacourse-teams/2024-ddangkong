@@ -75,6 +75,15 @@ public class MemberService {
     }
 
     @Transactional
+    public void passMaster(RoomMembers members, Long nextMasterId) {
+        Member currentMaster = members.getMaster();
+        Member nextMaster = members.getMember(nextMasterId);
+
+        nextMaster.promoteToMaster();
+        currentMaster.demoteToCommon();
+    }
+
+    @Transactional
     public void promoteOtherMember(RoomMembers members) {
         Member commonMember = members.getAnyCommonMember();
         commonMember.promoteToMaster();

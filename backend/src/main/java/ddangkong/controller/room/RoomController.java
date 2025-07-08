@@ -6,6 +6,7 @@ import ddangkong.aop.cookie.MemberId;
 import ddangkong.aop.logging.Polling;
 import ddangkong.facade.room.RoomFacade;
 import ddangkong.facade.room.dto.InitialRoomResponse;
+import ddangkong.facade.room.dto.PassMasterRequest;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -69,6 +70,13 @@ public class RoomController {
     public RoomJoinResponse joinRoom(@PathVariable String uuid,
                                      @Valid @RequestBody RoomJoinRequest request) {
         return roomFacade.joinRoom(request.nickname(), uuid);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/balances/rooms/{roomId}/pass-master")
+    public void passMaster(@PathVariable @Positive Long roomId,
+                           @RequestBody @Valid PassMasterRequest request) {
+        roomFacade.passMaster(roomId, request.nextMasterId());
     }
 
     @DeleteCookie

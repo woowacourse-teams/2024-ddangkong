@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.room.Room;
+import ddangkong.exception.room.member.AlreadyCommonException;
 import ddangkong.exception.room.member.AlreadyMasterException;
 import ddangkong.exception.room.member.InvalidNicknameException;
 import ddangkong.support.fixture.EntityFixtureUtils;
@@ -42,6 +43,34 @@ class MemberTest {
             assertThatThrownBy(() -> master.promoteToMaster())
                     .isExactlyInstanceOf(AlreadyMasterException.class)
                     .hasMessage("해당 멤버는 이미 방장입니다. memberId : 3");
+        }
+    }
+
+    @Nested
+    class 일반_유저로_변경 {
+
+        @Test
+        void 마스터_유저를_일반_유저로_변경할_수_있다() {
+            // given
+            Member master = Member.createMaster("prin", ROOM);
+
+            // when
+            master.demoteToCommon();
+
+            // then
+            assertThat(master.isMaster()).isFalse();
+        }
+
+        @Test
+        void 일반_유저인_경우_예외를_발생한다() {
+            // given
+            Member common = Member.createCommon("prin", ROOM);
+            EntityFixtureUtils.setId(common, 3L);
+
+            // when & then
+            assertThatThrownBy(() -> common.demoteToCommon())
+                    .isExactlyInstanceOf(AlreadyCommonException.class)
+                    .hasMessage("해당 멤버는 이미 일반 유저입니다. memberId : 3");
         }
     }
 

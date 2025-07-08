@@ -5,6 +5,7 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.room.NotFinishedRoomException;
+import ddangkong.exception.room.NotReadyRoomException;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -58,6 +59,17 @@ public class RoomFacade {
         Member member = memberService.getMemberById(memberId);
         Room room = member.getRoom();
         return new RoomMemberResponse(room.getId(), room.getUuid(), new MemberResponse(member));
+    }
+
+    @Transactional
+    public void passMaster(Long roomId, Long nextMasterId) {
+        Room room = roomService.getRoom(roomId);
+        if (room.isAlreadyStart()) {
+            throw new NotReadyRoomException();
+        }
+
+        RoomMembers roomMembers = memberService.findRoomMembers(room);
+        memberService.passMaster(roomMembers, nextMasterId);
     }
 
     @Transactional
