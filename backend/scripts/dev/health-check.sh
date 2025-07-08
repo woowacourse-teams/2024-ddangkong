@@ -28,5 +28,5 @@ done
 
 # 실패 메시지
 echo "Failure: Did not receive $SUCCESS_STATUS status code within $MAX_RETRIES attempts."
-sh ~/app/scripts/kill-application.sh
+sh /home/ddangkong/app/scripts/kill-application.sh
 exit 1
