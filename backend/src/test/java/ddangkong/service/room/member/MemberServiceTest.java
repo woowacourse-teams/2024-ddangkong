@@ -10,6 +10,7 @@ import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.room.NotReadyRoomException;
 import ddangkong.exception.room.member.AlreadyExistMasterException;
+import ddangkong.exception.room.member.AlreadyMasterException;
 import ddangkong.exception.room.member.ExceedMaxMemberCountException;
 import ddangkong.exception.room.member.InvalidMasterCreationException;
 import ddangkong.exception.room.member.NotExistCommonMemberException;
@@ -157,7 +158,42 @@ class MemberServiceTest extends BaseServiceTest {
     }
 
     @Nested
-    class 방장_넘겨주기 {
+    class 특정_멤버에게_방장_권한_부여 {
+
+        @Test
+        void 일반_멤버에게_방장_권한을_부여한다() {
+            // given
+            Room room = roomFixture.createNotStartedRoom();
+            Member master = memberFixture.createMaster(room);
+            Member common = memberFixture.createCommon(room);
+            RoomMembers roomMembers = new RoomMembers(List.of(master, common));
+
+            // when
+            memberService.passMaster(roomMembers, common.getId());
+
+            // then
+            assertAll(
+                    () -> assertThat(master.isMaster()).isFalse(),
+                    () -> assertThat(common.isMaster()).isTrue()
+            );
+        }
+
+        @Test
+        void 이미_방장인_멤버에겐_방장_권한을_다시_부여할_수_없다() {
+            // given
+            Room room = roomFixture.createNotStartedRoom();
+            Member master = memberFixture.createMaster(room);
+            Member common = memberFixture.createCommon(room);
+            RoomMembers roomMembers = new RoomMembers(List.of(master, common));
+
+            // when & then
+            assertThatThrownBy(() -> memberService.passMaster(roomMembers, master.getId()))
+                    .isExactlyInstanceOf(AlreadyMasterException.class);
+        }
+    }
+
+    @Nested
+    class 임의의_다른_멤버에게_방장_권한_부여 {
 
         private Room room;
         private Member master;
