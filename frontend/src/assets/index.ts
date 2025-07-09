@@ -16,6 +16,7 @@ import SillyDdangkong from './images/sillyDdangkong.webp';
 import SillyDdangkongMedium from './images/sillyDdangkongMedium.webp';
 import SillyDdangkongSmall from './images/sillyDdangkongSmall.webp';
 import SpinDdangkong from './images/spinDdangkong.webp';
+import VerticalMoreIcon from './images/verticalMoreIcon.png';
 
 export {
   AngryDdangkong,
@@ -36,4 +37,5 @@ export {
   SillyDdangkongMedium,
   SillyDdangkongSmall,
   SpinDdangkong,
+  VerticalMoreIcon,
 };

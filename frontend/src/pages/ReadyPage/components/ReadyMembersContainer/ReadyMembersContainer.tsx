@@ -11,20 +11,24 @@ import {
   membersContainer,
   inviteButton,
   profileImage,
+  userStatusBox,
+  userStatusIcon,
+  userOptionsButton,
 } from './ReadyMembersContainer.styled';
 
 import { A11yOnly } from '@/components/common';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 
-import { CrownIcon, SillyDdangkongMedium } from '@/assets';
+import { CrownIcon, SillyDdangkongMedium, VerticalMoreIcon } from '@/assets';
 import { InviteModal } from '@/components';
-import { useGetRoomInfo, useModal } from '@/hooks';
+import { useGetRoomInfo, useIsMaster, useModal } from '@/hooks';
 
 const ReadyMembersContainer = () => {
   const { members, master } = useGetRoomInfo();
-  const { showModal } = useModal();
+  const isMaster = useIsMaster();
   const queryClient = useQueryClient();
   const returnFocusRef = useRef<HTMLButtonElement>(null);
+  const { showModal } = useModal();
   const memberCountMessage = `총 인원 ${members.length}명`;
 
   const handleClickInvite = () => {
@@ -53,7 +57,14 @@ const ReadyMembersContainer = () => {
               </div>
               <div css={memberStatus}>
                 <span aria-hidden>{member.nickname}</span>
-                {member.isMaster && <img src={CrownIcon} alt="" />}
+              </div>
+              <div css={userStatusBox}>
+                {member.isMaster && <img src={CrownIcon} alt="" css={userStatusIcon} />}
+                {!member.isMaster && isMaster && (
+                  <button css={userOptionsButton}>
+                    <img src={VerticalMoreIcon} alt="" css={userStatusIcon} />
+                  </button>
+                )}
               </div>
             </li>
           ))}
