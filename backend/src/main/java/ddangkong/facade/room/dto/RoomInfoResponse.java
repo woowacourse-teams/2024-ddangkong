@@ -1,9 +1,11 @@
 package ddangkong.facade.room.dto;
 
 import ddangkong.domain.room.Room;
+import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.facade.room.member.dto.MasterResponse;
 import ddangkong.facade.room.member.dto.MemberResponse;
+import java.util.Comparator;
 import java.util.List;
 
 public record RoomInfoResponse(
@@ -16,6 +18,7 @@ public record RoomInfoResponse(
     public static RoomInfoResponse create(RoomMembers members, Room room) {
         List<MemberResponse> membersResponse = members.getMembers()
                 .stream()
+                .sorted(Comparator.comparing(Member::isMaster).reversed())
                 .map(MemberResponse::new)
                 .toList();
         RoomSettingResponse roomSettingResponse = new RoomSettingResponse(room);
