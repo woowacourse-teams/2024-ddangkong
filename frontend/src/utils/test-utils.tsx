@@ -11,7 +11,12 @@ import { AsyncErrorBoundary, RootErrorBoundary, Spinner } from '@/components/com
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Theme } from '@/styles/Theme';
 
-import { ModalProvider, QueryClientDefaultOptionProvider, ToastProvider } from '@/providers';
+import {
+  BottomSheetProvider,
+  ModalProvider,
+  QueryClientDefaultOptionProvider,
+  ToastProvider,
+} from '@/providers';
 
 const wrapper = ({
   children,
@@ -39,7 +44,11 @@ const wrapper = ({
               <AsyncErrorBoundary pendingFallback={pendingFallback}>
                 <MemoryRouter initialEntries={['/']}>
                   <ModalProvider>
-                    <QueryClientDefaultOptionProvider>{children}</QueryClientDefaultOptionProvider>
+                    <BottomSheetProvider>
+                      <QueryClientDefaultOptionProvider>
+                        {children}
+                      </QueryClientDefaultOptionProvider>
+                    </BottomSheetProvider>
                   </ModalProvider>
                 </MemoryRouter>
               </AsyncErrorBoundary>
