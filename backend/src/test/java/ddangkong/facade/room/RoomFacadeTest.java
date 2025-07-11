@@ -286,6 +286,28 @@ class RoomFacadeTest extends BaseServiceTest {
                     () -> assertThat(actual.master().memberId()).isEqualTo(master.getId())
             );
         }
+
+        @Test
+        void 조회_결과에서_방장이_가장_앞에_위치한다() {
+            // given
+            Room room = roomFixture.createNotStartedRoom();
+            memberFixture.createCommon(1, room);
+            memberFixture.createCommon(2, room);
+            Member master = memberFixture.createMaster(room);
+
+            // when
+            RoomInfoResponse actual = roomFacade.getRoomInfo(room.getId());
+
+            // then
+            List<MemberResponse> members = actual.members();
+            assertAll(
+                    () -> assertThat(members).hasSize(3),
+                    () -> assertThat(members.get(0).memberId()).isEqualTo(master.getId()),
+                    () -> assertThat(members.get(0).isMaster()).isTrue(),
+                    () -> assertThat(members.get(1).isMaster()).isFalse(),
+                    () -> assertThat(members.get(2).isMaster()).isFalse()
+            );
+        }
     }
 
     @Nested
