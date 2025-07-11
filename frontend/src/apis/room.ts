@@ -159,7 +159,7 @@ export const passMaster = async (roomId: number, memberId: number) => {
     headers: {
       'Content-Type': `application/json`,
     },
-    body: { memberId },
+    body: { nextMasterId: memberId },
   });
   const data = await res.json();
   return data;
