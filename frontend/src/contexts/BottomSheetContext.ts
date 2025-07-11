@@ -1,7 +1,15 @@
-import { createContext, ReactNode } from 'react';
+import { createContext, ComponentType } from 'react';
+
+export interface BottomSheetComponentProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
 interface BottomSheetContext {
-  showBottomSheet: (component: ReactNode) => void;
+  showBottomSheet: <T extends BottomSheetComponentProps>(
+    Component: ComponentType<T>,
+    props?: Omit<T, 'isOpen' | 'onClose'>,
+  ) => void;
   closeBottomSheet: () => void;
 }
 

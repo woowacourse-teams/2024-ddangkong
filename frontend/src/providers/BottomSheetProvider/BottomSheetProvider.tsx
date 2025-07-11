@@ -1,35 +1,42 @@
-import { useState, useMemo, ReactNode } from 'react';
+import { useState, useMemo, ReactNode, ComponentType } from 'react';
 
-import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
-import { BottomSheetContext } from '@/contexts/BottomSheetContext';
+import { BottomSheetContext, BottomSheetComponentProps } from '@/contexts/BottomSheetContext';
 
 interface BottomSheetProviderProps {
   children: ReactNode;
 }
 
 interface BottomSheetState {
+  Component: ComponentType<BottomSheetComponentProps> | null;
+  props: Omit<BottomSheetComponentProps, 'isOpen' | 'onClose'> | null;
   isOpen: boolean;
-  content: ReactNode | null;
 }
 
 const BottomSheetProvider = ({ children }: BottomSheetProviderProps) => {
   const [bottomSheetState, setBottomSheetState] = useState<BottomSheetState>({
+    Component: null,
+    props: null,
     isOpen: false,
-    content: null,
   });
 
-  const showBottomSheet = (content: ReactNode) => {
+  const showBottomSheet = <T extends BottomSheetComponentProps>(
+    Component: ComponentType<T>,
+    props?: Omit<T, 'isOpen' | 'onClose'>,
+  ) => {
     setBottomSheetState({
+      Component: Component as ComponentType<BottomSheetComponentProps>,
+      props: props || null,
       isOpen: true,
-      content,
     });
   };
 
   const closeBottomSheet = () => {
-    setBottomSheetState({
+    setBottomSheetState((prev) => ({
+      ...prev,
       isOpen: false,
-      content: null,
-    });
+      Component: null,
+      props: null,
+    }));
   };
 
   const context = useMemo(
@@ -43,10 +50,12 @@ const BottomSheetProvider = ({ children }: BottomSheetProviderProps) => {
   return (
     <BottomSheetContext.Provider value={context}>
       {children}
-      {bottomSheetState.isOpen && (
-        <BottomSheet isOpen={bottomSheetState.isOpen} onClose={closeBottomSheet}>
-          {bottomSheetState.content}
-        </BottomSheet>
+      {bottomSheetState.isOpen && bottomSheetState.Component && (
+        <bottomSheetState.Component
+          isOpen={bottomSheetState.isOpen}
+          onClose={closeBottomSheet}
+          {...bottomSheetState.props}
+        />
       )}
     </BottomSheetContext.Provider>
   );
