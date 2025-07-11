@@ -15,9 +15,12 @@ import {
   userStatusIcon,
   userOptionsButton,
 } from './ReadyMembersContainer.styled';
+import UserOptionsBottomSheet from '../UserOptionsBottomSheet/UserOptionsBottomSheet';
 
 import { A11yOnly } from '@/components/common';
 import { QUERY_KEYS } from '@/constants/queryKeys';
+import { useBottomSheet } from '@/hooks/useBottomSheet';
+import { Member } from '@/types/room';
 
 import { CrownIcon, SillyDdangkongMedium, VerticalMoreIcon } from '@/assets';
 import { InviteModal } from '@/components';
@@ -29,10 +32,15 @@ const ReadyMembersContainer = () => {
   const queryClient = useQueryClient();
   const returnFocusRef = useRef<HTMLButtonElement>(null);
   const { showModal } = useModal();
+  const { showBottomSheet } = useBottomSheet();
   const memberCountMessage = `총 인원 ${members.length}명`;
 
   const handleClickInvite = () => {
     showModal(InviteModal, { returnFocusRef });
+  };
+
+  const handleClickUserOptions = (member: Member) => {
+    showBottomSheet(UserOptionsBottomSheet, { member });
   };
 
   useEffect(() => {
@@ -61,7 +69,7 @@ const ReadyMembersContainer = () => {
               <div css={userStatusBox}>
                 {member.isMaster && <img src={CrownIcon} alt="" css={userStatusIcon} />}
                 {!member.isMaster && isMaster && (
-                  <button css={userOptionsButton}>
+                  <button css={userOptionsButton} onClick={() => handleClickUserOptions(member)}>
                     <img src={VerticalMoreIcon} alt="" css={userStatusIcon} />
                   </button>
                 )}

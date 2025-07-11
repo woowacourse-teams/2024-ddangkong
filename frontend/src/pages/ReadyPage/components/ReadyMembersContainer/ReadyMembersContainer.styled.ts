@@ -96,9 +96,10 @@ export const userStatusBox = css`
 `;
 
 export const userOptionsButton = css`
-  width: 1.6rem;
+  width: 100%;
+  padding: 1rem;
 `;
 
 export const userStatusIcon = css`
-  height: 50%;
+  height: 1.5rem;
 `;
