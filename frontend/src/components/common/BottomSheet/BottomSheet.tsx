@@ -7,6 +7,7 @@ import {
   bottomSheetHandle,
   bottomSheetHeaderLayout,
 } from './BottomSheet.styled';
+import { useBottomSheetClose } from './hooks/useBottomSheetClose';
 
 export interface BottomSheetProps {
   isOpen: boolean;
@@ -14,8 +15,9 @@ export interface BottomSheetProps {
   children: React.ReactNode;
 }
 
-const BottomSheet = ({ children, isOpen }: BottomSheetProps) => {
+const BottomSheet = ({ children, isOpen, onClose }: BottomSheetProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
+  useBottomSheetClose({ isOpen, onClose, ref: contentRef });
 
   if (!isOpen) return null;
 
