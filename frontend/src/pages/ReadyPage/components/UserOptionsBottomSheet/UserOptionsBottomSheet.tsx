@@ -14,7 +14,6 @@ const UserOptionsBottomSheet = ({ isOpen, onClose, member }: UserOptionsBottomSh
     <BottomSheet isOpen={isOpen} onClose={onClose}>
       <div css={userOptionsButtonWrapper}>
         <PassMasterButton member={member} />
-        <PassMasterButton member={member} />
       </div>
     </BottomSheet>
   );
