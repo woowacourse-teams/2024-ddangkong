@@ -38,20 +38,27 @@ export const bottomSheetContentWrapper = css`
 `;
 
 export const bottomSheetHeaderLayout = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  height: 1.6rem;
+  margin-bottom: 2rem;
 `;
 
 export const bottomSheetHandle = css`
   width: 4rem;
   height: 0.4rem;
-  margin: 0 auto 1.6rem;
+  padding: 0;
+  border: none;
   border-radius: 0.2rem;
 
   background-color: ${Theme.color.gray300};
+  cursor: pointer;
 `;
 
 export const bottomSheetContentLayout = css`
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 2.4rem;
 `;

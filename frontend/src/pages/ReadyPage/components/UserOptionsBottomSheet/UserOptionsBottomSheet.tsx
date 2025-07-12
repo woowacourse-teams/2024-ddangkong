@@ -1,4 +1,5 @@
 import PassMasterButton from './PassMasterButton/PassMasterButton';
+import { userOptionsButtonWrapper } from './UserOptionsBottomSheet.styled';
 
 import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
 import { BottomSheetComponentProps } from '@/contexts/BottomSheetContext';
@@ -11,7 +12,10 @@ interface UserOptionsBottomSheetProps extends BottomSheetComponentProps {
 const UserOptionsBottomSheet = ({ isOpen, onClose, member }: UserOptionsBottomSheetProps) => {
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose}>
-      <PassMasterButton member={member} />
+      <div css={userOptionsButtonWrapper}>
+        <PassMasterButton member={member} />
+        <PassMasterButton member={member} />
+      </div>
     </BottomSheet>
   );
 };

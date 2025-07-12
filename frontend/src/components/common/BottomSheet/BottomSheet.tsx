@@ -25,7 +25,7 @@ const BottomSheet = ({ children, isOpen, onClose }: BottomSheetProps) => {
     <div css={bottomSheetBackdropLayout}>
       <div ref={contentRef} css={bottomSheetContentWrapper}>
         <div css={bottomSheetHeaderLayout}>
-          <div css={bottomSheetHandle} />
+          <button type="button" css={bottomSheetHandle} />
         </div>
         {children}
       </div>

@@ -17,7 +17,14 @@ const PassMasterButton = ({ member }: PassMasterButtonProps) => {
     closeBottomSheet();
   };
 
-  return <Button text={`${member.nickname}님에게 방장 넘기기`} onClick={handleClick} bottom />;
+  return (
+    <Button
+      text={`${member.nickname}님에게 방장 넘기기`}
+      onClick={handleClick}
+      style={{ width: '100%', fontSize: 'medium' }}
+      radius="medium"
+    />
+  );
 };
 
 export default PassMasterButton;
