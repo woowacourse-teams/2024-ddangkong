@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Preview } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -10,6 +9,7 @@ import { initialize, mswLoader } from 'msw-storybook-addon';
 import { handlers } from '../src/mocks/handlers';
 import ToastProvider from '../src/providers/ToastProvider/ToastProvider';
 import ModalProvider from '../src/providers/ModalProvider/ModalProvider';
+import BottomSheetProvider from '../src/providers/BottomSheetProvider/BottomSheetProvider';
 
 initialize({
   serviceWorker: {
@@ -41,7 +41,9 @@ const preview: Preview = {
               <Global styles={GlobalStyle} />
               <ToastProvider>
                 <ModalProvider>
-                  <Story />
+                  <BottomSheetProvider>
+                    <Story />
+                  </BottomSheetProvider>
                 </ModalProvider>
               </ToastProvider>
             </MemoryRouter>
