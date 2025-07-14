@@ -415,6 +415,43 @@ class RoomFacadeTest extends BaseServiceTest {
     }
 
     @Nested
+    class 게임_중단 {
+
+        @Test
+        void 게임을_중단하면_방이_종료_상태가_된다() {
+            // given
+            Room room = roomFixture.createProgressRoom();
+            memberFixture.createMaster(room);
+
+            // when
+            roomFacade.stopGame(room.getId());
+
+            // then
+            Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
+            assertAll(
+                    () -> assertThat(foundRoom.isGameFinish()).isTrue(),
+                    () -> assertThat(foundRoom.getCurrentRound()).isEqualTo(foundRoom.getTotalRound())
+            );
+        }
+
+        @Test
+        void 게임을_중단하면_진행하지_않은_방_컨텐츠가_삭제된다() {
+            // given
+            Room room = roomFixture.createProgressRoom();
+            int beforeCurrentRound = room.getCurrentRound();
+            memberFixture.createMaster(room);
+            roomContentFixture.initRoomContents(room);
+
+            // when
+            roomFacade.stopGame(room.getId());
+
+            // then
+            Room foundRoom = roomRepository.findById(room.getId()).orElseThrow();
+            assertThat(roomContentRepository.findAllByRoom(foundRoom)).hasSize(beforeCurrentRound);
+        }
+    }
+
+    @Nested
     class 라운드_종료_여부 {
 
         @Test

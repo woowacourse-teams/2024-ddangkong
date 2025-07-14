@@ -118,6 +118,13 @@ public class RoomFacade {
         }
     }
 
+    @Transactional
+    public void stopGame(Long roomId) {
+        Room room = roomService.getRoom(roomId);
+        roomContentService.deleteNotUsedRoomContents(room);
+        room.stopGame();
+    }
+
     @Transactional(readOnly = true)
     public RoundFinishedResponse getRoundFinished(Long roomId, int round) {
         Room room = roomService.getRoom(roomId);
