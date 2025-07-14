@@ -99,6 +99,12 @@ public class RoomController {
         roomFacade.moveToNextRound(roomId);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/balances/rooms/{roomId}/stop")
+    public void stopGame(@PathVariable @Positive Long roomId) {
+        roomFacade.stopGame(roomId);
+    }
+
     @Polling
     @GetMapping("/balances/rooms/{roomId}/round-finished")
     public RoundFinishedResponse getRoundFinished(@Positive @PathVariable Long roomId,
