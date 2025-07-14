@@ -20,7 +20,6 @@ public enum ClientErrorCode {
     NOT_FOUND_ROOM("방이 존재하지 않습니다."),
     ROUND_LESS_THAN_START_ROUND("startRound보다 크거나 같아야 합니다. startRound : %d, round : %d"),
     ROUND_GREATER_THAN_CURRENT_ROUND("currentRound보다 작거나 같아야 합니다. currentRound : %d, round : %d"),
-    INVALID_ROUND_GAP("currentRound과 round의 차이는 %d이하여야 합니다. currentRound : %d, round : %d"),
 
     // RoomSetting
     // todo s로 변경

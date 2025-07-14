@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import ddangkong.domain.balance.content.Category;
-import ddangkong.exception.room.InvalidRoundGapException;
 import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.exception.room.NotProgressedRoomException;
 import ddangkong.exception.room.NotReadyRoomException;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class RoomTest {
 
@@ -104,6 +104,44 @@ class RoomTest {
     }
 
     @Nested
+    class 게임_중단 {
+
+        @Test
+        void 게임을_중단할_수_있다() {
+            // given
+            int totalRound = 5;
+            int currentRound = 3;
+            int timeLimit = 10_000;
+            RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, Category.IF);
+            Room room = new Room("uuid", currentRound, RoomStatus.PROGRESS, roomSetting);
+
+            // when
+            room.stopGame();
+
+            // then
+            assertAll(
+                    () -> assertThat(room.getCurrentRound()).isEqualTo(totalRound),
+                    () -> assertThat(room.getStatus()).isEqualTo(RoomStatus.FINISH)
+            );
+        }
+
+        @ParameterizedTest
+        @EnumSource(mode = Mode.EXCLUDE, names = "PROGRESS")
+        void 게임이_진행_중이_아닐_경우_예외를_던진다(RoomStatus status) {
+            // given
+            int totalRound = 5;
+            int currentRound = 3;
+            int timeLimit = 10_000;
+            RoomSetting roomSetting = new RoomSetting(totalRound, timeLimit, Category.IF);
+            Room room = new Room("uuid", currentRound, status, roomSetting);
+
+            // when & then
+            assertThatThrownBy(room::stopGame)
+                    .isExactlyInstanceOf(NotProgressedRoomException.class);
+        }
+    }
+
+    @Nested
     class 방_설정_변경 {
 
         @Test
@@ -128,13 +166,13 @@ class RoomTest {
         private static final RoomStatus STATUS = RoomStatus.PROGRESS;
         private static final Category CATEGORY = Category.IF;
 
-        @Test
-        void 라운드가_방의_현재_라운드보다_작으면_라운드는_종료된_것이다() {
+        @ParameterizedTest
+        @ValueSource(ints = {1, 2, 3})
+        void 라운드가_방의_현재_라운드보다_작으면_라운드는_종료된_것이다(int round) {
             // given
-            int currentRound = 2;
+            int currentRound = 4;
             RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
             Room room = new Room("uuid", currentRound, STATUS, roomSetting);
-            int round = 1;
 
             // when & then
             assertThat(room.isRoundFinished(round)).isTrue();
@@ -178,20 +216,15 @@ class RoomTest {
                     .isExactlyInstanceOf(RoundGreaterThanCurrentRoundException.class)
                     .hasMessageContaining("currentRound보다 작거나 같아야 합니다. currentRound : 1, round : 2");
         }
+    }
 
-        @Test
-        void 라운드가_방의_현재_라운드보다_2이상_작으면_예외가_발생한다() {
-            // given
-            int currentRound = 4;
-            RoomSetting roomSetting = new RoomSetting(TOTAL_ROUND, TIME_LIMIT, CATEGORY);
-            Room room = new Room("uuid", currentRound, STATUS, roomSetting);
-            int invalidRound = 2;
+    @Nested
+    class 전체_라운드_종료 {
 
-            // when & then
-            assertThatThrownBy(() -> room.isRoundFinished(invalidRound))
-                    .isExactlyInstanceOf(InvalidRoundGapException.class)
-                    .hasMessageContaining("currentRound과 round의 차이는 1이하여야 합니다. currentRound : 4, round : 2");
-        }
+        private static final int TOTAL_ROUND = 5;
+        private static final int TIME_LIMIT = 10_000;
+        private static final RoomStatus STATUS = RoomStatus.PROGRESS;
+        private static final Category CATEGORY = Category.IF;
 
         @Test
         void 현재_라운드와_전체_라운드가_같고_방_상태가_FINISH이면_방의_전체_라운드가_종료된_것이다() {
