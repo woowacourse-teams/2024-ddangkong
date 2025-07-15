@@ -2,7 +2,6 @@ package ddangkong.domain.room;
 
 import ddangkong.domain.BaseEntity;
 import ddangkong.domain.balance.content.Category;
-import ddangkong.exception.room.InvalidRoundGapException;
 import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.exception.room.NotProgressedRoomException;
 import ddangkong.exception.room.NotReadyRoomException;
@@ -27,7 +26,6 @@ import lombok.NoArgsConstructor;
 public class Room extends BaseEntity {
 
     private static final int START_ROUND = 1;
-    private static final int ALLOWED_ROUND_GAP = 1;
     private static final int MAX_MEMBER_COUNT = 12;
 
     @Id
@@ -77,6 +75,14 @@ public class Room extends BaseEntity {
         currentRound++;
     }
 
+    public void stopGame() {
+        if (!isGameProgress()) {
+            throw new NotProgressedRoomException();
+        }
+        this.currentRound = roomSetting.getTotalRound();
+        this.status = RoomStatus.FINISH;
+    }
+
     public boolean isAlreadyStart() {
         return status.isAlreadyStart();
     }
@@ -105,17 +111,14 @@ public class Room extends BaseEntity {
         if (round > currentRound) {
             throw new RoundGreaterThanCurrentRoundException(currentRound, round);
         }
-        if (currentRound - round > ALLOWED_ROUND_GAP) {
-            throw new InvalidRoundGapException(ALLOWED_ROUND_GAP, currentRound, round);
-        }
+    }
+
+    public boolean isAllRoundFinished() {
+        return isFinalRound() && status.isGameFinish();
     }
 
     private boolean isFinalRound() {
         return roomSetting.isFinalRound(currentRound);
-    }
-
-    public boolean isAllRoundFinished() {
-        return roomSetting.isFinalRound(currentRound) && status.isGameFinish();
     }
 
     public void reset() {

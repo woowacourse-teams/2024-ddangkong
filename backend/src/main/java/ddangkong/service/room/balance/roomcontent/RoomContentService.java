@@ -47,6 +47,12 @@ public class RoomContentService {
     }
 
     @Transactional
+    public void deleteNotUsedRoomContents(Room room) {
+        List<RoomContent> roomContents = roomContentRepository.findAllByRoomAndRoundGreaterThan(room, room.getCurrentRound());
+        roomContentRepository.deleteAllInBatch(roomContents);
+    }
+
+    @Transactional
     public void deleteRoomContents(Room room) {
         List<RoomContent> roomContents = roomContentRepository.findAllByRoom(room);
         roomContentRepository.deleteAllInBatch(roomContents);

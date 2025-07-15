@@ -67,6 +67,28 @@ class RoomContentServiceTest extends BaseServiceTest {
     }
 
     @Nested
+    class 진행하지_않은_방_컨텐츠_삭제 {
+
+        @Test
+        void 진행하지_않은_방_컨텐츠를_삭제한다() {
+            // given
+            Room room = roomFixture.createProgressRoom(1);
+            roomContentFixture.initRoomContents(room);
+            List<RoomContent> roomContents = roomContentRepository.findAllByRoom(room);
+
+            // when
+            roomContentService.deleteNotUsedRoomContents(room);
+
+            // then
+            List<RoomContent> afterDeleteRoomContents = roomContentRepository.findAllByRoom(room);
+            assertAll(
+                    () -> assertThat(roomContents).hasSize(room.getTotalRound()),
+                    () -> assertThat(afterDeleteRoomContents).hasSize(1)
+            );
+        }
+    }
+
+    @Nested
     class 방_컨텐츠_삭제 {
 
         @Test

@@ -202,6 +202,24 @@ include::{snippets}/room/nextRound/http-response.adoc[]
 
 '''
 
+=== 게임 중단
+
+==== curl
+
+include::{snippets}/room/stop/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/stop/http-request.adoc[]
+
+include::{snippets}/room/stop/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/stop/http-response.adoc[]
+
+'''
+
 === 라운드 종료 여부 (polling)
 
 ==== curl

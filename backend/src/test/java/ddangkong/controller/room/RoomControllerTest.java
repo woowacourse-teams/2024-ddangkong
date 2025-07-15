@@ -332,6 +332,24 @@ class RoomControllerTest extends BaseControllerTest {
     }
 
     @Nested
+    class 게임_중단 {
+
+        @Test
+        void 게임을_중단할_수_있다() {
+            // given
+            Room progressRoom = roomFixture.createProgressRoom();
+            memberFixture.createMaster(progressRoom);
+
+            // when & then
+            RestAssured.given().log().all()
+                    .pathParam("roomId", progressRoom.getId())
+                    .when().patch("/api/balances/rooms/{roomId}/stop")
+                    .then().log().all()
+                    .statusCode(204);
+        }
+    }
+
+    @Nested
     class 라운드_종료_여부 {
 
         @Test
