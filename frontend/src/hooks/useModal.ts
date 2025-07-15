@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 
-import ModalContext from '@/contexts/ModalContext';
+import { ModalContext } from '@/providers/ModalProvider/ModalProvider';
 
 const useModal = () => {
-  const dispatch = useContext(ModalContext);
+  const modal = useContext(ModalContext);
 
-  if (dispatch === null) {
-    throw new Error('ModalContext 존재하지 않습니다.');
+  if (modal === null) {
+    throw new Error('modal가 존재하지 않습니다.');
   }
-  return dispatch;
+  return modal;
 };
 export default useModal;
