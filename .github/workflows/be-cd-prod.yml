@@ -32,7 +32,7 @@ jobs:
     if: failure() && needs.deploy.result == 'failure'
     uses: ./.github/workflows/shutdown.yml
     with:
-      self_hosted_runner: prod
+      self_hosted_runner: gcp
       port: ${{ needs.deploy.outputs.green_port }}
 
   deploy-failure-notification:
@@ -48,7 +48,7 @@ jobs:
     needs: deploy
     uses: ./.github/workflows/nginx-port-forwarding.yml
     with:
-      self_hosted_runner: prod
+      self_hosted_runner: gcp
       app_path: ~/app
       old_port: ${{ needs.deploy.outputs.blue_port }}
       new_port: ${{ needs.deploy.outputs.green_port }}
@@ -59,7 +59,7 @@ jobs:
     if: failure() && (needs.configure-nginx.result == 'failure')
     uses: ./.github/workflows/nginx-port-forwarding.yml
     with:
-      self_hosted_runner: prod
+      self_hosted_runner: gcp
       app_path: ~/app
       old_port: ${{ needs.configure-nginx.outputs.new_port }}
       new_port: ${{ needs.configure-nginx.outputs.old_port }}
@@ -78,5 +78,5 @@ jobs:
     needs: configure-nginx
     uses: ./.github/workflows/shutdown.yml
     with:
-      self_hosted_runner: prod
+      self_hosted_runner: gcp
       port: ${{ needs.configure-nginx.outputs.old_port }}
