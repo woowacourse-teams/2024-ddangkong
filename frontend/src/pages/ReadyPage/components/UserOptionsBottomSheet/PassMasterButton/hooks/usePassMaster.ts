@@ -5,16 +5,9 @@ import { passMaster } from '@/apis/room';
 
 const usePassMaster = (memberId: number) => {
   const { roomId } = useParams();
-
-  const passMasterMutation = useMutation({
+  return useMutation({
     mutationFn: () => passMaster(Number(roomId), memberId),
   });
-
-  const handlePassMaster = () => {
-    passMasterMutation.mutate();
-  };
-
-  return { handlePassMaster, ...passMasterMutation };
 };
 
 export default usePassMaster;

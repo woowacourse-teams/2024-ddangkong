@@ -9,11 +9,11 @@ interface PassMasterButtonProps {
 }
 
 const PassMasterButton = ({ nickname, memberId }: PassMasterButtonProps) => {
-  const { handlePassMaster } = usePassMaster(memberId);
+  const { mutate: passMaster } = usePassMaster(memberId);
   const { closeBottomSheet } = useBottomSheet();
 
   const handleClick = () => {
-    handlePassMaster();
+    passMaster();
     closeBottomSheet();
   };
 
