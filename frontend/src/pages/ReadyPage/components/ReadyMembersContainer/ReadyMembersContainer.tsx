@@ -69,7 +69,11 @@ const ReadyMembersContainer = () => {
               <div css={userStatusBox}>
                 {member.isMaster && <img src={CrownIcon} alt="" css={userStatusIcon} />}
                 {!member.isMaster && isMaster && (
-                  <button css={userOptionsButton} onClick={() => handleClickUserOptions(member)}>
+                  <button
+                    css={userOptionsButton}
+                    onClick={() => handleClickUserOptions(member)}
+                    aria-label={`${member.nickname} 유저옵션`}
+                  >
                     <img src={VerticalMoreIcon} alt="" css={userStatusIcon} />
                   </button>
                 )}
