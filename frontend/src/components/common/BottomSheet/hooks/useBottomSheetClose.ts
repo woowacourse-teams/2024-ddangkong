@@ -20,10 +20,8 @@ export const useBottomSheetClose = ({ isOpen, onClose, ref }: UseBottomSheetClos
       }
     };
 
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
