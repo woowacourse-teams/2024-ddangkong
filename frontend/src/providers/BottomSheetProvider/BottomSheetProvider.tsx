@@ -44,12 +44,11 @@ const BottomSheetProvider = ({ children }: BottomSheetProviderProps) => {
   };
 
   const closeBottomSheet = () => {
-    setBottomSheetState((prev) => ({
-      ...prev,
+    setBottomSheetState({
       isOpen: false,
       Component: null,
       props: null,
-    }));
+    });
   };
 
   const bottomSheetContextValue = useMemo(
