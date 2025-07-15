@@ -19,14 +19,11 @@ const meta = {
     onClose: {
       description: '바텀 시트를 닫기 위한 핸들러 함수입니다.',
     },
-    member: {
-      control: 'object',
-      description: '사용자 정보 객체',
-      table: {
-        type: {
-          summary: 'Member',
-        },
-      },
+    memberId: {
+      description: '유저 아이디',
+    },
+    nickname: {
+      description: '유저 닉네임',
     },
   },
   args: {
@@ -48,11 +45,8 @@ export const 기본: Story = {
   },
   args: {
     isOpen: true,
-    member: {
-      memberId: 1,
-      nickname: '썬데이',
-      isMaster: false,
-    },
+    memberId: 1,
+    nickname: '썬데이',
     onClose: fn(),
   },
 };

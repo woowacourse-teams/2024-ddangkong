@@ -40,7 +40,10 @@ const ReadyMembersContainer = () => {
   };
 
   const handleClickUserOptions = (member: Member) => {
-    showBottomSheet(UserOptionsBottomSheet, { member });
+    showBottomSheet(UserOptionsBottomSheet, {
+      memberId: member.memberId,
+      nickname: member.nickname,
+    });
   };
 
   useEffect(() => {
