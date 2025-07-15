@@ -20,7 +20,7 @@ jobs:
     needs: [ build ]
     uses: ./.github/workflows/blue-green.yml
     with:
-      self_hosted_runner: prod, gcp
+      self_hosted_runner: gcp
       artifact_name: ${{ needs.build.outputs.artifact_name }}
       jar_name: ${{ needs.build.outputs.jar_name }}
       profile: prod
