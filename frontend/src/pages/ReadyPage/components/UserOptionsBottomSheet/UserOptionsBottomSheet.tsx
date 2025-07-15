@@ -2,7 +2,7 @@ import PassMasterButton from './PassMasterButton/PassMasterButton';
 import { userOptionsButtonWrapper } from './UserOptionsBottomSheet.styled';
 
 import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
-import { BottomSheetComponentProps } from '@/contexts/BottomSheetContext';
+import { BottomSheetComponentProps } from '@/providers/BottomSheetProvider/BottomSheetProvider';
 import { Member } from '@/types/room';
 
 interface UserOptionsBottomSheetProps extends BottomSheetComponentProps {

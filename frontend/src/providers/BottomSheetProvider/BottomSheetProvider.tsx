@@ -1,6 +1,19 @@
-import { useState, useMemo, ReactNode, ComponentType } from 'react';
+import { useState, useMemo, ReactNode, ComponentType, createContext } from 'react';
 
-import { BottomSheetContext, BottomSheetComponentProps } from '@/contexts/BottomSheetContext';
+export interface BottomSheetComponentProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+interface BottomSheetContextValue {
+  showBottomSheet: <T extends BottomSheetComponentProps>(
+    Component: ComponentType<T>,
+    props?: Omit<T, 'isOpen' | 'onClose'>,
+  ) => void;
+  closeBottomSheet: () => void;
+}
+
+export const BottomSheetContext = createContext<BottomSheetContextValue | null>(null);
 
 interface BottomSheetProviderProps {
   children: ReactNode;
@@ -39,7 +52,7 @@ const BottomSheetProvider = ({ children }: BottomSheetProviderProps) => {
     }));
   };
 
-  const context = useMemo(
+  const bottomSheetContextValue = useMemo(
     () => ({
       showBottomSheet,
       closeBottomSheet,
@@ -48,7 +61,7 @@ const BottomSheetProvider = ({ children }: BottomSheetProviderProps) => {
   );
 
   return (
-    <BottomSheetContext.Provider value={context}>
+    <BottomSheetContext.Provider value={bottomSheetContextValue}>
       {children}
       {bottomSheetState.isOpen && bottomSheetState.Component && (
         <bottomSheetState.Component

@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 
-import { BottomSheetContext } from '@/contexts/BottomSheetContext';
+import { BottomSheetContext } from '@/providers/BottomSheetProvider/BottomSheetProvider';
 
 export const useBottomSheet = () => {
-  const context = useContext(BottomSheetContext);
+  const bottomSheet = useContext(BottomSheetContext);
 
-  if (!context) {
+  if (!bottomSheet) {
     throw new Error('BottomSheetContext를 찾을 수 없습니다.');
   }
 
-  return context;
+  return bottomSheet;
 };
