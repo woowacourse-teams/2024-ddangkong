@@ -151,3 +151,16 @@ export const getUserInfo = async (): Promise<RoomAndMember> => {
   const data = await res.json();
   return data;
 };
+
+// 방장 넘기기
+export const passMaster = async (roomId: number, memberId: number) => {
+  const res = await fetcher.patch({
+    url: API_URL.passMaster(roomId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
+    body: { nextMasterId: memberId },
+  });
+  const data = await res.json();
+  return data;
+};

@@ -11,24 +11,39 @@ import {
   membersContainer,
   inviteButton,
   profileImage,
+  userStatusBox,
+  userStatusIcon,
+  userOptionsButton,
 } from './ReadyMembersContainer.styled';
+import UserOptionsBottomSheet from '../UserOptionsBottomSheet/UserOptionsBottomSheet';
 
 import { A11yOnly } from '@/components/common';
 import { QUERY_KEYS } from '@/constants/queryKeys';
+import { useBottomSheet } from '@/hooks/useBottomSheet';
+import { Member } from '@/types/room';
 
-import { CrownIcon, SillyDdangkongMedium } from '@/assets';
+import { CrownIcon, SillyDdangkongMedium, VerticalMoreIcon } from '@/assets';
 import { InviteModal } from '@/components';
-import { useGetRoomInfo, useModal } from '@/hooks';
+import { useGetRoomInfo, useIsMaster, useModal } from '@/hooks';
 
 const ReadyMembersContainer = () => {
   const { members, master } = useGetRoomInfo();
-  const { showModal } = useModal();
+  const isMaster = useIsMaster();
   const queryClient = useQueryClient();
   const returnFocusRef = useRef<HTMLButtonElement>(null);
+  const { showModal } = useModal();
+  const { showBottomSheet } = useBottomSheet();
   const memberCountMessage = `총 인원 ${members.length}명`;
 
   const handleClickInvite = () => {
     showModal(InviteModal, { returnFocusRef });
+  };
+
+  const handleClickUserOptions = (member: Member) => {
+    showBottomSheet(UserOptionsBottomSheet, {
+      memberId: member.memberId,
+      nickname: member.nickname,
+    });
   };
 
   useEffect(() => {
@@ -53,7 +68,18 @@ const ReadyMembersContainer = () => {
               </div>
               <div css={memberStatus}>
                 <span aria-hidden>{member.nickname}</span>
-                {member.isMaster && <img src={CrownIcon} alt="" />}
+              </div>
+              <div css={userStatusBox}>
+                {member.isMaster && <img src={CrownIcon} alt="" css={userStatusIcon} />}
+                {!member.isMaster && isMaster && (
+                  <button
+                    css={userOptionsButton}
+                    onClick={() => handleClickUserOptions(member)}
+                    aria-label={`${member.nickname} 유저옵션`}
+                  >
+                    <img src={VerticalMoreIcon} alt="" css={userStatusIcon} />
+                  </button>
+                )}
               </div>
             </li>
           ))}

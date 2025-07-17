@@ -85,3 +85,21 @@ export const memberStatus = css`
   justify-content: space-between;
   align-items: center;
 `;
+
+export const userStatusBox = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  padding-left: 2.5rem;
+`;
+
+export const userOptionsButton = css`
+  width: 100%;
+  padding: 1rem;
+`;
+
+export const userStatusIcon = css`
+  height: 1.5rem;
+`;

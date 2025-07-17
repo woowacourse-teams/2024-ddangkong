@@ -1,9 +1,13 @@
-import { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
+import { PropsWithChildren, useCallback, useEffect, useRef, useState, createContext } from 'react';
 import { createPortal } from 'react-dom';
 
 import { toastLayout } from './ToastProvider.styled';
 
-import ToastContext from '@/contexts/ToastContext';
+interface ToastContextValue {
+  showToast: (message: string) => void;
+}
+
+export const ToastContext = createContext<ToastContextValue | null>(null);
 
 const ToastProvider = ({ children }: PropsWithChildren) => {
   const [toastMessage, setToastMessage] = useState('');
