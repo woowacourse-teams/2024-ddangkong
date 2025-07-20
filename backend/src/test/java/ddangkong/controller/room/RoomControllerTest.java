@@ -47,7 +47,7 @@ class RoomControllerTest extends BaseControllerTest {
             // given
             RoomJoinRequest body = new RoomJoinRequest("방장", "https://example.image");
 
-            // when & then
+            // when
             RoomJoinResponse actual = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
                     .body(body)
@@ -56,7 +56,12 @@ class RoomControllerTest extends BaseControllerTest {
                     .statusCode(201)
                     .extract().as(RoomJoinResponse.class);
 
-            assertThat(actual.member().isMaster()).isTrue();
+            // then
+            assertAll(
+                    () -> assertThat(actual.member().nickname()).isEqualTo(body.nickname()),
+                    () -> assertThat(actual.member().imageUrl()).isEqualTo(body.imageUrl()),
+                    () -> assertThat(actual.member().isMaster()).isTrue()
+            );
         }
     }
 
@@ -247,7 +252,9 @@ class RoomControllerTest extends BaseControllerTest {
 
             assertAll(
                     () -> assertThat(actual.roomId()).isEqualTo(room.getId()),
-                    () -> assertThat(actual.member().nickname()).isEqualTo(request.nickname())
+                    () -> assertThat(actual.member().nickname()).isEqualTo(request.nickname()),
+                    () -> assertThat(actual.member().imageUrl()).isEqualTo(request.imageUrl()),
+                    () -> assertThat(actual.member().isMaster()).isFalse()
             );
         }
     }
@@ -458,7 +465,10 @@ class RoomControllerTest extends BaseControllerTest {
                     .extract().as(RoomJoinResponse.class);
 
             // then
-            assertThat(body.nickname()).isEqualTo(roomJoinResponse.member().nickname());
+            assertAll(
+                    () -> assertThat(body.nickname()).isEqualTo(roomJoinResponse.member().nickname()),
+                    () -> assertThat(body.imageUrl()).isEqualTo(roomJoinResponse.member().imageUrl())
+            );
         }
 
         @Test

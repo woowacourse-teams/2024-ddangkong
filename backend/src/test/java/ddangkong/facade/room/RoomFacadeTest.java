@@ -48,14 +48,16 @@ class RoomFacadeTest extends BaseServiceTest {
         void 방_생성_시_방장_멤버를_생성하고_방을_생성한다() {
             // given
             RoomJoinRequest request = new RoomJoinRequest("방장", "https://example.image");
-            MemberResponse expectedMemberResponse = new MemberResponse(1L, "방장", true);
+            MemberResponse expectedMemberResponse = new MemberResponse(1L, "방장", "https://example.image", true);
 
             // when
             RoomJoinResponse actual = roomFacade.createRoom(request);
 
             // then
-            assertThat(actual.roomId()).isEqualTo(1L);
-            assertThat(actual.member()).isEqualTo(expectedMemberResponse);
+            assertAll(
+                    () -> assertThat(actual.roomId()).isEqualTo(1L),
+                    () -> assertThat(actual.member()).isEqualTo(expectedMemberResponse)
+            );
         }
     }
 
@@ -69,7 +71,7 @@ class RoomFacadeTest extends BaseServiceTest {
             memberFixture.createMaster(room);
 
             RoomJoinRequest request = new RoomJoinRequest("참가자", "https://example.image");
-            MemberResponse expectedMemberResponse = new MemberResponse(2L, "참가자", false);
+            MemberResponse expectedMemberResponse = new MemberResponse(2L, "참가자", "https://example.image", false);
 
             // when
             RoomJoinResponse actual = roomFacade.joinRoom(request, room.getUuid());
@@ -130,7 +132,7 @@ class RoomFacadeTest extends BaseServiceTest {
             memberFixture.createMaster(room);
 
             RoomJoinRequest request = new RoomJoinRequest("참가자", "https://example.image");
-            MemberResponse expectedMemberResponse = new MemberResponse(2L, "참가자", false);
+            MemberResponse expectedMemberResponse = new MemberResponse(2L, "참가자", "https://example.image", false);
             roomFacade.joinRoom(request, room.getUuid());
 
             // when
@@ -637,7 +639,7 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 변경이_특정_시각_이후에_일어난_방은_지우지_않는다() {
             // given
-            LocalDateTime beforeModifiedAt = LocalDateTime.now();
+            LocalDateTime beforeModifiedAt = LocalDateTime.now().minusSeconds(1);
             roomFixture.createNotStartedRoom();
             roomFixture.createNotStartedRoom();
             long expectedCount = 2;

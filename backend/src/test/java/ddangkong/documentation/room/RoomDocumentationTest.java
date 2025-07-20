@@ -68,7 +68,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 방을_생성한다() throws Exception {
             // given
-            MemberResponse memberResponse = new MemberResponse(1L, "땅콩", true);
+            MemberResponse memberResponse = new MemberResponse(1L, "땅콩", "https://example.image", true);
             RoomJoinRequest request = new RoomJoinRequest("땅콩", "https://example.image");
             RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c", memberResponse);
             when(roomFacade.createRoom(request)).thenReturn(response);
@@ -90,6 +90,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("roomUuid").type(STRING).description("생성된 방의 UUID"),
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("member.imageUrl").type(STRING).description("멤버 이미지 URL"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
                             ),
                             responseCookies(
@@ -111,8 +112,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             Category category = Category.IF;
             RoomSettingResponse roomSetting = new RoomSettingResponse(5, 30, BalanceCategoryResponse.create(category));
             List<MemberResponse> members = List.of(
-                    new MemberResponse(1L, "땅콩", true),
-                    new MemberResponse(2L, "타콩", false)
+                    new MemberResponse(1L, "땅콩", "https://example.image", true),
+                    new MemberResponse(2L, "타콩", "https://example.image", false)
             );
             MasterResponse master = new MasterResponse(1L, "땅콩");
             RoomInfoResponse response = new RoomInfoResponse(false, roomSetting, members, master);
@@ -136,6 +137,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("members").type(ARRAY).description("방에 참여중 인원 목록"),
                                     fieldWithPath("members[].memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("members[].nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("members[].imageUrl").type(STRING).description("멤버 이미지 URL"),
                                     fieldWithPath("members[].isMaster").type(BOOLEAN).description("방장 여부"),
                                     fieldWithPath("master").type(OBJECT).description("방장 정보"),
                                     fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
@@ -186,7 +188,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             // given
             RoomJoinRequest request = new RoomJoinRequest("타콩", "https://example.image");
             RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
-                    new MemberResponse(2L, "타콩", false));
+                    new MemberResponse(2L, "타콩", "https://example.image", false));
             when(roomFacade.joinRoom(eq(request), anyString())).thenReturn(response);
             String content = objectMapper.writeValueAsString(request);
 
@@ -209,6 +211,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("roomUuid").type(STRING).description("참여한 방 UUID"),
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("member.imageUrl").type(STRING).description("멤버 이미지 URL"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
                             ),
                             responseCookies(
@@ -256,7 +259,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 사용자_정보를_조회한다() throws Exception {
             // given
             RoomMemberResponse response = new RoomMemberResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
-                    new MemberResponse(2L, "타콩", false));
+                    new MemberResponse(2L, "타콩", "https://example.image", false));
             when(roomFacade.getRoomMemberInfo(anyLong())).thenReturn(response);
 
             //when & then
@@ -275,6 +278,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("roomUuid").type(STRING).description("참여한 방 UUID"),
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("member.imageUrl").type(STRING).description("멤버 이미지 URL"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
                             )
                     ));
