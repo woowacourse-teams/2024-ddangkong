@@ -42,23 +42,16 @@ public class RoomFacade {
     private final RoomMigrator roomMigrator;
 
     @Transactional
-    public RoomJoinResponse createRoom(String nickname) {
+    public RoomJoinResponse createRoom(RoomJoinRequest request) {
         Room room = roomService.createRoom();
-        Member member = memberService.saveMasterMember(nickname, room);
-        return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
-    }
-
-    @Transactional
-    public RoomJoinResponse joinRoom(String nickname, String uuid) {
-        Room room = roomService.getRoomWithLock(uuid);
-        Member member = memberService.saveCommonMember(nickname, room);
+        Member member = memberService.saveMember(request.toMasterMember(room));
         return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }
 
     @Transactional
     public RoomJoinResponse joinRoom(RoomJoinRequest request, String uuid) {
         Room room = roomService.getRoomWithLock(uuid);
-        Member member = memberService.saveCommonMember(null, room); // TODO : 개선
+        Member member = memberService.saveMember(request.toCommonMember(room));
         return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }
 

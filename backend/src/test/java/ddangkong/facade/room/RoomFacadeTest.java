@@ -21,6 +21,7 @@ import ddangkong.exception.room.member.InvalidMemberIdException;
 import ddangkong.facade.BaseServiceTest;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
+import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomMemberResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
@@ -46,11 +47,11 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 방_생성_시_방장_멤버를_생성하고_방을_생성한다() {
             // given
-            String nickname = "방장";
-            MemberResponse expectedMemberResponse = new MemberResponse(1L, nickname, true);
+            RoomJoinRequest request = new RoomJoinRequest("방장", "https://example.image");
+            MemberResponse expectedMemberResponse = new MemberResponse(1L, "방장", true);
 
             // when
-            RoomJoinResponse actual = roomFacade.createRoom(nickname);
+            RoomJoinResponse actual = roomFacade.createRoom(request);
 
             // then
             assertThat(actual.roomId()).isEqualTo(1L);
@@ -67,11 +68,11 @@ class RoomFacadeTest extends BaseServiceTest {
             Room room = roomFixture.createNotStartedRoom();
             memberFixture.createMaster(room);
 
-            String nickname = "참가자";
-            MemberResponse expectedMemberResponse = new MemberResponse(2L, nickname, false);
+            RoomJoinRequest request = new RoomJoinRequest("참가자", "https://example.image");
+            MemberResponse expectedMemberResponse = new MemberResponse(2L, "참가자", false);
 
             // when
-            RoomJoinResponse actual = roomFacade.joinRoom(nickname, room.getUuid());
+            RoomJoinResponse actual = roomFacade.joinRoom(request, room.getUuid());
 
             // then
             assertAll(
@@ -84,11 +85,11 @@ class RoomFacadeTest extends BaseServiceTest {
         @Test
         void 존재하지_않는_방에_참여시_예외를_던진다() {
             // given
-            String nickname = "참가자";
             String nonExistUuid = "nonExistUuid";
+            RoomJoinRequest request = new RoomJoinRequest("참가자", "https://example.image");
 
             // when & then
-            assertThatThrownBy(() -> roomFacade.joinRoom(nickname, nonExistUuid))
+            assertThatThrownBy(() -> roomFacade.joinRoom(request, nonExistUuid))
                     .isExactlyInstanceOf(NotFoundRoomException.class);
         }
 
@@ -98,10 +99,11 @@ class RoomFacadeTest extends BaseServiceTest {
             Room room = roomFixture.createNotStartedRoom();
             memberFixture.createMaster(room);
             memberFixture.createCommons(room, 10);
+            RoomJoinRequest request = new RoomJoinRequest("member12", "https://example.image");
 
             // when
-            Thread t1 = new Thread(() -> roomFacade.joinRoom("member12-1", room.getUuid()));
-            Thread t2 = new Thread(() -> roomFacade.joinRoom("member12-2", room.getUuid()));
+            Thread t1 = new Thread(() -> roomFacade.joinRoom(request, room.getUuid()));
+            Thread t2 = new Thread(() -> roomFacade.joinRoom(request, room.getUuid()));
             t1.start();
             t2.start();
 
@@ -127,9 +129,9 @@ class RoomFacadeTest extends BaseServiceTest {
             Room room = roomFixture.createNotStartedRoom();
             memberFixture.createMaster(room);
 
-            String nickname = "참가자";
-            MemberResponse expectedMemberResponse = new MemberResponse(2L, nickname, false);
-            roomFacade.joinRoom(nickname, room.getUuid());
+            RoomJoinRequest request = new RoomJoinRequest("참가자", "https://example.image");
+            MemberResponse expectedMemberResponse = new MemberResponse(2L, "참가자", false);
+            roomFacade.joinRoom(request, room.getUuid());
 
             // when
             RoomMemberResponse actual = roomFacade.getRoomMemberInfo(2L);

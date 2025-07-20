@@ -23,12 +23,19 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Member saveMasterMember(String nickname, Room room) {
-        if (existsMasterInRoom(room)) {
+    public Member saveMember(Member member) {
+        if (member.isMaster()) {
+            return saveMasterMember(member);
+        }
+        return saveCommonMember(member);
+    }
+
+    private Member saveMasterMember(Member member) {
+        if (existsMasterInRoom(member.getRoom())) {
             throw new AlreadyExistMasterException();
         }
-        validateMemberNotExists(room);
-        return memberRepository.save(Member.createMaster(nickname, "https://example.image", room));
+        validateMemberNotExists(member.getRoom());
+        return memberRepository.save(member);
     }
 
     private void validateMemberNotExists(Room room) {
@@ -38,14 +45,12 @@ public class MemberService {
         }
     }
 
-    @Transactional
-    public Member saveCommonMember(String nickname, Room room) {
-        if (!existsMasterInRoom(room)) {
+    private Member saveCommonMember(Member member) {
+        if (!existsMasterInRoom(member.getRoom())) {
             throw new NotExistMasterException();
         }
-        validateRoomAcceptMember(room);
-        // todo 중복 닉네임 체크
-        return memberRepository.save(Member.createCommon(nickname, "https://example.image", room)); // TODO 개선
+        validateRoomAcceptMember(member.getRoom());
+        return memberRepository.save(member);
     }
 
     private boolean existsMasterInRoom(Room room) {
@@ -98,11 +103,6 @@ public class MemberService {
     public void deleteMember(Room room) {
         RoomMembers members = findRoomMembers(room);
         memberRepository.deleteAllInBatch(members.getMembers());
-    }
-
-    @Transactional(readOnly = true)
-    public Member getMaster(Room room) {
-        return findRoomMembers(room).getMaster();
     }
 
     @Transactional(readOnly = true)

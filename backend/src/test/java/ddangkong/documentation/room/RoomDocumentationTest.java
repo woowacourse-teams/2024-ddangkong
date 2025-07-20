@@ -3,6 +3,7 @@ package ddangkong.documentation.room;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
@@ -68,10 +69,9 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 방을_생성한다() throws Exception {
             // given
             MemberResponse memberResponse = new MemberResponse(1L, "땅콩", true);
-            RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c", memberResponse);
-            when(roomFacade.createRoom(anyString())).thenReturn(response);
-
             RoomJoinRequest request = new RoomJoinRequest("땅콩", "https://example.image");
+            RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c", memberResponse);
+            when(roomFacade.createRoom(request)).thenReturn(response);
             String content = objectMapper.writeValueAsString(request);
 
             // when & then
@@ -184,11 +184,10 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 방에_참여한다() throws Exception {
             // given
+            RoomJoinRequest request = new RoomJoinRequest("타콩", "https://example.image");
             RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
                     new MemberResponse(2L, "타콩", false));
-            when(roomFacade.joinRoom(anyString(), anyString())).thenReturn(response);
-
-            RoomJoinRequest request = new RoomJoinRequest("타콩", "https://example.image");
+            when(roomFacade.joinRoom(eq(request), anyString())).thenReturn(response);
             String content = objectMapper.writeValueAsString(request);
 
             //when & then

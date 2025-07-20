@@ -18,7 +18,6 @@ import ddangkong.facade.room.dto.RoomStatusResponse;
 import ddangkong.facade.room.dto.RoundFinishedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import java.util.Map;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -229,45 +228,27 @@ class RoomControllerTest extends BaseControllerTest {
     class 방_참가 {
 
         @Test
-        void 방에_참가할_수_있다() {
+        void 방에_일반_멤버가_참가할_수_있다() {
             // given
             Room room = roomFixture.createNotStartedRoom();
             memberFixture.createMaster(room);
 
-            String nickname = "참가자";
-            Map<String, Object> body = Map.of("nickname", nickname);
-
-            // when & then
-            RestAssured.given().log().all()
-                    .contentType(ContentType.JSON)
-                    .pathParam("uuid", room.getUuid())
-                    .body(body)
-                    .when().post("/api/balances/rooms/{uuid}/members")
-                    .then().log().all()
-                    .statusCode(201)
-                    .extract().as(RoomJoinResponse.class);
-        }
-
-        @Test
-        void 방에_참가한_멤버는_방장이_아니다() {
-            // given
-            Room room = roomFixture.createNotStartedRoom();
-            memberFixture.createMaster(room);
-
-            String nickname = "참가자";
-            Map<String, Object> body = Map.of("nickname", nickname);
+            RoomJoinRequest request = new RoomJoinRequest("참가자", "https://example.image");
 
             // when & then
             RoomJoinResponse actual = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
                     .pathParam("uuid", room.getUuid())
-                    .body(body)
+                    .body(request)
                     .when().post("/api/balances/rooms/{uuid}/members")
                     .then().log().all()
                     .statusCode(201)
                     .extract().as(RoomJoinResponse.class);
 
-            assertThat(actual.member().isMaster()).isFalse();
+            assertAll(
+                    () -> assertThat(actual.roomId()).isEqualTo(room.getId()),
+                    () -> assertThat(actual.member().nickname()).isEqualTo(request.nickname())
+            );
         }
     }
 
