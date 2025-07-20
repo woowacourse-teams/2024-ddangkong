@@ -8,6 +8,7 @@ import ddangkong.exception.room.NotFinishedRoomException;
 import ddangkong.exception.room.NotReadyRoomException;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
+import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomMemberResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
@@ -51,6 +52,13 @@ public class RoomFacade {
     public RoomJoinResponse joinRoom(String nickname, String uuid) {
         Room room = roomService.getRoomWithLock(uuid);
         Member member = memberService.saveCommonMember(nickname, room);
+        return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
+    }
+
+    @Transactional
+    public RoomJoinResponse joinRoom(RoomJoinRequest request, String uuid) {
+        Room room = roomService.getRoomWithLock(uuid);
+        Member member = memberService.saveCommonMember(null, room); // TODO : 개선
         return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }
 

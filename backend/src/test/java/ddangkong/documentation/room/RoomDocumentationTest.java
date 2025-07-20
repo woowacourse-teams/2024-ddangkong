@@ -71,7 +71,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c", memberResponse);
             when(roomFacade.createRoom(anyString())).thenReturn(response);
 
-            RoomJoinRequest request = new RoomJoinRequest("땅콩");
+            RoomJoinRequest request = new RoomJoinRequest("땅콩", "https://example.image");
             String content = objectMapper.writeValueAsString(request);
 
             // when & then
@@ -82,7 +82,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                     .andExpect(status().isCreated())
                     .andDo(document("room/create",
                             requestFields(
-                                    fieldWithPath("nickname").description("닉네임")
+                                    fieldWithPath("nickname").type(STRING).description("닉네임"),
+                                    fieldWithPath("imageUrl").type(STRING).description("이미지 URL")
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
@@ -187,7 +188,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                     new MemberResponse(2L, "타콩", false));
             when(roomFacade.joinRoom(anyString(), anyString())).thenReturn(response);
 
-            RoomJoinRequest request = new RoomJoinRequest("타콩");
+            RoomJoinRequest request = new RoomJoinRequest("타콩", "https://example.image");
             String content = objectMapper.writeValueAsString(request);
 
             //when & then
@@ -201,7 +202,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     parameterWithName("uuid").description("참여하는 방 UUID")
                             ),
                             requestFields(
-                                    fieldWithPath("nickname").description("닉네임")
+                                    fieldWithPath("nickname").description("닉네임"),
+                                    fieldWithPath("imageUrl").type(STRING).description("이미지 URL")
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("참여한 방 ID"),
@@ -266,7 +268,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                     .andExpect(status().isOk())
                     .andDo(document("room/member",
                             requestCookies(
-                                    cookieWithName("test_cookie").description("사용자 인증에 필요한 쿠키(쿠키의 키 값은 UUID로 예측할 수 없는 값이 들어감)")
+                                    cookieWithName("test_cookie").description(
+                                            "사용자 인증에 필요한 쿠키(쿠키의 키 값은 UUID로 예측할 수 없는 값이 들어감)")
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("참여한 방 ID"),
@@ -350,6 +353,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
 
     @Nested
     class 게임_중단 {
+
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/stop";
 
         @Test
@@ -400,6 +404,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
 
     @Nested
     class 방_게임_참여_가능_여부 {
+
         private static final String ENDPOINT = "/api/balances/rooms/{uuid}/status";
 
         @Test

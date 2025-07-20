@@ -10,6 +10,7 @@ public class MemberFixture {
 
     private static final String COMMON_NICKNAME = "common";
     private static final String MASTER_NICKNAME = "master";
+    private static final String DEFAULT_IMAGE_URL = "https://example.image";
 
     private final MemberRepository memberRepository;
 
@@ -18,7 +19,7 @@ public class MemberFixture {
     }
 
     private Member createCommon(String nickname, Room room) {
-        return memberRepository.save(Member.createCommon(nickname, room));
+        return memberRepository.save(Member.createCommon(nickname, DEFAULT_IMAGE_URL, room));
     }
 
     public Member createCommon(int order, Room room) {
@@ -36,7 +37,7 @@ public class MemberFixture {
     }
 
     public Member createMaster(String nickname, Room room) {
-        return memberRepository.save(Member.createMaster(nickname, room));
+        return memberRepository.save(Member.createMaster(nickname, DEFAULT_IMAGE_URL, room));
     }
 
     public Member createMaster(Room room) {

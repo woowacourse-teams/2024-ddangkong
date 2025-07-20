@@ -31,7 +31,7 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 방을_생성할_수_있다() {
             // given
-            RoomJoinRequest body = new RoomJoinRequest("방장");
+            RoomJoinRequest body = new RoomJoinRequest("방장", "https://example.image");
 
             // when & then
             RestAssured.given().log().all()
@@ -46,7 +46,7 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 방을_생성한_사용자는_방장이다() {
             // given
-            RoomJoinRequest body = new RoomJoinRequest("방장");
+            RoomJoinRequest body = new RoomJoinRequest("방장", "https://example.image");
 
             // when & then
             RoomJoinResponse actual = RestAssured.given().log().all()
@@ -426,7 +426,7 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 방_생성시_멤버_식별_쿠키를_생성한다() {
             // given
-            RoomJoinRequest body = new RoomJoinRequest("방장");
+            RoomJoinRequest body = new RoomJoinRequest("방장", "https://example.image");
 
             // when
             String cookie = RestAssured.given().log().all()
@@ -443,7 +443,7 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 방_참여시_멤버_식별_쿠키를_생성한다() {
             // given
-            RoomJoinRequest body = new RoomJoinRequest("참가자");
+            RoomJoinRequest body = new RoomJoinRequest("참가자", "https://example.image");
 
             // when
             String cookie = RestAssured.given().log().all()
@@ -460,7 +460,7 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 멤버_식별_쿠키를_통해_멤버_정보를_조회_할_수_있다() {
             // given
-            RoomJoinRequest body = new RoomJoinRequest("참가자");
+            RoomJoinRequest body = new RoomJoinRequest("참가자", "https://example.image");
             String cookie = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
                     .body(body)
@@ -483,7 +483,7 @@ class RoomControllerTest extends BaseControllerTest {
         @Test
         void 방을_나가면_멤버_식별_쿠키를_삭제한다() {
             // given
-            RoomJoinRequest body = new RoomJoinRequest("참가자");
+            RoomJoinRequest body = new RoomJoinRequest("참가자", "https://example.image");
             String cookie = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
                     .body(body)

@@ -28,7 +28,7 @@ public class MemberService {
             throw new AlreadyExistMasterException();
         }
         validateMemberNotExists(room);
-        return memberRepository.save(Member.createMaster(nickname, room));
+        return memberRepository.save(Member.createMaster(nickname, "https://example.image", room));
     }
 
     private void validateMemberNotExists(Room room) {
@@ -45,7 +45,7 @@ public class MemberService {
         }
         validateRoomAcceptMember(room);
         // todo 중복 닉네임 체크
-        return memberRepository.save(Member.createCommon(nickname, room));
+        return memberRepository.save(Member.createCommon(nickname, "https://example.image", room)); // TODO 개선
     }
 
     private boolean existsMasterInRoom(Room room) {
