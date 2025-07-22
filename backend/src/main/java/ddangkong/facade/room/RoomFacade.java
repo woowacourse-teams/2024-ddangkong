@@ -44,14 +44,14 @@ public class RoomFacade {
     @Transactional
     public RoomJoinResponse createRoom(RoomJoinRequest request) {
         Room room = roomService.createRoom();
-        Member member = memberService.saveMember(request.toMasterMember(room));
+        Member member = memberService.saveMember(Member.createMaster(request.nickname(), request.imageUrl(), room));
         return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }
 
     @Transactional
     public RoomJoinResponse joinRoom(RoomJoinRequest request, String uuid) {
         Room room = roomService.getRoomWithLock(uuid);
-        Member member = memberService.saveMember(request.toCommonMember(room));
+        Member member = memberService.saveMember(Member.createCommon(request.nickname(), request.imageUrl(), room));
         return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }
 
