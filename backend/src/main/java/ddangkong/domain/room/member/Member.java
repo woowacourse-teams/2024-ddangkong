@@ -33,7 +33,7 @@ public class Member {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 511)
     private String imageUrl;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
