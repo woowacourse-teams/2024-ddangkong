@@ -1,13 +1,13 @@
 #!/bin/bash
 
-PIDS=$(lsof -t -i:8080)
+PIDS=$(sudo lsof -t -i:8080)
 
 # 프로세스 종료
 if [ -z "$PIDS" ]; then
   echo "No process is using port 8080."
 else
   echo "Killing process with PIDS: $PIDS"
-  kill -15 $PIDS
+  sudo kill -15 $PIDS
 
   # 직전 명령(프로세스 종료 명령)이 정상 동작했는지 확인
   if [ $? -eq 0 ]; then

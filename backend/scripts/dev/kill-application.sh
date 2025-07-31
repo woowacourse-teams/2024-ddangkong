@@ -1,4 +1,4 @@
-PIDS=$(lsof -t -i:8080)
+PIDS=$(sudo lsof -t -i:8080)
 
 # 프로세스 종료
 if [ -z "$PIDS" ]; then
