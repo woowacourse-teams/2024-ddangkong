@@ -210,10 +210,12 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
                     () -> assertThat(actual.existMatching()).isTrue(),
                     () -> assertThat(actual.matchedMembers()).hasSize(2),
                     () -> assertThat(actual.matchedMembers().get(0).memberId()).isEqualTo(common1.getId()),
+                    () -> assertThat(actual.matchedMembers().get(0).imageUrl()).isNotNull(),
                     () -> assertThat(actual.matchedMembers().get(0).rank()).isEqualTo(1),
                     () -> assertThat(actual.matchedMembers().get(0).matchingPercent()).isEqualTo(100),
                     () -> assertThat(actual.matchedMembers().get(1).memberId()).isEqualTo(common2.getId()),
-                    () -> assertThat(actual.matchedMembers().get(1).matchingPercent()).isEqualTo(0),
+                    () -> assertThat(actual.matchedMembers().get(1).matchingPercent()).isZero(),
+                    () -> assertThat(actual.matchedMembers().get(1).imageUrl()).isNotNull(),
                     () -> assertThat(actual.matchedMembers().get(1).rank()).isEqualTo(2)
             );
         }

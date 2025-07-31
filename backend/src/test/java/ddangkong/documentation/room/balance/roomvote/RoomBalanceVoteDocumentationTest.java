@@ -31,7 +31,6 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomMemberVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomMembersVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -196,11 +195,11 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
         void 종료된_방에서_특정_멤버에_대한_다른_멤버들의_투표_매칭도를_조회한다() throws Exception {
             // given
             boolean existMatching = true;
-            List<RoomMemberVoteMatchingResponse> roomMemberVoteMatchingResponse = new ArrayList<>();
-            roomMemberVoteMatchingResponse.add(new RoomMemberVoteMatchingResponse(1, 2, "프콩", 100));
-            roomMemberVoteMatchingResponse.add(new RoomMemberVoteMatchingResponse(1, 3, "타콩", 100));
-            roomMemberVoteMatchingResponse.add(new RoomMemberVoteMatchingResponse(3, 4, "타콩", 30));
-
+            List<RoomMemberVoteMatchingResponse> roomMemberVoteMatchingResponse = List.of(
+                    new RoomMemberVoteMatchingResponse(1, 2, "프콩", "https://image.kr", 100),
+                    new RoomMemberVoteMatchingResponse(1, 3, "타콩", "https://image.kr", 100),
+                    new RoomMemberVoteMatchingResponse(3, 4, "타콩", "https://image.kr", 30)
+            );
             RoomMembersVoteMatchingResponse response = new RoomMembersVoteMatchingResponse(
                     roomMemberVoteMatchingResponse,
                     existMatching);
@@ -219,6 +218,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             fieldWithPath("matchedMembers[].rank").type(NUMBER).description("매칭 순위"),
                                             fieldWithPath("matchedMembers[].memberId").type(NUMBER).description("멤버 ID"),
                                             fieldWithPath("matchedMembers[].nickname").type(STRING).description("닉네임"),
+                                            fieldWithPath("matchedMembers[].imageUrl").type(STRING).description("이미지 URL"),
                                             fieldWithPath("matchedMembers[].matchingPercent").type(NUMBER)
                                                     .description("요청한 멤버와의 매칭도(%)"),
                                             fieldWithPath("existMatching").type(BOOLEAN).description("매칭 맴버 여부")
