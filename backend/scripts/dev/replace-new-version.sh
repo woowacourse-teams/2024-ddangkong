@@ -6,15 +6,14 @@ PIDS=$(sudo lsof -t -i:8080)
 if [ -z "$PIDS" ]; then
   echo "No process is using port 8080."
 else
-  echo "Killing process with PIDS: $PIDS"
-  sudo kill -15 $PIDS
-
-  # 직전 명령(프로세스 종료 명령)이 정상 동작했는지 확인
-  if [ $? -eq 0 ]; then
-    echo "Process $PIDS terminated successfully."
-  else
-    echo "Failed to terminate process $PIDS."
-  fi
+  for PID in $PIDS; do
+    echo "Killing process with PID: $PID"
+    if sudo kill -15 "$PID"; then
+      echo "Process $PID terminated successfully."
+    else
+      echo "Failed to terminate process $PID."
+    fi
+  done
 fi
 
 JAR_FILE=$(ls /home/ddangkong/app/*.jar | head -n 1)
