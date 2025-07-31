@@ -14,7 +14,10 @@ interface CategoryResponse {
 }
 
 // 방 만들기
-export const createRoom = async (nickname: string): Promise<CreateOrEnterRoomResponse> => {
+export const createRoom = async (
+  nickname: string,
+  imageUrl: string,
+): Promise<CreateOrEnterRoomResponse> => {
   const res = await fetcher.post({
     url: API_URL.room,
     headers: {
@@ -22,6 +25,7 @@ export const createRoom = async (nickname: string): Promise<CreateOrEnterRoomRes
     },
     body: {
       nickname,
+      imageUrl,
     },
   });
 
@@ -45,6 +49,7 @@ export const resetRoom = async (roomId: number) => {
 export const enterRoom = async (
   roomUuid: string,
   nickname: string,
+  imageUrl: string,
 ): Promise<CreateOrEnterRoomResponse> => {
   const res = await fetcher.post({
     url: API_URL.enterRoom(roomUuid),
@@ -53,6 +58,7 @@ export const enterRoom = async (
     },
     body: {
       nickname,
+      imageUrl,
     },
   });
 

@@ -15,7 +15,9 @@ export const profileWrapper = css`
 `;
 
 export const profileImg = css`
-  width: 60%;
+  max-width: 70%;
+  max-height: 70%;
+  object-fit: contain;
 `;
 
 export const nicknameContainer = css`
