@@ -4,6 +4,7 @@ import { Theme } from '@/styles/Theme';
 
 export const profileWrapper = css`
   display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
   width: 8rem;
@@ -73,4 +74,18 @@ export const noVoteText = css`
 export const angryImage = css`
   width: 16rem;
   height: 14rem;
+`;
+
+export const pencilIcon = css`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 3rem;
+  height: 2.4rem;
+  padding: 0.4rem;
+  border-radius: 50%;
+
+  background-color: white;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  cursor: pointer;
 `;

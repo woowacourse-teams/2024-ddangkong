@@ -3,14 +3,14 @@ import { useParams } from 'react-router-dom';
 
 import NicknameInput from './components/NicknameInput/NicknameInput';
 import { useAccessRoom, useIsJoinableRoomQuery } from './hooks';
-import { profileWrapper, profileImg, nicknameContainer } from './NicknamePage.styled';
+import { profileWrapper, profileImg, nicknameContainer, pencilIcon } from './NicknamePage.styled';
 
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
 import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
 import useGAPageTimeSpentGA from '@/lib/googleAnalytics/hooks/usePageTimeSpentGA';
 
-import { SillyDdangkong } from '@/assets';
+import { SillyDdangkong, PencilIcon } from '@/assets';
 
 const NicknamePage = () => {
   const { roomUuid } = useParams();
@@ -33,6 +33,7 @@ const NicknamePage = () => {
     <Content>
       <div css={profileWrapper}>
         <img src={SillyDdangkong} alt="사용자 프로필" css={profileImg} />
+        <img src={PencilIcon} alt="" css={pencilIcon} />
       </div>
       <div css={nicknameContainer}>
         <NicknameInput
