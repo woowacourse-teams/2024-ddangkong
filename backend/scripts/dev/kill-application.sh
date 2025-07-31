@@ -4,6 +4,6 @@ PID=$(lsof -t -i:8080)
 if [ -z "$PID" ]; then
   echo "No process is using port 8080."
 else
+  sudo kill -15 "$PID"
   echo "Killing process with PID: $PID"
-  kill -15 "$PID"
 fi
