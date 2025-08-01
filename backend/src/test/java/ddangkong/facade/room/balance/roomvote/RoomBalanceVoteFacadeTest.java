@@ -24,6 +24,7 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomMembersVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
+import ddangkong.facade.room.member.dto.MemberResponse;
 import ddangkong.support.annotation.FixedClock;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -148,10 +149,11 @@ class RoomBalanceVoteFacadeTest extends BaseServiceTest {
             RoomBalanceVoteResultResponse expected = new RoomBalanceVoteResultResponse(
                     new ContentRoomBalanceVoteResponse(
                             new OptionRoomBalanceVoteResponse(option1.getId(), option1.getName(),
-                                    List.of(member1.getNickname(), member2.getNickname(), member3.getNickname()), 3,
-                                    75), new OptionRoomBalanceVoteResponse(option2.getId(), option2.getName(),
-                            List.of(member4.getNickname()), 1, 25),
-                            new GiveUpVoteMemberResponse(List.of(giveUpMember.getNickname()), 1)),
+                                    List.of(new MemberResponse(member1), new MemberResponse(member2),
+                                            new MemberResponse(member3)), 3, 75),
+                            new OptionRoomBalanceVoteResponse(option2.getId(), option2.getName(),
+                                    List.of(new MemberResponse(member4)), 1, 25),
+                            new GiveUpVoteMemberResponse(List.of(new MemberResponse(giveUpMember)), 1)),
                     new ContentTotalBalanceVoteResponse(
                             new OptionTotalBalanceVoteResponse(option1.getId(), option1.getName(), 0),
                             new OptionTotalBalanceVoteResponse(option2.getId(), option2.getName(), 0)));

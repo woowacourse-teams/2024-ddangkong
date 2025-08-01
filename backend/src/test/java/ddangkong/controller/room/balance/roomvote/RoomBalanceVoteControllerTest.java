@@ -15,6 +15,7 @@ import ddangkong.domain.room.balance.roomvote.RoomBalanceVote;
 import ddangkong.domain.room.member.Member;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteRequest;
 import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResponse;
+import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomMembersVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
 import ddangkong.support.annotation.FixedClock;
@@ -37,6 +38,50 @@ class RoomBalanceVoteControllerTest extends BaseControllerTest {
         balanceContent = balanceContentFixture.create();
         optionA = balanceOptionFixture.create(balanceContent);
         optionB = balanceOptionFixture.create(balanceContent);
+    }
+
+    @Nested
+    class 투표_결과_조회 {
+
+        @Test
+        void 투표_결과를_조회한다() {
+            // given
+            Room room = roomFixture.createProgressRoom(1);
+            memberFixture.createMaster(room);
+            Member common = memberFixture.createCommon(room);
+
+            LocalDateTime voteDeadline = LocalDateTime.parse("2024-07-18T20:00:08");
+            RoomContent content = roomContentFixture.create(room, balanceContent, 1, voteDeadline);
+
+            roomBalanceVoteFixture.create(common, optionA);
+
+            // when
+            RoomBalanceVoteResultResponse actual = RestAssured.given().log().all()
+                    .pathParam("roomId", room.getId())
+                    .pathParam("contentId", content.getId())
+                    .when().get("/api/balances/rooms/{roomId}/contents/{contentId}/vote-result")
+                    .then().log().all()
+                    .statusCode(200)
+                    .extract().as(RoomBalanceVoteResultResponse.class);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.group().firstOption().optionId()).isEqualTo(optionA.getId()),
+                    () -> assertThat(actual.group().firstOption().memberCount()).isEqualTo(1),
+                    () -> assertThat(actual.group().firstOption().members()).hasSize(1),
+                    () -> assertThat(actual.group().firstOption().percent()).isEqualTo(100),
+                    () -> assertThat(actual.group().secondOption().optionId()).isEqualTo(optionB.getId()),
+                    () -> assertThat(actual.group().secondOption().memberCount()).isZero(),
+                    () -> assertThat(actual.group().secondOption().members()).isEmpty(),
+                    () -> assertThat(actual.group().secondOption().percent()).isZero(),
+                    () -> assertThat(actual.group().giveUp().memberCount()).isEqualTo(1),
+                    () -> assertThat(actual.group().giveUp().members()).hasSize(1),
+                    () -> assertThat(actual.total().firstOption().optionId()).isEqualTo(optionA.getId()),
+                    () -> assertThat(actual.total().firstOption().name()).isEqualTo(optionA.getName()),
+                    () -> assertThat(actual.total().secondOption().optionId()).isEqualTo(optionB.getId()),
+                    () -> assertThat(actual.total().secondOption().name()).isEqualTo(optionB.getName())
+            );
+        }
     }
 
     @Nested
