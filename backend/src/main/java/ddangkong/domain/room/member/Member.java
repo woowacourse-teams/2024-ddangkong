@@ -1,6 +1,7 @@
 package ddangkong.domain.room.member;
 
 import ddangkong.domain.room.Room;
+import ddangkong.exception.room.InvalidImageUrlException;
 import ddangkong.exception.room.member.AlreadyCommonException;
 import ddangkong.exception.room.member.AlreadyMasterException;
 import ddangkong.exception.room.member.InvalidNicknameException;
@@ -32,6 +33,9 @@ public class Member {
     @Column(nullable = false)
     private String nickname;
 
+    @Column(nullable = false, length = 511)
+    private String imageUrl;
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
@@ -39,9 +43,12 @@ public class Member {
     @Column(nullable = false)
     private boolean isMaster;
 
-    private Member(String nickname, Room room, boolean isMaster) {
+    private Member(String nickname, String imageUrl, Room room, boolean isMaster) {
         validateNickname(nickname);
+        validateImageUrl(imageUrl);
+
         this.nickname = nickname;
+        this.imageUrl = imageUrl;
         this.room = room;
         this.isMaster = isMaster;
     }
@@ -52,12 +59,18 @@ public class Member {
         }
     }
 
-    public static Member createMaster(String nickname, Room room) {
-        return new Member(nickname, room, true);
+    private void validateImageUrl(String imageUrl) {
+        if (Strings.isBlank(imageUrl) || !imageUrl.startsWith("https://")) {
+            throw new InvalidImageUrlException();
+        }
     }
 
-    public static Member createCommon(String nickname, Room room) {
-        return new Member(nickname, room, false);
+    public static Member createMaster(String nickname, String imageUrl, Room room) {
+        return new Member(nickname, imageUrl, room, true);
+    }
+
+    public static Member createCommon(String nickname, String imageUrl, Room room) {
+        return new Member(nickname, imageUrl, room, false);
     }
 
     public void promoteToMaster() {

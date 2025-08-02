@@ -31,7 +31,7 @@ import ddangkong.facade.room.balance.roomvote.dto.RoomBalanceVoteResultResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomMemberVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.RoomMembersVoteMatchingResponse;
 import ddangkong.facade.room.balance.roomvote.dto.VoteFinishedResponse;
-import java.util.ArrayList;
+import ddangkong.facade.room.member.dto.MemberResponse;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -57,12 +57,15 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
             Long contentId = 1L;
 
             OptionRoomBalanceVoteResponse firstGroupResponse = new OptionRoomBalanceVoteResponse(1L, "민초",
-                    List.of("mohamedeu al katan", "deundeun", "rupi"), 3, 75);
+                    List.of(new MemberResponse(2L, "mohamedeu al katan", "https://image.kr", true),
+                            new MemberResponse(3L, "deundeun", "https://image.kr", false),
+                            new MemberResponse(4L, "rupi", "https://image.kr", false)), 3, 75);
             OptionRoomBalanceVoteResponse secondGroupResponse = new OptionRoomBalanceVoteResponse(2L, "반민초",
-                    List.of("rapper lee"), 1, 25);
+                    List.of(new MemberResponse(5L, "rapper lee", "https://image.kr", false)), 1, 25);
             OptionTotalBalanceVoteResponse firstTotalResponse = new OptionTotalBalanceVoteResponse(1L, "민초", 50);
             OptionTotalBalanceVoteResponse secondTotalResponse = new OptionTotalBalanceVoteResponse(2L, "반민초", 50);
-            GiveUpVoteMemberResponse giveUpVoteMemberResponse = new GiveUpVoteMemberResponse(List.of("jason"), 1);
+            GiveUpVoteMemberResponse giveUpVoteMemberResponse = new GiveUpVoteMemberResponse(
+                    List.of(new MemberResponse(6L, "jason", "https://image.kr", false)), 1);
 
             RoomBalanceVoteResultResponse response = new RoomBalanceVoteResultResponse(
                     new ContentRoomBalanceVoteResponse(firstGroupResponse, secondGroupResponse,
@@ -84,16 +87,30 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             fieldWithPath("group.firstOption").type(OBJECT).description("그룹 내 첫 번째 선택지 결과"),
                                             fieldWithPath("group.firstOption.optionId").type(NUMBER).description("선택지 ID"),
                                             fieldWithPath("group.firstOption.name").type(STRING).description("선택지 이름"),
-                                            fieldWithPath("group.firstOption.members").type(ARRAY)
-                                                    .description("선택지를 선택한 멤버들의 닉네임"),
+                                            fieldWithPath("group.firstOption.members").type(ARRAY).description("선택지를 선택한 멤버들"),
+                                            fieldWithPath("group.firstOption.members[].memberId").type(NUMBER)
+                                                    .description("멤버 ID"),
+                                            fieldWithPath("group.firstOption.members[].nickname").type(STRING)
+                                                    .description("멤버 닉네임"),
+                                            fieldWithPath("group.firstOption.members[].imageUrl").type(STRING)
+                                                    .description("멤버 이미지 URL"),
+                                            fieldWithPath("group.firstOption.members[].isMaster").type(BOOLEAN)
+                                                    .description("방장 여부"),
                                             fieldWithPath("group.firstOption.memberCount").type(NUMBER)
                                                     .description("선택지를 선택한 사람 수"),
                                             fieldWithPath("group.firstOption.percent").type(NUMBER).description("선택지를 선택한 퍼센트"),
                                             fieldWithPath("group.secondOption").type(OBJECT).description("그룹 내 두 번째 선택지 결과"),
                                             fieldWithPath("group.secondOption.optionId").type(NUMBER).description("선택지 ID"),
                                             fieldWithPath("group.secondOption.name").type(STRING).description("선택지 이름"),
-                                            fieldWithPath("group.secondOption.members").type(ARRAY)
-                                                    .description("선택지를 선택한 멤버들의 닉네임"),
+                                            fieldWithPath("group.secondOption.members").type(ARRAY).description("선택지를 선택한 멤버들"),
+                                            fieldWithPath("group.secondOption.members[].memberId").type(NUMBER)
+                                                    .description("멤버 ID"),
+                                            fieldWithPath("group.secondOption.members[].nickname").type(STRING)
+                                                    .description("멤버 닉네임"),
+                                            fieldWithPath("group.secondOption.members[].imageUrl").type(STRING)
+                                                    .description("멤버 이미지 URL"),
+                                            fieldWithPath("group.secondOption.members[].isMaster").type(BOOLEAN)
+                                                    .description("방장 여부"),
                                             fieldWithPath("group.secondOption.memberCount").type(NUMBER)
                                                     .description("선택지를 선택한 사람 수"),
                                             fieldWithPath("group.secondOption.percent").type(NUMBER)
@@ -101,8 +118,15 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             fieldWithPath("group.giveUp").type(OBJECT).description("기권한 멤버 정보"),
                                             fieldWithPath("group.giveUp.members").type(ARRAY)
                                                     .description("기권한 멤버들의 닉네임"),
-                                            fieldWithPath("group.giveUp.memberCount").type(NUMBER)
-                                                    .description("기권한 멤버 수"),
+                                            fieldWithPath("group.giveUp.members[].memberId").type(NUMBER)
+                                                    .description("멤버 ID"),
+                                            fieldWithPath("group.giveUp.members[].nickname").type(STRING)
+                                                    .description("멤버 닉네임"),
+                                            fieldWithPath("group.giveUp.members[].imageUrl").type(STRING)
+                                                    .description("멤버 이미지 URL"),
+                                            fieldWithPath("group.giveUp.members[].isMaster").type(BOOLEAN)
+                                                    .description("방장 여부"),
+                                            fieldWithPath("group.giveUp.memberCount").type(NUMBER).description("기권한 멤버 수"),
                                             fieldWithPath("total").type(OBJECT).description("전체 유저 결과"),
                                             fieldWithPath("total.firstOption").type(OBJECT).description("전체 유저 첫 번째 선택지 결과"),
                                             fieldWithPath("total.firstOption.optionId").type(NUMBER).description("선택지 ID"),
@@ -196,11 +220,11 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
         void 종료된_방에서_특정_멤버에_대한_다른_멤버들의_투표_매칭도를_조회한다() throws Exception {
             // given
             boolean existMatching = true;
-            List<RoomMemberVoteMatchingResponse> roomMemberVoteMatchingResponse = new ArrayList<>();
-            roomMemberVoteMatchingResponse.add(new RoomMemberVoteMatchingResponse(1, 2, "프콩", 100));
-            roomMemberVoteMatchingResponse.add(new RoomMemberVoteMatchingResponse(1, 3, "타콩", 100));
-            roomMemberVoteMatchingResponse.add(new RoomMemberVoteMatchingResponse(3, 4, "타콩", 30));
-
+            List<RoomMemberVoteMatchingResponse> roomMemberVoteMatchingResponse = List.of(
+                    new RoomMemberVoteMatchingResponse(1, 2, "프콩", "https://image.kr", 100),
+                    new RoomMemberVoteMatchingResponse(1, 3, "타콩", "https://image.kr", 100),
+                    new RoomMemberVoteMatchingResponse(3, 4, "타콩", "https://image.kr", 30)
+            );
             RoomMembersVoteMatchingResponse response = new RoomMembersVoteMatchingResponse(
                     roomMemberVoteMatchingResponse,
                     existMatching);
@@ -219,6 +243,7 @@ public class RoomBalanceVoteDocumentationTest extends BaseDocumentationTest {
                                             fieldWithPath("matchedMembers[].rank").type(NUMBER).description("매칭 순위"),
                                             fieldWithPath("matchedMembers[].memberId").type(NUMBER).description("멤버 ID"),
                                             fieldWithPath("matchedMembers[].nickname").type(STRING).description("닉네임"),
+                                            fieldWithPath("matchedMembers[].imageUrl").type(STRING).description("이미지 URL"),
                                             fieldWithPath("matchedMembers[].matchingPercent").type(NUMBER)
                                                     .description("요청한 멤버와의 매칭도(%)"),
                                             fieldWithPath("existMatching").type(BOOLEAN).description("매칭 맴버 여부")

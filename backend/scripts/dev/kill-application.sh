@@ -1,9 +1,14 @@
-PID=$(lsof -t -i:8080)
+PIDS=$(sudo lsof -t -i:8080)
 
-# 프로세스 종료
-if [ -z "$PID" ]; then
+if [ -z "$PIDS" ]; then
   echo "No process is using port 8080."
 else
-  echo "Killing process with PID: $PID"
-  kill -15 "$PID"
+  for PID in $PIDS; do
+    echo "Attempting to terminate PID: $PID"
+    if sudo kill -15 "$PID"; then
+      echo "Process $PID terminated successfully."
+    else
+      echo "Failed to terminate process $PID."
+    fi
+  done
 fi

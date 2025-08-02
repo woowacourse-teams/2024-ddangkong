@@ -43,7 +43,7 @@ public class RoomController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/balances/rooms")
     public RoomJoinResponse createRoom(@Valid @RequestBody RoomJoinRequest request) {
-        return roomFacade.createRoom(request.nickname());
+        return roomFacade.createRoom(request);
     }
 
     @GetMapping("/balances/rooms/member")
@@ -69,7 +69,7 @@ public class RoomController {
     @PostMapping("/balances/rooms/{uuid}/members")
     public RoomJoinResponse joinRoom(@PathVariable String uuid,
                                      @Valid @RequestBody RoomJoinRequest request) {
-        return roomFacade.joinRoom(request.nickname(), uuid);
+        return roomFacade.joinRoom(request, uuid);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
