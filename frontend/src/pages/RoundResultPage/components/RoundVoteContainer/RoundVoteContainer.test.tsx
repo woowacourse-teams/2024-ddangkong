@@ -19,19 +19,19 @@ describe('RoundVoteContainer 컴포넌트 테스트', () => {
       // 첫 번째 선택지의 투표 멤버 확인
       const firstOptionMembers = ROUND_VOTE_RESULT.group.firstOption.members;
       firstOptionMembers.forEach((member) => {
-        expect(screen.getByText(member)).toBeInTheDocument();
+        expect(screen.getByText(member.nickname)).toBeInTheDocument();
       });
 
       // 두 번째 선택지의 투표 멤버 확인
       const secondOptionMembers = ROUND_VOTE_RESULT.group.secondOption.members;
       secondOptionMembers.forEach((member) => {
-        expect(screen.getByText(member)).toBeInTheDocument();
+        expect(screen.getByText(member.nickname)).toBeInTheDocument();
       });
 
       // 투표를 하지 않은 멤버 확인
       const giveUpMembers = ROUND_VOTE_RESULT.group.giveUp.members;
       giveUpMembers.forEach((member) => {
-        expect(screen.getByText(member)).toBeInTheDocument();
+        expect(screen.getByText(member.nickname)).toBeInTheDocument();
       });
     });
   });

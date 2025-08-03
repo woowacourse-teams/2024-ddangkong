@@ -3,7 +3,26 @@
     "firstOption": {
       "optionId": 1,
       "name": "100억 빚 송강",
-      "members": ["d"],
+      "members": [
+        {
+          "memberId": 2,
+          "nickname": "mohamedeu al katan",
+          "imageUrl": "https://image.kr",
+          "isMaster": true
+        },
+        {
+          "memberId": 3,
+          "nickname": "deundeun",
+          "imageUrl": "https://image.kr",
+          "isMaster": false
+        },
+        {
+          "memberId": 4,
+          "nickname": "rupi",
+          "imageUrl": "https://image.kr",
+          "isMaster": false
+        }
+      ],
       "memberCount": 1,
       "percent": 73
     },
@@ -11,18 +30,49 @@
       "optionId": 2,
       "name": "100억 부자 송강호",
       "members": [
-        "일이삼사오육칠팔구십일이",
-        "가나다라마바사아자차카타",
-        "abc",
-        "땅콩땅콩땅콩땅콩땅콩땅콩",
-        "123456789012",
-        "안녕하세요안녕하세요안녕"
+        {
+          "memberId": 2,
+          "nickname": "mohamedeu al katan",
+          "imageUrl": "https://image.kr",
+          "isMaster": true
+        },
+        {
+          "memberId": 3,
+          "nickname": "deundeun",
+          "imageUrl": "https://image.kr",
+          "isMaster": false
+        },
+        {
+          "memberId": 4,
+          "nickname": "rupi",
+          "imageUrl": "https://image.kr",
+          "isMaster": false
+        }
       ],
       "memberCount": 10,
       "percent": 27
     },
     "giveUp": {
-      "members": ["ㅁ"],
+      "members": [
+        {
+          "memberId": 2,
+          "nickname": "mohamedeu al katan",
+          "imageUrl": "https://image.kr",
+          "isMaster": true
+        },
+        {
+          "memberId": 3,
+          "nickname": "deundeun",
+          "imageUrl": "https://image.kr",
+          "isMaster": false
+        },
+        {
+          "memberId": 4,
+          "nickname": "rupi",
+          "imageUrl": "https://image.kr",
+          "isMaster": false
+        }
+      ],
       "memberCount": 1
     }
   },

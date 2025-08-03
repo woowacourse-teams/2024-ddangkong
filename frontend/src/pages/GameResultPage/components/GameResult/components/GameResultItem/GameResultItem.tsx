@@ -12,7 +12,6 @@ import {
   useInfoWrapper,
 } from './GameResultItem.styled';
 
-import SillyDdangkongMedium from '@/assets/images/sillyDdangkongMedium.webp';
 import useCountAnimation from '@/hooks/useCountAnimation';
 import { MemberMatchingInfo } from '@/types/balanceContent';
 
@@ -22,7 +21,7 @@ interface GameResultItemProps {
 
 const GameResultItem = forwardRef<HTMLLIElement, GameResultItemProps>(
   ({ memberMatchingInfo }, targetRef) => {
-    const { rank, nickname, matchingPercent } = memberMatchingInfo;
+    const { rank, nickname, matchingPercent, imageUrl } = memberMatchingInfo;
     const animatedRankPercent = useCountAnimation({
       target: matchingPercent,
       duration: 3000,
@@ -36,7 +35,7 @@ const GameResultItem = forwardRef<HTMLLIElement, GameResultItemProps>(
           </div>
           <div css={nicknameContainer(animatedRankPercent)}>
             <div css={useInfoWrapper}>
-              <img src={SillyDdangkongMedium} alt="" css={profileImage} />
+              <img src={imageUrl} alt="" css={profileImage} />
               <span css={nickname}>{nickname}</span>
             </div>
           </div>

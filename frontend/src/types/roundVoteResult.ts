@@ -1,5 +1,12 @@
+export interface Member {
+  memberId: number;
+  nickname: string;
+  imageUrl: string;
+  isMaster: boolean;
+}
+
 export interface GroupMemberInfo {
-  members: string[];
+  members: Member[];
   memberCount: number;
 }
 
