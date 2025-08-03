@@ -6,19 +6,19 @@
       "members": [
         {
           "memberId": 2,
-          "nickname": "mohamedeu al katan",
+          "nickname": "철수",
           "imageUrl": "https://image.kr",
           "isMaster": true
         },
         {
           "memberId": 3,
-          "nickname": "deundeun",
+          "nickname": "영미",
           "imageUrl": "https://image.kr",
           "isMaster": false
         },
         {
           "memberId": 4,
-          "nickname": "rupi",
+          "nickname": "짱구",
           "imageUrl": "https://image.kr",
           "isMaster": false
         }
@@ -32,21 +32,9 @@
       "members": [
         {
           "memberId": 2,
-          "nickname": "mohamedeu al katan",
+          "nickname": "마바사",
           "imageUrl": "https://image.kr",
           "isMaster": true
-        },
-        {
-          "memberId": 3,
-          "nickname": "deundeun",
-          "imageUrl": "https://image.kr",
-          "isMaster": false
-        },
-        {
-          "memberId": 4,
-          "nickname": "rupi",
-          "imageUrl": "https://image.kr",
-          "isMaster": false
         }
       ],
       "memberCount": 10,
@@ -56,21 +44,9 @@
       "members": [
         {
           "memberId": 2,
-          "nickname": "mohamedeu al katan",
+          "nickname": "가나다라",
           "imageUrl": "https://image.kr",
           "isMaster": true
-        },
-        {
-          "memberId": 3,
-          "nickname": "deundeun",
-          "imageUrl": "https://image.kr",
-          "isMaster": false
-        },
-        {
-          "memberId": 4,
-          "nickname": "rupi",
-          "imageUrl": "https://image.kr",
-          "isMaster": false
         }
       ],
       "memberCount": 1
