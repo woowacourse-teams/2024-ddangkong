@@ -170,3 +170,13 @@ export const passMaster = async (roomId: number, memberId: number) => {
   const data = await res.json();
   return data;
 };
+
+// 게임 중단
+export const stopGame = async (roomId: number) => {
+  await fetcher.patch({
+    url: API_URL.stopGame(roomId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
+  });
+};
