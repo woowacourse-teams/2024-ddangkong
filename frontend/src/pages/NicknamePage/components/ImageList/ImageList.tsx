@@ -38,7 +38,7 @@ const ImageList = ({ isOpen, onClose, changeImageUrl }: ImageListProps) => {
             <li key={index}>
               <button onClick={() => handleImageClick(IMAGE)}>
                 <div css={imageWrapper}>
-                  <img src={IMAGE} alt={`이미지 ${index + 1}`} css={imageStyle} />
+                  <img src={IMAGE} alt={`땅콩 이미지 ${index + 1}번`} css={imageStyle} />
                 </div>
               </button>
             </li>
