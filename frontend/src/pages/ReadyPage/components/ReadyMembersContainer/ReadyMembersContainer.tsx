@@ -22,7 +22,7 @@ import { QUERY_KEYS } from '@/constants/queryKeys';
 import { useBottomSheet } from '@/hooks/useBottomSheet';
 import { Member } from '@/types/room';
 
-import { CrownIcon, SillyDdangkongMedium, VerticalMoreIcon } from '@/assets';
+import { CrownIcon, VerticalMoreIcon } from '@/assets';
 import { InviteModal } from '@/components';
 import { useGetRoomInfo, useIsMaster, useModal } from '@/hooks';
 
@@ -64,13 +64,13 @@ const ReadyMembersContainer = () => {
             <li css={memberItem} key={member.memberId}>
               <A11yOnly>{`${member.isMaster ? '방장' : ''} ${member.nickname}`}</A11yOnly>
               <div css={profileBox}>
-                <img src={SillyDdangkongMedium} alt="" css={profileImage} />
+                <img src={member.imageUrl} alt="캐릭터 이미지" css={profileImage} />
               </div>
               <div css={memberStatus}>
                 <span aria-hidden>{member.nickname}</span>
               </div>
               <div css={userStatusBox}>
-                {member.isMaster && <img src={CrownIcon} alt="" css={userStatusIcon} />}
+                {member.isMaster && <img src={CrownIcon} alt="왕관 아이콘" css={userStatusIcon} />}
                 {!member.isMaster && isMaster && (
                   <button
                     css={userOptionsButton}

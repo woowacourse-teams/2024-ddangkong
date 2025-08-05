@@ -1,23 +1,32 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import ImageList from './components/ImageList/ImageList';
 import NicknameInput from './components/NicknameInput/NicknameInput';
 import { useAccessRoom, useIsJoinableRoomQuery } from './hooks';
-import { profileWrapper, profileImg, nicknameContainer } from './NicknamePage.styled';
+import { profileWrapper, profileImg, nicknameContainer, pencilIcon } from './NicknamePage.styled';
 
 import Button from '@/components/common/Button/Button';
 import Content from '@/components/layout/Content/Content';
+import { useBottomSheet } from '@/hooks/useBottomSheet';
 import useButtonHeightOnKeyboard from '@/hooks/useButtonHeightOnKeyboard';
 import useGAPageTimeSpentGA from '@/lib/googleAnalytics/hooks/usePageTimeSpentGA';
 
-import { SillyDdangkong } from '@/assets';
+import { PencilIcon } from '@/assets';
 
 const NicknamePage = () => {
   const { roomUuid } = useParams();
-  const { nicknameInputRef, handleCreateRoom, handleEnterRoom, isLoading, isSuccess } =
-    useAccessRoom();
+  const {
+    nicknameInputRef,
+    handleCreateRoom,
+    handleEnterRoom,
+    isLoading,
+    isSuccess,
+    changeImageUrl,
+    imageUrl,
+  } = useAccessRoom();
   const { bottomButtonHeight } = useButtonHeightOnKeyboard();
-
+  const { showBottomSheet } = useBottomSheet();
   const isMaster = !roomUuid;
 
   useIsJoinableRoomQuery({ roomUuid });
@@ -32,7 +41,14 @@ const NicknamePage = () => {
   return (
     <Content>
       <div css={profileWrapper}>
-        <img src={SillyDdangkong} alt="사용자 프로필" css={profileImg} />
+        <img src={imageUrl} alt="사용자 프로필" css={profileImg} />
+        <button
+          onClick={() => {
+            showBottomSheet(ImageList, { changeImageUrl });
+          }}
+        >
+          <img src={PencilIcon} alt="연필아이콘" css={pencilIcon} />
+        </button>
       </div>
       <div css={nicknameContainer}>
         <NicknameInput

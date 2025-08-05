@@ -22,6 +22,7 @@ const useGetUserInfo = (): RoomAndMember => {
       memberId: data?.member.memberId || 0,
       nickname: data?.member.nickname || '',
       isMaster: Boolean(data?.member.isMaster && Number(roomId) === data?.roomId),
+      imageUrl: data?.member.imageUrl || '',
     },
   };
 };

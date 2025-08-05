@@ -10,6 +10,7 @@ import DdangkongTimer from './images/ddangkongTimer.webp';
 import ErrorDdangkong from './images/errorDdangkong.webp';
 import ExitIcon from './images/exitIcon.svg';
 import HomeIcon from './images/homeIcon.svg';
+import PencilIcon from './images/pencilIcon.svg';
 import SadDdangkong from './images/sadDdangkong.webp';
 import SettingIcon from './images/settingIcon.svg';
 import SillyDdangkong from './images/sillyDdangkong.webp';
@@ -38,4 +39,5 @@ export {
   SillyDdangkongSmall,
   SpinDdangkong,
   VerticalMoreIcon,
+  PencilIcon,
 };
