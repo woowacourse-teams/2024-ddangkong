@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Theme } from '@/styles/Theme';
+import getBorderRadius from '@/styles/utils/getBorderRadius';
 
 export const headerLayout = (isCenter?: boolean) => css`
   display: flex;
@@ -38,6 +39,8 @@ export const buttonWrapper = css`
 `;
 
 export const gameTitle = css`
+  padding-left: 4rem;
+
   font-weight: bold;
   font-size: 2rem;
 `;
@@ -63,4 +66,13 @@ export const matchingResultTitle = css`
 export const matchingResultCaption = css`
   font-weight: bold;
   font-size: 1.2rem;
+`;
+
+export const stopButton = css`
+  padding: 0.5rem;
+  border-radius: ${getBorderRadius('small')};
+
+  background-color: ${Theme.color.gray200};
+
+  font-weight: 700;
 `;
