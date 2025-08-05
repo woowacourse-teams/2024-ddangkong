@@ -7,19 +7,19 @@
         {
           "memberId": 2,
           "nickname": "철수",
-          "imageUrl": "https://image.kr",
+          "imageUrl": "https://storage.googleapis.com/ddangkong-images/image1.png",
           "isMaster": true
         },
         {
           "memberId": 3,
           "nickname": "영미",
-          "imageUrl": "https://image.kr",
+          "imageUrl": "https://storage.googleapis.com/ddangkong-images/image1.png",
           "isMaster": false
         },
         {
           "memberId": 4,
           "nickname": "짱구",
-          "imageUrl": "https://image.kr",
+          "imageUrl": "https://storage.googleapis.com/ddangkong-images/image1.png",
           "isMaster": false
         }
       ],
@@ -33,7 +33,7 @@
         {
           "memberId": 2,
           "nickname": "마바사",
-          "imageUrl": "https://image.kr",
+          "imageUrl": "https://storage.googleapis.com/ddangkong-images/image1.png",
           "isMaster": true
         }
       ],
@@ -45,7 +45,7 @@
         {
           "memberId": 2,
           "nickname": "가나다라",
-          "imageUrl": "https://image.kr",
+          "imageUrl": "https://storage.googleapis.com/ddangkong-images/image1.png",
           "isMaster": true
         }
       ],
