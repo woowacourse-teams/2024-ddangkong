@@ -2,7 +2,15 @@
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { gameTitle, headerLayout, roundText, stopButton } from '../Header.styled';
+import {
+  emptyBox,
+  gameTitle,
+  headerLayout,
+  leftSide,
+  rightSide,
+  roundText,
+  stopButton,
+} from '../Header.styled';
 import { useStopGameMutation } from '../hooks';
 
 import A11yOnly from '@/components/common/A11yOnly/A11yOnly';
@@ -33,17 +41,21 @@ const RoundResultHeader = () => {
   return (
     <header css={headerLayout()} tabIndex={0} ref={focusRef}>
       <A11yOnly>{screenReaderRoundResult}</A11yOnly>
-      <span css={roundText} aria-hidden>
-        {balanceContent.currentRound}/{balanceContent.totalRound}
-      </span>
+      <div css={leftSide}>
+        <span css={roundText} aria-hidden>
+          {balanceContent.currentRound}/{balanceContent.totalRound}
+        </span>
+      </div>
       <h1 css={gameTitle} aria-hidden>
         투표 결과
       </h1>
-      <div>
-        {isMaster && (
+      <div css={rightSide}>
+        {isMaster ? (
           <button ref={returnFocusRef} css={stopButton} onClick={handleStopGame}>
             게임중단
           </button>
+        ) : (
+          <div css={emptyBox} />
         )}
       </div>
     </header>

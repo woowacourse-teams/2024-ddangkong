@@ -38,11 +38,25 @@ export const buttonWrapper = css`
   height: 2rem;
 `;
 
-export const gameTitle = css`
-  padding-left: 4rem;
+export const leftSide = css`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 10rem; /* Fixed width to balance the layout */
+`;
 
+export const rightSide = css`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 10rem; /* Fixed width to balance the layout */
+`;
+
+export const gameTitle = css`
   font-weight: bold;
   font-size: 2rem;
+  text-align: center;
+  flex-grow: 1;
 `;
 
 export const iconImage = css`
