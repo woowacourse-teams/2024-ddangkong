@@ -8,7 +8,7 @@ import { useStopGameMutation } from '../hooks';
 import A11yOnly from '@/components/common/A11yOnly/A11yOnly';
 
 import { AlertModal } from '@/components';
-import { useBalanceContentQuery, useFocus, useModal } from '@/hooks';
+import { useBalanceContentQuery, useFocus, useIsMaster, useModal } from '@/hooks';
 
 // 좌측 상단 라운드, 가운데 제목 차지하는 헤더 (API 호출 O) : 라운드 통계 화면
 const RoundResultHeader = () => {
@@ -19,6 +19,7 @@ const RoundResultHeader = () => {
   const returnFocusRef = useRef<HTMLButtonElement>(null);
   const screenReaderRoundResult = `${balanceContent.totalRound}라운드 중. ${balanceContent.currentRound}라운드. 투표 결과 페이지`;
   const focusRef = useFocus<HTMLElement>();
+  const isMaster = useIsMaster();
 
   const handleStopGame = () => {
     showModal(AlertModal, {
@@ -39,9 +40,11 @@ const RoundResultHeader = () => {
         투표 결과
       </h1>
       <div>
-        <button ref={returnFocusRef} css={stopButton} onClick={handleStopGame}>
-          게임중단
-        </button>
+        {isMaster && (
+          <button ref={returnFocusRef} css={stopButton} onClick={handleStopGame}>
+            게임중단
+          </button>
+        )}
       </div>
     </header>
   );
