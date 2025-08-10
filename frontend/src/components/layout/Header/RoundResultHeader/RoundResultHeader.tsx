@@ -39,14 +39,14 @@ const RoundResultHeader = () => {
   };
 
   return (
-    <header css={headerLayout()} tabIndex={0} ref={focusRef}>
-      <A11yOnly>{screenReaderRoundResult}</A11yOnly>
+    <header css={headerLayout} tabIndex={0} ref={focusRef}>
       <div css={leftSide}>
         <span css={roundText} aria-hidden>
           {balanceContent.currentRound}/{balanceContent.totalRound}
         </span>
       </div>
       <h1 css={gameTitle} aria-hidden>
+        <A11yOnly>{screenReaderRoundResult}</A11yOnly>
         투표 결과
       </h1>
       <div css={rightSide}>

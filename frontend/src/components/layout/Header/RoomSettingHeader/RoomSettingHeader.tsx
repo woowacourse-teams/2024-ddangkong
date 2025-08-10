@@ -1,7 +1,15 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import { useRef } from 'react';
 
-import { buttonWrapper, gameTitle, headerLayout, iconImage, roundText } from '../Header.styled';
+import {
+  buttonWrapper,
+  gameTitle,
+  headerLayout,
+  iconImage,
+  leftSide,
+  rightSide,
+  roundText,
+} from '../Header.styled';
 import { useExit } from '../hooks';
 
 import { ExitIcon, SettingIcon } from '@/assets';
@@ -30,18 +38,22 @@ const RoomSettingHeader = ({ title }: RoomSettingHeaderProps) => {
   };
 
   return (
-    <header css={headerLayout()} tabIndex={0} ref={focusRef}>
-      <button onClick={handleClickExit} css={buttonWrapper}>
-        <img src={ExitIcon} alt="방 나가기" css={iconImage} />
-      </button>
-      <h1 css={gameTitle}>{title}</h1>
-      {isMaster ? (
-        <button ref={returnFocusRef} onClick={handleClickRoomSetting} css={buttonWrapper}>
-          <img src={SettingIcon} alt="방 설정" css={iconImage} />
+    <header css={headerLayout} tabIndex={0} ref={focusRef}>
+      <div css={leftSide}>
+        <button onClick={handleClickExit} css={buttonWrapper}>
+          <img src={ExitIcon} alt="방 나가기" css={iconImage} />
         </button>
-      ) : (
-        <span css={roundText}></span>
-      )}
+      </div>
+      <h1 css={gameTitle}>{title}</h1>
+      <div css={rightSide}>
+        {isMaster ? (
+          <button ref={returnFocusRef} onClick={handleClickRoomSetting} css={buttonWrapper}>
+            <img src={SettingIcon} alt="방 설정" css={iconImage} />
+          </button>
+        ) : (
+          <span css={roundText}></span>
+        )}
+      </div>
     </header>
   );
 };
