@@ -83,7 +83,7 @@ export const matchingResultCaption = css`
 `;
 
 export const stopButton = css`
-  padding: 0.5rem;
+  padding: 1rem;
   border-radius: ${getBorderRadius('small')};
 
   background-color: ${Theme.color.gray200};
