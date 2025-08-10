@@ -42,14 +42,14 @@ export const leftSide = css`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 10rem; /* Fixed width to balance the layout */
+  width: 10rem;
 `;
 
 export const rightSide = css`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 10rem; /* Fixed width to balance the layout */
+  width: 10rem;
 `;
 
 export const gameTitle = css`
