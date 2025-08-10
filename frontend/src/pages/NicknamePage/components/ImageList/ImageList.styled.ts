@@ -6,18 +6,16 @@ export const title = css`
 `;
 
 export const imageList = css`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  display: grid;
+  gap: 1rem;
   padding: 3rem 0;
+  grid-template-columns: repeat(4, 1fr);
 `;
 
 export const imageWrapper = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 8rem;
-  height: 8rem;
   padding: 1rem;
   border: 1px solid;
   border-radius: 10%;

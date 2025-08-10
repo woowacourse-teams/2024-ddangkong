@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import useCreateRoom from './useCreateRoom';
 import useEnterRoom from './useEnterRoom';
 
-const DEFAULT_IMAGE_URL = 'https://storage.googleapis.com/ddangkong-images/image10.png';
+const DEFAULT_IMAGE_URL = 'https://storage.googleapis.com/ddangkong-images/image1.png';
 
 const useAccessRoom = () => {
   const { roomUuid } = useParams();

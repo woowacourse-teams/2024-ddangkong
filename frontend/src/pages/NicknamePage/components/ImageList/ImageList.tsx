@@ -19,8 +19,6 @@ const IMAGE_LIST = [
   `${STORAGE_URL}/image6.png`,
   `${STORAGE_URL}/image7.png`,
   `${STORAGE_URL}/image8.png`,
-  `${STORAGE_URL}/image9.png`,
-  `${STORAGE_URL}/image10.png`,
 ];
 
 const ImageList = ({ isOpen, onClose, changeImageUrl }: ImageListProps) => {
