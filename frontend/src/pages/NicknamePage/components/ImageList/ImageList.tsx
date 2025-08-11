@@ -1,4 +1,11 @@
-import { imageStyle, imageList, title, imageWrapper, closeButton } from './ImageList.styled';
+import {
+  imageStyle,
+  imageList,
+  title,
+  imageWrapper,
+  closeButton,
+  imageListWrapper,
+} from './ImageList.styled';
 
 import { Button } from '@/components/common';
 import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
@@ -30,18 +37,21 @@ const ImageList = ({ isOpen, onClose, changeImageUrl }: ImageListProps) => {
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose}>
       <div>
-        <h2 css={title}>이미지 목록</h2>
-        <ul css={imageList}>
-          {IMAGE_LIST.map((IMAGE, index) => (
-            <li key={index}>
-              <button onClick={() => handleImageClick(IMAGE)}>
-                <div css={imageWrapper}>
-                  <img src={IMAGE} alt={`땅콩 이미지 ${index + 1}번`} css={imageStyle} />
-                </div>
-              </button>
-            </li>
-          ))}
-        </ul>
+        <h2 css={title}>프로필 이미지 선택</h2>
+        <div css={imageListWrapper}>
+          <ul css={imageList}>
+            {IMAGE_LIST.map((IMAGE, index) => (
+              <li key={index}>
+                <button onClick={() => handleImageClick(IMAGE)}>
+                  <div css={imageWrapper}>
+                    <img src={IMAGE} alt={`땅콩 이미지 ${index + 1}번`} css={imageStyle} />
+                  </div>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <Button onClick={onClose} text="닫기" css={closeButton} />
       </div>
     </BottomSheet>
