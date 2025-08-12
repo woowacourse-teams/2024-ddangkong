@@ -7,7 +7,7 @@ const Header = () => {
 
   useBlockRefresh();
 
-  if (isNicknamePage) return <TitleHeader title="닉네임 설정" />;
+  if (isNicknamePage) return <TitleHeader title="프로필 설정" />;
   if (isReadyPage) return <RoomSettingHeader title="밸런스 게임" />;
   if (isRoundResultPage) return <RoundResultHeader />;
   if (isMatchingResultPage) return <MatchingResultHeader title="매칭 결과" />;
