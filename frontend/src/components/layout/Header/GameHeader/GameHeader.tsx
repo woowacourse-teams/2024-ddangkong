@@ -18,7 +18,7 @@ const GameHeader = () => {
   const focusRef = useFocus<HTMLElement>();
 
   return (
-    <header css={headerLayout()} tabIndex={0} ref={focusRef}>
+    <header css={headerLayout} tabIndex={0} ref={focusRef}>
       <A11yOnly>{screenReaderHeader}</A11yOnly>
       <span css={roundText} aria-hidden>
         {currentRound}/{totalRound}
