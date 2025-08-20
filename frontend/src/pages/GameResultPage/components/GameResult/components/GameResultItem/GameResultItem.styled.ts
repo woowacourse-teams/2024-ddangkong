@@ -76,3 +76,7 @@ export const profileImage = css`
   width: 1.8rem;
   height: 1.8rem;
 `;
+
+export const Image = css`
+  color: red;
+`;
