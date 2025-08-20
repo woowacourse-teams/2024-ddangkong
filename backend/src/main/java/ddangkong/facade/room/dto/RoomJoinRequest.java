@@ -4,6 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public record RoomJoinRequest(
         @NotBlank
-        String nickname
+        String nickname,
+
+        @NotBlank
+        String imageUrl
 ) {
 }

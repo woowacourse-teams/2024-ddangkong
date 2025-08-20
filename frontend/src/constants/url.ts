@@ -26,6 +26,8 @@ export const API_URL = {
     `${BASE_URL}/api/balances/rooms/${roomId}/members/${memberId}`,
   isJoinableRoom: (roomUuid: string) => `${BASE_URL}/api/balances/rooms/${roomUuid}/status`,
   getUserInfo: `${BASE_URL}/api/balances/rooms/member`,
+  passMaster: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/pass-master`,
+  stopGame: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/stop`,
 };
 
 type API_URL_KEYS = keyof typeof API_URL;
@@ -50,6 +52,8 @@ export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
   applyRoomSetting: `${BASE_URL}/api/balances/rooms/:roomId`,
   deleteRoom: `${BASE_URL}/api/balances/rooms/:roomId/members/:memberId`,
   isJoinableRoom: `${BASE_URL}/api/balances/rooms/:roomUuid/status`,
+  passMaster: `${BASE_URL}/api/balances/rooms/:roomId/pass-master`,
+  stopGame: `${BASE_URL}/api/balances/rooms/:roomId/stop`,
 };
 
 export const INVITE_URL = (roomUuid: string) => {

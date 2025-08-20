@@ -1,16 +1,20 @@
 package ddangkong.domain.room.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ddangkong.domain.room.Room;
+import ddangkong.exception.room.InvalidImageUrlException;
+import ddangkong.exception.room.member.AlreadyCommonException;
 import ddangkong.exception.room.member.AlreadyMasterException;
 import ddangkong.exception.room.member.InvalidNicknameException;
 import ddangkong.support.fixture.EntityFixtureUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class MemberTest {
@@ -23,7 +27,7 @@ class MemberTest {
         @Test
         void 일반_유저를_마스터로_변경할_수_있다() {
             // given
-            Member common = Member.createCommon("prin", ROOM);
+            Member common = Member.createCommon("prin", "https://example.image", ROOM);
 
             // when
             common.promoteToMaster();
@@ -35,13 +39,41 @@ class MemberTest {
         @Test
         void 마스터_유저인_경우_예외를_발생한다() {
             // given
-            Member master = Member.createMaster("prin", ROOM);
+            Member master = Member.createMaster("prin", "https://example.image", ROOM);
             EntityFixtureUtils.setId(master, 3L);
 
             // when & then
-            assertThatThrownBy(() -> master.promoteToMaster())
+            assertThatThrownBy(master::promoteToMaster)
                     .isExactlyInstanceOf(AlreadyMasterException.class)
                     .hasMessage("해당 멤버는 이미 방장입니다. memberId : 3");
+        }
+    }
+
+    @Nested
+    class 일반_유저로_변경 {
+
+        @Test
+        void 마스터_유저를_일반_유저로_변경할_수_있다() {
+            // given
+            Member master = Member.createMaster("prin", "https://example.image", ROOM);
+
+            // when
+            master.demoteToCommon();
+
+            // then
+            assertThat(master.isMaster()).isFalse();
+        }
+
+        @Test
+        void 일반_유저인_경우_예외를_발생한다() {
+            // given
+            Member common = Member.createCommon("prin", "https://example.image", ROOM);
+            EntityFixtureUtils.setId(common, 3L);
+
+            // when & then
+            assertThatThrownBy(() -> common.demoteToCommon())
+                    .isExactlyInstanceOf(AlreadyCommonException.class)
+                    .hasMessage("해당 멤버는 이미 일반 유저입니다. memberId : 3");
         }
     }
 
@@ -50,7 +82,7 @@ class MemberTest {
 
         @Test
         void 일반_유저인지_확인_할_수_있다() {
-            Member common = Member.createCommon("prin", ROOM);
+            Member common = Member.createCommon("prin", "https://example.image", ROOM);
 
             boolean actual = common.isCommon();
 
@@ -59,7 +91,7 @@ class MemberTest {
 
         @Test
         void 마스터_유저는_일반_유저가_아니다() {
-            Member master = Member.createMaster("prin", ROOM);
+            Member master = Member.createMaster("prin", "https://example.image", ROOM);
 
             boolean actual = master.isCommon();
 
@@ -74,15 +106,35 @@ class MemberTest {
         @ValueSource(strings = {"01", "012345678912"})
         void 닉네임_길이가_유효한_경우_예외가_발생하지_않는다(String name) {
             // when & then
-            assertThatNoException().isThrownBy(() -> Member.createMaster(name, ROOM));
+            assertThatNoException().isThrownBy(() -> Member.createMaster(name, "https://example.image", ROOM));
         }
 
         @ParameterizedTest
         @ValueSource(strings = {" ", "", "0123456789123"})
         void 닉네임_길이가_유효하지_않는_경우_예외를_발생시킨다(String name) {
             // when & then
-            assertThatThrownBy(() -> Member.createMaster(name, ROOM))
+            assertThatThrownBy(() -> Member.createMaster(name, "https://example.image", ROOM))
                     .isExactlyInstanceOf(InvalidNicknameException.class);
+        }
+    }
+
+    @Nested
+    class 이미지_URL_검증 {
+
+        @Test
+        void 이미지_URL이_유효한_경우_예외가_발생하지_않는다() {
+            // when & then
+            assertThatCode(() -> Member.createMaster("prin", "https://example.image", ROOM))
+                    .doesNotThrowAnyException();
+        }
+
+        @ParameterizedTest
+        @NullAndEmptySource
+        @ValueSource(strings = {"is-not-image", "http://example.image"})
+        void 이미지_URL이_유효하지_않는_경우_예외를_발생시킨다(String imageUrl) {
+            // when & then
+            assertThatThrownBy(() -> Member.createMaster("prin", imageUrl, ROOM))
+                    .isExactlyInstanceOf(InvalidImageUrlException.class);
         }
     }
 }

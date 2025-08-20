@@ -1,5 +1,5 @@
 import useTimer from './useTimer';
-import useCompleteSelectionMutation from '../../../SelectButton/SelectButton.hook';
+import useCompleteSelectionMutation from '../../SelectButton/SelectButton.hook';
 import { convertMsecToSecond } from '../Timer.util';
 
 import useBalanceContentQuery from '@/hooks/useBalanceContentQuery';

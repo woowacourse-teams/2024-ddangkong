@@ -5,8 +5,10 @@ import ddangkong.domain.room.Room;
 import ddangkong.domain.room.member.Member;
 import ddangkong.domain.room.member.RoomMembers;
 import ddangkong.exception.room.NotFinishedRoomException;
+import ddangkong.exception.room.NotReadyRoomException;
 import ddangkong.facade.room.dto.InitialRoomResponse;
 import ddangkong.facade.room.dto.RoomInfoResponse;
+import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
 import ddangkong.facade.room.dto.RoomMemberResponse;
 import ddangkong.facade.room.dto.RoomSettingRequest;
@@ -40,16 +42,16 @@ public class RoomFacade {
     private final RoomMigrator roomMigrator;
 
     @Transactional
-    public RoomJoinResponse createRoom(String nickname) {
+    public RoomJoinResponse createRoom(RoomJoinRequest request) {
         Room room = roomService.createRoom();
-        Member member = memberService.saveMasterMember(nickname, room);
+        Member member = memberService.saveMember(Member.createMaster(request.nickname(), request.imageUrl(), room));
         return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }
 
     @Transactional
-    public RoomJoinResponse joinRoom(String nickname, String uuid) {
+    public RoomJoinResponse joinRoom(RoomJoinRequest request, String uuid) {
         Room room = roomService.getRoomWithLock(uuid);
-        Member member = memberService.saveCommonMember(nickname, room);
+        Member member = memberService.saveMember(Member.createCommon(request.nickname(), request.imageUrl(), room));
         return new RoomJoinResponse(room.getId(), room.getUuid(), new MemberResponse(member));
     }
 
@@ -58,6 +60,17 @@ public class RoomFacade {
         Member member = memberService.getMemberById(memberId);
         Room room = member.getRoom();
         return new RoomMemberResponse(room.getId(), room.getUuid(), new MemberResponse(member));
+    }
+
+    @Transactional
+    public void passMaster(Long roomId, Long nextMasterId) {
+        Room room = roomService.getRoom(roomId);
+        if (room.isAlreadyStart()) {
+            throw new NotReadyRoomException();
+        }
+
+        RoomMembers roomMembers = memberService.findRoomMembers(room);
+        memberService.passMaster(roomMembers, nextMasterId);
     }
 
     @Transactional
@@ -104,6 +117,13 @@ public class RoomFacade {
         if (room.isGameProgress()) {
             roomContentService.progressNextRoomContent(room);
         }
+    }
+
+    @Transactional
+    public void stopGame(Long roomId) {
+        Room room = roomService.getRoom(roomId);
+        roomContentService.deleteNotUsedRoomContents(room);
+        room.stopGame();
     }
 
     @Transactional(readOnly = true)

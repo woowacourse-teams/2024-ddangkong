@@ -1,7 +1,8 @@
-interface Member {
+export interface Member {
   memberId: number;
   nickname: string;
   isMaster: boolean;
+  imageUrl: string;
 }
 
 export interface RoomSettingApply {

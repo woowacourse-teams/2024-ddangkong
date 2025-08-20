@@ -29,6 +29,7 @@ export interface MemberMatchingInfo {
   rank: number;
   memberId: number;
   nickname: string;
+  imageUrl: string;
   matchingPercent: number;
 }
 

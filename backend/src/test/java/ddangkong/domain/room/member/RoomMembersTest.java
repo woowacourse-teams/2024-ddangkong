@@ -29,8 +29,8 @@ class RoomMembersTest {
         @Test
         void 방_멤버들_객체를_생성한다() {
             // given
-            Member master = Member.createMaster("master", room);
-            Member member1 = Member.createCommon("common", room);
+            Member master = Member.createMaster("master", "https://example.image", room);
+            Member member1 = Member.createCommon("common", "https://example.image", room);
             List<Member> members = List.of(master, member1);
 
             // when
@@ -43,8 +43,8 @@ class RoomMembersTest {
         @Test
         void 방장이_여러명인_경우_예외를_발생한다() {
             // given
-            Member master1 = Member.createMaster("master1", room);
-            Member master2 = Member.createMaster("master2", room);
+            Member master1 = Member.createMaster("master1", "https://example.image", room);
+            Member master2 = Member.createMaster("master2", "https://example.image", room);
             List<Member> members = List.of(master1, master2);
 
             // when & then
@@ -56,8 +56,8 @@ class RoomMembersTest {
         @Test
         void 방장이_없는_경우_예외가_발생한다() {
             // given
-            Member member1 = Member.createCommon("common1", room);
-            Member member2 = Member.createCommon("common2", room);
+            Member member1 = Member.createCommon("common1", "https://example.image", room);
+            Member member2 = Member.createCommon("common2", "https://example.image", room);
             List<Member> members = List.of(member1, member2);
 
             // when & then
@@ -80,8 +80,8 @@ class RoomMembersTest {
         @Test
         void 방장을_조회한다() {
             // given
-            Member master = Member.createMaster("master", room);
-            Member member1 = Member.createCommon("common1", room);
+            Member master = Member.createMaster("master", "https://example.image", room);
+            Member member1 = Member.createCommon("common1", "https://example.image", room);
             List<Member> members = List.of(master, member1);
             RoomMembers roomMembers = new RoomMembers(members);
 
@@ -106,11 +106,11 @@ class RoomMembersTest {
         @Test
         void 임의의_일반_멤버를_조회할_수_있다() {
             // given
-            Member master = Member.createMaster("master", room);
+            Member master = Member.createMaster("master", "https://example.image", room);
             EntityFixtureUtils.setId(master, 1L);
-            Member member1 = Member.createCommon("common1", room);
+            Member member1 = Member.createCommon("common1", "https://example.image", room);
             EntityFixtureUtils.setId(member1, 2L);
-            Member member2 = Member.createCommon("common2", room);
+            Member member2 = Member.createCommon("common2", "https://example.image", room);
             EntityFixtureUtils.setId(member2, 3L);
             List<Member> members = List.of(master, member1, member2);
             RoomMembers roomMembers = new RoomMembers(members);
@@ -125,13 +125,13 @@ class RoomMembersTest {
         @Test
         void 일반_멤버가_없다면_예외를_발생시킨다() {
             // given
-            Member master = Member.createMaster("master", room);
+            Member master = Member.createMaster("master", "https://example.image", room);
             EntityFixtureUtils.setId(master, 1L);
             List<Member> members = List.of(master);
             RoomMembers roomMembers = new RoomMembers(members);
 
             // when & then
-            assertThatThrownBy(() -> roomMembers.getAnyCommonMember())
+            assertThatThrownBy(roomMembers::getAnyCommonMember)
                     .isExactlyInstanceOf(NotExistCommonMemberException.class);
         }
     }
@@ -149,11 +149,11 @@ class RoomMembersTest {
         @Test
         void 특정_멤버를_조회한다() {
             // given
-            Member master = Member.createMaster("master", room);
+            Member master = Member.createMaster("master", "https://example.image", room);
             EntityFixtureUtils.setId(master, 1L);
-            Member member1 = Member.createCommon("common1", room);
+            Member member1 = Member.createCommon("common1", "https://example.image", room);
             EntityFixtureUtils.setId(member1, 2L);
-            Member member2 = Member.createCommon("common2", room);
+            Member member2 = Member.createCommon("common2", "https://example.image", room);
             EntityFixtureUtils.setId(member2, 3L);
             List<Member> members = List.of(master, member1, member2);
             RoomMembers roomMembers = new RoomMembers(members);
@@ -168,9 +168,9 @@ class RoomMembersTest {
         @Test
         void 존재하지_않는_멤버를_조회하면_예외가_발생한다() {
             // given
-            Member master = Member.createMaster("master", room);
+            Member master = Member.createMaster("master", "https://example.image", room);
             EntityFixtureUtils.setId(master, 1L);
-            Member member1 = Member.createCommon("common1", room);
+            Member member1 = Member.createCommon("common1", "https://example.image", room);
             EntityFixtureUtils.setId(member1, 2L);
             List<Member> members = List.of(master, member1);
             RoomMembers roomMembers = new RoomMembers(members);

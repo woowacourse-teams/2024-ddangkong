@@ -10,13 +10,18 @@ import { CustomError } from '@/utils/error';
 
 interface useCreateRoomProps {
   nicknameInputRef: RefObject<HTMLInputElement>;
+  imageUrl: string;
 }
 
-const useCreateRoom = ({ nicknameInputRef }: useCreateRoomProps) => {
+const useCreateRoom = ({ nicknameInputRef, imageUrl }: useCreateRoomProps) => {
   const navigate = useNavigate();
 
-  const createRoomMutation = useMutation<CreateOrEnterRoomResponse, CustomError, string>({
-    mutationFn: createRoom,
+  const createRoomMutation = useMutation<
+    CreateOrEnterRoomResponse,
+    CustomError,
+    { nickname: string; imageUrl: string }
+  >({
+    mutationFn: ({ nickname, imageUrl }) => createRoom(nickname, imageUrl),
     onSuccess: (data) => {
       navigate(ROUTES.ready(Number(data.roomId)), { replace: true });
     },
@@ -28,7 +33,7 @@ const useCreateRoom = ({ nicknameInputRef }: useCreateRoomProps) => {
     if (createRoomMutation.isPending) return;
 
     const nickname = nicknameInputRef.current?.value || nicknameInputRef.current?.placeholder || '';
-    throttledCreateRoom(nickname);
+    throttledCreateRoom({ nickname, imageUrl });
   };
 
   return { createRoomMutation, handleCreateRoom };

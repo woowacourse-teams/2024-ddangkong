@@ -3,7 +3,26 @@
     "firstOption": {
       "optionId": 1,
       "name": "100억 빚 송강",
-      "members": ["d"],
+      "members": [
+        {
+          "memberId": 2,
+          "nickname": "철수",
+          "imageUrl": "https://storage.googleapis.com/ddangkong-images/image1.png",
+          "isMaster": true
+        },
+        {
+          "memberId": 3,
+          "nickname": "영미",
+          "imageUrl": "https://storage.googleapis.com/ddangkong-images/image1.png",
+          "isMaster": false
+        },
+        {
+          "memberId": 4,
+          "nickname": "짱구",
+          "imageUrl": "https://storage.googleapis.com/ddangkong-images/image1.png",
+          "isMaster": false
+        }
+      ],
       "memberCount": 1,
       "percent": 73
     },
@@ -11,18 +30,25 @@
       "optionId": 2,
       "name": "100억 부자 송강호",
       "members": [
-        "일이삼사오육칠팔구십일이",
-        "가나다라마바사아자차카타",
-        "abc",
-        "땅콩땅콩땅콩땅콩땅콩땅콩",
-        "123456789012",
-        "안녕하세요안녕하세요안녕"
+        {
+          "memberId": 2,
+          "nickname": "마바사",
+          "imageUrl": "https://storage.googleapis.com/ddangkong-images/image1.png",
+          "isMaster": true
+        }
       ],
       "memberCount": 10,
       "percent": 27
     },
     "giveUp": {
-      "members": ["ㅁ"],
+      "members": [
+        {
+          "memberId": 2,
+          "nickname": "가나다라",
+          "imageUrl": "https://storage.googleapis.com/ddangkong-images/image1.png",
+          "isMaster": true
+        }
+      ],
       "memberCount": 1
     }
   },

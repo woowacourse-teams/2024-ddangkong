@@ -3,6 +3,7 @@ package ddangkong.documentation.room;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
@@ -26,14 +27,13 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ddangkong.controller.room.RoomMemberCookieEncryptor;
-import ddangkong.controller.room.EncryptionUtils;
 import ddangkong.controller.room.RoomController;
 import ddangkong.documentation.BaseDocumentationTest;
 import ddangkong.domain.balance.content.Category;
 import ddangkong.facade.balance.content.BalanceCategoryResponse;
 import ddangkong.facade.room.RoomFacade;
 import ddangkong.facade.room.dto.InitialRoomResponse;
+import ddangkong.facade.room.dto.PassMasterRequest;
 import ddangkong.facade.room.dto.RoomInfoResponse;
 import ddangkong.facade.room.dto.RoomJoinRequest;
 import ddangkong.facade.room.dto.RoomJoinResponse;
@@ -50,11 +50,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.MediaType;
 
-@WebMvcTest(value = RoomController.class)
-@Import(value = {RoomMemberCookieEncryptor.class, EncryptionUtils.class})
+@WebMvcTest(RoomController.class)
+@EnableAspectJAutoProxy
 class RoomDocumentationTest extends BaseDocumentationTest {
 
     @MockBean
@@ -68,11 +68,10 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 방을_생성한다() throws Exception {
             // given
-            MemberResponse memberResponse = new MemberResponse(1L, "땅콩", true);
+            MemberResponse memberResponse = new MemberResponse(1L, "땅콩", "https://example.image", true);
+            RoomJoinRequest request = new RoomJoinRequest("땅콩", "https://example.image");
             RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c", memberResponse);
-            when(roomFacade.createRoom(anyString())).thenReturn(response);
-
-            RoomJoinRequest request = new RoomJoinRequest("땅콩");
+            when(roomFacade.createRoom(request)).thenReturn(response);
             String content = objectMapper.writeValueAsString(request);
 
             // when & then
@@ -83,13 +82,15 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                     .andExpect(status().isCreated())
                     .andDo(document("room/create",
                             requestFields(
-                                    fieldWithPath("nickname").description("닉네임")
+                                    fieldWithPath("nickname").type(STRING).description("닉네임"),
+                                    fieldWithPath("imageUrl").type(STRING).description("이미지 URL")
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("생성된 방 ID"),
                                     fieldWithPath("roomUuid").type(STRING).description("생성된 방의 UUID"),
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("member.imageUrl").type(STRING).description("멤버 이미지 URL"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
                             ),
                             responseCookies(
@@ -111,8 +112,8 @@ class RoomDocumentationTest extends BaseDocumentationTest {
             Category category = Category.IF;
             RoomSettingResponse roomSetting = new RoomSettingResponse(5, 30, BalanceCategoryResponse.create(category));
             List<MemberResponse> members = List.of(
-                    new MemberResponse(1L, "땅콩", true),
-                    new MemberResponse(2L, "타콩", false)
+                    new MemberResponse(1L, "땅콩", "https://example.image", true),
+                    new MemberResponse(2L, "타콩", "https://example.image", false)
             );
             MasterResponse master = new MasterResponse(1L, "땅콩");
             RoomInfoResponse response = new RoomInfoResponse(false, roomSetting, members, master);
@@ -136,6 +137,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     fieldWithPath("members").type(ARRAY).description("방에 참여중 인원 목록"),
                                     fieldWithPath("members[].memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("members[].nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("members[].imageUrl").type(STRING).description("멤버 이미지 URL"),
                                     fieldWithPath("members[].isMaster").type(BOOLEAN).description("방장 여부"),
                                     fieldWithPath("master").type(OBJECT).description("방장 정보"),
                                     fieldWithPath("master.memberId").type(NUMBER).description("멤버 ID"),
@@ -184,11 +186,10 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         @Test
         void 방에_참여한다() throws Exception {
             // given
+            RoomJoinRequest request = new RoomJoinRequest("타콩", "https://example.image");
             RoomJoinResponse response = new RoomJoinResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
-                    new MemberResponse(2L, "타콩", false));
-            when(roomFacade.joinRoom(anyString(), anyString())).thenReturn(response);
-
-            RoomJoinRequest request = new RoomJoinRequest("타콩");
+                    new MemberResponse(2L, "타콩", "https://example.image", false));
+            when(roomFacade.joinRoom(eq(request), anyString())).thenReturn(response);
             String content = objectMapper.writeValueAsString(request);
 
             //when & then
@@ -202,17 +203,48 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                                     parameterWithName("uuid").description("참여하는 방 UUID")
                             ),
                             requestFields(
-                                    fieldWithPath("nickname").description("닉네임")
+                                    fieldWithPath("nickname").description("닉네임"),
+                                    fieldWithPath("imageUrl").type(STRING).description("이미지 URL")
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("참여한 방 ID"),
                                     fieldWithPath("roomUuid").type(STRING).description("참여한 방 UUID"),
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("member.imageUrl").type(STRING).description("멤버 이미지 URL"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
                             ),
                             responseCookies(
                                     cookieWithName("test_cookie").description("방 재참여시 사용되는 쿠키")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    class 방장_교체 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/pass-master";
+
+        @Test
+        void 방장의_권한을_다른_멤버에게_넘긴다() throws Exception {
+            // given
+            Long roomId = 1L;
+            Long nextMasterId = 2L;
+            PassMasterRequest request = new PassMasterRequest(nextMasterId);
+
+            // when & then
+            mockMvc.perform(patch(ENDPOINT, roomId)
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/passMaster",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            ),
+                            requestFields(
+                                    fieldWithPath("nextMasterId").type(NUMBER).description("새로운 방장 멤버 ID")
                             )
                     ));
         }
@@ -227,7 +259,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
         void 사용자_정보를_조회한다() throws Exception {
             // given
             RoomMemberResponse response = new RoomMemberResponse(1L, "488fd79f92a34131bf2a628bd58c5d2c",
-                    new MemberResponse(2L, "타콩", false));
+                    new MemberResponse(2L, "타콩", "https://example.image", false));
             when(roomFacade.getRoomMemberInfo(anyLong())).thenReturn(response);
 
             //when & then
@@ -238,13 +270,15 @@ class RoomDocumentationTest extends BaseDocumentationTest {
                     .andExpect(status().isOk())
                     .andDo(document("room/member",
                             requestCookies(
-                                    cookieWithName("test_cookie").description("사용자 인증에 필요한 쿠키(쿠키의 키 값은 UUID로 예측할 수 없는 값이 들어감)")
+                                    cookieWithName("test_cookie").description(
+                                            "사용자 인증에 필요한 쿠키(쿠키의 키 값은 UUID로 예측할 수 없는 값이 들어감)")
                             ),
                             responseFields(
                                     fieldWithPath("roomId").type(NUMBER).description("참여한 방 ID"),
                                     fieldWithPath("roomUuid").type(STRING).description("참여한 방 UUID"),
                                     fieldWithPath("member.memberId").type(NUMBER).description("멤버 ID"),
                                     fieldWithPath("member.nickname").type(STRING).description("멤버 닉네임"),
+                                    fieldWithPath("member.imageUrl").type(STRING).description("멤버 이미지 URL"),
                                     fieldWithPath("member.isMaster").type(BOOLEAN).description("방장 여부")
                             )
                     ));
@@ -321,6 +355,26 @@ class RoomDocumentationTest extends BaseDocumentationTest {
     }
 
     @Nested
+    class 게임_중단 {
+
+        private static final String ENDPOINT = "/api/balances/rooms/{roomId}/stop";
+
+        @Test
+        void 게임을_중단한다() throws Exception {
+            // when & then
+            mockMvc.perform(patch(ENDPOINT, 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isNoContent())
+                    .andDo(document("room/stop",
+                            pathParameters(
+                                    parameterWithName("roomId").description("방 ID")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
     class 라운드_종료_여부 {
 
         private static final String ENDPOINT = "/api/balances/rooms/{roomId}/round-finished";
@@ -353,6 +407,7 @@ class RoomDocumentationTest extends BaseDocumentationTest {
 
     @Nested
     class 방_게임_참여_가능_여부 {
+
         private static final String ENDPOINT = "/api/balances/rooms/{uuid}/status";
 
         @Test

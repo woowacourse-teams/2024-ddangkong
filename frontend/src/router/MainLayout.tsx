@@ -1,15 +1,22 @@
 import { Outlet } from 'react-router-dom';
 
-import AsyncErrorBoundary from '@/components/common/ErrorBoundary/AsyncErrorBoundary';
-import RootErrorBoundary from '@/components/common/ErrorBoundary/RootErrorBoundary';
+import { AsyncErrorBoundary, RootErrorBoundary } from '@/components/common';
+import useCheckValidUser from '@/hooks/useCheckValidUser';
+import useGAInitializeGA from '@/lib/googleAnalytics/hooks/useInitializeGA';
+import BottomSheetProvider from '@/providers/BottomSheetProvider/BottomSheetProvider';
 import ModalProvider from '@/providers/ModalProvider/ModalProvider';
 
 const MainLayout = () => {
+  useGAInitializeGA();
+  useCheckValidUser();
+
   return (
     <RootErrorBoundary>
       <AsyncErrorBoundary>
         <ModalProvider>
-          <Outlet />
+          <BottomSheetProvider>
+            <Outlet />
+          </BottomSheetProvider>
         </ModalProvider>
       </AsyncErrorBoundary>
     </RootErrorBoundary>

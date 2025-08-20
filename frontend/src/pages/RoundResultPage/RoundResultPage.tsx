@@ -1,9 +1,11 @@
-import NextRoundButton from './components/NextRoundButton/NextRoundButton';
-import RoundVoteContainer from './components/RoundVoteContainer/RoundVoteContainer';
+import { NextRoundButton, RoundVoteContainer } from './components';
 
 import Content from '@/components/layout/Content/Content';
+import useGAPageTimeSpentGA from '@/lib/googleAnalytics/hooks/usePageTimeSpentGA';
 
 const RoundResultPage = () => {
+  useGAPageTimeSpentGA('라운드 결과 페이지');
+
   return (
     <Content>
       <RoundVoteContainer />

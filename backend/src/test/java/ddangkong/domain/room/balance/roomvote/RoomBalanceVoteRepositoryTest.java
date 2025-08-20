@@ -25,7 +25,7 @@ class RoomBalanceVoteRepositoryTest extends BaseRepositoryTest {
         void 같은_멤버가_같은_옵션에_투표하면_예외가_발생한다() {
             // given
             Room room = save(Room.createNewRoom());
-            Member master = save(Member.createMaster("member", room));
+            Member master = save(Member.createMaster("member", "https://example.image", room));
             BalanceContent content = save(new BalanceContent(Category.IF, "A vs B"));
             BalanceOption optionA = save(new BalanceOption("A", content));
 

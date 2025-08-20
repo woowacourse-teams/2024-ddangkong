@@ -13,7 +13,9 @@ const fetcher = {
       const response = await fetch(url, {
         method,
         body: body && JSON.stringify(body),
-        headers: headers && { ...headers, 'Content-Type': 'application/json' },
+        headers: headers
+          ? { ...headers, 'Content-Type': 'application/json' }
+          : { 'Content-Type': 'application/json' },
         credentials: auth ? 'include' : 'same-origin',
       });
 

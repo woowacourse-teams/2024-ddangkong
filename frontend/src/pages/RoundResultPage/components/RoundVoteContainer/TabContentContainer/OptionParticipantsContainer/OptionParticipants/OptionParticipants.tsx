@@ -5,12 +5,13 @@ import {
   participantsListWrapper,
 } from './OptionParticipants.styled';
 
-import A11yOnly from '@/components/common/a11yOnly/A11yOnly';
+import A11yOnly from '@/components/common/A11yOnly/A11yOnly';
+import { Member } from '@/types/room';
 
 export interface OptionParticipantsProps {
   optionName: string;
   memberCount: number;
-  members: string[];
+  members: Member[];
 }
 
 const OptionParticipants = ({ optionName, memberCount, members }: OptionParticipantsProps) => {
@@ -23,7 +24,7 @@ const OptionParticipants = ({ optionName, memberCount, members }: OptionParticip
       </p>
       <ul css={participantsListWrapper}>
         {members.map((member, index) => (
-          <NicknameItem nickName={member} key={index} />
+          <NicknameItem nickName={member.nickname} imageUrl={member.imageUrl} key={index} />
         ))}
       </ul>
     </div>

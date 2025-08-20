@@ -1,6 +1,4 @@
-import { PropsWithChildren, RefObject, useMemo, useState } from 'react';
-
-import ModalContext from '@/contexts/ModalContext';
+import { createContext, PropsWithChildren, RefObject, useMemo, useState } from 'react';
 
 interface ModalProps {
   title?: string;
@@ -13,6 +11,13 @@ interface ModalState extends ModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+interface ModalContextProps {
+  showModal: (Component: React.FC<ModalState> | null, props?: ModalProps) => void;
+  close: () => void;
+}
+
+export const ModalContext = createContext<ModalContextProps | null>(null);
 
 interface Modal extends ModalProps {
   Component: React.FC<ModalState> | null;
@@ -47,10 +52,10 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
     }));
   };
 
-  const dispatch = useMemo(() => ({ showModal, close }), []);
+  const modalContextValue = useMemo(() => ({ showModal, close }), []);
 
   return (
-    <ModalContext.Provider value={dispatch}>
+    <ModalContext.Provider value={modalContextValue}>
       {children}
       {modal.isOpen && modal.Component && <modal.Component onClose={close} {...modal} />}
     </ModalContext.Provider>

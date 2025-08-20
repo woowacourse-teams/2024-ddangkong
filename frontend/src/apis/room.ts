@@ -14,7 +14,10 @@ interface CategoryResponse {
 }
 
 // 방 만들기
-export const createRoom = async (nickname: string): Promise<CreateOrEnterRoomResponse> => {
+export const createRoom = async (
+  nickname: string,
+  imageUrl: string,
+): Promise<CreateOrEnterRoomResponse> => {
   const res = await fetcher.post({
     url: API_URL.room,
     headers: {
@@ -22,6 +25,7 @@ export const createRoom = async (nickname: string): Promise<CreateOrEnterRoomRes
     },
     body: {
       nickname,
+      imageUrl,
     },
   });
 
@@ -45,6 +49,7 @@ export const resetRoom = async (roomId: number) => {
 export const enterRoom = async (
   roomUuid: string,
   nickname: string,
+  imageUrl: string,
 ): Promise<CreateOrEnterRoomResponse> => {
   const res = await fetcher.post({
     url: API_URL.enterRoom(roomUuid),
@@ -53,6 +58,7 @@ export const enterRoom = async (
     },
     body: {
       nickname,
+      imageUrl,
     },
   });
 
@@ -150,4 +156,27 @@ export const getUserInfo = async (): Promise<RoomAndMember> => {
   });
   const data = await res.json();
   return data;
+};
+
+// 방장 넘기기
+export const passMaster = async (roomId: number, memberId: number) => {
+  const res = await fetcher.patch({
+    url: API_URL.passMaster(roomId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
+    body: { nextMasterId: memberId },
+  });
+  const data = await res.json();
+  return data;
+};
+
+// 게임 중단
+export const stopGame = async (roomId: number) => {
+  await fetcher.patch({
+    url: API_URL.stopGame(roomId),
+    headers: {
+      'Content-Type': `application/json`,
+    },
+  });
 };

@@ -20,7 +20,6 @@ public enum ClientErrorCode {
     NOT_FOUND_ROOM("방이 존재하지 않습니다."),
     ROUND_LESS_THAN_START_ROUND("startRound보다 크거나 같아야 합니다. startRound : %d, round : %d"),
     ROUND_GREATER_THAN_CURRENT_ROUND("currentRound보다 작거나 같아야 합니다. currentRound : %d, round : %d"),
-    INVALID_ROUND_GAP("currentRound과 round의 차이는 %d이하여야 합니다. currentRound : %d, round : %d"),
 
     // RoomSetting
     // todo s로 변경
@@ -30,12 +29,14 @@ public enum ClientErrorCode {
     // Member
     ALREADY_EXIST_MASTER("이미 방장이 존재합니다."),
     ALREADY_MASTER("해당 멤버는 이미 방장입니다. memberId : %d"),
+    ALREADY_COMMON("해당 멤버는 이미 일반 유저입니다. memberId : %d"),
     INVALID_MASTER_CREATION("방에 멤버가 존재하면 방장을 생성할 수 없습니다. 현재 멤버 수: %d"),
     NOT_EXIST_MASTER("방장이 존재하지 않습니다."),
     NOT_EXIST_COMMON("일반 멤버가 존재하지 않습니다."),
     EXCEED_MAX_MEMBER_COUNT("방의 최대 인원을 초과했습니다. 현재 멤버 수: %d"),
     NOT_ROOM_MEMBER("방에 존재하지 않는 멤버입니다."),
     INVALID_NICKNAME("닉네임은 공백이어선 안되며 최대 %d글자여야 합니다."),
+    INVALID_IMAGE_URL("이미지 URL 형식이 올바르지 않습니다."),
     INVALID_MEMBER_ID("해당 ID에 일치하는 멤버가 없습니다."),
 
     // RoomContent

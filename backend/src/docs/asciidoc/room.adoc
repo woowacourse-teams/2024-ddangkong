@@ -82,6 +82,26 @@ include::{snippets}/room/member/response-fields.adoc[]
 
 '''
 
+=== 방장 변경
+
+==== curl
+
+include::{snippets}/room/passMaster/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/passMaster/http-request.adoc[]
+
+include::{snippets}/room/passMaster/path-parameters.adoc[]
+
+include::{snippets}/room/passMaster/request-fields.adoc[]
+
+==== response
+
+include::{snippets}/room/passMaster/http-response.adoc[]
+
+'''
+
 === 방 나가기
 
 ==== curl
@@ -179,6 +199,24 @@ include::{snippets}/room/nextRound/path-parameters.adoc[]
 ==== response
 
 include::{snippets}/room/nextRound/http-response.adoc[]
+
+'''
+
+=== 게임 중단
+
+==== curl
+
+include::{snippets}/room/stop/curl-request.adoc[]
+
+==== request
+
+include::{snippets}/room/stop/http-request.adoc[]
+
+include::{snippets}/room/stop/path-parameters.adoc[]
+
+==== response
+
+include::{snippets}/room/stop/http-response.adoc[]
 
 '''
 
