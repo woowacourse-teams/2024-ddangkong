@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
@@ -68,6 +69,14 @@ public class GlobalExceptionHandler {
         log.warn(e.getMessage());
 
         return new ErrorResponse(ClientErrorCode.NOT_FOUND_COOKIE);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMultipartException(MultipartException e) {
+        log.warn(e.getMessage());
+
+        return new ErrorResponse(ClientErrorCode.MULTIPART_ERROR);
     }
 
     @ExceptionHandler
