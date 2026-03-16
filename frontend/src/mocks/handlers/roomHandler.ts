@@ -7,10 +7,21 @@ import MASTER_AND_INITIAL from '../data/masterAndInitial.json';
 import ROOM_AND_MASTER from '../data/roomAndMaster.json';
 import ROOM_INFO from '../data/roomInfo.json';
 
+import SillyDdangkongSmall from '@/assets/images/sillyDdangkongSmall.webp';
 import { MOCK_API_URL } from '@/constants/url';
 
 const getRoomInfoHandler = () => {
-  return HttpResponse.json(ROOM_INFO);
+  return HttpResponse.json({
+    ...ROOM_INFO,
+    members: ROOM_INFO.members.map((member) => ({
+      ...member,
+      imageUrl: SillyDdangkongSmall,
+    })),
+    master: {
+      ...ROOM_INFO.master,
+      imageUrl: SillyDdangkongSmall,
+    },
+  });
 };
 
 const startGameHandler = async () => {
@@ -52,11 +63,29 @@ const deleteRoomHandler = () => {
 };
 
 const createRoomHandler = () => {
-  return HttpResponse.json(CREATE_ROOM_RESPONSE, { status: 201 });
+  return HttpResponse.json(
+    {
+      ...CREATE_ROOM_RESPONSE,
+      member: {
+        ...CREATE_ROOM_RESPONSE.member,
+        imageUrl: SillyDdangkongSmall,
+      },
+    },
+    { status: 201 },
+  );
 };
 
 const enterRoomHandler = () => {
-  return HttpResponse.json(ENTER_ROOM_RESPONSE, { status: 201 });
+  return HttpResponse.json(
+    {
+      ...ENTER_ROOM_RESPONSE,
+      member: {
+        ...ENTER_ROOM_RESPONSE.member,
+        imageUrl: SillyDdangkongSmall,
+      },
+    },
+    { status: 201 },
+  );
 };
 
 const isJoinableRoomHandler = () => {
@@ -64,7 +93,16 @@ const isJoinableRoomHandler = () => {
 };
 
 const getUserInfoHandler = () => {
-  return HttpResponse.json(ROOM_AND_MASTER, { status: 200 });
+  return HttpResponse.json(
+    {
+      ...ROOM_AND_MASTER,
+      member: {
+        ...ROOM_AND_MASTER.member,
+        imageUrl: SillyDdangkongSmall,
+      },
+    },
+    { status: 200 },
+  );
 };
 
 export const roomHandler = [
