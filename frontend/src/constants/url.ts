@@ -28,6 +28,7 @@ export const API_URL = {
   getUserInfo: `${BASE_URL}/api/balances/rooms/member`,
   passMaster: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/pass-master`,
   stopGame: (roomId: number) => `${BASE_URL}/api/balances/rooms/${roomId}/stop`,
+  profileImage: (fileName: string) => `${BASE_URL}/image/profile/${fileName}`,
 };
 
 type API_URL_KEYS = keyof typeof API_URL;
@@ -54,8 +55,22 @@ export const MOCK_API_URL: Record<API_URL_KEYS, string> = {
   isJoinableRoom: `${BASE_URL}/api/balances/rooms/:roomUuid/status`,
   passMaster: `${BASE_URL}/api/balances/rooms/:roomId/pass-master`,
   stopGame: `${BASE_URL}/api/balances/rooms/:roomId/stop`,
+  profileImage: `${BASE_URL}/image/profile/:fileName`,
 };
 
 export const INVITE_URL = (roomUuid: string) => {
   return `${window.location.origin}${`/nickname/${roomUuid}`}`;
 };
+
+export const PROFILE_IMAGE_URLS = [
+  API_URL.profileImage('image1.png'),
+  API_URL.profileImage('image2.png'),
+  API_URL.profileImage('image3.png'),
+  API_URL.profileImage('image4.png'),
+  API_URL.profileImage('image5.png'),
+  API_URL.profileImage('image6.png'),
+  API_URL.profileImage('image7.png'),
+  API_URL.profileImage('image8.png'),
+];
+
+export const DEFAULT_PROFILE_IMAGE_URL = PROFILE_IMAGE_URLS[0];
