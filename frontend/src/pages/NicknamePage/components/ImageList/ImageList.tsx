@@ -9,24 +9,12 @@ import {
 
 import { Button } from '@/components/common';
 import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
+import { PROFILE_IMAGE_URLS } from '@/constants/url';
 import { BottomSheetComponentProps } from '@/providers/BottomSheetProvider/BottomSheetProvider';
 
 interface ImageListProps extends BottomSheetComponentProps {
   changeImageUrl: (newImageUrl: string) => void;
 }
-
-const STORAGE_URL = 'https://storage.googleapis.com/ddangkong-images';
-
-const IMAGE_LIST = [
-  `${STORAGE_URL}/image1.png`,
-  `${STORAGE_URL}/image2.png`,
-  `${STORAGE_URL}/image3.png`,
-  `${STORAGE_URL}/image4.png`,
-  `${STORAGE_URL}/image5.png`,
-  `${STORAGE_URL}/image6.png`,
-  `${STORAGE_URL}/image7.png`,
-  `${STORAGE_URL}/image8.png`,
-];
 
 const ImageList = ({ isOpen, onClose, changeImageUrl }: ImageListProps) => {
   const handleImageClick = (imageUrl: string) => {
@@ -40,7 +28,7 @@ const ImageList = ({ isOpen, onClose, changeImageUrl }: ImageListProps) => {
         <h2 css={title}>프로필 이미지 선택</h2>
         <div css={imageListWrapper}>
           <ul css={imageList}>
-            {IMAGE_LIST.map((IMAGE, index) => (
+            {PROFILE_IMAGE_URLS.map((IMAGE, index) => (
               <li key={index}>
                 <button onClick={() => handleImageClick(IMAGE)}>
                   <div css={imageWrapper}>

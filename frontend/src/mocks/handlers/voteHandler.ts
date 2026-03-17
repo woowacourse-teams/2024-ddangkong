@@ -6,6 +6,7 @@ import MY_GAME_STATUS from '../data/myGameStatus.json';
 import VOTE_RESULT from '../data/roundVoteResult.json';
 import VOTE_IS_FINISHED from '../data/voteIsFinished.json';
 
+import SillyDdangkongSmall from '@/assets/images/sillyDdangkongSmall.webp';
 import { MOCK_API_URL } from '@/constants/url';
 import { RoundVoteResult } from '@/types/roundVoteResult';
 
@@ -16,7 +17,33 @@ const voteBalanceContentHandler = async ({ request }: { request: Request }) => {
 };
 
 const fetchVoteResultHandler = async () => {
-  return HttpResponse.json<RoundVoteResult>(VOTE_RESULT);
+  return HttpResponse.json<RoundVoteResult>({
+    ...VOTE_RESULT,
+    group: {
+      ...VOTE_RESULT.group,
+      firstOption: {
+        ...VOTE_RESULT.group.firstOption,
+        members: VOTE_RESULT.group.firstOption.members.map((member) => ({
+          ...member,
+          imageUrl: SillyDdangkongSmall,
+        })),
+      },
+      secondOption: {
+        ...VOTE_RESULT.group.secondOption,
+        members: VOTE_RESULT.group.secondOption.members.map((member) => ({
+          ...member,
+          imageUrl: SillyDdangkongSmall,
+        })),
+      },
+      giveUp: {
+        ...VOTE_RESULT.group.giveUp,
+        members: VOTE_RESULT.group.giveUp.members.map((member) => ({
+          ...member,
+          imageUrl: SillyDdangkongSmall,
+        })),
+      },
+    },
+  });
 };
 
 const goToNextRoundHandler = () => {
